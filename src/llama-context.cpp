@@ -879,7 +879,12 @@ int llama_context::encode(const llama_batch & batch_inp) {
 
 int llama_context::decode(const llama_batch & batch_inp) {
     GGML_ASSERT((!batch_inp.token && batch_inp.embd) || (batch_inp.token && !batch_inp.embd)); // NOLINT
-
+    // for (int i = 0; i < batch_inp.n_tokens; i++) {
+    //     LLAMA_LOG_DEBUG(" batch_inp.token[%d] = %d ", i, batch_inp.token ? batch_inp.token[i] : -1);
+    //     for (int j = 0; j < 3; j++) {
+    //         LLAMA_LOG_DEBUG(" batch_inp.embd[%d][%d] = %d ", i, j, batch_inp.embd[i *3 + j]);
+    //     }
+    // }
     if (!memory) {
         LLAMA_LOG_DEBUG("%s: cannot decode batches with this context (calling encode() instead)\n", __func__);
         return encode(batch_inp);
@@ -906,6 +911,7 @@ int llama_context::decode(const llama_batch & batch_inp) {
 
     const uint32_t n_tokens_all  = balloc->get_n_tokens();
     const uint32_t n_outputs_all = balloc->get_n_outputs();
+    LLAMA_LOG_INFO("%s: n_tokens_all = %d, n_outputs_all = %d\n", __func__, n_tokens_all, n_outputs_all);
 
     if (output_all) {
         // require that all tokens are output
@@ -940,7 +946,7 @@ int llama_context::decode(const llama_batch & batch_inp) {
         if (!mctx) {
             return -2;
         }
-
+        // LLAMA_LOG_INFO("%s: unexpected memory context status: %d\n", __func__, mctx->get_status());
         switch (mctx->get_status()) {
             case LLAMA_MEMORY_STATUS_SUCCESS:
                 {
@@ -1080,7 +1086,7 @@ int llama_context::decode(const llama_batch & batch_inp) {
                         // extract token embeddings
                         GGML_ASSERT(embd != nullptr);
                         float * embd_out = embd + n_outputs_prev*n_embd;
-
+                        
                         if (n_outputs) {
                             GGML_ASSERT( n_outputs_prev + n_outputs <= n_outputs_all);
                             GGML_ASSERT((n_outputs_prev + n_outputs)*n_embd <= (int64_t) embd_size);

@@ -2062,7 +2062,8 @@ static struct ggml_tensor * ggml_mul_impl(
     GGML_ASSERT(ggml_can_repeat(b, a));
 
     struct ggml_tensor * result = inplace ? ggml_view_tensor(ctx, a) : ggml_dup_tensor(ctx, a);
-
+    
+    
     result->op     = GGML_OP_MUL;
     result->src[0] = a;
     result->src[1] = b;

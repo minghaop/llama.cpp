@@ -792,6 +792,20 @@ ggml_tensor * llm_graph_context::build_moe_ffn(
     return moe_out;
 }
 
+// void print_ggml_tensor(ggml_tensor* t) {
+//     GGML_ASSERT(t->type == GGML_TYPE_F32);  // 确保为浮点张量
+//     const float* data = (float*)t->data;
+//     const int64_t cols = t->ne[0], rows = t->ne[1];
+    
+//     for (int i = 0; i < rows; ++i) {
+//         for (int j = 0; j < cols; ++j) {
+//             size_t offset = i * (t->nb[1] / sizeof(float)) + j;
+//             LLAMA_LOG_DEBUG("***************************** %8.4f ", data[offset]);  // 格式化输出
+//         }
+//         // LLAMA_LOG_DEBUG("\n");
+//     }
+// }
+
 // input embeddings with optional lora
 ggml_tensor * llm_graph_context::build_inp_embd(ggml_tensor * tok_embd) const {
     const int64_t n_embd = hparams.n_embd;
@@ -830,6 +844,19 @@ ggml_tensor * llm_graph_context::build_inp_embd(ggml_tensor * tok_embd) const {
         ggml_set_input(inp->embd);
 
         cur = inp->embd;
+        // GGML_ASSERT(inp->embd->type == GGML_TYPE_F32);
+        // float * data = ggml_get_data_f32(inp->embd);
+        // LLAMA_LOG_INFO("************************ data ptr is: %d\n", data == nullptr);
+        // int64_t total_elements = ggml_nelements(inp->embd);
+        // LLAMA_LOG_INFO("************************ inp embd nelements is: %d\n", total_elements);
+        // LLAMA_LOG_INFO("************************ inp embd name is: %s\n", ggml_get_name(inp->embd));
+       
+        // float * embd_tensor = ubatch.embd;
+        // GGML_ASSERT(embd_tensor != nullptr);
+        // size_t embd_size = n_embd * ubatch.n_tokens * sizeof(float);
+        // memcpy(inp->embd->data, embd_tensor, embd_size);
+        // LLAMA_LOG_DEBUG("%s: inp->embed ne is: %d\n", __func__, inp->embd->ne[0]);
+        // print_ggml_tensor(cur);
     }
 
     // For Granite architecture
@@ -838,7 +865,6 @@ ggml_tensor * llm_graph_context::build_inp_embd(ggml_tensor * tok_embd) const {
     }
 
     cb(cur, "inp_embd", -1);
-
     res->add_input(std::move(inp));
 
     return cur;

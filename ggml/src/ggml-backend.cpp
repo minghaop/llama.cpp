@@ -885,6 +885,7 @@ static void ggml_backend_sched_split_graph(ggml_backend_sched_t sched, struct gg
     // pass 1: assign backends to ops with pre-allocated inputs
     for (int i = 0; i < graph->n_leafs; i++) {
         struct ggml_tensor * leaf = graph->leafs[i];
+        // GGML_LOG_INFO(" ################ op is: %d", leaf->op)
         int * leaf_backend_id = &tensor_backend_id(leaf);
         // do not overwrite user assignments
         if (*leaf_backend_id == -1) {
@@ -894,6 +895,7 @@ static void ggml_backend_sched_split_graph(ggml_backend_sched_t sched, struct gg
 
     for (int i = 0; i < graph->n_nodes; i++) {
         struct ggml_tensor * node = graph->nodes[i];
+        // GGML_LOG_INFO(" ################ op is: %d", node->op)
         int * node_backend_id = &tensor_backend_id(node);
         // do not overwrite user assignments
         if (*node_backend_id == -1) {
@@ -1364,8 +1366,9 @@ static enum ggml_status ggml_backend_sched_compute_splits(ggml_backend_sched_t s
     for (int i = 0; i < sched->n_splits; i++) {
         struct ggml_backend_sched_split * split = &splits[i];
         int split_backend_id = split->backend_id;
+        // GGML_LOG_INFO("## SPLIT #%d: %s # %d inputs\n", i, ggml_backend_name(sched->backends[split_backend_id]),
+        //     split->n_inputs);
         ggml_backend_t split_backend = sched->backends[split_backend_id];
-
         // copy the input tensors to the split backend
         for (int j = 0; j < split->n_inputs; j++) {
             ggml_backend_t input_backend = ggml_backend_sched_get_tensor_backend(sched, split->inputs[j]);
