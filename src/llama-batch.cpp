@@ -39,7 +39,7 @@ bool llama_batch_allocr::init(
     //
     // validate input batch
     //
-
+    // LLAMA_LOG_INFO(" batch token is nullptr %d \n", batch.token == nullptr);        
     if (batch.token) {
         for (int32_t i = 0; i < batch.n_tokens; ++i) {
             if (batch.token[i] < 0 || (uint32_t) batch.token[i] >= vocab.n_tokens()) {
@@ -255,7 +255,10 @@ bool llama_batch_allocr::init(
                 }
             } else {
                 assert(batch.embd);
-
+                // LLAMA_LOG_INFO(" batch.embd is not nullptr %d \n", batch.embd != nullptr);
+                // LLAMA_LOG_INFO(" seq_pos_min(s) %d \n", seq_pos_min(s));
+                // LLAMA_LOG_INFO(" p0 %d \n", p0);
+                // 
                 // for embeddings (typically used as vision input), we allow them to have repeating positions
                 // ref: https://github.com/ggml-org/llama.cpp/issues/13694#issuecomment-2983871762
                 if (seq_pos_min(s) != p0 && seq_pos_min(s) != p0 + 1) {
