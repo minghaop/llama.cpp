@@ -6984,13 +6984,14 @@ struct llm_build_qwen2 : public llm_graph_context {
 
         inpL = build_inp_embd(model.tok_embd);
 
+        
         // inp_pos - contains the positions
         ggml_tensor * inp_pos = build_inp_pos();
 
         auto * inp_attn = build_attn_inp_kv_unified();
 
         ggml_tensor * inp_out_ids = build_inp_out_ids();
-
+        // LLAMA_LOG_DEBUG("&&&&&&&&&&&&&&&&&&&&&&&&&&&& n_layer is: %d", n_layer);
         for (int il = 0; il < n_layer; ++il) {
             ggml_tensor * inpSA = inpL;
 
