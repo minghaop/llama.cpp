@@ -360,6 +360,7 @@ llama_pos llama_memory_recurrent::seq_pos_max(llama_seq_id seq_id) const {
 }
 
 llama_memory_context_ptr llama_memory_recurrent::init_batch(llama_batch_allocr & balloc, uint32_t n_ubatch, bool embd_all) {
+    // LLAMA_LOG_INFO("********************************************************************** llama_memory_recurrent init_batch\n");
     do {
         balloc.split_reset();
 
@@ -380,7 +381,7 @@ llama_memory_context_ptr llama_memory_recurrent::init_batch(llama_batch_allocr &
 
             ubatches.push_back(std::move(ubatch)); // NOLINT
         }
-
+        
         if (balloc.get_n_used() < balloc.get_n_tokens()) {
             // failed to find a suitable split
             break;

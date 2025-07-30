@@ -1488,7 +1488,7 @@ struct ggml_context * ggml_init(struct ggml_init_params params) {
     }
 
     const size_t mem_size = params.mem_buffer ? params.mem_size : GGML_PAD(params.mem_size, GGML_MEM_ALIGN);
-
+    // GGML_LOG_INFO("###################################### %s: initializing context with size %zu bytes\n", __func__, mem_size);
     *ctx = (struct ggml_context) {
         /*.mem_size           =*/ mem_size,
         /*.mem_buffer         =*/ params.mem_buffer ? params.mem_buffer : ggml_aligned_malloc(mem_size),

@@ -7648,6 +7648,7 @@ struct llm_build_qwen2 : public llm_graph_context {
         ggml_tensor * cur;
         ggml_tensor * inpL;
 
+        // 创建qwen2的算子
         inpL = build_inp_embd(model.tok_embd);
 
         
@@ -7660,13 +7661,13 @@ struct llm_build_qwen2 : public llm_graph_context {
         // LLAMA_LOG_DEBUG("&&&&&&&&&&&&&&&&&&&&&&&&&&&& n_layer is: %d", n_layer);
         for (int il = 0; il < n_layer; ++il) {
             ggml_tensor * inpSA = inpL;
-
+            // LLAMA_LOG_INFO("before build_norm **********************************************************************\n");
             // norm
             cur = build_norm(inpL,
                     model.layers[il].attn_norm, NULL,
                     LLM_NORM_RMS, il);
             cb(cur, "attn_norm", il);
-
+            // LLAMA_LOG_INFO("after build_norm **********************************************************************\n");
             // self-attention
             {
                 // compute Q and K and RoPE them
@@ -7752,7 +7753,8 @@ struct llm_build_qwen2 : public llm_graph_context {
 
         cb(cur, "result_output", -1);
         res->t_logits = cur;
-
+        
+        // build the graph
         ggml_build_forward_expand(gf, cur);
     }
 };

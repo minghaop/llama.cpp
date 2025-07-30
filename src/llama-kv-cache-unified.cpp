@@ -345,31 +345,33 @@ llama_memory_context_ptr llama_kv_cache_unified::init_batch(
             uint32_t n_ubatch,
             bool embd_all) {
     GGML_UNUSED(embd_all);
-
+    // LLAMA_LOG_INFO("********************************************************************** llama_kv_cache_unified init_batch\n");
     do {
         balloc.split_reset();
-
+        // LLAMA_LOG_INFO("********************************************************************** check here3\n");
         std::vector<llama_ubatch> ubatches;
         while (true) {
+            // LLAMA_LOG_INFO("********************************************************************** n_ubatch is: %d\n", n_ubatch);
             auto ubatch = balloc.split_simple(n_ubatch);
-
+            // LLAMA_LOG_INFO("********************************************************************** ubatch.n_tokens is: %d\n", ubatch.n_tokens);
             if (ubatch.n_tokens == 0) {
                 break;
             }
-
+            // LLAMA_LOG_INFO("********************************************************************** ubatches.size() is: %d, ubatches.capacity() is: %d\n", ubatches.size(), ubatches.capacity());
             ubatches.push_back(std::move(ubatch)); // NOLINT
+            // LLAMA_LOG_INFO("********************************************************************** check here4\n");
         }
-
+        // LLAMA_LOG_INFO("********************************************************************** check here5\n");
         if (balloc.get_n_used() < balloc.get_n_tokens()) {
             // failed to find a suitable split
             break;
         }
-
+        // LLAMA_LOG_INFO("********************************************************************** check here6\n");
         auto sinfos = prepare(ubatches);
         if (sinfos.empty()) {
             break;
         }
-
+        // LLAMA_LOG_INFO("********************************************************************** check here7\n");
         return std::make_unique<llama_kv_cache_unified_context>(
                 this, std::move(sinfos), std::move(ubatches));
     } while (false);
@@ -1874,7 +1876,7 @@ llama_kv_cache_unified_context::llama_kv_cache_unified_context(llama_memory_stat
 llama_kv_cache_unified_context::llama_kv_cache_unified_context(
         llama_kv_cache_unified * kv) : status(LLAMA_MEMORY_STATUS_SUCCESS), kv(kv) {
     n_kv = kv->get_size();
-
+    //LLAMA_LOG_INFO("############################################# %s, n_kv = %u\n", __func__, n_kv);
     // create a dummy slot info - the actual data is irrelevant. we just need to build the graph
     sinfos.resize(1);
     sinfos[0].idxs.resize(1);
