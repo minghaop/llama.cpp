@@ -97,7 +97,7 @@ llama_pos llama_kv_cache_unified_iswa::seq_pos_max(llama_seq_id seq_id) const {
 
 llama_memory_context_ptr llama_kv_cache_unified_iswa::init_batch(llama_batch_allocr & balloc, uint32_t n_ubatch, bool embd_all) {
     GGML_UNUSED(embd_all);
-
+    // LLAMA_LOG_INFO("********************************************************************** llama_kv_cache_unified_iswa init_batch\n");
     // first try simple split
     do {
         balloc.split_reset();

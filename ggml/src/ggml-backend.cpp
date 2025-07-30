@@ -255,12 +255,15 @@ void ggml_backend_tensor_get_async(ggml_backend_t backend, const struct ggml_ten
 
 void ggml_backend_tensor_set(struct ggml_tensor * tensor, const void * data, size_t offset, size_t size) {
     GGML_ASSERT(tensor);
+    // GGML_LOG_INFO(" ################ tensor->view_src->buffer is: %d\n", tensor->view_src->buffer == NULL);    
+    // GGML_LOG_INFO(" ################ tensor->buffer is: %d\n", tensor->buffer == NULL);    
+    
     ggml_backend_buffer_t buf = tensor->view_src ? tensor->view_src->buffer : tensor->buffer;
 
     if (size == 0) {
         return;
     }
-
+    // GGML_LOG_INFO(" ################ offset is: %d, size is: %d, buf is: %d\n", offset, size, buf == NULL);
     GGML_ASSERT(buf != NULL && "tensor buffer not set");
     GGML_ASSERT(tensor->data != NULL && "tensor not allocated");
     GGML_ASSERT(offset + size <= ggml_nbytes(tensor) && "tensor write out of bounds");
@@ -331,6 +334,7 @@ enum ggml_status ggml_backend_graph_compute(ggml_backend_t backend, struct ggml_
 }
 
 enum ggml_status ggml_backend_graph_compute_async(ggml_backend_t backend, struct ggml_cgraph * cgraph) {
+    // GGML_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& backend->iface beckend name is: %s\n", backend->iface.get_name(backend));
     return backend->iface.graph_compute(backend, cgraph);
 }
 
@@ -1403,7 +1407,8 @@ static enum ggml_status ggml_backend_sched_compute_splits(ggml_backend_sched_t s
                 }
             }
         }
-
+        // GGML_LOG_INFO("################################################################################################################################# %s, sched->callback_eval is: %d\n", 
+        //     __func__, sched->callback_eval != NULL);
         if (!sched->callback_eval) {
             enum ggml_status ec = ggml_backend_graph_compute_async(split_backend, &split->graph);
             if (ec != GGML_STATUS_SUCCESS) {
@@ -1566,6 +1571,8 @@ bool ggml_backend_sched_reserve(ggml_backend_sched_t sched, struct ggml_cgraph *
     return true;
 }
 
+
+// 许多节点内存、后端以及子图的分割
 bool ggml_backend_sched_alloc_graph(ggml_backend_sched_t sched, struct ggml_cgraph * graph) {
     GGML_ASSERT((int)sched->hash_set.size >= graph->n_nodes + graph->n_leafs);
 
@@ -1590,7 +1597,7 @@ enum ggml_status ggml_backend_sched_graph_compute_async(ggml_backend_sched_t sch
     if (!sched->is_reset && !sched->is_alloc) {
         ggml_backend_sched_reset(sched);
     }
-
+    GGML_LOG_INFO("################################################################################################################################# %s, sched->is_alloc is:%d\n", __func__, sched->is_alloc);
     if (!sched->is_alloc) {
         if (!ggml_backend_sched_alloc_graph(sched, graph)) {
             return GGML_STATUS_ALLOC_FAILED;

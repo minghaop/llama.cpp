@@ -57,6 +57,7 @@ llama_memory_hybrid::llama_memory_hybrid(
     )) {}
 
 llama_memory_context_ptr llama_memory_hybrid::init_batch(llama_batch_allocr & balloc, uint32_t n_ubatch, bool embd_all) {
+    // LLAMA_LOG_INFO("********************************************************************** llama_memory_hybrid init_batch\n");
     do {
         balloc.split_reset();
 

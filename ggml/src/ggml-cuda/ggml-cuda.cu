@@ -2208,10 +2208,12 @@ static void ggml_cuda_mul_mat_id(ggml_backend_cuda_context & ctx, ggml_tensor * 
 
 static bool ggml_cuda_compute_forward(ggml_backend_cuda_context & ctx, struct ggml_tensor * dst) {
     // why is this here instead of mul_mat?
+    // GGML_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& dst->src[0] is: %d", dst_src[0]? 1: 0);
     if (dst->src[0] != nullptr && ggml_backend_buft_is_cuda_split(dst->src[0]->buffer->buft)) {
+        // GGML_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& dst->src[0] is: %d", dst->src[0]? 1: 0);
         ggml_cuda_set_peer_access(dst->src[1]->ne[1], ctx.device);
     }
-
+    GGML_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& dst->op = %d\n", dst->op);
     switch (dst->op) {
         case GGML_OP_ARGMAX:
             ggml_cuda_argmax(ctx, dst);
