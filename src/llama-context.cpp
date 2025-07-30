@@ -21,6 +21,7 @@ llama_context::llama_context(
               llama_context_params params) :
     model(model),
     balloc(std::make_unique<llama_batch_allocr>(model.hparams.n_pos_per_embd())) {
+    // LLAMA_LOG_INFO("%s: n_pos_per_embd is: %d\n", __func__, model.hparams.n_pos_per_embd());
     LLAMA_LOG_INFO("%s: constructing llama_context\n", __func__);
 
     t_start_us = model.t_start_us;
@@ -279,7 +280,7 @@ llama_context::llama_context(
         int n_nodes_tg  = -1;
 
         // simulate full KV cache
-
+        //LLAMA_LOG_INFO("############################################################################################################################## %s\n", __func__);
         const auto mctx = memory->init_full();
         if (!mctx) {
             throw std::runtime_error("failed to initialize KV cache");
@@ -287,36 +288,37 @@ llama_context::llama_context(
 
         cross.v_embd.clear();
 
+        // //LLAMA_LOG_INFO("###################### %s, n_toknes is: %d, n_seqs is: %d\n", __func__, n_tokens, n_seqs);
         // reserve pp graph first so that buffers are only allocated once
-        {
-            auto * gf = graph_reserve(n_tokens, n_seqs, n_tokens, mctx.get());
-            if (!gf) {
-                throw std::runtime_error("failed to allocate compute pp buffers");
-            }
+        // {
+        //     auto * gf = graph_reserve(n_tokens, n_seqs, n_tokens, mctx.get());
+        //     if (!gf) {
+        //         throw std::runtime_error("failed to allocate compute pp buffers");
+        //     }
 
-            n_splits_pp = ggml_backend_sched_get_n_splits(sched.get());
-            n_nodes_pp  = ggml_graph_n_nodes(gf);
-        }
+        //     n_splits_pp = ggml_backend_sched_get_n_splits(sched.get());
+        //     n_nodes_pp  = ggml_graph_n_nodes(gf);
+        // }
 
-        // reserve with tg graph to get the number of splits and nodes
-        {
-            auto * gf = graph_reserve(1, 1, 1, mctx.get());
-            if (!gf) {
-                throw std::runtime_error("failed to allocate compute tg buffers");
-            }
+        // // reserve with tg graph to get the number of splits and nodes
+        // {
+        //     auto * gf = graph_reserve(1, 1, 1, mctx.get());
+        //     if (!gf) {
+        //         throw std::runtime_error("failed to allocate compute tg buffers");
+        //     }
 
-            n_splits_tg = ggml_backend_sched_get_n_splits(sched.get());
-            n_nodes_tg  = ggml_graph_n_nodes(gf);
-        }
+        //     n_splits_tg = ggml_backend_sched_get_n_splits(sched.get());
+        //     n_nodes_tg  = ggml_graph_n_nodes(gf);
+        // }
 
         // reserve again with pp graph to avoid ggml-alloc reallocations during inference
-        {
-            auto * gf = graph_reserve(n_tokens, n_seqs, n_tokens, mctx.get());
-            if (!gf) {
-                throw std::runtime_error("failed to allocate compute pp buffers");
-            }
-        }
-
+        // {
+        //     auto * gf = graph_reserve(n_tokens, n_seqs, n_tokens, mctx.get());
+        //     if (!gf) {
+        //         throw std::runtime_error("failed to allocate compute pp buffers");
+        //     }
+        // }
+        //LLAMA_LOG_INFO("############################################################################################################################## %s\n", __func__);
         for (size_t i = 0; i < backend_ptrs.size(); ++i) {
             ggml_backend_t             backend = backend_ptrs[i];
             ggml_backend_buffer_type_t buft    = backend_buft[i];
@@ -684,21 +686,20 @@ llm_graph_result_ptr llama_context::process_ubatch(const llama_ubatch & ubatch, 
         ret = GGML_STATUS_FAILED;
         return nullptr;
     }
-
     auto * gf = graph_init();
     if (!gf) {
         LLAMA_LOG_ERROR("%s: failed to initialize graph\n", __func__);
         ret = GGML_STATUS_FAILED;
         return nullptr;
     }
-
+    //LLAMA_LOG_INFO("############################################################################################################################## %s\n", __func__);
     auto res = graph_build(ctx_compute.get(), gf, ubatch, gtype, mctx);
     if (!res) {
         LLAMA_LOG_ERROR("%s: failed to build graph\n", __func__);
         ret = GGML_STATUS_FAILED;
         return nullptr;
     }
-
+    //LLAMA_LOG_INFO("############################################################################################################################## %s\n", __func__);
     // LLAMA_LOG_INFO("graph build time: %.3f ms (%d nodes, %d leafs)\n", (ggml_time_us() - t_start_us)/1000.0, gf->n_nodes, gf->n_leafs);
 
     if (!ggml_backend_sched_alloc_graph(sched.get(), gf)) {
@@ -706,9 +707,9 @@ llm_graph_result_ptr llama_context::process_ubatch(const llama_ubatch & ubatch, 
         ret = GGML_STATUS_ALLOC_FAILED;
         return nullptr;
     }
-
+    //LLAMA_LOG_INFO("############################################################################################################################## %s\n", __func__);
     res->set_inputs(&ubatch);
-
+    LLAMA_LOG_INFO("############################################################################################################################## %s\n", __func__);
     const auto status = graph_compute(gf, ubatch.n_tokens > 1);
     if (status != GGML_STATUS_SUCCESS) {
         LLAMA_LOG_ERROR("%s: failed to compute graph, compute status: %d\n", __func__, status);
@@ -889,6 +890,7 @@ int llama_context::encode(const llama_batch & batch_inp) {
 }
 
 int llama_context::decode(const llama_batch & batch_inp) {
+    //LLAMA_LOG_INFO("##############################################################################################################################\n");
     GGML_ASSERT((!batch_inp.token && batch_inp.embd) || (batch_inp.token && !batch_inp.embd)); // NOLINT
     // for (int i = 0; i < batch_inp.n_tokens; i++) {
     //     LLAMA_LOG_DEBUG(" batch_inp.token[%d] = %d ", i, batch_inp.token ? batch_inp.token[i] : -1);
@@ -914,7 +916,6 @@ int llama_context::decode(const llama_batch & batch_inp) {
 
     // when computing embeddings, all tokens are output
     const bool output_all = cparams.embeddings;
-
     if (!balloc->init(batch_inp, vocab, memory.get(), n_embd, output_all)) {
         LLAMA_LOG_ERROR("%s: failed to initialize batch\n", __func__);
         return -1;
@@ -922,7 +923,7 @@ int llama_context::decode(const llama_batch & batch_inp) {
 
     const uint32_t n_tokens_all  = balloc->get_n_tokens();
     const uint32_t n_outputs_all = balloc->get_n_outputs();
-    LLAMA_LOG_INFO("%s: n_tokens_all = %d, n_outputs_all = %d\n", __func__, n_tokens_all, n_outputs_all);
+    // LLAMA_LOG_INFO("%s: n_tokens_all = %d, n_outputs_all = %d\n", __func__, n_tokens_all, n_outputs_all);
 
     if (output_all) {
         // require that all tokens are output
@@ -933,10 +934,10 @@ int llama_context::decode(const llama_batch & batch_inp) {
         }
     }
 
-    GGML_ASSERT(n_tokens_all <= cparams.n_batch);
+    // GGML_ASSERT(n_tokens_all <= cparams.n_batch);
 
     GGML_ASSERT((cparams.causal_attn || cparams.n_ubatch >= n_tokens_all) && "non-causal attention requires n_ubatch >= n_tokens");
-
+    
     if (t_compute_start_us == 0) {
         t_compute_start_us = ggml_time_us();
     }
@@ -951,9 +952,11 @@ int llama_context::decode(const llama_batch & batch_inp) {
     kv_self_update(false);
 
     llama_memory_context_ptr mctx;
-
+    
     while (true) {
+        // LLAMA_LOG_INFO("********************************************************************** check here\n");
         mctx = memory->init_batch(*balloc, cparams.n_ubatch, output_all);
+        // LLAMA_LOG_INFO("********************************************************************** check here2\n");
         if (!mctx) {
             return -2;
         }
@@ -994,7 +997,7 @@ int llama_context::decode(const llama_batch & batch_inp) {
 
         break;
     }
-
+    
     // reserve output buffer
     if (output_reserve(n_outputs_all) < n_outputs_all) {
         LLAMA_LOG_ERROR("%s: could not reserve space for batch with %d outputs\n", __func__, n_outputs_all);
@@ -1021,13 +1024,15 @@ int llama_context::decode(const llama_batch & batch_inp) {
             // needs to happen before the graph is built
             n_outputs = n_outputs_new;
         }
-
+        
         ggml_backend_sched_reset(sched.get());
         ggml_backend_sched_set_eval_callback(sched.get(), cparams.cb_eval, cparams.cb_eval_user_data);
 
         ggml_status status;
+        // LLAMA_LOG_INFO("********************************************************************** cparams.n_ubatch is: %d\n", cparams.n_ubatch);
         const auto res = process_ubatch(ubatch, LLM_GRAPH_TYPE_DECODER, mctx.get(), status);
-
+        //LLAMA_LOG_INFO("##############################################################################################################################\n");
+        // LLAMA_LOG_INFO("%s: res ptr is:  %d\n", __func__, res ? 1 : 0);
         if (!res) {
             // the last ubatch failed or was aborted -> remove all positions of that ubatch from the KV cache
             llama_pos pos_min[LLAMA_MAX_SEQ];
@@ -1060,9 +1065,9 @@ int llama_context::decode(const llama_batch & batch_inp) {
         }
 
         // plot the computation graph in dot format (for debugging purposes)
-        //if (n_past%100 == 0) {
+        // if (ubatch.n_past%100 == 0) {
         //    ggml_graph_dump_dot(gf, NULL, "llama.dot");
-        //}
+        // }
 
         auto * t_logits = res->get_logits();
         auto * t_embd   = cparams.embeddings ? res->get_embd() : nullptr;
@@ -1070,7 +1075,7 @@ int llama_context::decode(const llama_batch & batch_inp) {
         if (t_embd && res->get_embd_pooled()) {
             t_embd = res->get_embd_pooled();
         }
-
+        // LLAMA_LOG_INFO("-------------------------------------- %s: t_logits = %d, t_embd = %d\n", __func__, t_logits? 1 : 0, t_embd ? 1 : 0);
         // extract logits
         if (t_logits && n_outputs > 0) {
             ggml_backend_t backend_res = ggml_backend_sched_get_tensor_backend(sched.get(), t_logits);
@@ -1085,12 +1090,13 @@ int llama_context::decode(const llama_batch & batch_inp) {
                 ggml_backend_tensor_get_async(backend_res, t_logits, logits_out, 0, n_outputs*n_vocab*sizeof(float));
             }
         }
-
+        // LLAMA_LOG_INFO("-------------------------------------- %s: n_outputs = %d\n", __func__, n_outputs);
         // extract embeddings
         if (t_embd && n_outputs > 0) {
             ggml_backend_t backend_embd = ggml_backend_sched_get_tensor_backend(sched.get(), t_embd);
             GGML_ASSERT(backend_embd != nullptr);
-
+            // LLAMA_LOG_INFO("-------------------------------------- %s: cparams.pooling_type = %d\n", __func__, cparams.pooling_type);
+            // LLAMA_LOG_INFO("-------------------------------------- %s: n_outputs_prev = %d\n", __func__, n_outputs_prev);
             switch (cparams.pooling_type) {
                 case LLAMA_POOLING_TYPE_NONE:
                     {
@@ -1309,7 +1315,7 @@ ggml_cgraph * llama_context::graph_init() {
 }
 
 ggml_cgraph * llama_context::graph_reserve(uint32_t n_tokens, uint32_t n_seqs, uint32_t n_outputs, const llama_memory_context_i * mctx) {
-    LLAMA_LOG_DEBUG("%s: reserving a graph for ubatch with n_tokens = %4u, n_seqs = %2u, n_outputs = %4u\n", __func__, n_tokens, n_seqs, n_outputs);
+    // LLAMA_LOG_DEBUG("%s: reserving a graph for ubatch with n_tokens = %4u, n_seqs = %2u, n_outputs = %4u\n", __func__, n_tokens, n_seqs, n_outputs);
 
     if (n_tokens % n_seqs != 0) {
         n_tokens = ((n_tokens + (n_seqs - 1)) / n_seqs) * n_seqs; // round to next multiple of n_seqs
@@ -1389,6 +1395,7 @@ ggml_status llama_context::graph_compute(
         set_n_threads_fn.second(set_n_threads_fn.first, n_threads);
     }
 
+    LLAMA_LOG_INFO("################################################################################################################################# %s\n", __func__);
     auto status = ggml_backend_sched_graph_compute_async(sched.get(), gf);
     if (status != GGML_STATUS_SUCCESS) {
         LLAMA_LOG_ERROR("%s: ggml_backend_sched_graph_compute_async failed with error %d\n", __func__, status);

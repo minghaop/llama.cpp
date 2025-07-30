@@ -825,22 +825,14 @@ ggml_tensor * llm_graph_context::build_inp_embd(ggml_tensor * tok_embd) const {
         }
     } else {
         inp->embd = ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, n_embd, ubatch.n_tokens);
+        ggml_backend_buffer_t buf = ggml_backend_alloc_ctx_tensors(ctx0, backend_cpu);
+        // LLAMA_LOG_INFO("build_inp_embd after buf **********************************************************************\n");
+        // LLAMA_LOG_INFO("************************ ubatch.n_tokens is: %d\n", ubatch.n_tokens);
         ggml_set_input(inp->embd);
-
+        // LLAMA_LOG_INFO("************************ inp->embd ne[0] is: %d, ne[1] is: %d\n", inp->embd->ne[0], inp->embd->ne[1]);
+        ggml_backend_tensor_set(inp->embd, ubatch.embd, 0, ubatch.n_tokens*n_embd*ggml_element_size(inp->embd));
         cur = inp->embd;
-        // GGML_ASSERT(inp->embd->type == GGML_TYPE_F32);
-        // float * data = ggml_get_data_f32(inp->embd);
-        // LLAMA_LOG_INFO("************************ data ptr is: %d\n", data == nullptr);
-        // int64_t total_elements = ggml_nelements(inp->embd);
-        // LLAMA_LOG_INFO("************************ inp embd nelements is: %d\n", total_elements);
-        // LLAMA_LOG_INFO("************************ inp embd name is: %s\n", ggml_get_name(inp->embd));
-       
-        // float * embd_tensor = ubatch.embd;
-        // GGML_ASSERT(embd_tensor != nullptr);
-        // size_t embd_size = n_embd * ubatch.n_tokens * sizeof(float);
-        // memcpy(inp->embd->data, embd_tensor, embd_size);
-        // LLAMA_LOG_DEBUG("%s: inp->embed ne is: %d\n", __func__, inp->embd->ne[0]);
-        // print_ggml_tensor(cur);
+        // LLAMA_LOG_INFO("build_inp_embd **********************************************************************\n");
     }
 
     // For Granite architecture
@@ -850,7 +842,7 @@ ggml_tensor * llm_graph_context::build_inp_embd(ggml_tensor * tok_embd) const {
 
     cb(cur, "inp_embd", -1);
     res->add_input(std::move(inp));
-
+    //  LLAMA_LOG_INFO("********************************************************************** %s, ubatch.n_tokens is: %d\n", __func__, ubatch.n_tokens);
     return cur;
 }
 

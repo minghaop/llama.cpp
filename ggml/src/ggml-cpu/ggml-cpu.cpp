@@ -154,7 +154,7 @@ static enum ggml_status ggml_backend_cpu_graph_compute(ggml_backend_t backend, s
     struct ggml_backend_cpu_context * cpu_ctx = (struct ggml_backend_cpu_context *)backend->context;
 
     struct ggml_cplan cplan = ggml_graph_plan(cgraph, cpu_ctx->n_threads, cpu_ctx->threadpool);
-
+    
     if (cpu_ctx->work_size < cplan.work_size) {
         delete[] cpu_ctx->work_data;
         cpu_ctx->work_data = new uint8_t[cplan.work_size];
