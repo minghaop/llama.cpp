@@ -228,7 +228,7 @@ static void soft_max_f32_cuda(const float * x, const T * mask, float * dst, cons
     const int id       = ggml_cuda_get_device();
     const size_t smpbo = ggml_cuda_info().devices[id].smpbo;
 
-
+    // printf("&&&&&&&&&&&&&& nbytes_shared <= smpbo is: %d\n", nbytes_shared <= smpbo);
     if (nbytes_shared <= smpbo) {
         launch_soft_max_kernels<32, 64, 128, 256, 512, 1024, 2048, 4096>(x, mask, dst, params, stream, block_dims, block_nums, nbytes_shared);
     } else {

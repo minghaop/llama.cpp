@@ -7,6 +7,7 @@ static __device__ __forceinline__ float op_repeat(const float a, const float b) 
 }
 
 static __device__ __forceinline__ float op_add(const float a, const float b) {
+    // printf("&&&&&&&&&&&&&&&&&&&& a + b is: %f\n", a + b);
     return a + b;
 }
 
@@ -15,6 +16,7 @@ static __device__ __forceinline__ float op_sub(const float a, const float b) {
 }
 
 static __device__ __forceinline__ float op_mul(const float a, const float b) {
+    
     return a * b;
 }
 
@@ -309,6 +311,7 @@ static void ggml_cuda_op_bin_bcast(
             ggml_type_name(dst->type), ggml_type_name(src0->type), ggml_type_name(src1->type));
         GGML_ABORT("fatal error");
     }
+
 }
 
 void ggml_cuda_op_repeat(ggml_backend_cuda_context & ctx, ggml_tensor * dst) {

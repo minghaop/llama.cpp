@@ -1,5 +1,6 @@
 #include "norm.cuh"
 #include <cstdint>
+#include <ggml-impl.h>
 
 template <int block_size>
 static __global__ void norm_f32(
@@ -143,9 +144,10 @@ static __global__ void rms_norm_f32(
 
     const float mean = tmp / ncols;
     const float scale = rsqrtf(mean + eps);
-
+    // printf("&&&&&&&&&&&&&&&&&&&&&&&&&&&&& tid is: %d, ncols is: %d, block_size is: %d\n", tid, ncols, block_size);
     for (int col = tid; col < ncols; col += block_size) {
         dst[col] = scale * x[col];
+        // printf("&&&&&&&&&&&&&&&&&&&&&&&&&&&&& col is %d, dst[col] is: %f\n", col, dst[col]);
     }
 }
 
@@ -315,6 +317,14 @@ static void rms_norm_f32_cuda(
         const dim3 block_dims(1024, 1, 1);
         rms_norm_f32<1024><<<blocks_num, block_dims, 0, stream>>>(x, dst, ncols, stride_row, stride_channel, stride_sample, eps);
     }
+    // CUDA_CHECK(cudaStreamSynchronize(stream));
+    // float * cpu_array = new float[896];
+    // CUDA_CHECK(cudaMemcpy(cpu_array, dst, 896 * sizeof(float), cudaMemcpyDeviceToHost));
+    // for(int i = 0; i < 896; i++)
+    // {
+    //     printf("&&&&&&&&&&&&&&&&&&&&&&&&&&&&& col is %d, dst[col] is: %f\n", i, cpu_array[i]);
+    // }
+    // delete[] cpu_array;
 }
 
 static void rms_norm_back_f32_cuda(const float * grad, const float * xf, float * dst, const int ncols, const int nrows, const float eps, cudaStream_t stream) {
@@ -386,9 +396,9 @@ void ggml_cuda_op_group_norm(ggml_backend_cuda_context & ctx, ggml_tensor * dst)
 void ggml_cuda_op_rms_norm(ggml_backend_cuda_context & ctx, ggml_tensor * dst) {
     const ggml_tensor * src0 = dst->src[0];
     const float * src0_d = (const float *) src0->data;
+
     float * dst_d = (float *) dst->data;
     cudaStream_t stream = ctx.stream();
-
     GGML_ASSERT(src0->type == GGML_TYPE_F32);
     GGML_ASSERT( dst->type == GGML_TYPE_F32);
 
