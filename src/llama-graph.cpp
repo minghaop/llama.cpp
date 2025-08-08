@@ -1232,6 +1232,12 @@ ggml_tensor * llm_graph_context::build_attn(
     ggml_tensor * k = mctx_cur->get_k(ctx0, il);
     ggml_tensor * v = mctx_cur->get_v(ctx0, il);
 
+    // float * k_data = new float[k->ne[0] * k->ne[1] * k->ne[2] * k->ne[3]];
+    // memcpy(k_data, (float *)k->data, k->ne[0] * k->ne[1] * k->ne[2] * k->ne[3] * sizeof(float));
+    // for(int i = 0; i< k->ne[0] * k->ne[1] * k->ne[2] * k->ne[3]; i++) {
+    //     LLAMA_LOG_DEBUG("***************************** %8.4f ", k_data[i]);  
+    // }
+
     ggml_tensor * cur = build_attn_mha(gf, q, k, v, kq_b, kq_mask, v_mla, kq_scale);
     cb(cur, "kqv_out", il);
 

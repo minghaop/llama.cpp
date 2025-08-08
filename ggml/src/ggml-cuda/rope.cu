@@ -97,7 +97,7 @@ static __global__ void rope_neox(
 
     const int idst = row_dst*ne0 + i0/2;
     const int ix   = channel_x*s2 + row_x*s1 + i0/2;
-
+    
     if (i0 >= n_dims) {
         dst[idst + i0/2 + 0] = x[ix + i0/2 + 0];
         dst[idst + i0/2 + 1] = x[ix + i0/2 + 1];
@@ -270,6 +270,14 @@ static void rope_neox_cuda(
             x, dst, ne0, ne1, s1, s2, n_dims, pos, freq_scale, ext_factor,
             attn_factor, corr_dims, theta_scale, freq_factors);
     }
+    // float * cpu_array = new float[64];
+    // CUDA_CHECK(cudaStreamSynchronize(stream));
+    // CUDA_CHECK(cudaMemcpy(cpu_array, dst, 64 * sizeof(float), cudaMemcpyDeviceToHost));
+    // for(int i = 0; i < 64; i++)
+    // {
+    //     printf("&&&&&&&&&&&&&&&&&&&&&&&&&&&&& col is %d, dst[col] is: %f\n", i, cpu_array[i]);
+    // }
+    // delete[] cpu_array;
 }
 
 template<bool forward, typename T>
