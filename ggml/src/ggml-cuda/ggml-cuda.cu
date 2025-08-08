@@ -1597,6 +1597,7 @@ static void ggml_cuda_op_mul_mat(
         }
 
         if (dst_on_device) {
+            // printf("^^^^^^^^^^^^^^^^^^^^^^^^^^^ dst_on_device is: %d\n", dst_on_device);
             dev[id].dst_dd = (float *) dst->data;
         } else {
             const size_t size_dst_ddf = split ? (dev[id].row_high - dev[id].row_low)*ne1 : ggml_nelements(dst);
@@ -1701,7 +1702,13 @@ static void ggml_cuda_op_mul_mat(
                 op(ctx, src0, src1, dst, src0_dd_i, src1_ddf_i, src1_ddq_i, dst_dd_i,
                     dev[id].row_low, dev[id].row_high, src1_ncols, src1_padded_col_size, stream);
                 CUDA_CHECK(cudaGetLastError());
-
+                // float * res = (float *) dst->data;
+                // float * host_res = (float *)malloc(ggml_nelements(dst) * sizeof(float));
+                // cudaMemcpy(host_res, dst->data, ggml_nelements(dst) * sizeof(float), cudaMemcpyDeviceToHost);
+                // for(int i = 0; i < 3; i++) {
+                //     printf("&&&&&&&&&&&&&&&&&&&&&&&&&&&&& ggml_mat_mul is: %f\n", res[i]);
+                // }
+                // printf("&&&&&&&&&&&&&&&&&&&&&&&&&&&&& ggml_mat_mul is: %f\n", res[0]);
                 // copy dst to host or other device if necessary
                 if (!dst_on_device) {
                     void * dst_off_device = dst->data;
@@ -1731,7 +1738,7 @@ static void ggml_cuda_op_mul_mat(
             }
         }
     }
-
+    
     // main device waits for all other devices to be finished
     if (split && ggml_backend_cuda_get_device_count() > 1) {
         int64_t is_max = (ne11 + MUL_MAT_SRC1_COL_STRIDE - 1) / MUL_MAT_SRC1_COL_STRIDE;
@@ -2027,12 +2034,12 @@ static void ggml_cuda_mul_mat(ggml_backend_cuda_context & ctx, const ggml_tensor
     }
 
     // debug helpers
-    //printf("src0: %8d %8d %8d %8d\n", src0->ne[0], src0->ne[1], src0->ne[2], src0->ne[3]);
-    //printf("      %8d %8d %8d %8d\n", src0->nb[0], src0->nb[1], src0->nb[2], src0->nb[3]);
-    //printf("src1: %8d %8d %8d %8d\n", src1->ne[0], src1->ne[1], src1->ne[2], src1->ne[3]);
-    //printf("      %8d %8d %8d %8d\n", src1->nb[0], src1->nb[1], src1->nb[2], src1->nb[3]);
-    //printf("src0 is contiguous %d, transposed %d, type = %s, name = %s\n", ggml_is_contiguous(src0), ggml_is_transposed(src0), ggml_type_name(src0->type), src0->name);
-    //printf("src1 is contiguous %d, transposed %d, type = %s, name = %s\n", ggml_is_contiguous(src1), ggml_is_transposed(src1), ggml_type_name(src1->type), src1->name);
+    // printf("src0: %8d %8d %8d %8d\n", src0->ne[0], src0->ne[1], src0->ne[2], src0->ne[3]);
+    // printf("      %8d %8d %8d %8d\n", src0->nb[0], src0->nb[1], src0->nb[2], src0->nb[3]);
+    // printf("src1: %8d %8d %8d %8d\n", src1->ne[0], src1->ne[1], src1->ne[2], src1->ne[3]);
+    // printf("      %8d %8d %8d %8d\n", src1->nb[0], src1->nb[1], src1->nb[2], src1->nb[3]);
+    // printf("src0 is contiguous %d, transposed %d, type = %s, name = %s\n", ggml_is_contiguous(src0), ggml_is_transposed(src0), ggml_type_name(src0->type), src0->name);
+    // printf("src1 is contiguous %d, transposed %d, type = %s, name = %s\n", ggml_is_contiguous(src1), ggml_is_transposed(src1), ggml_type_name(src1->type), src1->name);
 
     //TODO update for generic tensor parallelism
     const int cc                     = ggml_cuda_info().devices[ggml_cuda_get_device()].cc;
@@ -2040,6 +2047,10 @@ static void ggml_cuda_mul_mat(ggml_backend_cuda_context & ctx, const ggml_tensor
     bool use_batched_cublas_bf16 = src0->type == GGML_TYPE_BF16 && bf16_mma_hardware_available(cc);
     bool use_batched_cublas_f32  = src0->type == GGML_TYPE_F32;
 
+    // bool type_cu = (use_batched_cublas_f16 || use_batched_cublas_bf16 || use_batched_cublas_f32);
+    // bool tr_src = !ggml_is_transposed(src0) && !ggml_is_transposed(src1) && src1->ne[2]*src1->ne[3] > 1;
+    // printf("&&&&&&&&&&&&&&&&&&&& split is: %d, use_mul_mat_vec_q is: %d, use_mul_mat_q is: %d, type_cu is: %d, use_mul_mat_vec is: %d, tr_src is : %d\n",
+    // split, use_mul_mat_vec_q, use_mul_mat_q, type_cu, use_mul_mat_vec, tr_src);
     if (!split && use_mul_mat_vec) {
         // the custom F16 vector kernel can be used over batched cuBLAS GEMM
         // but this is only faster for GPUs without tensor cores or with a thin src0 matrix (particularly KQV in attention)
@@ -2051,6 +2062,7 @@ static void ggml_cuda_mul_mat(ggml_backend_cuda_context & ctx, const ggml_tensor
     } else if (!split && (use_batched_cublas_f16 || use_batched_cublas_bf16 || use_batched_cublas_f32)
         && !ggml_is_transposed(src0) && !ggml_is_transposed(src1) && src1->ne[2]*src1->ne[3] > 1) {
         // general KQ + KQV multi-batch without FlashAttention
+        
         ggml_cuda_mul_mat_batched_cublas(ctx, src0, src1, dst);
     } else if (use_mul_mat_vec) {
         ggml_cuda_op_mul_mat(ctx, src0, src1, dst, ggml_cuda_op_mul_mat_vec, nullptr);
@@ -2207,13 +2219,29 @@ static void ggml_cuda_mul_mat_id(ggml_backend_cuda_context & ctx, ggml_tensor * 
 }
 
 static bool ggml_cuda_compute_forward(ggml_backend_cuda_context & ctx, struct ggml_tensor * dst) {
-    // why is this here instead of mul_mat?
-    // GGML_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& dst->src[0] is: %d", dst_src[0]? 1: 0);
     if (dst->src[0] != nullptr && ggml_backend_buft_is_cuda_split(dst->src[0]->buffer->buft)) {
-        // GGML_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& dst->src[0] is: %d", dst->src[0]? 1: 0);
         ggml_cuda_set_peer_access(dst->src[1]->ne[1], ctx.device);
     }
-    GGML_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& dst->op = %d\n", dst->op);
+    // GGML_LOG_INFO("&&&&&&& dst->op = %d\n", dst->op);
+    // if (dst->op == GGML_OP_RMS_NORM)
+    // {
+    //     // std::string res = std::to_string(host_src0[0]) + " " + std::to_string(host_src0[1]) + " " + std::to_string(host_src0[2]) + " " + std::to_string(host_src0[3]);
+    //     // GGML_LOG_INFO("last_dim is: %d, res is: %s\n", last_dim, res.c_str());
+    //     GGML_LOG_INFO("&&&&&&& dst->op = %d\n", dst->op);
+    // }
+
+    // if (dst->op == GGML_OP_MUL)
+    // {   std::string res = "";
+    //     // for(int i = 0; i < 4; i++) {
+    //     //     res += std::to_string(host_src0[i]) + " ";
+    //     // }
+    //     for(int i = 0; i < 896; i++) {
+    //         res += std::to_string(*(host_dst + i)) + " ";
+    //     }
+    //     GGML_LOG_INFO("res is: %s\n", res.c_str());
+    // }
+    // get_k();
+    
     switch (dst->op) {
         case GGML_OP_ARGMAX:
             ggml_cuda_argmax(ctx, dst);
@@ -2364,7 +2392,18 @@ static bool ggml_cuda_compute_forward(ggml_backend_cuda_context & ctx, struct gg
             ggml_cuda_op_silu_back(ctx, dst);
             break;
         case GGML_OP_RMS_NORM:
+        {
             ggml_cuda_op_rms_norm(ctx, dst);
+            // float * data = (float *)malloc(sizeof(float) * 896);
+            // ggml_backend_cuda_context * cuda_ctx = &ctx;
+            // ggml_backend_buffer_t buf = dst->view_src ? dst->view_src->buffer : dst->buffer;
+            // GGML_ASSERT(buf->buft == ggml_backend_cuda_buffer_type(cuda_ctx->device) && "unsupported buffer type");
+            // CUDA_CHECK(cudaMemcpyAsync(data, (const char *)dst->data, 896 * sizeof(float), cudaMemcpyDeviceToHost, cuda_ctx->stream()));
+            // for(int i = 0; i < 896; i++) 
+            // {
+            //     GGML_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&&&& pos is: %d, res is: %f\n", i, data[i]);
+            // }
+        }
             break;
         case GGML_OP_RMS_NORM_BACK:
             ggml_cuda_op_rms_norm_back(ctx, dst);
@@ -2477,6 +2516,10 @@ static bool ggml_cuda_compute_forward(ggml_backend_cuda_context & ctx, struct gg
         default:
             return false;
     }
+    
+    
+    
+    // free(host_src0);
 
     cudaError_t err = cudaGetLastError();
     if (err != cudaSuccess) {
@@ -2804,7 +2847,7 @@ static void evaluate_and_capture_cuda_graph(ggml_backend_cuda_context * cuda_ctx
                 CUDA_CHECK(cudaGraphDestroy(cuda_ctx->cuda_graph->graph));
                 cuda_ctx->cuda_graph->graph = nullptr;
             }
-
+            
             CUDA_CHECK(cudaStreamEndCapture(cuda_ctx->stream(), &cuda_ctx->cuda_graph->graph));
             graph_evaluated_or_captured = true; // CUDA graph has been captured
 
@@ -2824,6 +2867,16 @@ static void evaluate_and_capture_cuda_graph(ggml_backend_cuda_context * cuda_ctx
         if (cuda_graph_update_required) { // Update graph executable
             update_cuda_graph_executable(cuda_ctx);
         }
+        // if(node->op == GGML_OP_RMS_NORM)
+        // {
+        //     float * h_dst = new float[896];
+        //     cudaMemcpyAsync(h_dst, (float *)node->data, sizeof(float) * 896, cudaMemcpyDeviceToHost, cuda_ctx->stream());
+        //     cudaStreamSynchronize(cuda_ctx->stream());
+        //     for(int i = 0; i < 896; i++) {
+        //         GGML_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&&&& pos is: %d, res is: %f\n", i, h_dst[i]);
+        //     }
+        // }
+        
         // Launch graph
         CUDA_CHECK(cudaGraphLaunch(cuda_ctx->cuda_graph->instance, cuda_ctx->stream()));
 #else

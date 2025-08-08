@@ -334,7 +334,7 @@ enum ggml_status ggml_backend_graph_compute(ggml_backend_t backend, struct ggml_
 }
 
 enum ggml_status ggml_backend_graph_compute_async(ggml_backend_t backend, struct ggml_cgraph * cgraph) {
-    // GGML_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& backend->iface beckend name is: %s\n", backend->iface.get_name(backend));
+    GGML_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& backend->iface beckend name is: %s\n", backend->iface.get_name(backend));
     return backend->iface.graph_compute(backend, cgraph);
 }
 
@@ -1597,7 +1597,7 @@ enum ggml_status ggml_backend_sched_graph_compute_async(ggml_backend_sched_t sch
     if (!sched->is_reset && !sched->is_alloc) {
         ggml_backend_sched_reset(sched);
     }
-    GGML_LOG_INFO("################################################################################################################################# %s, sched->is_alloc is:%d\n", __func__, sched->is_alloc);
+    // GGML_LOG_INFO("################################################################################################################################# %s, sched->is_alloc is:%d\n", __func__, sched->is_alloc);
     if (!sched->is_alloc) {
         if (!ggml_backend_sched_alloc_graph(sched, graph)) {
             return GGML_STATUS_ALLOC_FAILED;
