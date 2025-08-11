@@ -668,9 +668,7 @@ void llama_batch_allocr::clear() {
 
 llama_ubatch llama_batch_allocr::ubatch_add(const std::vector<int32_t> & idxs, uint32_t n_seqs, bool equal_seqs) {
     const uint32_t n_tokens = idxs.size();
-    // LLAMA_LOG_INFO("********************************************************************** n_tokens is: %d, n_seqs is: %d\n", n_tokens, n_seqs);
     assert(n_tokens%n_seqs == 0);
-    // LLAMA_LOG_INFO("********************************************************************** ubatch_add check1\n");
     ubatches.emplace_back();
 
     auto & ubatch = ubatches.back();
@@ -703,13 +701,15 @@ llama_ubatch llama_batch_allocr::ubatch_add(const std::vector<int32_t> & idxs, u
         }
         // LLAMA_LOG_INFO("********************************************************************** copy data is: %d\n", ubatch.embd.data()[0]);
         for (int j = 0; j < n_pos_cur; ++j) {
+            // LLAMA_LOG_INFO("********************************************************************** j*n_tokens + i is: %d, j*batch.n_tokens + idxs[i] is: %d\n", j*n_tokens + i, j*batch.n_tokens + idxs[i]);
             ubatch.pos[j*n_tokens + i] = batch.pos[j*batch.n_tokens + idxs[i]];
         }
-
+        // LLAMA_LOG_INFO("********************************************************************** ubatch_add check4\n");
         ubatch.n_seq_id[i] = batch.n_seq_id[idxs[i]];
         ubatch.seq_id[i]   = batch.seq_id[idxs[i]];
         ubatch.output[i]   = batch.logits[idxs[i]];
-
+        // LLAMA_LOG_INFO("********************************************************************** ubatch.seq_id[i][s] is: %d\n", ubatch.seq_id[i][0]);
+        // LLAMA_LOG_INFO("********************************************************************** n_tokens is: %d\n", n_tokens);
         for (int s = 0; s < ubatch.n_seq_id[i]; ++s) {
             seq_set_unq.set(ubatch.seq_id[i][s]);
         }

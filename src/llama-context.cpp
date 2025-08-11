@@ -194,7 +194,7 @@ llama_context::llama_context(
             /*.type_v   =*/ params.type_v,
             /*.swa_full =*/ params.swa_full,
         };
-
+        
         memory.reset(model.create_memory(params_mem, cparams));
     }
 
@@ -447,6 +447,8 @@ bool llama_context::kv_self_update(bool optimize) {
         memory_force_optimize = false;
 
         const auto mctx = memory->init_update(this, optimize);
+        // if(!mctx) {
+        //     ggml_tensor * k = memory->get_k(ctx);
         switch (mctx->get_status()) {
             case LLAMA_MEMORY_STATUS_SUCCESS:
                 {
@@ -709,7 +711,7 @@ llm_graph_result_ptr llama_context::process_ubatch(const llama_ubatch & ubatch, 
     }
     //LLAMA_LOG_INFO("############################################################################################################################## %s\n", __func__);
     res->set_inputs(&ubatch);
-    LLAMA_LOG_INFO("############################################################################################################################## %s\n", __func__);
+    // LLAMA_LOG_INFO("############################################################################################################################## %s\n", __func__);
     const auto status = graph_compute(gf, ubatch.n_tokens > 1);
     if (status != GGML_STATUS_SUCCESS) {
         LLAMA_LOG_ERROR("%s: failed to compute graph, compute status: %d\n", __func__, status);
@@ -718,7 +720,7 @@ llm_graph_result_ptr llama_context::process_ubatch(const llama_ubatch & ubatch, 
     }
 
     ret = GGML_STATUS_SUCCESS;
-
+    
     return res;
 }
 
@@ -973,6 +975,7 @@ int llama_context::decode(const llama_batch & batch_inp) {
                 }
             case LLAMA_MEMORY_STATUS_FAILED_PREPARE:
                 {
+                    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& cgeck here!!!!!!!!!!!!!!!!!!!!\n");
                     if (!did_optimize) {
                         did_optimize = true;
 
@@ -1216,6 +1219,8 @@ int llama_context::decode(const llama_batch & batch_inp) {
     // Reset state for the next token before backend sync, to allow the CPU activities in the reset to
     // overlap with device computation.
     ggml_backend_sched_reset(sched.get());
+    // llama_kv_cache_unified_context * kv_mctx = new llama_kv_cache_unified_context;
+    // ggml_tensor * k_cache = kv_mctx->get_k(this, 0);
 
     return 0;
 }
@@ -1395,7 +1400,7 @@ ggml_status llama_context::graph_compute(
         set_n_threads_fn.second(set_n_threads_fn.first, n_threads);
     }
 
-    LLAMA_LOG_INFO("################################################################################################################################# %s\n", __func__);
+    // LLAMA_LOG_INFO("################################################################################################################################# %s\n", __func__);
     auto status = ggml_backend_sched_graph_compute_async(sched.get(), gf);
     if (status != GGML_STATUS_SUCCESS) {
         LLAMA_LOG_ERROR("%s: ggml_backend_sched_graph_compute_async failed with error %d\n", __func__, status);
