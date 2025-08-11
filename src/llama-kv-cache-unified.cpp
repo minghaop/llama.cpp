@@ -32,13 +32,13 @@ llama_kv_cache_unified::llama_kv_cache_unified(
     n_seq_max(n_seq_max), n_pad(n_pad), n_swa(n_swa), swa_type(swa_type) {
 
     GGML_ASSERT(kv_size % n_pad == 0);
-
+    
     // TODO: this is temporary until we support passing reuse layer filters [KV_REUSE]
     auto n_layer_cache = hparams.n_layer;
     if (model.arch == LLM_ARCH_GEMMA3N) {
         n_layer_cache = 20;
     }
-
+    
     // create a context for each buffer type
     std::map<ggml_backend_buffer_type_t, ggml_context *> ctx_map;
     auto ctx_for_buft = [&](ggml_backend_buffer_type_t buft) -> ggml_context * {
@@ -67,7 +67,7 @@ llama_kv_cache_unified::llama_kv_cache_unified(
     head = 0;
 
     cells.resize(kv_size);
-
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&& %s: kv_size = %u\n", __func__, n_layer_cache);
     for (uint32_t il = 0; il < n_layer_cache; il++) {
         if (filter && !filter(il)) {
             LLAMA_LOG_DEBUG("%s: layer %3d: skipped\n", __func__, il);
@@ -76,7 +76,8 @@ llama_kv_cache_unified::llama_kv_cache_unified(
 
         const uint32_t n_embd_k_gqa = hparams.n_embd_k_gqa(il);
         const uint32_t n_embd_v_gqa = hparams.n_embd_v_gqa(il);
-
+        // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&& %s: n_embd_k_gqa = %u\n", __func__, n_embd_k_gqa);
+        // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&& %s: n_embd_v_gqa = %u\n", __func__, n_embd_v_gqa);
         const char * dev_name = "CPU";
 
         ggml_backend_buffer_type_t buft = ggml_backend_cpu_buffer_type();
@@ -346,6 +347,7 @@ llama_memory_context_ptr llama_kv_cache_unified::init_batch(
             bool embd_all) {
     GGML_UNUSED(embd_all);
     // LLAMA_LOG_INFO("********************************************************************** llama_kv_cache_unified init_batch\n");
+    
     do {
         balloc.split_reset();
         // LLAMA_LOG_INFO("********************************************************************** check here3\n");
@@ -385,7 +387,7 @@ llama_memory_context_ptr llama_kv_cache_unified::init_full() {
 
 llama_memory_context_ptr llama_kv_cache_unified::init_update(llama_context * lctx, bool optimize) {
     bool do_shift = get_has_shift();
-
+    
     defrag_info dinfo;
 
     // see if we need to defrag
@@ -396,7 +398,7 @@ llama_memory_context_ptr llama_kv_cache_unified::init_update(llama_context * lct
 
         if (!do_defrag && thold > 0.0f) {
             const auto n_kv = cells.used_max_p1();
-
+            
             // - do not defrag small contexts (i.e. < 2048 tokens)
             // - count the padding towards the number of used tokens
             const float fragmentation = n_kv >= 2048 ? std::max(0.0f, 1.0f - (float(cells.get_used() + n_pad)/n_kv)) : 0.0f;

@@ -20,7 +20,7 @@ struct llama_context;
 class llama_kv_cache_unified : public llama_memory_i {
 public:
     static uint32_t get_padding(const llama_cparams & cparams);
-
+    
     // this callback is used to filter out layers that should not be included in the cache
     using layer_filter_cb = std::function<bool(int32_t il)>;
 
