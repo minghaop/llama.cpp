@@ -238,6 +238,7 @@ class GGUFWriter:
             kv_bytes = bytearray()
 
             for key, val in kv_data.items():
+                # print("&&&&&&&&&&&& key is: {}, val.value is: {}, val.type is: {}".format(key, val.value, val.type))
                 kv_bytes += self._pack_val(key, GGUFValueType.STRING, add_vtype=False)
                 kv_bytes += self._pack_val(val.value, val.type, add_vtype=True, sub_type=val.sub_type)
 
@@ -648,9 +649,6 @@ class GGUFWriter:
     def add_convnext_block_count(self, length: int) -> None:
         self.add_uint32(Keys.ConvNext.BLOCK_COUNT.format(arch=self.arch), length)
 
-    def add_shortconv_l_cache(self, length: int) -> None:
-        self.add_uint32(Keys.ShortConv.L_CACHE.format(arch=self.arch), length)
-
     def add_block_count(self, length: int) -> None:
         self.add_uint32(Keys.LLM.BLOCK_COUNT.format(arch=self.arch), length)
 
@@ -674,18 +672,6 @@ class GGUFWriter:
 
     def add_decoder_start_token_id(self, id: int) -> None:
         self.add_uint32(Keys.LLM.DECODER_START_TOKEN_ID.format(arch=self.arch), id)
-
-    def add_embedding_length_per_layer_input(self, value: int) -> None:
-        self.add_uint32(Keys.LLM.EMBD_LENGTH_PER_LAYER_INP.format(arch=self.arch), value)
-
-    def add_altup_active_idx(self, val: int) -> None:
-        self.add_uint32(Keys.LLM.ALTUP_ACTIVE_IDX.format(arch=self.arch), val)
-
-    def add_altup_num_inputs(self, val: int) -> None:
-        self.add_uint32(Keys.LLM.ALTUP_NUM_INPUTS.format(arch=self.arch), val)
-
-    def add_activation_sparsity_scale(self, values: Sequence[float]) -> None:
-        self.add_array(Keys.LLM.ACTIVATION_SPARSITY_SCALE.format(arch=self.arch), values)
 
     def add_head_count(self, count: int | Sequence[int]) -> None:
         if isinstance(count, int):
@@ -716,12 +702,6 @@ class GGUFWriter:
 
     def add_clamp_kqv(self, value: float) -> None:
         self.add_float32(Keys.Attention.CLAMP_KQV.format(arch=self.arch), value)
-
-    def add_shared_kv_layers(self, value: int) -> None:
-        self.add_uint32(Keys.Attention.SHARED_KV_LAYERS.format(arch=self.arch), value)
-
-    def add_sliding_window_pattern(self, value: Sequence[bool]) -> None:
-        self.add_array(Keys.Attention.SLIDING_WINDOW_PATTERN.format(arch=self.arch), value)
 
     def add_logit_scale(self, value: float) -> None:
         self.add_float32(Keys.LLM.LOGIT_SCALE.format(arch=self.arch), value)
@@ -864,9 +844,6 @@ class GGUFWriter:
     def add_ssm_time_step_rank(self, value: int) -> None:
         self.add_uint32(Keys.SSM.TIME_STEP_RANK.format(arch=self.arch), value)
 
-    def add_ssm_group_count(self, value: int) -> None:
-        self.add_uint32(Keys.SSM.GROUP_COUNT.format(arch=self.arch), value)
-
     def add_ssm_dt_b_c_rms(self, value: bool) -> None:
         self.add_bool(Keys.SSM.DT_B_C_RMS.format(arch=self.arch), value)
 
@@ -915,9 +892,6 @@ class GGUFWriter:
     def add_add_eos_token(self, value: bool) -> None:
         self.add_bool(Keys.Tokenizer.ADD_EOS, value)
 
-    def add_add_sep_token(self, value: bool) -> None:
-        self.add_bool(Keys.Tokenizer.ADD_SEP, value)
-
     def add_add_space_prefix(self, value: bool) -> None:
         self.add_bool(Keys.Tokenizer.ADD_PREFIX, value)
 
@@ -926,6 +900,144 @@ class GGUFWriter:
 
     def add_precompiled_charsmap(self, charsmap: bytes) -> None:
         self.add_array(Keys.Tokenizer.PRECOMPILED_CHARSMAP, charsmap)
+    
+    ################## CosyVoiceFlow ##################
+    
+    def add_cosyvoiceflow_vocab_size(self, size: int) -> None:
+        self.add_uint32(Keys.CosyVoiceFlow.VOCAB_SIZE, size)
+    
+    def add_cosyvoiceflow_token_mel_ratio(self, ratio: int) -> None:
+        self.add_float32(Keys.CosyVoiceFlow.TOKEN_MEL_RATIO, ratio)
+    
+    def add_cosyvoiceflow_spk_embed_dim(self, dim: int) -> None:
+        self.add_uint32(Keys.CosyVoiceFlow.SPK_EMBED_DIM, dim)
+
+    def add_cosyvoiceflow_pre_lookahead_len(self, length: int) -> None:
+        self.add_uint32(Keys.CosyVoiceFlow.PRE_LOOKAHEAD_LEN, length)
+    
+    def add_cosyvoiceflow_output_type(self, type: str) -> None:
+        self.add_string(Keys.CosyVoiceFlow.OUT_TYPE, type)
+    
+    def add_cosyvoiceflow_output_size(self, size: int) -> None:
+        self.add_uint32(Keys.CosyVoiceFlow.OUTPUT_SIZE, size)
+
+    def add_cosyvoiceflow_only_mask_loss(self, value: bool) -> None:
+        self.add_bool(Keys.CosyVoiceFlow.ONLY_MASK_LOSS, value)
+    
+    def add_cosyvoiceflow_input_size(self, size: int) -> None:
+        self.add_uint32(Keys.CosyVoiceFlow.INPUT_SIZE, size)
+    
+    def add_cosyvoiceflow_input_frame_rate(self, rate: int) -> None:
+        self.add_uint32(Keys.CosyVoiceFlow.INPUT_FRAME_RATE, rate)
+    
+    def add_cosyvoiceflow_torch_dtype(self, dtype: str) -> None:
+        self.add_string(Keys.CosyVoiceFlow.TORCH_DTYPE, dtype)
+    
+    def add_cosyvoiceflow_encoder_attention_heads(self, count: int) -> None:
+        self.add_uint32(Keys.CosyVoiceFlow.encoder.ATTN_HEADS, count)
+    
+    def add_cosyvoiceflow_encoder_attention_droupout_rate(self, rate: float) -> None:
+        self.add_float32(Keys.CosyVoiceFlow.encoder.ATTN_DROPOUT_RATE, rate)
+    
+    def add_cosyvoiceflow_encoder_droupout_rate(self, rate: float) -> None:
+        self.add_float32(Keys.CosyVoiceFlow.encoder.DROPOUT_RATE, rate)
+    
+    def add_cosyvoiceflow_encoder_input_layer(self, layer: str) -> None:
+        self.add_string(Keys.CosyVoiceFlow.encoder.INPUT_LAYER, layer)
+    
+    def add_cosyvoiceflow_encoder_input_size(self, size: int) -> None:
+        self.add_uint32(Keys.CosyVoiceFlow.encoder.INPUT_SIZE, size)
+    
+    def add_cosyvoiceflow_encoder_layer_units(self, units: int) -> None:
+        self.add_uint32(Keys.CosyVoiceFlow.encoder.LINEAR_UNITS, units)
+    
+    def add_cosyvoiceflow_encoder_macaron_stytle(self, stytle: bool) -> None:
+        self.add_bool(Keys.CosyVoiceFlow.encoder.MACARON_STYLE, stytle)
+    
+    def add_cosyvoiceflow_encoder_normalize_before(self, value: bool) -> None:
+        self.add_bool(Keys.CosyVoiceFlow.encoder.NORMALIZE_BEFORE, value)
+    
+    def add_cosyvoiceflow_encoder_num_blocks(self, blocks: int) -> None:
+        self.add_uint32(Keys.CosyVoiceFlow.encoder.BLOCKS_COUNT, blocks)
+    
+    def add_cosyvoiceflow_encoder_output_size(self, size: int) -> None:
+        self.add_uint32(Keys.CosyVoiceFlow.encoder.OUTPUT_SIZE, size)
+    
+    def add_cosyvoiceflow_encoder_pos_enc_layer_type(self, type: str) -> None:
+        self.add_string(Keys.CosyVoiceFlow.encoder.POS_ENC_LAYER_TYPE, type)
+    
+    def add_cosyvoiceflow_encoder_positional_dropout_rate(self, rate: float) -> None:
+        self.add_float32(Keys.CosyVoiceFlow.encoder.POS_DROPOUT_RATE, rate)
+    
+    def add_cosyvoiceflow_encoder_self_attention_layer_type(self, layer: str) -> None:
+        self.add_string(Keys.CosyVoiceFlow.encoder.SELF_ATTENTION_TYPE, layer)
+    
+    def add_cosyvoiceflow_encoder_static_chunck_size(self, size: int) -> None:
+        self.add_uint32(Keys.CosyVoiceFlow.encoder.STATIC_CHUNK_SIZE, size)
+    
+    def add_cosyvoiceflow_encoder_use_cnn_module(self, use: bool) -> None:
+        self.add_bool(Keys.CosyVoiceFlow.encoder.USE_CNN_MODULE, use)
+    
+    def add_cosyvoiceflow_decoder_act_fn(self, act_fn: str) -> None:
+        self.add_string(Keys.CosyVoiceFlow.decoder.ACT_FN, act_fn)
+    
+    def add_cosyvoiceflow_decoder_attention_heads(self, count: int) -> None:
+        self.add_uint32(Keys.CosyVoiceFlow.decoder.ATTENTION_HEAND_DIM, count)
+    
+    def add_cosyvoiceflow_decoder_channels(self, channels: Sequence[int]) -> None:
+        self.add_array(Keys.CosyVoiceFlow.decoder.CHANNELS, channels)
+
+    def add_cosyvoiceflow_decoder_droupout_rate(self, rate: float) -> None:
+        self.add_float32(Keys.CosyVoiceFlow.decoder.DROPOUT_RATE, rate)
+
+    def add_cosyvoiceflow_decoder_estimator_input_size(self, size: int) -> None:
+        self.add_uint32(Keys.CosyVoiceFlow.decoder.ESTIMATOR_INPUT_CHANNELS, size)
+    
+    def add_cosyvoiceflow_decoder_in_channels(self, channels: int) -> None:
+        self.add_uint32(Keys.CosyVoiceFlow.decoder.IN_CHANNELS, channels)
+
+    def add_cosyvoiceflow_decoder_inference_cfg_rate(self, rate: int) -> None:
+        self.add_float32(Keys.CosyVoiceFlow.decoder.INFER_CFG_RATE, rate)
+    
+    def add_cosyvoiceflow_decoder_n_blocks(self, blocks: int) -> None:
+        self.add_uint32(Keys.CosyVoiceFlow.decoder.N_BLOCKS, blocks)
+    
+    def add_cosyvoiceflow_decoder_n_spks(self, count: int) -> None:
+        self.add_uint32(Keys.CosyVoiceFlow.decoder.N_SPKS, count)
+    
+    def add_cosyvoiceflow_decoding_left_chunck_size(self, size: int) -> None:
+        self.add_int32(Keys.CosyVoiceFlow.decoder.DECODING_LEFT_CHUNCK, size)
+    
+    def add_cosyvoiceflow_decoder_num_heads(self, count: int) -> None:
+        self.add_uint32(Keys.CosyVoiceFlow.decoder.NUM_HEADS, count)
+    
+    def add_cosyvoiceflow_decoder_num_mid_blocks(self, count: int) -> None:
+        self.add_uint32(Keys.CosyVoiceFlow.decoder.NUM_MID_BLOCKS, count)
+    
+    def add_cosyvoiceflow_decoder_out_channels(self, channels: int) -> None:
+        self.add_uint32(Keys.CosyVoiceFlow.decoder.OUTPUT_CHANNELS, channels)
+    
+    def add_cosyvoiceflow_decoder_reg_loss_type(self, loss_type: str) -> None:
+        self.add_string(Keys.CosyVoiceFlow.decoder.REG_LOSS_TYPE, loss_type)
+    
+    def add_cosyvoiceflow_decoder_sigma_min(self, sigma: float) -> None:
+        self.add_float32(Keys.CosyVoiceFlow.decoder.SIGMA_MIN, sigma)
+    
+    def add_cosyvoiceflow_decoder_solver_type(self, solver_type: str) -> None:
+        self.add_string(Keys.CosyVoiceFlow.decoder.SLOVER, solver_type)
+    
+    def add_cosyvoiceflow_decoder_spk_embed_dim(self, dim: int) -> None:
+        self.add_uint32(Keys.CosyVoiceFlow.decoder.SPK_EMB_DIM, dim)
+    
+    def add_cosyvoiceflow_decoder_static_chunck_size(self, size: int) -> None:
+        self.add_uint32(Keys.CosyVoiceFlow.decoder.STATIC_CHUNCK_SIZE, size)
+    
+    def add_cosyvoiceflow_decoder_t_scheduler(self, scheduler: str) -> None:
+        self.add_string(Keys.CosyVoiceFlow.decoder.T_SCHEDULER, scheduler)
+    
+    def add_cosyvoiceflow_decoder_training_cfg_rate(self, rate: int) -> None:
+        self.add_float32(Keys.CosyVoiceFlow.decoder.TRAIN_CFG_RATE, rate)
+    
 
     def add_chat_template(self, value: str | Sequence[Mapping[str, str]]) -> None:
         if not isinstance(value, str):
