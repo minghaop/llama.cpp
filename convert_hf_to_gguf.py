@@ -14,9 +14,9 @@ import sys
 from enum import IntEnum
 from pathlib import Path
 from hashlib import sha256
-from typing import TYPE_CHECKING, Any, Callable, ContextManager, Iterable, Iterator, Literal, Sequence, TypeVar, cast
+from typing import TYPE_CHECKING, Any, Callable, ContextManager, Iterable, Iterator, Literal, Sequence, TypeVar, cast, Optional, Tuple, List
 from itertools import chain
-from transformers import AutoConfig
+from transformers import AutoConfig, PretrainedConfig
 
 import math
 import numpy as np
@@ -31,6 +31,119 @@ import gguf
 
 logger = logging.getLogger("hf-to-gguf")
 
+
+
+###### Custome Config ######
+class CosyVoiceFlowConfig(PretrainedConfig):
+    """
+    Configuration for CosyVoice Flow (CausalMaskedDiffWithXvec)
+    """
+    model_type = "cosy_voice_flow"
+
+    def __init__(
+        self,
+        input_size: int = 512,
+        output_size: int = 80,
+        spk_embed_dim: int = 192,          # 根据实际值填写
+        output_type: str = "mel",
+        vocab_size: int = 6561,
+        input_frame_rate: int = 25,
+        only_mask_loss: bool = True,
+        token_mel_ratio: int = 2,
+        pre_lookahead_len: int = 3,
+        # ----------------- encoder -----------------
+        encoder_output_size: int = 512,
+        encoder_attention_heads: int = 8,
+        encoder_linear_units: int = 2048,
+        encoder_num_blocks: int = 6,
+        encoder_dropout_rate: float = 0.1,
+        encoder_positional_dropout_rate: float = 0.1,
+        encoder_attention_dropout_rate: float = 0.1,
+        encoder_normalize_before: bool = True,
+        encoder_input_layer: str = "linear",
+        encoder_pos_enc_layer_type: str = "rel_pos_espnet",
+        encoder_selfattention_layer_type: str = "rel_selfattn",
+        encoder_input_size: int = 512,
+        encoder_use_cnn_module: bool = False,
+        encoder_macaron_style: bool = False,
+        encoder_static_chunk_size: Optional[int] = 25,
+        # ----------------- decoder -----------------
+        decoder_in_channels: int = 240,
+        decoder_n_spks: int = 1,
+        decoder_spk_emb_dim: int = 80,
+        decoder_sigma_min: float = 1e-6,
+        decoder_solver: str = "euler",
+        decoder_t_scheduler: str = "cosine",
+        decoder_training_cfg_rate: float = 0.2,
+        decoder_inference_cfg_rate: float = 0.7,
+        decoder_reg_loss_type: str = "l1",
+        decoder_estimator_input_channels: int = 320,
+        decoder_out_channels: int = 80,
+        decoder_channels: List[int] = (256,),
+        decoder_dropout: float = 0.0,
+        decoder_attention_head_dim: int = 64,
+        decoder_n_blocks: int = 4,
+        decoder_num_mid_blocks: int = 12,
+        decoder_num_heads: int = 8,
+        decoder_act_fn: str = "gelu",
+        decoder_static_chunk_size: Optional[int] = 50,
+        decoder_num_decoding_left_chunks: int = -1,
+        **kwargs,
+    ):
+        # 1. 把局部变量一次性写进 self 的属性
+        self.input_size = input_size
+        self.output_size = output_size
+        self.spk_embed_dim = spk_embed_dim
+        self.output_type = output_type
+        self.vocab_size = vocab_size
+        self.input_frame_rate = input_frame_rate
+        self.only_mask_loss = only_mask_loss
+        self.token_mel_ratio = token_mel_ratio
+        self.pre_lookahead_len = pre_lookahead_len
+
+        # encoder
+        self.encoder_output_size = encoder_output_size
+        self.encoder_attention_heads = encoder_attention_heads
+        self.encoder_linear_units = encoder_linear_units
+        self.encoder_num_blocks = encoder_num_blocks
+        self.encoder_dropout_rate = encoder_dropout_rate
+        self.encoder_positional_dropout_rate = encoder_positional_dropout_rate
+        self.encoder_attention_dropout_rate = encoder_attention_dropout_rate
+        self.encoder_normalize_before = encoder_normalize_before
+        self.encoder_input_layer = encoder_input_layer
+        self.encoder_pos_enc_layer_type = encoder_pos_enc_layer_type
+        self.encoder_selfattention_layer_type = encoder_selfattention_layer_type
+        self.encoder_input_size = encoder_input_size
+        self.encoder_use_cnn_module = encoder_use_cnn_module
+        self.encoder_macaron_style = encoder_macaron_style
+        self.encoder_static_chunk_size = encoder_static_chunk_size
+
+        # decoder
+        self.decoder_in_channels = decoder_in_channels
+        self.decoder_n_spks = decoder_n_spks
+        self.decoder_spk_emb_dim = decoder_spk_emb_dim
+        self.decoder_sigma_min = decoder_sigma_min
+        self.decoder_solver = decoder_solver
+        self.decoder_t_scheduler = decoder_t_scheduler
+        self.decoder_training_cfg_rate = decoder_training_cfg_rate
+        self.decoder_inference_cfg_rate = decoder_inference_cfg_rate
+        self.decoder_reg_loss_type = decoder_reg_loss_type
+
+        # decoder estimator
+        self.decoder_estimator_input_channels = decoder_estimator_input_channels
+        self.decoder_out_channels = decoder_out_channels
+        self.decoder_channels = list(decoder_channels)
+        self.decoder_dropout = decoder_dropout
+        self.decoder_attention_head_dim = decoder_attention_head_dim
+        self.decoder_n_blocks = decoder_n_blocks
+        self.decoder_num_mid_blocks = decoder_num_mid_blocks
+        self.decoder_num_heads = decoder_num_heads
+        self.decoder_act_fn = decoder_act_fn
+        self.decoder_static_chunk_size = decoder_static_chunk_size
+        self.decoder_num_decoding_left_chunks = decoder_num_decoding_left_chunks
+
+        # 2. 让父类保存其余 kwargs（如 vocab_size、pad_token_id 等）
+        super().__init__(**kwargs)
 
 ###### MODEL DEFINITIONS ######
 
@@ -143,9 +256,10 @@ class ModelBase:
         return path.with_name(new_name)
 
     def find_hparam(self, keys: Iterable[str], optional: bool = False) -> Any:
-        key = next((k for k in keys if k in self.hparams), None)
+        cfg_dict = self.hparams.to_dict()
+        key = next((k for k in keys if k in cfg_dict), None)
         if key is not None:
-            return self.hparams[key]
+            return cfg_dict[key]
         if optional:
             return None
         raise KeyError(f"could not find any of: {keys}")
@@ -178,7 +292,7 @@ class ModelBase:
                 ctx = cast(ContextManager[Any], safe_open(self.dir_model / part_name, framework="pt", device="cpu"))
             else:
                 ctx = contextlib.nullcontext(torch.load(str(self.dir_model / part_name), map_location="cpu", mmap=True, weights_only=True))
-
+            
             with ctx as model_part:
                 tensor_names_from_parts.update(model_part.keys())
 
@@ -193,6 +307,8 @@ class ModelBase:
                         data = model_part[name]
                         if self.lazy:
                             data = LazyTorchTensor.from_eager(data)
+                    # import pdb
+                    # pdb.set_trace()
                     yield name, data
 
         # verify tensor name presence and identify potentially missing files
@@ -254,9 +370,12 @@ class ModelBase:
         return ()
 
     def prepare_tensors(self):
+        # import pdb
+        # pdb.set_trace()
         max_name_len = max(len(s) for _, s in self.tensor_map.mapping.values()) + len(".weight,")
 
         for name, data_torch in chain(self.generate_extra_tensors(), self.get_tensors()):
+            
             # we don't need these
             if name.endswith((".attention.masked_bias", ".attention.bias", ".rotary_emb.inv_freq")):
                 continue
@@ -273,7 +392,8 @@ class ModelBase:
                 if part.isdecimal():
                     bid = int(part)
                     break
-
+            # import pdb
+            # pdb.set_trace()
             for new_name, data_torch in (self.modify_tensors(data_torch, name, bid)):
                 # TODO: why do we squeeze here?
                 # data = data_torch.squeeze().numpy()
@@ -379,7 +499,8 @@ class ModelBase:
         total_params, shared_params, expert_params, expert_count = self.gguf_writer.get_total_parameter_count()
 
         self.metadata = gguf.Metadata.load(self.metadata_override, self.dir_model_card, self.model_name, total_params)
-
+        # import pdb
+        # pdb.set_trace()
         # If we are using HF model id, set the metadata name to the model id
         if self.remote_hf_model_id:
             self.metadata.name = self.remote_hf_model_id
@@ -398,7 +519,7 @@ class ModelBase:
         self.metadata.set_gguf_meta_model(self.gguf_writer)
 
         logger.info("Set model parameters")
-        self.set_gguf_parameters()
+        self.set_flow_guff_parameters()
 
         logger.info("Set model quantization version")
         self.gguf_writer.add_quantization_version(gguf.GGML_QUANT_VERSION)
@@ -430,7 +551,8 @@ class ModelBase:
         try:
             # for security reason, we don't allow loading remote code by default
             # if a model need remote code, we will fallback to config.json
-            config = AutoConfig.from_pretrained(dir_model, trust_remote_code=False).to_dict()
+            # config = AutoConfig.from_pretrained(dir_model, trust_remote_code=False).to_dict()
+            config = CosyVoiceFlowConfig.from_pretrained("/home/yangkun/CosyVoice/CosyVoice_ori/CosyVoice/pretrained_models/CosyVoice2-0.5B/flow")
         except Exception as e:
             logger.warning(f"Failed to load model config from {dir_model}: {e}")
             logger.warning("Trying to load config.json instead")
@@ -465,6 +587,8 @@ class ModelBase:
     @classmethod
     def from_model_architecture(cls, arch: str, model_type = ModelType.TEXT) -> type[ModelBase]:
         try:
+            # import pdb
+            # pdb.set_trace()
             return cls._model_classes[model_type][arch]
         except KeyError:
             raise NotImplementedError(f'Architecture {arch!r} not supported!') from None
@@ -481,7 +605,8 @@ class TextModel(ModelBase):
         if "text_config" in self.hparams:
             # move the text_config to the root level
             self.hparams = {**self.hparams, **self.hparams["text_config"]}
-
+        # import pdb
+        # pdb.set_trace()
         self.block_count = self.find_hparam(["n_layers", "num_hidden_layers", "n_layer", "num_layers"])
         self.tensor_map = gguf.get_tensor_name_map(self.model_arch, self.block_count)
 
@@ -521,7 +646,7 @@ class TextModel(ModelBase):
             self.fname_out = self.fname_out.parent / gguf.fill_templated_filename(self.fname_out.name, output_type)
 
         logger.info("Set model tokenizer")
-        self.set_vocab()
+        # self.set_vocab()
 
     def set_gguf_parameters(self):
         self.gguf_writer.add_block_count(self.block_count)
@@ -568,6 +693,115 @@ class TextModel(ModelBase):
 
         self.gguf_writer.add_file_type(self.ftype)
         logger.info(f"gguf: file type = {self.ftype}")
+    
+    def set_flow_guff_parameters(self):
+
+        ######## flow ########
+        cfg_dict = self.hparams.to_dict()
+        input_size = cfg_dict["input_size"]
+        input_frame_rate = cfg_dict["input_frame_rate"]
+        only_mask_loss = cfg_dict["only_mask_loss"]
+        output_size = cfg_dict["output_size"]
+        output_type = cfg_dict["output_type"]
+        pre_lookahead_len = cfg_dict["pre_lookahead_len"]
+        spk_embed_dim = cfg_dict["spk_embed_dim"]
+        token_mel_ratio = cfg_dict["token_mel_ratio"]
+        vocab_size = cfg_dict["vocab_size"]
+
+        ######## encoder ########
+        encoder_attention_dropout_rate = cfg_dict["encoder_attention_dropout_rate"]
+        encoder_attention_heads = cfg_dict["encoder_attention_heads"]
+        encoder_dropout_rate  = cfg_dict["encoder_dropout_rate"]
+        encoder_input_layer = cfg_dict["encoder_input_layer"]
+        encoder_input_size = cfg_dict["encoder_input_size"]
+        encoder_linear_units = cfg_dict["encoder_linear_units"]
+        encoder_macaron_style = cfg_dict["encoder_macaron_style"]
+        encoder_normalize_before = cfg_dict["encoder_normalize_before"]
+        encoder_num_blocks = cfg_dict["encoder_num_blocks"]
+        encoder_output_size = cfg_dict["encoder_output_size"]
+        encoder_pos_enc_layer_type = cfg_dict["encoder_pos_enc_layer_type"]
+        encoder_positional_dropout_rate = cfg_dict["encoder_positional_dropout_rate"]
+        encoder_selfattention_layer_type = cfg_dict["encoder_selfattention_layer_type"]
+        encoder_static_chunk_size = cfg_dict["encoder_static_chunk_size"]
+        encoder_use_cnn_module = cfg_dict["encoder_use_cnn_module"]
+
+
+        ######## decoder ########
+        decoder_in_channels = cfg_dict["decoder_in_channels"]
+        decoder_dropout = cfg_dict["decoder_dropout"]
+        decoder_channels = cfg_dict["decoder_channels"]
+        decoder_act_fn = cfg_dict["decoder_act_fn"]
+        decoder_attention_head_dim = cfg_dict["decoder_attention_head_dim"]
+        decoder_estimator_input_channels = cfg_dict["decoder_estimator_input_channels"]
+        decoder_inference_cfg_rate = cfg_dict["decoder_inference_cfg_rate"]
+        decoder_n_blocks = cfg_dict["decoder_n_blocks"]
+        decoder_n_spks = cfg_dict["decoder_n_spks"]
+        decoder_num_decoding_left_chunks = cfg_dict["decoder_num_decoding_left_chunks"]
+        decoder_num_heads = cfg_dict["decoder_num_heads"]
+        decoder_num_mid_blocks = cfg_dict["decoder_num_mid_blocks"]
+        decoder_out_channels =  cfg_dict["decoder_out_channels"]
+        decoder_reg_loss_type = cfg_dict["decoder_reg_loss_type"]
+        decoder_sigma_min = cfg_dict["decoder_sigma_min"]
+        decoder_solver = cfg_dict["decoder_solver"]
+        decoder_spk_emb_dim = cfg_dict["decoder_spk_emb_dim"]
+        decoder_static_chunk_size = cfg_dict["decoder_static_chunk_size"]
+        decoder_t_scheduler = cfg_dict["decoder_t_scheduler"]
+        decoder_training_cfg_rate = cfg_dict["decoder_training_cfg_rate"]
+
+        self.gguf_writer.add_cosyvoiceflow_vocab_size(vocab_size)
+        self.gguf_writer.add_cosyvoiceflow_token_mel_ratio(token_mel_ratio)
+        self.gguf_writer.add_cosyvoiceflow_spk_embed_dim(spk_embed_dim)
+        self.gguf_writer.add_cosyvoiceflow_pre_lookahead_len(pre_lookahead_len)
+        self.gguf_writer.add_cosyvoiceflow_output_type(output_type)
+        self.gguf_writer.add_cosyvoiceflow_output_size(output_size)
+
+        only_mask_loss = only_mask_loss == "true"
+        self.gguf_writer.add_cosyvoiceflow_only_mask_loss(only_mask_loss)
+        self.gguf_writer.add_cosyvoiceflow_input_size(input_size)
+        self.gguf_writer.add_cosyvoiceflow_input_frame_rate(input_frame_rate)
+
+        self.gguf_writer.add_cosyvoiceflow_encoder_attention_heads(encoder_attention_heads)
+        self.gguf_writer.add_cosyvoiceflow_encoder_attention_droupout_rate(encoder_attention_dropout_rate)
+        self.gguf_writer.add_cosyvoiceflow_encoder_droupout_rate(encoder_dropout_rate)
+        self.gguf_writer.add_cosyvoiceflow_encoder_input_layer(encoder_input_layer)
+        self.gguf_writer.add_cosyvoiceflow_encoder_input_size(encoder_input_size)
+        self.gguf_writer.add_cosyvoiceflow_encoder_layer_units(encoder_linear_units)
+
+        encoder_macaron_style = encoder_macaron_style == "true"
+        self.gguf_writer.add_cosyvoiceflow_encoder_macaron_stytle(encoder_macaron_style)
+
+        encoder_normalize_before = encoder_normalize_before == "true"
+        self.gguf_writer.add_cosyvoiceflow_encoder_normalize_before(encoder_normalize_before)
+        self.gguf_writer.add_cosyvoiceflow_encoder_num_blocks(encoder_num_blocks)
+        self.gguf_writer.add_cosyvoiceflow_encoder_output_size(encoder_output_size)
+        self.gguf_writer.add_cosyvoiceflow_encoder_pos_enc_layer_type(encoder_pos_enc_layer_type)
+        self.gguf_writer.add_cosyvoiceflow_encoder_positional_dropout_rate(encoder_positional_dropout_rate)
+        self.gguf_writer.add_cosyvoiceflow_encoder_self_attention_layer_type(encoder_selfattention_layer_type)
+        self.gguf_writer.add_cosyvoiceflow_encoder_static_chunck_size(encoder_static_chunk_size)
+
+        encoder_use_cnn_module = encoder_use_cnn_module == "true"
+        self.gguf_writer.add_cosyvoiceflow_encoder_use_cnn_module(encoder_use_cnn_module)
+        self.gguf_writer.add_cosyvoiceflow_decoder_act_fn(decoder_act_fn)
+        self.gguf_writer.add_cosyvoiceflow_decoder_attention_heads(decoder_attention_head_dim)
+        self.gguf_writer.add_cosyvoiceflow_decoder_channels(decoder_channels)
+        self.gguf_writer.add_cosyvoiceflow_decoder_droupout_rate(decoder_dropout)
+        self.gguf_writer.add_cosyvoiceflow_decoder_estimator_input_size(decoder_estimator_input_channels)
+        self.gguf_writer.add_cosyvoiceflow_decoder_in_channels(decoder_in_channels)
+        self.gguf_writer.add_cosyvoiceflow_decoder_inference_cfg_rate(decoder_inference_cfg_rate)
+        self.gguf_writer.add_cosyvoiceflow_decoder_n_blocks(decoder_n_blocks)
+        self.gguf_writer.add_cosyvoiceflow_decoder_n_spks(decoder_n_spks)
+        self.gguf_writer.add_cosyvoiceflow_decoding_left_chunck_size(decoder_num_decoding_left_chunks)
+        self.gguf_writer.add_cosyvoiceflow_decoder_num_heads(decoder_num_heads)
+        self.gguf_writer.add_cosyvoiceflow_decoder_num_mid_blocks(decoder_num_mid_blocks)
+        self.gguf_writer.add_cosyvoiceflow_decoder_out_channels(decoder_out_channels)
+        self.gguf_writer.add_cosyvoiceflow_decoder_reg_loss_type(decoder_reg_loss_type)
+        self.gguf_writer.add_cosyvoiceflow_decoder_sigma_min(decoder_sigma_min)
+        self.gguf_writer.add_cosyvoiceflow_decoder_solver_type(decoder_solver)
+        self.gguf_writer.add_cosyvoiceflow_decoder_spk_embed_dim(decoder_spk_emb_dim)
+        self.gguf_writer.add_cosyvoiceflow_decoder_static_chunck_size(decoder_static_chunk_size)
+        self.gguf_writer.add_cosyvoiceflow_decoder_t_scheduler(decoder_t_scheduler)
+        self.gguf_writer.add_cosyvoiceflow_decoder_training_cfg_rate(decoder_training_cfg_rate)
+
 
     def write_vocab(self):
         if len(self.gguf_writer.tensors) != 1:
@@ -869,7 +1103,10 @@ class TextModel(ModelBase):
         self.gguf_writer.add_tokenizer_model("none")
 
     def _set_vocab_gpt2(self) -> None:
-        tokens, toktypes, tokpre = self.get_vocab_base()
+        # tokens, toktypes, tokpre = self.get_vocab_base()
+        tokens = list("")
+        toktypes = [0]
+        tokpre = ""
         self.gguf_writer.add_tokenizer_model("gpt2")
         self.gguf_writer.add_tokenizer_pre(tokpre)
         self.gguf_writer.add_token_list(tokens)
@@ -2777,6 +3014,14 @@ class Qwen2Model(TextModel):
             return []
         yield from super().modify_tensors(data_torch, name, bid)
 
+@ModelBase.register("CosyVoiceFlow")
+class CosyVoiceFlow(TextModel):
+    model_arch = gguf.MODEL_ARCH.COSYVOICEFLOW
+
+    def set_flow_parameters(self):
+        super().set_flow_guff_parameters()
+        
+        
 
 @ModelBase.register("Ernie4_5_ForCausalLM")
 class Ernie4_5Model(TextModel):
@@ -7528,10 +7773,11 @@ def split_str_to_n_bytes(split_str: str) -> int:
 def get_model_architecture(hparams: dict[str, Any], model_type: ModelType) -> str:
     # TODO @ngxson : this won't work correctly if the model has both audio & vision encoders
     # maybe we should fallback to text model's arch in that case, since not many models have both
-    text_config = hparams.get("text_config", {})
-    vision_config = hparams.get("vision_config", {})
+   
+    text_config = getattr(hparams, "text_config", {})
+    vision_config = getattr(hparams, "vision_config", {})
     arch = None
-    if (arches := hparams.get("architectures")) is not None and len(arches) > 0:
+    if (arches := getattr(hparams,"architectures", {})) is not None and len(arches) > 0:
         arch = arches[0]
     elif "ssm_cfg" in hparams:
         # For non-hf Mamba and Mamba2 models
@@ -7617,6 +7863,8 @@ def main() -> None:
             logger.error(f"Model {model_architecture} is not supported")
             sys.exit(1)
 
+        # import pdb 
+        # pdb.set_trace()
         model_instance = model_class(dir_model, output_type, fname_out,
                                      is_big_endian=args.bigendian, use_temp_file=args.use_temp_file,
                                      eager=args.no_lazy,

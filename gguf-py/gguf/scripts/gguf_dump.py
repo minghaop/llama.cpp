@@ -460,7 +460,8 @@ def main() -> None:
         logger.info(f'* Loading: {args.model}')
 
     reader = GGUFReader(args.model, 'r')
-
+    # import pdb
+    # pdb.set_trace()
     if args.json:
         dump_metadata_json(reader, args)
     elif args.markdown:
