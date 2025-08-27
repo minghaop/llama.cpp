@@ -4,6 +4,7 @@
 
 #include <array>
 
+
 // bump if necessary
 #define LLAMA_MAX_LAYERS  512
 #define LLAMA_MAX_EXPERTS 384  // Kimi-K2
@@ -151,6 +152,55 @@ struct llama_hparams {
     uint32_t i_altup_act  = 0; // altup_active_idx
     uint32_t laurel_rank  = 64;
     uint32_t n_embd_altup = 256;
+
+
+    //CosyVoiceFlow
+    bool use_flow                              = true;
+    char decoder_act_fn[5]                     = "gelu";
+    uint32_t decoder_attention_head_dim        = 64;
+    std::array<uint32_t, 1>   decoder_channels;
+    float decoder_dropout                      = 0.0f;
+    uint32_t decoder_estimator_input_channels  = 320;
+    uint32_t decoder_in_channels               = 240;
+    float decoder_inference_cfg_rate           = 0.7;
+    uint32_t decoder_n_blocks                  = 4;
+    uint32_t decoder_n_spks                    = 1;
+    int32_t decoder_num_decoding_left_chunks   = -1;
+    uint32_t decoder_num_heads                 = 8;
+    uint32_t decoder_num_mid_blocks            = 12;
+    uint32_t decoder_out_channels              = 80;
+    char decoder_reg_loss_type[3]              = "l1";
+    float decoder_sigma_min                    = 1e-06;
+    char decoder_solver[6]                     = "euler";
+    uint32_t decoder_spk_emb_dim               = 80;
+    uint32_t decoder_static_chunk_size         = 50;
+    char decoder_t_scheduler[7]                = "cosine";
+    float decoder_training_cfg_rate            = 0.2;
+    float encoder_attention_dropout_rate       = 0.1;
+    uint32_t encoder_attention_heads           = 8;
+    float encoder_dropout_rate                 = 0.1;
+    char encoder_input_layer[7]                = "linear";
+    uint32_t encoder_input_size                = 512;
+    uint32_t encoder_linear_units              = 2048;
+    bool encoder_normalize_before;
+    uint32_t encoder_num_blocks                = 6;
+    uint32_t encoder_output_size               = 512;
+    char encoder_pos_enc_layer_type[15]        = "rel_pos_espnet";
+    float encoder_positional_dropout_rate      = 0.1;
+    char encoder_selfattention_layer_type[13]  = "rel_selfattn";
+    uint32_t encoder_static_chunk_size         = 25;
+    bool encoder_use_cnn_module;
+    uint32_t input_frame_rate                  = 25;
+    uint32_t input_size                        = 512;
+    char model_type[16]                        ="cosy_voice_flow";
+    bool only_mask_loss;
+    uint32_t output_size                       = 80;
+    char output_type[4]                        = "mel";
+    uint32_t pre_lookahead_len                 = 3;
+    uint32_t spk_embed_dim                     = 192;
+    uint32_t token_mel_ratio                   = 2;
+    uint32_t vocab_size                        = 6561;
+    uint32_t num_layers                        = 81;
 
     // needed by encoder-decoder models (e.g. T5, FLAN-T5)
     // ref: https://github.com/ggerganov/llama.cpp/pull/8141

@@ -96,23 +96,24 @@ static int llama_model_load(const std::string & fname, std::vector<std::string> 
         llama_model_loader ml(fname, splits, params.use_mmap, params.check_tensors, params.kv_overrides, params.tensor_buft_overrides);
 
         ml.print_info();
-
-        model.hparams.vocab_only = params.vocab_only;
-
         try {
             model.load_arch(ml);
         } catch(const std::exception & e) {
             throw std::runtime_error("error loading model architecture: " + std::string(e.what()));
         }
-        try {
-            model.load_hparams(ml);
-        } catch(const std::exception & e) {
-            throw std::runtime_error("error loading model hyperparameters: " + std::string(e.what()));
-        }
-        try {
-            model.load_vocab(ml);
-        } catch(const std::exception & e) {
-            throw std::runtime_error("error loading model vocabulary: " + std::string(e.what()));
+        if (!params.is_flow) {
+            LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&& check is_flow is: %d\n", params.is_flow);
+            model.hparams.vocab_only = params.vocab_only;
+            try {
+                model.load_hparams(ml);
+            } catch(const std::exception & e) {
+                throw std::runtime_error("error loading model hyperparameters: " + std::string(e.what()));
+            }
+            try {
+                model.load_vocab(ml);
+            } catch(const std::exception & e) {
+                throw std::runtime_error("error loading model vocabulary: " + std::string(e.what()));
+            }
         }
 
         model.load_stats(ml);
@@ -139,12 +140,12 @@ static struct llama_model * llama_model_load_from_file_impl(
         std::vector<std::string> & splits,
         struct llama_model_params params) {
     ggml_time_init();
-
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&& check here1111 !!!!!!!!!!!!!!!!!!!!!\n");
     if (!params.vocab_only && ggml_backend_reg_count() == 0) {
         LLAMA_LOG_ERROR("%s: no backends are loaded. hint: use ggml_backend_load() or ggml_backend_load_all() to load a backend before calling this function\n", __func__);
         return nullptr;
     }
-
+    
     unsigned cur_percentage = 0;
     if (params.progress_callback == NULL) {
         params.progress_callback_user_data = &cur_percentage;
@@ -161,7 +162,7 @@ static struct llama_model * llama_model_load_from_file_impl(
             return true;
         };
     }
-
+    
     llama_model * model = new llama_model(params);
 
     // create list of devices to use with this model
@@ -195,7 +196,7 @@ static struct llama_model * llama_model_load_from_file_impl(
             model->devices.insert(model->devices.begin(), rpc_servers.begin(), rpc_servers.end());
         }
     }
-
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&& check here4444 !!!!!!!!!!!!!!!!!!!!!\n");
     // if using single GPU mode, remove all except the main GPU
     if (params.split_mode == LLAMA_SPLIT_MODE_NONE) {
         if (params.main_gpu < 0) {
@@ -218,9 +219,6 @@ static struct llama_model * llama_model_load_from_file_impl(
         LLAMA_LOG_INFO("%s: using device %s (%s) - %zu MiB free\n", __func__, ggml_backend_dev_name(dev), ggml_backend_dev_description(dev), free/1024/1024);
     }
 
-    // for(int i = 0; i < splits.size(); i++) {
-    //     LLAMA_LOG_INFO("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ %s: split %d: %s\n", __func__, i, splits[i].c_str());
-    // } 
     const int status = llama_model_load(path_model, splits, *model, params);
     GGML_ASSERT(status <= 0);
     if (status < 0) {
@@ -233,7 +231,6 @@ static struct llama_model * llama_model_load_from_file_impl(
         llama_model_free(model);
         return nullptr;
     }
-
     return model;
 }
 
