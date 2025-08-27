@@ -720,6 +720,7 @@ std::string llama_model_loader::get_arch_name() const {
 }
 
 enum llm_arch llama_model_loader::get_arch() const {
+    // LLAMA_LOG_INFO("&&&&&&&&&& get_arch llm_kv.arch is: %d\n", llm_kv.arch);
     return llm_kv.arch;
 }
 
