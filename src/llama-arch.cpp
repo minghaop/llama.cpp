@@ -86,6 +86,7 @@ static const std::map<llm_arch, const char *> LLM_ARCH_NAMES = {
     { LLM_ARCH_SMOLLM3,          "smollm3"          },
     { LLM_ARCH_LFM2,             "lfm2"             },
     { LLM_ARCH_UNKNOWN,          "(unknown)"        },
+    { LLM_ARCH_COSYVOICEFLOW,    "CosyVoiceFlow"   },
 };
 
 static const std::map<llm_kv, const char *> LLM_KV_NAMES = {

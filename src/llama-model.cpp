@@ -455,1261 +455,1313 @@ void llama_model::load_hparams(llama_model_loader & ml) {
     if (hparams.vocab_only) {
         return;
     }
-
-    ml.get_key(LLM_KV_CONTEXT_LENGTH,    hparams.n_ctx_train);
-    ml.get_key(LLM_KV_EMBEDDING_LENGTH,  hparams.n_embd);
-    ml.get_key(LLM_KV_BLOCK_COUNT,       hparams.n_layer);
-    ml.get_key(LLM_KV_EXPERT_COUNT,      hparams.n_expert,      false);
-    ml.get_key(LLM_KV_EXPERT_USED_COUNT, hparams.n_expert_used, false);
-
-    if (arch == LLM_ARCH_WAVTOKENIZER_DEC) {
-        ml.get_key(LLM_KV_FEATURES_LENGTH, hparams.n_embd_features);
-
-        ml.get_key(LLM_KV_POSNET_EMBEDDING_LENGTH, hparams.posnet.n_embd);
-        ml.get_key(LLM_KV_POSNET_BLOCK_COUNT,      hparams.posnet.n_layer);
-
-        ml.get_key(LLM_KV_CONVNEXT_EMBEDDING_LENGTH, hparams.convnext.n_embd);
-        ml.get_key(LLM_KV_CONVNEXT_BLOCK_COUNT,      hparams.convnext.n_layer);
+    if (hparams.use_flow) {
+        LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&& check here !!!!!!!!!!\n");
+        // ml.get_key(LLM_KV_TOKEN_MEL_RATIO, hparams.token_mel_ratio);
+        // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&& check here !!!!!!!!!!\n");
+        // ml.get_key(LLM_KV_SPK_EMBED_DIM, hparams.spk_embed_dim);
+        // ml.get_key(LLM_KV_PRE_LOOKAHEAD_LEN, hparams.pre_lookahead_len);
+        
+        // // ml.get_key(LLM_KV_OUT_TYPE, hparams.output_type);
+        // ml.get_key(LLM_KV_OUTPUT_SIZE, hparams.output_size);
+        // ml.get_key(LLM_KV_ONLY_MASK_LOSS, hparams.only_mask_loss, true);
+        // ml.get_key(LLM_KV_INPUT_SIZE, hparams.input_size);
+        // ml.get_key(LLM_KV_INPUT_FRAME_RATE, hparams.input_frame_rate);
+        // ml.get_key(LLM_KV_ENCODER_ATTENTION_HEADS, hparams.encoder_attention_heads);
+        // ml.get_key(LLM_KV_ENCODER_DROUPOUT_RATE, hparams.encoder_dropout_rate);
+        // // ml.get_key(LLM_KV_ENCODER_INPUT_LAYER, hparams.encoder_input_layer);
+        // ml.get_key(LLM_KV_ENCODER_INPUT_SIZE, hparams.encoder_input_size);
+        // ml.get_key(LLM_KV_ENCODER_LINEAR_UNITS, hparams.encoder_linear_units);
+        // ml.get_key(LLM_KV_ENCODER_NOIMALIZE_BEFORE, hparams.encoder_normalize_before, true);
+        // ml.get_key(LLM_KV_ENCODER_NUM_BLOCKS, hparams.encoder_num_blocks);
+        // ml.get_key(LLM_KV_ENCODER_OUTPUT_SIZE, hparams.encoder_output_size);
+        
+        // // ml.get_key(LLM_KV_ENCODER_POS_ENC_LAYER_TYPE, hparams.encoder_pos_enc_layer_type);
+        // ml.get_key(LLM_KV_ENCODER_POS_DROUPOUT_RATE, hparams.encoder_positional_dropout_rate);
+        // // ml.get_key(LLM_KV_ENCODER_SELFATTENTION_LAYER_TYPE, hparams.encoder_selfattention_layer_type);
+        // ml.get_key(LLM_KV_ENCODER_STATIC_CHUNK_SIZE, hparams.encoder_static_chunk_size);
+        // ml.get_key(LLM_KV_ENCODER_USE_CNN_MODULE, hparams.encoder_use_cnn_module, false);
+        // // ml.get_key(LLM_KV_DECODER_ACT_FN, hparams.decoder_act_fn);
+        // ml.get_key(LLM_KV_DECODER_ATTENTION_HEAD_DIM, hparams.decoder_attention_head_dim);
+        // // ml.get_key(LLM_KV_DECODER_CHANNELS, hparams.decoder_channels);
+        // ml.get_key(LLM_KV_DECODER_DROPOUT, hparams.decoder_dropout);
+        // ml.get_key(LLM_KV_DECODER_ESTIMATOR_INPUT_CHANNELS, hparams.decoder_estimator_input_channels);
+        // ml.get_key(LLM_KV_DECODER_IN_CHANNELS, hparams.decoder_in_channels);
+        // ml.get_key(LLM_KV_DECODER_INFER_CFG_RATE, hparams.decoder_inference_cfg_rate);
+        // ml.get_key(LLM_KV_DECODER_N_BLOCKS, hparams.decoder_n_blocks);
+        // ml.get_key(LLM_KV_DECODER_N_SPKS, hparams.decoder_n_spks);
+        // // ml.get_key(LLM_KV_DECODER_DECODING_LEFT_CHUNKS, hparams.decoder_num_decoding_left_chunks);
+        // ml.get_key(LLM_KV_DECODER_NUM_HEADS, hparams.decoder_num_heads);
+        // ml.get_key(LLM_KV_DECODER_NUM_MID_BLOCKS, hparams.decoder_num_mid_blocks);
+        // ml.get_key(LLM_KV_DECODER_OUTPUT_CHANNELS, hparams.decoder_out_channels);
+        // // ml.get_key(LLM_KV_DECODER_REG_LOSS_TYPE, hparams.decoder_reg_loss_type);
+        // ml.get_key(LLM_KV_DECODER_SIGMA_MIN, hparams.decoder_sigma_min);
+        // // ml.get_key(LLM_KV_DECODER_SOLVER, hparams.decoder_solver);
+        // ml.get_key(LLM_KV_DECODER_SPK_EMBD_DIM, hparams.decoder_spk_emb_dim);
+        // ml.get_key(LLM_KV_DECODER_STATIC_CHUNK_SIZE, hparams.decoder_static_chunk_size);
+        // // ml.get_key(LLM_KV_DECODER_T_SCHEDULER, hparams.decoder_t_scheduler);
+        // // ml.get_key(LLM_KV_DECODER_TRAIN_CFG_RATE, hparams.decoder_training_cfg_rate);
+        
+        // std::fill(hparams.decoder_channels.begin(), hparams.decoder_channels.end(), 256);
+        
     }
+    else {
+        ml.get_key(LLM_KV_CONTEXT_LENGTH,    hparams.n_ctx_train);
+        ml.get_key(LLM_KV_EMBEDDING_LENGTH,  hparams.n_embd);
+        ml.get_key(LLM_KV_BLOCK_COUNT,       hparams.n_layer);
+        ml.get_key(LLM_KV_EXPERT_COUNT,      hparams.n_expert,      false);
+        ml.get_key(LLM_KV_EXPERT_USED_COUNT, hparams.n_expert_used, false);
 
-    GGML_ASSERT(hparams.n_expert <= LLAMA_MAX_EXPERTS);
-    GGML_ASSERT(hparams.n_expert_used <= hparams.n_expert);
-    if (hparams.n_expert > 0) {
-        GGML_ASSERT(hparams.n_expert_used > 0);
-    } else {
-        GGML_ASSERT(hparams.n_expert_used == 0);
-    }
+        if (arch == LLM_ARCH_WAVTOKENIZER_DEC) {
+            ml.get_key(LLM_KV_FEATURES_LENGTH, hparams.n_embd_features);
 
-    std::fill(hparams.n_head_arr.begin(),    hparams.n_head_arr.end(),    0);
-    std::fill(hparams.n_head_kv_arr.begin(), hparams.n_head_kv_arr.end(), 0);
-    std::fill(hparams.n_ff_arr.begin(),      hparams.n_ff_arr.end(),      0);
-    std::fill(
-        hparams.recurrent_layer_arr.begin(),
-        hparams.recurrent_layer_arr.end(),
-        llm_arch_is_recurrent(ml.get_arch()));
+            ml.get_key(LLM_KV_POSNET_EMBEDDING_LENGTH, hparams.posnet.n_embd);
+            ml.get_key(LLM_KV_POSNET_BLOCK_COUNT,      hparams.posnet.n_layer);
 
-    std::fill(hparams.rope_sections.begin(), hparams.rope_sections.end(), 0);
-
-    std::fill(hparams.swa_layers.begin(), hparams.swa_layers.end(), 0);
-
-    ml.get_key_or_arr(LLM_KV_FEED_FORWARD_LENGTH,  hparams.n_ff_arr,   hparams.n_layer, false);
-    ml.get_key_or_arr(LLM_KV_ATTENTION_HEAD_COUNT, hparams.n_head_arr, hparams.n_layer, false);
-
-    // n_head_kv is optional, default to n_head
-    hparams.n_head_kv_arr = hparams.n_head_arr;
-
-    ml.get_key_or_arr(LLM_KV_ATTENTION_HEAD_COUNT_KV, hparams.n_head_kv_arr, hparams.n_layer, false);
-
-    bool rope_finetuned = false;
-    ml.get_key(LLM_KV_ROPE_SCALING_FINETUNED, rope_finetuned, false);
-    hparams.rope_finetuned = rope_finetuned;
-
-    hparams.n_ctx_orig_yarn = hparams.n_ctx_train;
-    ml.get_key(LLM_KV_ROPE_SCALING_ORIG_CTX_LEN, hparams.n_ctx_orig_yarn, false);
-
-    // rope_freq_base (optional)
-    hparams.rope_freq_base_train = 10000.0f;
-    ml.get_key(LLM_KV_ROPE_FREQ_BASE, hparams.rope_freq_base_train, false);
-
-    std::string rope_scaling("linear");
-    ml.get_key(LLM_KV_ROPE_SCALING_TYPE, rope_scaling, false);
-    hparams.rope_scaling_type_train = llama_rope_scaling_type_from_string(rope_scaling);
-    GGML_ASSERT(hparams.rope_scaling_type_train != LLAMA_ROPE_SCALING_TYPE_UNSPECIFIED);
-
-    // rope_freq_scale (inverse of the kv) is optional
-    float ropescale = 0.0f;
-    if (!ml.get_key(LLM_KV_ROPE_SCALING_FACTOR, ropescale, false)) {
-        // try the old key name
-        ml.get_key(LLM_KV_ROPE_SCALE_LINEAR, ropescale, false);
-    }
-    hparams.rope_freq_scale_train = ropescale == 0.0f ? 1.0f : 1.0f/ropescale;
-
-    // by default assume that the sliding-window layers use the same scaling type as the non-sliding-window layers
-    hparams.rope_freq_base_train_swa  = hparams.rope_freq_base_train;
-    hparams.rope_freq_scale_train_swa = hparams.rope_freq_scale_train;
-
-    ml.get_key(LLM_KV_ROPE_SCALING_ATTN_FACTOR, hparams.rope_attn_factor, false);
-
-    // non-transformer models do not have attention heads
-    if (hparams.n_head() > 0) {
-        // gpt-neox n_rot = rotary_pct * (n_embd / n_head)
-        // gpt-j n_rot = rotary_dim
-
-        hparams.n_embd_head_k = hparams.n_embd / hparams.n_head();
-        ml.get_key(LLM_KV_ATTENTION_KEY_LENGTH, hparams.n_embd_head_k, false);
-
-        hparams.n_embd_head_v = hparams.n_embd / hparams.n_head();
-        ml.get_key(LLM_KV_ATTENTION_VALUE_LENGTH, hparams.n_embd_head_v, false);
-
-        // sanity check for n_rot (optional)
-        hparams.n_rot = hparams.n_embd_head_k;
-
-        ml.get_key(LLM_KV_ROPE_DIMENSION_COUNT, hparams.n_rot, false);
-
-        if (arch == LLM_ARCH_LLAMA || arch == LLM_ARCH_DECI || arch == LLM_ARCH_FALCON) {
-            if (hparams.n_rot != hparams.n_embd_head_k) {
-                throw std::runtime_error(format("invalid n_rot: %u, expected %u", hparams.n_rot, hparams.n_embd_head_k));
-            }
+            ml.get_key(LLM_KV_CONVNEXT_EMBEDDING_LENGTH, hparams.convnext.n_embd);
+            ml.get_key(LLM_KV_CONVNEXT_BLOCK_COUNT,      hparams.convnext.n_layer);
         }
-    } else {
-        hparams.n_rot = 0;
-        hparams.n_embd_head_k = 0;
-        hparams.n_embd_head_v = 0;
-    }
 
-    // for differentiating model types
-    uint32_t n_vocab = 0;
-    ml.get_key(LLM_KV_VOCAB_SIZE, n_vocab, false) || ml.get_arr_n(LLM_KV_TOKENIZER_LIST, n_vocab, false);
+        GGML_ASSERT(hparams.n_expert <= LLAMA_MAX_EXPERTS);
+        GGML_ASSERT(hparams.n_expert_used <= hparams.n_expert);
+        if (hparams.n_expert > 0) {
+            GGML_ASSERT(hparams.n_expert_used > 0);
+        } else {
+            GGML_ASSERT(hparams.n_expert_used == 0);
+        }
 
-    // for classifier models
-    ml.get_arr(LLM_KV_CLASSIFIER_OUTPUT_LABELS, classifier_labels, false);
-    if (!classifier_labels.empty()) {
-        hparams.n_cls_out = classifier_labels.size();
-    }
+        
+        std::fill(hparams.n_head_arr.begin(),    hparams.n_head_arr.end(),    0);
+        std::fill(hparams.n_head_kv_arr.begin(), hparams.n_head_kv_arr.end(), 0);
+        std::fill(hparams.n_ff_arr.begin(),      hparams.n_ff_arr.end(),      0);
+        std::fill(
+            hparams.recurrent_layer_arr.begin(),
+            hparams.recurrent_layer_arr.end(),
+            llm_arch_is_recurrent(ml.get_arch()));
 
-    // arch-specific KVs
-    switch (arch) {
-        case LLM_ARCH_LLAMA:
-            {
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
+        std::fill(hparams.rope_sections.begin(), hparams.rope_sections.end(), 0);
 
-                if (hparams.n_expert == 8) {
+        std::fill(hparams.swa_layers.begin(), hparams.swa_layers.end(), 0);
+
+        ml.get_key_or_arr(LLM_KV_FEED_FORWARD_LENGTH,  hparams.n_ff_arr,   hparams.n_layer, false);
+        ml.get_key_or_arr(LLM_KV_ATTENTION_HEAD_COUNT, hparams.n_head_arr, hparams.n_layer, false);
+
+        // n_head_kv is optional, default to n_head
+        hparams.n_head_kv_arr = hparams.n_head_arr;
+
+        ml.get_key_or_arr(LLM_KV_ATTENTION_HEAD_COUNT_KV, hparams.n_head_kv_arr, hparams.n_layer, false);
+
+        bool rope_finetuned = false;
+        ml.get_key(LLM_KV_ROPE_SCALING_FINETUNED, rope_finetuned, false);
+        hparams.rope_finetuned = rope_finetuned;
+
+        hparams.n_ctx_orig_yarn = hparams.n_ctx_train;
+        ml.get_key(LLM_KV_ROPE_SCALING_ORIG_CTX_LEN, hparams.n_ctx_orig_yarn, false);
+
+        // rope_freq_base (optional)
+        hparams.rope_freq_base_train = 10000.0f;
+        ml.get_key(LLM_KV_ROPE_FREQ_BASE, hparams.rope_freq_base_train, false);
+
+        std::string rope_scaling("linear");
+        ml.get_key(LLM_KV_ROPE_SCALING_TYPE, rope_scaling, false);
+        hparams.rope_scaling_type_train = llama_rope_scaling_type_from_string(rope_scaling);
+        GGML_ASSERT(hparams.rope_scaling_type_train != LLAMA_ROPE_SCALING_TYPE_UNSPECIFIED);
+
+        // rope_freq_scale (inverse of the kv) is optional
+        float ropescale = 0.0f;
+        if (!ml.get_key(LLM_KV_ROPE_SCALING_FACTOR, ropescale, false)) {
+            // try the old key name
+            ml.get_key(LLM_KV_ROPE_SCALE_LINEAR, ropescale, false);
+        }
+        hparams.rope_freq_scale_train = ropescale == 0.0f ? 1.0f : 1.0f/ropescale;
+
+        // by default assume that the sliding-window layers use the same scaling type as the non-sliding-window layers
+        hparams.rope_freq_base_train_swa  = hparams.rope_freq_base_train;
+        hparams.rope_freq_scale_train_swa = hparams.rope_freq_scale_train;
+
+        ml.get_key(LLM_KV_ROPE_SCALING_ATTN_FACTOR, hparams.rope_attn_factor, false);
+
+        // non-transformer models do not have attention heads
+        if (hparams.n_head() > 0) {
+            // gpt-neox n_rot = rotary_pct * (n_embd / n_head)
+            // gpt-j n_rot = rotary_dim
+
+            hparams.n_embd_head_k = hparams.n_embd / hparams.n_head();
+            ml.get_key(LLM_KV_ATTENTION_KEY_LENGTH, hparams.n_embd_head_k, false);
+
+            hparams.n_embd_head_v = hparams.n_embd / hparams.n_head();
+            ml.get_key(LLM_KV_ATTENTION_VALUE_LENGTH, hparams.n_embd_head_v, false);
+
+            // sanity check for n_rot (optional)
+            hparams.n_rot = hparams.n_embd_head_k;
+
+            ml.get_key(LLM_KV_ROPE_DIMENSION_COUNT, hparams.n_rot, false);
+
+            if (arch == LLM_ARCH_LLAMA || arch == LLM_ARCH_DECI || arch == LLM_ARCH_FALCON) {
+                if (hparams.n_rot != hparams.n_embd_head_k) {
+                    throw std::runtime_error(format("invalid n_rot: %u, expected %u", hparams.n_rot, hparams.n_embd_head_k));
+                }
+            }
+        } else {
+            hparams.n_rot = 0;
+            hparams.n_embd_head_k = 0;
+            hparams.n_embd_head_v = 0;
+        }
+
+        // for differentiating model types
+        uint32_t n_vocab = 0;
+        ml.get_key(LLM_KV_VOCAB_SIZE, n_vocab, false) || ml.get_arr_n(LLM_KV_TOKENIZER_LIST, n_vocab, false);
+
+        // for classifier models
+        ml.get_arr(LLM_KV_CLASSIFIER_OUTPUT_LABELS, classifier_labels, false);
+        if (!classifier_labels.empty()) {
+            hparams.n_cls_out = classifier_labels.size();
+        }
+
+        // arch-specific KVs
+        switch (arch) {
+            case LLM_ARCH_LLAMA:
+                {
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
+
+                    if (hparams.n_expert == 8) {
+                        switch (hparams.n_layer) {
+                            case 32: type = LLM_TYPE_8x7B; break;
+                            case 56: type = LLM_TYPE_8x22B; break;
+                            default: type = LLM_TYPE_UNKNOWN;
+                        }
+                    } else {
+                        switch (hparams.n_layer) {
+                            case 16: type = LLM_TYPE_1B; break; // Llama 3.2 1B
+                            case 22: type = LLM_TYPE_1B; break;
+                            case 26: type = LLM_TYPE_3B; break;
+                            case 28: type = LLM_TYPE_3B; break; // Llama 3.2 3B
+                            case 30: type = LLM_TYPE_256M; break; // smoldocling 256M
+                            // granite uses a vocab with len 49152
+                            case 32: type = n_vocab == 49152 ? LLM_TYPE_3B : (n_vocab < 40000 ? LLM_TYPE_7B : LLM_TYPE_8B); break;
+                            case 36: type = LLM_TYPE_8B; break; // granite
+                            case 40: type = LLM_TYPE_13B; break;
+                            case 48: type = LLM_TYPE_34B; break;
+                            case 60: type = LLM_TYPE_30B; break;
+                            case 80: type = hparams.n_head() == hparams.n_head_kv() ? LLM_TYPE_65B : LLM_TYPE_70B; break;
+                            default: type = LLM_TYPE_UNKNOWN;
+                        }
+                    }
+                } break;
+            case LLM_ARCH_LLAMA4:
+                {
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
+                    ml.get_key(LLM_KV_EXPERT_FEED_FORWARD_LENGTH,  hparams.n_ff_exp);
+                    ml.get_key(LLM_KV_INTERLEAVE_MOE_LAYER_STEP,   hparams.n_moe_layer_step);
+
+                    hparams.swa_type      = LLAMA_SWA_TYPE_CHUNKED;
+                    hparams.n_swa         = 8192; // should this be a gguf kv? currently it's the same for Scout and Maverick
+                    hparams.set_swa_pattern(4);   // pattern: 3 chunked - 1 full
+
+                    switch (hparams.n_expert) {
+                        case 16:  type = LLM_TYPE_17B_16E; break;
+                        case 128: type = LLM_TYPE_17B_128E; break;
+                        default:  type = LLM_TYPE_UNKNOWN;
+                    }
+
+                    if (type == LLM_TYPE_17B_128E) {
+                        hparams.use_kq_norm = false;
+                    }
+                } break;
+            case LLM_ARCH_ARCEE:
+                {
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
+
+                    // Arcee uses the same structure as Llama
                     switch (hparams.n_layer) {
-                        case 32: type = LLM_TYPE_8x7B; break;
-                        case 56: type = LLM_TYPE_8x22B; break;
+                        case 36: type = LLM_TYPE_4B; break;
                         default: type = LLM_TYPE_UNKNOWN;
                     }
-                } else {
+                } break;
+            case LLM_ARCH_DECI:
+                {
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
                     switch (hparams.n_layer) {
-                        case 16: type = LLM_TYPE_1B; break; // Llama 3.2 1B
-                        case 22: type = LLM_TYPE_1B; break;
-                        case 26: type = LLM_TYPE_3B; break;
-                        case 28: type = LLM_TYPE_3B; break; // Llama 3.2 3B
-                        case 30: type = LLM_TYPE_256M; break; // smoldocling 256M
-                        // granite uses a vocab with len 49152
-                        case 32: type = n_vocab == 49152 ? LLM_TYPE_3B : (n_vocab < 40000 ? LLM_TYPE_7B : LLM_TYPE_8B); break;
-                        case 36: type = LLM_TYPE_8B; break; // granite
+                        case 32: type = LLM_TYPE_7B; break;
+                        case 80: type = LLM_TYPE_70B; break;
+                        case 162: type = LLM_TYPE_405B; break;
+                        default: type = LLM_TYPE_UNKNOWN;
+                    }
+                } break;
+            case LLM_ARCH_MINICPM:
+                {
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
+                    ml.get_key(LLM_KV_EMBEDDING_SCALE,             hparams.f_embedding_scale);
+                    ml.get_key(LLM_KV_RESIDUAL_SCALE,              hparams.f_residual_scale);
+                    ml.get_key(LLM_KV_LOGIT_SCALE,                 hparams.f_logit_scale);
+
+                    switch (hparams.n_layer) {
+                        case 52: type = LLM_TYPE_1B; break;
+                        case 40: type = LLM_TYPE_2B; break;
+                        default: type = LLM_TYPE_UNKNOWN;
+                    }
+                } break;
+            case LLM_ARCH_MINICPM3:
+                {
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
+                    ml.get_key(LLM_KV_ATTENTION_Q_LORA_RANK,       hparams.n_lora_q);
+                    ml.get_key(LLM_KV_ATTENTION_KV_LORA_RANK,      hparams.n_lora_kv);
+
+                    switch (hparams.n_layer) {
+                        case 62: type = LLM_TYPE_4B; break;
+                        default: type = LLM_TYPE_UNKNOWN;
+                    }
+                } break;
+            case LLM_ARCH_GROK:
+                {
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
+
+                    switch (hparams.n_layer) {
+                        case 64: type = LLM_TYPE_314B; break;
+                        default: type = LLM_TYPE_UNKNOWN;
+                    }
+                } break;
+            case LLM_ARCH_FALCON:
+                {
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_EPS, hparams.f_norm_eps);
+
+                    switch (hparams.n_layer) {
+                        case 32: type = LLM_TYPE_7B; break;
+                        case 60: type = LLM_TYPE_40B; break;
+                        default: type = LLM_TYPE_UNKNOWN;
+                    }
+                } break;
+            case LLM_ARCH_BAICHUAN:
+                {
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
+                    switch (hparams.n_layer) {
+                        case 32: type = LLM_TYPE_7B; break;
                         case 40: type = LLM_TYPE_13B; break;
-                        case 48: type = LLM_TYPE_34B; break;
-                        case 60: type = LLM_TYPE_30B; break;
-                        case 80: type = hparams.n_head() == hparams.n_head_kv() ? LLM_TYPE_65B : LLM_TYPE_70B; break;
                         default: type = LLM_TYPE_UNKNOWN;
                     }
-                }
-            } break;
-        case LLM_ARCH_LLAMA4:
-            {
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
-                ml.get_key(LLM_KV_EXPERT_FEED_FORWARD_LENGTH,  hparams.n_ff_exp);
-                ml.get_key(LLM_KV_INTERLEAVE_MOE_LAYER_STEP,   hparams.n_moe_layer_step);
 
-                hparams.swa_type      = LLAMA_SWA_TYPE_CHUNKED;
-                hparams.n_swa         = 8192; // should this be a gguf kv? currently it's the same for Scout and Maverick
-                hparams.set_swa_pattern(4);   // pattern: 3 chunked - 1 full
+                    if (type == LLM_TYPE_13B) {
+                        // TODO: become GGUF KV parameter
+                        hparams.f_max_alibi_bias = 8.0f;
+                    }
+                } break;
+            case LLM_ARCH_STARCODER:
+                {
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_EPS, hparams.f_norm_eps);
+                    switch (hparams.n_layer) {
+                        case 24: type = LLM_TYPE_1B; break;
+                        case 36: type = LLM_TYPE_3B; break;
+                        case 42: type = LLM_TYPE_7B; break;
+                        case 40: type = LLM_TYPE_15B; break;
+                        default: type = LLM_TYPE_UNKNOWN;
+                    }
+                } break;
+            case LLM_ARCH_REFACT:
+                {
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
+                    switch (hparams.n_layer) {
+                        case 32: type = LLM_TYPE_1B; break;
+                        default: type = LLM_TYPE_UNKNOWN;
+                    }
 
-                switch (hparams.n_expert) {
-                    case 16:  type = LLM_TYPE_17B_16E; break;
-                    case 128: type = LLM_TYPE_17B_128E; break;
-                    default:  type = LLM_TYPE_UNKNOWN;
-                }
-
-                if (type == LLM_TYPE_17B_128E) {
-                    hparams.use_kq_norm = false;
-                }
-            } break;
-        case LLM_ARCH_ARCEE:
-            {
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
-
-                // Arcee uses the same structure as Llama
-                switch (hparams.n_layer) {
-                    case 36: type = LLM_TYPE_4B; break;
-                    default: type = LLM_TYPE_UNKNOWN;
-                }
-            } break;
-        case LLM_ARCH_DECI:
-            {
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
-                switch (hparams.n_layer) {
-                    case 32: type = LLM_TYPE_7B; break;
-                    case 80: type = LLM_TYPE_70B; break;
-                    case 162: type = LLM_TYPE_405B; break;
-                    default: type = LLM_TYPE_UNKNOWN;
-                }
-            } break;
-        case LLM_ARCH_MINICPM:
-            {
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
-                ml.get_key(LLM_KV_EMBEDDING_SCALE,             hparams.f_embedding_scale);
-                ml.get_key(LLM_KV_RESIDUAL_SCALE,              hparams.f_residual_scale);
-                ml.get_key(LLM_KV_LOGIT_SCALE,                 hparams.f_logit_scale);
-
-                switch (hparams.n_layer) {
-                    case 52: type = LLM_TYPE_1B; break;
-                    case 40: type = LLM_TYPE_2B; break;
-                    default: type = LLM_TYPE_UNKNOWN;
-                }
-            } break;
-        case LLM_ARCH_MINICPM3:
-            {
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
-                ml.get_key(LLM_KV_ATTENTION_Q_LORA_RANK,       hparams.n_lora_q);
-                ml.get_key(LLM_KV_ATTENTION_KV_LORA_RANK,      hparams.n_lora_kv);
-
-                switch (hparams.n_layer) {
-                    case 62: type = LLM_TYPE_4B; break;
-                    default: type = LLM_TYPE_UNKNOWN;
-                }
-            } break;
-        case LLM_ARCH_GROK:
-            {
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
-
-                switch (hparams.n_layer) {
-                    case 64: type = LLM_TYPE_314B; break;
-                    default: type = LLM_TYPE_UNKNOWN;
-                }
-            } break;
-        case LLM_ARCH_FALCON:
-            {
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_EPS, hparams.f_norm_eps);
-
-                switch (hparams.n_layer) {
-                    case 32: type = LLM_TYPE_7B; break;
-                    case 60: type = LLM_TYPE_40B; break;
-                    default: type = LLM_TYPE_UNKNOWN;
-                }
-            } break;
-        case LLM_ARCH_BAICHUAN:
-            {
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
-                switch (hparams.n_layer) {
-                    case 32: type = LLM_TYPE_7B; break;
-                    case 40: type = LLM_TYPE_13B; break;
-                    default: type = LLM_TYPE_UNKNOWN;
-                }
-
-                if (type == LLM_TYPE_13B) {
                     // TODO: become GGUF KV parameter
                     hparams.f_max_alibi_bias = 8.0f;
-                }
-            } break;
-        case LLM_ARCH_STARCODER:
-            {
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_EPS, hparams.f_norm_eps);
-                switch (hparams.n_layer) {
-                    case 24: type = LLM_TYPE_1B; break;
-                    case 36: type = LLM_TYPE_3B; break;
-                    case 42: type = LLM_TYPE_7B; break;
-                    case 40: type = LLM_TYPE_15B; break;
-                    default: type = LLM_TYPE_UNKNOWN;
-                }
-            } break;
-        case LLM_ARCH_REFACT:
-            {
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
-                switch (hparams.n_layer) {
-                    case 32: type = LLM_TYPE_1B; break;
-                    default: type = LLM_TYPE_UNKNOWN;
-                }
+                } break;
+            case LLM_ARCH_BERT:
+                {
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_EPS,    hparams.f_norm_eps);
+                    ml.get_key(LLM_KV_ATTENTION_CAUSAL,           hparams.causal_attn);
+                    ml.get_key(LLM_KV_POOLING_TYPE,               hparams.pooling_type, false);
 
-                // TODO: become GGUF KV parameter
-                hparams.f_max_alibi_bias = 8.0f;
-            } break;
-        case LLM_ARCH_BERT:
-            {
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_EPS,    hparams.f_norm_eps);
-                ml.get_key(LLM_KV_ATTENTION_CAUSAL,           hparams.causal_attn);
-                ml.get_key(LLM_KV_POOLING_TYPE,               hparams.pooling_type, false);
-
-                switch (hparams.n_layer) {
-                    case 3:
-                        type = LLM_TYPE_17M; break; // bge-micro
-                    case 6:
-                        type = LLM_TYPE_22M; break; // MiniLM-L6
-                    case 12:
-                        switch (hparams.n_embd) {
-                            case 384: type = LLM_TYPE_33M; break; // MiniLM-L12, bge-small
-                            case 768: type = LLM_TYPE_109M; break; // bge-base
-                            default: type = LLM_TYPE_UNKNOWN;
-                        } break;
-                    case 24:
-                        type = LLM_TYPE_335M; break; // bge-large
-                    default: type = LLM_TYPE_UNKNOWN;
-                }
-            } break;
-        case LLM_ARCH_JINA_BERT_V2:
-            {
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_EPS,    hparams.f_norm_eps);
-                ml.get_key(LLM_KV_ATTENTION_CAUSAL,           hparams.causal_attn);
-                ml.get_key(LLM_KV_POOLING_TYPE,               hparams.pooling_type, false);
-                hparams.f_max_alibi_bias = 8.0f;
-
-                switch (hparams.n_layer) {
-                    case 4:  type = LLM_TYPE_33M;  break; // jina-embeddings-small
-                    case 12: type = LLM_TYPE_137M; break; // jina-embeddings-base
-                    default: type = LLM_TYPE_UNKNOWN;
-                }
-            } break;
-        case LLM_ARCH_NOMIC_BERT:
-        case LLM_ARCH_NOMIC_BERT_MOE:
-            {
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_EPS,    hparams.f_norm_eps);
-                ml.get_key(LLM_KV_ATTENTION_CAUSAL,           hparams.causal_attn);
-                ml.get_key(LLM_KV_POOLING_TYPE,               hparams.pooling_type);
-                ml.get_key(LLM_KV_MOE_EVERY_N_LAYERS,         hparams.moe_every_n_layers, 0);
-
-                if (hparams.n_layer == 12 && hparams.n_embd == 768) {
-                    if (arch == LLM_ARCH_NOMIC_BERT) {
-                        type = LLM_TYPE_137M;
-                    } else if (arch == LLM_ARCH_NOMIC_BERT_MOE && hparams.moe_every_n_layers == 2) {
-                        type = LLM_TYPE_475M;
-                    }
-                }
-            } break;
-        case LLM_ARCH_NEO_BERT:
-            {
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
-                ml.get_key(LLM_KV_ATTENTION_CAUSAL,            hparams.causal_attn);
-                ml.get_key(LLM_KV_POOLING_TYPE,                hparams.pooling_type);
-
-                if (hparams.n_layer == 28) {
-                    type = LLM_TYPE_250M;
-                }
-            } break;
-        case LLM_ARCH_BLOOM:
-            {
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_EPS, hparams.f_norm_eps);
-
-                switch (hparams.n_layer) {
-                    case 24: type = LLM_TYPE_1B; break;
-                    case 30:
-                        switch (hparams.n_embd) {
-                            case 2560: type = LLM_TYPE_3B; break;
-                            case 4096: type = LLM_TYPE_7B; break;
-                            default: type = LLM_TYPE_UNKNOWN;
-                        } break;
-                    default: type = LLM_TYPE_UNKNOWN;
-                }
-
-                // TODO: become GGUF KV parameter
-                hparams.f_max_alibi_bias = 8.0f;
-            } break;
-        case LLM_ARCH_MPT:
-            {
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_EPS,  hparams.f_norm_eps);
-                ml.get_key(LLM_KV_ATTENTION_CLAMP_KQV,      hparams.f_clamp_kqv, false);
-                ml.get_key(LLM_KV_ATTENTION_MAX_ALIBI_BIAS, hparams.f_max_alibi_bias);
-
-                switch (hparams.n_layer) {
-                    case 32: type = LLM_TYPE_7B; break;
-                    case 48: type = LLM_TYPE_30B; break;
-                    default: type = LLM_TYPE_UNKNOWN;
-                }
-            } break;
-        case LLM_ARCH_STABLELM:
-            {
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_EPS, hparams.f_norm_eps);
-
-                switch (hparams.n_layer) {
-                    case 24: type = LLM_TYPE_1B; break;
-                    case 32: type = LLM_TYPE_3B; break;
-                    case 40: type = LLM_TYPE_12B; break;
-                    default: type = LLM_TYPE_UNKNOWN;
-               }
-            } break;
-        case LLM_ARCH_QWEN:
-            {
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
-
-                switch (hparams.n_layer) {
-                    case 32: type = LLM_TYPE_7B; break;
-                    case 40: type = LLM_TYPE_13B; break;
-                    default: type = LLM_TYPE_UNKNOWN;
-                }
-            } break;
-        case LLM_ARCH_QWEN2VL:
-            {
-                ml.get_key_or_arr(LLM_KV_ROPE_DIMENSION_SECTIONS, hparams.rope_sections, 4, true);
-            }
-            // fall through
-        case LLM_ARCH_QWEN2:
-            {
-                ml.get_key(LLM_KV_POOLING_TYPE, hparams.pooling_type, false);
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
-                switch (hparams.n_layer) {
-                    case 24: type = hparams.n_embd == 1024 ? LLM_TYPE_0_5B : LLM_TYPE_1B; break;
-                    case 28: type = hparams.n_embd == 1536 ? LLM_TYPE_1_5B : LLM_TYPE_7B; break;
-                    case 32: type = LLM_TYPE_7B; break;
-                    case 36: type = LLM_TYPE_3B; break;
-                    case 40: type = hparams.n_head() == 20 ? LLM_TYPE_4B : LLM_TYPE_13B; break;
-                    case 48: type = LLM_TYPE_14B; break;
-                    case 64: type = LLM_TYPE_32B; break;
-                    case 80: type = LLM_TYPE_70B; break;
-                    default: type = LLM_TYPE_UNKNOWN;
-                }
-            } break;
-        case LLM_ARCH_QWEN2MOE:
-            {
-                ml.get_key(LLM_KV_EXPERT_FEED_FORWARD_LENGTH,        hparams.n_ff_exp, false);
-                ml.get_key(LLM_KV_EXPERT_SHARED_FEED_FORWARD_LENGTH, hparams.n_ff_shexp, false);
-
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
-                switch (hparams.n_layer) {
-                    case 24: type = LLM_TYPE_A2_7B; break;
-                    case 28: type = LLM_TYPE_57B_A14B; break;
-                    default: type = LLM_TYPE_UNKNOWN;
-                }
-            } break;
-        case LLM_ARCH_QWEN3:
-            {
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
-                switch (hparams.n_layer) {
-                    case 28: type = hparams.n_embd == 1024 ? LLM_TYPE_0_6B : LLM_TYPE_1_7B; break;
-                    case 36: type = hparams.n_embd == 2560 ? LLM_TYPE_4B : LLM_TYPE_8B; break;
-                    case 40: type = LLM_TYPE_14B; break;
-                    case 64: type = LLM_TYPE_32B; break;
-                    default: type = LLM_TYPE_UNKNOWN;
-                }
-            } break;
-        case LLM_ARCH_QWEN3MOE:
-            {
-                ml.get_key(LLM_KV_EXPERT_FEED_FORWARD_LENGTH,        hparams.n_ff_exp, false);
-
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
-                switch (hparams.n_layer) {
-                    case 48: type = LLM_TYPE_30B_A3B; break;
-                    case 94: type = LLM_TYPE_235B_A22B; break;
-                    default: type = LLM_TYPE_UNKNOWN;
-                }
-            } break;
-        case LLM_ARCH_PHI2:
-            {
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_EPS, hparams.f_norm_eps);
-
-                switch (hparams.n_layer) {
-                    case 24: type = LLM_TYPE_1B; break;
-                    case 32: type = LLM_TYPE_3B; break;
-                    default: type = LLM_TYPE_UNKNOWN;
-                }
-            } break;
-        case LLM_ARCH_PHI3:
-            {
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
-
-                switch (hparams.n_layer) {
-                    case 24: type = LLM_TYPE_1B; break;
-                    case 32: type = LLM_TYPE_3B; break;
-                    case 40: type = LLM_TYPE_14B; break;
-                    default: type = LLM_TYPE_UNKNOWN;
-                }
-
-                const bool found_swa = ml.get_key(LLM_KV_ATTENTION_SLIDING_WINDOW, hparams.n_swa, false);
-
-                if (found_swa && hparams.n_swa > 0) {
-                    LLAMA_LOG_WARN("%s: Phi SWA is currently disabled - results might be suboptimal for some models (see %s)\n",
-                            __func__, "https://github.com/ggml-org/llama.cpp/pull/13676");
-
-                    // TODO: fix conversion scripts to correctly populate `n_swa` and `n_swa_pattern`
-                    hparams.swa_type = LLAMA_SWA_TYPE_NONE;
-
-                    hparams.n_swa         = 0;
-                    hparams.set_swa_pattern(1);
-                }
-            } break;
-        case LLM_ARCH_PHIMOE:
-            {
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
-
-                switch (hparams.n_layer) {
-                    case 32: type = LLM_TYPE_16x3_8B; break;
-                    default: type = LLM_TYPE_UNKNOWN;
-                }
-            } break;
-        case LLM_ARCH_PLAMO:
-            {
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
-
-                switch (hparams.n_layer) {
-                    case 40: type = LLM_TYPE_13B; break;
-                    default: type = LLM_TYPE_UNKNOWN;
-               }
-            } break;
-        case LLM_ARCH_PLAMO2:
-            {
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
-
-                // Load Mamba SSM parameters
-                ml.get_key(LLM_KV_SSM_CONV_KERNEL,    hparams.ssm_d_conv);
-                ml.get_key(LLM_KV_SSM_INNER_SIZE,     hparams.ssm_d_inner);
-                ml.get_key(LLM_KV_SSM_STATE_SIZE,     hparams.ssm_d_state);
-                ml.get_key(LLM_KV_SSM_TIME_STEP_RANK, hparams.ssm_dt_rank);
-                ml.get_key(LLM_KV_SSM_GROUP_COUNT,    hparams.ssm_n_group);
-
-                for (uint32_t i = 0; i < hparams.n_layer; ++i) {
-                    hparams.recurrent_layer_arr[i] = hparams.n_head_kv(i) == 0;
-                }
-
-                switch (hparams.n_layer) {
-                    case 16: type = LLM_TYPE_1B; break;
-                    case 32:
-                        if (hparams.n_embd == 2048) {
-                            type = LLM_TYPE_2B;
-                        } else if (hparams.n_embd == 4096) {
-                            type = LLM_TYPE_8B;
-                        }
-                        break;
-                    default: type = LLM_TYPE_UNKNOWN;
-               }
-            } break;
-        case LLM_ARCH_GPT2:
-            {
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_EPS, hparams.f_norm_eps);
-                switch (hparams.n_layer) {
-                    case 12: type = LLM_TYPE_SMALL; break;
-                    case 24: type = LLM_TYPE_MEDIUM; break;
-                    case 36: type = LLM_TYPE_LARGE; break;
-                    case 48: type = LLM_TYPE_XL; break;
-                    default: type = LLM_TYPE_UNKNOWN;
-                }
-            } break;
-        case LLM_ARCH_CODESHELL:
-            {
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_EPS, hparams.f_norm_eps);
-                switch (hparams.n_layer) {
-                    case 42: type = LLM_TYPE_7B; break;
-                    default: type = LLM_TYPE_UNKNOWN;
-                }
-            } break;
-        case LLM_ARCH_ORION:
-            {
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_EPS, hparams.f_norm_eps);
-
-                switch (hparams.n_layer) {
-                    case 40: type = LLM_TYPE_14B; break;
-                    default: type = LLM_TYPE_UNKNOWN;
-                }
-            } break;
-        case LLM_ARCH_INTERNLM2:
-            {
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
-                switch (hparams.n_layer) {
-                    case 32: type = LLM_TYPE_7B; break;
-                    case 48: type = LLM_TYPE_20B; break;
-                    default: type = LLM_TYPE_UNKNOWN;
-                }
-            } break;
-        case LLM_ARCH_GEMMA:
-            {
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
-
-                switch (hparams.n_layer) {
-                    case 18: type = LLM_TYPE_2B; break;
-                    case 28: type = LLM_TYPE_7B; break;
-                    default: type = LLM_TYPE_UNKNOWN;
-               }
-            } break;
-        case LLM_ARCH_GEMMA2:
-            {
-                hparams.swa_type = LLAMA_SWA_TYPE_STANDARD;
-                hparams.n_swa = 4096; // default value of gemma 2
-                hparams.set_swa_pattern(2);
-                hparams.attn_soft_cap = true;
-
-                ml.get_key(LLM_KV_ATTENTION_SLIDING_WINDOW,    hparams.n_swa, false);
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
-                ml.get_key(LLM_KV_ATTN_LOGIT_SOFTCAPPING,      hparams.f_attn_logit_softcapping, false);
-                ml.get_key(LLM_KV_FINAL_LOGIT_SOFTCAPPING,     hparams.f_final_logit_softcapping, false);
-
-                switch (hparams.n_layer) {
-                    case 26: type = LLM_TYPE_2B; break;
-                    case 42: type = LLM_TYPE_9B; break;
-                    case 46: type = LLM_TYPE_27B; break;
-                    default: type = LLM_TYPE_UNKNOWN;
-               }
-
-                // ref: https://github.com/google/gemma_pytorch/blob/014acb7ac4563a5f77c76d7ff98f31b568c16508/gemma/config.py#L173
-                hparams.f_attention_scale = type == LLM_TYPE_27B
-                    ? 1.0f / std::sqrt(float(hparams.n_embd / hparams.n_head(0)))
-                    : 1.0f / std::sqrt(float(hparams.n_embd_head_k));
-            } break;
-        case LLM_ARCH_GEMMA3:
-            {
-                hparams.swa_type = LLAMA_SWA_TYPE_STANDARD;
-                hparams.set_swa_pattern(6);
-
-                hparams.rope_freq_base_train_swa  = 10000.0f;
-                hparams.rope_freq_scale_train_swa = 1.0f;
-
-                ml.get_key(LLM_KV_ATTENTION_SLIDING_WINDOW,    hparams.n_swa);
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
-
-                switch (hparams.n_layer) {
-                    case 26: type = LLM_TYPE_1B; break;
-                    case 34: type = LLM_TYPE_4B; break;
-                    case 48: type = LLM_TYPE_12B; break;
-                    case 62: type = LLM_TYPE_27B; break;
-                    default: type = LLM_TYPE_UNKNOWN;
-                }
-
-                // ref: https://github.com/google/gemma_pytorch/blob/014acb7ac4563a5f77c76d7ff98f31b568c16508/gemma/config.py#L289
-                hparams.f_attention_scale = type == LLM_TYPE_27B
-                    ? 1.0f / std::sqrt(float(hparams.n_embd / hparams.n_head(0)))
-                    : 1.0f / std::sqrt(float(hparams.n_embd_head_k));
-            } break;
-        case LLM_ARCH_GEMMA3N:
-            {
-                hparams.swa_type = LLAMA_SWA_TYPE_STANDARD;
-                hparams.set_swa_pattern(5);
-
-                hparams.rope_freq_base_train_swa  = 10000.0f;
-                hparams.rope_freq_scale_train_swa = 1.0f;
-                hparams.f_attention_scale         = 1.0f;
-
-                ml.get_key(LLM_KV_ATTENTION_SLIDING_WINDOW,    hparams.n_swa);
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
-
-                switch (hparams.n_layer) {
-                    case 30: type = LLM_TYPE_E2B; break;
-                    case 35: type = LLM_TYPE_E4B; break;
-                    default: type = LLM_TYPE_UNKNOWN;
-                }
-            } break;
-        case LLM_ARCH_STARCODER2:
-            {
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_EPS, hparams.f_norm_eps);
-                switch (hparams.n_layer) {
-                    case 30: type = LLM_TYPE_3B; break;
-                    case 32: type = LLM_TYPE_7B; break;
-                    case 40: type = LLM_TYPE_15B; break;
-                    case 52: type = LLM_TYPE_20B; break; // granite
-                    case 88: type = LLM_TYPE_34B; break; // granite
-                    default: type = LLM_TYPE_UNKNOWN;
-                }
-            } break;
-        case LLM_ARCH_MAMBA:
-            {
-                ml.get_key(LLM_KV_SSM_CONV_KERNEL,    hparams.ssm_d_conv);
-                ml.get_key(LLM_KV_SSM_INNER_SIZE,     hparams.ssm_d_inner);
-                ml.get_key(LLM_KV_SSM_STATE_SIZE,     hparams.ssm_d_state);
-                ml.get_key(LLM_KV_SSM_TIME_STEP_RANK, hparams.ssm_dt_rank);
-                ml.get_key(LLM_KV_SSM_DT_B_C_RMS,     hparams.ssm_dt_b_c_rms, false);
-
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
-
-                switch (hparams.n_layer) {
-                    case 24:
-                        switch (hparams.n_embd) {
-                            case 768: type = LLM_TYPE_SMALL; break;
-                            default: type = LLM_TYPE_UNKNOWN;
-                        } break;
-                    case 48:
-                        switch (hparams.n_embd) {
-                            case 1024: type = LLM_TYPE_MEDIUM; break;
-                            case 1536: type = LLM_TYPE_LARGE; break;
-                            case 2048: type = LLM_TYPE_XL; break;
-                            default:   type = LLM_TYPE_UNKNOWN;
-                        } break;
-                    case 64:
-                        switch (hparams.n_embd) {
-                            case 2560: type = LLM_TYPE_3B; break;
-                            default: type = LLM_TYPE_UNKNOWN;
-                        } break;
-                    default: type = LLM_TYPE_UNKNOWN;
-                }
-            } break;
-        case LLM_ARCH_MAMBA2:
-            {
-                ml.get_key(LLM_KV_SSM_CONV_KERNEL,    hparams.ssm_d_conv);
-                ml.get_key(LLM_KV_SSM_INNER_SIZE,     hparams.ssm_d_inner);
-                ml.get_key(LLM_KV_SSM_STATE_SIZE,     hparams.ssm_d_state);
-                ml.get_key(LLM_KV_SSM_TIME_STEP_RANK, hparams.ssm_dt_rank);
-                ml.get_key(LLM_KV_SSM_GROUP_COUNT,    hparams.ssm_n_group);
-
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
-
-                switch (hparams.n_layer) {
-                    case 24:
-                        switch (hparams.n_embd) {
-                            case 768: type = LLM_TYPE_SMALL; break;
-                            default: type = LLM_TYPE_UNKNOWN;
-                        } break;
-                    case 48:
-                        switch (hparams.n_embd) {
-                            case 1024: type = LLM_TYPE_MEDIUM; break;
-                            case 1536: type = LLM_TYPE_LARGE; break;
-                            case 2048: type = LLM_TYPE_XL; break;
-                            default: type = LLM_TYPE_UNKNOWN;
-                        } break;
-                    case 64:
-                        switch (hparams.n_embd) {
-                            case 2560: type = LLM_TYPE_3B; break;
-                            case 4096: type = LLM_TYPE_7B; break;
-                            default: type = LLM_TYPE_UNKNOWN;
-                        } break;
-                    default: type = LLM_TYPE_UNKNOWN;
-                }
-            } break;
-        case LLM_ARCH_JAMBA:
-            {
-                ml.get_key(LLM_KV_SSM_CONV_KERNEL,    hparams.ssm_d_conv);
-                ml.get_key(LLM_KV_SSM_INNER_SIZE,     hparams.ssm_d_inner);
-                ml.get_key(LLM_KV_SSM_STATE_SIZE,     hparams.ssm_d_state);
-                ml.get_key(LLM_KV_SSM_TIME_STEP_RANK, hparams.ssm_dt_rank);
-
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
-
-                for (uint32_t i = 0; i < hparams.n_layer; ++i) {
-                    hparams.recurrent_layer_arr[i] = hparams.n_head_kv(i) == 0;
-                }
-
-                switch (hparams.n_layer) {
-                    // TODO: Jamba layers are a bit heterogenous, so naming this is hard.
-                    case 12: // 900M  8x???M
-                    case 32: // 51B  16x?B
-                    default: type = LLM_TYPE_UNKNOWN;
-                }
-            } break;
-        case LLM_ARCH_XVERSE:
-            {
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
-                switch (hparams.n_layer) {
-                    case 32: type = LLM_TYPE_7B; break;
-                    case 40: type = LLM_TYPE_13B; break;
-                    case 80: type = LLM_TYPE_65B; break;
-                    default: type = LLM_TYPE_UNKNOWN;
-                }
-            } break;
-        case LLM_ARCH_COMMAND_R:
-            {
-                ml.get_key(LLM_KV_LOGIT_SCALE,             hparams.f_logit_scale);
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_EPS, hparams.f_norm_eps);
-                switch (hparams.n_layer) {
-                    case 40: type = LLM_TYPE_35B; break;
-                    default: type = LLM_TYPE_UNKNOWN;
-                }
-            } break;
-        case LLM_ARCH_COHERE2:
-            {
-                hparams.swa_type = LLAMA_SWA_TYPE_STANDARD;
-                hparams.set_swa_pattern(4);
-
-                ml.get_key(LLM_KV_ATTENTION_SLIDING_WINDOW, hparams.n_swa);
-                ml.get_key(LLM_KV_LOGIT_SCALE,              hparams.f_logit_scale);
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_EPS,  hparams.f_norm_eps);
-                switch (hparams.n_layer) {
-                    case 32: type = LLM_TYPE_8B; break;
-                    default: type = LLM_TYPE_UNKNOWN;
-                }
-            } break;
-        case LLM_ARCH_DBRX:
-        {
-            ml.get_key(LLM_KV_ATTENTION_LAYERNORM_EPS, hparams.f_norm_eps);
-            ml.get_key(LLM_KV_ATTENTION_CLAMP_KQV,     hparams.f_clamp_kqv);
-
-            switch (hparams.n_layer) {
-                case 40: type = LLM_TYPE_16x12B; break;
-                default: type = LLM_TYPE_UNKNOWN;
-            }
-        } break;
-        case LLM_ARCH_OLMO:
-            {
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_EPS, hparams.f_norm_eps);
-                ml.get_key(LLM_KV_ATTENTION_CLAMP_KQV,     hparams.f_clamp_kqv, false);
-
-                switch (hparams.n_layer) {
-                    case 22: type = LLM_TYPE_1B; break;
-                    case 32: type = LLM_TYPE_7B; break;
-                    case 80: type = LLM_TYPE_70B; break;
-                    default: type = LLM_TYPE_UNKNOWN;
-                }
-            } break;
-        case LLM_ARCH_OLMO2:
-            {
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
-
-                switch (hparams.n_layer) {
-                    case 16: type = LLM_TYPE_1B; break;
-                    case 32: type = LLM_TYPE_7B; break;
-                    case 40: type = LLM_TYPE_13B; break;
-                    case 64: type = LLM_TYPE_32B; break;
-                    default: type = LLM_TYPE_UNKNOWN;
-                }
-            } break;
-        case LLM_ARCH_OLMOE:
-            {
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
-                switch (hparams.n_layer) {
-                    case 16: type = LLM_TYPE_A1_7B; break;
-                    default: type = LLM_TYPE_UNKNOWN;
-                }
-            } break;
-        case LLM_ARCH_OPENELM:
-            {
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
-
-                switch (hparams.n_layer) {
-                case 16: type = LLM_TYPE_270M; break;
-                case 20: type = LLM_TYPE_450M; break;
-                case 28: type = LLM_TYPE_1B; break;
-                case 36: type = LLM_TYPE_3B; break;
-                default: type = LLM_TYPE_UNKNOWN;
-                }
-            } break;
-        case LLM_ARCH_GPTNEOX:
-            {
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_EPS, hparams.f_norm_eps);
-                ml.get_key(LLM_KV_USE_PARALLEL_RESIDUAL,   hparams.use_par_res);
-                switch (hparams.n_layer) {
-                    case 6:
-                        switch (hparams.n_ff()) {
-                            case 512:  type = LLM_TYPE_14M; break;
-                            case 2048: type = LLM_TYPE_70M; break;
-                            default:   type = LLM_TYPE_UNKNOWN;
-                        } break;
-                    case 12:
-                        switch (hparams.n_ff()) {
-                            case 3072: type = LLM_TYPE_160M; break;
-                            default: type = LLM_TYPE_UNKNOWN;
-                        } break;
-                    case 16:
-                        switch (hparams.n_ff()) {
-                            case 8192: type = LLM_TYPE_1B; break;
-                            default: type = LLM_TYPE_UNKNOWN;
-                        } break;
-                    case 24:
-                        switch (hparams.n_ff()) {
-                            case 4096: type = LLM_TYPE_410M; break;
-                            case 8192: type = LLM_TYPE_1_4B; break;
-                            default: type = LLM_TYPE_UNKNOWN;
-                        } break;
-                    case 32:
-                        switch (hparams.n_ff()) {
-                            case 10240: type = LLM_TYPE_2_8B; break;
-                            case 16384: type = LLM_TYPE_6_9B; break;
-                            default: type = LLM_TYPE_UNKNOWN;
-                        } break;
-                    case 36:
-                        switch (hparams.n_ff()) {
-                            case 20480: type = LLM_TYPE_12B; break;
-                            default: type = LLM_TYPE_UNKNOWN;
-                        } break;
-                    case 44:
-                        switch (hparams.n_ff()) {
-                            case 24576: type = LLM_TYPE_20B; break;
-                            default: type = LLM_TYPE_UNKNOWN;
-                        } break;
-                    default: type = LLM_TYPE_UNKNOWN;
-                }
-            } break;
-        case LLM_ARCH_ARCTIC:
-            {
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
-
-                if (hparams.n_expert == 128) {
                     switch (hparams.n_layer) {
-                        case 35: type = LLM_TYPE_10B_128x3_66B; break;
+                        case 3:
+                            type = LLM_TYPE_17M; break; // bge-micro
+                        case 6:
+                            type = LLM_TYPE_22M; break; // MiniLM-L6
+                        case 12:
+                            switch (hparams.n_embd) {
+                                case 384: type = LLM_TYPE_33M; break; // MiniLM-L12, bge-small
+                                case 768: type = LLM_TYPE_109M; break; // bge-base
+                                default: type = LLM_TYPE_UNKNOWN;
+                            } break;
+                        case 24:
+                            type = LLM_TYPE_335M; break; // bge-large
                         default: type = LLM_TYPE_UNKNOWN;
                     }
-                } else {
-                    type = LLM_TYPE_UNKNOWN;
-                }
-            } break;
-        case LLM_ARCH_DEEPSEEK:
-            {
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
-                ml.get_key(LLM_KV_LEADING_DENSE_BLOCK_COUNT,   hparams.n_layer_dense_lead);
-                ml.get_key(LLM_KV_EXPERT_FEED_FORWARD_LENGTH,  hparams.n_ff_exp);
-                ml.get_key(LLM_KV_EXPERT_SHARED_COUNT,         hparams.n_expert_shared);
-                ml.get_key(LLM_KV_EXPERT_WEIGHTS_SCALE,        hparams.expert_weights_scale);
+                } break;
+            case LLM_ARCH_JINA_BERT_V2:
+                {
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_EPS,    hparams.f_norm_eps);
+                    ml.get_key(LLM_KV_ATTENTION_CAUSAL,           hparams.causal_attn);
+                    ml.get_key(LLM_KV_POOLING_TYPE,               hparams.pooling_type, false);
+                    hparams.f_max_alibi_bias = 8.0f;
 
-                switch (hparams.n_layer) {
-                    case 28: type = LLM_TYPE_20B; break;
-                    default: type = LLM_TYPE_UNKNOWN;
-                }
-            } break;
-        case LLM_ARCH_DEEPSEEK2:
-            {
-                bool is_lite = (hparams.n_layer == 27);
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
-                ml.get_key(LLM_KV_LEADING_DENSE_BLOCK_COUNT,   hparams.n_layer_dense_lead);
-                if (!is_lite) {
-                    ml.get_key(LLM_KV_ATTENTION_Q_LORA_RANK, hparams.n_lora_q);
-                }
-                ml.get_key(LLM_KV_ATTENTION_KV_LORA_RANK,     hparams.n_lora_kv);
-                ml.get_key(LLM_KV_ATTENTION_KEY_LENGTH_MLA,   hparams.n_embd_head_k_mla, false);
-                ml.get_key(LLM_KV_ATTENTION_VALUE_LENGTH_MLA, hparams.n_embd_head_v_mla, false);
-                ml.get_key(LLM_KV_EXPERT_FEED_FORWARD_LENGTH, hparams.n_ff_exp);
-                ml.get_key(LLM_KV_EXPERT_SHARED_COUNT,        hparams.n_expert_shared);
-                ml.get_key(LLM_KV_EXPERT_WEIGHTS_SCALE,       hparams.expert_weights_scale);
-                ml.get_key(LLM_KV_EXPERT_WEIGHTS_NORM,        hparams.expert_weights_norm, false);
-                ml.get_key(LLM_KV_EXPERT_GATING_FUNC,         hparams.expert_gating_func, false);
-                if (hparams.expert_gating_func == LLAMA_EXPERT_GATING_FUNC_TYPE_NONE) {
-                    // for compatibility with existing DeepSeek V2 and V2.5 GGUFs
-                    // that have no expert_gating_func model parameter set
-                    hparams.expert_gating_func = LLAMA_EXPERT_GATING_FUNC_TYPE_SOFTMAX;
-                }
-                ml.get_key(LLM_KV_ROPE_SCALING_YARN_LOG_MUL, hparams.rope_yarn_log_mul);
+                    switch (hparams.n_layer) {
+                        case 4:  type = LLM_TYPE_33M;  break; // jina-embeddings-small
+                        case 12: type = LLM_TYPE_137M; break; // jina-embeddings-base
+                        default: type = LLM_TYPE_UNKNOWN;
+                    }
+                } break;
+            case LLM_ARCH_NOMIC_BERT:
+            case LLM_ARCH_NOMIC_BERT_MOE:
+                {
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_EPS,    hparams.f_norm_eps);
+                    ml.get_key(LLM_KV_ATTENTION_CAUSAL,           hparams.causal_attn);
+                    ml.get_key(LLM_KV_POOLING_TYPE,               hparams.pooling_type);
+                    ml.get_key(LLM_KV_MOE_EVERY_N_LAYERS,         hparams.moe_every_n_layers, 0);
 
-                switch (hparams.n_layer) {
-                    case 27: type = LLM_TYPE_16B; break;
-                    case 60: type = LLM_TYPE_236B; break;
-                    case 61: type = LLM_TYPE_671B; break;
-                    default: type = LLM_TYPE_UNKNOWN;
-                }
-            } break;
-        case LLM_ARCH_PLM:
-            {
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
-                ml.get_key(LLM_KV_ATTENTION_KV_LORA_RANK, hparams.n_lora_kv);
-                switch (hparams.n_layer) {
-                    case 32: type = LLM_TYPE_1_8B; break;
-                    default: type = LLM_TYPE_UNKNOWN;
-                }
-            } break;
-        case LLM_ARCH_CHATGLM:
-            {
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
-                switch (hparams.n_layer) {
-                    case 28: {
-                        if (hparams.n_head(0) == 16) {
-                            type = LLM_TYPE_1_5B;
-                        } else {
-                            type = LLM_TYPE_6B;
+                    if (hparams.n_layer == 12 && hparams.n_embd == 768) {
+                        if (arch == LLM_ARCH_NOMIC_BERT) {
+                            type = LLM_TYPE_137M;
+                        } else if (arch == LLM_ARCH_NOMIC_BERT_MOE && hparams.moe_every_n_layers == 2) {
+                            type = LLM_TYPE_475M;
                         }
-                    } break;
-                    case 40: {
-                        if (hparams.n_head(0) == 24) {
-                            type = LLM_TYPE_4B;
-                        } else {
-                            type = LLM_TYPE_9B;
-                        }
-                    } break;
-                    default: type = LLM_TYPE_UNKNOWN;
-                }
-            } break;
-        case LLM_ARCH_GLM4:
-            {
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
-                switch (hparams.n_layer) {
-                    case 40: type = LLM_TYPE_9B; break;
-                    case 61: type = LLM_TYPE_32B; break;
-                    default: type = LLM_TYPE_UNKNOWN;
-                }
-            } break;
-        case LLM_ARCH_BITNET:
-            {
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
+                    }
+                } break;
+            case LLM_ARCH_NEO_BERT:
+                {
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
+                    ml.get_key(LLM_KV_ATTENTION_CAUSAL,            hparams.causal_attn);
+                    ml.get_key(LLM_KV_POOLING_TYPE,                hparams.pooling_type);
 
-                switch (hparams.n_layer) {
-                    case 26: type = LLM_TYPE_3B; break;
-                    default: type = LLM_TYPE_UNKNOWN;
-                }
-            } break;
-        case LLM_ARCH_T5:
-            {
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS,      hparams.f_norm_rms_eps);
-                ml.get_key(LLM_KV_ATTENTION_RELATIVE_BUCKETS_COUNT, hparams.n_rel_attn_bkts);
+                    if (hparams.n_layer == 28) {
+                        type = LLM_TYPE_250M;
+                    }
+                } break;
+            case LLM_ARCH_BLOOM:
+                {
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_EPS, hparams.f_norm_eps);
 
-                uint32_t dec_start_token_id;
-                if (ml.get_key(LLM_KV_DECODER_START_TOKEN_ID, dec_start_token_id, false)) {
-                    hparams.dec_start_token_id = dec_start_token_id;
+                    switch (hparams.n_layer) {
+                        case 24: type = LLM_TYPE_1B; break;
+                        case 30:
+                            switch (hparams.n_embd) {
+                                case 2560: type = LLM_TYPE_3B; break;
+                                case 4096: type = LLM_TYPE_7B; break;
+                                default: type = LLM_TYPE_UNKNOWN;
+                            } break;
+                        default: type = LLM_TYPE_UNKNOWN;
+                    }
+
+                    // TODO: become GGUF KV parameter
+                    hparams.f_max_alibi_bias = 8.0f;
+                } break;
+            case LLM_ARCH_MPT:
+                {
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_EPS,  hparams.f_norm_eps);
+                    ml.get_key(LLM_KV_ATTENTION_CLAMP_KQV,      hparams.f_clamp_kqv, false);
+                    ml.get_key(LLM_KV_ATTENTION_MAX_ALIBI_BIAS, hparams.f_max_alibi_bias);
+
+                    switch (hparams.n_layer) {
+                        case 32: type = LLM_TYPE_7B; break;
+                        case 48: type = LLM_TYPE_30B; break;
+                        default: type = LLM_TYPE_UNKNOWN;
+                    }
+                } break;
+            case LLM_ARCH_STABLELM:
+                {
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_EPS, hparams.f_norm_eps);
+
+                    switch (hparams.n_layer) {
+                        case 24: type = LLM_TYPE_1B; break;
+                        case 32: type = LLM_TYPE_3B; break;
+                        case 40: type = LLM_TYPE_12B; break;
+                        default: type = LLM_TYPE_UNKNOWN;
+                }
+                } break;
+            case LLM_ARCH_QWEN:
+                {
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
+
+                    switch (hparams.n_layer) {
+                        case 32: type = LLM_TYPE_7B; break;
+                        case 40: type = LLM_TYPE_13B; break;
+                        default: type = LLM_TYPE_UNKNOWN;
+                    }
+                } break;
+            case LLM_ARCH_QWEN2VL:
+                {
+                    ml.get_key_or_arr(LLM_KV_ROPE_DIMENSION_SECTIONS, hparams.rope_sections, 4, true);
+                }
+                // fall through
+            case LLM_ARCH_QWEN2:
+                {
+                    ml.get_key(LLM_KV_POOLING_TYPE, hparams.pooling_type, false);
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
+                    switch (hparams.n_layer) {
+                        case 24: type = hparams.n_embd == 1024 ? LLM_TYPE_0_5B : LLM_TYPE_1B; break;
+                        case 28: type = hparams.n_embd == 1536 ? LLM_TYPE_1_5B : LLM_TYPE_7B; break;
+                        case 32: type = LLM_TYPE_7B; break;
+                        case 36: type = LLM_TYPE_3B; break;
+                        case 40: type = hparams.n_head() == 20 ? LLM_TYPE_4B : LLM_TYPE_13B; break;
+                        case 48: type = LLM_TYPE_14B; break;
+                        case 64: type = LLM_TYPE_32B; break;
+                        case 80: type = LLM_TYPE_70B; break;
+                        default: type = LLM_TYPE_UNKNOWN;
+                    }
+                } break;
+            case LLM_ARCH_QWEN2MOE:
+                {
+                    ml.get_key(LLM_KV_EXPERT_FEED_FORWARD_LENGTH,        hparams.n_ff_exp, false);
+                    ml.get_key(LLM_KV_EXPERT_SHARED_FEED_FORWARD_LENGTH, hparams.n_ff_shexp, false);
+
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
+                    switch (hparams.n_layer) {
+                        case 24: type = LLM_TYPE_A2_7B; break;
+                        case 28: type = LLM_TYPE_57B_A14B; break;
+                        default: type = LLM_TYPE_UNKNOWN;
+                    }
+                } break;
+            case LLM_ARCH_QWEN3:
+                {
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
+                    switch (hparams.n_layer) {
+                        case 28: type = hparams.n_embd == 1024 ? LLM_TYPE_0_6B : LLM_TYPE_1_7B; break;
+                        case 36: type = hparams.n_embd == 2560 ? LLM_TYPE_4B : LLM_TYPE_8B; break;
+                        case 40: type = LLM_TYPE_14B; break;
+                        case 64: type = LLM_TYPE_32B; break;
+                        default: type = LLM_TYPE_UNKNOWN;
+                    }
+                } break;
+            case LLM_ARCH_QWEN3MOE:
+                {
+                    ml.get_key(LLM_KV_EXPERT_FEED_FORWARD_LENGTH,        hparams.n_ff_exp, false);
+
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
+                    switch (hparams.n_layer) {
+                        case 48: type = LLM_TYPE_30B_A3B; break;
+                        case 94: type = LLM_TYPE_235B_A22B; break;
+                        default: type = LLM_TYPE_UNKNOWN;
+                    }
+                } break;
+            case LLM_ARCH_PHI2:
+                {
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_EPS, hparams.f_norm_eps);
+
+                    switch (hparams.n_layer) {
+                        case 24: type = LLM_TYPE_1B; break;
+                        case 32: type = LLM_TYPE_3B; break;
+                        default: type = LLM_TYPE_UNKNOWN;
+                    }
+                } break;
+            case LLM_ARCH_PHI3:
+                {
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
+
+                    switch (hparams.n_layer) {
+                        case 24: type = LLM_TYPE_1B; break;
+                        case 32: type = LLM_TYPE_3B; break;
+                        case 40: type = LLM_TYPE_14B; break;
+                        default: type = LLM_TYPE_UNKNOWN;
+                    }
+
+                    const bool found_swa = ml.get_key(LLM_KV_ATTENTION_SLIDING_WINDOW, hparams.n_swa, false);
+
+                    if (found_swa && hparams.n_swa > 0) {
+                        LLAMA_LOG_WARN("%s: Phi SWA is currently disabled - results might be suboptimal for some models (see %s)\n",
+                                __func__, "https://github.com/ggml-org/llama.cpp/pull/13676");
+
+                        // TODO: fix conversion scripts to correctly populate `n_swa` and `n_swa_pattern`
+                        hparams.swa_type = LLAMA_SWA_TYPE_NONE;
+
+                        hparams.n_swa         = 0;
+                        hparams.set_swa_pattern(1);
+                    }
+                } break;
+            case LLM_ARCH_PHIMOE:
+                {
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
+
+                    switch (hparams.n_layer) {
+                        case 32: type = LLM_TYPE_16x3_8B; break;
+                        default: type = LLM_TYPE_UNKNOWN;
+                    }
+                } break;
+            case LLM_ARCH_PLAMO:
+                {
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
+
+                    switch (hparams.n_layer) {
+                        case 40: type = LLM_TYPE_13B; break;
+                        default: type = LLM_TYPE_UNKNOWN;
+                }
+                } break;
+            case LLM_ARCH_PLAMO2:
+                {
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
+
+                    // Load Mamba SSM parameters
+                    ml.get_key(LLM_KV_SSM_CONV_KERNEL,    hparams.ssm_d_conv);
+                    ml.get_key(LLM_KV_SSM_INNER_SIZE,     hparams.ssm_d_inner);
+                    ml.get_key(LLM_KV_SSM_STATE_SIZE,     hparams.ssm_d_state);
+                    ml.get_key(LLM_KV_SSM_TIME_STEP_RANK, hparams.ssm_dt_rank);
+                    ml.get_key(LLM_KV_SSM_GROUP_COUNT,    hparams.ssm_n_group);
+
+                    for (uint32_t i = 0; i < hparams.n_layer; ++i) {
+                        hparams.recurrent_layer_arr[i] = hparams.n_head_kv(i) == 0;
+                    }
+
+                    switch (hparams.n_layer) {
+                        case 16: type = LLM_TYPE_1B; break;
+                        case 32:
+                            if (hparams.n_embd == 2048) {
+                                type = LLM_TYPE_2B;
+                            } else if (hparams.n_embd == 4096) {
+                                type = LLM_TYPE_8B;
+                            }
+                            break;
+                        default: type = LLM_TYPE_UNKNOWN;
+                }
+                } break;
+            case LLM_ARCH_GPT2:
+                {
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_EPS, hparams.f_norm_eps);
+                    switch (hparams.n_layer) {
+                        case 12: type = LLM_TYPE_SMALL; break;
+                        case 24: type = LLM_TYPE_MEDIUM; break;
+                        case 36: type = LLM_TYPE_LARGE; break;
+                        case 48: type = LLM_TYPE_XL; break;
+                        default: type = LLM_TYPE_UNKNOWN;
+                    }
+                } break;
+            case LLM_ARCH_CODESHELL:
+                {
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_EPS, hparams.f_norm_eps);
+                    switch (hparams.n_layer) {
+                        case 42: type = LLM_TYPE_7B; break;
+                        default: type = LLM_TYPE_UNKNOWN;
+                    }
+                } break;
+            case LLM_ARCH_ORION:
+                {
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_EPS, hparams.f_norm_eps);
+
+                    switch (hparams.n_layer) {
+                        case 40: type = LLM_TYPE_14B; break;
+                        default: type = LLM_TYPE_UNKNOWN;
+                    }
+                } break;
+            case LLM_ARCH_INTERNLM2:
+                {
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
+                    switch (hparams.n_layer) {
+                        case 32: type = LLM_TYPE_7B; break;
+                        case 48: type = LLM_TYPE_20B; break;
+                        default: type = LLM_TYPE_UNKNOWN;
+                    }
+                } break;
+            case LLM_ARCH_GEMMA:
+                {
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
+
+                    switch (hparams.n_layer) {
+                        case 18: type = LLM_TYPE_2B; break;
+                        case 28: type = LLM_TYPE_7B; break;
+                        default: type = LLM_TYPE_UNKNOWN;
+                }
+                } break;
+            case LLM_ARCH_GEMMA2:
+                {
+                    hparams.swa_type = LLAMA_SWA_TYPE_STANDARD;
+                    hparams.n_swa = 4096; // default value of gemma 2
+                    hparams.set_swa_pattern(2);
+                    hparams.attn_soft_cap = true;
+
+                    ml.get_key(LLM_KV_ATTENTION_SLIDING_WINDOW,    hparams.n_swa, false);
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
+                    ml.get_key(LLM_KV_ATTN_LOGIT_SOFTCAPPING,      hparams.f_attn_logit_softcapping, false);
+                    ml.get_key(LLM_KV_FINAL_LOGIT_SOFTCAPPING,     hparams.f_final_logit_softcapping, false);
+
+                    switch (hparams.n_layer) {
+                        case 26: type = LLM_TYPE_2B; break;
+                        case 42: type = LLM_TYPE_9B; break;
+                        case 46: type = LLM_TYPE_27B; break;
+                        default: type = LLM_TYPE_UNKNOWN;
                 }
 
-                switch (hparams.n_layer) {
-                    case 6:  type = LLM_TYPE_60M;  break; // t5-small
-                    case 8:  type = LLM_TYPE_80M;  break; // flan-t5-small
-                    case 12:
-                        switch (hparams.n_ff()) {
-                            case 3072: type = LLM_TYPE_220M; break; // t5-base
-                            case 2048: type = LLM_TYPE_250M; break; // flan-t5-base
-                            default: type = LLM_TYPE_UNKNOWN;
-                        } break;
-                    case 24:
-                        switch (hparams.n_ff()) {
-                            case 4096:  type = LLM_TYPE_770M; break; // t5-large
-                            case 2816:  type = LLM_TYPE_780M; break; // flan-t5-large
-                            case 16384: type = LLM_TYPE_3B;   break; // t5-3b
-                            case 5120:  type = LLM_TYPE_3B;   break; // flan-t5-xl
-                            case 65536: type = LLM_TYPE_11B;  break; // t5-11b
-                            case 10240: type = LLM_TYPE_11B;  break; // flan-t5-xxl
-                            default: type = LLM_TYPE_UNKNOWN;
-                        } break;
-                    default: type = LLM_TYPE_UNKNOWN;
-               }
-            } break;
-        case LLM_ARCH_T5ENCODER:
-            {
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
-                ml.get_key(LLM_KV_ATTENTION_RELATIVE_BUCKETS_COUNT, hparams.n_rel_attn_bkts);
-                type = LLM_TYPE_UNKNOWN;
-            } break;
-        case LLM_ARCH_JAIS:
+                    // ref: https://github.com/google/gemma_pytorch/blob/014acb7ac4563a5f77c76d7ff98f31b568c16508/gemma/config.py#L173
+                    hparams.f_attention_scale = type == LLM_TYPE_27B
+                        ? 1.0f / std::sqrt(float(hparams.n_embd / hparams.n_head(0)))
+                        : 1.0f / std::sqrt(float(hparams.n_embd_head_k));
+                } break;
+            case LLM_ARCH_GEMMA3:
+                {
+                    hparams.swa_type = LLAMA_SWA_TYPE_STANDARD;
+                    hparams.set_swa_pattern(6);
+
+                    hparams.rope_freq_base_train_swa  = 10000.0f;
+                    hparams.rope_freq_scale_train_swa = 1.0f;
+
+                    ml.get_key(LLM_KV_ATTENTION_SLIDING_WINDOW,    hparams.n_swa);
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
+
+                    switch (hparams.n_layer) {
+                        case 26: type = LLM_TYPE_1B; break;
+                        case 34: type = LLM_TYPE_4B; break;
+                        case 48: type = LLM_TYPE_12B; break;
+                        case 62: type = LLM_TYPE_27B; break;
+                        default: type = LLM_TYPE_UNKNOWN;
+                    }
+
+                    // ref: https://github.com/google/gemma_pytorch/blob/014acb7ac4563a5f77c76d7ff98f31b568c16508/gemma/config.py#L289
+                    hparams.f_attention_scale = type == LLM_TYPE_27B
+                        ? 1.0f / std::sqrt(float(hparams.n_embd / hparams.n_head(0)))
+                        : 1.0f / std::sqrt(float(hparams.n_embd_head_k));
+                } break;
+            case LLM_ARCH_GEMMA3N:
+                {
+                    hparams.swa_type = LLAMA_SWA_TYPE_STANDARD;
+                    hparams.set_swa_pattern(5);
+
+                    hparams.rope_freq_base_train_swa  = 10000.0f;
+                    hparams.rope_freq_scale_train_swa = 1.0f;
+                    hparams.f_attention_scale         = 1.0f;
+
+                    ml.get_key(LLM_KV_ATTENTION_SLIDING_WINDOW,    hparams.n_swa);
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
+
+                    switch (hparams.n_layer) {
+                        case 30: type = LLM_TYPE_E2B; break;
+                        case 35: type = LLM_TYPE_E4B; break;
+                        default: type = LLM_TYPE_UNKNOWN;
+                    }
+                } break;
+            case LLM_ARCH_STARCODER2:
+                {
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_EPS, hparams.f_norm_eps);
+                    switch (hparams.n_layer) {
+                        case 30: type = LLM_TYPE_3B; break;
+                        case 32: type = LLM_TYPE_7B; break;
+                        case 40: type = LLM_TYPE_15B; break;
+                        case 52: type = LLM_TYPE_20B; break; // granite
+                        case 88: type = LLM_TYPE_34B; break; // granite
+                        default: type = LLM_TYPE_UNKNOWN;
+                    }
+                } break;
+            case LLM_ARCH_MAMBA:
+                {
+                    ml.get_key(LLM_KV_SSM_CONV_KERNEL,    hparams.ssm_d_conv);
+                    ml.get_key(LLM_KV_SSM_INNER_SIZE,     hparams.ssm_d_inner);
+                    ml.get_key(LLM_KV_SSM_STATE_SIZE,     hparams.ssm_d_state);
+                    ml.get_key(LLM_KV_SSM_TIME_STEP_RANK, hparams.ssm_dt_rank);
+                    ml.get_key(LLM_KV_SSM_DT_B_C_RMS,     hparams.ssm_dt_b_c_rms, false);
+
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
+
+                    switch (hparams.n_layer) {
+                        case 24:
+                            switch (hparams.n_embd) {
+                                case 768: type = LLM_TYPE_SMALL; break;
+                                default: type = LLM_TYPE_UNKNOWN;
+                            } break;
+                        case 48:
+                            switch (hparams.n_embd) {
+                                case 1024: type = LLM_TYPE_MEDIUM; break;
+                                case 1536: type = LLM_TYPE_LARGE; break;
+                                case 2048: type = LLM_TYPE_XL; break;
+                                default:   type = LLM_TYPE_UNKNOWN;
+                            } break;
+                        case 64:
+                            switch (hparams.n_embd) {
+                                case 2560: type = LLM_TYPE_3B; break;
+                                default: type = LLM_TYPE_UNKNOWN;
+                            } break;
+                        default: type = LLM_TYPE_UNKNOWN;
+                    }
+                } break;
+            case LLM_ARCH_MAMBA2:
+                {
+                    ml.get_key(LLM_KV_SSM_CONV_KERNEL,    hparams.ssm_d_conv);
+                    ml.get_key(LLM_KV_SSM_INNER_SIZE,     hparams.ssm_d_inner);
+                    ml.get_key(LLM_KV_SSM_STATE_SIZE,     hparams.ssm_d_state);
+                    ml.get_key(LLM_KV_SSM_TIME_STEP_RANK, hparams.ssm_dt_rank);
+                    ml.get_key(LLM_KV_SSM_GROUP_COUNT,    hparams.ssm_n_group);
+
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
+
+                    switch (hparams.n_layer) {
+                        case 24:
+                            switch (hparams.n_embd) {
+                                case 768: type = LLM_TYPE_SMALL; break;
+                                default: type = LLM_TYPE_UNKNOWN;
+                            } break;
+                        case 48:
+                            switch (hparams.n_embd) {
+                                case 1024: type = LLM_TYPE_MEDIUM; break;
+                                case 1536: type = LLM_TYPE_LARGE; break;
+                                case 2048: type = LLM_TYPE_XL; break;
+                                default: type = LLM_TYPE_UNKNOWN;
+                            } break;
+                        case 64:
+                            switch (hparams.n_embd) {
+                                case 2560: type = LLM_TYPE_3B; break;
+                                case 4096: type = LLM_TYPE_7B; break;
+                                default: type = LLM_TYPE_UNKNOWN;
+                            } break;
+                        default: type = LLM_TYPE_UNKNOWN;
+                    }
+                } break;
+            case LLM_ARCH_JAMBA:
+                {
+                    ml.get_key(LLM_KV_SSM_CONV_KERNEL,    hparams.ssm_d_conv);
+                    ml.get_key(LLM_KV_SSM_INNER_SIZE,     hparams.ssm_d_inner);
+                    ml.get_key(LLM_KV_SSM_STATE_SIZE,     hparams.ssm_d_state);
+                    ml.get_key(LLM_KV_SSM_TIME_STEP_RANK, hparams.ssm_dt_rank);
+
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
+
+                    for (uint32_t i = 0; i < hparams.n_layer; ++i) {
+                        hparams.recurrent_layer_arr[i] = hparams.n_head_kv(i) == 0;
+                    }
+
+                    switch (hparams.n_layer) {
+                        // TODO: Jamba layers are a bit heterogenous, so naming this is hard.
+                        case 12: // 900M  8x???M
+                        case 32: // 51B  16x?B
+                        default: type = LLM_TYPE_UNKNOWN;
+                    }
+                } break;
+            case LLM_ARCH_XVERSE:
+                {
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
+                    switch (hparams.n_layer) {
+                        case 32: type = LLM_TYPE_7B; break;
+                        case 40: type = LLM_TYPE_13B; break;
+                        case 80: type = LLM_TYPE_65B; break;
+                        default: type = LLM_TYPE_UNKNOWN;
+                    }
+                } break;
+            case LLM_ARCH_COMMAND_R:
+                {
+                    ml.get_key(LLM_KV_LOGIT_SCALE,             hparams.f_logit_scale);
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_EPS, hparams.f_norm_eps);
+                    switch (hparams.n_layer) {
+                        case 40: type = LLM_TYPE_35B; break;
+                        default: type = LLM_TYPE_UNKNOWN;
+                    }
+                } break;
+            case LLM_ARCH_COHERE2:
+                {
+                    hparams.swa_type = LLAMA_SWA_TYPE_STANDARD;
+                    hparams.set_swa_pattern(4);
+
+                    ml.get_key(LLM_KV_ATTENTION_SLIDING_WINDOW, hparams.n_swa);
+                    ml.get_key(LLM_KV_LOGIT_SCALE,              hparams.f_logit_scale);
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_EPS,  hparams.f_norm_eps);
+                    switch (hparams.n_layer) {
+                        case 32: type = LLM_TYPE_8B; break;
+                        default: type = LLM_TYPE_UNKNOWN;
+                    }
+                } break;
+            case LLM_ARCH_DBRX:
             {
                 ml.get_key(LLM_KV_ATTENTION_LAYERNORM_EPS, hparams.f_norm_eps);
-                ml.get_key(LLM_KV_ATTENTION_MAX_ALIBI_BIAS, hparams.f_max_alibi_bias);
+                ml.get_key(LLM_KV_ATTENTION_CLAMP_KQV,     hparams.f_clamp_kqv);
 
                 switch (hparams.n_layer) {
-                    case 24: type = LLM_TYPE_1_3B; break;
-                    case 40: type = LLM_TYPE_13B; break;
-                    /* TODO: add variants */
+                    case 40: type = LLM_TYPE_16x12B; break;
                     default: type = LLM_TYPE_UNKNOWN;
                 }
             } break;
-        case LLM_ARCH_NEMOTRON:
-            {
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_EPS, hparams.f_norm_eps);
-                switch (hparams.n_layer) {
-                    case 32: type = LLM_TYPE_4B; break;
-                    default: type = LLM_TYPE_UNKNOWN;
-                }
-            } break;
-        case LLM_ARCH_EXAONE:
-            {
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
+            case LLM_ARCH_OLMO:
+                {
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_EPS, hparams.f_norm_eps);
+                    ml.get_key(LLM_KV_ATTENTION_CLAMP_KQV,     hparams.f_clamp_kqv, false);
 
-                switch (hparams.n_layer) {
-                    case 32: type = LLM_TYPE_8B; break;
-                    default: type = LLM_TYPE_UNKNOWN;
-                }
-            } break;
-        case LLM_ARCH_RWKV6:
-        case LLM_ARCH_RWKV6QWEN2:
-            {
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_EPS,     hparams.f_norm_eps, false);
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps, false);
-                ml.get_key(LLM_KV_WKV_HEAD_SIZE,               hparams.wkv_head_size);
-                ml.get_key(LLM_KV_TIME_MIX_EXTRA_DIM,          hparams.time_mix_extra_dim);
-                ml.get_key(LLM_KV_TIME_DECAY_EXTRA_DIM,        hparams.time_decay_extra_dim);
-                ml.get_key(LLM_KV_RESCALE_EVERY_N_LAYERS,      hparams.rescale_every_n_layers, false);
-                ml.get_key(LLM_KV_TOKEN_SHIFT_COUNT,           hparams.token_shift_count, false);
+                    switch (hparams.n_layer) {
+                        case 22: type = LLM_TYPE_1B; break;
+                        case 32: type = LLM_TYPE_7B; break;
+                        case 80: type = LLM_TYPE_70B; break;
+                        default: type = LLM_TYPE_UNKNOWN;
+                    }
+                } break;
+            case LLM_ARCH_OLMO2:
+                {
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
 
-                switch (hparams.n_layer) {
-                    case 24: type = LLM_TYPE_1_6B; break;
-                    case 32:
-                        switch (hparams.n_embd) {
-                            case 2560: type = LLM_TYPE_3B; break;
-                            case 4096: type = LLM_TYPE_7B; break;
-                            default: type = LLM_TYPE_UNKNOWN;
-                        } break;
-                    case 61: type = LLM_TYPE_14B; break;
-                    case 64: type = LLM_TYPE_32B; break;
-                    default: type = LLM_TYPE_UNKNOWN;
-                }
-            } break;
-        case LLM_ARCH_RWKV7:
-        case LLM_ARCH_ARWKV7:
-            {
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_EPS,                hparams.f_norm_eps, false);
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS,            hparams.f_norm_rms_eps, false);
-                ml.get_key(LLM_KV_WKV_HEAD_SIZE,                          hparams.wkv_head_size);
-                ml.get_key(LLM_KV_ATTENTION_DECAY_LORA_RANK,              hparams.n_lora_decay);
-                ml.get_key(LLM_KV_ATTENTION_ICLR_LORA_RANK,               hparams.n_lora_iclr);
-                ml.get_key(LLM_KV_ATTENTION_VALUE_RESIDUAL_MIX_LORA_RANK, hparams.n_lora_value_res_mix);
-                ml.get_key(LLM_KV_ATTENTION_GATE_LORA_RANK,               hparams.n_lora_gate, false);
-                ml.get_key(LLM_KV_TOKEN_SHIFT_COUNT,                      hparams.token_shift_count, false);
+                    switch (hparams.n_layer) {
+                        case 16: type = LLM_TYPE_1B; break;
+                        case 32: type = LLM_TYPE_7B; break;
+                        case 40: type = LLM_TYPE_13B; break;
+                        case 64: type = LLM_TYPE_32B; break;
+                        default: type = LLM_TYPE_UNKNOWN;
+                    }
+                } break;
+            case LLM_ARCH_OLMOE:
+                {
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
+                    switch (hparams.n_layer) {
+                        case 16: type = LLM_TYPE_A1_7B; break;
+                        default: type = LLM_TYPE_UNKNOWN;
+                    }
+                } break;
+            case LLM_ARCH_OPENELM:
+                {
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
 
-                switch (hparams.n_layer) {
-                    case 12: type = LLM_TYPE_190M; break;
-                    case 24:
-                        switch (hparams.n_embd) {
-                            case 1024: type = LLM_TYPE_450M; break;
-                            case 2048: type = LLM_TYPE_1_5B; break;
-                            default: type = LLM_TYPE_UNKNOWN;
-                        } break;
-                    case 28:
-                        switch (hparams.n_embd) {
-                            case 1536: type = LLM_TYPE_1_5B; break;
-                            case 3584: type = LLM_TYPE_7B; break;
-                            default: type = LLM_TYPE_UNKNOWN;
-                        } break;
-                    case 32: type = LLM_TYPE_2_9B; break; // RWKV-7-World
-                    default: type = LLM_TYPE_UNKNOWN;
-                }
-            } break;
-        case LLM_ARCH_GRANITE:
-        case LLM_ARCH_GRANITE_MOE:
-            {
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
-                ml.get_key(LLM_KV_LOGIT_SCALE,                 hparams.f_logit_scale);
-                ml.get_key(LLM_KV_RESIDUAL_SCALE,              hparams.f_residual_scale);
-                ml.get_key(LLM_KV_EMBEDDING_SCALE,             hparams.f_embedding_scale);
-                ml.get_key(LLM_KV_ATTENTION_SCALE,             hparams.f_attention_scale);
-
-                // Granite uses rope_finetuned as a switch for rope, so default to true
-                bool rope_finetuned = true;
-                ml.get_key(LLM_KV_ROPE_SCALING_FINETUNED, rope_finetuned, false);
-                hparams.rope_finetuned = rope_finetuned;
-
-                switch (hparams.n_layer) {
-                    case 32: type = LLM_TYPE_3B; break;
-                    case 40: type = LLM_TYPE_3B; break;
-                    // Add additional layer/vocab/etc checks here for other model sizes
-                    default: type = LLM_TYPE_UNKNOWN;
-                }
-
-                // For Granite MoE Shared
-                ml.get_key(LLM_KV_EXPERT_SHARED_FEED_FORWARD_LENGTH, hparams.n_ff_shexp, /* required */ false);
-            } break;
-        case LLM_ARCH_GRANITE_HYBRID:
-            {
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
-                ml.get_key(LLM_KV_LOGIT_SCALE,                 hparams.f_logit_scale, /* required */ false);
-                ml.get_key(LLM_KV_RESIDUAL_SCALE,              hparams.f_residual_scale, /* required */ false);
-                ml.get_key(LLM_KV_EMBEDDING_SCALE,             hparams.f_embedding_scale, /* required */ false);
-                ml.get_key(LLM_KV_ATTENTION_SCALE,             hparams.f_attention_scale, /* required */ false);
-
-                ml.get_key(LLM_KV_SSM_CONV_KERNEL,    hparams.ssm_d_conv);
-                ml.get_key(LLM_KV_SSM_INNER_SIZE,     hparams.ssm_d_inner);
-                ml.get_key(LLM_KV_SSM_STATE_SIZE,     hparams.ssm_d_state);
-                ml.get_key(LLM_KV_SSM_TIME_STEP_RANK, hparams.ssm_dt_rank);
-                ml.get_key(LLM_KV_SSM_GROUP_COUNT,    hparams.ssm_n_group);
-
-                // Granite uses rope_finetuned as a switch for rope, so default to true
-                bool rope_finetuned = true;
-                ml.get_key(LLM_KV_ROPE_SCALING_FINETUNED, rope_finetuned, false);
-                hparams.rope_finetuned = rope_finetuned;
-
-                // A layer is recurrent IFF the n_head_kv value is set to 0
-                for (uint32_t i = 0; i < hparams.n_layer; ++i) {
-                    hparams.recurrent_layer_arr[i] = hparams.n_head_kv(i) == 0;
-                }
-
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
-
-                switch (hparams.n_layer) {
-                    // TODO: Add llm type label (not sure this is useful)
-                    default: type = LLM_TYPE_UNKNOWN;
-                }
-
-                // For Granite MoE Shared
-                ml.get_key(LLM_KV_EXPERT_SHARED_FEED_FORWARD_LENGTH, hparams.n_ff_shexp, /* required */ false);
-            } break;
-        case LLM_ARCH_CHAMELEON:
-            {
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
-                hparams.f_norm_eps = 1e-5;  // eps for qk-norm, torch default
-                ml.get_key(LLM_KV_SWIN_NORM, hparams.swin_norm);
-
-                switch (hparams.n_layer) {
-                    case 32: type = LLM_TYPE_7B; break;
-                    case 48: type = LLM_TYPE_34B; break;
-                    default: type = LLM_TYPE_UNKNOWN;
-               }
-            } break;
-        case LLM_ARCH_WAVTOKENIZER_DEC:
-            {
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_EPS,    hparams.f_norm_eps);
-                ml.get_key(LLM_KV_ATTENTION_GROUPNORM_EPS,    hparams.f_norm_group_eps);
-                ml.get_key(LLM_KV_ATTENTION_GROUPNORM_GROUPS, hparams.n_norm_groups);
-                ml.get_key(LLM_KV_ATTENTION_CAUSAL,           hparams.causal_attn);
-            } break;
-        case LLM_ARCH_BAILINGMOE:
-            {
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
-                ml.get_key(LLM_KV_LEADING_DENSE_BLOCK_COUNT,   hparams.n_layer_dense_lead);
-                ml.get_key(LLM_KV_EXPERT_FEED_FORWARD_LENGTH,  hparams.n_ff_exp);
-                ml.get_key(LLM_KV_EXPERT_SHARED_COUNT,         hparams.n_expert_shared);
-                ml.get_key(LLM_KV_EXPERT_WEIGHTS_SCALE,        hparams.expert_weights_scale);
-                ml.get_key(LLM_KV_EXPERT_WEIGHTS_NORM,         hparams.expert_weights_norm, false);
-
-                switch (hparams.n_layer) {
-                    case 28: type = LLM_TYPE_16B; break;
-                    case 88: type = LLM_TYPE_290B; break;
-                    default: type = LLM_TYPE_UNKNOWN;
-                }
-            } break;
-        case LLM_ARCH_DOTS1:
-            {
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
-                ml.get_key(LLM_KV_LEADING_DENSE_BLOCK_COUNT,   hparams.n_layer_dense_lead);
-                ml.get_key(LLM_KV_EXPERT_FEED_FORWARD_LENGTH,  hparams.n_ff_exp);
-                ml.get_key(LLM_KV_EXPERT_SHARED_COUNT,         hparams.n_expert_shared);
-                ml.get_key(LLM_KV_EXPERT_WEIGHTS_SCALE,        hparams.expert_weights_scale);
-                ml.get_key(LLM_KV_EXPERT_WEIGHTS_NORM,         hparams.expert_weights_norm, false);
-                ml.get_key(LLM_KV_EXPERT_GATING_FUNC,          hparams.expert_gating_func, false);
-                switch (hparams.n_layer) {
-                    case 62: type = LLM_TYPE_142B; break;
-                    default: type = LLM_TYPE_UNKNOWN;
-                }
-            } break;
-        case LLM_ARCH_ERNIE4_5:
-            {
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
-                switch (hparams.n_layer) {
-                    case 18: type = LLM_TYPE_0_3B; break;
-                    default: type = LLM_TYPE_UNKNOWN;
-                }
-            } break;
-        case LLM_ARCH_FALCON_H1:
-            {
-                // Common parameters
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
-
-                // SSM parameters
-                ml.get_key(LLM_KV_SSM_CONV_KERNEL,    hparams.ssm_d_conv);
-                ml.get_key(LLM_KV_SSM_INNER_SIZE,     hparams.ssm_d_inner);
-                ml.get_key(LLM_KV_SSM_STATE_SIZE,     hparams.ssm_d_state);
-                ml.get_key(LLM_KV_SSM_TIME_STEP_RANK, hparams.ssm_dt_rank);
-                ml.get_key(LLM_KV_SSM_GROUP_COUNT,    hparams.ssm_n_group);
-
-                std::fill(hparams.recurrent_layer_arr.begin(), hparams.recurrent_layer_arr.end(), true);
-
-                switch (hparams.n_layer) {
-                    case 36:
-                        type = LLM_TYPE_0_5B; break;
-                    case 24:
-                        type = LLM_TYPE_1_5B; break;
-                    case 66:
-                        type = LLM_TYPE_1B; break;
-                    case 32:
-                        type = LLM_TYPE_3B; break;
-                    case 44:
-                        type = LLM_TYPE_7B; break;
-                    case 72:
-                        type = LLM_TYPE_34B; break;
-                    default:
-                        type = LLM_TYPE_UNKNOWN;
-                }
-            } break;
-        case LLM_ARCH_HUNYUAN_MOE:
-            {
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS,       hparams.f_norm_rms_eps);
-                ml.get_key(LLM_KV_EXPERT_FEED_FORWARD_LENGTH,        hparams.n_ff_exp);
-                ml.get_key(LLM_KV_EXPERT_SHARED_FEED_FORWARD_LENGTH, hparams.n_ff_shexp);
-
-                switch (hparams.n_layer) {
-                    case 32: type = LLM_TYPE_A13B; break;
-                    default: type = LLM_TYPE_UNKNOWN;
-                }
-            } break;
-        case LLM_ARCH_SMOLLM3:
-            {
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
-                hparams.n_no_rope_layer_step = 4;
-
-                switch (hparams.n_layer) {
+                    switch (hparams.n_layer) {
+                    case 16: type = LLM_TYPE_270M; break;
+                    case 20: type = LLM_TYPE_450M; break;
+                    case 28: type = LLM_TYPE_1B; break;
                     case 36: type = LLM_TYPE_3B; break;
                     default: type = LLM_TYPE_UNKNOWN;
-                }
-            } break;
-        case LLM_ARCH_LFM2:
-            {
-                ml.get_key(LLM_KV_SHORTCONV_L_CACHE,           hparams.n_shortconv_l_cache);
-                ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
-                for (uint32_t il = 0; il < hparams.n_layer; ++il) {
-                    hparams.recurrent_layer_arr[il] = hparams.n_head_kv(il) == 0;
-                }
-                switch (hparams.n_embd) {
-                    case 1024: type = LLM_TYPE_350M; break;
-                    case 1536: type = LLM_TYPE_700M; break;
-                    case 2048: type = LLM_TYPE_1_2B; break;
-                    default:   type = LLM_TYPE_UNKNOWN;
-                }
-            } break;
-        default: throw std::runtime_error("unsupported model architecture");
-    }
+                    }
+                } break;
+            case LLM_ARCH_GPTNEOX:
+                {
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_EPS, hparams.f_norm_eps);
+                    ml.get_key(LLM_KV_USE_PARALLEL_RESIDUAL,   hparams.use_par_res);
+                    switch (hparams.n_layer) {
+                        case 6:
+                            switch (hparams.n_ff()) {
+                                case 512:  type = LLM_TYPE_14M; break;
+                                case 2048: type = LLM_TYPE_70M; break;
+                                default:   type = LLM_TYPE_UNKNOWN;
+                            } break;
+                        case 12:
+                            switch (hparams.n_ff()) {
+                                case 3072: type = LLM_TYPE_160M; break;
+                                default: type = LLM_TYPE_UNKNOWN;
+                            } break;
+                        case 16:
+                            switch (hparams.n_ff()) {
+                                case 8192: type = LLM_TYPE_1B; break;
+                                default: type = LLM_TYPE_UNKNOWN;
+                            } break;
+                        case 24:
+                            switch (hparams.n_ff()) {
+                                case 4096: type = LLM_TYPE_410M; break;
+                                case 8192: type = LLM_TYPE_1_4B; break;
+                                default: type = LLM_TYPE_UNKNOWN;
+                            } break;
+                        case 32:
+                            switch (hparams.n_ff()) {
+                                case 10240: type = LLM_TYPE_2_8B; break;
+                                case 16384: type = LLM_TYPE_6_9B; break;
+                                default: type = LLM_TYPE_UNKNOWN;
+                            } break;
+                        case 36:
+                            switch (hparams.n_ff()) {
+                                case 20480: type = LLM_TYPE_12B; break;
+                                default: type = LLM_TYPE_UNKNOWN;
+                            } break;
+                        case 44:
+                            switch (hparams.n_ff()) {
+                                case 24576: type = LLM_TYPE_20B; break;
+                                default: type = LLM_TYPE_UNKNOWN;
+                            } break;
+                        default: type = LLM_TYPE_UNKNOWN;
+                    }
+                } break;
+            case LLM_ARCH_ARCTIC:
+                {
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
 
+                    if (hparams.n_expert == 128) {
+                        switch (hparams.n_layer) {
+                            case 35: type = LLM_TYPE_10B_128x3_66B; break;
+                            default: type = LLM_TYPE_UNKNOWN;
+                        }
+                    } else {
+                        type = LLM_TYPE_UNKNOWN;
+                    }
+                } break;
+            case LLM_ARCH_DEEPSEEK:
+                {
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
+                    ml.get_key(LLM_KV_LEADING_DENSE_BLOCK_COUNT,   hparams.n_layer_dense_lead);
+                    ml.get_key(LLM_KV_EXPERT_FEED_FORWARD_LENGTH,  hparams.n_ff_exp);
+                    ml.get_key(LLM_KV_EXPERT_SHARED_COUNT,         hparams.n_expert_shared);
+                    ml.get_key(LLM_KV_EXPERT_WEIGHTS_SCALE,        hparams.expert_weights_scale);
+
+                    switch (hparams.n_layer) {
+                        case 28: type = LLM_TYPE_20B; break;
+                        default: type = LLM_TYPE_UNKNOWN;
+                    }
+                } break;
+            case LLM_ARCH_DEEPSEEK2:
+                {
+                    bool is_lite = (hparams.n_layer == 27);
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
+                    ml.get_key(LLM_KV_LEADING_DENSE_BLOCK_COUNT,   hparams.n_layer_dense_lead);
+                    if (!is_lite) {
+                        ml.get_key(LLM_KV_ATTENTION_Q_LORA_RANK, hparams.n_lora_q);
+                    }
+                    ml.get_key(LLM_KV_ATTENTION_KV_LORA_RANK,     hparams.n_lora_kv);
+                    ml.get_key(LLM_KV_ATTENTION_KEY_LENGTH_MLA,   hparams.n_embd_head_k_mla, false);
+                    ml.get_key(LLM_KV_ATTENTION_VALUE_LENGTH_MLA, hparams.n_embd_head_v_mla, false);
+                    ml.get_key(LLM_KV_EXPERT_FEED_FORWARD_LENGTH, hparams.n_ff_exp);
+                    ml.get_key(LLM_KV_EXPERT_SHARED_COUNT,        hparams.n_expert_shared);
+                    ml.get_key(LLM_KV_EXPERT_WEIGHTS_SCALE,       hparams.expert_weights_scale);
+                    ml.get_key(LLM_KV_EXPERT_WEIGHTS_NORM,        hparams.expert_weights_norm, false);
+                    ml.get_key(LLM_KV_EXPERT_GATING_FUNC,         hparams.expert_gating_func, false);
+                    if (hparams.expert_gating_func == LLAMA_EXPERT_GATING_FUNC_TYPE_NONE) {
+                        // for compatibility with existing DeepSeek V2 and V2.5 GGUFs
+                        // that have no expert_gating_func model parameter set
+                        hparams.expert_gating_func = LLAMA_EXPERT_GATING_FUNC_TYPE_SOFTMAX;
+                    }
+                    ml.get_key(LLM_KV_ROPE_SCALING_YARN_LOG_MUL, hparams.rope_yarn_log_mul);
+
+                    switch (hparams.n_layer) {
+                        case 27: type = LLM_TYPE_16B; break;
+                        case 60: type = LLM_TYPE_236B; break;
+                        case 61: type = LLM_TYPE_671B; break;
+                        default: type = LLM_TYPE_UNKNOWN;
+                    }
+                } break;
+            case LLM_ARCH_PLM:
+                {
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
+                    ml.get_key(LLM_KV_ATTENTION_KV_LORA_RANK, hparams.n_lora_kv);
+                    switch (hparams.n_layer) {
+                        case 32: type = LLM_TYPE_1_8B; break;
+                        default: type = LLM_TYPE_UNKNOWN;
+                    }
+                } break;
+            case LLM_ARCH_CHATGLM:
+                {
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
+                    switch (hparams.n_layer) {
+                        case 28: {
+                            if (hparams.n_head(0) == 16) {
+                                type = LLM_TYPE_1_5B;
+                            } else {
+                                type = LLM_TYPE_6B;
+                            }
+                        } break;
+                        case 40: {
+                            if (hparams.n_head(0) == 24) {
+                                type = LLM_TYPE_4B;
+                            } else {
+                                type = LLM_TYPE_9B;
+                            }
+                        } break;
+                        default: type = LLM_TYPE_UNKNOWN;
+                    }
+                } break;
+            case LLM_ARCH_GLM4:
+                {
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
+                    switch (hparams.n_layer) {
+                        case 40: type = LLM_TYPE_9B; break;
+                        case 61: type = LLM_TYPE_32B; break;
+                        default: type = LLM_TYPE_UNKNOWN;
+                    }
+                } break;
+            case LLM_ARCH_BITNET:
+                {
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
+
+                    switch (hparams.n_layer) {
+                        case 26: type = LLM_TYPE_3B; break;
+                        default: type = LLM_TYPE_UNKNOWN;
+                    }
+                } break;
+            case LLM_ARCH_T5:
+                {
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS,      hparams.f_norm_rms_eps);
+                    ml.get_key(LLM_KV_ATTENTION_RELATIVE_BUCKETS_COUNT, hparams.n_rel_attn_bkts);
+
+                    uint32_t dec_start_token_id;
+                    if (ml.get_key(LLM_KV_DECODER_START_TOKEN_ID, dec_start_token_id, false)) {
+                        hparams.dec_start_token_id = dec_start_token_id;
+                    }
+
+                    switch (hparams.n_layer) {
+                        case 6:  type = LLM_TYPE_60M;  break; // t5-small
+                        case 8:  type = LLM_TYPE_80M;  break; // flan-t5-small
+                        case 12:
+                            switch (hparams.n_ff()) {
+                                case 3072: type = LLM_TYPE_220M; break; // t5-base
+                                case 2048: type = LLM_TYPE_250M; break; // flan-t5-base
+                                default: type = LLM_TYPE_UNKNOWN;
+                            } break;
+                        case 24:
+                            switch (hparams.n_ff()) {
+                                case 4096:  type = LLM_TYPE_770M; break; // t5-large
+                                case 2816:  type = LLM_TYPE_780M; break; // flan-t5-large
+                                case 16384: type = LLM_TYPE_3B;   break; // t5-3b
+                                case 5120:  type = LLM_TYPE_3B;   break; // flan-t5-xl
+                                case 65536: type = LLM_TYPE_11B;  break; // t5-11b
+                                case 10240: type = LLM_TYPE_11B;  break; // flan-t5-xxl
+                                default: type = LLM_TYPE_UNKNOWN;
+                            } break;
+                        default: type = LLM_TYPE_UNKNOWN;
+                }
+                } break;
+            case LLM_ARCH_T5ENCODER:
+                {
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
+                    ml.get_key(LLM_KV_ATTENTION_RELATIVE_BUCKETS_COUNT, hparams.n_rel_attn_bkts);
+                    type = LLM_TYPE_UNKNOWN;
+                } break;
+            case LLM_ARCH_JAIS:
+                {
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_EPS, hparams.f_norm_eps);
+                    ml.get_key(LLM_KV_ATTENTION_MAX_ALIBI_BIAS, hparams.f_max_alibi_bias);
+
+                    switch (hparams.n_layer) {
+                        case 24: type = LLM_TYPE_1_3B; break;
+                        case 40: type = LLM_TYPE_13B; break;
+                        /* TODO: add variants */
+                        default: type = LLM_TYPE_UNKNOWN;
+                    }
+                } break;
+            case LLM_ARCH_NEMOTRON:
+                {
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_EPS, hparams.f_norm_eps);
+                    switch (hparams.n_layer) {
+                        case 32: type = LLM_TYPE_4B; break;
+                        default: type = LLM_TYPE_UNKNOWN;
+                    }
+                } break;
+            case LLM_ARCH_EXAONE:
+                {
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
+
+                    switch (hparams.n_layer) {
+                        case 32: type = LLM_TYPE_8B; break;
+                        default: type = LLM_TYPE_UNKNOWN;
+                    }
+                } break;
+            case LLM_ARCH_RWKV6:
+            case LLM_ARCH_RWKV6QWEN2:
+                {
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_EPS,     hparams.f_norm_eps, false);
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps, false);
+                    ml.get_key(LLM_KV_WKV_HEAD_SIZE,               hparams.wkv_head_size);
+                    ml.get_key(LLM_KV_TIME_MIX_EXTRA_DIM,          hparams.time_mix_extra_dim);
+                    ml.get_key(LLM_KV_TIME_DECAY_EXTRA_DIM,        hparams.time_decay_extra_dim);
+                    ml.get_key(LLM_KV_RESCALE_EVERY_N_LAYERS,      hparams.rescale_every_n_layers, false);
+                    ml.get_key(LLM_KV_TOKEN_SHIFT_COUNT,           hparams.token_shift_count, false);
+
+                    switch (hparams.n_layer) {
+                        case 24: type = LLM_TYPE_1_6B; break;
+                        case 32:
+                            switch (hparams.n_embd) {
+                                case 2560: type = LLM_TYPE_3B; break;
+                                case 4096: type = LLM_TYPE_7B; break;
+                                default: type = LLM_TYPE_UNKNOWN;
+                            } break;
+                        case 61: type = LLM_TYPE_14B; break;
+                        case 64: type = LLM_TYPE_32B; break;
+                        default: type = LLM_TYPE_UNKNOWN;
+                    }
+                } break;
+            case LLM_ARCH_RWKV7:
+            case LLM_ARCH_ARWKV7:
+                {
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_EPS,                hparams.f_norm_eps, false);
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS,            hparams.f_norm_rms_eps, false);
+                    ml.get_key(LLM_KV_WKV_HEAD_SIZE,                          hparams.wkv_head_size);
+                    ml.get_key(LLM_KV_ATTENTION_DECAY_LORA_RANK,              hparams.n_lora_decay);
+                    ml.get_key(LLM_KV_ATTENTION_ICLR_LORA_RANK,               hparams.n_lora_iclr);
+                    ml.get_key(LLM_KV_ATTENTION_VALUE_RESIDUAL_MIX_LORA_RANK, hparams.n_lora_value_res_mix);
+                    ml.get_key(LLM_KV_ATTENTION_GATE_LORA_RANK,               hparams.n_lora_gate, false);
+                    ml.get_key(LLM_KV_TOKEN_SHIFT_COUNT,                      hparams.token_shift_count, false);
+
+                    switch (hparams.n_layer) {
+                        case 12: type = LLM_TYPE_190M; break;
+                        case 24:
+                            switch (hparams.n_embd) {
+                                case 1024: type = LLM_TYPE_450M; break;
+                                case 2048: type = LLM_TYPE_1_5B; break;
+                                default: type = LLM_TYPE_UNKNOWN;
+                            } break;
+                        case 28:
+                            switch (hparams.n_embd) {
+                                case 1536: type = LLM_TYPE_1_5B; break;
+                                case 3584: type = LLM_TYPE_7B; break;
+                                default: type = LLM_TYPE_UNKNOWN;
+                            } break;
+                        case 32: type = LLM_TYPE_2_9B; break; // RWKV-7-World
+                        default: type = LLM_TYPE_UNKNOWN;
+                    }
+                } break;
+            case LLM_ARCH_GRANITE:
+            case LLM_ARCH_GRANITE_MOE:
+                {
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
+                    ml.get_key(LLM_KV_LOGIT_SCALE,                 hparams.f_logit_scale);
+                    ml.get_key(LLM_KV_RESIDUAL_SCALE,              hparams.f_residual_scale);
+                    ml.get_key(LLM_KV_EMBEDDING_SCALE,             hparams.f_embedding_scale);
+                    ml.get_key(LLM_KV_ATTENTION_SCALE,             hparams.f_attention_scale);
+
+                    // Granite uses rope_finetuned as a switch for rope, so default to true
+                    bool rope_finetuned = true;
+                    ml.get_key(LLM_KV_ROPE_SCALING_FINETUNED, rope_finetuned, false);
+                    hparams.rope_finetuned = rope_finetuned;
+
+                    switch (hparams.n_layer) {
+                        case 32: type = LLM_TYPE_3B; break;
+                        case 40: type = LLM_TYPE_3B; break;
+                        // Add additional layer/vocab/etc checks here for other model sizes
+                        default: type = LLM_TYPE_UNKNOWN;
+                    }
+
+                    // For Granite MoE Shared
+                    ml.get_key(LLM_KV_EXPERT_SHARED_FEED_FORWARD_LENGTH, hparams.n_ff_shexp, /* required */ false);
+                } break;
+            case LLM_ARCH_GRANITE_HYBRID:
+                {
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
+                    ml.get_key(LLM_KV_LOGIT_SCALE,                 hparams.f_logit_scale, /* required */ false);
+                    ml.get_key(LLM_KV_RESIDUAL_SCALE,              hparams.f_residual_scale, /* required */ false);
+                    ml.get_key(LLM_KV_EMBEDDING_SCALE,             hparams.f_embedding_scale, /* required */ false);
+                    ml.get_key(LLM_KV_ATTENTION_SCALE,             hparams.f_attention_scale, /* required */ false);
+
+                    ml.get_key(LLM_KV_SSM_CONV_KERNEL,    hparams.ssm_d_conv);
+                    ml.get_key(LLM_KV_SSM_INNER_SIZE,     hparams.ssm_d_inner);
+                    ml.get_key(LLM_KV_SSM_STATE_SIZE,     hparams.ssm_d_state);
+                    ml.get_key(LLM_KV_SSM_TIME_STEP_RANK, hparams.ssm_dt_rank);
+                    ml.get_key(LLM_KV_SSM_GROUP_COUNT,    hparams.ssm_n_group);
+
+                    // Granite uses rope_finetuned as a switch for rope, so default to true
+                    bool rope_finetuned = true;
+                    ml.get_key(LLM_KV_ROPE_SCALING_FINETUNED, rope_finetuned, false);
+                    hparams.rope_finetuned = rope_finetuned;
+
+                    // A layer is recurrent IFF the n_head_kv value is set to 0
+                    for (uint32_t i = 0; i < hparams.n_layer; ++i) {
+                        hparams.recurrent_layer_arr[i] = hparams.n_head_kv(i) == 0;
+                    }
+
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
+
+                    switch (hparams.n_layer) {
+                        // TODO: Add llm type label (not sure this is useful)
+                        default: type = LLM_TYPE_UNKNOWN;
+                    }
+
+                    // For Granite MoE Shared
+                    ml.get_key(LLM_KV_EXPERT_SHARED_FEED_FORWARD_LENGTH, hparams.n_ff_shexp, /* required */ false);
+                } break;
+            case LLM_ARCH_CHAMELEON:
+                {
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
+                    hparams.f_norm_eps = 1e-5;  // eps for qk-norm, torch default
+                    ml.get_key(LLM_KV_SWIN_NORM, hparams.swin_norm);
+
+                    switch (hparams.n_layer) {
+                        case 32: type = LLM_TYPE_7B; break;
+                        case 48: type = LLM_TYPE_34B; break;
+                        default: type = LLM_TYPE_UNKNOWN;
+                }
+                } break;
+            case LLM_ARCH_WAVTOKENIZER_DEC:
+                {
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_EPS,    hparams.f_norm_eps);
+                    ml.get_key(LLM_KV_ATTENTION_GROUPNORM_EPS,    hparams.f_norm_group_eps);
+                    ml.get_key(LLM_KV_ATTENTION_GROUPNORM_GROUPS, hparams.n_norm_groups);
+                    ml.get_key(LLM_KV_ATTENTION_CAUSAL,           hparams.causal_attn);
+                } break;
+            case LLM_ARCH_BAILINGMOE:
+                {
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
+                    ml.get_key(LLM_KV_LEADING_DENSE_BLOCK_COUNT,   hparams.n_layer_dense_lead);
+                    ml.get_key(LLM_KV_EXPERT_FEED_FORWARD_LENGTH,  hparams.n_ff_exp);
+                    ml.get_key(LLM_KV_EXPERT_SHARED_COUNT,         hparams.n_expert_shared);
+                    ml.get_key(LLM_KV_EXPERT_WEIGHTS_SCALE,        hparams.expert_weights_scale);
+                    ml.get_key(LLM_KV_EXPERT_WEIGHTS_NORM,         hparams.expert_weights_norm, false);
+
+                    switch (hparams.n_layer) {
+                        case 28: type = LLM_TYPE_16B; break;
+                        case 88: type = LLM_TYPE_290B; break;
+                        default: type = LLM_TYPE_UNKNOWN;
+                    }
+                } break;
+            case LLM_ARCH_DOTS1:
+                {
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
+                    ml.get_key(LLM_KV_LEADING_DENSE_BLOCK_COUNT,   hparams.n_layer_dense_lead);
+                    ml.get_key(LLM_KV_EXPERT_FEED_FORWARD_LENGTH,  hparams.n_ff_exp);
+                    ml.get_key(LLM_KV_EXPERT_SHARED_COUNT,         hparams.n_expert_shared);
+                    ml.get_key(LLM_KV_EXPERT_WEIGHTS_SCALE,        hparams.expert_weights_scale);
+                    ml.get_key(LLM_KV_EXPERT_WEIGHTS_NORM,         hparams.expert_weights_norm, false);
+                    ml.get_key(LLM_KV_EXPERT_GATING_FUNC,          hparams.expert_gating_func, false);
+                    switch (hparams.n_layer) {
+                        case 62: type = LLM_TYPE_142B; break;
+                        default: type = LLM_TYPE_UNKNOWN;
+                    }
+                } break;
+            case LLM_ARCH_ERNIE4_5:
+                {
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
+                    switch (hparams.n_layer) {
+                        case 18: type = LLM_TYPE_0_3B; break;
+                        default: type = LLM_TYPE_UNKNOWN;
+                    }
+                } break;
+            case LLM_ARCH_FALCON_H1:
+                {
+                    // Common parameters
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
+
+                    // SSM parameters
+                    ml.get_key(LLM_KV_SSM_CONV_KERNEL,    hparams.ssm_d_conv);
+                    ml.get_key(LLM_KV_SSM_INNER_SIZE,     hparams.ssm_d_inner);
+                    ml.get_key(LLM_KV_SSM_STATE_SIZE,     hparams.ssm_d_state);
+                    ml.get_key(LLM_KV_SSM_TIME_STEP_RANK, hparams.ssm_dt_rank);
+                    ml.get_key(LLM_KV_SSM_GROUP_COUNT,    hparams.ssm_n_group);
+
+                    std::fill(hparams.recurrent_layer_arr.begin(), hparams.recurrent_layer_arr.end(), true);
+
+                    switch (hparams.n_layer) {
+                        case 36:
+                            type = LLM_TYPE_0_5B; break;
+                        case 24:
+                            type = LLM_TYPE_1_5B; break;
+                        case 66:
+                            type = LLM_TYPE_1B; break;
+                        case 32:
+                            type = LLM_TYPE_3B; break;
+                        case 44:
+                            type = LLM_TYPE_7B; break;
+                        case 72:
+                            type = LLM_TYPE_34B; break;
+                        default:
+                            type = LLM_TYPE_UNKNOWN;
+                    }
+                } break;
+            case LLM_ARCH_HUNYUAN_MOE:
+                {
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS,       hparams.f_norm_rms_eps);
+                    ml.get_key(LLM_KV_EXPERT_FEED_FORWARD_LENGTH,        hparams.n_ff_exp);
+                    ml.get_key(LLM_KV_EXPERT_SHARED_FEED_FORWARD_LENGTH, hparams.n_ff_shexp);
+
+                    switch (hparams.n_layer) {
+                        case 32: type = LLM_TYPE_A13B; break;
+                        default: type = LLM_TYPE_UNKNOWN;
+                    }
+                } break;
+            case LLM_ARCH_SMOLLM3:
+                {
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
+                    hparams.n_no_rope_layer_step = 4;
+
+                    switch (hparams.n_layer) {
+                        case 36: type = LLM_TYPE_3B; break;
+                        default: type = LLM_TYPE_UNKNOWN;
+                    }
+                } break;
+            case LLM_ARCH_LFM2:
+                {
+                    ml.get_key(LLM_KV_SHORTCONV_L_CACHE,           hparams.n_shortconv_l_cache);
+                    ml.get_key(LLM_KV_ATTENTION_LAYERNORM_RMS_EPS, hparams.f_norm_rms_eps);
+                    for (uint32_t il = 0; il < hparams.n_layer; ++il) {
+                        hparams.recurrent_layer_arr[il] = hparams.n_head_kv(il) == 0;
+                    }
+                    switch (hparams.n_embd) {
+                        case 1024: type = LLM_TYPE_350M; break;
+                        case 1536: type = LLM_TYPE_700M; break;
+                        case 2048: type = LLM_TYPE_1_2B; break;
+                        default:   type = LLM_TYPE_UNKNOWN;
+                    }
+                } break;
+            default: throw std::runtime_error("unsupported model architecture");
+        }
+
+    }
     pimpl->n_bytes = ml.n_bytes;
 
     pimpl->desc_str = arch_name() + " " + type_name() + " " + ml.ftype_name();
@@ -1733,8 +1785,13 @@ bool llama_model::load_tensors(llama_model_loader & ml) {
     const auto & use_mlock    = params.use_mlock;
     const auto & tensor_split = params.tensor_split;
 
-    const int n_layer = hparams.n_layer;
-
+    int n_layer = hparams.n_layer;
+    if (hparams.use_flow){
+        n_layer = 640;
+    }else {
+        n_layer = hparams.n_layer;
+    }
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&& n_layer is:%d\n", n_layer);
     const bool use_mmap_buffer = true;
 
     LLAMA_LOG_INFO("%s: loading model tensors, this can take a while... (mmap = %s)\n", __func__, ml.use_mmap ? "true" : "false");
@@ -1795,7 +1852,6 @@ bool llama_model::load_tensors(llama_model_loader & ml) {
     // assign the input layer
     // there is very little benefit to offloading the input layer, so always keep it on the CPU
     pimpl->dev_input = { cpu_dev, &pimpl->cpu_buft_list };
-
     // assign the repeating layers to the devices according to the splits
     pimpl->dev_layer.resize(n_layer);
     for (int il = 0; il < n_layer; ++il) {
@@ -1810,7 +1866,7 @@ bool llama_model::load_tensors(llama_model_loader & ml) {
     max_n_tensors += 1;         // duplicated output tensor
     max_n_tensors += n_layer*2; // duplicated rope freq tensors
     const size_t ctx_size = ggml_tensor_overhead()*max_n_tensors;
-
+    
     std::map<ggml_backend_buffer_type_t, ggml_context *> ctx_map;
     auto ctx_for_buft = [&](ggml_backend_buffer_type_t buft) -> ggml_context * {
         auto it = ctx_map.find(buft);
@@ -1855,6 +1911,7 @@ bool llama_model::load_tensors(llama_model_loader & ml) {
         const int64_t n_expert      = hparams.n_expert;
         const int64_t n_expert_used = hparams.n_expert_used;
         const int64_t n_ctx_train   = hparams.n_ctx_train;
+
 
         if (n_expert > 0 && hparams.n_expert_used == 0) {
             throw std::runtime_error("model has expert layers but no expert layers are used");
@@ -5050,6 +5107,651 @@ bool llama_model::load_tensors(llama_model_loader & ml) {
                         }
                     }
                 } break;
+            case LLM_ARCH_COSYVOICEFLOW:
+            {
+                decoder_estimator_down_blocks_0_0_block1_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_0_BLOCK1_BLOCK_0_WEIGHT, "weight"), {3, 320, 256}, 0);
+                decoder_estimator_down_blocks_0_0_block1_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_0_BLOCK1_BLOCK_2_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_down_blocks_0_0_block2_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_0_BLOCK2_BLOCK_0_WEIGHT, "weight"), {3, 256, 256}, 0);
+                decoder_estimator_down_blocks_0_0_block2_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_0_BLOCK2_BLOCK_2_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_down_blocks_0_0_mlp_1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_0_MLP_1_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_down_blocks_0_0_res_conv_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_0_RES_CONV_WEIGHT, "weight"), {1, 320, 256}, 0);
+                decoder_estimator_down_blocks_0_1_0_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_0_ATTN1_TO_K_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_down_blocks_0_1_0_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_0_ATTN1_TO_OUT_0_WEIGHT, "weight"), {512, 256}, 0);
+                decoder_estimator_down_blocks_0_1_0_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_0_ATTN1_TO_Q_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_down_blocks_0_1_0_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_0_ATTN1_TO_V_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_down_blocks_0_1_0_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_0_FF_NET_0_PROJ_WEIGHT, "weight"), {256, 1024}, 0);
+                decoder_estimator_down_blocks_0_1_0_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_0_FF_NET_2_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_down_blocks_0_1_0_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_0_NORM1_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_down_blocks_0_1_0_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_0_NORM3_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_down_blocks_0_1_1_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_1_ATTN1_TO_K_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_down_blocks_0_1_1_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_1_ATTN1_TO_OUT_0_WEIGHT, "weight"), {512, 256}, 0);
+                decoder_estimator_down_blocks_0_1_1_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_1_ATTN1_TO_Q_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_down_blocks_0_1_1_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_1_ATTN1_TO_V_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_down_blocks_0_1_1_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_1_FF_NET_0_PROJ_WEIGHT, "weight"), {256, 1024}, 0);
+                decoder_estimator_down_blocks_0_1_1_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_1_FF_NET_2_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_down_blocks_0_1_1_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_1_NORM1_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_down_blocks_0_1_1_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_1_NORM3_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_down_blocks_0_1_2_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_ATTN1_TO_K_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_down_blocks_0_1_2_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_ATTN1_TO_OUT_0_WEIGHT, "weight"), {512, 256}, 0);
+                decoder_estimator_down_blocks_0_1_2_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_ATTN1_TO_Q_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_down_blocks_0_1_2_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_ATTN1_TO_V_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_down_blocks_0_1_2_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_FF_NET_0_PROJ_WEIGHT, "weight"), {256, 1024}, 0);
+                decoder_estimator_down_blocks_0_1_2_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_FF_NET_2_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_down_blocks_0_1_2_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_NORM1_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_down_blocks_0_1_2_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_NORM3_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_down_blocks_0_1_3_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_ATTN1_TO_K_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_down_blocks_0_1_3_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_ATTN1_TO_OUT_0_WEIGHT, "weight"), {512, 256}, 0);
+                decoder_estimator_down_blocks_0_1_3_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_ATTN1_TO_Q_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_down_blocks_0_1_3_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_ATTN1_TO_V_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_down_blocks_0_1_3_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_FF_NET_0_PROJ_WEIGHT, "weight"), {256, 1024}, 0);
+                decoder_estimator_down_blocks_0_1_3_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_FF_NET_2_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_down_blocks_0_1_3_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_NORM1_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_down_blocks_0_1_3_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_NORM3_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_down_blocks_0_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_2_WEIGHT, "weight"), {3, 256, 256}, 0);
+                decoder_estimator_final_block_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_FINAL_BLOCK_BLOCK_0_WEIGHT, "weight"), {3, 256, 256}, 0);
+                decoder_estimator_final_block_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_FINAL_BLOCK_BLOCK_2_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_final_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_FINAL_PROJ_WEIGHT, "weight"), {1, 256, 80}, 0);
+                decoder_estimator_mid_blocks_0_0_block1_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_0_BLOCK1_BLOCK_0_WEIGHT, "weight"), {3, 256, 256}, 0);
+                decoder_estimator_mid_blocks_0_0_block1_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_0_BLOCK1_BLOCK_2_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_0_0_block2_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_0_BLOCK2_BLOCK_0_WEIGHT, "weight"), {3, 256, 256}, 0);
+                decoder_estimator_mid_blocks_0_0_block2_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_0_BLOCK2_BLOCK_2_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_0_0_mlp_1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_0_MLP_1_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_mid_blocks_0_0_res_conv_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_0_RES_CONV_WEIGHT, "weight"), {1, 256, 256}, 0);
+                decoder_estimator_mid_blocks_0_1_0_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_ATTN1_TO_K_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_0_1_0_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_ATTN1_TO_OUT_0_WEIGHT, "weight"), {512, 256}, 0);
+                decoder_estimator_mid_blocks_0_1_0_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_ATTN1_TO_Q_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_0_1_0_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_ATTN1_TO_V_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_0_1_0_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_FF_NET_0_PROJ_WEIGHT, "weight"), {256, 1024}, 0);
+                decoder_estimator_mid_blocks_0_1_0_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_FF_NET_2_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_mid_blocks_0_1_0_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_NORM1_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_0_1_0_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_NORM3_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_0_1_1_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_1_ATTN1_TO_K_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_0_1_1_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_1_ATTN1_TO_OUT_0_WEIGHT, "weight"), {512, 256}, 0);
+                decoder_estimator_mid_blocks_0_1_1_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_1_ATTN1_TO_Q_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_0_1_1_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_1_ATTN1_TO_V_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_0_1_1_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_1_FF_NET_0_PROJ_WEIGHT, "weight"), {256, 1024}, 0);
+                decoder_estimator_mid_blocks_0_1_1_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_1_FF_NET_2_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_mid_blocks_0_1_1_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_1_NORM1_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_0_1_1_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_1_NORM3_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_0_1_2_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_2_ATTN1_TO_K_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_0_1_2_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_2_ATTN1_TO_OUT_0_WEIGHT, "weight"), {512, 256}, 0);
+                decoder_estimator_mid_blocks_0_1_2_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_2_ATTN1_TO_Q_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_0_1_2_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_2_ATTN1_TO_V_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_0_1_2_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_2_FF_NET_0_PROJ_WEIGHT, "weight"), {256, 1024}, 0);
+                decoder_estimator_mid_blocks_0_1_2_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_2_FF_NET_2_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_mid_blocks_0_1_2_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_2_NORM1_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_0_1_2_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_2_NORM3_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_0_1_3_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_3_ATTN1_TO_K_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_0_1_3_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_3_ATTN1_TO_OUT_0_WEIGHT, "weight"), {512, 256}, 0);
+                decoder_estimator_mid_blocks_0_1_3_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_3_ATTN1_TO_Q_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_0_1_3_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_3_ATTN1_TO_V_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_0_1_3_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_3_FF_NET_0_PROJ_WEIGHT, "weight"), {256, 1024}, 0);
+                decoder_estimator_mid_blocks_0_1_3_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_3_FF_NET_2_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_mid_blocks_0_1_3_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_3_NORM1_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_0_1_3_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_3_NORM3_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_1_0_block1_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_0_BLOCK1_BLOCK_0_WEIGHT, "weight"), {3, 256, 256}, 0);
+                decoder_estimator_mid_blocks_1_0_block1_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_0_BLOCK1_BLOCK_2_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_1_0_block2_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_0_BLOCK2_BLOCK_0_WEIGHT, "weight"), {3, 256, 256}, 0);
+                decoder_estimator_mid_blocks_1_0_block2_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_0_BLOCK2_BLOCK_2_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_1_0_mlp_1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_0_MLP_1_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_mid_blocks_1_0_res_conv_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_0_RES_CONV_WEIGHT, "weight"), {1, 256, 256}, 0);
+                decoder_estimator_mid_blocks_1_1_0_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_0_ATTN1_TO_K_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_1_1_0_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_0_ATTN1_TO_OUT_0_WEIGHT, "weight"), {512, 256}, 0);
+                decoder_estimator_mid_blocks_1_1_0_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_0_ATTN1_TO_Q_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_1_1_0_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_0_ATTN1_TO_V_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_1_1_0_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_0_FF_NET_0_PROJ_WEIGHT, "weight"), {256, 1024}, 0);
+                decoder_estimator_mid_blocks_1_1_0_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_0_FF_NET_2_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_mid_blocks_1_1_0_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_0_NORM1_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_1_1_0_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_0_NORM3_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_1_1_1_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_1_ATTN1_TO_K_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_1_1_1_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_1_ATTN1_TO_OUT_0_WEIGHT, "weight"), {512, 256}, 0);
+                decoder_estimator_mid_blocks_1_1_1_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_1_ATTN1_TO_Q_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_1_1_1_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_1_ATTN1_TO_V_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_1_1_1_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_1_FF_NET_0_PROJ_WEIGHT, "weight"), {256, 1024}, 0);
+                decoder_estimator_mid_blocks_1_1_1_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_1_FF_NET_2_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_mid_blocks_1_1_1_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_1_NORM1_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_1_1_1_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_1_NORM3_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_1_1_2_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_2_ATTN1_TO_K_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_1_1_2_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_2_ATTN1_TO_OUT_0_WEIGHT, "weight"), {512, 256}, 0);
+                decoder_estimator_mid_blocks_1_1_2_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_2_ATTN1_TO_Q_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_1_1_2_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_2_ATTN1_TO_V_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_1_1_2_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_2_FF_NET_0_PROJ_WEIGHT, "weight"), {256, 1024}, 0);
+                decoder_estimator_mid_blocks_1_1_2_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_2_FF_NET_2_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_mid_blocks_1_1_2_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_2_NORM1_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_1_1_2_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_2_NORM3_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_1_1_3_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_3_ATTN1_TO_K_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_1_1_3_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_3_ATTN1_TO_OUT_0_WEIGHT, "weight"), {512, 256}, 0);
+                decoder_estimator_mid_blocks_1_1_3_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_3_ATTN1_TO_Q_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_1_1_3_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_3_ATTN1_TO_V_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_1_1_3_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_3_FF_NET_0_PROJ_WEIGHT, "weight"), {256, 1024}, 0);
+                decoder_estimator_mid_blocks_1_1_3_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_3_FF_NET_2_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_mid_blocks_1_1_3_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_3_NORM1_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_1_1_3_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_3_NORM3_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_10_0_block1_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_0_BLOCK1_BLOCK_0_WEIGHT, "weight"), {3, 256, 256}, 0);
+                decoder_estimator_mid_blocks_10_0_block1_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_0_BLOCK1_BLOCK_2_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_10_0_block2_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_0_BLOCK2_BLOCK_0_WEIGHT, "weight"), {3, 256, 256}, 0);
+                decoder_estimator_mid_blocks_10_0_block2_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_0_BLOCK2_BLOCK_2_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_10_0_mlp_1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_0_MLP_1_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_mid_blocks_10_0_res_conv_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_0_RES_CONV_WEIGHT, "weight"), {1, 256, 256}, 0);
+                decoder_estimator_mid_blocks_10_1_0_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_0_ATTN1_TO_K_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_10_1_0_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_0_ATTN1_TO_OUT_0_WEIGHT, "weight"), {512, 256}, 0);
+                decoder_estimator_mid_blocks_10_1_0_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_0_ATTN1_TO_Q_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_10_1_0_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_0_ATTN1_TO_V_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_10_1_0_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_0_FF_NET_0_PROJ_WEIGHT, "weight"), {256, 1024}, 0);
+                decoder_estimator_mid_blocks_10_1_0_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_0_FF_NET_2_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_mid_blocks_10_1_0_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_0_NORM1_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_10_1_0_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_0_NORM3_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_10_1_1_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_1_ATTN1_TO_K_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_10_1_1_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_1_ATTN1_TO_OUT_0_WEIGHT, "weight"), {512, 256}, 0);
+                decoder_estimator_mid_blocks_10_1_1_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_1_ATTN1_TO_Q_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_10_1_1_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_1_ATTN1_TO_V_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_10_1_1_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_1_FF_NET_0_PROJ_WEIGHT, "weight"), {256, 1024}, 0);
+                decoder_estimator_mid_blocks_10_1_1_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_1_FF_NET_2_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_mid_blocks_10_1_1_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_1_NORM1_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_10_1_1_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_1_NORM3_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_10_1_2_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_2_ATTN1_TO_K_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_10_1_2_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_2_ATTN1_TO_OUT_0_WEIGHT, "weight"), {512, 256}, 0);
+                decoder_estimator_mid_blocks_10_1_2_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_2_ATTN1_TO_Q_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_10_1_2_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_2_ATTN1_TO_V_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_10_1_2_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_2_FF_NET_0_PROJ_WEIGHT, "weight"), {256, 1024}, 0);
+                decoder_estimator_mid_blocks_10_1_2_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_2_FF_NET_2_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_mid_blocks_10_1_2_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_2_NORM1_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_10_1_2_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_2_NORM3_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_10_1_3_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_3_ATTN1_TO_K_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_10_1_3_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_3_ATTN1_TO_OUT_0_WEIGHT, "weight"), {512, 256}, 0);
+                decoder_estimator_mid_blocks_10_1_3_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_3_ATTN1_TO_Q_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_10_1_3_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_3_ATTN1_TO_V_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_10_1_3_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_3_FF_NET_0_PROJ_WEIGHT, "weight"), {256, 1024}, 0);
+                decoder_estimator_mid_blocks_10_1_3_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_3_FF_NET_2_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_mid_blocks_10_1_3_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_3_NORM1_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_10_1_3_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_3_NORM3_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_11_0_block1_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_0_BLOCK1_BLOCK_0_WEIGHT, "weight"), {3, 256, 256}, 0);
+                decoder_estimator_mid_blocks_11_0_block1_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_0_BLOCK1_BLOCK_2_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_11_0_block2_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_0_BLOCK2_BLOCK_0_WEIGHT, "weight"), {3, 256, 256}, 0);
+                decoder_estimator_mid_blocks_11_0_block2_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_0_BLOCK2_BLOCK_2_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_11_0_mlp_1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_0_MLP_1_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_mid_blocks_11_0_res_conv_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_0_RES_CONV_WEIGHT, "weight"), {1, 256, 256}, 0);
+                decoder_estimator_mid_blocks_11_1_0_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_0_ATTN1_TO_K_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_11_1_0_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_0_ATTN1_TO_OUT_0_WEIGHT, "weight"), {512, 256}, 0);
+                decoder_estimator_mid_blocks_11_1_0_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_0_ATTN1_TO_Q_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_11_1_0_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_0_ATTN1_TO_V_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_11_1_0_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_0_FF_NET_0_PROJ_WEIGHT, "weight"), {256, 1024}, 0);
+                decoder_estimator_mid_blocks_11_1_0_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_0_FF_NET_2_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_mid_blocks_11_1_0_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_0_NORM1_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_11_1_0_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_0_NORM3_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_11_1_1_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_1_ATTN1_TO_K_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_11_1_1_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_1_ATTN1_TO_OUT_0_WEIGHT, "weight"), {512, 256}, 0);
+                decoder_estimator_mid_blocks_11_1_1_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_1_ATTN1_TO_Q_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_11_1_1_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_1_ATTN1_TO_V_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_11_1_1_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_1_FF_NET_0_PROJ_WEIGHT, "weight"), {256, 1024}, 0);
+                decoder_estimator_mid_blocks_11_1_1_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_1_FF_NET_2_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_mid_blocks_11_1_1_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_1_NORM1_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_11_1_1_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_1_NORM3_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_11_1_2_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_2_ATTN1_TO_K_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_11_1_2_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_2_ATTN1_TO_OUT_0_WEIGHT, "weight"), {512, 256}, 0);
+                decoder_estimator_mid_blocks_11_1_2_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_2_ATTN1_TO_Q_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_11_1_2_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_2_ATTN1_TO_V_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_11_1_2_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_2_FF_NET_0_PROJ_WEIGHT, "weight"), {256, 1024}, 0);
+                decoder_estimator_mid_blocks_11_1_2_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_2_FF_NET_2_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_mid_blocks_11_1_2_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_2_NORM1_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_11_1_2_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_2_NORM3_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_11_1_3_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_3_ATTN1_TO_K_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_11_1_3_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_3_ATTN1_TO_OUT_0_WEIGHT, "weight"), {512, 256}, 0);
+                decoder_estimator_mid_blocks_11_1_3_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_3_ATTN1_TO_Q_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_11_1_3_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_3_ATTN1_TO_V_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_11_1_3_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_3_FF_NET_0_PROJ_WEIGHT, "weight"), {256, 1024}, 0);
+                decoder_estimator_mid_blocks_11_1_3_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_3_FF_NET_2_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_mid_blocks_11_1_3_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_3_NORM1_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_11_1_3_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_3_NORM3_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_2_0_block1_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_0_BLOCK1_BLOCK_0_WEIGHT, "weight"), {3, 256, 256}, 0);
+                decoder_estimator_mid_blocks_2_0_block1_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_0_BLOCK1_BLOCK_2_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_2_0_block2_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_0_BLOCK2_BLOCK_0_WEIGHT, "weight"), {3, 256, 256}, 0);
+                decoder_estimator_mid_blocks_2_0_block2_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_0_BLOCK2_BLOCK_2_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_2_0_mlp_1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_0_MLP_1_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_mid_blocks_2_0_res_conv_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_0_RES_CONV_WEIGHT, "weight"), {1, 256, 256}, 0);
+                decoder_estimator_mid_blocks_2_1_0_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_0_ATTN1_TO_K_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_2_1_0_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_0_ATTN1_TO_OUT_0_WEIGHT, "weight"), {512, 256}, 0);
+                decoder_estimator_mid_blocks_2_1_0_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_0_ATTN1_TO_Q_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_2_1_0_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_0_ATTN1_TO_V_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_2_1_0_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_0_FF_NET_0_PROJ_WEIGHT, "weight"), {256, 1024}, 0);
+                decoder_estimator_mid_blocks_2_1_0_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_0_FF_NET_2_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_mid_blocks_2_1_0_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_0_NORM1_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_2_1_0_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_0_NORM3_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_2_1_1_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_1_ATTN1_TO_K_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_2_1_1_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_1_ATTN1_TO_OUT_0_WEIGHT, "weight"), {512, 256}, 0);
+                decoder_estimator_mid_blocks_2_1_1_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_1_ATTN1_TO_Q_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_2_1_1_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_1_ATTN1_TO_V_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_2_1_1_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_1_FF_NET_0_PROJ_WEIGHT, "weight"), {256, 1024}, 0);
+                decoder_estimator_mid_blocks_2_1_1_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_1_FF_NET_2_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_mid_blocks_2_1_1_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_1_NORM1_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_2_1_1_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_1_NORM3_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_2_1_2_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_2_ATTN1_TO_K_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_2_1_2_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_2_ATTN1_TO_OUT_0_WEIGHT, "weight"), {512, 256}, 0);
+                decoder_estimator_mid_blocks_2_1_2_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_2_ATTN1_TO_Q_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_2_1_2_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_2_ATTN1_TO_V_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_2_1_2_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_2_FF_NET_0_PROJ_WEIGHT, "weight"), {256, 1024}, 0);
+                decoder_estimator_mid_blocks_2_1_2_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_2_FF_NET_2_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_mid_blocks_2_1_2_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_2_NORM1_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_2_1_2_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_2_NORM3_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_2_1_3_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_3_ATTN1_TO_K_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_2_1_3_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_3_ATTN1_TO_OUT_0_WEIGHT, "weight"), {512, 256}, 0);
+                decoder_estimator_mid_blocks_2_1_3_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_3_ATTN1_TO_Q_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_2_1_3_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_3_ATTN1_TO_V_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_2_1_3_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_3_FF_NET_0_PROJ_WEIGHT, "weight"), {256, 1024}, 0);
+                decoder_estimator_mid_blocks_2_1_3_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_3_FF_NET_2_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_mid_blocks_2_1_3_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_3_NORM1_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_2_1_3_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_3_NORM3_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_3_0_block1_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_0_BLOCK1_BLOCK_0_WEIGHT, "weight"), {3, 256, 256}, 0);
+                decoder_estimator_mid_blocks_3_0_block1_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_0_BLOCK1_BLOCK_2_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_3_0_block2_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_0_BLOCK2_BLOCK_0_WEIGHT, "weight"), {3, 256, 256}, 0);
+                decoder_estimator_mid_blocks_3_0_block2_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_0_BLOCK2_BLOCK_2_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_3_0_mlp_1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_0_MLP_1_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_mid_blocks_3_0_res_conv_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_0_RES_CONV_WEIGHT, "weight"), {1, 256, 256}, 0);
+                decoder_estimator_mid_blocks_3_1_0_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_0_ATTN1_TO_K_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_3_1_0_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_0_ATTN1_TO_OUT_0_WEIGHT, "weight"), {512, 256}, 0);
+                decoder_estimator_mid_blocks_3_1_0_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_0_ATTN1_TO_Q_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_3_1_0_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_0_ATTN1_TO_V_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_3_1_0_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_0_FF_NET_0_PROJ_WEIGHT, "weight"), {256, 1024}, 0);
+                decoder_estimator_mid_blocks_3_1_0_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_0_FF_NET_2_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_mid_blocks_3_1_0_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_0_NORM1_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_3_1_0_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_0_NORM3_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_3_1_1_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_1_ATTN1_TO_K_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_3_1_1_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_1_ATTN1_TO_OUT_0_WEIGHT, "weight"), {512, 256}, 0);
+                decoder_estimator_mid_blocks_3_1_1_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_1_ATTN1_TO_Q_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_3_1_1_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_1_ATTN1_TO_V_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_3_1_1_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_1_FF_NET_0_PROJ_WEIGHT, "weight"), {256, 1024}, 0);
+                decoder_estimator_mid_blocks_3_1_1_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_1_FF_NET_2_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_mid_blocks_3_1_1_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_1_NORM1_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_3_1_1_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_1_NORM3_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_3_1_2_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_2_ATTN1_TO_K_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_3_1_2_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_2_ATTN1_TO_OUT_0_WEIGHT, "weight"), {512, 256}, 0);
+                decoder_estimator_mid_blocks_3_1_2_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_2_ATTN1_TO_Q_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_3_1_2_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_2_ATTN1_TO_V_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_3_1_2_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_2_FF_NET_0_PROJ_WEIGHT, "weight"), {256, 1024}, 0);
+                decoder_estimator_mid_blocks_3_1_2_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_2_FF_NET_2_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_mid_blocks_3_1_2_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_2_NORM1_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_3_1_2_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_2_NORM3_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_3_1_3_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_3_ATTN1_TO_K_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_3_1_3_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_3_ATTN1_TO_OUT_0_WEIGHT, "weight"), {512, 256}, 0);
+                decoder_estimator_mid_blocks_3_1_3_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_3_ATTN1_TO_Q_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_3_1_3_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_3_ATTN1_TO_V_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_3_1_3_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_3_FF_NET_0_PROJ_WEIGHT, "weight"), {256, 1024}, 0);
+                decoder_estimator_mid_blocks_3_1_3_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_3_FF_NET_2_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_mid_blocks_3_1_3_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_3_NORM1_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_3_1_3_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_3_NORM3_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_4_0_block1_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_0_BLOCK1_BLOCK_0_WEIGHT, "weight"), {3, 256, 256}, 0);
+                decoder_estimator_mid_blocks_4_0_block1_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_0_BLOCK1_BLOCK_2_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_4_0_block2_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_0_BLOCK2_BLOCK_0_WEIGHT, "weight"), {3, 256, 256}, 0);
+                decoder_estimator_mid_blocks_4_0_block2_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_0_BLOCK2_BLOCK_2_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_4_0_mlp_1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_0_MLP_1_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_mid_blocks_4_0_res_conv_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_0_RES_CONV_WEIGHT, "weight"), {1, 256, 256}, 0);
+                decoder_estimator_mid_blocks_4_1_0_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_0_ATTN1_TO_K_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_4_1_0_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_0_ATTN1_TO_OUT_0_WEIGHT, "weight"), {512, 256}, 0);
+                decoder_estimator_mid_blocks_4_1_0_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_0_ATTN1_TO_Q_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_4_1_0_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_0_ATTN1_TO_V_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_4_1_0_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_0_FF_NET_0_PROJ_WEIGHT, "weight"), {256, 1024}, 0);
+                decoder_estimator_mid_blocks_4_1_0_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_0_FF_NET_2_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_mid_blocks_4_1_0_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_0_NORM1_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_4_1_0_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_0_NORM3_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_4_1_1_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_1_ATTN1_TO_K_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_4_1_1_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_1_ATTN1_TO_OUT_0_WEIGHT, "weight"), {512, 256}, 0);
+                decoder_estimator_mid_blocks_4_1_1_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_1_ATTN1_TO_Q_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_4_1_1_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_1_ATTN1_TO_V_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_4_1_1_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_1_FF_NET_0_PROJ_WEIGHT, "weight"), {256, 1024}, 0);
+                decoder_estimator_mid_blocks_4_1_1_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_1_FF_NET_2_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_mid_blocks_4_1_1_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_1_NORM1_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_4_1_1_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_1_NORM3_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_4_1_2_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_2_ATTN1_TO_K_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_4_1_2_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_2_ATTN1_TO_OUT_0_WEIGHT, "weight"), {512, 256}, 0);
+                decoder_estimator_mid_blocks_4_1_2_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_2_ATTN1_TO_Q_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_4_1_2_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_2_ATTN1_TO_V_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_4_1_2_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_2_FF_NET_0_PROJ_WEIGHT, "weight"), {256, 1024}, 0);
+                decoder_estimator_mid_blocks_4_1_2_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_2_FF_NET_2_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_mid_blocks_4_1_2_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_2_NORM1_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_4_1_2_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_2_NORM3_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_4_1_3_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_3_ATTN1_TO_K_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_4_1_3_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_3_ATTN1_TO_OUT_0_WEIGHT, "weight"), {512, 256}, 0);
+                decoder_estimator_mid_blocks_4_1_3_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_3_ATTN1_TO_Q_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_4_1_3_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_3_ATTN1_TO_V_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_4_1_3_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_3_FF_NET_0_PROJ_WEIGHT, "weight"), {256, 1024}, 0);
+                decoder_estimator_mid_blocks_4_1_3_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_3_FF_NET_2_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_mid_blocks_4_1_3_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_3_NORM1_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_4_1_3_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_3_NORM3_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_5_0_block1_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_0_BLOCK1_BLOCK_0_WEIGHT, "weight"), {3, 256, 256}, 0);
+                decoder_estimator_mid_blocks_5_0_block1_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_0_BLOCK1_BLOCK_2_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_5_0_block2_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_0_BLOCK2_BLOCK_0_WEIGHT, "weight"), {3, 256, 256}, 0);
+                decoder_estimator_mid_blocks_5_0_block2_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_0_BLOCK2_BLOCK_2_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_5_0_mlp_1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_0_MLP_1_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_mid_blocks_5_0_res_conv_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_0_RES_CONV_WEIGHT, "weight"), {1, 256, 256}, 0);
+                decoder_estimator_mid_blocks_5_1_0_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_0_ATTN1_TO_K_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_5_1_0_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_0_ATTN1_TO_OUT_0_WEIGHT, "weight"), {512, 256}, 0);
+                decoder_estimator_mid_blocks_5_1_0_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_0_ATTN1_TO_Q_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_5_1_0_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_0_ATTN1_TO_V_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_5_1_0_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_0_FF_NET_0_PROJ_WEIGHT, "weight"), {256, 1024}, 0);
+                decoder_estimator_mid_blocks_5_1_0_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_0_FF_NET_2_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_mid_blocks_5_1_0_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_0_NORM1_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_5_1_0_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_0_NORM3_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_5_1_1_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_1_ATTN1_TO_K_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_5_1_1_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_1_ATTN1_TO_OUT_0_WEIGHT, "weight"), {512, 256}, 0);
+                decoder_estimator_mid_blocks_5_1_1_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_1_ATTN1_TO_Q_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_5_1_1_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_1_ATTN1_TO_V_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_5_1_1_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_1_FF_NET_0_PROJ_WEIGHT, "weight"), {256, 1024}, 0);
+                decoder_estimator_mid_blocks_5_1_1_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_1_FF_NET_2_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_mid_blocks_5_1_1_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_1_NORM1_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_5_1_1_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_1_NORM3_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_5_1_2_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_2_ATTN1_TO_K_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_5_1_2_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_2_ATTN1_TO_OUT_0_WEIGHT, "weight"), {512, 256}, 0);
+                decoder_estimator_mid_blocks_5_1_2_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_2_ATTN1_TO_Q_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_5_1_2_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_2_ATTN1_TO_V_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_5_1_2_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_2_FF_NET_0_PROJ_WEIGHT, "weight"), {256, 1024}, 0);
+                decoder_estimator_mid_blocks_5_1_2_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_2_FF_NET_2_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_mid_blocks_5_1_2_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_2_NORM1_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_5_1_2_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_2_NORM3_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_5_1_3_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_3_ATTN1_TO_K_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_5_1_3_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_3_ATTN1_TO_OUT_0_WEIGHT, "weight"), {512, 256}, 0);
+                decoder_estimator_mid_blocks_5_1_3_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_3_ATTN1_TO_Q_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_5_1_3_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_3_ATTN1_TO_V_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_5_1_3_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_3_FF_NET_0_PROJ_WEIGHT, "weight"), {256, 1024}, 0);
+                decoder_estimator_mid_blocks_5_1_3_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_3_FF_NET_2_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_mid_blocks_5_1_3_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_3_NORM1_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_5_1_3_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_3_NORM3_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_6_0_block1_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_0_BLOCK1_BLOCK_0_WEIGHT, "weight"), {3, 256, 256}, 0);
+                decoder_estimator_mid_blocks_6_0_block1_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_0_BLOCK1_BLOCK_2_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_6_0_block2_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_0_BLOCK2_BLOCK_0_WEIGHT, "weight"), {3, 256, 256}, 0);
+                decoder_estimator_mid_blocks_6_0_block2_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_0_BLOCK2_BLOCK_2_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_6_0_mlp_1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_0_MLP_1_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_mid_blocks_6_0_res_conv_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_0_RES_CONV_WEIGHT, "weight"), {1, 256, 256}, 0);
+                decoder_estimator_mid_blocks_6_1_0_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_0_ATTN1_TO_K_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_6_1_0_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_0_ATTN1_TO_OUT_0_WEIGHT, "weight"), {512, 256}, 0);
+                decoder_estimator_mid_blocks_6_1_0_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_0_ATTN1_TO_Q_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_6_1_0_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_0_ATTN1_TO_V_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_6_1_0_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_0_FF_NET_0_PROJ_WEIGHT, "weight"), {256, 1024}, 0);
+                decoder_estimator_mid_blocks_6_1_0_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_0_FF_NET_2_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_mid_blocks_6_1_0_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_0_NORM1_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_6_1_0_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_0_NORM3_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_6_1_1_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_1_ATTN1_TO_K_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_6_1_1_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_1_ATTN1_TO_OUT_0_WEIGHT, "weight"), {512, 256}, 0);
+                decoder_estimator_mid_blocks_6_1_1_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_1_ATTN1_TO_Q_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_6_1_1_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_1_ATTN1_TO_V_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_6_1_1_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_1_FF_NET_0_PROJ_WEIGHT, "weight"), {256, 1024}, 0);
+                decoder_estimator_mid_blocks_6_1_1_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_1_FF_NET_2_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_mid_blocks_6_1_1_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_1_NORM1_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_6_1_1_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_1_NORM3_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_6_1_2_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_2_ATTN1_TO_K_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_6_1_2_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_2_ATTN1_TO_OUT_0_WEIGHT, "weight"), {512, 256}, 0);
+                decoder_estimator_mid_blocks_6_1_2_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_2_ATTN1_TO_Q_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_6_1_2_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_2_ATTN1_TO_V_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_6_1_2_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_2_FF_NET_0_PROJ_WEIGHT, "weight"), {256, 1024}, 0);
+                decoder_estimator_mid_blocks_6_1_2_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_2_FF_NET_2_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_mid_blocks_6_1_2_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_2_NORM1_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_6_1_2_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_2_NORM3_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_6_1_3_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_3_ATTN1_TO_K_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_6_1_3_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_3_ATTN1_TO_OUT_0_WEIGHT, "weight"), {512, 256}, 0);
+                decoder_estimator_mid_blocks_6_1_3_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_3_ATTN1_TO_Q_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_6_1_3_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_3_ATTN1_TO_V_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_6_1_3_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_3_FF_NET_0_PROJ_WEIGHT, "weight"), {256, 1024}, 0);
+                decoder_estimator_mid_blocks_6_1_3_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_3_FF_NET_2_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_mid_blocks_6_1_3_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_3_NORM1_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_6_1_3_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_3_NORM3_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_7_0_block1_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_0_BLOCK1_BLOCK_0_WEIGHT, "weight"), {3, 256, 256}, 0);
+                decoder_estimator_mid_blocks_7_0_block1_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_0_BLOCK1_BLOCK_2_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_7_0_block2_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_0_BLOCK2_BLOCK_0_WEIGHT, "weight"), {3, 256, 256}, 0);
+                decoder_estimator_mid_blocks_7_0_block2_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_0_BLOCK2_BLOCK_2_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_7_0_mlp_1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_0_MLP_1_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_mid_blocks_7_0_res_conv_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_0_RES_CONV_WEIGHT, "weight"), {1, 256, 256}, 0);
+                decoder_estimator_mid_blocks_7_1_0_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_0_ATTN1_TO_K_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_7_1_0_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_0_ATTN1_TO_OUT_0_WEIGHT, "weight"), {512, 256}, 0);
+                decoder_estimator_mid_blocks_7_1_0_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_0_ATTN1_TO_Q_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_7_1_0_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_0_ATTN1_TO_V_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_7_1_0_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_0_FF_NET_0_PROJ_WEIGHT, "weight"), {256, 1024}, 0);
+                decoder_estimator_mid_blocks_7_1_0_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_0_FF_NET_2_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_mid_blocks_7_1_0_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_0_NORM1_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_7_1_0_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_0_NORM3_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_7_1_1_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_1_ATTN1_TO_K_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_7_1_1_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_1_ATTN1_TO_OUT_0_WEIGHT, "weight"), {512, 256}, 0);
+                decoder_estimator_mid_blocks_7_1_1_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_1_ATTN1_TO_Q_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_7_1_1_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_1_ATTN1_TO_V_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_7_1_1_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_1_FF_NET_0_PROJ_WEIGHT, "weight"), {256, 1024}, 0);
+                decoder_estimator_mid_blocks_7_1_1_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_1_FF_NET_2_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_mid_blocks_7_1_1_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_1_NORM1_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_7_1_1_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_1_NORM3_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_7_1_2_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_2_ATTN1_TO_K_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_7_1_2_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_2_ATTN1_TO_OUT_0_WEIGHT, "weight"), {512, 256}, 0);
+                decoder_estimator_mid_blocks_7_1_2_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_2_ATTN1_TO_Q_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_7_1_2_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_2_ATTN1_TO_V_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_7_1_2_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_2_FF_NET_0_PROJ_WEIGHT, "weight"), {256, 1024}, 0);
+                decoder_estimator_mid_blocks_7_1_2_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_2_FF_NET_2_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_mid_blocks_7_1_2_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_2_NORM1_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_7_1_2_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_2_NORM3_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_7_1_3_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_3_ATTN1_TO_K_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_7_1_3_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_3_ATTN1_TO_OUT_0_WEIGHT, "weight"), {512, 256}, 0);
+                decoder_estimator_mid_blocks_7_1_3_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_3_ATTN1_TO_Q_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_7_1_3_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_3_ATTN1_TO_V_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_7_1_3_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_3_FF_NET_0_PROJ_WEIGHT, "weight"), {256, 1024}, 0);
+                decoder_estimator_mid_blocks_7_1_3_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_3_FF_NET_2_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_mid_blocks_7_1_3_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_3_NORM1_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_7_1_3_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_3_NORM3_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_8_0_block1_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_0_BLOCK1_BLOCK_0_WEIGHT, "weight"), {3, 256, 256}, 0);
+                decoder_estimator_mid_blocks_8_0_block1_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_0_BLOCK1_BLOCK_2_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_8_0_block2_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_0_BLOCK2_BLOCK_0_WEIGHT, "weight"), {3, 256, 256}, 0);
+                decoder_estimator_mid_blocks_8_0_block2_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_0_BLOCK2_BLOCK_2_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_8_0_mlp_1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_0_MLP_1_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_mid_blocks_8_0_res_conv_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_0_RES_CONV_WEIGHT, "weight"), {1, 256, 256}, 0);
+                decoder_estimator_mid_blocks_8_1_0_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_0_ATTN1_TO_K_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_8_1_0_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_0_ATTN1_TO_OUT_0_WEIGHT, "weight"), {512, 256}, 0);
+                decoder_estimator_mid_blocks_8_1_0_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_0_ATTN1_TO_Q_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_8_1_0_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_0_ATTN1_TO_V_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_8_1_0_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_0_FF_NET_0_PROJ_WEIGHT, "weight"), {256, 1024}, 0);
+                decoder_estimator_mid_blocks_8_1_0_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_0_FF_NET_2_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_mid_blocks_8_1_0_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_0_NORM1_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_8_1_0_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_0_NORM3_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_8_1_1_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_1_ATTN1_TO_K_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_8_1_1_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_1_ATTN1_TO_OUT_0_WEIGHT, "weight"), {512, 256}, 0);
+                decoder_estimator_mid_blocks_8_1_1_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_1_ATTN1_TO_Q_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_8_1_1_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_1_ATTN1_TO_V_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_8_1_1_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_1_FF_NET_0_PROJ_WEIGHT, "weight"), {256, 1024}, 0);
+                decoder_estimator_mid_blocks_8_1_1_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_1_FF_NET_2_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_mid_blocks_8_1_1_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_1_NORM1_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_8_1_1_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_1_NORM3_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_8_1_2_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_2_ATTN1_TO_K_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_8_1_2_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_2_ATTN1_TO_OUT_0_WEIGHT, "weight"), {512, 256}, 0);
+                decoder_estimator_mid_blocks_8_1_2_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_2_ATTN1_TO_Q_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_8_1_2_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_2_ATTN1_TO_V_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_8_1_2_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_2_FF_NET_0_PROJ_WEIGHT, "weight"), {256, 1024}, 0);
+                decoder_estimator_mid_blocks_8_1_2_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_2_FF_NET_2_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_mid_blocks_8_1_2_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_2_NORM1_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_8_1_2_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_2_NORM3_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_8_1_3_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_3_ATTN1_TO_K_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_8_1_3_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_3_ATTN1_TO_OUT_0_WEIGHT, "weight"), {512, 256}, 0);
+                decoder_estimator_mid_blocks_8_1_3_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_3_ATTN1_TO_Q_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_8_1_3_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_3_ATTN1_TO_V_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_8_1_3_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_3_FF_NET_0_PROJ_WEIGHT, "weight"), {256, 1024}, 0);
+                decoder_estimator_mid_blocks_8_1_3_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_3_FF_NET_2_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_mid_blocks_8_1_3_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_3_NORM1_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_8_1_3_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_3_NORM3_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_9_0_block1_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_0_BLOCK1_BLOCK_0_WEIGHT, "weight"), {3, 256, 256}, 0);
+                decoder_estimator_mid_blocks_9_0_block1_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_0_BLOCK1_BLOCK_2_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_9_0_block2_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_0_BLOCK2_BLOCK_0_WEIGHT, "weight"), {3, 256, 256}, 0);
+                decoder_estimator_mid_blocks_9_0_block2_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_0_BLOCK2_BLOCK_2_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_9_0_mlp_1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_0_MLP_1_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_mid_blocks_9_0_res_conv_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_0_RES_CONV_WEIGHT, "weight"), {1, 256, 256}, 0);
+                decoder_estimator_mid_blocks_9_1_0_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_0_ATTN1_TO_K_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_9_1_0_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_0_ATTN1_TO_OUT_0_WEIGHT, "weight"), {512, 256}, 0);
+                decoder_estimator_mid_blocks_9_1_0_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_0_ATTN1_TO_Q_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_9_1_0_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_0_ATTN1_TO_V_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_9_1_0_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_0_FF_NET_0_PROJ_WEIGHT, "weight"), {256, 1024}, 0);
+                decoder_estimator_mid_blocks_9_1_0_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_0_FF_NET_2_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_mid_blocks_9_1_0_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_0_NORM1_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_9_1_0_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_0_NORM3_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_9_1_1_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_1_ATTN1_TO_K_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_9_1_1_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_1_ATTN1_TO_OUT_0_WEIGHT, "weight"), {512, 256}, 0);
+                decoder_estimator_mid_blocks_9_1_1_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_1_ATTN1_TO_Q_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_9_1_1_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_1_ATTN1_TO_V_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_9_1_1_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_1_FF_NET_0_PROJ_WEIGHT, "weight"), {256, 1024}, 0);
+                decoder_estimator_mid_blocks_9_1_1_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_1_FF_NET_2_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_mid_blocks_9_1_1_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_1_NORM1_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_9_1_1_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_1_NORM3_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_9_1_2_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_2_ATTN1_TO_K_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_9_1_2_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_2_ATTN1_TO_OUT_0_WEIGHT, "weight"), {512, 256}, 0);
+                decoder_estimator_mid_blocks_9_1_2_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_2_ATTN1_TO_Q_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_9_1_2_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_2_ATTN1_TO_V_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_9_1_2_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_2_FF_NET_0_PROJ_WEIGHT, "weight"), {256, 1024}, 0);
+                decoder_estimator_mid_blocks_9_1_2_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_2_FF_NET_2_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_mid_blocks_9_1_2_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_2_NORM1_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_9_1_2_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_2_NORM3_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_9_1_3_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_3_ATTN1_TO_K_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_9_1_3_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_3_ATTN1_TO_OUT_0_WEIGHT, "weight"), {512, 256}, 0);
+                decoder_estimator_mid_blocks_9_1_3_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_3_ATTN1_TO_Q_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_9_1_3_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_3_ATTN1_TO_V_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_mid_blocks_9_1_3_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_3_FF_NET_0_PROJ_WEIGHT, "weight"), {256, 1024}, 0);
+                decoder_estimator_mid_blocks_9_1_3_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_3_FF_NET_2_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_mid_blocks_9_1_3_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_3_NORM1_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_mid_blocks_9_1_3_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_3_NORM3_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_time_mlp_linear_1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_TIME_MLP_LINEAR_1_WEIGHT, "weight"), {320, 1024}, 0);
+                decoder_estimator_time_mlp_linear_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_TIME_MLP_LINEAR_2_WEIGHT, "weight"), {1024, 1024}, 0);
+                decoder_estimator_up_blocks_0_0_block1_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_0_BLOCK1_BLOCK_0_WEIGHT, "weight"), {3, 512, 256}, 0);
+                decoder_estimator_up_blocks_0_0_block1_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_0_BLOCK1_BLOCK_2_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_up_blocks_0_0_block2_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_0_BLOCK2_BLOCK_0_WEIGHT, "weight"), {3, 256, 256}, 0);
+                decoder_estimator_up_blocks_0_0_block2_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_0_BLOCK2_BLOCK_2_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_up_blocks_0_0_mlp_1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_0_MLP_1_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_up_blocks_0_0_res_conv_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_0_RES_CONV_WEIGHT, "weight"), {1, 512, 256}, 0);
+                decoder_estimator_up_blocks_0_1_0_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_0_ATTN1_TO_K_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_up_blocks_0_1_0_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_0_ATTN1_TO_OUT_0_WEIGHT, "weight"), {512, 256}, 0);
+                decoder_estimator_up_blocks_0_1_0_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_0_ATTN1_TO_Q_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_up_blocks_0_1_0_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_0_ATTN1_TO_V_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_up_blocks_0_1_0_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_0_FF_NET_0_PROJ_WEIGHT, "weight"), {256, 1024}, 0);
+                decoder_estimator_up_blocks_0_1_0_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_0_FF_NET_2_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_up_blocks_0_1_0_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_0_NORM1_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_up_blocks_0_1_0_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_0_NORM3_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_up_blocks_0_1_1_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_1_ATTN1_TO_K_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_up_blocks_0_1_1_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_1_ATTN1_TO_OUT_0_WEIGHT, "weight"), {512, 256}, 0);
+                decoder_estimator_up_blocks_0_1_1_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_1_ATTN1_TO_Q_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_up_blocks_0_1_1_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_1_ATTN1_TO_V_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_up_blocks_0_1_1_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_1_FF_NET_0_PROJ_WEIGHT, "weight"), {256, 1024}, 0);
+                decoder_estimator_up_blocks_0_1_1_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_1_FF_NET_2_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_up_blocks_0_1_1_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_1_NORM1_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_up_blocks_0_1_1_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_1_NORM3_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_up_blocks_0_1_2_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_2_ATTN1_TO_K_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_up_blocks_0_1_2_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_2_ATTN1_TO_OUT_0_WEIGHT, "weight"), {512, 256}, 0);
+                decoder_estimator_up_blocks_0_1_2_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_2_ATTN1_TO_Q_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_up_blocks_0_1_2_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_2_ATTN1_TO_V_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_up_blocks_0_1_2_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_2_FF_NET_0_PROJ_WEIGHT, "weight"), {256, 1024}, 0);
+                decoder_estimator_up_blocks_0_1_2_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_2_FF_NET_2_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_up_blocks_0_1_2_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_2_NORM1_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_up_blocks_0_1_2_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_2_NORM3_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_up_blocks_0_1_3_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_3_ATTN1_TO_K_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_up_blocks_0_1_3_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_3_ATTN1_TO_OUT_0_WEIGHT, "weight"), {512, 256}, 0);
+                decoder_estimator_up_blocks_0_1_3_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_3_ATTN1_TO_Q_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_up_blocks_0_1_3_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_3_ATTN1_TO_V_WEIGHT, "weight"), {256, 512}, 0);
+                decoder_estimator_up_blocks_0_1_3_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_3_FF_NET_0_PROJ_WEIGHT, "weight"), {256, 1024}, 0);
+                decoder_estimator_up_blocks_0_1_3_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_3_FF_NET_2_WEIGHT, "weight"), {1024, 256}, 0);
+                decoder_estimator_up_blocks_0_1_3_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_3_NORM1_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_up_blocks_0_1_3_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_3_NORM3_WEIGHT, "weight"), {256}, 0);
+                decoder_estimator_up_blocks_0_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_2_WEIGHT, "weight"), {3, 256, 256}, 0);
+                encoder_after_norm_weight = create_tensor(tn(LLM_TENSOR_ENCODER_AFTER_NORM_WEIGHT, "weight"), {512}, 0);
+                encoder_embed_out_0_weight = create_tensor(tn(LLM_TENSOR_ENCODER_EMBED_OUT_0_WEIGHT, "weight"), {512, 512}, 0);
+                encoder_embed_out_1_weight = create_tensor(tn(LLM_TENSOR_ENCODER_EMBED_OUT_1_WEIGHT, "weight"), {512}, 0);
+                encoder_encoders_0_feed_forward_w_1_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_0_FEED_FORWARD_W_1_WEIGHT, "weight"), {512, 2048}, 0);
+                encoder_encoders_0_feed_forward_w_2_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_0_FEED_FORWARD_W_2_WEIGHT, "weight"), {2048, 512}, 0);
+                encoder_encoders_0_norm_ff_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_0_NORM_FF_WEIGHT, "weight"), {512}, 0);
+                encoder_encoders_0_norm_mha_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_0_NORM_MHA_WEIGHT, "weight"), {512}, 0);
+                encoder_encoders_0_self_attn_linear_k_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_0_SELF_ATTN_LINEAR_K_WEIGHT, "weight"), {512, 512}, 0);
+                encoder_encoders_0_self_attn_linear_out_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_0_SELF_ATTN_LINEAR_OUT_WEIGHT, "weight"), {512, 512}, 0);
+                encoder_encoders_0_self_attn_linear_pos_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_0_SELF_ATTN_LINEAR_POS_WEIGHT, "weight"), {512, 512}, 0);
+                encoder_encoders_0_self_attn_linear_q_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_0_SELF_ATTN_LINEAR_Q_WEIGHT, "weight"), {512, 512}, 0);
+                encoder_encoders_0_self_attn_linear_v_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_0_SELF_ATTN_LINEAR_V_WEIGHT, "weight"), {512, 512}, 0);
+                encoder_encoders_1_feed_forward_w_1_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_1_FEED_FORWARD_W_1_WEIGHT, "weight"), {512, 2048}, 0);
+                encoder_encoders_1_feed_forward_w_2_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_1_FEED_FORWARD_W_2_WEIGHT, "weight"), {2048, 512}, 0);
+                encoder_encoders_1_norm_ff_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_1_NORM_FF_WEIGHT, "weight"), {512}, 0);
+                encoder_encoders_1_norm_mha_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_1_NORM_MHA_WEIGHT, "weight"), {512}, 0);
+                encoder_encoders_1_self_attn_linear_k_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_1_SELF_ATTN_LINEAR_K_WEIGHT, "weight"), {512, 512}, 0);
+                encoder_encoders_1_self_attn_linear_out_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_1_SELF_ATTN_LINEAR_OUT_WEIGHT, "weight"), {512, 512}, 0);
+                encoder_encoders_1_self_attn_linear_pos_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_1_SELF_ATTN_LINEAR_POS_WEIGHT, "weight"), {512, 512}, 0);
+                encoder_encoders_1_self_attn_linear_q_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_1_SELF_ATTN_LINEAR_Q_WEIGHT, "weight"), {512, 512}, 0);
+                encoder_encoders_1_self_attn_linear_v_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_1_SELF_ATTN_LINEAR_V_WEIGHT, "weight"), {512, 512}, 0);
+                encoder_encoders_2_feed_forward_w_1_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_2_FEED_FORWARD_W_1_WEIGHT, "weight"), {512, 2048}, 0);
+                encoder_encoders_2_feed_forward_w_2_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_2_FEED_FORWARD_W_2_WEIGHT, "weight"), {2048, 512}, 0);
+                encoder_encoders_2_norm_ff_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_2_NORM_FF_WEIGHT, "weight"), {512}, 0);
+                encoder_encoders_2_norm_mha_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_2_NORM_MHA_WEIGHT, "weight"), {512}, 0);
+                encoder_encoders_2_self_attn_linear_k_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_2_SELF_ATTN_LINEAR_K_WEIGHT, "weight"), {512, 512}, 0);
+                encoder_encoders_2_self_attn_linear_out_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_2_SELF_ATTN_LINEAR_OUT_WEIGHT, "weight"), {512, 512}, 0);
+                encoder_encoders_2_self_attn_linear_pos_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_2_SELF_ATTN_LINEAR_POS_WEIGHT, "weight"), {512, 512}, 0);
+                encoder_encoders_2_self_attn_linear_q_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_2_SELF_ATTN_LINEAR_Q_WEIGHT, "weight"), {512, 512}, 0);
+                encoder_encoders_2_self_attn_linear_v_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_2_SELF_ATTN_LINEAR_V_WEIGHT, "weight"), {512, 512}, 0);
+                encoder_encoders_3_feed_forward_w_1_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_3_FEED_FORWARD_W_1_WEIGHT, "weight"), {512, 2048}, 0);
+                encoder_encoders_3_feed_forward_w_2_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_3_FEED_FORWARD_W_2_WEIGHT, "weight"), {2048, 512}, 0);
+                encoder_encoders_3_norm_ff_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_3_NORM_FF_WEIGHT, "weight"), {512}, 0);
+                encoder_encoders_3_norm_mha_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_3_NORM_MHA_WEIGHT, "weight"), {512}, 0);
+                encoder_encoders_3_self_attn_linear_k_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_3_SELF_ATTN_LINEAR_K_WEIGHT, "weight"), {512, 512}, 0);
+                encoder_encoders_3_self_attn_linear_out_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_3_SELF_ATTN_LINEAR_OUT_WEIGHT, "weight"), {512, 512}, 0);
+                encoder_encoders_3_self_attn_linear_pos_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_3_SELF_ATTN_LINEAR_POS_WEIGHT, "weight"), {512, 512}, 0);
+                encoder_encoders_3_self_attn_linear_q_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_3_SELF_ATTN_LINEAR_Q_WEIGHT, "weight"), {512, 512}, 0);
+                encoder_encoders_3_self_attn_linear_v_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_3_SELF_ATTN_LINEAR_V_WEIGHT, "weight"), {512, 512}, 0);
+                encoder_encoders_4_feed_forward_w_1_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_4_FEED_FORWARD_W_1_WEIGHT, "weight"), {512, 2048}, 0);
+                encoder_encoders_4_feed_forward_w_2_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_4_FEED_FORWARD_W_2_WEIGHT, "weight"), {2048, 512}, 0);
+                encoder_encoders_4_norm_ff_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_4_NORM_FF_WEIGHT, "weight"), {512}, 0);
+                encoder_encoders_4_norm_mha_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_4_NORM_MHA_WEIGHT, "weight"), {512}, 0);
+                encoder_encoders_4_self_attn_linear_k_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_4_SELF_ATTN_LINEAR_K_WEIGHT, "weight"), {512, 512}, 0);
+                encoder_encoders_4_self_attn_linear_out_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_4_SELF_ATTN_LINEAR_OUT_WEIGHT, "weight"), {512, 512}, 0);
+                encoder_encoders_4_self_attn_linear_pos_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_4_SELF_ATTN_LINEAR_POS_WEIGHT, "weight"), {512, 512}, 0);
+                encoder_encoders_4_self_attn_linear_q_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_4_SELF_ATTN_LINEAR_Q_WEIGHT, "weight"), {512, 512}, 0);
+                encoder_encoders_4_self_attn_linear_v_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_4_SELF_ATTN_LINEAR_V_WEIGHT, "weight"), {512, 512}, 0);
+                encoder_encoders_5_feed_forward_w_1_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_5_FEED_FORWARD_W_1_WEIGHT, "weight"), {512, 2048}, 0);
+                encoder_encoders_5_feed_forward_w_2_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_5_FEED_FORWARD_W_2_WEIGHT, "weight"), {2048, 512}, 0);
+                encoder_encoders_5_norm_ff_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_5_NORM_FF_WEIGHT, "weight"), {512}, 0);
+                encoder_encoders_5_norm_mha_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_5_NORM_MHA_WEIGHT, "weight"), {512}, 0);
+                encoder_encoders_5_self_attn_linear_k_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_5_SELF_ATTN_LINEAR_K_WEIGHT, "weight"), {512, 512}, 0);
+                encoder_encoders_5_self_attn_linear_out_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_5_SELF_ATTN_LINEAR_OUT_WEIGHT, "weight"), {512, 512}, 0);
+                encoder_encoders_5_self_attn_linear_pos_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_5_SELF_ATTN_LINEAR_POS_WEIGHT, "weight"), {512, 512}, 0);
+                encoder_encoders_5_self_attn_linear_q_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_5_SELF_ATTN_LINEAR_Q_WEIGHT, "weight"), {512, 512}, 0);
+                encoder_encoders_5_self_attn_linear_v_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_5_SELF_ATTN_LINEAR_V_WEIGHT, "weight"), {512, 512}, 0);
+                encoder_pre_lookahead_layer_conv1_weight = create_tensor(tn(LLM_TENSOR_ENCODER_PRE_LOOKAHEAD_LAYER_CONV1_WEIGHT, "weight"), {4, 512, 512}, 0);
+                encoder_pre_lookahead_layer_conv2_weight = create_tensor(tn(LLM_TENSOR_ENCODER_PRE_LOOKAHEAD_LAYER_CONV2_WEIGHT, "weight"), {3, 512, 512}, 0);
+                encoder_up_embed_out_0_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_EMBED_OUT_0_WEIGHT, "weight"), {512, 512}, 0);
+                encoder_up_embed_out_1_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_EMBED_OUT_1_WEIGHT, "weight"), {512}, 0);
+                encoder_up_encoders_0_feed_forward_w_1_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_0_FEED_FORWARD_W_1_WEIGHT, "weight"), {512, 2048}, 0);
+                encoder_up_encoders_0_feed_forward_w_2_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_0_FEED_FORWARD_W_2_WEIGHT, "weight"), {2048, 512}, 0);
+                encoder_up_encoders_0_norm_ff_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_0_NORM_FF_WEIGHT, "weight"), {512}, 0);
+                encoder_up_encoders_0_norm_mha_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_0_NORM_MHA_WEIGHT, "weight"), {512}, 0);
+                encoder_up_encoders_0_self_attn_linear_k_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_0_SELF_ATTN_LINEAR_K_WEIGHT, "weight"), {512, 512}, 0);
+                encoder_up_encoders_0_self_attn_linear_out_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_0_SELF_ATTN_LINEAR_OUT_WEIGHT, "weight"), {512, 512}, 0);
+                encoder_up_encoders_0_self_attn_linear_pos_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_0_SELF_ATTN_LINEAR_POS_WEIGHT, "weight"), {512, 512}, 0);
+                encoder_up_encoders_0_self_attn_linear_q_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_0_SELF_ATTN_LINEAR_Q_WEIGHT, "weight"), {512, 512}, 0);
+                encoder_up_encoders_0_self_attn_linear_v_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_0_SELF_ATTN_LINEAR_V_WEIGHT, "weight"), {512, 512}, 0);
+                encoder_up_encoders_1_feed_forward_w_1_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_1_FEED_FORWARD_W_1_WEIGHT, "weight"), {512, 2048}, 0);
+                encoder_up_encoders_1_feed_forward_w_2_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_1_FEED_FORWARD_W_2_WEIGHT, "weight"), {2048, 512}, 0);
+                encoder_up_encoders_1_norm_ff_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_1_NORM_FF_WEIGHT, "weight"), {512}, 0);
+                encoder_up_encoders_1_norm_mha_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_1_NORM_MHA_WEIGHT, "weight"), {512}, 0);
+                encoder_up_encoders_1_self_attn_linear_k_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_1_SELF_ATTN_LINEAR_K_WEIGHT, "weight"), {512, 512}, 0);
+                encoder_up_encoders_1_self_attn_linear_out_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_1_SELF_ATTN_LINEAR_OUT_WEIGHT, "weight"), {512, 512}, 0);
+                encoder_up_encoders_1_self_attn_linear_pos_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_1_SELF_ATTN_LINEAR_POS_WEIGHT, "weight"), {512, 512}, 0);
+                encoder_up_encoders_1_self_attn_linear_q_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_1_SELF_ATTN_LINEAR_Q_WEIGHT, "weight"), {512, 512}, 0);
+                encoder_up_encoders_1_self_attn_linear_v_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_1_SELF_ATTN_LINEAR_V_WEIGHT, "weight"), {512, 512}, 0);
+                encoder_up_encoders_2_feed_forward_w_1_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_2_FEED_FORWARD_W_1_WEIGHT, "weight"), {512, 2048}, 0);
+                encoder_up_encoders_2_feed_forward_w_2_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_2_FEED_FORWARD_W_2_WEIGHT, "weight"), {2048, 512}, 0);
+                encoder_up_encoders_2_norm_ff_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_2_NORM_FF_WEIGHT, "weight"), {512}, 0);
+                encoder_up_encoders_2_norm_mha_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_2_NORM_MHA_WEIGHT, "weight"), {512}, 0);
+                encoder_up_encoders_2_self_attn_linear_k_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_2_SELF_ATTN_LINEAR_K_WEIGHT, "weight"), {512, 512}, 0);
+                encoder_up_encoders_2_self_attn_linear_out_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_2_SELF_ATTN_LINEAR_OUT_WEIGHT, "weight"), {512, 512}, 0);
+                encoder_up_encoders_2_self_attn_linear_pos_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_2_SELF_ATTN_LINEAR_POS_WEIGHT, "weight"), {512, 512}, 0);
+                encoder_up_encoders_2_self_attn_linear_q_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_2_SELF_ATTN_LINEAR_Q_WEIGHT, "weight"), {512, 512}, 0);
+                encoder_up_encoders_2_self_attn_linear_v_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_2_SELF_ATTN_LINEAR_V_WEIGHT, "weight"), {512, 512}, 0);
+                encoder_up_encoders_3_feed_forward_w_1_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_3_FEED_FORWARD_W_1_WEIGHT, "weight"), {512, 2048}, 0);
+                encoder_up_encoders_3_feed_forward_w_2_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_3_FEED_FORWARD_W_2_WEIGHT, "weight"), {2048, 512}, 0);
+                encoder_up_encoders_3_norm_ff_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_3_NORM_FF_WEIGHT, "weight"), {512}, 0);
+                encoder_up_encoders_3_norm_mha_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_3_NORM_MHA_WEIGHT, "weight"), {512}, 0);
+                encoder_up_encoders_3_self_attn_linear_k_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_3_SELF_ATTN_LINEAR_K_WEIGHT, "weight"), {512, 512}, 0);
+                encoder_up_encoders_3_self_attn_linear_out_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_3_SELF_ATTN_LINEAR_OUT_WEIGHT, "weight"), {512, 512}, 0);
+                encoder_up_encoders_3_self_attn_linear_pos_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_3_SELF_ATTN_LINEAR_POS_WEIGHT, "weight"), {512, 512}, 0);
+                encoder_up_encoders_3_self_attn_linear_q_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_3_SELF_ATTN_LINEAR_Q_WEIGHT, "weight"), {512, 512}, 0);
+                encoder_up_encoders_3_self_attn_linear_v_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_3_SELF_ATTN_LINEAR_V_WEIGHT, "weight"), {512, 512}, 0);
+                encoder_up_layer_conv_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_LAYER_CONV_WEIGHT, "weight"), {5, 512, 512}, 0);
+                encoder_proj_weight = create_tensor(tn(LLM_TENSOR_ENCODER_PROJ_WEIGHT, "weight"), {512, 80}, 0);
+                input_embedding_weight = create_tensor(tn(LLM_TENSOR_INPUT_EMBEDDING_WEIGHT, "weight"), {512, 6561}, 0);
+                spk_embed_affine_layer_weight = create_tensor(tn(LLM_TENSOR_SPK_EMBED_AFFINE_LAYER_WEIGHT, "weight"), {192, 80}, 0);
+
+            } break;
+
             default:
                 throw std::runtime_error("unknown architecture");
         }
@@ -5258,7 +5960,7 @@ void llama_model::print_info() const {
     LLAMA_LOG_INFO("%s: arch             = %s\n",     __func__, arch_name().c_str());
     LLAMA_LOG_INFO("%s: vocab_only       = %d\n",     __func__, hparams.vocab_only);
 
-    if (!hparams.vocab_only) {
+    if (!hparams.vocab_only && !hparams.use_flow) {
         LLAMA_LOG_INFO("%s: n_ctx_train      = %u\n",     __func__, hparams.n_ctx_train);
         LLAMA_LOG_INFO("%s: n_embd           = %u\n",     __func__, hparams.n_embd);
         LLAMA_LOG_INFO("%s: n_layer          = %u\n",     __func__, hparams.n_layer);
@@ -5374,8 +6076,10 @@ void llama_model::print_info() const {
         LLAMA_LOG_INFO("%s: expert_weights_scale = %.1f\n",   __func__, hparams.expert_weights_scale);
         LLAMA_LOG_INFO("%s: expert_weights_norm  = %d\n",     __func__, hparams.expert_weights_norm);
     }
-
-    vocab.print_info();
+    if (!hparams.use_flow) {
+        vocab.print_info();
+    }
+    
 }
 
 ggml_backend_dev_t llama_model::dev_layer(int il) const {
@@ -16918,6 +17622,7 @@ llama_model_params llama_model_default_params() {
         /*.use_mmap                    =*/ true,
         /*.use_mlock                   =*/ false,
         /*.check_tensors               =*/ false,
+        /*。is_flow                    =*/ true,
     };
 
 #ifdef GGML_USE_METAL
