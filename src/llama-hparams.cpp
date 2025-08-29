@@ -1,4 +1,5 @@
 #include "llama-hparams.h"
+#include "llama-impl.h"
 
 #include "ggml.h"
 
@@ -19,6 +20,7 @@ bool llama_hparams::is_swa_any() const {
 }
 
 uint32_t llama_hparams::n_head(uint32_t il) const {
+    LLAMA_LOG_INFO("&&&&&&&&&& il is: %d, n_layer is: %d\n", il, n_layer);
     if (il < n_layer) {
         return n_head_arr[il];
     }
