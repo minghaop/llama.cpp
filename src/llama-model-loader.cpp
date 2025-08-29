@@ -583,6 +583,7 @@ llama_model_loader::llama_model_loader(
                 weights_map.emplace(tensor_name, llama_tensor_weight(files.back().get(), idx, ctx_gguf.get(), cur));
             }
         }
+        
 
         get_key(llm_kv(LLM_KV_SPLIT_TENSORS_COUNT), n_tensors);
 
@@ -598,7 +599,14 @@ llama_model_loader::llama_model_loader(
     }
 
     n_kv      = gguf_get_n_kv(meta.get());
-    n_tensors = weights_map.size();
+    LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&& arch_name is: %s\n", arch_name.c_str());
+    if (arch_name == "CosyVoiceFlow")
+    {
+        n_tensors = 640;
+    }else {
+        n_tensors = weights_map.size();
+    }
+    
 
     fver = (enum llama_fver) gguf_get_version(meta.get());
 
