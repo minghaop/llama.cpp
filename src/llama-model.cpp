@@ -17843,16 +17843,16 @@ struct llm_build_flow : public llm_graph_context {
     }
 
     ggml_tesnor * build_encoder(ggml_tensor * x, ggml_tensor * mask) {
-        x = ggml_mul_mat(ctx0, model.enc_in_w, x);
-        x = ggml_add(ctx0, x, model.enc_in_b);
+        x = ggml_mul_mat(ctx0, model.encoder_embed_out_0_weight, x);
+        x = ggml_add(ctx0, x, model.encoder_embed_out_0_bias);
         x = ggml_norm(ctx0, x, 1e-5f);
-        x = ggml_mul(ctx0, x, model.enc_in_gamma);
-        x = ggml_add(ctx0, x, model.enc_in_beta);
+        x = ggml_mul(ctx0, x, model.encoder_embed_out_1_weight);
+        x = ggml_add(ctx0, x, model.encoder_embed_out_1_bias);
 
         // 6 层 Conformer
         for (int i = 0; i < 6; ++i) {
             // self-attn
-            ggml_tensor * q = ggml_mul_mat(ctx0, model.enc[i].wq, x);
+            ggml_tensor * q = ggml_mul_mat(ctx0, model.encoder_encoders_0_self_attn_linear_q_weight, x);
             ggml_tensor * k = ggml_mul_mat(ctx0, model.enc[i].wk, x);
             ggml_tensor * v = ggml_mul_mat(ctx0, model.enc[i].wv, x);
             ggml_tensor * attn = build_rel_pos_attn(q, k, v, mask);
