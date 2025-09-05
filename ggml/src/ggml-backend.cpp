@@ -61,6 +61,7 @@ size_t ggml_backend_buft_get_alloc_size(ggml_backend_buffer_type_t buft, const s
     if (buft->iface.get_alloc_size) {
         size_t size = buft->iface.get_alloc_size(buft, tensor);
         assert(size >= ggml_nbytes(tensor));
+        // GGML_LOG_INFO("&&&&&&&&&&&&&&&&& size is: %d\n", size);
         return size;
     }
     return ggml_nbytes(tensor);

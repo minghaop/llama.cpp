@@ -989,30 +989,37 @@ ggml_backend_buffer_t ggml_backend_alloc_ctx_tensors_from_buft(struct ggml_conte
 
     size_t alignment = ggml_backend_buft_get_alignment(buft);
     size_t max_size = ggml_backend_buft_get_max_size(buft);
+    // GGML_LOG_INFO("&&&&&&&&&&&&&& max_size is: %d, alignment is: %d\n", max_size, alignment);
 
     ggml_backend_buffer_t * buffers = NULL;
     size_t n_buffers = 0;
 
     size_t cur_buf_size = 0;
     struct ggml_tensor * first = ggml_get_first_tensor(ctx);
+    // GGML_LOG_INFO("&&&&&&&&&&&&&&& tensor is NULL: %d\n", first == NULL);
     for (struct ggml_tensor * t = first; t != NULL; t = ggml_get_next_tensor(ctx, t)) {
         size_t this_size = 0;
         if (t->data == NULL && t->view_src == NULL) {
             this_size = GGML_PAD(ggml_backend_buft_get_alloc_size(buft, t), alignment);
+            // GGML_LOG_INFO("&&&&&&&&&&&&& this_size is: %d\n", this_size);
+            // GGML_LOG_WARN("tensor %s: ne0=%d, ne1=%d, type=%d, raw_size=%zu, padded=%zu\n",
+            //        t->name, t->ne[0], t->ne[1], t->type, ggml_backend_buft_get_alloc_size(buft, t), this_size);
         }
-
+        
         if (cur_buf_size > 0 && (cur_buf_size + this_size) > max_size) {
             // allocate tensors in the current buffer
             if (!alloc_tensor_range(ctx, first, t, buft, cur_buf_size, &buffers, &n_buffers)) {
                 return NULL;
             }
+            // GGML_LOG_INFO("&&&&&&&&&&& check here1 !!!!!!!!!\n");
             first = t;
             cur_buf_size = this_size;
         } else {
+            // GGML_LOG_INFO("&&&&&&&&&&& check here2 !!!!!!!!!\n");
             cur_buf_size += this_size;
         }
     }
-
+    // GGML_LOG_INFO("&&&&&&&&&&&& cur_buf_size is: %d\n", cur_buf_size);
     // allocate remaining tensors
     if (cur_buf_size > 0) {
         if (!alloc_tensor_range(ctx, first, NULL, buft, cur_buf_size, &buffers, &n_buffers)) {
@@ -1024,6 +1031,7 @@ ggml_backend_buffer_t ggml_backend_alloc_ctx_tensors_from_buft(struct ggml_conte
 #ifndef NDEBUG
         GGML_LOG_DEBUG("%s: all tensors in the context are already allocated\n", __func__);
 #endif
+        // GGML_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&& n_buffers is: %d\n", n_buffers);
         return NULL;
     }
 

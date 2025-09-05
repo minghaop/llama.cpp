@@ -599,10 +599,10 @@ llama_model_loader::llama_model_loader(
     }
 
     n_kv      = gguf_get_n_kv(meta.get());
-    LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&& arch_name is: %s\n", arch_name.c_str());
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&& arch_name is: %s\n", arch_name.c_str());
     if (arch_name == "CosyVoiceFlow")
     {
-        n_tensors = 640;
+        n_tensors = 1127;
     }else {
         n_tensors = weights_map.size();
     }

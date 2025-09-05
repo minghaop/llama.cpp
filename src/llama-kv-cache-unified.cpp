@@ -32,13 +32,16 @@ llama_kv_cache_unified::llama_kv_cache_unified(
     n_seq_max(n_seq_max), n_pad(n_pad), n_swa(n_swa), swa_type(swa_type) {
 
     GGML_ASSERT(kv_size % n_pad == 0);
-    
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&& kv_size is: %d\n", kv_size);
     // TODO: this is temporary until we support passing reuse layer filters [KV_REUSE]
     auto n_layer_cache = hparams.n_layer;
     if (model.arch == LLM_ARCH_GEMMA3N) {
         n_layer_cache = 20;
     }
-    
+
+    if(model.arch == LLM_ARCH_COSYVOICEFLOW){
+        n_layer_cache = 62;
+    }
     // create a context for each buffer type
     std::map<ggml_backend_buffer_type_t, ggml_context *> ctx_map;
     auto ctx_for_buft = [&](ggml_backend_buffer_type_t buft) -> ggml_context * {
@@ -54,20 +57,18 @@ llama_kv_cache_unified::llama_kv_cache_unified(
             if (!ctx) {
                 return nullptr;
             }
-
+            
             ctx_map[buft] = ctx;
             ctxs.emplace_back(ctx);
 
             return ctx;
         }
-
         return it->second;
     };
 
     head = 0;
 
     cells.resize(kv_size);
-    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&& %s: kv_size = %u\n", __func__, n_layer_cache);
     for (uint32_t il = 0; il < n_layer_cache; il++) {
         if (filter && !filter(il)) {
             LLAMA_LOG_DEBUG("%s: layer %3d: skipped\n", __func__, il);
@@ -76,8 +77,7 @@ llama_kv_cache_unified::llama_kv_cache_unified(
 
         const uint32_t n_embd_k_gqa = hparams.n_embd_k_gqa(il);
         const uint32_t n_embd_v_gqa = hparams.n_embd_v_gqa(il);
-        // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&& %s: n_embd_k_gqa = %u\n", __func__, n_embd_k_gqa);
-        // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&& %s: n_embd_v_gqa = %u\n", __func__, n_embd_v_gqa);
+        // LLAMA_LOG_INFO("&&&&&&&&&&&& n_embd_k_gqa is: %d\n", n_embd_k_gqa);
         const char * dev_name = "CPU";
 
         ggml_backend_buffer_type_t buft = ggml_backend_cpu_buffer_type();
@@ -89,19 +89,19 @@ llama_kv_cache_unified::llama_kv_cache_unified(
             dev_name = ggml_backend_dev_name(dev);
         }
 
-        LLAMA_LOG_DEBUG("%s: layer %3d: dev = %s\n", __func__, il, dev_name);
-
         ggml_context * ctx = ctx_for_buft(buft);
+
         if (!ctx) {
             throw std::runtime_error("failed to create ggml context for kv cache");
         }
 
+        
         ggml_tensor * k;
         ggml_tensor * v;
 
         k = ggml_new_tensor_2d(ctx, type_k, n_embd_k_gqa, kv_size);
         v = ggml_new_tensor_2d(ctx, type_v, n_embd_v_gqa, kv_size);
-
+        // LLAMA_LOG_INFO("&&&&&&&&&&&& create layer %d, k v size is: %d, n_embd_k_gqa is: %d, type_k is: %d\n", il, kv_size, n_embd_v_gqa, type_k);
         ggml_format_name(k, "cache_k_l%d", il);
         ggml_format_name(v, "cache_v_l%d", il);
 
@@ -135,6 +135,8 @@ llama_kv_cache_unified::llama_kv_cache_unified(
         auto * ctx  = it.second;
 
         ggml_backend_buffer_t buf = ggml_backend_alloc_ctx_tensors_from_buft(ctx, buft);
+        // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&& buf is nullptr : %d\n", buf == nullptr);
+        // LLAMA_LOG_INFO("%s: KV buffer requested = %.2f MiB\n", __func__, ggml_backend_buffer_get_size(buf)/1024.0/1024.0);
         if (!buf) {
             throw std::runtime_error("failed to allocate buffer for kv cache");
         }
