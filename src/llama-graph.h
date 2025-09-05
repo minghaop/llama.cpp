@@ -94,6 +94,16 @@ public:
     ggml_tensor * embd   = nullptr; // F32 [n_embd, n_batch]
 };
 
+// class llm_graph_spk_embd : public llm_graph_input_i {
+// public:
+//     llm_graph_spk_embd()            = default;
+//     virtual ~llm_graph_input_embd() = default;
+    
+//     void set_input(const llm_ubatch * ubatch) override;
+    
+//     ggml_tensor * spk_embd = nullptr;
+// };
+
 class llm_graph_input_pos : public llm_graph_input_i {
 public:
     llm_graph_input_pos(uint32_t n_pos_per_embd) : n_pos_per_embd(n_pos_per_embd) {}
@@ -556,6 +566,9 @@ struct llm_graph_context {
     ggml_tensor * build_inp_pos_bucket_enc() const;
     ggml_tensor * build_inp_pos_bucket_dec() const;
     ggml_tensor * build_pos_bias(ggml_tensor * pos_bucket, ggml_tensor * attn_rel_b) const;
+
+    //CosyVoiceFlow
+    ggml_tensor * build_inp_spk_embd(ggml_tensor * spk_embd_weight, ggml_tensor * spk_embd_bias) const;
 
     //
     // attention

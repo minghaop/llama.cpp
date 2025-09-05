@@ -10,17 +10,20 @@ void llama_hparams::set_swa_pattern(uint32_t n_pattern) {
 }
 
 bool llama_hparams::is_swa_any() const {
+    // LLAMA_LOG_INFO("&&&&&&&&&&&& n_layer is: %d\n", n_layer);
+    if (use_flow) {
+        return false;
+    }
     for (uint32_t il = 0; il < n_layer; ++il) {
         if (swa_layers[il]) {
             return true;
         }
     }
-
     return false;
 }
 
 uint32_t llama_hparams::n_head(uint32_t il) const {
-    LLAMA_LOG_INFO("&&&&&&&&&& il is: %d, n_layer is: %d\n", il, n_layer);
+    // LLAMA_LOG_INFO("&&&&&&&&&& il is: %d, n_layer is: %d\n", il, n_layer);
     if (il < n_layer) {
         return n_head_arr[il];
     }
@@ -56,15 +59,26 @@ uint32_t llama_hparams::n_gqa(uint32_t il) const {
 }
 
 uint32_t llama_hparams::n_embd_k_gqa(uint32_t il) const {
-    const uint32_t n_head_kv = this->n_head_kv(il);
+    if (use_flow) {
+        return 512;
 
-    return n_embd_head_k * n_head_kv;
+    } else {
+        const uint32_t n_head_kv = this->n_head_kv(il);
+
+        return n_embd_head_k * n_head_kv;
+    }
+    
 }
 
 uint32_t llama_hparams::n_embd_v_gqa(uint32_t il) const {
-    const uint32_t n_head_kv = this->n_head_kv(il);
+    if (use_flow) {
+        return 512;
+    } else {
+        const uint32_t n_head_kv = this->n_head_kv(il);
 
-    return n_embd_head_v * n_head_kv;
+        return n_embd_head_v * n_head_kv;
+    }
+    
 }
 
 uint32_t llama_hparams::n_embd_r() const {

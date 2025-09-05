@@ -703,14 +703,13 @@ static size_t ggml_backend_cuda_buffer_type_get_alignment(ggml_backend_buffer_ty
 static size_t ggml_backend_cuda_buffer_type_get_alloc_size(ggml_backend_buffer_type_t buft, const ggml_tensor * tensor) {
     size_t size = ggml_nbytes(tensor);
     int64_t ne0 = tensor->ne[0];
-
+    // GGML_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&& ne0 is: %d\n", ne0);
     if (ggml_is_quantized(tensor->type)) {
         if (ne0 % MATRIX_ROW_PADDING != 0) {
             GGML_ASSERT(tensor->nb[0] == ggml_element_size(tensor));
             size += ggml_row_size(tensor->type, MATRIX_ROW_PADDING - ne0 % MATRIX_ROW_PADDING);
         }
     }
-
     return size;
 
     GGML_UNUSED(buft);
@@ -1006,7 +1005,7 @@ static size_t ggml_backend_cuda_split_buffer_type_get_alloc_size(ggml_backend_bu
     size_t total_size = 0;
 
     const int64_t ne0 = tensor->ne[0];
-
+    
     for (int id = 0; id < ggml_backend_cuda_get_device_count(); ++id) {
         int64_t row_low, row_high;
         get_row_split(&row_low, &row_high, tensor, ctx->tensor_split, id);

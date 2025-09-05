@@ -1189,7 +1189,7 @@ size_t ggml_nbytes(const struct ggml_tensor * tensor) {
             return 0;
         }
     }
-
+    // GGML_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&& ggml_nbytes\n");
     size_t nbytes;
     const size_t blck_size = ggml_blck_size(tensor->type);
     if (blck_size == 1) {
