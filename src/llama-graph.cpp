@@ -776,20 +776,6 @@ ggml_tensor * llm_graph_context::build_moe_ffn(
     return moe_out;
 }
 
-// void print_ggml_tensor(ggml_tensor* t) {
-//     GGML_ASSERT(t->type == GGML_TYPE_F32);  // 确保为浮点张量
-//     const float* data = (float*)t->data;
-//     const int64_t cols = t->ne[0], rows = t->ne[1];
-    
-//     for (int i = 0; i < rows; ++i) {
-//         for (int j = 0; j < cols; ++j) {
-//             size_t offset = i * (t->nb[1] / sizeof(float)) + j;
-//             LLAMA_LOG_DEBUG("***************************** %8.4f ", data[offset]);  // 格式化输出
-//         }
-//         // LLAMA_LOG_DEBUG("\n");
-//     }
-// }
-
 // input embeddings with optional lora
 ggml_tensor * llm_graph_context::build_inp_embd(ggml_tensor * tok_embd) const {
     const int64_t n_embd = hparams.n_embd;
@@ -826,13 +812,9 @@ ggml_tensor * llm_graph_context::build_inp_embd(ggml_tensor * tok_embd) const {
     } else {
         inp->embd = ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, n_embd, ubatch.n_tokens);
         ggml_backend_buffer_t buf = ggml_backend_alloc_ctx_tensors(ctx0, backend_cpu);
-        // LLAMA_LOG_INFO("build_inp_embd after buf **********************************************************************\n");
-        // LLAMA_LOG_INFO("************************ ubatch.n_tokens is: %d\n", ubatch.n_tokens);
         ggml_set_input(inp->embd);
-        // LLAMA_LOG_INFO("************************ inp->embd ne[0] is: %d, ne[1] is: %d\n", inp->embd->ne[0], inp->embd->ne[1]);
         ggml_backend_tensor_set(inp->embd, ubatch.embd, 0, ubatch.n_tokens*n_embd*ggml_element_size(inp->embd));
         cur = inp->embd;
-        // LLAMA_LOG_INFO("build_inp_embd **********************************************************************\n");
     }
 
     // For Granite architecture
@@ -842,9 +824,28 @@ ggml_tensor * llm_graph_context::build_inp_embd(ggml_tensor * tok_embd) const {
 
     cb(cur, "inp_embd", -1);
     res->add_input(std::move(inp));
-    //  LLAMA_LOG_INFO("********************************************************************** %s, ubatch.n_tokens is: %d\n", __func__, ubatch.n_tokens);
     return cur;
 }
+
+ggml_tensor * llm_graph_context::build_inp_speaker(ggml_tensor * spk_embd_weight, ggml_tensor * spk_embd_bias) const {
+
+    const int64_t spk_input = hparams.spk_embed_dim;
+    
+    auto inp = std::make_unique<llm_graph_spk_embd>();
+
+    ggml_tensor * cur = nullptr;
+
+    inp->spk_embd = ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, spk_input, 1);
+    ggml_backend_buffer_t buf = ggml_backend_alloc_ctx_tensors(ctx0, backend_cpu);
+    ggml_set_input(inp->embd);
+    ggml_backend_tensor_set(inp->embd, ubatch.embd, 0, ubatch.n_tokens*n_embd*ggml_element_size(inp->embd));
+    cur = inp->embd;
+    cb(cur, "inp_embd", -1);
+    res->add_input(std::move(inp));
+    return cur;
+}
+
+
 
 ggml_tensor * llm_graph_context::build_inp_pos() const {
     auto inp = std::make_unique<llm_graph_input_pos>(hparams.n_pos_per_embd());

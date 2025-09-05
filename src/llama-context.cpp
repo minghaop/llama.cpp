@@ -194,7 +194,7 @@ llama_context::llama_context(
             /*.type_v   =*/ params.type_v,
             /*.swa_full =*/ params.swa_full,
         };
-        
+        // LLAMA_LOG_INFO("&&&&&&&&&&&&& create_memory !!!!!!!!!!!!!!!!\n");
         memory.reset(model.create_memory(params_mem, cparams));
     }
 
@@ -229,6 +229,7 @@ llama_context::llama_context(
         LLAMA_LOG_DEBUG("%s: max_nodes = %zu\n", __func__, max_nodes);
 
         // buffer used to store the computation graph and the tensor meta data
+        // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& cap is : %d\n", ggml_tensor_overhead()*max_nodes + ggml_graph_overhead_custom(max_nodes, false));
         buf_compute_meta.resize(ggml_tensor_overhead()*max_nodes + ggml_graph_overhead_custom(max_nodes, false));
 
         // TODO: move these checks to ggml_backend_sched
@@ -239,7 +240,7 @@ llama_context::llama_context(
             model.params.split_mode == LLAMA_SPLIT_MODE_LAYER &&
             cparams.offload_kqv &&
             !model.has_tensor_overrides();
-
+        // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& check here1  !!!!!!!!!!!!\n");
         // pipeline parallelism requires support for async compute and events in all devices
         if (pipeline_parallel) {
             for (auto & backend : backends) {
@@ -258,14 +259,14 @@ llama_context::llama_context(
                 }
             }
         }
-
+        // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& check here2 !!!!!!!!!!!!\n");
         sched.reset(ggml_backend_sched_new(backend_ptrs.data(), backend_buft.data(), backend_ptrs.size(), max_nodes, pipeline_parallel, cparams.op_offload));
 
         if (pipeline_parallel) {
             LLAMA_LOG_INFO("%s: pipeline parallelism enabled (n_copies=%d)\n", __func__, ggml_backend_sched_get_n_copies(sched.get()));
         }
     }
-
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& check here3 !!!!!!!!!!!!\n");
     // reserve worst-case graph
     if (!hparams.vocab_only && memory) {
         const uint32_t n_seqs = cparams.n_seq_max;
@@ -329,13 +330,13 @@ llama_context::llama_context(
                         size / 1024.0 / 1024.0);
             }
         }
-
+        // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& check here4 !!!!!!!!!!!!\n");
         if (n_nodes_pp == n_nodes_tg) {
             LLAMA_LOG_INFO("%s: graph nodes  = %d\n", __func__, n_nodes_pp);
         } else {
             LLAMA_LOG_INFO("%s: graph nodes  = %d (with bs=%d), %d (with bs=1)\n", __func__, n_nodes_pp, n_tokens, n_nodes_tg);
         }
-
+        // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& check here5 !!!!!!!!!!!!\n");
         if (n_splits_pp == n_splits_tg) {
             LLAMA_LOG_INFO("%s: graph splits = %d\n", __func__, n_splits_pp);
         } else {
@@ -694,15 +695,15 @@ llm_graph_result_ptr llama_context::process_ubatch(const llama_ubatch & ubatch, 
         ret = GGML_STATUS_FAILED;
         return nullptr;
     }
-    //LLAMA_LOG_INFO("############################################################################################################################## %s\n", __func__);
+    
     auto res = graph_build(ctx_compute.get(), gf, ubatch, gtype, mctx);
     if (!res) {
         LLAMA_LOG_ERROR("%s: failed to build graph\n", __func__);
         ret = GGML_STATUS_FAILED;
         return nullptr;
     }
-    //LLAMA_LOG_INFO("############################################################################################################################## %s\n", __func__);
-    // LLAMA_LOG_INFO("graph build time: %.3f ms (%d nodes, %d leafs)\n", (ggml_time_us() - t_start_us)/1000.0, gf->n_nodes, gf->n_leafs);
+    
+    
 
     if (!ggml_backend_sched_alloc_graph(sched.get(), gf)) {
         LLAMA_LOG_ERROR("%s: failed to allocate graph\n", __func__);
@@ -892,14 +893,7 @@ int llama_context::encode(const llama_batch & batch_inp) {
 }
 
 int llama_context::decode(const llama_batch & batch_inp) {
-    //LLAMA_LOG_INFO("##############################################################################################################################\n");
     GGML_ASSERT((!batch_inp.token && batch_inp.embd) || (batch_inp.token && !batch_inp.embd)); // NOLINT
-    // for (int i = 0; i < batch_inp.n_tokens; i++) {
-    //     LLAMA_LOG_DEBUG(" batch_inp.token[%d] = %d ", i, batch_inp.token ? batch_inp.token[i] : -1);
-    //     for (int j = 0; j < 3; j++) {
-    //         LLAMA_LOG_DEBUG(" batch_inp.embd[%d][%d] = %d ", i, j, batch_inp.embd[i *3 + j]);
-    //     }
-    // }
     if (!memory) {
         LLAMA_LOG_DEBUG("%s: cannot decode batches with this context (calling encode() instead)\n", __func__);
         return encode(batch_inp);

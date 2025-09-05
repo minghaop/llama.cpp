@@ -503,6 +503,7 @@ void llama_model::load_hparams(llama_model_loader & ml) {
         // // ml.get_key(LLM_KV_DECODER_TRAIN_CFG_RATE, hparams.decoder_training_cfg_rate);
         
         // std::fill(hparams.decoder_channels.begin(), hparams.decoder_channels.end(), 256);
+        // std::fill(hparams.swa_layers.begin(), hparams.swa_layers.end(), 0);
         
     }
     else {
@@ -1787,7 +1788,7 @@ bool llama_model::load_tensors(llama_model_loader & ml) {
 
     int n_layer = hparams.n_layer;
     if (hparams.use_flow){
-        n_layer = 640;
+        n_layer = 1127;
         hparams.n_layer = n_layer;
     }else {
         n_layer = hparams.n_layer;
@@ -1849,7 +1850,7 @@ bool llama_model::load_tensors(llama_model_loader & ml) {
         // LLAMA_LOG_DEBUG("load_tensors: layer %3d assigned to device %s, is_swa = %d\n", il, ggml_backend_dev_name(dev), is_swa);
         return {dev, &pimpl->gpu_buft_list.at(dev)};
     };
-    LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&& check flow begin ok!!!!!!!!!!!!!!!!!!!\n");
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&& check flow begin ok!!!!!!!!!!!!!!!!!!!\n");
     // assign the input layer
     // there is very little benefit to offloading the input layer, so always keep it on the CPU
     pimpl->dev_input = { cpu_dev, &pimpl->cpu_buft_list };
@@ -2023,7 +2024,7 @@ bool llama_model::load_tensors(llama_model_loader & ml) {
                     throw std::runtime_error(format("failed to find a compatible buffer type for tensor %s", tn.str().c_str()));
                 }
             }
-            // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&& check create_tensor func5\n");
+            
             // avoid using a host buffer when using mmap
             auto * buft_dev = ggml_backend_buft_get_device(buft);
             if (ml.use_mmap && buft_dev && buft == ggml_backend_dev_host_buffer_type(buft_dev)) {
@@ -2052,12 +2053,14 @@ bool llama_model::load_tensors(llama_model_loader & ml) {
                     return t;
                 }
             }
+            // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&& check create_tensor func5\n");
             return ml.create_tensor(ctx, tn, ne, flags);
         };
         layers.resize(n_layer);
         // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&& check flow swicth ok!!!!!!!!!!!!!!!!!!!\n");
         // TODO: move to a separate function
         const auto tn = LLM_TN(arch);
+        // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& check here !!!!!!!!\n");
         switch (arch) {
             case LLM_ARCH_LLAMA:
             case LLM_ARCH_REFACT:
@@ -5113,759 +5116,1249 @@ bool llama_model::load_tensors(llama_model_loader & ml) {
                 } break;
             case LLM_ARCH_COSYVOICEFLOW:
                 {
-                    input_embedding_weight = create_tensor(tn(LLM_TENSOR_INPUT_EMBEDDING_WEIGHT, "weight"), {512, 6561}, 0);
-                    spk_embed_affine_layer_weight = create_tensor(tn(LLM_TENSOR_SPK_EMBED_AFFINE_LAYER_WEIGHT, "weight", 0), {192, 80}, 0);
-                    encoder_embed_out_0_weight = create_tensor(tn(LLM_TENSOR_ENCODER_EMBED_OUT_0_WEIGHT, "weight", 1), {512, 512}, 0);
-                    encoder_embed_out_1_weight = create_tensor(tn(LLM_TENSOR_ENCODER_EMBED_OUT_1_WEIGHT, "weight", 2), {512}, 0);
-                    encoder_after_norm_weight = create_tensor(tn(LLM_TENSOR_ENCODER_AFTER_NORM_WEIGHT, "weight",3), {512}, 0);
-                    encoder_pre_lookahead_layer_conv1_weight = create_tensor(tn(LLM_TENSOR_ENCODER_PRE_LOOKAHEAD_LAYER_CONV1_WEIGHT, "weight",4), {4, 512, 512}, 0);
-                    encoder_pre_lookahead_layer_conv2_weight = create_tensor(tn(LLM_TENSOR_ENCODER_PRE_LOOKAHEAD_LAYER_CONV2_WEIGHT, "weight",5), {3, 512, 512}, 0);
-
-                    encoder_encoders_0_self_attn_linear_q_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_0_SELF_ATTN_LINEAR_Q_WEIGHT, "weight",6), {512, 512}, 0);
-                    encoder_encoders_0_self_attn_linear_k_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_0_SELF_ATTN_LINEAR_K_WEIGHT, "weight",7), {512, 512}, 0);
                     
-                    encoder_encoders_0_self_attn_linear_v_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_0_SELF_ATTN_LINEAR_V_WEIGHT, "weight", 8), {512, 512}, 0);
-                    encoder_encoders_0_self_attn_linear_out_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_0_SELF_ATTN_LINEAR_OUT_WEIGHT, "weight", 9), {512, 512}, 0);
-                    encoder_encoders_0_self_attn_linear_pos_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_0_SELF_ATTN_LINEAR_POS_WEIGHT, "weight", 10), {512, 512}, 0);
-                    encoder_encoders_0_feed_forward_w_1_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_0_FEED_FORWARD_W_1_WEIGHT, "weight", 11), {512, 2048}, 0);
-                    encoder_encoders_0_feed_forward_w_2_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_0_FEED_FORWARD_W_2_WEIGHT, "weight", 12), {2048, 512}, 0);
-                    encoder_encoders_0_norm_ff_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_0_NORM_FF_WEIGHT, "weight", 13), {512}, 0);
-                    encoder_encoders_0_norm_mha_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_0_NORM_MHA_WEIGHT, "weight", 14), {512}, 0);
-
-                    encoder_encoders_1_self_attn_linear_q_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_1_SELF_ATTN_LINEAR_Q_WEIGHT, "weight", 15), {512, 512}, 0);
-                    encoder_encoders_1_self_attn_linear_k_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_1_SELF_ATTN_LINEAR_K_WEIGHT, "weight", 16), {512, 512}, 0);
-                    encoder_encoders_1_self_attn_linear_v_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_1_SELF_ATTN_LINEAR_V_WEIGHT, "weight", 17), {512, 512}, 0);
-                    encoder_encoders_1_self_attn_linear_out_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_1_SELF_ATTN_LINEAR_OUT_WEIGHT, "weight", 18), {512, 512}, 0);
-                    encoder_encoders_1_self_attn_linear_pos_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_1_SELF_ATTN_LINEAR_POS_WEIGHT, "weight", 19), {512, 512}, 0);
-                    encoder_encoders_1_feed_forward_w_1_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_1_FEED_FORWARD_W_1_WEIGHT, "weight", 20), {512, 2048}, 0);
-                    encoder_encoders_1_feed_forward_w_2_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_1_FEED_FORWARD_W_2_WEIGHT, "weight", 21), {2048, 512}, 0);
-                    encoder_encoders_1_norm_ff_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_1_NORM_FF_WEIGHT, "weight", 22), {512}, 0);
-                    encoder_encoders_1_norm_mha_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_1_NORM_MHA_WEIGHT, "weight", 23), {512}, 0);
-
-                    encoder_encoders_2_self_attn_linear_q_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_2_SELF_ATTN_LINEAR_Q_WEIGHT, "weight", 24), {512, 512}, 0);
-                    encoder_encoders_2_self_attn_linear_k_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_2_SELF_ATTN_LINEAR_K_WEIGHT, "weight", 25), {512, 512}, 0);
-                    encoder_encoders_2_self_attn_linear_v_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_2_SELF_ATTN_LINEAR_V_WEIGHT, "weight", 26), {512, 512}, 0);
-                    encoder_encoders_2_self_attn_linear_out_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_2_SELF_ATTN_LINEAR_OUT_WEIGHT, "weight", 27), {512, 512}, 0);
-                    encoder_encoders_2_self_attn_linear_pos_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_2_SELF_ATTN_LINEAR_POS_WEIGHT, "weight", 28), {512, 512}, 0);
-                    encoder_encoders_2_feed_forward_w_1_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_2_FEED_FORWARD_W_1_WEIGHT, "weight", 29), {512, 2048}, 0);
-                    encoder_encoders_2_feed_forward_w_2_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_2_FEED_FORWARD_W_2_WEIGHT, "weight", 30), {2048, 512}, 0);
-                    encoder_encoders_2_norm_ff_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_2_NORM_FF_WEIGHT, "weight", 31), {512}, 0);
-                    encoder_encoders_2_norm_mha_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_2_NORM_MHA_WEIGHT, "weight", 32), {512}, 0);
-
-                    encoder_encoders_3_self_attn_linear_q_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_3_SELF_ATTN_LINEAR_Q_WEIGHT, "weight", 33), {512, 512}, 0);
-                    encoder_encoders_3_self_attn_linear_k_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_3_SELF_ATTN_LINEAR_K_WEIGHT, "weight", 34), {512, 512}, 0);
-                    encoder_encoders_3_self_attn_linear_v_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_3_SELF_ATTN_LINEAR_V_WEIGHT, "weight", 35), {512, 512}, 0);
-                    encoder_encoders_3_self_attn_linear_out_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_3_SELF_ATTN_LINEAR_OUT_WEIGHT, "weight", 36), {512, 512}, 0);
-                    encoder_encoders_3_self_attn_linear_pos_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_3_SELF_ATTN_LINEAR_POS_WEIGHT, "weight", 37), {512, 512}, 0);
-                    encoder_encoders_3_feed_forward_w_1_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_3_FEED_FORWARD_W_1_WEIGHT, "weight", 38), {512, 2048}, 0);
-                    encoder_encoders_3_feed_forward_w_2_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_3_FEED_FORWARD_W_2_WEIGHT, "weight", 39), {2048, 512}, 0);
-                    encoder_encoders_3_norm_ff_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_3_NORM_FF_WEIGHT, "weight", 40), {512}, 0);
-                    encoder_encoders_3_norm_mha_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_3_NORM_MHA_WEIGHT, "weight", 41), {512}, 0);
-
-                    encoder_encoders_4_self_attn_linear_q_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_4_SELF_ATTN_LINEAR_Q_WEIGHT, "weight", 42), {512, 512}, 0);
-                    encoder_encoders_4_self_attn_linear_k_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_4_SELF_ATTN_LINEAR_K_WEIGHT, "weight", 43), {512, 512}, 0);
-                    encoder_encoders_4_self_attn_linear_v_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_4_SELF_ATTN_LINEAR_V_WEIGHT, "weight", 44), {512, 512}, 0);
-                    encoder_encoders_4_self_attn_linear_out_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_4_SELF_ATTN_LINEAR_OUT_WEIGHT, "weight", 45), {512, 512}, 0);
-                    encoder_encoders_4_self_attn_linear_pos_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_4_SELF_ATTN_LINEAR_POS_WEIGHT, "weight", 46), {512, 512}, 0);
-                    encoder_encoders_4_feed_forward_w_1_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_4_FEED_FORWARD_W_1_WEIGHT, "weight", 47), {512, 2048}, 0);
-                    encoder_encoders_4_feed_forward_w_2_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_4_FEED_FORWARD_W_2_WEIGHT, "weight", 48), {2048, 512}, 0);
-                    encoder_encoders_4_norm_ff_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_4_NORM_FF_WEIGHT, "weight", 49), {512}, 0);
-                    encoder_encoders_4_norm_mha_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_4_NORM_MHA_WEIGHT, "weight", 50), {512}, 0);
-
-                    encoder_encoders_5_self_attn_linear_q_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_5_SELF_ATTN_LINEAR_Q_WEIGHT, "weight", 51), {512, 512}, 0);
-                    encoder_encoders_5_self_attn_linear_k_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_5_SELF_ATTN_LINEAR_K_WEIGHT, "weight", 52), {512, 512}, 0);
-                    encoder_encoders_5_self_attn_linear_v_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_5_SELF_ATTN_LINEAR_V_WEIGHT, "weight", 53), {512, 512}, 0);
-                    encoder_encoders_5_self_attn_linear_out_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_5_SELF_ATTN_LINEAR_OUT_WEIGHT, "weight", 54), {512, 512}, 0);
-                    encoder_encoders_5_self_attn_linear_pos_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_5_SELF_ATTN_LINEAR_POS_WEIGHT, "weight", 55), {512, 512}, 0);
-                    encoder_encoders_5_feed_forward_w_1_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_5_FEED_FORWARD_W_1_WEIGHT, "weight", 56), {512, 2048}, 0);
-                    encoder_encoders_5_feed_forward_w_2_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_5_FEED_FORWARD_W_2_WEIGHT, "weight", 57), {2048, 512}, 0);
-                    encoder_encoders_5_norm_ff_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_5_NORM_FF_WEIGHT, "weight", 58), {512}, 0);
-                    encoder_encoders_5_norm_mha_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_5_NORM_MHA_WEIGHT, "weight", 59), {512}, 0);
-
-                    encoder_up_layer_conv_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_LAYER_CONV_WEIGHT, "weight", 60), {5, 512, 512}, 0);
-                    encoder_up_embed_out_0_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_EMBED_OUT_0_WEIGHT, "weight", 61), {512, 512}, 0);
-                    encoder_up_embed_out_1_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_EMBED_OUT_1_WEIGHT, "weight", 62), {512}, 0);
-
-                    encoder_up_encoders_0_self_attn_linear_q_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_0_SELF_ATTN_LINEAR_Q_WEIGHT, "weight", 63,6), {512, 512}, 0);
-                    encoder_up_encoders_0_self_attn_linear_k_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_0_SELF_ATTN_LINEAR_K_WEIGHT, "weight", 64,7), {512, 512}, 0);
-                    encoder_up_encoders_0_self_attn_linear_v_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_0_SELF_ATTN_LINEAR_V_WEIGHT, "weight", 65,8), {512, 512}, 0);
-                    encoder_up_encoders_0_self_attn_linear_out_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_0_SELF_ATTN_LINEAR_OUT_WEIGHT, "weight", 66,9), {512, 512}, 0);
-                    encoder_up_encoders_0_self_attn_linear_pos_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_0_SELF_ATTN_LINEAR_POS_WEIGHT, "weight", 67,10), {512, 512}, 0);
-                    encoder_up_encoders_0_feed_forward_w_1_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_0_FEED_FORWARD_W_1_WEIGHT, "weight", 68), {512, 2048}, 0);
-                    encoder_up_encoders_0_feed_forward_w_2_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_0_FEED_FORWARD_W_2_WEIGHT, "weight", 69), {2048, 512}, 0);
-                    encoder_up_encoders_0_norm_ff_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_0_NORM_FF_WEIGHT, "weight", 70), {512}, 0);
-                    encoder_up_encoders_0_norm_mha_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_0_NORM_MHA_WEIGHT, "weight", 71), {512}, 0);
-
-                    encoder_up_encoders_1_self_attn_linear_q_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_1_SELF_ATTN_LINEAR_Q_WEIGHT, "weight", 72), {512, 512}, 0);
-                    encoder_up_encoders_1_self_attn_linear_k_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_1_SELF_ATTN_LINEAR_K_WEIGHT, "weight", 73), {512, 512}, 0);
-                    encoder_up_encoders_1_self_attn_linear_v_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_1_SELF_ATTN_LINEAR_V_WEIGHT, "weight", 74), {512, 512}, 0);
-                    encoder_up_encoders_1_self_attn_linear_out_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_1_SELF_ATTN_LINEAR_OUT_WEIGHT, "weight", 75), {512, 512}, 0);
-                    encoder_up_encoders_1_self_attn_linear_pos_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_1_SELF_ATTN_LINEAR_POS_WEIGHT, "weight", 76), {512, 512}, 0);
-                    encoder_up_encoders_1_feed_forward_w_1_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_1_FEED_FORWARD_W_1_WEIGHT, "weight", 77), {512, 2048}, 0);
-                    encoder_up_encoders_1_feed_forward_w_2_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_1_FEED_FORWARD_W_2_WEIGHT, "weight", 78), {2048, 512}, 0);
-                    encoder_up_encoders_1_norm_ff_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_1_NORM_FF_WEIGHT, "weight", 79), {512}, 0);
-                    encoder_up_encoders_1_norm_mha_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_1_NORM_MHA_WEIGHT, "weight", 80), {512}, 0);
-
-                    encoder_up_encoders_2_self_attn_linear_q_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_2_SELF_ATTN_LINEAR_Q_WEIGHT, "weight", 81), {512, 512}, 0);
-                    encoder_up_encoders_2_self_attn_linear_k_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_2_SELF_ATTN_LINEAR_K_WEIGHT, "weight", 82), {512, 512}, 0);
-                    encoder_up_encoders_2_self_attn_linear_v_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_2_SELF_ATTN_LINEAR_V_WEIGHT, "weight", 83), {512, 512}, 0);
-                    encoder_up_encoders_2_self_attn_linear_out_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_2_SELF_ATTN_LINEAR_OUT_WEIGHT, "weight", 84), {512, 512}, 0);
-                    encoder_up_encoders_2_self_attn_linear_pos_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_2_SELF_ATTN_LINEAR_POS_WEIGHT, "weight", 85), {512, 512}, 0);
-                    encoder_up_encoders_2_feed_forward_w_1_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_2_FEED_FORWARD_W_1_WEIGHT, "weight", 86), {512, 2048}, 0);
-                    encoder_up_encoders_2_feed_forward_w_2_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_2_FEED_FORWARD_W_2_WEIGHT, "weight", 87), {2048, 512}, 0);
-                    encoder_up_encoders_2_norm_ff_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_2_NORM_FF_WEIGHT, "weight", 88), {512}, 0);
-                    encoder_up_encoders_2_norm_mha_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_2_NORM_MHA_WEIGHT, "weight", 89), {512}, 0);
-
-                    encoder_up_encoders_3_self_attn_linear_q_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_3_SELF_ATTN_LINEAR_Q_WEIGHT, "weight", 90), {512, 512}, 0);
-                    encoder_up_encoders_3_self_attn_linear_k_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_3_SELF_ATTN_LINEAR_K_WEIGHT, "weight", 91), {512, 512}, 0);
-                    encoder_up_encoders_3_self_attn_linear_v_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_3_SELF_ATTN_LINEAR_V_WEIGHT, "weight", 92), {512, 512}, 0);
-                    encoder_up_encoders_3_self_attn_linear_out_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_3_SELF_ATTN_LINEAR_OUT_WEIGHT, "weight", 93), {512, 512}, 0);
-                    encoder_up_encoders_3_self_attn_linear_pos_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_3_SELF_ATTN_LINEAR_POS_WEIGHT, "weight", 94), {512, 512}, 0);
-                    encoder_up_encoders_3_feed_forward_w_1_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_3_FEED_FORWARD_W_1_WEIGHT, "weight", 95), {512, 2048}, 0);
-                    encoder_up_encoders_3_feed_forward_w_2_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_3_FEED_FORWARD_W_2_WEIGHT, "weight", 96), {2048, 512}, 0);
-                    encoder_up_encoders_3_norm_ff_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_3_NORM_FF_WEIGHT, "weight", 97), {512}, 0);
-                    encoder_up_encoders_3_norm_mha_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_3_NORM_MHA_WEIGHT, "weight", 98), {512}, 0);
-
-                    encoder_proj_weight = create_tensor(tn(LLM_TENSOR_ENCODER_PROJ_WEIGHT, "weight", 99), {512, 80}, 0);
-
-                    decoder_estimator_time_mlp_linear_1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_TIME_MLP_LINEAR_1_WEIGHT, "weight", 100), {320, 1024}, 0);
-                    decoder_estimator_time_mlp_linear_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_TIME_MLP_LINEAR_2_WEIGHT, "weight", 101), {1024, 1024}, 0);
-
-                    decoder_estimator_down_blocks_0_0_mlp_1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_0_MLP_1_WEIGHT, "weight", 102), {1024, 256}, 0);
-
-                    decoder_estimator_down_blocks_0_0_block1_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_0_BLOCK1_BLOCK_0_WEIGHT, "weight", 103), {3, 320, 256}, 0);
-                    decoder_estimator_down_blocks_0_0_block1_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_0_BLOCK1_BLOCK_2_WEIGHT, "weight", 104), {256}, 0);
-                    decoder_estimator_down_blocks_0_0_block2_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_0_BLOCK2_BLOCK_0_WEIGHT, "weight", 105), {3, 256, 256}, 0);
-                    decoder_estimator_down_blocks_0_0_block2_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_0_BLOCK2_BLOCK_2_WEIGHT, "weight", 106), {256}, 0);
-
-                    decoder_estimator_down_blocks_0_0_res_conv_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_0_RES_CONV_WEIGHT, "weight", 107), {1, 320, 256}, 0);
-
-                    decoder_estimator_down_blocks_0_1_0_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_0_NORM1_WEIGHT, "weight", 108), {256}, 0);
-                    decoder_estimator_down_blocks_0_1_0_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_0_ATTN1_TO_Q_WEIGHT, "weight", 109), {256, 512}, 0);
-                    decoder_estimator_down_blocks_0_1_0_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_0_ATTN1_TO_K_WEIGHT, "weight", 110), {256, 512}, 0);
-                    decoder_estimator_down_blocks_0_1_0_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_0_ATTN1_TO_V_WEIGHT, "weight", 111), {256, 512}, 0);
-                    decoder_estimator_down_blocks_0_1_0_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_0_ATTN1_TO_OUT_0_WEIGHT, "weight", 112), {512, 256}, 0);
-                    decoder_estimator_down_blocks_0_1_0_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_0_NORM3_WEIGHT, "weight", 113), {256}, 0);
-                    decoder_estimator_down_blocks_0_1_0_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_0_FF_NET_0_PROJ_WEIGHT, "weight", 114), {256, 1024}, 0);
-                    decoder_estimator_down_blocks_0_1_0_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_0_FF_NET_2_WEIGHT, "weight", 115), {1024, 256}, 0);
-
-                    decoder_estimator_down_blocks_0_1_1_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_1_NORM1_WEIGHT, "weight", 116), {256}, 0);
-                    decoder_estimator_down_blocks_0_1_1_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_1_ATTN1_TO_Q_WEIGHT, "weight", 117), {256, 512}, 0);
-                    decoder_estimator_down_blocks_0_1_1_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_1_ATTN1_TO_K_WEIGHT, "weight", 118), {256, 512}, 0);
-                    decoder_estimator_down_blocks_0_1_1_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_1_ATTN1_TO_V_WEIGHT, "weight", 119), {256, 512}, 0);
-                    decoder_estimator_down_blocks_0_1_1_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_1_ATTN1_TO_OUT_0_WEIGHT, "weight", 120), {512, 256}, 0);
-                    decoder_estimator_down_blocks_0_1_1_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_1_NORM3_WEIGHT, "weight", 121), {256}, 0);
-                    decoder_estimator_down_blocks_0_1_1_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_1_FF_NET_0_PROJ_WEIGHT, "weight", 122), {256, 1024}, 0);
-                    decoder_estimator_down_blocks_0_1_1_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_1_FF_NET_2_WEIGHT, "weight", 123), {1024, 256}, 0);
-
-                    decoder_estimator_down_blocks_0_1_2_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_NORM1_WEIGHT, "weight", 124), {256}, 0);
-                    decoder_estimator_down_blocks_0_1_2_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_ATTN1_TO_Q_WEIGHT, "weight", 125), {256, 512}, 0);
-                    decoder_estimator_down_blocks_0_1_2_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_ATTN1_TO_K_WEIGHT, "weight", 126), {256, 512}, 0);
-                    decoder_estimator_down_blocks_0_1_2_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_ATTN1_TO_V_WEIGHT, "weight", 127), {256, 512}, 0);
-                    decoder_estimator_down_blocks_0_1_2_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_ATTN1_TO_OUT_0_WEIGHT, "weight", 128), {512, 256}, 0);
-                    decoder_estimator_down_blocks_0_1_2_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_NORM3_WEIGHT, "weight", 129), {256}, 0);
-                    decoder_estimator_down_blocks_0_1_2_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_FF_NET_0_PROJ_WEIGHT, "weight", 130), {256, 1024}, 0);
-                    decoder_estimator_down_blocks_0_1_2_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_FF_NET_2_WEIGHT, "weight", 131), {1024, 256}, 0);
-
-                    decoder_estimator_down_blocks_0_1_3_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_NORM1_WEIGHT, "weight", 132), {256}, 0);
-
-                    decoder_estimator_down_blocks_0_1_3_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_ATTN1_TO_Q_WEIGHT, "weight", 133), {256, 512}, 0);
-                    decoder_estimator_down_blocks_0_1_3_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_ATTN1_TO_K_WEIGHT, "weight", 134), {256, 512}, 0);
-                    decoder_estimator_down_blocks_0_1_3_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_ATTN1_TO_V_WEIGHT, "weight", 135), {256, 512}, 0);
-                    decoder_estimator_down_blocks_0_1_3_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_ATTN1_TO_OUT_0_WEIGHT, "weight", 136), {512, 256}, 0);
-                    decoder_estimator_down_blocks_0_1_3_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_NORM3_WEIGHT, "weight", 137), {256}, 0);
-                    decoder_estimator_down_blocks_0_1_3_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_FF_NET_0_PROJ_WEIGHT, "weight", 138), {256, 1024}, 0);
-                    decoder_estimator_down_blocks_0_1_3_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_FF_NET_2_WEIGHT, "weight", 139), {1024, 256}, 0);
-
-                    decoder_estimator_down_blocks_0_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_2_WEIGHT, "weight", 140), {3, 256, 256}, 0);
-
-                    decoder_estimator_mid_blocks_0_0_mlp_1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_0_MLP_1_WEIGHT, "weight", 141), {1024, 256}, 0);
-                    decoder_estimator_mid_blocks_0_0_block1_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_0_BLOCK1_BLOCK_0_WEIGHT, "weight", 142), {3, 256, 256}, 0);
-                    decoder_estimator_mid_blocks_0_0_block1_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_0_BLOCK1_BLOCK_2_WEIGHT, "weight", 143), {256}, 0);
-                    decoder_estimator_mid_blocks_0_0_block2_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_0_BLOCK2_BLOCK_0_WEIGHT, "weight", 144), {3, 256, 256}, 0);
-                    decoder_estimator_mid_blocks_0_0_block2_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_0_BLOCK2_BLOCK_2_WEIGHT, "weight", 145), {256}, 0);
-                    decoder_estimator_mid_blocks_0_0_res_conv_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_0_RES_CONV_WEIGHT, "weight", 146), {1, 256, 256}, 0);
-
-                    decoder_estimator_mid_blocks_0_1_0_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_NORM1_WEIGHT, "weight", 147), {256}, 0);
-                    decoder_estimator_mid_blocks_0_1_0_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_ATTN1_TO_Q_WEIGHT, "weight", 148), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_0_1_0_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_ATTN1_TO_K_WEIGHT, "weight", 149), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_0_1_0_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_ATTN1_TO_V_WEIGHT, "weight", 150), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_0_1_0_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_ATTN1_TO_OUT_0_WEIGHT, "weight", 151), {512, 256}, 0);
-                    decoder_estimator_mid_blocks_0_1_0_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_NORM3_WEIGHT, "weight", 152), {256}, 0);
-                    decoder_estimator_mid_blocks_0_1_0_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_FF_NET_0_PROJ_WEIGHT, "weight", 153), {256, 1024}, 0);
-                    decoder_estimator_mid_blocks_0_1_0_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_FF_NET_2_WEIGHT, "weight", 154), {1024, 256}, 0);
-
-
-                    decoder_estimator_mid_blocks_0_1_1_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_1_NORM1_WEIGHT, "weight", 155), {256}, 0);
-                    decoder_estimator_mid_blocks_0_1_1_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_1_ATTN1_TO_OUT_0_WEIGHT, "weight", 156), {512, 256}, 0);
-                    decoder_estimator_mid_blocks_0_1_1_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_1_ATTN1_TO_Q_WEIGHT, "weight", 157), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_0_1_1_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_1_ATTN1_TO_K_WEIGHT, "weight", 158), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_0_1_1_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_1_ATTN1_TO_V_WEIGHT, "weight", 159), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_0_1_1_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_1_NORM3_WEIGHT, "weight", 160), {256}, 0);
-                    decoder_estimator_mid_blocks_0_1_1_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_1_FF_NET_0_PROJ_WEIGHT, "weight", 161), {256, 1024}, 0);
-                    decoder_estimator_mid_blocks_0_1_1_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_1_FF_NET_2_WEIGHT, "weight", 162), {1024, 256}, 0);
-
-                    decoder_estimator_mid_blocks_0_1_2_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_2_NORM1_WEIGHT, "weight", 163), {256}, 0);
-                    decoder_estimator_mid_blocks_0_1_2_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_2_ATTN1_TO_OUT_0_WEIGHT, "weight", 164), {512, 256}, 0);
-                    decoder_estimator_mid_blocks_0_1_2_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_2_ATTN1_TO_Q_WEIGHT, "weight", 165), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_0_1_2_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_2_ATTN1_TO_K_WEIGHT, "weight", 166), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_0_1_2_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_2_ATTN1_TO_V_WEIGHT, "weight", 167), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_0_1_2_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_2_NORM3_WEIGHT, "weight", 168), {256}, 0);
-                    decoder_estimator_mid_blocks_0_1_2_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_2_FF_NET_0_PROJ_WEIGHT, "weight", 169), {256, 1024}, 0);
-                    decoder_estimator_mid_blocks_0_1_2_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_2_FF_NET_2_WEIGHT, "weight", 170), {1024, 256}, 0);
-
-                    decoder_estimator_mid_blocks_0_1_3_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_3_NORM1_WEIGHT, "weight", 171), {256}, 0);
-                    decoder_estimator_mid_blocks_0_1_3_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_3_ATTN1_TO_Q_WEIGHT, "weight", 172), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_0_1_3_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_3_ATTN1_TO_K_WEIGHT, "weight", 173), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_0_1_3_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_3_ATTN1_TO_V_WEIGHT, "weight", 174), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_0_1_3_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_3_ATTN1_TO_OUT_0_WEIGHT, "weight", 175), {512, 256}, 0);
-                    decoder_estimator_mid_blocks_0_1_3_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_3_NORM3_WEIGHT, "weight", 176), {256}, 0);
-                    decoder_estimator_mid_blocks_0_1_3_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_3_FF_NET_0_PROJ_WEIGHT, "weight", 177), {256, 1024}, 0);
-                    decoder_estimator_mid_blocks_0_1_3_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_3_FF_NET_2_WEIGHT, "weight", 178), {1024, 256}, 0);
-
-                    decoder_estimator_mid_blocks_1_0_mlp_1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_0_MLP_1_WEIGHT, "weight", 179), {1024, 256}, 0);
-                    decoder_estimator_mid_blocks_1_0_block1_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_0_BLOCK1_BLOCK_0_WEIGHT, "weight", 180), {3, 256, 256}, 0);
-                    decoder_estimator_mid_blocks_1_0_block1_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_0_BLOCK1_BLOCK_2_WEIGHT, "weight", 181), {256}, 0);
-                    decoder_estimator_mid_blocks_1_0_block2_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_0_BLOCK2_BLOCK_0_WEIGHT, "weight", 182), {3, 256, 256}, 0);
-                    decoder_estimator_mid_blocks_1_0_block2_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_0_BLOCK2_BLOCK_2_WEIGHT, "weight", 183), {256}, 0);
-                    decoder_estimator_mid_blocks_1_0_res_conv_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_0_RES_CONV_WEIGHT, "weight", 184), {1, 256, 256}, 0);
-
-                    decoder_estimator_mid_blocks_1_1_0_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_0_NORM1_WEIGHT, "weight", 185), {256}, 0);
-                    decoder_estimator_mid_blocks_1_1_0_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_0_ATTN1_TO_Q_WEIGHT, "weight", 186), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_1_1_0_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_0_ATTN1_TO_K_WEIGHT, "weight", 187), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_1_1_0_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_0_ATTN1_TO_V_WEIGHT, "weight", 188), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_1_1_0_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_0_ATTN1_TO_OUT_0_WEIGHT, "weight", 189), {512, 256}, 0);
-                    decoder_estimator_mid_blocks_1_1_0_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_0_NORM3_WEIGHT, "weight", 190), {256}, 0);
-                    decoder_estimator_mid_blocks_1_1_0_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_0_FF_NET_0_PROJ_WEIGHT, "weight", 191), {256, 1024}, 0);
-                    decoder_estimator_mid_blocks_1_1_0_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_0_FF_NET_2_WEIGHT, "weight", 192), {1024, 256}, 0);
-
-                    decoder_estimator_mid_blocks_1_1_1_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_1_NORM1_WEIGHT, "weight", 193), {256}, 0);
-                    decoder_estimator_mid_blocks_1_1_1_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_1_ATTN1_TO_OUT_0_WEIGHT, "weight", 194), {512, 256}, 0);
-                    decoder_estimator_mid_blocks_1_1_1_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_1_ATTN1_TO_Q_WEIGHT, "weight", 195), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_1_1_1_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_1_ATTN1_TO_K_WEIGHT, "weight", 196), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_1_1_1_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_1_ATTN1_TO_V_WEIGHT, "weight", 197), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_1_1_1_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_1_NORM3_WEIGHT, "weight", 198), {256}, 0);
-                    decoder_estimator_mid_blocks_1_1_1_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_1_FF_NET_0_PROJ_WEIGHT, "weight", 199), {256, 1024}, 0);
-                    decoder_estimator_mid_blocks_1_1_1_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_1_FF_NET_2_WEIGHT, "weight", 200), {1024, 256}, 0);
-
-                    decoder_estimator_mid_blocks_1_1_2_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_2_NORM1_WEIGHT, "weight", 201), {256}, 0);
-                    decoder_estimator_mid_blocks_1_1_2_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_2_ATTN1_TO_OUT_0_WEIGHT, "weight", 202), {512, 256}, 0);
-                    decoder_estimator_mid_blocks_1_1_2_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_2_ATTN1_TO_Q_WEIGHT, "weight", 203), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_1_1_2_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_2_ATTN1_TO_K_WEIGHT, "weight", 204), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_1_1_2_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_2_ATTN1_TO_V_WEIGHT, "weight", 205), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_1_1_2_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_2_NORM3_WEIGHT, "weight", 206), {256}, 0);
-                    decoder_estimator_mid_blocks_1_1_2_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_2_FF_NET_0_PROJ_WEIGHT, "weight", 207), {256, 1024}, 0);
-                    decoder_estimator_mid_blocks_1_1_2_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_2_FF_NET_2_WEIGHT, "weight", 208), {1024, 256}, 0);
-
-                    decoder_estimator_mid_blocks_1_1_3_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_3_NORM1_WEIGHT, "weight", 209), {256}, 0);
-                    decoder_estimator_mid_blocks_1_1_3_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_3_ATTN1_TO_Q_WEIGHT, "weight", 210), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_1_1_3_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_3_ATTN1_TO_K_WEIGHT, "weight", 211), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_1_1_3_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_3_ATTN1_TO_V_WEIGHT, "weight", 212), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_1_1_3_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_3_ATTN1_TO_OUT_0_WEIGHT, "weight", 213), {512, 256}, 0);
-                    decoder_estimator_mid_blocks_1_1_3_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_3_NORM3_WEIGHT, "weight", 214), {256}, 0);
-                    decoder_estimator_mid_blocks_1_1_3_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_3_FF_NET_0_PROJ_WEIGHT, "weight", 215), {256, 1024}, 0);
-                    decoder_estimator_mid_blocks_1_1_3_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_3_FF_NET_2_WEIGHT, "weight", 216), {1024, 256}, 0);
-
-                    decoder_estimator_mid_blocks_2_0_mlp_1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_0_MLP_1_WEIGHT, "weight", 217), {1024, 256}, 0);
-                    decoder_estimator_mid_blocks_2_0_block1_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_0_BLOCK1_BLOCK_0_WEIGHT, "weight", 218), {3, 256, 256}, 0);
-                    decoder_estimator_mid_blocks_2_0_block1_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_0_BLOCK1_BLOCK_2_WEIGHT, "weight", 219), {256}, 0);
-                    decoder_estimator_mid_blocks_2_0_block2_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_0_BLOCK2_BLOCK_0_WEIGHT, "weight", 220), {3, 256, 256}, 0);
-                    decoder_estimator_mid_blocks_2_0_block2_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_0_BLOCK2_BLOCK_2_WEIGHT, "weight", 221), {256}, 0);
-                    decoder_estimator_mid_blocks_2_0_res_conv_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_0_RES_CONV_WEIGHT, "weight", 222), {1, 256, 256}, 0);
-
-                    decoder_estimator_mid_blocks_2_1_0_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_0_NORM1_WEIGHT, "weight", 223), {256}, 0);
-                    decoder_estimator_mid_blocks_2_1_0_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_0_ATTN1_TO_Q_WEIGHT, "weight", 224), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_2_1_0_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_0_ATTN1_TO_K_WEIGHT, "weight", 225), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_2_1_0_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_0_ATTN1_TO_V_WEIGHT, "weight", 226), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_2_1_0_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_0_ATTN1_TO_OUT_0_WEIGHT, "weight", 227), {512, 256}, 0);
-                    decoder_estimator_mid_blocks_2_1_0_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_0_NORM3_WEIGHT, "weight", 228), {256}, 0);
-                    decoder_estimator_mid_blocks_2_1_0_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_0_FF_NET_0_PROJ_WEIGHT, "weight", 229), {256, 1024}, 0);
-                    decoder_estimator_mid_blocks_2_1_0_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_0_FF_NET_2_WEIGHT, "weight", 230), {1024, 256}, 0);
-
-                    decoder_estimator_mid_blocks_2_1_1_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_1_NORM1_WEIGHT, "weight", 231), {256}, 0);
-                    decoder_estimator_mid_blocks_2_1_1_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_1_ATTN1_TO_OUT_0_WEIGHT, "weight", 232), {512, 256}, 0);
-                    decoder_estimator_mid_blocks_2_1_1_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_1_ATTN1_TO_Q_WEIGHT, "weight", 233), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_2_1_1_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_1_ATTN1_TO_K_WEIGHT, "weight", 234), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_2_1_1_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_1_ATTN1_TO_V_WEIGHT, "weight", 235), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_2_1_1_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_1_NORM3_WEIGHT, "weight", 236), {256}, 0);
-                    decoder_estimator_mid_blocks_2_1_1_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_1_FF_NET_0_PROJ_WEIGHT, "weight", 237), {256, 1024}, 0);
-                    decoder_estimator_mid_blocks_2_1_1_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_1_FF_NET_2_WEIGHT, "weight", 238), {1024, 256}, 0);
-
-                    decoder_estimator_mid_blocks_2_1_2_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_2_NORM1_WEIGHT, "weight", 239), {256}, 0);
-                    decoder_estimator_mid_blocks_2_1_2_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_2_ATTN1_TO_OUT_0_WEIGHT, "weight", 240), {512, 256}, 0);
-                    decoder_estimator_mid_blocks_2_1_2_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_2_ATTN1_TO_Q_WEIGHT, "weight", 241), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_2_1_2_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_2_ATTN1_TO_K_WEIGHT, "weight", 242), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_2_1_2_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_2_ATTN1_TO_V_WEIGHT, "weight", 243), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_2_1_2_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_2_NORM3_WEIGHT, "weight", 244), {256}, 0);
-                    decoder_estimator_mid_blocks_2_1_2_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_2_FF_NET_0_PROJ_WEIGHT, "weight", 245), {256, 1024}, 0);
-                    decoder_estimator_mid_blocks_2_1_2_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_2_FF_NET_2_WEIGHT, "weight", 246), {1024, 256}, 0);
-
-                    decoder_estimator_mid_blocks_2_1_3_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_3_NORM1_WEIGHT, "weight", 247), {256}, 0);
-                    decoder_estimator_mid_blocks_2_1_3_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_3_ATTN1_TO_Q_WEIGHT, "weight", 248), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_2_1_3_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_3_ATTN1_TO_K_WEIGHT, "weight", 249), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_2_1_3_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_3_ATTN1_TO_V_WEIGHT, "weight", 250), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_2_1_3_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_3_ATTN1_TO_OUT_0_WEIGHT, "weight", 251), {512, 256}, 0);
-                    decoder_estimator_mid_blocks_2_1_3_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_3_NORM3_WEIGHT, "weight", 252), {256}, 0);
-                    decoder_estimator_mid_blocks_2_1_3_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_3_FF_NET_0_PROJ_WEIGHT, "weight", 253), {256, 1024}, 0);
-                    decoder_estimator_mid_blocks_2_1_3_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_3_FF_NET_2_WEIGHT, "weight", 254), {1024, 256}, 0);
-
-                    decoder_estimator_mid_blocks_3_0_mlp_1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_0_MLP_1_WEIGHT, "weight", 255), {1024, 256}, 0);
-                    decoder_estimator_mid_blocks_3_0_block1_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_0_BLOCK1_BLOCK_0_WEIGHT, "weight", 256), {3, 256, 256}, 0);
-                    decoder_estimator_mid_blocks_3_0_block1_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_0_BLOCK1_BLOCK_2_WEIGHT, "weight", 257), {256}, 0);
-                    decoder_estimator_mid_blocks_3_0_block2_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_0_BLOCK2_BLOCK_0_WEIGHT, "weight", 258), {3, 256, 256}, 0);
-                    decoder_estimator_mid_blocks_3_0_block2_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_0_BLOCK2_BLOCK_2_WEIGHT, "weight", 259), {256}, 0);
-                    decoder_estimator_mid_blocks_3_0_res_conv_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_0_RES_CONV_WEIGHT, "weight", 260), {1, 256, 256}, 0);
-
-                    decoder_estimator_mid_blocks_3_1_0_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_0_NORM1_WEIGHT, "weight", 261), {256}, 0);
-                    decoder_estimator_mid_blocks_3_1_0_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_0_ATTN1_TO_Q_WEIGHT, "weight", 262), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_3_1_0_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_0_ATTN1_TO_K_WEIGHT, "weight", 263), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_3_1_0_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_0_ATTN1_TO_V_WEIGHT, "weight", 264), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_3_1_0_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_0_ATTN1_TO_OUT_0_WEIGHT, "weight", 265), {512, 256}, 0);
-                    decoder_estimator_mid_blocks_3_1_0_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_NORM3_WEIGHT, "weight", 266), {256}, 0);
-                    decoder_estimator_mid_blocks_3_1_0_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_0_FF_NET_0_PROJ_WEIGHT, "weight", 267), {256, 1024}, 0);
-                    decoder_estimator_mid_blocks_3_1_0_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_0_FF_NET_2_WEIGHT, "weight", 268), {1024, 256}, 0);
-
-                    decoder_estimator_mid_blocks_3_1_1_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_1_NORM1_WEIGHT, "weight", 269), {256}, 0);
-                    decoder_estimator_mid_blocks_3_1_1_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_1_ATTN1_TO_OUT_0_WEIGHT, "weight", 270), {512, 256}, 0);
-                    decoder_estimator_mid_blocks_3_1_1_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_1_ATTN1_TO_Q_WEIGHT, "weight", 271), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_3_1_1_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_1_ATTN1_TO_K_WEIGHT, "weight", 272), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_3_1_1_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_1_ATTN1_TO_V_WEIGHT, "weight", 273), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_3_1_1_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_1_NORM3_WEIGHT, "weight", 274), {256}, 0);
-                    decoder_estimator_mid_blocks_3_1_1_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_1_FF_NET_0_PROJ_WEIGHT, "weight", 275), {256, 1024}, 0);
-                    decoder_estimator_mid_blocks_3_1_1_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_1_FF_NET_2_WEIGHT, "weight", 276), {1024, 256}, 0);
-
-                    decoder_estimator_mid_blocks_3_1_2_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_2_NORM1_WEIGHT, "weight", 277), {256}, 0);
-                    decoder_estimator_mid_blocks_3_1_2_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_2_ATTN1_TO_OUT_0_WEIGHT, "weight", 278), {512, 256}, 0);
-                    decoder_estimator_mid_blocks_3_1_2_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_2_ATTN1_TO_Q_WEIGHT, "weight", 279), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_3_1_2_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_2_ATTN1_TO_K_WEIGHT, "weight", 280), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_3_1_2_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_2_ATTN1_TO_V_WEIGHT, "weight", 281), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_3_1_2_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_2_NORM3_WEIGHT, "weight", 282), {256}, 0);
-                    decoder_estimator_mid_blocks_3_1_2_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_2_FF_NET_0_PROJ_WEIGHT, "weight", 283), {256, 1024}, 0);
-                    decoder_estimator_mid_blocks_3_1_2_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_2_FF_NET_2_WEIGHT, "weight", 284), {1024, 256}, 0);
-
-                    decoder_estimator_mid_blocks_3_1_3_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_3_NORM1_WEIGHT, "weight", 285), {256}, 0);
-                    decoder_estimator_mid_blocks_3_1_3_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_3_ATTN1_TO_Q_WEIGHT, "weight", 286), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_3_1_3_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_3_ATTN1_TO_K_WEIGHT, "weight", 287), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_3_1_3_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_3_ATTN1_TO_V_WEIGHT, "weight", 288), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_3_1_3_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_3_ATTN1_TO_OUT_0_WEIGHT, "weight", 289), {512, 256}, 0);
-                    decoder_estimator_mid_blocks_3_1_3_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_3_NORM3_WEIGHT, "weight", 290), {256}, 0);
-                    decoder_estimator_mid_blocks_3_1_3_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_3_FF_NET_0_PROJ_WEIGHT, "weight", 291), {256, 1024}, 0);
-                    decoder_estimator_mid_blocks_3_1_3_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_3_FF_NET_2_WEIGHT, "weight", 292), {1024, 256}, 0);
-
-                    decoder_estimator_mid_blocks_4_0_mlp_1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_0_MLP_1_WEIGHT, "weight", 293), {1024, 256}, 0);
-                    decoder_estimator_mid_blocks_4_0_block1_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_0_BLOCK1_BLOCK_0_WEIGHT, "weight", 294), {3, 256, 256}, 0);
-                    decoder_estimator_mid_blocks_4_0_block1_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_0_BLOCK1_BLOCK_2_WEIGHT, "weight", 295), {256}, 0);
-                    decoder_estimator_mid_blocks_4_0_block2_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_0_BLOCK2_BLOCK_0_WEIGHT, "weight", 296), {3, 256, 256}, 0);
-                    decoder_estimator_mid_blocks_4_0_block2_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_0_BLOCK2_BLOCK_2_WEIGHT, "weight", 297), {256}, 0);
-                    decoder_estimator_mid_blocks_4_0_res_conv_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_0_RES_CONV_WEIGHT, "weight", 298), {1, 256, 256}, 0);
-
-                    decoder_estimator_mid_blocks_4_1_0_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_0_NORM1_WEIGHT, "weight", 299), {256}, 0);
-                    decoder_estimator_mid_blocks_4_1_0_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_0_ATTN1_TO_Q_WEIGHT, "weight", 300), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_4_1_0_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_0_ATTN1_TO_K_WEIGHT, "weight", 301), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_4_1_0_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_0_ATTN1_TO_V_WEIGHT, "weight", 302), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_4_1_0_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_0_ATTN1_TO_OUT_0_WEIGHT, "weight", 303), {512, 256}, 0);
-                    decoder_estimator_mid_blocks_4_1_0_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_0_NORM3_WEIGHT, "weight", 304), {256}, 0);
-                    decoder_estimator_mid_blocks_4_1_0_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_0_FF_NET_0_PROJ_WEIGHT, "weight", 305), {256, 1024}, 0);
-                    decoder_estimator_mid_blocks_4_1_0_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_0_FF_NET_2_WEIGHT, "weight", 306), {1024, 256}, 0);
-
-                    decoder_estimator_mid_blocks_4_1_1_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_1_NORM1_WEIGHT, "weight", 307), {256}, 0);
-                    decoder_estimator_mid_blocks_4_1_1_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_1_ATTN1_TO_OUT_0_WEIGHT, "weight", 308), {512, 256}, 0);
-                    decoder_estimator_mid_blocks_4_1_1_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_1_ATTN1_TO_Q_WEIGHT, "weight", 309), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_4_1_1_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_1_ATTN1_TO_K_WEIGHT, "weight", 310), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_4_1_1_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_1_ATTN1_TO_V_WEIGHT, "weight", 311), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_4_1_1_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_1_NORM3_WEIGHT, "weight", 312), {256}, 0);
-                    decoder_estimator_mid_blocks_4_1_1_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_1_FF_NET_0_PROJ_WEIGHT, "weight", 313), {256, 1024}, 0);
-                    decoder_estimator_mid_blocks_4_1_1_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_1_FF_NET_2_WEIGHT, "weight", 314), {1024, 256}, 0);
-
-                    decoder_estimator_mid_blocks_4_1_2_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_2_NORM1_WEIGHT, "weight", 315), {256}, 0);
-                    decoder_estimator_mid_blocks_4_1_2_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_2_ATTN1_TO_OUT_0_WEIGHT, "weight", 316), {512, 256}, 0);
-                    decoder_estimator_mid_blocks_4_1_2_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_2_ATTN1_TO_Q_WEIGHT, "weight", 317), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_4_1_2_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_2_ATTN1_TO_K_WEIGHT, "weight", 318), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_4_1_2_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_2_ATTN1_TO_V_WEIGHT, "weight", 319), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_4_1_2_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_2_NORM3_WEIGHT, "weight", 320), {256}, 0);
-                    decoder_estimator_mid_blocks_4_1_2_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_2_FF_NET_0_PROJ_WEIGHT, "weight", 321), {256, 1024}, 0);
-                    decoder_estimator_mid_blocks_4_1_2_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_2_FF_NET_2_WEIGHT, "weight", 322), {1024, 256}, 0);
-
-                    decoder_estimator_mid_blocks_4_1_3_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_3_NORM1_WEIGHT, "weight", 323), {256}, 0);
-                    decoder_estimator_mid_blocks_4_1_3_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_3_ATTN1_TO_Q_WEIGHT, "weight", 324), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_4_1_3_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_3_ATTN1_TO_K_WEIGHT, "weight", 325), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_4_1_3_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_3_ATTN1_TO_V_WEIGHT, "weight", 326), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_4_1_3_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_3_ATTN1_TO_OUT_0_WEIGHT, "weight", 327), {512, 256}, 0);
-                    decoder_estimator_mid_blocks_4_1_3_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_3_NORM3_WEIGHT, "weight", 328), {256}, 0);
-                    decoder_estimator_mid_blocks_4_1_3_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_3_FF_NET_0_PROJ_WEIGHT, "weight", 329), {256, 1024}, 0);
-                    decoder_estimator_mid_blocks_4_1_3_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_3_FF_NET_2_WEIGHT, "weight", 330), {1024, 256}, 0);
-
-                    decoder_estimator_mid_blocks_5_0_mlp_1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_0_MLP_1_WEIGHT, "weight", 331), {1024, 256}, 0);
-                    decoder_estimator_mid_blocks_5_0_block1_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_0_BLOCK1_BLOCK_0_WEIGHT, "weight", 332), {3, 256, 256}, 0);
-                    decoder_estimator_mid_blocks_5_0_block1_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_0_BLOCK1_BLOCK_2_WEIGHT, "weight", 333), {256}, 0);
-                    decoder_estimator_mid_blocks_5_0_block2_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_0_BLOCK2_BLOCK_0_WEIGHT, "weight", 334), {3, 256, 256}, 0);
-                    decoder_estimator_mid_blocks_5_0_block2_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_0_BLOCK2_BLOCK_2_WEIGHT, "weight", 335), {256}, 0);
-                    decoder_estimator_mid_blocks_5_0_res_conv_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_0_RES_CONV_WEIGHT, "weight", 336), {1, 256, 256}, 0);
-
-                    decoder_estimator_mid_blocks_5_1_0_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_0_NORM1_WEIGHT, "weight", 337), {256}, 0);
-                    decoder_estimator_mid_blocks_5_1_0_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_0_ATTN1_TO_Q_WEIGHT, "weight", 338), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_5_1_0_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_0_ATTN1_TO_K_WEIGHT, "weight", 339), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_5_1_0_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_0_ATTN1_TO_V_WEIGHT, "weight", 340), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_5_1_0_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_0_ATTN1_TO_OUT_0_WEIGHT, "weight", 341), {512, 256}, 0);
-                    decoder_estimator_mid_blocks_5_1_0_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_0_NORM3_WEIGHT, "weight", 342), {256}, 0);
-                    decoder_estimator_mid_blocks_5_1_0_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_0_FF_NET_0_PROJ_WEIGHT, "weight", 343), {256, 1024}, 0);
-                    decoder_estimator_mid_blocks_5_1_0_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_0_FF_NET_2_WEIGHT, "weight", 344), {1024, 256}, 0);
-
-                    decoder_estimator_mid_blocks_5_1_1_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_1_NORM1_WEIGHT, "weight", 345), {256}, 0);
-                    decoder_estimator_mid_blocks_5_1_1_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_1_ATTN1_TO_OUT_0_WEIGHT, "weight", 346), {512, 256}, 0);
-                    decoder_estimator_mid_blocks_5_1_1_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_1_ATTN1_TO_Q_WEIGHT, "weight", 347), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_5_1_1_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_1_ATTN1_TO_K_WEIGHT, "weight", 348), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_5_1_1_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_1_ATTN1_TO_V_WEIGHT, "weight", 349), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_5_1_1_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_1_NORM3_WEIGHT, "weight", 350), {256}, 0);
-                    decoder_estimator_mid_blocks_5_1_1_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_1_FF_NET_0_PROJ_WEIGHT, "weight", 351), {256, 1024}, 0);
-                    decoder_estimator_mid_blocks_5_1_1_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_1_FF_NET_2_WEIGHT, "weight", 352), {1024, 256}, 0);
-
-                    decoder_estimator_mid_blocks_5_1_2_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_2_NORM1_WEIGHT, "weight", 353), {256}, 0);
-                    decoder_estimator_mid_blocks_5_1_2_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_2_ATTN1_TO_OUT_0_WEIGHT, "weight", 354), {512, 256}, 0);
-                    decoder_estimator_mid_blocks_5_1_2_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_2_ATTN1_TO_Q_WEIGHT, "weight", 355), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_5_1_2_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_2_ATTN1_TO_K_WEIGHT, "weight", 356), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_5_1_2_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_2_ATTN1_TO_V_WEIGHT, "weight", 357), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_5_1_2_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_2_NORM3_WEIGHT, "weight", 358), {256}, 0);
-                    decoder_estimator_mid_blocks_5_1_2_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_2_FF_NET_0_PROJ_WEIGHT, "weight", 359), {256, 1024}, 0);
-                    decoder_estimator_mid_blocks_5_1_2_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_2_FF_NET_2_WEIGHT, "weight", 360), {1024, 256}, 0);
-
-                    decoder_estimator_mid_blocks_5_1_3_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_3_NORM1_WEIGHT, "weight", 361), {256}, 0);
-                    decoder_estimator_mid_blocks_5_1_3_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_3_ATTN1_TO_Q_WEIGHT, "weight", 362), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_5_1_3_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_3_ATTN1_TO_K_WEIGHT, "weight", 363), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_5_1_3_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_3_ATTN1_TO_V_WEIGHT, "weight", 364), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_5_1_3_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_3_ATTN1_TO_OUT_0_WEIGHT, "weight", 365), {512, 256}, 0);
-                    decoder_estimator_mid_blocks_5_1_3_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_3_NORM3_WEIGHT, "weight", 366), {256}, 0);
-                    decoder_estimator_mid_blocks_5_1_3_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_3_FF_NET_0_PROJ_WEIGHT, "weight", 367), {256, 1024}, 0);
-                    decoder_estimator_mid_blocks_5_1_3_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_3_FF_NET_2_WEIGHT, "weight", 368), {1024, 256}, 0);
-
-                    decoder_estimator_mid_blocks_6_0_mlp_1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_0_MLP_1_WEIGHT, "weight", 369), {1024, 256}, 0);
-                    decoder_estimator_mid_blocks_6_0_block1_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_0_BLOCK1_BLOCK_0_WEIGHT, "weight", 370), {3, 256, 256}, 0);
-                    decoder_estimator_mid_blocks_6_0_block1_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_0_BLOCK1_BLOCK_2_WEIGHT, "weight", 371), {256}, 0);
-                    decoder_estimator_mid_blocks_6_0_block2_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_0_BLOCK2_BLOCK_0_WEIGHT, "weight", 372), {3, 256, 256}, 0);
-                    decoder_estimator_mid_blocks_6_0_block2_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_0_BLOCK2_BLOCK_2_WEIGHT, "weight", 373), {256}, 0);
-                    decoder_estimator_mid_blocks_6_0_res_conv_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_0_RES_CONV_WEIGHT, "weight", 374), {1, 256, 256}, 0);
-
-                    decoder_estimator_mid_blocks_6_1_0_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_0_NORM1_WEIGHT, "weight", 375), {256}, 0);
-                    decoder_estimator_mid_blocks_6_1_0_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_0_ATTN1_TO_Q_WEIGHT, "weight", 376), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_6_1_0_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_0_ATTN1_TO_K_WEIGHT, "weight", 377), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_6_1_0_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_0_ATTN1_TO_V_WEIGHT, "weight", 378), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_6_1_0_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_0_ATTN1_TO_OUT_0_WEIGHT, "weight", 379), {512, 256}, 0);
-                    decoder_estimator_mid_blocks_6_1_0_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_0_NORM3_WEIGHT, "weight", 380), {256}, 0);
-                    decoder_estimator_mid_blocks_6_1_0_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_0_FF_NET_0_PROJ_WEIGHT, "weight", 381), {256, 1024}, 0);
-                    decoder_estimator_mid_blocks_6_1_0_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_0_FF_NET_2_WEIGHT, "weight", 382), {1024, 256}, 0);
-
-                    decoder_estimator_mid_blocks_6_1_1_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_1_NORM1_WEIGHT, "weight", 383), {256}, 0);
-                    decoder_estimator_mid_blocks_6_1_1_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_1_ATTN1_TO_OUT_0_WEIGHT, "weight", 384), {512, 256}, 0);
-                    decoder_estimator_mid_blocks_6_1_1_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_1_ATTN1_TO_Q_WEIGHT, "weight", 385), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_6_1_1_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_1_ATTN1_TO_K_WEIGHT, "weight", 386), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_6_1_1_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_1_ATTN1_TO_V_WEIGHT, "weight", 387), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_6_1_1_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_1_NORM3_WEIGHT, "weight", 388), {256}, 0);
-                    decoder_estimator_mid_blocks_6_1_1_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_1_FF_NET_0_PROJ_WEIGHT, "weight", 389), {256, 1024}, 0);
-                    decoder_estimator_mid_blocks_6_1_1_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_1_FF_NET_2_WEIGHT, "weight", 390), {1024, 256}, 0);
-
-                    decoder_estimator_mid_blocks_6_1_2_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_2_NORM1_WEIGHT, "weight", 391), {256}, 0);
-                    decoder_estimator_mid_blocks_6_1_2_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_2_ATTN1_TO_OUT_0_WEIGHT, "weight", 392), {512, 256}, 0);
-                    decoder_estimator_mid_blocks_6_1_2_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_2_ATTN1_TO_Q_WEIGHT, "weight", 393), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_6_1_2_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_2_ATTN1_TO_K_WEIGHT, "weight", 394), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_6_1_2_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_2_ATTN1_TO_V_WEIGHT, "weight", 395), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_6_1_2_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_2_NORM3_WEIGHT, "weight", 396), {256}, 0);
-                    decoder_estimator_mid_blocks_6_1_2_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_2_FF_NET_0_PROJ_WEIGHT, "weight", 397), {256, 1024}, 0);
-                    decoder_estimator_mid_blocks_6_1_2_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_2_FF_NET_2_WEIGHT, "weight", 398), {1024, 256}, 0);
-
-                    decoder_estimator_mid_blocks_6_1_3_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_3_NORM1_WEIGHT, "weight", 399), {256}, 0);
-                    decoder_estimator_mid_blocks_6_1_3_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_3_ATTN1_TO_Q_WEIGHT, "weight", 400), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_6_1_3_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_3_ATTN1_TO_K_WEIGHT, "weight", 401), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_6_1_3_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_3_ATTN1_TO_V_WEIGHT, "weight", 402), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_6_1_3_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_3_ATTN1_TO_OUT_0_WEIGHT, "weight", 403), {512, 256}, 0);
-                    decoder_estimator_mid_blocks_6_1_3_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_3_NORM3_WEIGHT, "weight", 404), {256}, 0);
-                    decoder_estimator_mid_blocks_6_1_3_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_3_FF_NET_0_PROJ_WEIGHT, "weight", 405), {256, 1024}, 0);
-                    decoder_estimator_mid_blocks_6_1_3_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_3_FF_NET_2_WEIGHT, "weight", 406), {1024, 256}, 0);
-
-                    decoder_estimator_mid_blocks_7_0_mlp_1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_0_MLP_1_WEIGHT, "weight", 407), {1024, 256}, 0);
-                    decoder_estimator_mid_blocks_7_0_block1_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_0_BLOCK1_BLOCK_0_WEIGHT, "weight", 408), {3, 256, 256}, 0);
-                    decoder_estimator_mid_blocks_7_0_block1_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_0_BLOCK1_BLOCK_2_WEIGHT, "weight", 409), {256}, 0);
-                    decoder_estimator_mid_blocks_7_0_block2_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_0_BLOCK2_BLOCK_0_WEIGHT, "weight", 410), {3, 256, 256}, 0);
-                    decoder_estimator_mid_blocks_7_0_block2_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_0_BLOCK2_BLOCK_2_WEIGHT, "weight", 411), {256}, 0);
-                    decoder_estimator_mid_blocks_7_0_res_conv_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_0_RES_CONV_WEIGHT, "weight", 412), {1, 256, 256}, 0);
-
-                    decoder_estimator_mid_blocks_7_1_0_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_0_NORM1_WEIGHT, "weight", 413), {256}, 0);
-                    decoder_estimator_mid_blocks_7_1_0_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_0_ATTN1_TO_Q_WEIGHT, "weight", 414), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_7_1_0_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_0_ATTN1_TO_K_WEIGHT, "weight", 415), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_7_1_0_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_0_ATTN1_TO_V_WEIGHT, "weight", 416), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_7_1_0_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_0_ATTN1_TO_OUT_0_WEIGHT, "weight", 417), {512, 256}, 0);
-                    decoder_estimator_mid_blocks_7_1_0_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_0_NORM3_WEIGHT, "weight", 418), {256}, 0);
-                    decoder_estimator_mid_blocks_7_1_0_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_0_FF_NET_0_PROJ_WEIGHT, "weight", 419), {256, 1024}, 0);
-                    decoder_estimator_mid_blocks_7_1_0_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_0_FF_NET_2_WEIGHT, "weight", 420), {1024, 256}, 0);
-
-                    decoder_estimator_mid_blocks_7_1_1_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_1_NORM1_WEIGHT, "weight", 421), {256}, 0);
-                    decoder_estimator_mid_blocks_7_1_1_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_1_ATTN1_TO_OUT_0_WEIGHT, "weight", 422), {512, 256}, 0);
-                    decoder_estimator_mid_blocks_7_1_1_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_1_ATTN1_TO_Q_WEIGHT, "weight", 423), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_7_1_1_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_1_ATTN1_TO_K_WEIGHT, "weight", 424), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_7_1_1_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_1_ATTN1_TO_V_WEIGHT, "weight", 425), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_7_1_1_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_1_NORM3_WEIGHT, "weight", 426), {256}, 0);
-                    decoder_estimator_mid_blocks_7_1_1_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_1_FF_NET_0_PROJ_WEIGHT, "weight", 427), {256, 1024}, 0);
-                    decoder_estimator_mid_blocks_7_1_1_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_1_FF_NET_2_WEIGHT, "weight", 428), {1024, 256}, 0);
-
-                    decoder_estimator_mid_blocks_7_1_2_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_2_NORM1_WEIGHT, "weight", 429), {256}, 0);
-                    decoder_estimator_mid_blocks_7_1_2_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_2_ATTN1_TO_OUT_0_WEIGHT, "weight", 430), {512, 256}, 0);
-                    decoder_estimator_mid_blocks_7_1_2_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_2_ATTN1_TO_Q_WEIGHT, "weight", 431), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_7_1_2_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_2_ATTN1_TO_K_WEIGHT, "weight", 432), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_7_1_2_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_2_ATTN1_TO_V_WEIGHT, "weight", 433), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_7_1_2_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_2_NORM3_WEIGHT, "weight", 434), {256}, 0);
-                    decoder_estimator_mid_blocks_7_1_2_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_2_FF_NET_0_PROJ_WEIGHT, "weight", 435), {256, 1024}, 0);
-                    decoder_estimator_mid_blocks_7_1_2_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_2_FF_NET_2_WEIGHT, "weight", 436), {1024, 256}, 0);
-
-                    decoder_estimator_mid_blocks_7_1_3_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_3_NORM1_WEIGHT, "weight", 437), {256}, 0);
-                    decoder_estimator_mid_blocks_7_1_3_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_3_ATTN1_TO_Q_WEIGHT, "weight", 438), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_7_1_3_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_3_ATTN1_TO_K_WEIGHT, "weight", 439), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_7_1_3_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_3_ATTN1_TO_V_WEIGHT, "weight", 440), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_7_1_3_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_3_ATTN1_TO_OUT_0_WEIGHT, "weight", 441), {512, 256}, 0);
-                    decoder_estimator_mid_blocks_7_1_3_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_3_NORM3_WEIGHT, "weight", 442), {256}, 0);
-                    decoder_estimator_mid_blocks_7_1_3_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_3_FF_NET_0_PROJ_WEIGHT, "weight", 443), {256, 1024}, 0);
-                    decoder_estimator_mid_blocks_7_1_3_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_3_FF_NET_2_WEIGHT, "weight", 444), {1024, 256}, 0);
-
-                    decoder_estimator_mid_blocks_8_0_mlp_1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_0_MLP_1_WEIGHT, "weight", 445), {1024, 256}, 0);
-                    decoder_estimator_mid_blocks_8_0_block1_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_0_BLOCK1_BLOCK_0_WEIGHT, "weight", 446), {3, 256, 256}, 0);
-                    decoder_estimator_mid_blocks_8_0_block1_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_0_BLOCK1_BLOCK_2_WEIGHT, "weight", 447), {256}, 0);
-                    decoder_estimator_mid_blocks_8_0_block2_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_0_BLOCK2_BLOCK_0_WEIGHT, "weight", 448), {3, 256, 256}, 0);
-                    decoder_estimator_mid_blocks_8_0_block2_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_0_BLOCK2_BLOCK_2_WEIGHT, "weight", 449), {256}, 0);
-                    decoder_estimator_mid_blocks_8_0_res_conv_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_0_RES_CONV_WEIGHT, "weight", 450), {1, 256, 256}, 0);
-
-                    decoder_estimator_mid_blocks_8_1_0_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_0_NORM1_WEIGHT, "weight", 451), {256}, 0);
-                    decoder_estimator_mid_blocks_8_1_0_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_0_ATTN1_TO_Q_WEIGHT, "weight", 452), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_8_1_0_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_0_ATTN1_TO_K_WEIGHT, "weight", 453), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_8_1_0_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_0_ATTN1_TO_V_WEIGHT, "weight", 454), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_8_1_0_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_0_ATTN1_TO_OUT_0_WEIGHT, "weight", 455), {512, 256}, 0);
-                    decoder_estimator_mid_blocks_8_1_0_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_0_NORM3_WEIGHT, "weight", 456), {256}, 0);
-                    decoder_estimator_mid_blocks_8_1_0_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_0_FF_NET_0_PROJ_WEIGHT, "weight", 457), {256, 1024}, 0);
-                    decoder_estimator_mid_blocks_8_1_0_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_0_FF_NET_2_WEIGHT, "weight", 458), {1024, 256}, 0);
-
-                    decoder_estimator_mid_blocks_8_1_1_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_1_NORM1_WEIGHT, "weight", 459), {256}, 0);
-                    decoder_estimator_mid_blocks_8_1_1_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_1_ATTN1_TO_OUT_0_WEIGHT, "weight", 460), {512, 256}, 0);
-                    decoder_estimator_mid_blocks_8_1_1_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_1_ATTN1_TO_Q_WEIGHT, "weight", 461), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_8_1_1_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_1_ATTN1_TO_K_WEIGHT, "weight", 462), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_8_1_1_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_1_ATTN1_TO_V_WEIGHT, "weight", 463), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_8_1_1_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_1_NORM3_WEIGHT, "weight", 464), {256}, 0);
-                    decoder_estimator_mid_blocks_8_1_1_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_1_FF_NET_0_PROJ_WEIGHT, "weight", 465), {256, 1024}, 0);
-                    decoder_estimator_mid_blocks_8_1_1_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_1_FF_NET_2_WEIGHT, "weight", 466), {1024, 256}, 0);
-
-                    decoder_estimator_mid_blocks_8_1_2_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_2_NORM1_WEIGHT, "weight", 467), {256}, 0);
-                    decoder_estimator_mid_blocks_8_1_2_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_2_ATTN1_TO_OUT_0_WEIGHT, "weight", 468), {512, 256}, 0);
-                    decoder_estimator_mid_blocks_8_1_2_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_2_ATTN1_TO_Q_WEIGHT, "weight", 469), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_8_1_2_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_2_ATTN1_TO_K_WEIGHT, "weight", 470), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_8_1_2_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_2_ATTN1_TO_V_WEIGHT, "weight", 471), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_8_1_2_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_2_NORM3_WEIGHT, "weight", 472), {256}, 0);
-                    decoder_estimator_mid_blocks_8_1_2_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_2_FF_NET_0_PROJ_WEIGHT, "weight", 473), {256, 1024}, 0);
-                    decoder_estimator_mid_blocks_8_1_2_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_2_FF_NET_2_WEIGHT, "weight", 474), {1024, 256}, 0);
-
-                    decoder_estimator_mid_blocks_8_1_3_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_3_NORM1_WEIGHT, "weight", 475), {256}, 0);
-                    decoder_estimator_mid_blocks_8_1_3_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_3_ATTN1_TO_Q_WEIGHT, "weight", 476), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_8_1_3_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_3_ATTN1_TO_K_WEIGHT, "weight", 477), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_8_1_3_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_3_ATTN1_TO_V_WEIGHT, "weight", 478), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_8_1_3_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_3_ATTN1_TO_OUT_0_WEIGHT, "weight", 479), {512, 256}, 0);
-                    decoder_estimator_mid_blocks_8_1_3_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_3_NORM3_WEIGHT, "weight", 480), {256}, 0);
-                    decoder_estimator_mid_blocks_8_1_3_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_3_FF_NET_0_PROJ_WEIGHT, "weight", 481), {256, 1024}, 0);
-                    decoder_estimator_mid_blocks_8_1_3_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_3_FF_NET_2_WEIGHT, "weight", 482), {1024, 256}, 0);
-
-                    decoder_estimator_mid_blocks_9_0_mlp_1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_0_MLP_1_WEIGHT, "weight", 483), {1024, 256}, 0);
-                    decoder_estimator_mid_blocks_9_0_block1_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_0_BLOCK1_BLOCK_0_WEIGHT, "weight", 484), {3, 256, 256}, 0);
-                    decoder_estimator_mid_blocks_9_0_block1_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_0_BLOCK1_BLOCK_2_WEIGHT, "weight", 485), {256}, 0);
-                    decoder_estimator_mid_blocks_9_0_block2_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_0_BLOCK2_BLOCK_0_WEIGHT, "weight", 486), {3, 256, 256}, 0);
-                    decoder_estimator_mid_blocks_9_0_block2_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_0_BLOCK2_BLOCK_2_WEIGHT, "weight", 487), {256}, 0);
-                    decoder_estimator_mid_blocks_9_0_res_conv_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_0_RES_CONV_WEIGHT, "weight", 488), {1, 256, 256}, 0);
-
-                    decoder_estimator_mid_blocks_9_1_0_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_0_NORM1_WEIGHT, "weight", 489), {256}, 0);
-                    decoder_estimator_mid_blocks_9_1_0_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_0_ATTN1_TO_Q_WEIGHT, "weight", 490), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_9_1_0_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_0_ATTN1_TO_K_WEIGHT, "weight", 491), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_9_1_0_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_0_ATTN1_TO_V_WEIGHT, "weight", 492), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_9_1_0_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_0_ATTN1_TO_OUT_0_WEIGHT, "weight", 493), {512, 256}, 0);
-                    decoder_estimator_mid_blocks_9_1_0_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_0_NORM3_WEIGHT, "weight", 494), {256}, 0);
-                    decoder_estimator_mid_blocks_9_1_0_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_0_FF_NET_0_PROJ_WEIGHT, "weight", 495), {256, 1024}, 0);
-                    decoder_estimator_mid_blocks_9_1_0_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_0_FF_NET_2_WEIGHT, "weight", 496), {1024, 256}, 0);
-
-                    decoder_estimator_mid_blocks_9_1_1_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_1_NORM1_WEIGHT, "weight", 497), {256}, 0);
-                    decoder_estimator_mid_blocks_9_1_1_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_1_ATTN1_TO_OUT_0_WEIGHT, "weight", 498), {512, 256}, 0);
-                    decoder_estimator_mid_blocks_9_1_1_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_1_ATTN1_TO_Q_WEIGHT, "weight", 499), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_9_1_1_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_1_ATTN1_TO_K_WEIGHT, "weight", 500), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_9_1_1_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_1_ATTN1_TO_V_WEIGHT, "weight", 501), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_9_1_1_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_1_NORM3_WEIGHT, "weight", 502), {256}, 0);
-                    decoder_estimator_mid_blocks_9_1_1_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_1_FF_NET_0_PROJ_WEIGHT, "weight", 503), {256, 1024}, 0);
-                    decoder_estimator_mid_blocks_9_1_1_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_1_FF_NET_2_WEIGHT, "weight", 504), {1024, 256}, 0);
-
-                    decoder_estimator_mid_blocks_9_1_2_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_2_NORM1_WEIGHT, "weight", 505), {256}, 0);
-                    decoder_estimator_mid_blocks_9_1_2_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_2_ATTN1_TO_OUT_0_WEIGHT, "weight", 506), {512, 256}, 0);
-                    decoder_estimator_mid_blocks_9_1_2_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_2_ATTN1_TO_Q_WEIGHT, "weight", 507), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_9_1_2_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_2_ATTN1_TO_K_WEIGHT, "weight", 508), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_9_1_2_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_2_ATTN1_TO_V_WEIGHT, "weight", 509), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_9_1_2_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_2_NORM3_WEIGHT, "weight", 510), {256}, 0);
-                    decoder_estimator_mid_blocks_9_1_2_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_2_FF_NET_0_PROJ_WEIGHT, "weight", 511), {256, 1024}, 0);
-                    decoder_estimator_mid_blocks_9_1_2_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_2_FF_NET_2_WEIGHT, "weight", 512), {1024, 256}, 0);
-
-                    decoder_estimator_mid_blocks_9_1_3_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_3_NORM1_WEIGHT, "weight", 513), {256}, 0);
-                    decoder_estimator_mid_blocks_9_1_3_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_3_ATTN1_TO_Q_WEIGHT, "weight", 514), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_9_1_3_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_3_ATTN1_TO_K_WEIGHT, "weight", 515), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_9_1_3_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_3_ATTN1_TO_V_WEIGHT, "weight", 516), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_9_1_3_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_3_ATTN1_TO_OUT_0_WEIGHT, "weight", 517), {512, 256}, 0);
-                    decoder_estimator_mid_blocks_9_1_3_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_3_NORM3_WEIGHT, "weight", 518), {256}, 0);
-                    decoder_estimator_mid_blocks_9_1_3_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_3_FF_NET_0_PROJ_WEIGHT, "weight", 519), {256, 1024}, 0);
-                    decoder_estimator_mid_blocks_9_1_3_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_3_FF_NET_2_WEIGHT, "weight", 520), {1024, 256}, 0);
-
-                    decoder_estimator_mid_blocks_10_0_mlp_1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_0_MLP_1_WEIGHT, "weight", 521), {1024, 256}, 0);
-                    decoder_estimator_mid_blocks_10_0_block1_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_0_BLOCK1_BLOCK_0_WEIGHT, "weight", 522), {3, 256, 256}, 0);
-                    decoder_estimator_mid_blocks_10_0_block1_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_0_BLOCK1_BLOCK_2_WEIGHT, "weight", 523), {256}, 0);
-                    decoder_estimator_mid_blocks_10_0_block2_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_0_BLOCK2_BLOCK_0_WEIGHT, "weight", 524), {3, 256, 256}, 0);
-                    decoder_estimator_mid_blocks_10_0_block2_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_0_BLOCK2_BLOCK_2_WEIGHT, "weight", 525), {256}, 0);
-                    decoder_estimator_mid_blocks_10_0_res_conv_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_0_RES_CONV_WEIGHT, "weight", 526), {1, 256, 256}, 0);
-
-                    decoder_estimator_mid_blocks_10_1_0_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_0_NORM1_WEIGHT, "weight", 527), {256}, 0);
-                    decoder_estimator_mid_blocks_10_1_0_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_0_ATTN1_TO_Q_WEIGHT, "weight", 528), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_10_1_0_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_0_ATTN1_TO_K_WEIGHT, "weight", 529), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_10_1_0_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_0_ATTN1_TO_V_WEIGHT, "weight", 530), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_10_1_0_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_0_ATTN1_TO_OUT_0_WEIGHT, "weight", 531), {512, 256}, 0);
-                    decoder_estimator_mid_blocks_10_1_0_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_0_NORM3_WEIGHT, "weight", 532), {256}, 0);
-                    decoder_estimator_mid_blocks_10_1_0_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_0_FF_NET_0_PROJ_WEIGHT, "weight", 533), {256, 1024}, 0);
-                    decoder_estimator_mid_blocks_10_1_0_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_0_FF_NET_2_WEIGHT, "weight", 534), {1024, 256}, 0);
-
-                    decoder_estimator_mid_blocks_10_1_1_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_1_NORM1_WEIGHT, "weight", 535), {256}, 0);
-                    decoder_estimator_mid_blocks_10_1_1_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_1_ATTN1_TO_OUT_0_WEIGHT, "weight", 536), {512, 256}, 0);
-                    decoder_estimator_mid_blocks_10_1_1_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_1_ATTN1_TO_Q_WEIGHT, "weight", 537), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_10_1_1_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_1_ATTN1_TO_K_WEIGHT, "weight", 538), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_10_1_1_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_1_ATTN1_TO_V_WEIGHT, "weight", 539), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_10_1_1_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_1_NORM3_WEIGHT, "weight", 540), {256}, 0);
-                    decoder_estimator_mid_blocks_10_1_1_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_1_FF_NET_0_PROJ_WEIGHT, "weight", 541), {256, 1024}, 0);
-                    decoder_estimator_mid_blocks_10_1_1_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_1_FF_NET_2_WEIGHT, "weight", 542), {1024, 256}, 0);
-
-                    decoder_estimator_mid_blocks_10_1_2_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_2_NORM1_WEIGHT, "weight", 543), {256}, 0);
-                    decoder_estimator_mid_blocks_10_1_2_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_2_ATTN1_TO_OUT_0_WEIGHT, "weight", 544), {512, 256}, 0);
-                    decoder_estimator_mid_blocks_10_1_2_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_2_ATTN1_TO_Q_WEIGHT, "weight", 545), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_10_1_2_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_2_ATTN1_TO_K_WEIGHT, "weight", 546), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_10_1_2_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_2_ATTN1_TO_V_WEIGHT, "weight", 547), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_10_1_2_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_2_NORM3_WEIGHT, "weight", 548), {256}, 0);
-                    decoder_estimator_mid_blocks_10_1_2_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_2_FF_NET_0_PROJ_WEIGHT, "weight", 549), {256, 1024}, 0);
-                    decoder_estimator_mid_blocks_10_1_2_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_2_FF_NET_2_WEIGHT, "weight", 550), {1024, 256}, 0);
-
-                    decoder_estimator_mid_blocks_10_1_3_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_3_NORM1_WEIGHT, "weight", 551), {256}, 0);
-                    decoder_estimator_mid_blocks_10_1_3_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_3_ATTN1_TO_Q_WEIGHT, "weight", 552), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_10_1_3_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_3_ATTN1_TO_K_WEIGHT, "weight", 553), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_10_1_3_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_3_ATTN1_TO_V_WEIGHT, "weight", 554), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_10_1_3_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_3_ATTN1_TO_OUT_0_WEIGHT, "weight", 555), {512, 256}, 0);
-                    decoder_estimator_mid_blocks_10_1_3_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_3_NORM3_WEIGHT, "weight", 556), {256}, 0);
-                    decoder_estimator_mid_blocks_10_1_3_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_3_FF_NET_0_PROJ_WEIGHT, "weight", 557), {256, 1024}, 0);
-                    decoder_estimator_mid_blocks_10_1_3_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_3_FF_NET_2_WEIGHT, "weight", 558), {1024, 256}, 0);
-
-                    decoder_estimator_mid_blocks_11_0_mlp_1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_0_MLP_1_WEIGHT, "weight", 559), {1024, 256}, 0);
-                    decoder_estimator_mid_blocks_11_0_block1_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_0_BLOCK1_BLOCK_0_WEIGHT, "weight", 560), {3, 256, 256}, 0);
-                    decoder_estimator_mid_blocks_11_0_block1_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_0_BLOCK1_BLOCK_2_WEIGHT, "weight", 561), {256}, 0);
-                    decoder_estimator_mid_blocks_11_0_block2_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_0_BLOCK2_BLOCK_0_WEIGHT, "weight", 562), {3, 256, 256}, 0);
-                    decoder_estimator_mid_blocks_11_0_block2_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_0_BLOCK2_BLOCK_2_WEIGHT, "weight", 563), {256}, 0);
-                    decoder_estimator_mid_blocks_11_0_res_conv_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_0_RES_CONV_WEIGHT, "weight", 564), {1, 256, 256}, 0);
-
-                    decoder_estimator_mid_blocks_11_1_0_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_0_NORM1_WEIGHT, "weight", 565), {256}, 0);
-                    decoder_estimator_mid_blocks_11_1_0_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_0_ATTN1_TO_Q_WEIGHT, "weight", 566), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_11_1_0_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_0_ATTN1_TO_K_WEIGHT, "weight", 567), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_11_1_0_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_0_ATTN1_TO_V_WEIGHT, "weight", 568), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_11_1_0_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_0_ATTN1_TO_OUT_0_WEIGHT, "weight", 569), {512, 256}, 0);
-                    decoder_estimator_mid_blocks_11_1_0_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_0_NORM3_WEIGHT, "weight", 570), {256}, 0);
-                    decoder_estimator_mid_blocks_11_1_0_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_0_FF_NET_0_PROJ_WEIGHT, "weight", 571), {256, 1024}, 0);
-                    decoder_estimator_mid_blocks_11_1_0_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_0_FF_NET_2_WEIGHT, "weight", 572), {1024, 256}, 0);
-
-                    decoder_estimator_mid_blocks_11_1_1_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_1_NORM1_WEIGHT, "weight", 573), {256}, 0);
-                    decoder_estimator_mid_blocks_11_1_1_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_1_ATTN1_TO_OUT_0_WEIGHT, "weight", 574), {512, 256}, 0);
-                    decoder_estimator_mid_blocks_11_1_1_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_1_ATTN1_TO_Q_WEIGHT, "weight", 575), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_11_1_1_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_1_ATTN1_TO_K_WEIGHT, "weight", 576), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_11_1_1_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_1_ATTN1_TO_V_WEIGHT, "weight", 577), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_11_1_1_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_1_NORM3_WEIGHT, "weight", 578), {256}, 0);
-                    decoder_estimator_mid_blocks_11_1_1_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_1_FF_NET_0_PROJ_WEIGHT, "weight", 579), {256, 1024}, 0);
-                    decoder_estimator_mid_blocks_11_1_1_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_1_FF_NET_2_WEIGHT, "weight", 580), {1024, 256}, 0);
-
-                    decoder_estimator_mid_blocks_11_1_2_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_2_NORM1_WEIGHT, "weight", 581), {256}, 0);
-                    decoder_estimator_mid_blocks_11_1_2_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_2_ATTN1_TO_OUT_0_WEIGHT, "weight", 582), {512, 256}, 0);
-                    decoder_estimator_mid_blocks_11_1_2_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_2_ATTN1_TO_Q_WEIGHT, "weight", 583), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_11_1_2_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_2_ATTN1_TO_K_WEIGHT, "weight", 584), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_11_1_2_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_2_ATTN1_TO_V_WEIGHT, "weight", 585), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_11_1_2_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_2_NORM3_WEIGHT, "weight", 586), {256}, 0);
-                    decoder_estimator_mid_blocks_11_1_2_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_2_FF_NET_0_PROJ_WEIGHT, "weight", 587), {256, 1024}, 0);
-                    decoder_estimator_mid_blocks_11_1_2_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_2_FF_NET_2_WEIGHT, "weight", 588), {1024, 256}, 0);
-
-                    decoder_estimator_mid_blocks_11_1_3_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_3_NORM1_WEIGHT, "weight", 589), {256}, 0);
-                    decoder_estimator_mid_blocks_11_1_3_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_3_ATTN1_TO_Q_WEIGHT, "weight", 590), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_11_1_3_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_3_ATTN1_TO_K_WEIGHT, "weight", 591), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_11_1_3_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_3_ATTN1_TO_V_WEIGHT, "weight", 592), {256, 512}, 0);
-                    decoder_estimator_mid_blocks_11_1_3_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_3_ATTN1_TO_OUT_0_WEIGHT, "weight", 593), {512, 256}, 0);
-                    decoder_estimator_mid_blocks_11_1_3_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_3_NORM3_WEIGHT, "weight", 594), {256}, 0);
-                    decoder_estimator_mid_blocks_11_1_3_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_3_FF_NET_0_PROJ_WEIGHT, "weight", 595), {256, 1024}, 0);
-                    decoder_estimator_mid_blocks_11_1_3_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_3_FF_NET_2_WEIGHT, "weight", 596), {1024, 256}, 0);
-
-                    decoder_estimator_up_blocks_0_0_mlp_1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_0_MLP_1_WEIGHT, "weight", 597), {1024, 256}, 0);
-                    decoder_estimator_up_blocks_0_0_block1_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_0_BLOCK1_BLOCK_0_WEIGHT, "weight", 598), {3, 512, 256}, 0);
-                    decoder_estimator_up_blocks_0_0_block1_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_0_BLOCK1_BLOCK_2_WEIGHT, "weight", 599), {256}, 0);
-                    decoder_estimator_up_blocks_0_0_block2_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_0_BLOCK2_BLOCK_0_WEIGHT, "weight", 600), {3, 256, 256}, 0);
-                    decoder_estimator_up_blocks_0_0_block2_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_0_BLOCK2_BLOCK_2_WEIGHT, "weight", 601), {256}, 0);
-                    decoder_estimator_up_blocks_0_0_res_conv_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_0_RES_CONV_WEIGHT, "weight", 602), {1, 512, 256}, 0);
-                    decoder_estimator_up_blocks_0_1_0_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_0_NORM1_WEIGHT, "weight", 603), {256}, 0);
-                    decoder_estimator_up_blocks_0_1_0_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_0_ATTN1_TO_Q_WEIGHT, "weight", 604), {256, 512}, 0);
-                    decoder_estimator_up_blocks_0_1_0_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_0_ATTN1_TO_K_WEIGHT, "weight", 605), {256, 512}, 0);
-                    decoder_estimator_up_blocks_0_1_0_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_0_ATTN1_TO_V_WEIGHT, "weight", 606), {256, 512}, 0);
-                    decoder_estimator_up_blocks_0_1_0_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_0_ATTN1_TO_OUT_0_WEIGHT, "weight", 607), {512, 256}, 0);
-                    decoder_estimator_up_blocks_0_1_0_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_0_FF_NET_0_PROJ_WEIGHT, "weight", 608), {256, 1024}, 0);
-                    decoder_estimator_up_blocks_0_1_0_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_0_NORM3_WEIGHT, "weight", 609), {256}, 0);
-                    decoder_estimator_up_blocks_0_1_0_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_0_FF_NET_2_WEIGHT, "weight", 610), {1024, 256}, 0);
-
-                    decoder_estimator_up_blocks_0_1_1_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_1_NORM1_WEIGHT, "weight", 611), {256}, 0);
-                    decoder_estimator_up_blocks_0_1_1_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_1_ATTN1_TO_Q_WEIGHT, "weight", 612), {256, 512}, 0);
-                    decoder_estimator_up_blocks_0_1_1_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_1_ATTN1_TO_K_WEIGHT, "weight", 613), {256, 512}, 0);
-                    decoder_estimator_up_blocks_0_1_1_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_1_ATTN1_TO_V_WEIGHT, "weight", 614), {256, 512}, 0);
-                    decoder_estimator_up_blocks_0_1_1_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_1_ATTN1_TO_OUT_0_WEIGHT, "weight", 615), {512, 256}, 0);
-                    decoder_estimator_up_blocks_0_1_1_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_1_FF_NET_0_PROJ_WEIGHT, "weight", 616), {256, 1024}, 0);
-                    decoder_estimator_up_blocks_0_1_1_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_1_FF_NET_2_WEIGHT, "weight", 617), {1024, 256}, 0);
-                    decoder_estimator_up_blocks_0_1_1_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_1_NORM3_WEIGHT, "weight", 618), {256}, 0);
-
-                    decoder_estimator_up_blocks_0_1_2_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_2_NORM1_WEIGHT, "weight", 619), {256}, 0);
-                    decoder_estimator_up_blocks_0_1_2_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_2_ATTN1_TO_Q_WEIGHT, "weight", 620), {256, 512}, 0);
-                    decoder_estimator_up_blocks_0_1_2_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_2_ATTN1_TO_K_WEIGHT, "weight", 621), {256, 512}, 0);
-                    decoder_estimator_up_blocks_0_1_2_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_2_ATTN1_TO_V_WEIGHT, "weight", 622), {256, 512}, 0);
-                    decoder_estimator_up_blocks_0_1_2_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_2_FF_NET_0_PROJ_WEIGHT, "weight", 623), {256, 1024}, 0);
-                    decoder_estimator_up_blocks_0_1_2_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_2_ATTN1_TO_OUT_0_WEIGHT, "weight", 624), {512, 256}, 0);
-                    decoder_estimator_up_blocks_0_1_2_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_2_FF_NET_2_WEIGHT, "weight", 625), {1024, 256}, 0);
-                    decoder_estimator_up_blocks_0_1_2_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_2_NORM3_WEIGHT, "weight", 626), {256}, 0);
-
-                    decoder_estimator_up_blocks_0_1_3_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_3_NORM1_WEIGHT, "weight", 627), {256}, 0);
-                    decoder_estimator_up_blocks_0_1_3_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_3_ATTN1_TO_Q_WEIGHT, "weight", 628), {256, 512}, 0);
-                    decoder_estimator_up_blocks_0_1_3_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_3_ATTN1_TO_K_WEIGHT, "weight", 629), {256, 512}, 0);
-                    decoder_estimator_up_blocks_0_1_3_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_3_ATTN1_TO_V_WEIGHT, "weight", 630), {256, 512}, 0);
-                    decoder_estimator_up_blocks_0_1_3_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_3_ATTN1_TO_OUT_0_WEIGHT, "weight", 631), {512, 256}, 0);
-                    decoder_estimator_up_blocks_0_1_3_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_3_FF_NET_0_PROJ_WEIGHT, "weight", 632), {256, 1024}, 0);
-                    decoder_estimator_up_blocks_0_1_3_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_3_FF_NET_2_WEIGHT, "weight", 633), {1024, 256}, 0);
-                    decoder_estimator_up_blocks_0_1_3_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_3_NORM3_WEIGHT, "weight", 634), {256}, 0);
-
-                    decoder_estimator_up_blocks_0_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_2_WEIGHT, "weight", 635), {3, 256, 256}, 0);
-
-                    decoder_estimator_final_block_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_FINAL_BLOCK_BLOCK_0_WEIGHT, "weight", 636), {3, 256, 256}, 0);
-                    decoder_estimator_final_block_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_FINAL_BLOCK_BLOCK_2_WEIGHT, "weight", 637), {256}, 0);
+                    spk_embed_affine_layer_weight = create_tensor(tn(LLM_TENSOR_SPK_EMBED_AFFINE_LAYER_WEIGHT, "weight", 0), {192, 80}, 0);
+                    spk_embed_affine_layer_bias = create_tensor(tn(LLM_TENSOR_SPK_EMBED_AFFINE_LAYER_BIAS, "bias", 1), {80}, 0);
+
+                    encoder_embed_out_0_weight = create_tensor(tn(LLM_TENSOR_ENCODER_EMBED_OUT_0_WEIGHT, "weight", 2), {512, 512}, 0);
+                    encoder_embed_out_0_bias = create_tensor(tn(LLM_TENSOR_ENCODER_EMBED_OUT_0_BIAS, "bias", 3), {512}, 0);
+                    encoder_embed_out_1_weight = create_tensor(tn(LLM_TENSOR_ENCODER_EMBED_OUT_1_WEIGHT, "weight", 4), {512}, 0);
+                    encoder_embed_out_1_bias = create_tensor(tn(LLM_TENSOR_ENCODER_EMBED_OUT_1_BIAS, "bias", 5), {512}, 0);
+                    encoder_after_norm_weight = create_tensor(tn(LLM_TENSOR_ENCODER_AFTER_NORM_WEIGHT, "weight", 6), {512}, 0);
+                    encoder_after_norm_bias = create_tensor(tn(LLM_TENSOR_ENCODER_AFTER_NORM_BIAS, "bias", 7), {512}, 0);
+                    encoder_pre_lookahead_layer_conv1_weight = create_tensor(tn(LLM_TENSOR_ENCODER_PRE_LOOKAHEAD_LAYER_CONV1_WEIGHT, "weight", 8), {4, 512, 512}, 0);
+                    encoder_pre_lookahead_layer_conv1_bias = create_tensor(tn(LLM_TENSOR_ENCODER_PRE_LOOKAHEAD_LAYER_CONV1_BIAS, "bias", 9), {512}, 0);
+                    encoder_pre_lookahead_layer_conv2_weight = create_tensor(tn(LLM_TENSOR_ENCODER_PRE_LOOKAHEAD_LAYER_CONV2_WEIGHT, "weight", 10), {3, 512, 512}, 0);
+                    encoder_pre_lookahead_layer_conv2_bias = create_tensor(tn(LLM_TENSOR_ENCODER_PRE_LOOKAHEAD_LAYER_CONV2_BIAS, "bias", 11), {512}, 0);
+
+                    encoder_encoders_0_self_attn_linear_q_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_0_SELF_ATTN_LINEAR_Q_WEIGHT, "weight", 12), {512, 512}, 0);
+                    encoder_encoders_0_self_attn_linear_k_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_0_SELF_ATTN_LINEAR_K_WEIGHT, "weight", 13), {512, 512}, 0);
+                    encoder_encoders_0_self_attn_linear_v_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_0_SELF_ATTN_LINEAR_V_WEIGHT, "weight", 14), {512, 512}, 0);
+                    encoder_encoders_0_self_attn_linear_out_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_0_SELF_ATTN_LINEAR_OUT_WEIGHT, "weight", 15), {512, 512}, 0);
+                    encoder_encoders_0_self_attn_linear_pos_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_0_SELF_ATTN_LINEAR_POS_WEIGHT, "weight", 16), {512, 512}, 0);
+                    encoder_encoders_0_self_attn_linear_q_bias = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_0_SELF_ATTN_LINEAR_Q_BIAS, "bias", 17), {512}, 0);
+                    encoder_encoders_0_self_attn_linear_k_bias = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_0_SELF_ATTN_LINEAR_K_BIAS, "bias", 18), {512}, 0);
+                    encoder_encoders_0_self_attn_linear_v_bias = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_0_SELF_ATTN_LINEAR_V_BIAS, "bias", 19), {512}, 0);
+                    encoder_encoders_0_self_attn_linear_out_bias = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_0_SELF_ATTN_LINEAR_OUT_BIAS, "bias", 20), {512}, 0);
+                    encoder_encoders_0_self_attn_pos_bias_u = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_0_SELF_ATTN_POS_BIAS_U, 21), {64, 8}, 0);
+                    encoder_encoders_0_self_attn_pos_bias_v = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_0_SELF_ATTN_POS_BIAS_V, 22), {64, 8}, 0);
+                    encoder_encoders_0_feed_forward_w_1_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_0_FEED_FORWARD_W_1_WEIGHT, "weight", 23), {512, 2048}, 0);
+                    encoder_encoders_0_feed_forward_w_2_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_0_FEED_FORWARD_W_2_WEIGHT, "weight", 24), {2048, 512}, 0);
+                    encoder_encoders_0_norm_ff_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_0_NORM_FF_WEIGHT, "weight", 25), {512}, 0);
+                    encoder_encoders_0_norm_mha_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_0_NORM_MHA_WEIGHT, "weight", 26), {512}, 0);
+                    encoder_encoders_0_feed_forward_w_1_bias = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_0_FEED_FORWARD_W_1_BIAS, "bias", 27), {2048}, 0);
+                    encoder_encoders_0_feed_forward_w_2_bias = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_0_FEED_FORWARD_W_2_BIAS, "bias", 28), {512}, 0);
+                    encoder_encoders_0_norm_ff_bias = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_0_NORM_FF_BIAS, "bias", 29), {512}, 0);
+                    encoder_encoders_0_norm_mha_bias = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_0_NORM_MHA_BIAS, "bias", 30), {512}, 0);
+                    
+                    encoder_encoders_1_self_attn_linear_q_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_1_SELF_ATTN_LINEAR_Q_WEIGHT, "weight", 31), {512, 512}, 0);
+                    encoder_encoders_1_self_attn_linear_k_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_1_SELF_ATTN_LINEAR_K_WEIGHT, "weight", 32), {512, 512}, 0);
+                    encoder_encoders_1_self_attn_linear_v_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_1_SELF_ATTN_LINEAR_V_WEIGHT, "weight", 33), {512, 512}, 0);
+                    encoder_encoders_1_self_attn_linear_out_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_1_SELF_ATTN_LINEAR_OUT_WEIGHT, "weight", 34), {512, 512}, 0);
+                    encoder_encoders_1_self_attn_linear_pos_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_1_SELF_ATTN_LINEAR_POS_WEIGHT, "weight", 35), {512, 512}, 0);
+                    encoder_encoders_1_self_attn_linear_q_bias = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_1_SELF_ATTN_LINEAR_Q_BIAS, "bias", 36), {512}, 0);
+                    encoder_encoders_1_self_attn_linear_k_bias = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_1_SELF_ATTN_LINEAR_K_BIAS, "bias", 37), {512}, 0);
+                    encoder_encoders_1_self_attn_linear_v_bias = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_1_SELF_ATTN_LINEAR_V_BIAS, "bias", 38), {512}, 0);
+                    encoder_encoders_1_self_attn_linear_out_bias = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_1_SELF_ATTN_LINEAR_OUT_BIAS, "bias", 39), {512}, 0);
+                    encoder_encoders_1_self_attn_pos_bias_u = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_1_SELF_ATTN_POS_BIAS_U,  40), {64, 8}, 0);
+                    encoder_encoders_1_self_attn_pos_bias_v = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_1_SELF_ATTN_POS_BIAS_V,  41), {64, 8}, 0);
+                    encoder_encoders_1_feed_forward_w_1_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_1_FEED_FORWARD_W_1_WEIGHT, "weight", 42), {512, 2048}, 0);
+                    encoder_encoders_1_feed_forward_w_2_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_1_FEED_FORWARD_W_2_WEIGHT, "weight", 43), {2048, 512}, 0);
+                    encoder_encoders_1_norm_ff_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_1_NORM_FF_WEIGHT, "weight", 44), {512}, 0);
+                    encoder_encoders_1_norm_mha_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_1_NORM_MHA_WEIGHT, "weight", 45), {512}, 0);
+                    encoder_encoders_1_feed_forward_w_1_bias = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_1_FEED_FORWARD_W_1_BIAS, "bias", 46), {2048}, 0);
+                    encoder_encoders_1_feed_forward_w_2_bias = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_1_FEED_FORWARD_W_2_BIAS, "bias", 47), {512}, 0);
+                    encoder_encoders_1_norm_ff_bias = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_1_NORM_FF_BIAS, "bias", 48), {512}, 0);
+                    encoder_encoders_1_norm_mha_bias = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_1_NORM_MHA_BIAS, "bias", 49), {512}, 0);
+                    
+                    encoder_encoders_2_self_attn_linear_q_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_2_SELF_ATTN_LINEAR_Q_WEIGHT, "weight", 50), {512, 512}, 0);
+                    encoder_encoders_2_self_attn_linear_k_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_2_SELF_ATTN_LINEAR_K_WEIGHT, "weight", 51), {512, 512}, 0);
+                    encoder_encoders_2_self_attn_linear_v_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_2_SELF_ATTN_LINEAR_V_WEIGHT, "weight", 52), {512, 512}, 0);
+                    encoder_encoders_2_self_attn_linear_out_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_2_SELF_ATTN_LINEAR_OUT_WEIGHT, "weight", 53), {512, 512}, 0);
+                    encoder_encoders_2_self_attn_linear_pos_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_2_SELF_ATTN_LINEAR_POS_WEIGHT, "weight", 54), {512, 512}, 0);
+                    encoder_encoders_2_self_attn_linear_q_bias = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_2_SELF_ATTN_LINEAR_Q_BIAS, "bias", 55), {512}, 0);
+                    encoder_encoders_2_self_attn_linear_k_bias = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_2_SELF_ATTN_LINEAR_K_BIAS, "bias", 56), {512}, 0);
+                    encoder_encoders_2_self_attn_linear_v_bias = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_2_SELF_ATTN_LINEAR_V_BIAS, "bias", 57), {512}, 0);
+                    encoder_encoders_2_self_attn_linear_out_bias = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_2_SELF_ATTN_LINEAR_OUT_BIAS, "bias", 58), {512}, 0);
+                    encoder_encoders_2_self_attn_pos_bias_u = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_2_SELF_ATTN_POS_BIAS_U,  59), {64, 8}, 0);
+                    encoder_encoders_2_self_attn_pos_bias_v = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_2_SELF_ATTN_POS_BIAS_V,  60), {64, 8}, 0);
+                    encoder_encoders_2_feed_forward_w_1_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_2_FEED_FORWARD_W_1_WEIGHT, "weight", 61), {512, 2048}, 0);
+                    encoder_encoders_2_feed_forward_w_2_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_2_FEED_FORWARD_W_2_WEIGHT, "weight", 62), {2048, 512}, 0);
+                    encoder_encoders_2_norm_ff_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_2_NORM_FF_WEIGHT, "weight", 63), {512}, 0);
+                    encoder_encoders_2_norm_mha_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_2_NORM_MHA_WEIGHT, "weight", 64), {512}, 0);
+                    encoder_encoders_2_feed_forward_w_1_bias = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_2_FEED_FORWARD_W_1_BIAS, "bias", 65), {2048}, 0);
+                    encoder_encoders_2_feed_forward_w_2_bias = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_2_FEED_FORWARD_W_2_BIAS, "bias", 66), {512}, 0);
+                    encoder_encoders_2_norm_ff_bias = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_2_NORM_FF_BIAS, "bias", 67), {512}, 0);
+                    encoder_encoders_2_norm_mha_bias = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_2_NORM_MHA_BIAS, "bias", 68), {512}, 0);
+
+                    encoder_encoders_3_self_attn_linear_q_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_3_SELF_ATTN_LINEAR_Q_WEIGHT, "weight", 69), {512, 512}, 0);
+                    encoder_encoders_3_self_attn_linear_k_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_3_SELF_ATTN_LINEAR_K_WEIGHT, "weight", 70), {512, 512}, 0);
+                    encoder_encoders_3_self_attn_linear_v_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_3_SELF_ATTN_LINEAR_V_WEIGHT, "weight", 71), {512, 512}, 0);
+                    encoder_encoders_3_self_attn_linear_out_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_3_SELF_ATTN_LINEAR_OUT_WEIGHT, "weight", 72), {512, 512}, 0);
+                    encoder_encoders_3_self_attn_linear_pos_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_3_SELF_ATTN_LINEAR_POS_WEIGHT, "weight", 73), {512, 512}, 0);
+                    encoder_encoders_3_self_attn_linear_q_bias = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_3_SELF_ATTN_LINEAR_Q_BIAS, "bias", 74), {512}, 0);
+                    encoder_encoders_3_self_attn_linear_k_bias = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_3_SELF_ATTN_LINEAR_K_BIAS, "bias", 75), {512}, 0);
+                    encoder_encoders_3_self_attn_linear_v_bias = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_3_SELF_ATTN_LINEAR_V_BIAS, "bias", 76), {512}, 0);
+                    encoder_encoders_3_self_attn_linear_out_bias = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_3_SELF_ATTN_LINEAR_OUT_BIAS, "bias", 77), {512}, 0);
+                    encoder_encoders_3_self_attn_pos_bias_u = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_3_SELF_ATTN_POS_BIAS_U,  78), {64, 8}, 0);
+                    encoder_encoders_3_self_attn_pos_bias_v = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_3_SELF_ATTN_POS_BIAS_V,  79), {64, 8}, 0);
+                    encoder_encoders_3_feed_forward_w_1_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_3_FEED_FORWARD_W_1_WEIGHT, "weight", 80), {512, 2048}, 0);
+                    encoder_encoders_3_feed_forward_w_2_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_3_FEED_FORWARD_W_2_WEIGHT, "weight", 81), {2048, 512}, 0);
+                    encoder_encoders_3_norm_ff_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_3_NORM_FF_WEIGHT, "weight", 82), {512}, 0);
+                    encoder_encoders_3_norm_mha_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_3_NORM_MHA_WEIGHT, "weight", 83), {512}, 0);
+                    encoder_encoders_3_feed_forward_w_1_bias = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_3_FEED_FORWARD_W_1_BIAS, "bias", 84), {2048}, 0);
+                    encoder_encoders_3_feed_forward_w_2_bias = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_3_FEED_FORWARD_W_2_BIAS, "bias", 85), {512}, 0);
+                    encoder_encoders_3_norm_ff_bias = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_3_NORM_FF_BIAS, "bias", 86), {512}, 0);
+                    encoder_encoders_3_norm_mha_bias = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_3_NORM_MHA_BIAS, "bias", 87), {512}, 0);
+
+                    encoder_encoders_4_self_attn_linear_q_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_4_SELF_ATTN_LINEAR_Q_WEIGHT, "weight", 88), {512, 512}, 0);
+                    encoder_encoders_4_self_attn_linear_k_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_4_SELF_ATTN_LINEAR_K_WEIGHT, "weight", 89), {512, 512}, 0);
+                    encoder_encoders_4_self_attn_linear_v_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_4_SELF_ATTN_LINEAR_V_WEIGHT, "weight", 90), {512, 512}, 0);
+                    encoder_encoders_4_self_attn_linear_out_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_4_SELF_ATTN_LINEAR_OUT_WEIGHT, "weight", 91), {512, 512}, 0);
+                    encoder_encoders_4_self_attn_linear_pos_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_4_SELF_ATTN_LINEAR_POS_WEIGHT, "weight", 92), {512, 512}, 0);
+                    encoder_encoders_4_self_attn_linear_q_bias = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_4_SELF_ATTN_LINEAR_Q_BIAS, "bias", 93), {512}, 0);
+                    encoder_encoders_4_self_attn_linear_k_bias = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_4_SELF_ATTN_LINEAR_K_BIAS, "bias", 94), {512}, 0);
+                    encoder_encoders_4_self_attn_linear_v_bias = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_4_SELF_ATTN_LINEAR_V_BIAS, "bias", 95), {512}, 0);
+                    encoder_encoders_4_self_attn_linear_out_bias = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_4_SELF_ATTN_LINEAR_OUT_BIAS, "bias", 96), {512}, 0);
+                    encoder_encoders_4_self_attn_pos_bias_u = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_4_SELF_ATTN_POS_BIAS_U,  97), {64, 8}, 0);
+                    encoder_encoders_4_self_attn_pos_bias_v = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_4_SELF_ATTN_POS_BIAS_V,  98), {64, 8}, 0);
+                    encoder_encoders_4_feed_forward_w_1_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_4_FEED_FORWARD_W_1_WEIGHT, "weight", 99), {512, 2048}, 0);
+                    encoder_encoders_4_feed_forward_w_2_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_4_FEED_FORWARD_W_2_WEIGHT, "weight", 100), {2048, 512}, 0);
+                    encoder_encoders_4_norm_ff_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_4_NORM_FF_WEIGHT, "weight", 101), {512}, 0);
+                    encoder_encoders_4_norm_mha_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_4_NORM_MHA_WEIGHT, "weight", 102), {512}, 0);
+                    encoder_encoders_4_feed_forward_w_1_bias = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_4_FEED_FORWARD_W_1_BIAS, "bias", 103), {2048}, 0);
+                    encoder_encoders_4_feed_forward_w_2_bias = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_4_FEED_FORWARD_W_2_BIAS, "bias", 104), {512}, 0);
+                    encoder_encoders_4_norm_ff_bias = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_4_NORM_FF_BIAS, "bias", 105), {512}, 0);
+                    encoder_encoders_4_norm_mha_bias = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_4_NORM_MHA_BIAS, "bias", 106), {512}, 0);
+                    
+                    encoder_encoders_5_self_attn_linear_q_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_5_SELF_ATTN_LINEAR_Q_WEIGHT, "weight", 107), {512, 512}, 0);
+                    encoder_encoders_5_self_attn_linear_k_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_5_SELF_ATTN_LINEAR_K_WEIGHT, "weight", 108), {512, 512}, 0);
+                    encoder_encoders_5_self_attn_linear_v_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_5_SELF_ATTN_LINEAR_V_WEIGHT, "weight", 109), {512, 512}, 0);
+                    encoder_encoders_5_self_attn_linear_out_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_5_SELF_ATTN_LINEAR_OUT_WEIGHT, "weight", 110), {512, 512}, 0);
+                    encoder_encoders_5_self_attn_linear_pos_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_5_SELF_ATTN_LINEAR_POS_WEIGHT, "weight", 111), {512, 512}, 0);
+                    encoder_encoders_5_self_attn_linear_q_bias = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_5_SELF_ATTN_LINEAR_Q_BIAS, "bias", 112), {512}, 0);
+                    encoder_encoders_5_self_attn_linear_k_bias = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_5_SELF_ATTN_LINEAR_K_BIAS, "bias", 113), {512}, 0);
+                    encoder_encoders_5_self_attn_linear_v_bias = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_5_SELF_ATTN_LINEAR_V_BIAS, "bias", 114), {512}, 0);
+                    encoder_encoders_5_self_attn_linear_out_bias = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_5_SELF_ATTN_LINEAR_OUT_BIAS, "bias", 115), {512}, 0);
+                    encoder_encoders_5_self_attn_pos_bias_u = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_5_SELF_ATTN_POS_BIAS_U,  116), {64, 8}, 0);
+                    encoder_encoders_5_self_attn_pos_bias_v = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_5_SELF_ATTN_POS_BIAS_V,  117), {64, 8}, 0);
+                    encoder_encoders_5_feed_forward_w_1_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_5_FEED_FORWARD_W_1_WEIGHT, "weight", 118), {512, 2048}, 0);
+                    encoder_encoders_5_feed_forward_w_2_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_5_FEED_FORWARD_W_2_WEIGHT, "weight", 119), {2048, 512}, 0);
+                    encoder_encoders_5_norm_ff_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_5_NORM_FF_WEIGHT, "weight", 120), {512}, 0);
+                    encoder_encoders_5_norm_mha_weight = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_5_NORM_MHA_WEIGHT, "weight", 121), {512}, 0);
+                    encoder_encoders_5_feed_forward_w_1_bias = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_5_FEED_FORWARD_W_1_BIAS, "bias", 122), {2048}, 0);
+                    encoder_encoders_5_feed_forward_w_2_bias = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_5_FEED_FORWARD_W_2_BIAS, "bias", 123), {512}, 0);
+                    encoder_encoders_5_norm_ff_bias = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_5_NORM_FF_BIAS, "bias", 124), {512}, 0);
+                    encoder_encoders_5_norm_mha_bias = create_tensor(tn(LLM_TENSOR_ENCODER_ENCODERS_5_NORM_MHA_BIAS, "bias", 125), {512}, 0);
+                    
+                    encoder_up_layer_conv_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_LAYER_CONV_WEIGHT, "weight", 126), {5, 512, 512}, 0);
+                    encoder_up_layer_conv_bias = create_tensor(tn(LLM_TENSOR_ENCODER_UP_LAYER_CONV_BIAS, "bias", 127), {512}, 0);
+                    encoder_up_embed_out_0_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_EMBED_OUT_0_WEIGHT, "weight", 128), {512, 512}, 0);
+                    encoder_up_embed_out_1_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_EMBED_OUT_1_WEIGHT, "weight", 129), {512}, 0);
+                    encoder_up_embed_out_0_bias = create_tensor(tn(LLM_TENSOR_ENCODER_UP_EMBED_OUT_0_BIAS, "bias", 130), {512}, 0);
+                    encoder_up_embed_out_1_bias = create_tensor(tn(LLM_TENSOR_ENCODER_UP_EMBED_OUT_1_BIAS, "bias", 131), {512}, 0);
+
+                    encoder_up_encoders_0_self_attn_linear_q_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_0_SELF_ATTN_LINEAR_Q_WEIGHT, "weight", 132), {512, 512}, 0);
+                    encoder_up_encoders_0_self_attn_linear_k_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_0_SELF_ATTN_LINEAR_K_WEIGHT, "weight", 133), {512, 512}, 0);
+                    encoder_up_encoders_0_self_attn_linear_v_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_0_SELF_ATTN_LINEAR_V_WEIGHT, "weight", 134), {512, 512}, 0);
+                    encoder_up_encoders_0_self_attn_linear_out_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_0_SELF_ATTN_LINEAR_OUT_WEIGHT, "weight", 135), {512, 512}, 0);
+                    encoder_up_encoders_0_self_attn_linear_pos_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_0_SELF_ATTN_LINEAR_POS_WEIGHT, "weight", 136), {512, 512}, 0);
+                    encoder_up_encoders_0_self_attn_linear_q_bias = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_0_SELF_ATTN_LINEAR_Q_BIAS, "bias", 137), {512}, 0);
+                    encoder_up_encoders_0_self_attn_linear_k_bias = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_0_SELF_ATTN_LINEAR_K_BIAS, "bias", 138), {512}, 0);
+                    encoder_up_encoders_0_self_attn_linear_v_bias = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_0_SELF_ATTN_LINEAR_V_BIAS, "bias", 139), {512}, 0);
+                    encoder_up_encoders_0_self_attn_linear_out_bias = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_0_SELF_ATTN_LINEAR_OUT_BIAS, "bias", 140), {512}, 0);
+                    encoder_up_encoders_0_self_attn_pos_bias_u = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_0_SELF_ATTN_POS_BIAS_U,  141), {64, 8}, 0);
+                    encoder_up_encoders_0_self_attn_pos_bias_v = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_0_SELF_ATTN_POS_BIAS_V,  142), {64, 8}, 0);
+                    encoder_up_encoders_0_feed_forward_w_1_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_0_FEED_FORWARD_W_1_WEIGHT, "weight", 143), {512, 2048}, 0);
+                    encoder_up_encoders_0_feed_forward_w_2_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_0_FEED_FORWARD_W_2_WEIGHT, "weight", 144), {2048, 512}, 0);
+                    encoder_up_encoders_0_norm_ff_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_0_NORM_FF_WEIGHT, "weight", 145), {512}, 0);
+                    encoder_up_encoders_0_norm_mha_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_0_NORM_MHA_WEIGHT, "weight", 146), {512}, 0);
+                    encoder_up_encoders_0_feed_forward_w_1_bias = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_0_FEED_FORWARD_W_1_BIAS, "bias", 147), {2048}, 0);
+                    encoder_up_encoders_0_feed_forward_w_2_bias = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_0_FEED_FORWARD_W_2_BIAS, "bias", 148), {512}, 0);
+                    encoder_up_encoders_0_norm_ff_bias = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_0_NORM_FF_BIAS, "bias", 149), {512}, 0);
+                    encoder_up_encoders_0_norm_mha_bias = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_0_NORM_MHA_BIAS, "bias", 150), {512}, 0);
+                    
+                    encoder_up_encoders_1_self_attn_linear_q_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_1_SELF_ATTN_LINEAR_Q_WEIGHT, "weight", 151), {512, 512}, 0);
+                    encoder_up_encoders_1_self_attn_linear_k_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_1_SELF_ATTN_LINEAR_K_WEIGHT, "weight", 152), {512, 512}, 0);
+                    encoder_up_encoders_1_self_attn_linear_v_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_1_SELF_ATTN_LINEAR_V_WEIGHT, "weight", 153), {512, 512}, 0);
+                    encoder_up_encoders_1_self_attn_linear_out_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_1_SELF_ATTN_LINEAR_OUT_WEIGHT, "weight", 154), {512, 512}, 0);
+                    encoder_up_encoders_1_self_attn_linear_pos_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_1_SELF_ATTN_LINEAR_POS_WEIGHT, "weight", 155), {512, 512}, 0);
+                    encoder_up_encoders_1_self_attn_linear_q_bias = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_1_SELF_ATTN_LINEAR_Q_BIAS, "bias", 156), {512}, 0);
+                    encoder_up_encoders_1_self_attn_linear_k_bias = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_1_SELF_ATTN_LINEAR_K_BIAS, "bias", 157), {512}, 0);
+                    encoder_up_encoders_1_self_attn_linear_v_bias = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_1_SELF_ATTN_LINEAR_V_BIAS, "bias", 158), {512}, 0);
+                    encoder_up_encoders_1_self_attn_linear_out_bias = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_1_SELF_ATTN_LINEAR_OUT_BIAS, "bias", 159), {512}, 0);
+                    encoder_up_encoders_1_self_attn_pos_bias_u = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_1_SELF_ATTN_POS_BIAS_U,  160), {64, 8}, 0);
+                    encoder_up_encoders_1_self_attn_pos_bias_v = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_1_SELF_ATTN_POS_BIAS_V,  161), {64, 8}, 0);
+                    encoder_up_encoders_1_feed_forward_w_1_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_1_FEED_FORWARD_W_1_WEIGHT, "weight", 162), {512, 2048}, 0);
+                    encoder_up_encoders_1_feed_forward_w_2_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_1_FEED_FORWARD_W_2_WEIGHT, "weight", 163), {2048, 512}, 0);
+                    encoder_up_encoders_1_norm_ff_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_1_NORM_FF_WEIGHT, "weight", 164), {512}, 0);
+                    encoder_up_encoders_1_norm_mha_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_1_NORM_MHA_WEIGHT, "weight", 165), {512}, 0);
+                    encoder_up_encoders_1_feed_forward_w_1_bias = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_1_FEED_FORWARD_W_1_BIAS, "bias", 166), {2048}, 0);
+                    encoder_up_encoders_1_feed_forward_w_2_bias = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_1_FEED_FORWARD_W_2_BIAS, "bias", 167), {512}, 0);
+                    encoder_up_encoders_1_norm_ff_bias = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_1_NORM_FF_BIAS, "bias", 168), {512}, 0);
+                    encoder_up_encoders_1_norm_mha_bias = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_1_NORM_MHA_BIAS, "bias", 169), {512}, 0);
+                    
+                    encoder_up_encoders_2_self_attn_linear_q_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_2_SELF_ATTN_LINEAR_Q_WEIGHT, "weight", 170), {512, 512}, 0);
+                    encoder_up_encoders_2_self_attn_linear_k_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_2_SELF_ATTN_LINEAR_K_WEIGHT, "weight", 171), {512, 512}, 0);
+                    encoder_up_encoders_2_self_attn_linear_v_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_2_SELF_ATTN_LINEAR_V_WEIGHT, "weight", 172), {512, 512}, 0);
+                    encoder_up_encoders_2_self_attn_linear_out_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_2_SELF_ATTN_LINEAR_OUT_WEIGHT, "weight", 173), {512, 512}, 0);
+                    encoder_up_encoders_2_self_attn_linear_pos_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_2_SELF_ATTN_LINEAR_POS_WEIGHT, "weight", 174), {512, 512}, 0);
+                    encoder_up_encoders_2_self_attn_linear_q_bias = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_2_SELF_ATTN_LINEAR_Q_BIAS, "bias", 175), {512}, 0);
+                    encoder_up_encoders_2_self_attn_linear_k_bias = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_2_SELF_ATTN_LINEAR_K_BIAS, "bias", 176), {512}, 0);
+                    encoder_up_encoders_2_self_attn_linear_v_bias = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_2_SELF_ATTN_LINEAR_V_BIAS, "bias", 177), {512}, 0);
+                    encoder_up_encoders_2_self_attn_linear_out_bias = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_2_SELF_ATTN_LINEAR_OUT_BIAS, "bias", 178), {512}, 0);
+                    encoder_up_encoders_2_self_attn_pos_bias_u = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_2_SELF_ATTN_POS_BIAS_U,  179), {64, 8}, 0);
+                    encoder_up_encoders_2_self_attn_pos_bias_v = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_2_SELF_ATTN_POS_BIAS_V,  180), {64, 8}, 0);
+                    encoder_up_encoders_2_feed_forward_w_1_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_2_FEED_FORWARD_W_1_WEIGHT, "weight", 181), {512, 2048}, 0);
+                    encoder_up_encoders_2_feed_forward_w_2_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_2_FEED_FORWARD_W_2_WEIGHT, "weight", 182), {2048, 512}, 0);
+                    encoder_up_encoders_2_norm_ff_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_2_NORM_FF_WEIGHT, "weight", 183), {512}, 0);
+                    encoder_up_encoders_2_norm_mha_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_2_NORM_MHA_WEIGHT, "weight", 184), {512}, 0);
+                    encoder_up_encoders_2_feed_forward_w_1_bias = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_2_FEED_FORWARD_W_1_BIAS, "bias", 185), {2048}, 0);
+                    encoder_up_encoders_2_feed_forward_w_2_bias = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_2_FEED_FORWARD_W_2_BIAS, "bias", 186), {512}, 0);
+                    encoder_up_encoders_2_norm_ff_bias = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_2_NORM_FF_BIAS, "bias", 187), {512}, 0);
+                    encoder_up_encoders_2_norm_mha_bias = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_2_NORM_MHA_BIAS, "bias", 188), {512}, 0);
+                    
+                    encoder_up_encoders_3_self_attn_linear_q_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_3_SELF_ATTN_LINEAR_Q_WEIGHT, "weight", 189), {512, 512}, 0);
+                    encoder_up_encoders_3_self_attn_linear_k_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_3_SELF_ATTN_LINEAR_K_WEIGHT, "weight", 190), {512, 512}, 0);
+                    encoder_up_encoders_3_self_attn_linear_v_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_3_SELF_ATTN_LINEAR_V_WEIGHT, "weight", 191), {512, 512}, 0);
+                    encoder_up_encoders_3_self_attn_linear_out_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_3_SELF_ATTN_LINEAR_OUT_WEIGHT, "weight", 192), {512, 512}, 0);
+                    encoder_up_encoders_3_self_attn_linear_pos_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_3_SELF_ATTN_LINEAR_POS_WEIGHT, "weight", 193), {512, 512}, 0);
+                    encoder_up_encoders_3_self_attn_linear_q_bias = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_3_SELF_ATTN_LINEAR_Q_BIAS, "bias", 194), {512}, 0);
+                    encoder_up_encoders_3_self_attn_linear_k_bias = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_3_SELF_ATTN_LINEAR_K_BIAS, "bias", 195), {512}, 0);
+                    encoder_up_encoders_3_self_attn_linear_v_bias = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_3_SELF_ATTN_LINEAR_V_BIAS, "bias", 196), {512}, 0);
+                    encoder_up_encoders_3_self_attn_linear_out_bias = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_3_SELF_ATTN_LINEAR_OUT_BIAS, "bias", 197), {512}, 0);
+                    encoder_up_encoders_3_self_attn_pos_bias_u = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_3_SELF_ATTN_POS_BIAS_U,  198), {64, 8}, 0);
+                    encoder_up_encoders_3_self_attn_pos_bias_v = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_3_SELF_ATTN_POS_BIAS_V,  199), {64, 8}, 0);
+                    encoder_up_encoders_3_feed_forward_w_1_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_3_FEED_FORWARD_W_1_WEIGHT, "weight", 200), {512, 2048}, 0);
+                    encoder_up_encoders_3_feed_forward_w_2_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_3_FEED_FORWARD_W_2_WEIGHT, "weight", 201), {2048, 512}, 0);
+                    encoder_up_encoders_3_norm_ff_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_3_NORM_FF_WEIGHT, "weight", 202), {512}, 0);
+                    encoder_up_encoders_3_norm_mha_weight = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_3_NORM_MHA_WEIGHT, "weight", 203), {512}, 0);
+                    encoder_up_encoders_3_feed_forward_w_1_bias = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_3_FEED_FORWARD_W_1_BIAS, "bias", 204), {2048}, 0);
+                    encoder_up_encoders_3_feed_forward_w_2_bias = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_3_FEED_FORWARD_W_2_BIAS, "bias", 205), {512}, 0);
+                    encoder_up_encoders_3_norm_ff_bias = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_3_NORM_FF_BIAS, "bias", 206), {512}, 0);
+                    encoder_up_encoders_3_norm_mha_bias = create_tensor(tn(LLM_TENSOR_ENCODER_UP_ENCODERS_3_NORM_MHA_BIAS, "bias", 207), {512}, 0);
+                
+                    encoder_proj_weight = create_tensor(tn(LLM_TENSOR_ENCODER_PROJ_WEIGHT, "weight", 208), {512, 80}, 0);
+                    encoder_proj_bias = create_tensor(tn(LLM_TENSOR_ENCODER_PROJ_BIAS, "bias", 209), {80}, 0);
+
+                    decoder_estimator_time_mlp_linear_1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_TIME_MLP_LINEAR_1_WEIGHT, "weight", 210), {320, 1024}, 0);
+                    decoder_estimator_time_mlp_linear_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_TIME_MLP_LINEAR_2_WEIGHT, "weight", 211), {1024, 1024}, 0);
+                    decoder_estimator_time_mlp_linear_1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_TIME_MLP_LINEAR_1_BIAS, "bias", 212), {1024}, 0);
+                    decoder_estimator_time_mlp_linear_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_TIME_MLP_LINEAR_2_BIAS, "bias", 213), {1024}, 0);
+
+                    decoder_estimator_down_blocks_0_0_mlp_1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_0_MLP_1_WEIGHT, "weight", 214), {1024, 256}, 0);
+                    decoder_estimator_down_blocks_0_0_mlp_1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_0_MLP_1_BIAS, "bias", 215), {256}, 0);
+
+                    decoder_estimator_down_blocks_0_0_block1_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_0_BLOCK1_BLOCK_0_WEIGHT, "weight", 216), {3, 320, 256}, 0);
+                    decoder_estimator_down_blocks_0_0_block1_block_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_0_BLOCK1_BLOCK_0_BIAS, "bias", 217), {256}, 0);
+                    decoder_estimator_down_blocks_0_0_block1_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_0_BLOCK1_BLOCK_2_WEIGHT, "weight", 218), {256}, 0);
+                    decoder_estimator_down_blocks_0_0_block1_block_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_0_BLOCK1_BLOCK_2_BIAS, "bias", 219), {256}, 0);
+                    decoder_estimator_down_blocks_0_0_block2_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_0_BLOCK2_BLOCK_0_WEIGHT, "weight", 220), {3, 256, 256}, 0);
+                    decoder_estimator_down_blocks_0_0_block2_block_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_0_BLOCK2_BLOCK_0_BIAS, "bias", 221), {256}, 0);
+                    decoder_estimator_down_blocks_0_0_block2_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_0_BLOCK2_BLOCK_2_WEIGHT, "weight", 222), {256}, 0);
+                    decoder_estimator_down_blocks_0_0_block2_block_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_0_BLOCK2_BLOCK_2_BIAS, "bias", 223), {256}, 0);
+                    
+                    decoder_estimator_down_blocks_0_0_res_conv_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_0_RES_CONV_WEIGHT, "weight", 224), {1, 320, 256}, 0);
+                    decoder_estimator_down_blocks_0_0_res_conv_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_0_RES_CONV_BIAS, "bias", 225), {256}, 0);
+
+                    decoder_estimator_down_blocks_0_1_0_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_0_NORM1_WEIGHT, "weight", 226), {256}, 0);
+                    decoder_estimator_down_blocks_0_1_0_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_0_ATTN1_TO_Q_WEIGHT, "weight", 227), {256, 512}, 0);
+                    decoder_estimator_down_blocks_0_1_0_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_0_ATTN1_TO_K_WEIGHT, "weight", 228), {256, 512}, 0);
+                    decoder_estimator_down_blocks_0_1_0_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_0_ATTN1_TO_V_WEIGHT, "weight", 229), {256, 512}, 0);
+                    decoder_estimator_down_blocks_0_1_0_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_0_ATTN1_TO_OUT_0_WEIGHT, "weight", 230), {512, 256}, 0);
+                    decoder_estimator_down_blocks_0_1_0_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_0_NORM3_WEIGHT, "weight", 231), {256}, 0);
+                    decoder_estimator_down_blocks_0_1_0_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_0_FF_NET_0_PROJ_WEIGHT, "weight", 232), {256, 1024}, 0);
+                    decoder_estimator_down_blocks_0_1_0_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_0_FF_NET_2_WEIGHT, "weight", 233), {1024, 256}, 0);
+                    decoder_estimator_down_blocks_0_1_0_norm1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_0_NORM1_BIAS, "bias", 234), {256}, 0);
+                    decoder_estimator_down_blocks_0_1_0_attn1_to_out_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_0_ATTN1_TO_OUT_0_BIAS, "bias", 235), {256}, 0);
+                    decoder_estimator_down_blocks_0_1_0_norm3_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_0_NORM3_BIAS, "bias", 236), {256}, 0);
+                    decoder_estimator_down_blocks_0_1_0_ff_net_0_proj_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_0_FF_NET_0_PROJ_BIAS, "bias", 237), {1024}, 0);
+                    decoder_estimator_down_blocks_0_1_0_ff_net_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_0_FF_NET_2_BIAS, "bias", 238), {256}, 0);
+                    
+                    decoder_estimator_down_blocks_0_1_3_attn1_to_out_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_ATTN1_TO_OUT_0_BIAS, "bias", 239), {256}, 0);
+                    decoder_estimator_down_blocks_0_1_3_ff_net_0_proj_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_FF_NET_0_PROJ_BIAS, "bias", 240), {1024}, 0);
+                    decoder_estimator_down_blocks_0_1_2_norm3_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_NORM3_BIAS, "bias", 241), {256}, 0);
+                    decoder_estimator_down_blocks_0_1_3_ff_net_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_FF_NET_2_BIAS, "bias", 242), {256}, 0);
+                    decoder_estimator_down_blocks_0_1_3_norm1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_NORM1_BIAS, "bias", 243), {256}, 0);
+                    decoder_estimator_down_blocks_0_1_3_norm3_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_NORM3_BIAS, "bias", 244), {256}, 0);
+                    decoder_estimator_down_blocks_0_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_2_BIAS, "bias", 245), {256}, 0);
+
+                    decoder_estimator_down_blocks_0_1_1_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_1_NORM1_WEIGHT, "weight", 246), {256}, 0);
+                    decoder_estimator_down_blocks_0_1_1_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_1_ATTN1_TO_Q_WEIGHT, "weight", 247), {256, 512}, 0);
+                    decoder_estimator_down_blocks_0_1_1_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_1_ATTN1_TO_K_WEIGHT, "weight", 248), {256, 512}, 0);
+                    decoder_estimator_down_blocks_0_1_1_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_1_ATTN1_TO_V_WEIGHT, "weight", 249), {256, 512}, 0);
+                    decoder_estimator_down_blocks_0_1_1_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_1_ATTN1_TO_OUT_0_WEIGHT, "weight", 250), {512, 256}, 0);
+                    decoder_estimator_down_blocks_0_1_1_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_1_NORM3_WEIGHT, "weight", 251), {256}, 0);
+                    decoder_estimator_down_blocks_0_1_1_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_1_FF_NET_0_PROJ_WEIGHT, "weight", 252), {256, 1024}, 0);
+                    decoder_estimator_down_blocks_0_1_1_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_1_FF_NET_2_WEIGHT, "weight", 253), {1024, 256}, 0);
+                    decoder_estimator_down_blocks_0_1_1_norm1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_1_NORM1_BIAS, "bias", 254), {256}, 0);
+                    decoder_estimator_down_blocks_0_1_1_attn1_to_out_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_1_ATTN1_TO_OUT_0_BIAS, "bias", 255), {256}, 0);
+                    decoder_estimator_down_blocks_0_1_1_norm3_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_1_NORM3_BIAS, "bias", 256), {256}, 0);
+                    decoder_estimator_down_blocks_0_1_1_ff_net_0_proj_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_1_FF_NET_0_PROJ_BIAS, "bias", 257), {1024}, 0);
+                    decoder_estimator_down_blocks_0_1_1_ff_net_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_1_FF_NET_2_BIAS, "bias", 258), {256}, 0);
+
+                    decoder_estimator_down_blocks_0_1_2_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_NORM1_WEIGHT, "weight", 259), {256}, 0);
+                    decoder_estimator_down_blocks_0_1_2_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_ATTN1_TO_Q_WEIGHT, "weight", 260), {256, 512}, 0);
+                    decoder_estimator_down_blocks_0_1_2_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_ATTN1_TO_K_WEIGHT, "weight", 261), {256, 512}, 0);
+                    decoder_estimator_down_blocks_0_1_2_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_ATTN1_TO_V_WEIGHT, "weight", 262), {256, 512}, 0);
+                    decoder_estimator_down_blocks_0_1_2_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_ATTN1_TO_OUT_0_WEIGHT, "weight", 263), {512, 256}, 0);
+                    decoder_estimator_down_blocks_0_1_2_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_NORM3_WEIGHT, "weight", 264), {256}, 0);
+                    decoder_estimator_down_blocks_0_1_2_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_FF_NET_0_PROJ_WEIGHT, "weight", 265), {256, 1024}, 0);
+                    decoder_estimator_down_blocks_0_1_2_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_FF_NET_2_WEIGHT, "weight", 266), {1024, 256}, 0);
+                    decoder_estimator_down_blocks_0_1_2_norm1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_NORM1_BIAS, "bias", 267), {256}, 0);
+                    decoder_estimator_down_blocks_0_1_2_attn1_to_out_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_ATTN1_TO_OUT_0_BIAS, "bias", 268), {256}, 0);
+                    decoder_estimator_down_blocks_0_1_2_norm3_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_NORM3_BIAS, "bias", 269), {256}, 0);
+                    decoder_estimator_down_blocks_0_1_2_ff_net_0_proj_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_FF_NET_0_PROJ_BIAS, "bias", 270), {1024}, 0);
+                    decoder_estimator_down_blocks_0_1_2_ff_net_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_FF_NET_2_BIAS, "bias", 271), {256}, 0);
+
+                    decoder_estimator_down_blocks_0_1_3_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_NORM1_WEIGHT, "weight", 272), {256}, 0);
+                    decoder_estimator_down_blocks_0_1_3_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_ATTN1_TO_Q_WEIGHT, "weight", 273), {256, 512}, 0);
+                    decoder_estimator_down_blocks_0_1_3_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_ATTN1_TO_K_WEIGHT, "weight", 274), {256, 512}, 0);
+                    decoder_estimator_down_blocks_0_1_3_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_ATTN1_TO_V_WEIGHT, "weight", 275), {256, 512}, 0);
+                    decoder_estimator_down_blocks_0_1_3_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_ATTN1_TO_OUT_0_WEIGHT, "weight", 276), {512, 256}, 0);
+                    decoder_estimator_down_blocks_0_1_3_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_NORM3_WEIGHT, "weight", 277), {256}, 0);
+                    decoder_estimator_down_blocks_0_1_3_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_FF_NET_0_PROJ_WEIGHT, "weight", 278), {256, 1024}, 0);
+                    decoder_estimator_down_blocks_0_1_3_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_FF_NET_2_WEIGHT, "weight", 279), {1024, 256}, 0);
+                    decoder_estimator_down_blocks_0_1_3_norm1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_NORM1_BIAS, "bias", 280), {256}, 0);
+                    decoder_estimator_down_blocks_0_1_3_attn1_to_out_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_ATTN1_TO_OUT_0_BIAS, "bias", 281), {256}, 0);
+                    decoder_estimator_down_blocks_0_1_3_norm3_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_NORM3_BIAS, "bias", 282), {256}, 0);
+                    decoder_estimator_down_blocks_0_1_3_ff_net_0_proj_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_FF_NET_0_PROJ_BIAS, "bias", 283), {1024}, 0);
+                    decoder_estimator_down_blocks_0_1_3_ff_net_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_FF_NET_2_BIAS, "bias", 284), {256}, 0);
+                    
+                    decoder_estimator_down_blocks_0_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_2_WEIGHT, "weight", 285), {3, 256, 256}, 0);
+                    decoder_estimator_down_blocks_0_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_DOWN_BLOCKS_0_2_BIAS, "bias", 286), {256}, 0);
+
+                    decoder_estimator_mid_blocks_0_0_mlp_1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_0_MLP_1_WEIGHT, "weight", 287), {1024, 256}, 0);
+                    decoder_estimator_mid_blocks_0_0_mlp_1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_0_MLP_1_BIAS, "bias", 288), {256}, 0);
+                    decoder_estimator_mid_blocks_0_0_block1_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_0_BLOCK1_BLOCK_0_WEIGHT, "weight", 289), {3, 256, 256}, 0);
+                    decoder_estimator_mid_blocks_0_0_block1_block_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_0_BLOCK1_BLOCK_0_BIAS, "bias", 290), {256}, 0);
+                    decoder_estimator_mid_blocks_0_0_block1_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_0_BLOCK1_BLOCK_2_WEIGHT, "weight", 291), {256}, 0);
+                    decoder_estimator_mid_blocks_0_0_block1_block_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_0_BLOCK1_BLOCK_2_BIAS, "bias", 292), {256}, 0);
+                    decoder_estimator_mid_blocks_0_0_block2_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_0_BLOCK2_BLOCK_0_WEIGHT, "weight", 293), {3, 256, 256}, 0);
+                    decoder_estimator_mid_blocks_0_0_block2_block_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_0_BLOCK2_BLOCK_0_BIAS, "bias", 294), {256}, 0);
+                    decoder_estimator_mid_blocks_0_0_block2_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_0_BLOCK2_BLOCK_2_WEIGHT, "weight", 295), {256}, 0);
+                    decoder_estimator_mid_blocks_0_0_block2_block_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_0_BLOCK2_BLOCK_2_BIAS, "bias", 296), {256}, 0);
+                    decoder_estimator_mid_blocks_0_0_res_conv_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_0_RES_CONV_WEIGHT, "weight", 297), {1, 256, 256}, 0);
+                    decoder_estimator_mid_blocks_0_0_res_conv_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_0_RES_CONV_BIAS, "bias", 298), {256}, 0);
+
+                    decoder_estimator_mid_blocks_0_1_0_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_NORM1_WEIGHT, "weight", 299), {256}, 0);
+                    decoder_estimator_mid_blocks_0_1_0_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_ATTN1_TO_Q_WEIGHT, "weight", 300), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_0_1_0_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_ATTN1_TO_K_WEIGHT, "weight", 301), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_0_1_0_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_ATTN1_TO_V_WEIGHT, "weight", 302), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_0_1_0_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_ATTN1_TO_OUT_0_WEIGHT, "weight", 303), {512, 256}, 0);
+                    decoder_estimator_mid_blocks_0_1_0_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_NORM3_WEIGHT, "weight", 304), {256}, 0);
+                    decoder_estimator_mid_blocks_0_1_0_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_FF_NET_0_PROJ_WEIGHT, "weight", 305), {256, 1024}, 0);
+                    decoder_estimator_mid_blocks_0_1_0_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_FF_NET_2_WEIGHT, "weight", 306), {1024, 256}, 0);
+                    decoder_estimator_mid_blocks_0_1_0_norm1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_NORM1_BIAS, "bias", 307), {256}, 0);
+                    decoder_estimator_mid_blocks_0_1_0_attn1_to_out_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_ATTN1_TO_OUT_0_BIAS, "bias", 308), {256}, 0);
+                    decoder_estimator_mid_blocks_0_1_0_norm3_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_NORM3_BIAS, "bias", 309), {256}, 0);
+                    decoder_estimator_mid_blocks_0_1_0_ff_net_0_proj_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_FF_NET_0_PROJ_BIAS, "bias", 310), {1024}, 0);
+                    decoder_estimator_mid_blocks_0_1_0_ff_net_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_FF_NET_2_BIAS, "bias", 311), {256}, 0);
+                    
+
+                    decoder_estimator_mid_blocks_0_1_1_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_1_NORM1_WEIGHT, "weight", 312), {256}, 0);
+                    decoder_estimator_mid_blocks_0_1_1_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_1_ATTN1_TO_OUT_0_WEIGHT, "weight", 313), {512, 256}, 0);
+                    decoder_estimator_mid_blocks_0_1_1_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_1_ATTN1_TO_Q_WEIGHT, "weight", 314), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_0_1_1_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_1_ATTN1_TO_K_WEIGHT, "weight", 315), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_0_1_1_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_1_ATTN1_TO_V_WEIGHT, "weight", 316), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_0_1_1_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_1_NORM3_WEIGHT, "weight", 317), {256}, 0);
+                    decoder_estimator_mid_blocks_0_1_1_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_1_FF_NET_0_PROJ_WEIGHT, "weight", 318), {256, 1024}, 0);
+                    decoder_estimator_mid_blocks_0_1_1_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_1_FF_NET_2_WEIGHT, "weight", 319), {1024, 256}, 0);
+                    decoder_estimator_mid_blocks_0_1_1_norm1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_1_NORM1_BIAS, "bias", 320), {256}, 0);
+                    decoder_estimator_mid_blocks_0_1_1_attn1_to_out_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_1_ATTN1_TO_OUT_0_BIAS, "bias", 321), {256}, 0);
+                    decoder_estimator_mid_blocks_0_1_1_norm3_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_1_NORM3_BIAS, "bias", 322), {256}, 0);
+                    decoder_estimator_mid_blocks_0_1_1_ff_net_0_proj_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_1_FF_NET_0_PROJ_BIAS, "bias", 323), {1024}, 0);
+                    decoder_estimator_mid_blocks_0_1_1_ff_net_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_1_FF_NET_2_BIAS, "bias", 324), {256}, 0);
+
+                    decoder_estimator_mid_blocks_0_1_2_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_2_NORM1_WEIGHT, "weight", 325), {256}, 0);
+                    decoder_estimator_mid_blocks_0_1_2_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_2_ATTN1_TO_OUT_0_WEIGHT, "weight", 326), {512, 256}, 0);
+                    decoder_estimator_mid_blocks_0_1_2_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_2_ATTN1_TO_Q_WEIGHT, "weight", 327), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_0_1_2_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_2_ATTN1_TO_K_WEIGHT, "weight", 328), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_0_1_2_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_2_ATTN1_TO_V_WEIGHT, "weight", 329), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_0_1_2_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_2_NORM3_WEIGHT, "weight", 330), {256}, 0);
+                    decoder_estimator_mid_blocks_0_1_2_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_2_FF_NET_0_PROJ_WEIGHT, "weight", 331), {256, 1024}, 0);
+                    decoder_estimator_mid_blocks_0_1_2_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_2_FF_NET_2_WEIGHT, "weight", 332), {1024, 256}, 0);
+                    decoder_estimator_mid_blocks_0_1_2_norm1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_2_NORM1_BIAS, "bias", 333), {256}, 0);
+                    decoder_estimator_mid_blocks_0_1_2_attn1_to_out_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_2_ATTN1_TO_OUT_0_BIAS, "bias", 334), {256}, 0);
+                    decoder_estimator_mid_blocks_0_1_2_norm3_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_2_NORM3_BIAS, "bias", 335), {256}, 0);
+                    decoder_estimator_mid_blocks_0_1_2_ff_net_0_proj_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_2_FF_NET_0_PROJ_BIAS, "bias", 336), {1024}, 0);
+                    decoder_estimator_mid_blocks_0_1_2_ff_net_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_2_FF_NET_2_BIAS, "bias", 337), {256}, 0);
+
+                    decoder_estimator_mid_blocks_0_1_3_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_3_NORM1_WEIGHT, "weight", 338), {256}, 0);
+                    decoder_estimator_mid_blocks_0_1_3_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_3_ATTN1_TO_Q_WEIGHT, "weight", 339), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_0_1_3_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_3_ATTN1_TO_K_WEIGHT, "weight", 340), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_0_1_3_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_3_ATTN1_TO_V_WEIGHT, "weight", 341), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_0_1_3_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_3_ATTN1_TO_OUT_0_WEIGHT, "weight", 342), {512, 256}, 0);
+                    decoder_estimator_mid_blocks_0_1_3_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_3_NORM3_WEIGHT, "weight", 343), {256}, 0);
+                    decoder_estimator_mid_blocks_0_1_3_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_3_FF_NET_0_PROJ_WEIGHT, "weight", 344), {256, 1024}, 0);
+                    decoder_estimator_mid_blocks_0_1_3_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_3_FF_NET_2_WEIGHT, "weight", 345), {1024, 256}, 0);
+                    decoder_estimator_mid_blocks_0_1_3_norm1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_3_NORM1_BIAS, "bias", 346), {256}, 0);
+                    decoder_estimator_mid_blocks_0_1_3_attn1_to_out_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_3_ATTN1_TO_OUT_0_BIAS, "bias", 347), {256}, 0);
+                    decoder_estimator_mid_blocks_0_1_3_norm3_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_3_NORM3_BIAS, "bias", 348), {256}, 0);
+                    decoder_estimator_mid_blocks_0_1_3_ff_net_0_proj_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_3_FF_NET_0_PROJ_BIAS, "bias", 349), {1024}, 0);
+                    decoder_estimator_mid_blocks_0_1_3_ff_net_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_3_FF_NET_2_BIAS, "bias", 350), {256}, 0);
+
+                    decoder_estimator_mid_blocks_1_0_mlp_1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_0_MLP_1_WEIGHT, "weight", 351), {1024, 256}, 0);
+                    decoder_estimator_mid_blocks_1_0_mlp_1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_0_MLP_1_BIAS, "bias", 352), {256}, 0);
+                    
+                    decoder_estimator_mid_blocks_1_0_block1_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_0_BLOCK1_BLOCK_0_WEIGHT, "weight", 353), {3, 256, 256}, 0);
+                    decoder_estimator_mid_blocks_1_0_block1_block_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_0_BLOCK1_BLOCK_0_BIAS, "bias", 354), {256}, 0);
+                    decoder_estimator_mid_blocks_1_0_block1_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_0_BLOCK1_BLOCK_2_WEIGHT, "weight", 355), {256}, 0);
+                    decoder_estimator_mid_blocks_1_0_block1_block_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_0_BLOCK1_BLOCK_2_BIAS, "bias", 356), {256}, 0);
+                    decoder_estimator_mid_blocks_1_0_block2_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_0_BLOCK2_BLOCK_0_WEIGHT, "weight", 357), {3, 256, 256}, 0);
+                    decoder_estimator_mid_blocks_1_0_block2_block_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_0_BLOCK2_BLOCK_0_BIAS, "bias", 358), {256}, 0);
+                    decoder_estimator_mid_blocks_1_0_block2_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_0_BLOCK2_BLOCK_2_WEIGHT, "weight", 359), {256}, 0);
+                    decoder_estimator_mid_blocks_1_0_block2_block_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_0_BLOCK2_BLOCK_2_BIAS, "bias", 360), {256}, 0);
+                    decoder_estimator_mid_blocks_1_0_res_conv_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_0_RES_CONV_WEIGHT, "weight", 361), {1, 256, 256}, 0);
+                    decoder_estimator_mid_blocks_1_0_res_conv_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_0_RES_CONV_BIAS, "bias", 362), {256}, 0);
+                
+                    decoder_estimator_mid_blocks_1_1_0_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_0_NORM1_WEIGHT, "weight", 363), {256}, 0);
+                    decoder_estimator_mid_blocks_1_1_0_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_0_ATTN1_TO_Q_WEIGHT, "weight", 364), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_1_1_0_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_0_ATTN1_TO_K_WEIGHT, "weight", 365), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_1_1_0_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_0_ATTN1_TO_V_WEIGHT, "weight", 366), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_1_1_0_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_0_ATTN1_TO_OUT_0_WEIGHT, "weight", 367), {512, 256}, 0);
+                    decoder_estimator_mid_blocks_1_1_0_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_0_NORM3_WEIGHT, "weight", 368), {256}, 0);
+                    decoder_estimator_mid_blocks_1_1_0_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_0_FF_NET_0_PROJ_WEIGHT, "weight", 369), {256, 1024}, 0);
+                    decoder_estimator_mid_blocks_1_1_0_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_0_FF_NET_2_WEIGHT, "weight", 370), {1024, 256}, 0);
+                    decoder_estimator_mid_blocks_1_1_0_norm1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_0_NORM1_BIAS, "bias", 371), {256}, 0);
+                    decoder_estimator_mid_blocks_1_1_0_attn1_to_out_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_0_ATTN1_TO_OUT_0_BIAS, "bias", 372), {256}, 0);
+                    decoder_estimator_mid_blocks_1_1_0_norm3_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_0_NORM3_BIAS, "bias", 373), {256}, 0);
+                    decoder_estimator_mid_blocks_1_1_0_ff_net_0_proj_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_0_FF_NET_0_PROJ_BIAS, "bias", 374), {1024}, 0);
+                    decoder_estimator_mid_blocks_1_1_0_ff_net_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_0_FF_NET_2_BIAS, "bias", 375), {256}, 0);
+
+                    decoder_estimator_mid_blocks_1_1_1_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_1_NORM1_WEIGHT, "weight", 376), {256}, 0);
+                    decoder_estimator_mid_blocks_1_1_1_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_1_ATTN1_TO_OUT_0_WEIGHT, "weight", 377), {512, 256}, 0);
+                    decoder_estimator_mid_blocks_1_1_1_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_1_ATTN1_TO_Q_WEIGHT, "weight", 378), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_1_1_1_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_1_ATTN1_TO_K_WEIGHT, "weight", 379), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_1_1_1_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_1_ATTN1_TO_V_WEIGHT, "weight", 380), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_1_1_1_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_1_NORM3_WEIGHT, "weight", 381), {256}, 0);
+                    decoder_estimator_mid_blocks_1_1_1_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_1_FF_NET_0_PROJ_WEIGHT, "weight", 382), {256, 1024}, 0);
+                    decoder_estimator_mid_blocks_1_1_1_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_1_FF_NET_2_WEIGHT, "weight", 383), {1024, 256}, 0);
+                    decoder_estimator_mid_blocks_1_1_1_norm1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_1_NORM1_BIAS, "bias", 384), {256}, 0);
+                    decoder_estimator_mid_blocks_1_1_1_attn1_to_out_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_1_ATTN1_TO_OUT_0_BIAS, "bias", 385), {256}, 0);
+                    decoder_estimator_mid_blocks_1_1_1_norm3_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_1_NORM3_BIAS, "bias", 386), {256}, 0);
+                    decoder_estimator_mid_blocks_1_1_1_ff_net_0_proj_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_1_FF_NET_0_PROJ_BIAS, "bias", 387), {1024}, 0);
+                    decoder_estimator_mid_blocks_1_1_1_ff_net_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_1_FF_NET_2_BIAS, "bias", 388), {256}, 0);
+
+                    decoder_estimator_mid_blocks_1_1_2_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_2_NORM1_WEIGHT, "weight", 389), {256}, 0);
+                    decoder_estimator_mid_blocks_1_1_2_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_2_ATTN1_TO_OUT_0_WEIGHT, "weight", 390), {512, 256}, 0);
+                    decoder_estimator_mid_blocks_1_1_2_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_2_ATTN1_TO_Q_WEIGHT, "weight", 391), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_1_1_2_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_2_ATTN1_TO_K_WEIGHT, "weight", 392), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_1_1_2_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_2_ATTN1_TO_V_WEIGHT, "weight", 393), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_1_1_2_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_2_NORM3_WEIGHT, "weight", 394), {256}, 0);
+                    decoder_estimator_mid_blocks_1_1_2_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_2_FF_NET_0_PROJ_WEIGHT, "weight", 395), {256, 1024}, 0);
+                    decoder_estimator_mid_blocks_1_1_2_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_2_FF_NET_2_WEIGHT, "weight", 396), {1024, 256}, 0);
+                    decoder_estimator_mid_blocks_1_1_2_norm1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_2_NORM1_BIAS, "bias", 397), {256}, 0);
+                    decoder_estimator_mid_blocks_1_1_2_attn1_to_out_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_2_ATTN1_TO_OUT_0_BIAS, "bias", 398), {256}, 0);
+                    decoder_estimator_mid_blocks_1_1_2_norm3_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_2_NORM3_BIAS, "bias", 399), {256}, 0);
+                    decoder_estimator_mid_blocks_1_1_2_ff_net_0_proj_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_2_FF_NET_0_PROJ_BIAS, "bias", 400), {1024}, 0);
+                    decoder_estimator_mid_blocks_1_1_2_ff_net_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_2_FF_NET_2_BIAS, "bias", 401), {256}, 0);
+
+                    decoder_estimator_mid_blocks_1_1_3_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_3_NORM1_WEIGHT, "weight", 402), {256}, 0);
+                    decoder_estimator_mid_blocks_1_1_3_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_3_ATTN1_TO_Q_WEIGHT, "weight", 403), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_1_1_3_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_3_ATTN1_TO_K_WEIGHT, "weight", 404), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_1_1_3_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_3_ATTN1_TO_V_WEIGHT, "weight", 405), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_1_1_3_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_3_ATTN1_TO_OUT_0_WEIGHT, "weight", 406), {512, 256}, 0);
+                    decoder_estimator_mid_blocks_1_1_3_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_3_NORM3_WEIGHT, "weight", 407), {256}, 0);
+                    decoder_estimator_mid_blocks_1_1_3_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_3_FF_NET_0_PROJ_WEIGHT, "weight", 408), {256, 1024}, 0);
+                    decoder_estimator_mid_blocks_1_1_3_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_3_FF_NET_2_WEIGHT, "weight", 409), {1024, 256}, 0);
+                    decoder_estimator_mid_blocks_1_1_3_norm1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_3_NORM1_BIAS, "bias", 410), {256}, 0);
+                    decoder_estimator_mid_blocks_1_1_3_attn1_to_out_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_3_ATTN1_TO_OUT_0_BIAS, "bias", 411), {256}, 0);
+                    decoder_estimator_mid_blocks_1_1_3_norm3_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_3_NORM3_BIAS, "bias", 412), {256}, 0);
+                    decoder_estimator_mid_blocks_1_1_3_ff_net_0_proj_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_3_FF_NET_0_PROJ_BIAS, "bias", 413), {1024}, 0);
+                    decoder_estimator_mid_blocks_1_1_3_ff_net_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_1_1_3_FF_NET_2_BIAS, "bias", 414), {256}, 0);
+
+                    decoder_estimator_mid_blocks_2_0_mlp_1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_0_MLP_1_WEIGHT, "weight", 415), {1024, 256}, 0);
+                    decoder_estimator_mid_blocks_2_0_mlp_1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_0_MLP_1_BIAS, "bias", 416), {256}, 0);
+                    decoder_estimator_mid_blocks_2_0_block1_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_0_BLOCK1_BLOCK_0_WEIGHT, "weight", 417), {3, 256, 256}, 0);
+                    decoder_estimator_mid_blocks_2_0_block1_block_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_0_BLOCK1_BLOCK_0_BIAS, "bias", 418), {256}, 0);
+                    decoder_estimator_mid_blocks_2_0_block1_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_0_BLOCK1_BLOCK_2_WEIGHT, "weight", 419), {256}, 0);
+                    decoder_estimator_mid_blocks_2_0_block1_block_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_0_BLOCK1_BLOCK_2_BIAS, "bias", 420), {256}, 0);
+                    decoder_estimator_mid_blocks_2_0_block2_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_0_BLOCK2_BLOCK_0_WEIGHT, "weight", 421), {3, 256, 256}, 0);
+                    decoder_estimator_mid_blocks_2_0_block2_block_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_0_BLOCK2_BLOCK_0_BIAS, "bias", 422), {256}, 0);
+                    decoder_estimator_mid_blocks_2_0_block2_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_0_BLOCK2_BLOCK_2_WEIGHT, "weight", 423), {256}, 0);
+                    decoder_estimator_mid_blocks_2_0_block2_block_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_0_BLOCK2_BLOCK_2_BIAS, "bias", 424), {256}, 0);
+                    decoder_estimator_mid_blocks_2_0_res_conv_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_0_RES_CONV_WEIGHT, "weight", 425), {1, 256, 256}, 0);
+                    decoder_estimator_mid_blocks_2_0_res_conv_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_0_RES_CONV_BIAS, "bias", 426), {256}, 0);
+
+                    decoder_estimator_mid_blocks_2_1_0_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_0_NORM1_WEIGHT, "weight", 427), {256}, 0);
+                    decoder_estimator_mid_blocks_2_1_0_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_0_ATTN1_TO_Q_WEIGHT, "weight", 428), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_2_1_0_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_0_ATTN1_TO_K_WEIGHT, "weight", 429), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_2_1_0_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_0_ATTN1_TO_V_WEIGHT, "weight", 430), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_2_1_0_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_0_ATTN1_TO_OUT_0_WEIGHT, "weight", 431), {512, 256}, 0);
+                    decoder_estimator_mid_blocks_2_1_0_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_0_NORM3_WEIGHT, "weight", 432), {256}, 0);
+                    decoder_estimator_mid_blocks_2_1_0_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_0_FF_NET_0_PROJ_WEIGHT, "weight", 433), {256, 1024}, 0);
+                    decoder_estimator_mid_blocks_2_1_0_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_0_FF_NET_2_WEIGHT, "weight", 434), {1024, 256}, 0);
+                    decoder_estimator_mid_blocks_2_1_0_norm1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_0_NORM1_BIAS, "bias", 435), {256}, 0);
+                    decoder_estimator_mid_blocks_2_1_0_attn1_to_out_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_0_ATTN1_TO_OUT_0_BIAS, "bias", 436), {256}, 0);
+                    decoder_estimator_mid_blocks_2_1_0_norm3_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_0_NORM3_BIAS, "bias", 437), {256}, 0);
+                    decoder_estimator_mid_blocks_2_1_0_ff_net_0_proj_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_0_FF_NET_0_PROJ_BIAS, "bias", 438), {1024}, 0);
+                    decoder_estimator_mid_blocks_2_1_0_ff_net_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_0_FF_NET_2_BIAS, "bias", 439), {256}, 0);
+
+                    decoder_estimator_mid_blocks_2_1_1_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_1_NORM1_WEIGHT, "weight", 440), {256}, 0);
+                    decoder_estimator_mid_blocks_2_1_1_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_1_ATTN1_TO_OUT_0_WEIGHT, "weight", 441), {512, 256}, 0);
+                    decoder_estimator_mid_blocks_2_1_1_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_1_ATTN1_TO_Q_WEIGHT, "weight", 442), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_2_1_1_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_1_ATTN1_TO_K_WEIGHT, "weight", 443), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_2_1_1_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_1_ATTN1_TO_V_WEIGHT, "weight", 444), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_2_1_1_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_1_NORM3_WEIGHT, "weight", 445), {256}, 0);
+                    decoder_estimator_mid_blocks_2_1_1_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_1_FF_NET_0_PROJ_WEIGHT, "weight", 446), {256, 1024}, 0);
+                    decoder_estimator_mid_blocks_2_1_1_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_1_FF_NET_2_WEIGHT, "weight", 447), {1024, 256}, 0);
+                    decoder_estimator_mid_blocks_2_1_1_norm1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_1_NORM1_BIAS, "bias", 448), {256}, 0);
+                    decoder_estimator_mid_blocks_2_1_1_attn1_to_out_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_1_ATTN1_TO_OUT_0_BIAS, "bias", 449), {256}, 0);
+                    decoder_estimator_mid_blocks_2_1_1_norm3_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_1_NORM3_BIAS, "bias", 450), {256}, 0);
+                    decoder_estimator_mid_blocks_2_1_1_ff_net_0_proj_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_1_FF_NET_0_PROJ_BIAS, "bias", 451), {1024}, 0);
+                    decoder_estimator_mid_blocks_2_1_1_ff_net_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_1_FF_NET_2_BIAS, "bias", 452), {256}, 0);
+
+                    decoder_estimator_mid_blocks_2_1_2_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_2_NORM1_WEIGHT, "weight", 453), {256}, 0);
+                    decoder_estimator_mid_blocks_2_1_2_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_2_ATTN1_TO_OUT_0_WEIGHT, "weight", 454), {512, 256}, 0);
+                    decoder_estimator_mid_blocks_2_1_2_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_2_ATTN1_TO_Q_WEIGHT, "weight", 455), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_2_1_2_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_2_ATTN1_TO_K_WEIGHT, "weight", 456), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_2_1_2_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_2_ATTN1_TO_V_WEIGHT, "weight", 457), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_2_1_2_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_2_NORM3_WEIGHT, "weight", 458), {256}, 0);
+                    decoder_estimator_mid_blocks_2_1_2_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_2_FF_NET_0_PROJ_WEIGHT, "weight", 459), {256, 1024}, 0);
+                    decoder_estimator_mid_blocks_2_1_2_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_2_FF_NET_2_WEIGHT, "weight", 460), {1024, 256}, 0);
+                    decoder_estimator_mid_blocks_2_1_2_norm1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_2_NORM1_BIAS, "bias", 461), {256}, 0);
+                    decoder_estimator_mid_blocks_2_1_2_attn1_to_out_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_2_ATTN1_TO_OUT_0_BIAS, "bias", 462), {256}, 0);
+                    decoder_estimator_mid_blocks_2_1_2_norm3_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_2_NORM3_BIAS, "bias", 463), {256}, 0);
+                    decoder_estimator_mid_blocks_2_1_2_ff_net_0_proj_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_2_FF_NET_0_PROJ_BIAS, "bias", 464), {1024}, 0);
+                    decoder_estimator_mid_blocks_2_1_2_ff_net_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_2_FF_NET_2_BIAS, "bias", 465), {256}, 0);
+
+                    decoder_estimator_mid_blocks_2_1_3_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_3_NORM1_WEIGHT, "weight", 466), {256}, 0);
+                    decoder_estimator_mid_blocks_2_1_3_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_3_ATTN1_TO_Q_WEIGHT, "weight", 467), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_2_1_3_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_3_ATTN1_TO_K_WEIGHT, "weight", 468), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_2_1_3_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_3_ATTN1_TO_V_WEIGHT, "weight", 469), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_2_1_3_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_3_ATTN1_TO_OUT_0_WEIGHT, "weight", 470), {512, 256}, 0);
+                    decoder_estimator_mid_blocks_2_1_3_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_3_NORM3_WEIGHT, "weight", 471), {256}, 0);
+                    decoder_estimator_mid_blocks_2_1_3_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_3_FF_NET_0_PROJ_WEIGHT, "weight", 472), {256, 1024}, 0);
+                    decoder_estimator_mid_blocks_2_1_3_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_3_FF_NET_2_WEIGHT, "weight", 473), {1024, 256}, 0);
+                    decoder_estimator_mid_blocks_2_1_3_norm1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_3_NORM1_BIAS, "bias", 474), {256}, 0);
+                    decoder_estimator_mid_blocks_2_1_3_attn1_to_out_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_3_ATTN1_TO_OUT_0_BIAS, "bias", 475), {256}, 0);
+                    decoder_estimator_mid_blocks_2_1_3_norm3_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_3_NORM3_BIAS, "bias", 476), {256}, 0);
+                    decoder_estimator_mid_blocks_2_1_3_ff_net_0_proj_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_3_FF_NET_0_PROJ_BIAS, "bias", 477), {1024}, 0);
+                    decoder_estimator_mid_blocks_2_1_3_ff_net_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_2_1_3_FF_NET_2_BIAS, "bias", 478), {256}, 0);
+
+                    decoder_estimator_mid_blocks_3_0_mlp_1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_0_MLP_1_WEIGHT, "weight", 479), {1024, 256}, 0);
+                    decoder_estimator_mid_blocks_3_0_mlp_1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_0_MLP_1_BIAS, "bias", 480), {256}, 0);
+                    decoder_estimator_mid_blocks_3_0_block1_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_0_BLOCK1_BLOCK_0_WEIGHT, "weight", 481), {3, 256, 256}, 0);
+                    decoder_estimator_mid_blocks_3_0_block1_block_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_0_BLOCK1_BLOCK_0_BIAS, "bias", 482), {256}, 0);
+                    decoder_estimator_mid_blocks_3_0_block1_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_0_BLOCK1_BLOCK_2_WEIGHT, "weight", 483), {256}, 0);
+                    decoder_estimator_mid_blocks_3_0_block1_block_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_0_BLOCK1_BLOCK_2_BIAS, "bias", 484), {256}, 0);
+                    decoder_estimator_mid_blocks_3_0_block2_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_0_BLOCK2_BLOCK_0_WEIGHT, "weight", 485), {3, 256, 256}, 0);
+                    decoder_estimator_mid_blocks_3_0_block2_block_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_0_BLOCK2_BLOCK_0_BIAS, "bias", 486), {256}, 0);
+                    decoder_estimator_mid_blocks_3_0_block2_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_0_BLOCK2_BLOCK_2_WEIGHT, "weight", 487), {256}, 0);
+                    decoder_estimator_mid_blocks_3_0_block2_block_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_0_BLOCK2_BLOCK_2_BIAS, "bias", 488), {256}, 0);
+                    decoder_estimator_mid_blocks_3_0_res_conv_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_0_RES_CONV_WEIGHT, "weight", 489), {1, 256, 256}, 0);
+                    decoder_estimator_mid_blocks_3_0_res_conv_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_0_RES_CONV_BIAS, "bias", 490), {256}, 0);
+
+                    decoder_estimator_mid_blocks_3_1_0_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_0_NORM1_WEIGHT, "weight", 491), {256}, 0);
+                    decoder_estimator_mid_blocks_3_1_0_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_0_ATTN1_TO_Q_WEIGHT, "weight", 492), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_3_1_0_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_0_ATTN1_TO_K_WEIGHT, "weight", 493), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_3_1_0_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_0_ATTN1_TO_V_WEIGHT, "weight", 494), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_3_1_0_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_0_ATTN1_TO_OUT_0_WEIGHT, "weight", 495), {512, 256}, 0);
+                    decoder_estimator_mid_blocks_3_1_0_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_NORM3_WEIGHT, "weight", 496), {256}, 0);
+                    decoder_estimator_mid_blocks_3_1_0_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_0_FF_NET_0_PROJ_WEIGHT, "weight", 497), {256, 1024}, 0);
+                    decoder_estimator_mid_blocks_3_1_0_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_0_FF_NET_2_WEIGHT, "weight", 498), {1024, 256}, 0);
+                    decoder_estimator_mid_blocks_3_1_0_norm1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_0_NORM1_BIAS, "bias", 499), {256}, 0);
+                    decoder_estimator_mid_blocks_3_1_0_attn1_to_out_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_0_ATTN1_TO_OUT_0_BIAS, "bias", 500), {256}, 0);
+                    decoder_estimator_mid_blocks_3_1_0_norm3_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_0_NORM3_BIAS, "bias", 501), {256}, 0);
+                    decoder_estimator_mid_blocks_3_1_0_ff_net_0_proj_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_0_FF_NET_0_PROJ_BIAS, "bias", 502), {1024}, 0);
+                    decoder_estimator_mid_blocks_3_1_0_ff_net_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_0_FF_NET_2_BIAS, "bias", 503), {256}, 0);
+
+                    decoder_estimator_mid_blocks_3_1_1_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_1_NORM1_WEIGHT, "weight", 504), {256}, 0);
+                    decoder_estimator_mid_blocks_3_1_1_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_1_ATTN1_TO_OUT_0_WEIGHT, "weight", 505), {512, 256}, 0);
+                    decoder_estimator_mid_blocks_3_1_1_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_1_ATTN1_TO_Q_WEIGHT, "weight", 506), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_3_1_1_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_1_ATTN1_TO_K_WEIGHT, "weight", 507), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_3_1_1_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_1_ATTN1_TO_V_WEIGHT, "weight", 508), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_3_1_1_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_1_NORM3_WEIGHT, "weight", 509), {256}, 0);
+                    decoder_estimator_mid_blocks_3_1_1_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_1_FF_NET_0_PROJ_WEIGHT, "weight", 510), {256, 1024}, 0);
+                    decoder_estimator_mid_blocks_3_1_1_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_1_FF_NET_2_WEIGHT, "weight", 511), {1024, 256}, 0);
+                    decoder_estimator_mid_blocks_3_1_1_norm1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_1_NORM1_BIAS, "bias", 512), {256}, 0);
+                    decoder_estimator_mid_blocks_3_1_1_attn1_to_out_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_1_ATTN1_TO_OUT_0_BIAS, "bias", 513), {256}, 0);
+                    decoder_estimator_mid_blocks_3_1_1_norm3_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_1_NORM3_BIAS, "bias", 514), {256}, 0);
+                    decoder_estimator_mid_blocks_3_1_1_ff_net_0_proj_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_1_FF_NET_0_PROJ_BIAS, "bias", 515), {1024}, 0);
+                    decoder_estimator_mid_blocks_3_1_1_ff_net_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_1_FF_NET_2_BIAS, "bias", 516), {256}, 0);
+
+                    decoder_estimator_mid_blocks_3_1_2_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_2_NORM1_WEIGHT, "weight", 517), {256}, 0);
+                    decoder_estimator_mid_blocks_3_1_2_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_2_ATTN1_TO_OUT_0_WEIGHT, "weight", 518), {512, 256}, 0);
+                    decoder_estimator_mid_blocks_3_1_2_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_2_ATTN1_TO_Q_WEIGHT, "weight", 519), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_3_1_2_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_2_ATTN1_TO_K_WEIGHT, "weight", 520), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_3_1_2_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_2_ATTN1_TO_V_WEIGHT, "weight", 521), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_3_1_2_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_2_NORM3_WEIGHT, "weight", 522), {256}, 0);
+                    decoder_estimator_mid_blocks_3_1_2_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_2_FF_NET_0_PROJ_WEIGHT, "weight", 523), {256, 1024}, 0);
+                    decoder_estimator_mid_blocks_3_1_2_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_2_FF_NET_2_WEIGHT, "weight", 524), {1024, 256}, 0);
+                    decoder_estimator_mid_blocks_3_1_2_norm1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_2_NORM1_BIAS, "bias", 525), {256}, 0);
+                    decoder_estimator_mid_blocks_3_1_2_attn1_to_out_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_2_ATTN1_TO_OUT_0_BIAS, "bias", 526), {256}, 0);
+                    decoder_estimator_mid_blocks_3_1_2_norm3_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_2_NORM3_BIAS, "bias", 527), {256}, 0);
+                    decoder_estimator_mid_blocks_3_1_2_ff_net_0_proj_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_2_FF_NET_0_PROJ_BIAS, "bias", 528), {1024}, 0);
+                    decoder_estimator_mid_blocks_3_1_2_ff_net_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_2_FF_NET_2_BIAS, "bias", 529), {256}, 0);
+
+                    decoder_estimator_mid_blocks_3_1_3_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_3_NORM1_WEIGHT, "weight", 530), {256}, 0);
+                    decoder_estimator_mid_blocks_3_1_3_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_3_ATTN1_TO_Q_WEIGHT, "weight", 531), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_3_1_3_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_3_ATTN1_TO_K_WEIGHT, "weight", 532), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_3_1_3_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_3_ATTN1_TO_V_WEIGHT, "weight", 533), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_3_1_3_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_3_ATTN1_TO_OUT_0_WEIGHT, "weight", 534), {512, 256}, 0);
+                    decoder_estimator_mid_blocks_3_1_3_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_3_NORM3_WEIGHT, "weight", 535), {256}, 0);
+                    decoder_estimator_mid_blocks_3_1_3_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_3_FF_NET_0_PROJ_WEIGHT, "weight", 536), {256, 1024}, 0);
+                    decoder_estimator_mid_blocks_3_1_3_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_3_FF_NET_2_WEIGHT, "weight", 537), {1024, 256}, 0);
+                    decoder_estimator_mid_blocks_3_1_3_norm1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_3_NORM1_BIAS, "bias", 538), {256}, 0);
+                    decoder_estimator_mid_blocks_3_1_3_attn1_to_out_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_3_ATTN1_TO_OUT_0_BIAS, "bias", 539), {256}, 0);
+                    decoder_estimator_mid_blocks_3_1_3_norm3_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_3_NORM3_BIAS, "bias", 540), {256}, 0);
+                    decoder_estimator_mid_blocks_3_1_3_ff_net_0_proj_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_3_FF_NET_0_PROJ_BIAS, "bias", 541), {1024}, 0);
+                    decoder_estimator_mid_blocks_3_1_3_ff_net_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_3_1_3_FF_NET_2_BIAS, "bias", 542), {256}, 0);
+
+                    decoder_estimator_mid_blocks_4_0_mlp_1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_0_MLP_1_WEIGHT, "weight", 543), {1024, 256}, 0);
+                    decoder_estimator_mid_blocks_4_0_mlp_1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_0_MLP_1_BIAS, "bias", 544), {256}, 0);
+                    decoder_estimator_mid_blocks_4_0_block1_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_0_BLOCK1_BLOCK_0_WEIGHT, "weight", 545), {3, 256, 256}, 0);
+                    decoder_estimator_mid_blocks_4_0_block1_block_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_0_BLOCK1_BLOCK_0_BIAS, "bias", 546), {256}, 0);
+                    decoder_estimator_mid_blocks_4_0_block1_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_0_BLOCK1_BLOCK_2_WEIGHT, "weight", 547), {256}, 0);
+                    decoder_estimator_mid_blocks_4_0_block1_block_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_0_BLOCK1_BLOCK_2_BIAS, "bias", 548), {256}, 0);
+                    decoder_estimator_mid_blocks_4_0_block2_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_0_BLOCK2_BLOCK_0_WEIGHT, "weight", 549), {3, 256, 256}, 0);
+                    decoder_estimator_mid_blocks_4_0_block2_block_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_0_BLOCK2_BLOCK_0_BIAS, "bias", 550), {256}, 0);
+                    decoder_estimator_mid_blocks_4_0_block2_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_0_BLOCK2_BLOCK_2_WEIGHT, "weight", 551), {256}, 0);
+                    decoder_estimator_mid_blocks_4_0_block2_block_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_0_BLOCK2_BLOCK_2_BIAS, "bias", 552), {256}, 0);
+                    decoder_estimator_mid_blocks_4_0_res_conv_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_0_RES_CONV_WEIGHT, "weight", 553), {1, 256, 256}, 0);
+                    decoder_estimator_mid_blocks_4_0_res_conv_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_0_RES_CONV_BIAS, "bias", 554), {256}, 0);
+
+                    decoder_estimator_mid_blocks_4_1_0_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_0_NORM1_WEIGHT, "weight", 555), {256}, 0);
+                    decoder_estimator_mid_blocks_4_1_0_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_0_ATTN1_TO_Q_WEIGHT, "weight", 556), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_4_1_0_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_0_ATTN1_TO_K_WEIGHT, "weight", 557), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_4_1_0_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_0_ATTN1_TO_V_WEIGHT, "weight", 558), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_4_1_0_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_0_ATTN1_TO_OUT_0_WEIGHT, "weight", 559), {512, 256}, 0);
+                    decoder_estimator_mid_blocks_4_1_0_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_0_NORM3_WEIGHT, "weight", 560), {256}, 0);
+                    decoder_estimator_mid_blocks_4_1_0_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_0_FF_NET_0_PROJ_WEIGHT, "weight", 561), {256, 1024}, 0);
+                    decoder_estimator_mid_blocks_4_1_0_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_0_FF_NET_2_WEIGHT, "weight", 562), {1024, 256}, 0);
+                    decoder_estimator_mid_blocks_4_1_0_norm1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_0_NORM1_BIAS, "bias", 563), {256}, 0);
+                    decoder_estimator_mid_blocks_4_1_0_attn1_to_out_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_0_ATTN1_TO_OUT_0_BIAS, "bias", 564), {256}, 0);
+                    decoder_estimator_mid_blocks_4_1_0_norm3_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_0_NORM3_BIAS, "bias", 565), {256}, 0);
+                    decoder_estimator_mid_blocks_4_1_0_ff_net_0_proj_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_0_FF_NET_0_PROJ_BIAS, "bias", 566), {1024}, 0);
+                    decoder_estimator_mid_blocks_4_1_0_ff_net_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_0_FF_NET_2_BIAS, "bias", 567), {256}, 0);
+
+                    decoder_estimator_mid_blocks_4_1_1_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_1_NORM1_WEIGHT, "weight", 568), {256}, 0);
+                    decoder_estimator_mid_blocks_4_1_1_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_1_ATTN1_TO_OUT_0_WEIGHT, "weight", 569), {512, 256}, 0);
+                    decoder_estimator_mid_blocks_4_1_1_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_1_ATTN1_TO_Q_WEIGHT, "weight", 570), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_4_1_1_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_1_ATTN1_TO_K_WEIGHT, "weight", 571), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_4_1_1_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_1_ATTN1_TO_V_WEIGHT, "weight", 572), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_4_1_1_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_1_NORM3_WEIGHT, "weight", 573), {256}, 0);
+                    decoder_estimator_mid_blocks_4_1_1_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_1_FF_NET_0_PROJ_WEIGHT, "weight", 574), {256, 1024}, 0);
+                    decoder_estimator_mid_blocks_4_1_1_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_1_FF_NET_2_WEIGHT, "weight", 575), {1024, 256}, 0);
+                    decoder_estimator_mid_blocks_4_1_1_norm1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_1_NORM1_BIAS, "bias", 576), {256}, 0);
+                    decoder_estimator_mid_blocks_4_1_1_attn1_to_out_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_1_ATTN1_TO_OUT_0_BIAS, "bias", 577), {256}, 0);
+                    decoder_estimator_mid_blocks_4_1_1_norm3_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_1_NORM3_BIAS, "bias", 578), {256}, 0);
+                    decoder_estimator_mid_blocks_4_1_1_ff_net_0_proj_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_1_FF_NET_0_PROJ_BIAS, "bias", 579), {1024}, 0);
+                    decoder_estimator_mid_blocks_4_1_1_ff_net_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_1_FF_NET_2_BIAS, "bias", 580), {256}, 0);
+
+                    decoder_estimator_mid_blocks_4_1_2_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_2_NORM1_WEIGHT, "weight", 581), {256}, 0);
+                    decoder_estimator_mid_blocks_4_1_2_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_2_ATTN1_TO_OUT_0_WEIGHT, "weight", 582), {512, 256}, 0);
+                    decoder_estimator_mid_blocks_4_1_2_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_2_ATTN1_TO_Q_WEIGHT, "weight", 583), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_4_1_2_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_2_ATTN1_TO_K_WEIGHT, "weight", 584), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_4_1_2_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_2_ATTN1_TO_V_WEIGHT, "weight", 585), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_4_1_2_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_2_NORM3_WEIGHT, "weight", 586), {256}, 0);
+                    decoder_estimator_mid_blocks_4_1_2_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_2_FF_NET_0_PROJ_WEIGHT, "weight", 587), {256, 1024}, 0);
+                    decoder_estimator_mid_blocks_4_1_2_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_2_FF_NET_2_WEIGHT, "weight", 588), {1024, 256}, 0);
+                    decoder_estimator_mid_blocks_4_1_2_norm1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_2_NORM1_BIAS, "bias", 589), {256}, 0);
+                    decoder_estimator_mid_blocks_4_1_2_attn1_to_out_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_2_ATTN1_TO_OUT_0_BIAS, "bias", 590), {256}, 0);
+                    decoder_estimator_mid_blocks_4_1_2_norm3_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_2_NORM3_BIAS, "bias", 591), {256}, 0);
+                    decoder_estimator_mid_blocks_4_1_2_ff_net_0_proj_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_2_FF_NET_0_PROJ_BIAS, "bias", 592), {1024}, 0);
+                    decoder_estimator_mid_blocks_4_1_2_ff_net_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_2_FF_NET_2_BIAS, "bias", 593), {256}, 0);
+
+                    decoder_estimator_mid_blocks_4_1_3_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_3_NORM1_WEIGHT, "weight", 594), {256}, 0);
+                    decoder_estimator_mid_blocks_4_1_3_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_3_ATTN1_TO_Q_WEIGHT, "weight", 595), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_4_1_3_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_3_ATTN1_TO_K_WEIGHT, "weight", 596), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_4_1_3_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_3_ATTN1_TO_V_WEIGHT, "weight", 597), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_4_1_3_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_3_ATTN1_TO_OUT_0_WEIGHT, "weight", 598), {512, 256}, 0);
+                    decoder_estimator_mid_blocks_4_1_3_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_3_NORM3_WEIGHT, "weight", 599), {256}, 0);
+                    decoder_estimator_mid_blocks_4_1_3_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_3_FF_NET_0_PROJ_WEIGHT, "weight", 600), {256, 1024}, 0);
+                    decoder_estimator_mid_blocks_4_1_3_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_3_FF_NET_2_WEIGHT, "weight", 601), {1024, 256}, 0);
+                    decoder_estimator_mid_blocks_4_1_3_norm1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_3_NORM1_BIAS, "bias", 602), {256}, 0);
+                    decoder_estimator_mid_blocks_4_1_3_attn1_to_out_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_3_ATTN1_TO_OUT_0_BIAS, "bias", 603), {256}, 0);
+                    decoder_estimator_mid_blocks_4_1_3_norm3_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_3_NORM3_BIAS, "bias", 604), {256}, 0);
+                    decoder_estimator_mid_blocks_4_1_3_ff_net_0_proj_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_3_FF_NET_0_PROJ_BIAS, "bias", 605), {1024}, 0);
+                    decoder_estimator_mid_blocks_4_1_3_ff_net_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_4_1_3_FF_NET_2_BIAS, "bias", 606), {256}, 0);
+
+                    decoder_estimator_mid_blocks_5_0_mlp_1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_0_MLP_1_WEIGHT, "weight", 607), {1024, 256}, 0);
+                    decoder_estimator_mid_blocks_5_0_mlp_1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_0_MLP_1_BIAS, "bias", 608), {256}, 0);
+                    decoder_estimator_mid_blocks_5_0_block1_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_0_BLOCK1_BLOCK_0_WEIGHT, "weight", 609), {3, 256, 256}, 0);
+                    decoder_estimator_mid_blocks_5_0_block1_block_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_0_BLOCK1_BLOCK_0_BIAS, "bias", 610), {256}, 0);
+                    decoder_estimator_mid_blocks_5_0_block1_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_0_BLOCK1_BLOCK_2_WEIGHT, "weight", 611), {256}, 0);
+                    decoder_estimator_mid_blocks_5_0_block1_block_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_0_BLOCK1_BLOCK_2_BIAS, "bias", 612), {256}, 0);
+                    decoder_estimator_mid_blocks_5_0_block2_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_0_BLOCK2_BLOCK_0_WEIGHT, "weight", 613), {3, 256, 256}, 0);
+                    decoder_estimator_mid_blocks_5_0_block2_block_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_0_BLOCK2_BLOCK_0_BIAS, "bias", 614), {256}, 0);
+                    decoder_estimator_mid_blocks_5_0_block2_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_0_BLOCK2_BLOCK_2_WEIGHT, "weight", 615), {256}, 0);
+                    decoder_estimator_mid_blocks_5_0_block2_block_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_0_BLOCK2_BLOCK_2_BIAS, "bias", 616), {256}, 0);
+                    decoder_estimator_mid_blocks_5_0_res_conv_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_0_RES_CONV_WEIGHT, "weight", 617), {1, 256, 256}, 0);
+                    decoder_estimator_mid_blocks_5_0_res_conv_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_0_RES_CONV_BIAS, "bias", 618), {256}, 0);
+                    
+                    decoder_estimator_mid_blocks_5_1_0_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_0_NORM1_WEIGHT, "weight", 619), {256}, 0);
+                    decoder_estimator_mid_blocks_5_1_0_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_0_ATTN1_TO_Q_WEIGHT, "weight", 620), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_5_1_0_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_0_ATTN1_TO_K_WEIGHT, "weight", 621), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_5_1_0_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_0_ATTN1_TO_V_WEIGHT, "weight", 622), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_5_1_0_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_0_ATTN1_TO_OUT_0_WEIGHT, "weight", 623), {512, 256}, 0);
+                    decoder_estimator_mid_blocks_5_1_0_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_0_NORM3_WEIGHT, "weight", 624), {256}, 0);
+                    decoder_estimator_mid_blocks_5_1_0_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_0_FF_NET_0_PROJ_WEIGHT, "weight", 625), {256, 1024}, 0);
+                    decoder_estimator_mid_blocks_5_1_0_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_0_FF_NET_2_WEIGHT, "weight", 626), {1024, 256}, 0);
+                    decoder_estimator_mid_blocks_5_1_0_norm1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_0_NORM1_BIAS, "bias", 627), {256}, 0);
+                    decoder_estimator_mid_blocks_5_1_0_attn1_to_out_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_0_ATTN1_TO_OUT_0_BIAS, "bias", 628), {256}, 0);
+                    decoder_estimator_mid_blocks_5_1_0_norm3_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_0_NORM3_BIAS, "bias", 629), {256}, 0);
+                    decoder_estimator_mid_blocks_5_1_0_ff_net_0_proj_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_0_FF_NET_0_PROJ_BIAS, "bias", 630), {1024}, 0);
+                    decoder_estimator_mid_blocks_5_1_0_ff_net_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_0_FF_NET_2_BIAS, "bias", 631), {256}, 0);
+
+                    decoder_estimator_mid_blocks_5_1_1_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_1_NORM1_WEIGHT, "weight", 632), {256}, 0);
+                    decoder_estimator_mid_blocks_5_1_1_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_1_ATTN1_TO_OUT_0_WEIGHT, "weight", 633), {512, 256}, 0);
+                    decoder_estimator_mid_blocks_5_1_1_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_1_ATTN1_TO_Q_WEIGHT, "weight", 634), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_5_1_1_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_1_ATTN1_TO_K_WEIGHT, "weight", 635), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_5_1_1_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_1_ATTN1_TO_V_WEIGHT, "weight", 636), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_5_1_1_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_1_NORM3_WEIGHT, "weight", 637), {256}, 0);
+                    decoder_estimator_mid_blocks_5_1_1_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_1_FF_NET_0_PROJ_WEIGHT, "weight", 638), {256, 1024}, 0);
+                    decoder_estimator_mid_blocks_5_1_1_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_1_FF_NET_2_WEIGHT, "weight", 639), {1024, 256}, 0);
+                    decoder_estimator_mid_blocks_5_1_1_norm1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_1_NORM1_BIAS, "bias", 640), {256}, 0);
+                    decoder_estimator_mid_blocks_5_1_1_attn1_to_out_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_1_ATTN1_TO_OUT_0_BIAS, "bias", 641), {256}, 0);
+                    decoder_estimator_mid_blocks_5_1_1_norm3_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_1_NORM3_BIAS, "bias", 642), {256}, 0);
+                    decoder_estimator_mid_blocks_5_1_1_ff_net_0_proj_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_1_FF_NET_0_PROJ_BIAS, "bias", 643), {1024}, 0);
+                    decoder_estimator_mid_blocks_5_1_1_ff_net_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_1_FF_NET_2_BIAS, "bias", 644), {256}, 0);
+
+                    decoder_estimator_mid_blocks_5_1_2_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_2_NORM1_WEIGHT, "weight", 645), {256}, 0);
+                    decoder_estimator_mid_blocks_5_1_2_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_2_ATTN1_TO_OUT_0_WEIGHT, "weight", 646), {512, 256}, 0);
+                    decoder_estimator_mid_blocks_5_1_2_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_2_ATTN1_TO_Q_WEIGHT, "weight", 647), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_5_1_2_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_2_ATTN1_TO_K_WEIGHT, "weight", 648), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_5_1_2_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_2_ATTN1_TO_V_WEIGHT, "weight", 649), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_5_1_2_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_2_NORM3_WEIGHT, "weight", 650), {256}, 0);
+                    decoder_estimator_mid_blocks_5_1_2_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_2_FF_NET_0_PROJ_WEIGHT, "weight", 651), {256, 1024}, 0);
+                    decoder_estimator_mid_blocks_5_1_2_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_2_FF_NET_2_WEIGHT, "weight", 652), {1024, 256}, 0);
+                    decoder_estimator_mid_blocks_5_1_2_attn1_to_out_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_2_ATTN1_TO_OUT_0_BIAS, "bias", 653), {256}, 0);
+                    decoder_estimator_mid_blocks_5_1_2_ff_net_0_proj_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_2_FF_NET_0_PROJ_BIAS, "bias", 654), {1024}, 0);
+                    decoder_estimator_mid_blocks_5_1_2_ff_net_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_2_FF_NET_2_BIAS, "bias", 655), {256}, 0);
+                    decoder_estimator_mid_blocks_5_1_2_norm1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_2_NORM1_BIAS, "bias", 656), {256}, 0);
+                    decoder_estimator_mid_blocks_5_1_2_norm3_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_2_NORM3_BIAS, "bias", 657), {256}, 0);
+
+                    decoder_estimator_mid_blocks_5_1_3_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_3_NORM1_WEIGHT, "weight", 658), {256}, 0);
+                    decoder_estimator_mid_blocks_5_1_3_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_3_ATTN1_TO_Q_WEIGHT, "weight", 659), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_5_1_3_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_3_ATTN1_TO_K_WEIGHT, "weight", 660), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_5_1_3_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_3_ATTN1_TO_V_WEIGHT, "weight", 661), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_5_1_3_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_3_ATTN1_TO_OUT_0_WEIGHT, "weight", 662), {512, 256}, 0);
+                    decoder_estimator_mid_blocks_5_1_3_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_3_NORM3_WEIGHT, "weight", 663), {256}, 0);
+                    decoder_estimator_mid_blocks_5_1_3_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_3_FF_NET_0_PROJ_WEIGHT, "weight", 664), {256, 1024}, 0);
+                    decoder_estimator_mid_blocks_5_1_3_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_3_FF_NET_2_WEIGHT, "weight", 665), {1024, 256}, 0);
+                    decoder_estimator_mid_blocks_5_1_3_attn1_to_out_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_3_ATTN1_TO_OUT_0_BIAS, "bias", 666), {256}, 0);
+                    decoder_estimator_mid_blocks_5_1_3_ff_net_0_proj_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_3_FF_NET_0_PROJ_BIAS, "bias", 667), {1024}, 0);
+                    decoder_estimator_mid_blocks_5_1_3_ff_net_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_3_FF_NET_2_BIAS, "bias", 668), {256}, 0);
+                    decoder_estimator_mid_blocks_5_1_3_norm1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_3_NORM1_BIAS, "bias", 669), {256}, 0);
+                    decoder_estimator_mid_blocks_5_1_3_norm3_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_5_1_3_NORM3_BIAS, "bias", 670), {256}, 0);
+                    decoder_estimator_mid_blocks_6_0_block1_block_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_0_BLOCK1_BLOCK_0_BIAS, "bias", 671), {256}, 0);
+
+                    decoder_estimator_mid_blocks_6_0_mlp_1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_0_MLP_1_WEIGHT, "weight", 672), {1024, 256}, 0);
+                    decoder_estimator_mid_blocks_6_0_block1_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_0_BLOCK1_BLOCK_0_WEIGHT, "weight", 673), {3, 256, 256}, 0);
+                    decoder_estimator_mid_blocks_6_0_block1_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_0_BLOCK1_BLOCK_2_WEIGHT, "weight", 674), {256}, 0);
+                    decoder_estimator_mid_blocks_6_0_block2_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_0_BLOCK2_BLOCK_0_WEIGHT, "weight", 675), {3, 256, 256}, 0);
+                    decoder_estimator_mid_blocks_6_0_block2_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_0_BLOCK2_BLOCK_2_WEIGHT, "weight", 676), {256}, 0);
+                    decoder_estimator_mid_blocks_6_0_res_conv_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_0_RES_CONV_WEIGHT, "weight", 677), {1, 256, 256}, 0);
+                    decoder_estimator_mid_blocks_6_0_block1_block_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_0_BLOCK1_BLOCK_2_BIAS, "bias", 678), {256}, 0);
+                    decoder_estimator_mid_blocks_6_0_block2_block_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_0_BLOCK2_BLOCK_0_BIAS, "bias", 679), {256}, 0);
+                    decoder_estimator_mid_blocks_6_0_block2_block_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_0_BLOCK2_BLOCK_2_BIAS, "bias", 680), {256}, 0);
+                    decoder_estimator_mid_blocks_6_0_mlp_1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_0_MLP_1_BIAS, "bias", 681), {256}, 0);
+                    decoder_estimator_mid_blocks_6_0_res_conv_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_0_RES_CONV_BIAS, "bias", 682), {256}, 0);
+
+                    decoder_estimator_mid_blocks_6_1_0_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_0_NORM1_WEIGHT, "weight", 683), {256}, 0);
+                    decoder_estimator_mid_blocks_6_1_0_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_0_ATTN1_TO_Q_WEIGHT, "weight", 684), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_6_1_0_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_0_ATTN1_TO_K_WEIGHT, "weight", 685), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_6_1_0_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_0_ATTN1_TO_V_WEIGHT, "weight", 686), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_6_1_0_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_0_ATTN1_TO_OUT_0_WEIGHT, "weight", 687), {512, 256}, 0);
+                    decoder_estimator_mid_blocks_6_1_0_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_0_NORM3_WEIGHT, "weight", 688), {256}, 0);
+                    decoder_estimator_mid_blocks_6_1_0_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_0_FF_NET_0_PROJ_WEIGHT, "weight", 689), {256, 1024}, 0);
+                    decoder_estimator_mid_blocks_6_1_0_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_0_FF_NET_2_WEIGHT, "weight", 690), {1024, 256}, 0);
+                    decoder_estimator_mid_blocks_6_1_0_attn1_to_out_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_0_ATTN1_TO_OUT_0_BIAS, "bias", 691), {256}, 0);
+                    decoder_estimator_mid_blocks_6_1_0_ff_net_0_proj_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_0_FF_NET_0_PROJ_BIAS, "bias", 692), {1024}, 0);
+                    decoder_estimator_mid_blocks_6_1_0_ff_net_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_0_FF_NET_2_BIAS, "bias", 693), {256}, 0);
+                    decoder_estimator_mid_blocks_6_1_0_norm1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_0_NORM1_BIAS, "bias", 694), {256}, 0);
+                    decoder_estimator_mid_blocks_6_1_0_norm3_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_0_NORM3_BIAS, "bias", 695), {256}, 0);
+
+                    decoder_estimator_mid_blocks_6_1_1_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_1_NORM1_WEIGHT, "weight", 696), {256}, 0);
+                    decoder_estimator_mid_blocks_6_1_1_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_1_ATTN1_TO_OUT_0_WEIGHT, "weight", 697), {512, 256}, 0);
+                    decoder_estimator_mid_blocks_6_1_1_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_1_ATTN1_TO_Q_WEIGHT, "weight", 698), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_6_1_1_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_1_ATTN1_TO_K_WEIGHT, "weight", 699), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_6_1_1_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_1_ATTN1_TO_V_WEIGHT, "weight", 700), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_6_1_1_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_1_NORM3_WEIGHT, "weight", 701), {256}, 0);
+                    decoder_estimator_mid_blocks_6_1_1_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_1_FF_NET_0_PROJ_WEIGHT, "weight", 702), {256, 1024}, 0);
+                    decoder_estimator_mid_blocks_6_1_1_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_1_FF_NET_2_WEIGHT, "weight", 703), {1024, 256}, 0);
+                    decoder_estimator_mid_blocks_6_1_1_attn1_to_out_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_1_ATTN1_TO_OUT_0_BIAS, "bias", 704), {256}, 0);
+                    decoder_estimator_mid_blocks_6_1_1_ff_net_0_proj_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_1_FF_NET_0_PROJ_BIAS, "bias", 705), {1024}, 0);
+                    decoder_estimator_mid_blocks_6_1_1_ff_net_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_1_FF_NET_2_BIAS, "bias", 706), {256}, 0);
+                    decoder_estimator_mid_blocks_6_1_1_norm1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_1_NORM1_BIAS, "bias", 707), {256}, 0);
+                    decoder_estimator_mid_blocks_6_1_1_norm3_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_1_NORM3_BIAS, "bias", 708), {256}, 0);
+
+                    decoder_estimator_mid_blocks_6_1_2_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_2_NORM1_WEIGHT, "weight", 709), {256}, 0);
+                    decoder_estimator_mid_blocks_6_1_2_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_2_ATTN1_TO_OUT_0_WEIGHT, "weight", 710), {512, 256}, 0);
+                    decoder_estimator_mid_blocks_6_1_2_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_2_ATTN1_TO_Q_WEIGHT, "weight", 711), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_6_1_2_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_2_ATTN1_TO_K_WEIGHT, "weight", 712), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_6_1_2_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_2_ATTN1_TO_V_WEIGHT, "weight", 713), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_6_1_2_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_2_NORM3_WEIGHT, "weight", 714), {256}, 0);
+                    decoder_estimator_mid_blocks_6_1_2_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_2_FF_NET_0_PROJ_WEIGHT, "weight", 715), {256, 1024}, 0);
+                    decoder_estimator_mid_blocks_6_1_2_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_2_FF_NET_2_WEIGHT, "weight", 716), {1024, 256}, 0);
+                    decoder_estimator_mid_blocks_6_1_2_attn1_to_out_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_2_ATTN1_TO_OUT_0_BIAS, "bias", 717), {256}, 0);
+                    decoder_estimator_mid_blocks_6_1_2_ff_net_0_proj_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_2_FF_NET_0_PROJ_BIAS, "bias", 718), {1024}, 0);
+                    decoder_estimator_mid_blocks_6_1_2_ff_net_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_2_FF_NET_2_BIAS, "bias", 719), {256}, 0);
+                    decoder_estimator_mid_blocks_6_1_2_norm1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_2_NORM1_BIAS, "bias", 720), {256}, 0);
+                    decoder_estimator_mid_blocks_6_1_2_norm3_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_2_NORM3_BIAS, "bias", 721), {256}, 0);
+
+                    decoder_estimator_mid_blocks_6_1_3_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_3_NORM1_WEIGHT, "weight", 722), {256}, 0);
+                    decoder_estimator_mid_blocks_6_1_3_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_3_ATTN1_TO_Q_WEIGHT, "weight", 723), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_6_1_3_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_3_ATTN1_TO_K_WEIGHT, "weight", 724), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_6_1_3_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_3_ATTN1_TO_V_WEIGHT, "weight", 725), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_6_1_3_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_3_ATTN1_TO_OUT_0_WEIGHT, "weight", 726), {512, 256}, 0);
+                    decoder_estimator_mid_blocks_6_1_3_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_3_NORM3_WEIGHT, "weight", 727), {256}, 0);
+                    decoder_estimator_mid_blocks_6_1_3_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_3_FF_NET_0_PROJ_WEIGHT, "weight", 728), {256, 1024}, 0);
+                    decoder_estimator_mid_blocks_6_1_3_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_3_FF_NET_2_WEIGHT, "weight", 729), {1024, 256}, 0);
+                    decoder_estimator_mid_blocks_6_1_3_attn1_to_out_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_3_ATTN1_TO_OUT_0_BIAS, "bias", 730), {256}, 0);
+                    decoder_estimator_mid_blocks_6_1_3_ff_net_0_proj_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_3_FF_NET_0_PROJ_BIAS, "bias", 731), {1024}, 0);
+                    decoder_estimator_mid_blocks_6_1_3_ff_net_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_3_FF_NET_2_BIAS, "bias", 732), {256}, 0);
+                    decoder_estimator_mid_blocks_6_1_3_norm1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_3_NORM1_BIAS, "bias", 733), {256}, 0);
+                    decoder_estimator_mid_blocks_6_1_3_norm3_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_6_1_3_NORM3_BIAS, "bias", 734), {256}, 0);
+
+                    decoder_estimator_mid_blocks_7_0_mlp_1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_0_MLP_1_WEIGHT, "weight", 735), {1024, 256}, 0);
+                    decoder_estimator_mid_blocks_7_0_block1_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_0_BLOCK1_BLOCK_0_WEIGHT, "weight", 736), {3, 256, 256}, 0);
+                    decoder_estimator_mid_blocks_7_0_block1_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_0_BLOCK1_BLOCK_2_WEIGHT, "weight", 737), {256}, 0);
+                    decoder_estimator_mid_blocks_7_0_block2_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_0_BLOCK2_BLOCK_0_WEIGHT, "weight", 738), {3, 256, 256}, 0);
+                    decoder_estimator_mid_blocks_7_0_block2_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_0_BLOCK2_BLOCK_2_WEIGHT, "weight", 739), {256}, 0);
+                    decoder_estimator_mid_blocks_7_0_res_conv_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_0_RES_CONV_WEIGHT, "weight", 740), {1, 256, 256}, 0);
+                    decoder_estimator_mid_blocks_7_0_mlp_1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_0_MLP_1_BIAS, "bias", 741), {256}, 0);
+                    decoder_estimator_mid_blocks_7_0_res_conv_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_0_RES_CONV_BIAS, "bias", 742), {256}, 0);
+                    decoder_estimator_mid_blocks_7_0_block1_block_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_0_BLOCK1_BLOCK_0_BIAS, "bias", 743), {256}, 0);
+                    decoder_estimator_mid_blocks_7_0_block1_block_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_0_BLOCK1_BLOCK_2_BIAS, "bias", 744), {256}, 0);
+                    decoder_estimator_mid_blocks_7_0_block2_block_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_0_BLOCK2_BLOCK_0_BIAS, "bias", 745), {256}, 0);
+                    decoder_estimator_mid_blocks_7_0_block2_block_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_0_BLOCK2_BLOCK_2_BIAS, "bias", 746), {256}, 0);
+
+                    decoder_estimator_mid_blocks_7_1_0_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_0_NORM1_WEIGHT, "weight", 747), {256}, 0);
+                    decoder_estimator_mid_blocks_7_1_0_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_0_ATTN1_TO_Q_WEIGHT, "weight", 748), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_7_1_0_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_0_ATTN1_TO_K_WEIGHT, "weight", 749), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_7_1_0_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_0_ATTN1_TO_V_WEIGHT, "weight", 750), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_7_1_0_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_0_ATTN1_TO_OUT_0_WEIGHT, "weight", 751), {512, 256}, 0);
+                    decoder_estimator_mid_blocks_7_1_0_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_0_NORM3_WEIGHT, "weight", 752), {256}, 0);
+                    decoder_estimator_mid_blocks_7_1_0_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_0_FF_NET_0_PROJ_WEIGHT, "weight", 753), {256, 1024}, 0);
+                    decoder_estimator_mid_blocks_7_1_0_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_0_FF_NET_2_WEIGHT, "weight", 754), {1024, 256}, 0);
+                    decoder_estimator_mid_blocks_7_1_0_attn1_to_out_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_0_ATTN1_TO_OUT_0_BIAS, "bias", 755), {256}, 0);
+                    decoder_estimator_mid_blocks_7_1_0_ff_net_0_proj_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_0_FF_NET_0_PROJ_BIAS, "bias", 756), {1024}, 0);
+                    decoder_estimator_mid_blocks_7_1_0_ff_net_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_0_FF_NET_2_BIAS, "bias", 757), {256}, 0);
+                    decoder_estimator_mid_blocks_7_1_0_norm1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_0_NORM1_BIAS, "bias", 758), {256}, 0);
+                    decoder_estimator_mid_blocks_7_1_0_norm3_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_0_NORM3_BIAS, "bias", 759), {256}, 0);
+
+                    decoder_estimator_mid_blocks_7_1_1_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_1_NORM1_WEIGHT, "weight", 760), {256}, 0);
+                    decoder_estimator_mid_blocks_7_1_1_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_1_ATTN1_TO_OUT_0_WEIGHT, "weight", 761), {512, 256}, 0);
+                    decoder_estimator_mid_blocks_7_1_1_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_1_ATTN1_TO_Q_WEIGHT, "weight", 762), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_7_1_1_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_1_ATTN1_TO_K_WEIGHT, "weight", 763), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_7_1_1_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_1_ATTN1_TO_V_WEIGHT, "weight", 764), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_7_1_1_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_1_NORM3_WEIGHT, "weight", 765), {256}, 0);
+                    decoder_estimator_mid_blocks_7_1_1_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_1_FF_NET_0_PROJ_WEIGHT, "weight", 766), {256, 1024}, 0);
+                    decoder_estimator_mid_blocks_7_1_1_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_1_FF_NET_2_WEIGHT, "weight", 767), {1024, 256}, 0);
+                    decoder_estimator_mid_blocks_7_1_1_attn1_to_out_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_1_ATTN1_TO_OUT_0_BIAS, "bias", 768), {256}, 0);
+                    decoder_estimator_mid_blocks_7_1_1_ff_net_0_proj_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_1_FF_NET_0_PROJ_BIAS, "bias", 769), {1024}, 0);
+                    decoder_estimator_mid_blocks_7_1_1_ff_net_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_1_FF_NET_2_BIAS, "bias", 770), {256}, 0);
+                    decoder_estimator_mid_blocks_7_1_1_norm1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_1_NORM1_BIAS, "bias", 771), {256}, 0);
+                    decoder_estimator_mid_blocks_7_1_1_norm3_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_1_NORM3_BIAS, "bias", 772), {256}, 0);
+
+                    decoder_estimator_mid_blocks_7_1_2_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_2_NORM1_WEIGHT, "weight", 773), {256}, 0);
+                    decoder_estimator_mid_blocks_7_1_2_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_2_ATTN1_TO_OUT_0_WEIGHT, "weight", 774), {512, 256}, 0);
+                    decoder_estimator_mid_blocks_7_1_2_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_2_ATTN1_TO_Q_WEIGHT, "weight", 775), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_7_1_2_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_2_ATTN1_TO_K_WEIGHT, "weight", 776), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_7_1_2_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_2_ATTN1_TO_V_WEIGHT, "weight", 777), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_7_1_2_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_2_NORM3_WEIGHT, "weight", 778), {256}, 0);
+                    decoder_estimator_mid_blocks_7_1_2_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_2_FF_NET_0_PROJ_WEIGHT, "weight", 779), {256, 1024}, 0);
+                    decoder_estimator_mid_blocks_7_1_2_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_2_FF_NET_2_WEIGHT, "weight", 780), {1024, 256}, 0);
+                    decoder_estimator_mid_blocks_7_1_2_attn1_to_out_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_2_ATTN1_TO_OUT_0_BIAS, "bias", 781), {256}, 0);
+                    decoder_estimator_mid_blocks_7_1_2_ff_net_0_proj_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_2_FF_NET_0_PROJ_BIAS, "bias", 782), {1024}, 0);
+                    decoder_estimator_mid_blocks_7_1_2_ff_net_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_2_FF_NET_2_BIAS, "bias", 783), {256}, 0);
+                    decoder_estimator_mid_blocks_7_1_2_norm1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_2_NORM1_BIAS, "bias", 784), {256}, 0);
+                    decoder_estimator_mid_blocks_7_1_2_norm3_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_2_NORM3_BIAS, "bias", 785), {256}, 0);
+
+                    decoder_estimator_mid_blocks_7_1_3_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_3_NORM1_WEIGHT, "weight", 786), {256}, 0);
+                    decoder_estimator_mid_blocks_7_1_3_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_3_ATTN1_TO_Q_WEIGHT, "weight", 787), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_7_1_3_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_3_ATTN1_TO_K_WEIGHT, "weight", 788), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_7_1_3_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_3_ATTN1_TO_V_WEIGHT, "weight", 789), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_7_1_3_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_3_ATTN1_TO_OUT_0_WEIGHT, "weight", 790), {512, 256}, 0);
+                    decoder_estimator_mid_blocks_7_1_3_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_3_NORM3_WEIGHT, "weight", 791), {256}, 0);
+                    decoder_estimator_mid_blocks_7_1_3_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_3_FF_NET_0_PROJ_WEIGHT, "weight", 792), {256, 1024}, 0);
+                    decoder_estimator_mid_blocks_7_1_3_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_3_FF_NET_2_WEIGHT, "weight", 793), {1024, 256}, 0);
+                    decoder_estimator_mid_blocks_7_1_3_attn1_to_out_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_3_ATTN1_TO_OUT_0_BIAS, "bias", 794), {256}, 0);
+                    decoder_estimator_mid_blocks_7_1_3_ff_net_0_proj_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_3_FF_NET_0_PROJ_BIAS, "bias", 795), {1024}, 0);
+                    decoder_estimator_mid_blocks_7_1_3_ff_net_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_3_FF_NET_2_BIAS, "bias", 796), {256}, 0);
+                    decoder_estimator_mid_blocks_7_1_3_norm1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_3_NORM1_BIAS, "bias", 797), {256}, 0);
+                    decoder_estimator_mid_blocks_7_1_3_norm3_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_7_1_3_NORM3_BIAS, "bias", 798), {256}, 0);
+                    
+                    decoder_estimator_mid_blocks_8_0_mlp_1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_0_MLP_1_WEIGHT, "weight", 799), {1024, 256}, 0);
+                    decoder_estimator_mid_blocks_8_0_block1_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_0_BLOCK1_BLOCK_0_WEIGHT, "weight", 800), {3, 256, 256}, 0);
+                    decoder_estimator_mid_blocks_8_0_block1_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_0_BLOCK1_BLOCK_2_WEIGHT, "weight", 801), {256}, 0);
+                    decoder_estimator_mid_blocks_8_0_block2_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_0_BLOCK2_BLOCK_0_WEIGHT, "weight", 802), {3, 256, 256}, 0);
+                    decoder_estimator_mid_blocks_8_0_block2_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_0_BLOCK2_BLOCK_2_WEIGHT, "weight", 803), {256}, 0);
+                    decoder_estimator_mid_blocks_8_0_res_conv_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_0_RES_CONV_WEIGHT, "weight", 804), {1, 256, 256}, 0);
+                    decoder_estimator_mid_blocks_8_0_block1_block_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_0_BLOCK1_BLOCK_0_BIAS, "bias", 805), {256}, 0);
+                    decoder_estimator_mid_blocks_8_0_block1_block_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_0_BLOCK1_BLOCK_2_BIAS, "bias", 806), {256}, 0);
+                    decoder_estimator_mid_blocks_8_0_block2_block_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_0_BLOCK2_BLOCK_0_BIAS, "bias", 807), {256}, 0);
+                    decoder_estimator_mid_blocks_8_0_block2_block_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_0_BLOCK2_BLOCK_2_BIAS, "bias", 808), {256}, 0);
+                    decoder_estimator_mid_blocks_8_0_mlp_1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_0_MLP_1_BIAS, "bias", 809), {256}, 0);
+                    decoder_estimator_mid_blocks_8_0_res_conv_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_0_RES_CONV_BIAS, "bias", 810), {256}, 0);
+
+                    decoder_estimator_mid_blocks_8_1_0_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_0_NORM1_WEIGHT, "weight", 811), {256}, 0);
+                    decoder_estimator_mid_blocks_8_1_0_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_0_ATTN1_TO_Q_WEIGHT, "weight", 812), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_8_1_0_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_0_ATTN1_TO_K_WEIGHT, "weight", 813), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_8_1_0_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_0_ATTN1_TO_V_WEIGHT, "weight", 814), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_8_1_0_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_0_ATTN1_TO_OUT_0_WEIGHT, "weight", 815), {512, 256}, 0);
+                    decoder_estimator_mid_blocks_8_1_0_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_0_NORM3_WEIGHT, "weight", 816), {256}, 0);
+                    decoder_estimator_mid_blocks_8_1_0_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_0_FF_NET_0_PROJ_WEIGHT, "weight", 817), {256, 1024}, 0);
+                    decoder_estimator_mid_blocks_8_1_0_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_0_FF_NET_2_WEIGHT, "weight", 818), {1024, 256}, 0);
+                    decoder_estimator_mid_blocks_8_1_0_attn1_to_out_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_0_ATTN1_TO_OUT_0_BIAS, "bias", 819), {256}, 0);
+                    decoder_estimator_mid_blocks_8_1_0_ff_net_0_proj_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_0_FF_NET_0_PROJ_BIAS, "bias", 820), {1024}, 0);
+                    decoder_estimator_mid_blocks_8_1_0_ff_net_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_0_FF_NET_2_BIAS, "bias", 821), {256}, 0);
+                    decoder_estimator_mid_blocks_8_1_0_norm1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_0_NORM1_BIAS, "bias", 822), {256}, 0);
+                    decoder_estimator_mid_blocks_8_1_0_norm3_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_0_NORM3_BIAS, "bias", 823), {256}, 0);
+
+                    decoder_estimator_mid_blocks_8_1_1_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_1_NORM1_WEIGHT, "weight", 824), {256}, 0);
+                    decoder_estimator_mid_blocks_8_1_1_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_1_ATTN1_TO_OUT_0_WEIGHT, "weight", 825), {512, 256}, 0);
+                    decoder_estimator_mid_blocks_8_1_1_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_1_ATTN1_TO_Q_WEIGHT, "weight", 826), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_8_1_1_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_1_ATTN1_TO_K_WEIGHT, "weight", 827), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_8_1_1_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_1_ATTN1_TO_V_WEIGHT, "weight", 828), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_8_1_1_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_1_NORM3_WEIGHT, "weight", 829), {256}, 0);
+                    decoder_estimator_mid_blocks_8_1_1_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_1_FF_NET_0_PROJ_WEIGHT, "weight", 830), {256, 1024}, 0);
+                    decoder_estimator_mid_blocks_8_1_1_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_1_FF_NET_2_WEIGHT, "weight", 831), {1024, 256}, 0);
+                    decoder_estimator_mid_blocks_8_1_1_attn1_to_out_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_1_ATTN1_TO_OUT_0_BIAS, "bias", 832), {256}, 0);
+                    decoder_estimator_mid_blocks_8_1_1_ff_net_0_proj_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_1_FF_NET_0_PROJ_BIAS, "bias", 833), {1024}, 0);
+                    decoder_estimator_mid_blocks_8_1_1_ff_net_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_1_FF_NET_2_BIAS, "bias", 834), {256}, 0);
+                    decoder_estimator_mid_blocks_8_1_1_norm1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_1_NORM1_BIAS, "bias", 835), {256}, 0);
+                    decoder_estimator_mid_blocks_8_1_1_norm3_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_1_NORM3_BIAS, "bias", 836), {256}, 0);
+
+                    decoder_estimator_mid_blocks_8_1_2_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_2_NORM1_WEIGHT, "weight", 837), {256}, 0);
+                    decoder_estimator_mid_blocks_8_1_2_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_2_ATTN1_TO_OUT_0_WEIGHT, "weight", 838), {512, 256}, 0);
+                    decoder_estimator_mid_blocks_8_1_2_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_2_ATTN1_TO_Q_WEIGHT, "weight", 839), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_8_1_2_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_2_ATTN1_TO_K_WEIGHT, "weight", 840), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_8_1_2_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_2_ATTN1_TO_V_WEIGHT, "weight", 841), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_8_1_2_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_2_NORM3_WEIGHT, "weight", 842), {256}, 0);
+                    decoder_estimator_mid_blocks_8_1_2_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_2_FF_NET_0_PROJ_WEIGHT, "weight", 843), {256, 1024}, 0);
+                    decoder_estimator_mid_blocks_8_1_2_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_2_FF_NET_2_WEIGHT, "weight", 844), {1024, 256}, 0);
+                    decoder_estimator_mid_blocks_8_1_2_attn1_to_out_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_2_ATTN1_TO_OUT_0_BIAS, "bias", 845), {256}, 0);
+                    decoder_estimator_mid_blocks_8_1_2_ff_net_0_proj_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_2_FF_NET_0_PROJ_BIAS, "bias", 846), {1024}, 0);
+                    decoder_estimator_mid_blocks_8_1_2_ff_net_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_2_FF_NET_2_BIAS, "bias", 847), {256}, 0);
+                    decoder_estimator_mid_blocks_8_1_2_norm1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_2_NORM1_BIAS, "bias", 848), {256}, 0);
+                    decoder_estimator_mid_blocks_8_1_2_norm3_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_2_NORM3_BIAS, "bias", 849), {256}, 0);
+                    
+                    decoder_estimator_mid_blocks_8_1_3_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_3_NORM1_WEIGHT, "weight", 850), {256}, 0);
+                    decoder_estimator_mid_blocks_8_1_3_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_3_ATTN1_TO_Q_WEIGHT, "weight", 851), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_8_1_3_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_3_ATTN1_TO_K_WEIGHT, "weight", 852), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_8_1_3_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_3_ATTN1_TO_V_WEIGHT, "weight", 853), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_8_1_3_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_3_ATTN1_TO_OUT_0_WEIGHT, "weight", 854), {512, 256}, 0);
+                    decoder_estimator_mid_blocks_8_1_3_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_3_NORM3_WEIGHT, "weight", 855), {256}, 0);
+                    decoder_estimator_mid_blocks_8_1_3_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_3_FF_NET_0_PROJ_WEIGHT, "weight", 856), {256, 1024}, 0);
+                    decoder_estimator_mid_blocks_8_1_3_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_3_FF_NET_2_WEIGHT, "weight", 857), {1024, 256}, 0);
+                    decoder_estimator_mid_blocks_8_1_3_attn1_to_out_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_3_ATTN1_TO_OUT_0_BIAS, "bias", 858), {256}, 0);
+                    decoder_estimator_mid_blocks_8_1_3_ff_net_0_proj_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_3_FF_NET_0_PROJ_BIAS, "bias", 859), {1024}, 0);
+                    decoder_estimator_mid_blocks_8_1_3_ff_net_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_3_FF_NET_2_BIAS, "bias", 860), {256}, 0);
+                    decoder_estimator_mid_blocks_8_1_3_norm1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_3_NORM1_BIAS, "bias", 861), {256}, 0);
+                    decoder_estimator_mid_blocks_8_1_3_norm3_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_8_1_3_NORM3_BIAS, "bias", 862), {256}, 0);
+
+                    decoder_estimator_mid_blocks_9_0_mlp_1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_0_MLP_1_WEIGHT, "weight", 863), {1024, 256}, 0);
+                    decoder_estimator_mid_blocks_9_0_block1_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_0_BLOCK1_BLOCK_0_WEIGHT, "weight", 864), {3, 256, 256}, 0);
+                    decoder_estimator_mid_blocks_9_0_block1_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_0_BLOCK1_BLOCK_2_WEIGHT, "weight", 865), {256}, 0);
+                    decoder_estimator_mid_blocks_9_0_block2_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_0_BLOCK2_BLOCK_0_WEIGHT, "weight", 866), {3, 256, 256}, 0);
+                    decoder_estimator_mid_blocks_9_0_block2_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_0_BLOCK2_BLOCK_2_WEIGHT, "weight", 867), {256}, 0);
+                    decoder_estimator_mid_blocks_9_0_res_conv_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_0_RES_CONV_WEIGHT, "weight", 868), {1, 256, 256}, 0);
+                    decoder_estimator_mid_blocks_9_0_block1_block_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_0_BLOCK1_BLOCK_0_BIAS, "bias", 869), {256}, 0);
+                    decoder_estimator_mid_blocks_9_0_block1_block_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_0_BLOCK1_BLOCK_2_BIAS, "bias", 870), {256}, 0);
+                    decoder_estimator_mid_blocks_9_0_block2_block_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_0_BLOCK2_BLOCK_0_BIAS, "bias", 871), {256}, 0);
+                    decoder_estimator_mid_blocks_9_0_block2_block_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_0_BLOCK2_BLOCK_2_BIAS, "bias", 872), {256}, 0);
+                    decoder_estimator_mid_blocks_9_0_mlp_1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_0_MLP_1_BIAS, "bias", 873), {256}, 0);
+                    decoder_estimator_mid_blocks_9_0_res_conv_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_0_RES_CONV_BIAS, "bias", 874), {256}, 0);
+
+                    decoder_estimator_mid_blocks_9_1_0_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_0_NORM1_WEIGHT, "weight", 875), {256}, 0);
+                    decoder_estimator_mid_blocks_9_1_0_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_0_ATTN1_TO_Q_WEIGHT, "weight", 876), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_9_1_0_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_0_ATTN1_TO_K_WEIGHT, "weight", 877), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_9_1_0_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_0_ATTN1_TO_V_WEIGHT, "weight", 878), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_9_1_0_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_0_ATTN1_TO_OUT_0_WEIGHT, "weight", 879), {512, 256}, 0);
+                    decoder_estimator_mid_blocks_9_1_0_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_0_NORM3_WEIGHT, "weight", 880), {256}, 0);
+                    decoder_estimator_mid_blocks_9_1_0_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_0_FF_NET_0_PROJ_WEIGHT, "weight", 881), {256, 1024}, 0);
+                    decoder_estimator_mid_blocks_9_1_0_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_0_FF_NET_2_WEIGHT, "weight", 882), {1024, 256}, 0);
+                    decoder_estimator_mid_blocks_9_1_0_attn1_to_out_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_0_ATTN1_TO_OUT_0_BIAS, "bias", 883), {256}, 0);
+                    decoder_estimator_mid_blocks_9_1_0_ff_net_0_proj_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_0_FF_NET_0_PROJ_BIAS, "bias", 884), {1024}, 0);
+                    decoder_estimator_mid_blocks_9_1_0_ff_net_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_0_FF_NET_2_BIAS, "bias", 885), {256}, 0);
+                    decoder_estimator_mid_blocks_9_1_0_norm1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_0_NORM1_BIAS, "bias", 886), {256}, 0);
+                    decoder_estimator_mid_blocks_9_1_0_norm3_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_0_NORM3_BIAS, "bias", 887), {256}, 0);
+
+                    decoder_estimator_mid_blocks_9_1_1_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_1_NORM1_WEIGHT, "weight", 888), {256}, 0);
+                    decoder_estimator_mid_blocks_9_1_1_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_1_ATTN1_TO_OUT_0_WEIGHT, "weight", 889), {512, 256}, 0);
+                    decoder_estimator_mid_blocks_9_1_1_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_1_ATTN1_TO_Q_WEIGHT, "weight", 890), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_9_1_1_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_1_ATTN1_TO_K_WEIGHT, "weight", 891), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_9_1_1_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_1_ATTN1_TO_V_WEIGHT, "weight", 892), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_9_1_1_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_1_NORM3_WEIGHT, "weight", 893), {256}, 0);
+                    decoder_estimator_mid_blocks_9_1_1_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_1_FF_NET_0_PROJ_WEIGHT, "weight", 894), {256, 1024}, 0);
+                    decoder_estimator_mid_blocks_9_1_1_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_1_FF_NET_2_WEIGHT, "weight", 895), {1024, 256}, 0);
+                    decoder_estimator_mid_blocks_9_1_1_attn1_to_out_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_1_ATTN1_TO_OUT_0_BIAS, "bias", 896), {256}, 0);
+                    decoder_estimator_mid_blocks_9_1_1_ff_net_0_proj_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_1_FF_NET_0_PROJ_BIAS, "bias", 897), {1024}, 0);
+                    decoder_estimator_mid_blocks_9_1_1_ff_net_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_1_FF_NET_2_BIAS, "bias", 898), {256}, 0);
+                    decoder_estimator_mid_blocks_9_1_1_norm1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_1_NORM1_BIAS, "bias", 899), {256}, 0);
+                    decoder_estimator_mid_blocks_9_1_1_norm3_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_1_NORM3_BIAS, "bias", 900), {256}, 0);
+
+                    decoder_estimator_mid_blocks_9_1_2_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_2_NORM1_WEIGHT, "weight", 901), {256}, 0);
+                    decoder_estimator_mid_blocks_9_1_2_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_2_ATTN1_TO_OUT_0_WEIGHT, "weight", 902), {512, 256}, 0);
+                    decoder_estimator_mid_blocks_9_1_2_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_2_ATTN1_TO_Q_WEIGHT, "weight", 903), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_9_1_2_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_2_ATTN1_TO_K_WEIGHT, "weight", 904), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_9_1_2_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_2_ATTN1_TO_V_WEIGHT, "weight", 905), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_9_1_2_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_2_NORM3_WEIGHT, "weight", 906), {256}, 0);
+                    decoder_estimator_mid_blocks_9_1_2_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_2_FF_NET_0_PROJ_WEIGHT, "weight", 907), {256, 1024}, 0);
+                    decoder_estimator_mid_blocks_9_1_2_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_2_FF_NET_2_WEIGHT, "weight", 908), {1024, 256}, 0);
+                    decoder_estimator_mid_blocks_9_1_2_attn1_to_out_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_2_ATTN1_TO_OUT_0_BIAS, "bias", 909), {256}, 0);
+                    decoder_estimator_mid_blocks_9_1_2_ff_net_0_proj_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_2_FF_NET_0_PROJ_BIAS, "bias", 910), {1024}, 0);
+                    decoder_estimator_mid_blocks_9_1_2_ff_net_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_2_FF_NET_2_BIAS, "bias", 911), {256}, 0);
+                    decoder_estimator_mid_blocks_9_1_2_norm1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_2_NORM1_BIAS, "bias", 912), {256}, 0);
+                    decoder_estimator_mid_blocks_9_1_2_norm3_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_2_NORM3_BIAS, "bias", 913), {256}, 0);
+
+                    decoder_estimator_mid_blocks_9_1_3_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_3_NORM1_WEIGHT, "weight", 914), {256}, 0);
+                    decoder_estimator_mid_blocks_9_1_3_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_3_ATTN1_TO_Q_WEIGHT, "weight", 915), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_9_1_3_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_3_ATTN1_TO_K_WEIGHT, "weight", 916), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_9_1_3_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_3_ATTN1_TO_V_WEIGHT, "weight", 917), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_9_1_3_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_3_ATTN1_TO_OUT_0_WEIGHT, "weight", 918), {512, 256}, 0);
+                    decoder_estimator_mid_blocks_9_1_3_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_3_NORM3_WEIGHT, "weight", 919), {256}, 0);
+                    decoder_estimator_mid_blocks_9_1_3_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_3_FF_NET_0_PROJ_WEIGHT, "weight", 920), {256, 1024}, 0);
+                    decoder_estimator_mid_blocks_9_1_3_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_3_FF_NET_2_WEIGHT, "weight", 921), {1024, 256}, 0);
+                    decoder_estimator_mid_blocks_9_1_3_attn1_to_out_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_3_ATTN1_TO_OUT_0_BIAS, "bias", 922), {256}, 0);
+                    decoder_estimator_mid_blocks_9_1_3_ff_net_0_proj_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_3_FF_NET_0_PROJ_BIAS, "bias", 923), {1024}, 0);
+                    decoder_estimator_mid_blocks_9_1_3_ff_net_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_3_FF_NET_2_BIAS, "bias", 924), {256}, 0);
+                    decoder_estimator_mid_blocks_9_1_3_norm1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_3_NORM1_BIAS, "bias", 925), {256}, 0);
+                    decoder_estimator_mid_blocks_9_1_3_norm3_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_9_1_3_NORM3_BIAS, "bias", 926), {256}, 0);
+
+                    decoder_estimator_mid_blocks_10_0_mlp_1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_0_MLP_1_WEIGHT, "weight", 927), {1024, 256}, 0);
+                    decoder_estimator_mid_blocks_10_0_block1_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_0_BLOCK1_BLOCK_0_WEIGHT, "weight", 928), {3, 256, 256}, 0);
+                    decoder_estimator_mid_blocks_10_0_block1_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_0_BLOCK1_BLOCK_2_WEIGHT, "weight", 929), {256}, 0);
+                    decoder_estimator_mid_blocks_10_0_block2_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_0_BLOCK2_BLOCK_0_WEIGHT, "weight", 930), {3, 256, 256}, 0);
+                    decoder_estimator_mid_blocks_10_0_block2_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_0_BLOCK2_BLOCK_2_WEIGHT, "weight", 931), {256}, 0);
+                    decoder_estimator_mid_blocks_10_0_res_conv_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_0_RES_CONV_WEIGHT, "weight", 932), {1, 256, 256}, 0);
+                    decoder_estimator_mid_blocks_10_0_block1_block_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_0_BLOCK1_BLOCK_0_BIAS, "bias", 933), {256}, 0);
+                    decoder_estimator_mid_blocks_10_0_block1_block_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_0_BLOCK1_BLOCK_2_BIAS, "bias", 934), {256}, 0);
+                    decoder_estimator_mid_blocks_10_0_block2_block_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_0_BLOCK2_BLOCK_0_BIAS, "bias", 935), {256}, 0);
+                    decoder_estimator_mid_blocks_10_0_block2_block_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_0_BLOCK2_BLOCK_2_BIAS, "bias", 936), {256}, 0);
+                    decoder_estimator_mid_blocks_10_0_mlp_1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_0_MLP_1_BIAS, "bias", 937), {256}, 0);
+                    decoder_estimator_mid_blocks_10_0_res_conv_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_0_RES_CONV_BIAS, "bias", 938), {256}, 0);
+
+                    decoder_estimator_mid_blocks_10_1_0_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_0_NORM1_WEIGHT, "weight", 939), {256}, 0);
+                    decoder_estimator_mid_blocks_10_1_0_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_0_ATTN1_TO_Q_WEIGHT, "weight", 940), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_10_1_0_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_0_ATTN1_TO_K_WEIGHT, "weight", 941), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_10_1_0_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_0_ATTN1_TO_V_WEIGHT, "weight", 942), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_10_1_0_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_0_ATTN1_TO_OUT_0_WEIGHT, "weight", 943), {512, 256}, 0);
+                    decoder_estimator_mid_blocks_10_1_0_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_0_NORM3_WEIGHT, "weight", 944), {256}, 0);
+                    decoder_estimator_mid_blocks_10_1_0_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_0_FF_NET_0_PROJ_WEIGHT, "weight", 945), {256, 1024}, 0);
+                    decoder_estimator_mid_blocks_10_1_0_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_0_FF_NET_2_WEIGHT, "weight", 946), {1024, 256}, 0);
+                    decoder_estimator_mid_blocks_10_1_0_attn1_to_out_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_0_ATTN1_TO_OUT_0_BIAS, "bias", 947), {256}, 0);
+                    decoder_estimator_mid_blocks_10_1_0_ff_net_0_proj_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_0_FF_NET_0_PROJ_BIAS, "bias", 948), {1024}, 0);
+                    decoder_estimator_mid_blocks_10_1_0_ff_net_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_0_FF_NET_2_BIAS, "bias", 949), {256}, 0);
+                    decoder_estimator_mid_blocks_10_1_0_norm1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_0_NORM1_BIAS, "bias", 950), {256}, 0);
+                    decoder_estimator_mid_blocks_10_1_0_norm3_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_0_NORM3_BIAS, "bias", 951), {256}, 0);
+
+                    decoder_estimator_mid_blocks_10_1_1_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_1_NORM1_WEIGHT, "weight", 952), {256}, 0);
+                    decoder_estimator_mid_blocks_10_1_1_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_1_ATTN1_TO_OUT_0_WEIGHT, "weight", 953), {512, 256}, 0);
+                    decoder_estimator_mid_blocks_10_1_1_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_1_ATTN1_TO_Q_WEIGHT, "weight", 954), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_10_1_1_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_1_ATTN1_TO_K_WEIGHT, "weight", 955), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_10_1_1_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_1_ATTN1_TO_V_WEIGHT, "weight", 956), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_10_1_1_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_1_NORM3_WEIGHT, "weight", 957), {256}, 0);
+                    decoder_estimator_mid_blocks_10_1_1_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_1_FF_NET_0_PROJ_WEIGHT, "weight", 958), {256, 1024}, 0);
+                    decoder_estimator_mid_blocks_10_1_1_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_1_FF_NET_2_WEIGHT, "weight", 959), {1024, 256}, 0);
+                    decoder_estimator_mid_blocks_10_1_1_attn1_to_out_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_1_ATTN1_TO_OUT_0_BIAS, "bias", 960), {256}, 0);
+                    decoder_estimator_mid_blocks_10_1_1_ff_net_0_proj_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_1_FF_NET_0_PROJ_BIAS, "bias", 961), {1024}, 0);
+                    decoder_estimator_mid_blocks_10_1_1_ff_net_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_1_FF_NET_2_BIAS, "bias", 962), {256}, 0);
+                    decoder_estimator_mid_blocks_10_1_1_norm1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_1_NORM1_BIAS, "bias", 963), {256}, 0);
+                    decoder_estimator_mid_blocks_10_1_1_norm3_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_1_NORM3_BIAS, "bias", 964), {256}, 0);
+
+                    decoder_estimator_mid_blocks_10_1_2_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_2_NORM1_WEIGHT, "weight", 965), {256}, 0);
+                    decoder_estimator_mid_blocks_10_1_2_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_2_ATTN1_TO_OUT_0_WEIGHT, "weight", 966), {512, 256}, 0);
+                    decoder_estimator_mid_blocks_10_1_2_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_2_ATTN1_TO_Q_WEIGHT, "weight", 967), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_10_1_2_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_2_ATTN1_TO_K_WEIGHT, "weight", 968), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_10_1_2_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_2_ATTN1_TO_V_WEIGHT, "weight", 969), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_10_1_2_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_2_NORM3_WEIGHT, "weight", 970), {256}, 0);
+                    decoder_estimator_mid_blocks_10_1_2_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_2_FF_NET_0_PROJ_WEIGHT, "weight", 971), {256, 1024}, 0);
+                    decoder_estimator_mid_blocks_10_1_2_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_2_FF_NET_2_WEIGHT, "weight", 972), {1024, 256}, 0);
+                    decoder_estimator_mid_blocks_10_1_2_attn1_to_out_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_2_ATTN1_TO_OUT_0_BIAS, "bias", 973), {256}, 0);
+                    decoder_estimator_mid_blocks_10_1_2_ff_net_0_proj_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_2_FF_NET_0_PROJ_BIAS, "bias", 974), {1024}, 0);
+                    decoder_estimator_mid_blocks_10_1_2_ff_net_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_2_FF_NET_2_BIAS, "bias", 975), {256}, 0);
+                    decoder_estimator_mid_blocks_10_1_2_norm1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_2_NORM1_BIAS, "bias", 976), {256}, 0);
+                    decoder_estimator_mid_blocks_10_1_2_norm3_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_2_NORM3_BIAS, "bias", 977), {256}, 0);
+
+                    decoder_estimator_mid_blocks_10_1_3_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_3_NORM1_WEIGHT, "weight", 978), {256}, 0);
+                    decoder_estimator_mid_blocks_10_1_3_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_3_ATTN1_TO_Q_WEIGHT, "weight", 979), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_10_1_3_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_3_ATTN1_TO_K_WEIGHT, "weight", 980), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_10_1_3_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_3_ATTN1_TO_V_WEIGHT, "weight", 981), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_10_1_3_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_3_ATTN1_TO_OUT_0_WEIGHT, "weight", 982), {512, 256}, 0);
+                    decoder_estimator_mid_blocks_10_1_3_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_3_NORM3_WEIGHT, "weight", 983), {256}, 0);
+                    decoder_estimator_mid_blocks_10_1_3_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_3_FF_NET_0_PROJ_WEIGHT, "weight", 984), {256, 1024}, 0);
+                    decoder_estimator_mid_blocks_10_1_3_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_3_FF_NET_2_WEIGHT, "weight", 985), {1024, 256}, 0);
+                    decoder_estimator_mid_blocks_10_1_3_attn1_to_out_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_3_ATTN1_TO_OUT_0_BIAS, "bias", 986), {256}, 0);
+                    decoder_estimator_mid_blocks_10_1_3_ff_net_0_proj_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_3_FF_NET_0_PROJ_BIAS, "bias", 987), {1024}, 0);
+                    decoder_estimator_mid_blocks_10_1_3_ff_net_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_3_FF_NET_2_BIAS, "bias", 988), {256}, 0);
+                    decoder_estimator_mid_blocks_10_1_3_norm1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_3_NORM1_BIAS, "bias", 989), {256}, 0);
+                    decoder_estimator_mid_blocks_10_1_3_norm3_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_10_1_3_NORM3_BIAS, "bias", 990), {256}, 0);
+
+                    decoder_estimator_mid_blocks_11_0_mlp_1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_0_MLP_1_WEIGHT, "weight", 991), {1024, 256}, 0);
+                    decoder_estimator_mid_blocks_11_0_block1_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_0_BLOCK1_BLOCK_0_WEIGHT, "weight", 992), {3, 256, 256}, 0);
+                    decoder_estimator_mid_blocks_11_0_block1_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_0_BLOCK1_BLOCK_2_WEIGHT, "weight", 993), {256}, 0);
+                    decoder_estimator_mid_blocks_11_0_block2_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_0_BLOCK2_BLOCK_0_WEIGHT, "weight", 994), {3, 256, 256}, 0);
+                    decoder_estimator_mid_blocks_11_0_block2_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_0_BLOCK2_BLOCK_2_WEIGHT, "weight", 995), {256}, 0);
+                    decoder_estimator_mid_blocks_11_0_res_conv_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_0_RES_CONV_WEIGHT, "weight", 996), {1, 256, 256}, 0);
+                    decoder_estimator_mid_blocks_11_0_block1_block_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_0_BLOCK1_BLOCK_0_BIAS, "bias", 997), {256}, 0);
+                    decoder_estimator_mid_blocks_11_0_block1_block_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_0_BLOCK1_BLOCK_2_BIAS, "bias", 998), {256}, 0);
+                    decoder_estimator_mid_blocks_11_0_block2_block_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_0_BLOCK2_BLOCK_0_BIAS, "bias", 999), {256}, 0);
+                    decoder_estimator_mid_blocks_11_0_block2_block_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_0_BLOCK2_BLOCK_2_BIAS, "bias", 1000), {256}, 0);
+                    decoder_estimator_mid_blocks_11_0_mlp_1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_0_MLP_1_BIAS, "bias", 1001), {256}, 0);
+                    decoder_estimator_mid_blocks_11_0_res_conv_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_0_RES_CONV_BIAS, "bias", 1002), {256}, 0);
+
+                    decoder_estimator_mid_blocks_11_1_0_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_0_NORM1_WEIGHT, "weight", 1003), {256}, 0);
+                    decoder_estimator_mid_blocks_11_1_0_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_0_ATTN1_TO_Q_WEIGHT, "weight", 1004), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_11_1_0_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_0_ATTN1_TO_K_WEIGHT, "weight", 1005), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_11_1_0_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_0_ATTN1_TO_V_WEIGHT, "weight", 1006), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_11_1_0_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_0_ATTN1_TO_OUT_0_WEIGHT, "weight", 1007), {512, 256}, 0);
+                    decoder_estimator_mid_blocks_11_1_0_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_0_NORM3_WEIGHT, "weight", 1008), {256}, 0);
+                    decoder_estimator_mid_blocks_11_1_0_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_0_FF_NET_0_PROJ_WEIGHT, "weight", 1009), {256, 1024}, 0);
+                    decoder_estimator_mid_blocks_11_1_0_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_0_FF_NET_2_WEIGHT, "weight", 1010), {1024, 256}, 0);
+                    decoder_estimator_mid_blocks_11_1_0_attn1_to_out_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_0_ATTN1_TO_OUT_0_BIAS, "bias", 1011), {256}, 0);
+                    decoder_estimator_mid_blocks_11_1_0_ff_net_0_proj_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_0_FF_NET_0_PROJ_BIAS, "bias", 1012), {1024}, 0);
+                    decoder_estimator_mid_blocks_11_1_0_ff_net_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_0_FF_NET_2_BIAS, "bias", 1013), {256}, 0);
+                    decoder_estimator_mid_blocks_11_1_0_norm1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_0_NORM1_BIAS, "bias", 1014), {256}, 0);
+                    decoder_estimator_mid_blocks_11_1_0_norm3_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_0_NORM3_BIAS, "bias", 1015), {256}, 0);
+
+                    decoder_estimator_mid_blocks_11_1_1_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_1_NORM1_WEIGHT, "weight", 1016), {256}, 0);
+                    decoder_estimator_mid_blocks_11_1_1_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_1_ATTN1_TO_OUT_0_WEIGHT, "weight", 1017), {512, 256}, 0);
+                    decoder_estimator_mid_blocks_11_1_1_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_1_ATTN1_TO_Q_WEIGHT, "weight", 1018), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_11_1_1_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_1_ATTN1_TO_K_WEIGHT, "weight", 1019), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_11_1_1_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_1_ATTN1_TO_V_WEIGHT, "weight", 1020), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_11_1_1_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_1_NORM3_WEIGHT, "weight", 1021), {256}, 0);
+                    decoder_estimator_mid_blocks_11_1_1_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_1_FF_NET_0_PROJ_WEIGHT, "weight", 1022), {256, 1024}, 0);
+                    decoder_estimator_mid_blocks_11_1_1_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_1_FF_NET_2_WEIGHT, "weight", 1023), {1024, 256}, 0);
+                    decoder_estimator_mid_blocks_11_1_1_attn1_to_out_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_1_ATTN1_TO_OUT_0_BIAS, "bias", 1024), {256}, 0);
+                    decoder_estimator_mid_blocks_11_1_1_ff_net_0_proj_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_1_FF_NET_0_PROJ_BIAS, "bias", 1025), {1024}, 0);
+                    decoder_estimator_mid_blocks_11_1_1_ff_net_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_1_FF_NET_2_BIAS, "bias", 1026), {256}, 0);
+                    decoder_estimator_mid_blocks_11_1_1_norm1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_1_NORM1_BIAS, "bias", 1027), {256}, 0);
+                    decoder_estimator_mid_blocks_11_1_1_norm3_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_1_NORM3_BIAS, "bias", 1028), {256}, 0);
+
+                    decoder_estimator_mid_blocks_11_1_2_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_2_NORM1_WEIGHT, "weight", 1029), {256}, 0);
+                    decoder_estimator_mid_blocks_11_1_2_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_2_ATTN1_TO_OUT_0_WEIGHT, "weight", 1030), {512, 256}, 0);
+                    decoder_estimator_mid_blocks_11_1_2_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_2_ATTN1_TO_Q_WEIGHT, "weight", 1031), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_11_1_2_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_2_ATTN1_TO_K_WEIGHT, "weight", 1032), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_11_1_2_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_2_ATTN1_TO_V_WEIGHT, "weight", 1033), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_11_1_2_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_2_NORM3_WEIGHT, "weight", 1034), {256}, 0);
+                    decoder_estimator_mid_blocks_11_1_2_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_2_FF_NET_0_PROJ_WEIGHT, "weight", 1035), {256, 1024}, 0);
+                    decoder_estimator_mid_blocks_11_1_2_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_2_FF_NET_2_WEIGHT, "weight", 1036), {1024, 256}, 0);
+                    decoder_estimator_mid_blocks_11_1_2_attn1_to_out_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_2_ATTN1_TO_OUT_0_BIAS, "bias", 1037), {256}, 0);
+                    decoder_estimator_mid_blocks_11_1_2_ff_net_0_proj_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_2_FF_NET_0_PROJ_BIAS, "bias", 1038), {1024}, 0);
+                    decoder_estimator_mid_blocks_11_1_2_ff_net_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_2_FF_NET_2_BIAS, "bias", 1039), {256}, 0);
+                    decoder_estimator_mid_blocks_11_1_2_norm1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_2_NORM1_BIAS, "bias", 1040), {256}, 0);
+                    decoder_estimator_mid_blocks_11_1_2_norm3_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_2_NORM3_BIAS, "bias", 1041), {256}, 0);
+
+                    decoder_estimator_mid_blocks_11_1_3_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_3_NORM1_WEIGHT, "weight", 1042), {256}, 0);
+                    decoder_estimator_mid_blocks_11_1_3_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_3_ATTN1_TO_Q_WEIGHT, "weight", 1043), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_11_1_3_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_3_ATTN1_TO_K_WEIGHT, "weight", 1044), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_11_1_3_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_3_ATTN1_TO_V_WEIGHT, "weight", 1045), {256, 512}, 0);
+                    decoder_estimator_mid_blocks_11_1_3_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_3_ATTN1_TO_OUT_0_WEIGHT, "weight", 1046), {512, 256}, 0);
+                    decoder_estimator_mid_blocks_11_1_3_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_3_NORM3_WEIGHT, "weight", 1047), {256}, 0);
+                    decoder_estimator_mid_blocks_11_1_3_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_3_FF_NET_0_PROJ_WEIGHT, "weight", 1048), {256, 1024}, 0);
+                    decoder_estimator_mid_blocks_11_1_3_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_3_FF_NET_2_WEIGHT, "weight", 1049), {1024, 256}, 0);
+                    decoder_estimator_mid_blocks_11_1_3_attn1_to_out_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_3_ATTN1_TO_OUT_0_BIAS, "bias", 1050), {256}, 0);
+                    decoder_estimator_mid_blocks_11_1_3_ff_net_0_proj_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_3_FF_NET_0_PROJ_BIAS, "bias", 1051), {1024}, 0);
+                    decoder_estimator_mid_blocks_11_1_3_ff_net_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_3_FF_NET_2_BIAS, "bias", 1052), {256}, 0);
+                    decoder_estimator_mid_blocks_11_1_3_norm1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_3_NORM1_BIAS, "bias", 1053), {256}, 0);
+                    decoder_estimator_mid_blocks_11_1_3_norm3_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_MID_BLOCKS_11_1_3_NORM3_BIAS, "bias", 1054), {256}, 0);
+
+                    decoder_estimator_up_blocks_0_0_mlp_1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_0_MLP_1_WEIGHT, "weight", 1055), {1024, 256}, 0);
+                    decoder_estimator_up_blocks_0_0_block1_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_0_BLOCK1_BLOCK_0_WEIGHT, "weight", 1056), {3, 512, 256}, 0);
+                    decoder_estimator_up_blocks_0_0_block1_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_0_BLOCK1_BLOCK_2_WEIGHT, "weight", 1057), {256}, 0);
+                    decoder_estimator_up_blocks_0_0_block2_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_0_BLOCK2_BLOCK_0_WEIGHT, "weight", 1058), {3, 256, 256}, 0);
+                    decoder_estimator_up_blocks_0_0_block2_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_0_BLOCK2_BLOCK_2_WEIGHT, "weight", 1059), {256}, 0);
+                    decoder_estimator_up_blocks_0_0_res_conv_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_0_RES_CONV_WEIGHT, "weight", 1060), {1, 512, 256}, 0);
+                    decoder_estimator_up_blocks_0_0_block1_block_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_0_BLOCK1_BLOCK_0_BIAS, "bias", 1061), {256}, 0);
+                    decoder_estimator_up_blocks_0_0_block1_block_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_0_BLOCK1_BLOCK_2_BIAS, "bias", 1062), {256}, 0);
+                    decoder_estimator_up_blocks_0_0_block2_block_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_0_BLOCK2_BLOCK_0_BIAS, "bias", 1063), {256}, 0);
+                    decoder_estimator_up_blocks_0_0_block2_block_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_0_BLOCK2_BLOCK_2_BIAS, "bias", 1064), {256}, 0);
+                    decoder_estimator_up_blocks_0_0_mlp_1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_0_MLP_1_BIAS, "bias", 1065), {256}, 0);
+                    decoder_estimator_up_blocks_0_0_res_conv_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_0_RES_CONV_BIAS, "bias", 1066), {256}, 0);
+
+                    decoder_estimator_up_blocks_0_1_0_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_0_NORM1_WEIGHT, "weight", 1067), {256}, 0);
+                    decoder_estimator_up_blocks_0_1_0_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_0_ATTN1_TO_Q_WEIGHT, "weight", 1068), {256, 512}, 0);
+                    decoder_estimator_up_blocks_0_1_0_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_0_ATTN1_TO_K_WEIGHT, "weight", 1069), {256, 512}, 0);
+                    decoder_estimator_up_blocks_0_1_0_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_0_ATTN1_TO_V_WEIGHT, "weight", 1070), {256, 512}, 0);
+                    decoder_estimator_up_blocks_0_1_0_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_0_ATTN1_TO_OUT_0_WEIGHT, "weight", 1071), {512, 256}, 0);
+                    decoder_estimator_up_blocks_0_1_0_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_0_FF_NET_0_PROJ_WEIGHT, "weight", 1072), {256, 1024}, 0);
+                    decoder_estimator_up_blocks_0_1_0_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_0_NORM3_WEIGHT, "weight", 1073), {256}, 0);
+                    decoder_estimator_up_blocks_0_1_0_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_0_FF_NET_2_WEIGHT, "weight", 1074), {1024, 256}, 0);
+                    decoder_estimator_up_blocks_0_1_0_attn1_to_out_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_0_ATTN1_TO_OUT_0_BIAS, "bias", 1075), {256}, 0);
+                    decoder_estimator_up_blocks_0_1_0_ff_net_0_proj_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_0_FF_NET_0_PROJ_BIAS, "bias", 1076), {1024}, 0);
+                    decoder_estimator_up_blocks_0_1_0_ff_net_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_0_FF_NET_2_BIAS, "bias", 1077), {256}, 0);
+                    decoder_estimator_up_blocks_0_1_0_norm1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_0_NORM1_BIAS, "bias", 1078), {256}, 0);
+                    decoder_estimator_up_blocks_0_1_0_norm3_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_0_NORM3_BIAS, "bias", 1079), {256}, 0);
+
+                    decoder_estimator_up_blocks_0_1_1_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_1_NORM1_WEIGHT, "weight", 1080), {256}, 0);
+                    decoder_estimator_up_blocks_0_1_1_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_1_ATTN1_TO_Q_WEIGHT, "weight", 1081), {256, 512}, 0);
+                    decoder_estimator_up_blocks_0_1_1_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_1_ATTN1_TO_K_WEIGHT, "weight", 1082), {256, 512}, 0);
+                    decoder_estimator_up_blocks_0_1_1_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_1_ATTN1_TO_V_WEIGHT, "weight", 1083), {256, 512}, 0);
+                    decoder_estimator_up_blocks_0_1_1_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_1_ATTN1_TO_OUT_0_WEIGHT, "weight", 1084), {512, 256}, 0);
+                    decoder_estimator_up_blocks_0_1_1_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_1_FF_NET_0_PROJ_WEIGHT, "weight", 1085), {256, 1024}, 0);
+                    decoder_estimator_up_blocks_0_1_1_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_1_FF_NET_2_WEIGHT, "weight", 1086), {1024, 256}, 0);
+                    decoder_estimator_up_blocks_0_1_1_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_1_NORM3_WEIGHT, "weight", 1087), {256}, 0);
+                    decoder_estimator_up_blocks_0_1_1_attn1_to_out_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_1_ATTN1_TO_OUT_0_BIAS, "bias", 1088), {256}, 0);
+                    decoder_estimator_up_blocks_0_1_1_ff_net_0_proj_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_1_FF_NET_0_PROJ_BIAS, "bias", 1089), {1024}, 0);
+                    decoder_estimator_up_blocks_0_1_1_ff_net_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_1_FF_NET_2_BIAS, "bias", 1090), {256}, 0);
+                    decoder_estimator_up_blocks_0_1_1_norm1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_1_NORM1_BIAS, "bias", 1091), {256}, 0);
+                    decoder_estimator_up_blocks_0_1_1_norm3_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_1_NORM3_BIAS, "bias", 1092), {256}, 0);
+
+                    decoder_estimator_up_blocks_0_1_2_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_2_NORM1_WEIGHT, "weight", 1093), {256}, 0);
+                    decoder_estimator_up_blocks_0_1_2_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_2_ATTN1_TO_Q_WEIGHT, "weight", 1094), {256, 512}, 0);
+                    decoder_estimator_up_blocks_0_1_2_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_2_ATTN1_TO_K_WEIGHT, "weight", 1095), {256, 512}, 0);
+                    decoder_estimator_up_blocks_0_1_2_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_2_ATTN1_TO_V_WEIGHT, "weight", 1096), {256, 512}, 0);
+                    decoder_estimator_up_blocks_0_1_2_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_2_FF_NET_0_PROJ_WEIGHT, "weight", 1097), {256, 1024}, 0);
+                    decoder_estimator_up_blocks_0_1_2_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_2_ATTN1_TO_OUT_0_WEIGHT, "weight", 1098), {512, 256}, 0);
+                    decoder_estimator_up_blocks_0_1_2_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_2_FF_NET_2_WEIGHT, "weight", 1099), {1024, 256}, 0);
+                    decoder_estimator_up_blocks_0_1_2_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_2_NORM3_WEIGHT, "weight", 1100), {256}, 0);
+                    decoder_estimator_up_blocks_0_1_2_attn1_to_out_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_2_ATTN1_TO_OUT_0_BIAS, "bias", 1101), {256}, 0);
+                    decoder_estimator_up_blocks_0_1_2_ff_net_0_proj_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_2_FF_NET_0_PROJ_BIAS, "bias", 1102), {1024}, 0);
+                    decoder_estimator_up_blocks_0_1_2_ff_net_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_2_FF_NET_2_BIAS, "bias", 1103), {256}, 0);
+                    decoder_estimator_up_blocks_0_1_2_norm1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_2_NORM1_BIAS, "bias", 1104), {256}, 0);
+                    decoder_estimator_up_blocks_0_1_2_norm3_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_2_NORM3_BIAS, "bias", 1105), {256}, 0);
+
+                    decoder_estimator_up_blocks_0_1_3_norm1_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_3_NORM1_WEIGHT, "weight", 1106), {256}, 0);
+                    decoder_estimator_up_blocks_0_1_3_attn1_to_q_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_3_ATTN1_TO_Q_WEIGHT, "weight", 1107), {256, 512}, 0);
+                    decoder_estimator_up_blocks_0_1_3_attn1_to_k_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_3_ATTN1_TO_K_WEIGHT, "weight", 1108), {256, 512}, 0);
+                    decoder_estimator_up_blocks_0_1_3_attn1_to_v_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_3_ATTN1_TO_V_WEIGHT, "weight", 1109), {256, 512}, 0);
+                    decoder_estimator_up_blocks_0_1_3_attn1_to_out_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_3_ATTN1_TO_OUT_0_WEIGHT, "weight", 1110), {512, 256}, 0);
+                    decoder_estimator_up_blocks_0_1_3_ff_net_0_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_3_FF_NET_0_PROJ_WEIGHT, "weight", 1111), {256, 1024}, 0);
+                    decoder_estimator_up_blocks_0_1_3_ff_net_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_3_FF_NET_2_WEIGHT, "weight", 1112), {1024, 256}, 0);
+                    decoder_estimator_up_blocks_0_1_3_norm3_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_3_NORM3_WEIGHT, "weight", 1113), {256}, 0);
+                    decoder_estimator_up_blocks_0_1_3_attn1_to_out_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_3_ATTN1_TO_OUT_0_BIAS, "bias", 1114), {256}, 0);
+                    decoder_estimator_up_blocks_0_1_3_ff_net_0_proj_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_3_FF_NET_0_PROJ_BIAS, "bias", 1115), {1024}, 0);
+                    decoder_estimator_up_blocks_0_1_3_ff_net_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_3_FF_NET_2_BIAS, "bias", 1116), {256}, 0);
+                    decoder_estimator_up_blocks_0_1_3_norm1_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_3_NORM1_BIAS, "bias", 1117), {256}, 0);
+                    decoder_estimator_up_blocks_0_1_3_norm3_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_1_3_NORM3_BIAS, "bias", 1118), {256}, 0);
+
+                    decoder_estimator_up_blocks_0_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_2_WEIGHT, "weight", 1119), {3, 256, 256}, 0);
+                    decoder_estimator_up_blocks_0_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_UP_BLOCKS_0_2_BIAS, "bias", 1120), {256}, 0);
+
+                    decoder_estimator_final_block_block_0_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_FINAL_BLOCK_BLOCK_0_WEIGHT, "weight", 1121), {3, 256, 256}, 0);
+                    decoder_estimator_final_block_block_2_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_FINAL_BLOCK_BLOCK_2_WEIGHT, "weight", 1122), {256}, 0);
                     decoder_estimator_final_proj_weight = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_FINAL_PROJ_WEIGHT, "weight"), {1, 256, 80}, 0);
+                    decoder_estimator_final_block_block_0_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_FINAL_BLOCK_BLOCK_0_BIAS, "bias", 1123), {256}, 0);
+                    decoder_estimator_final_block_block_2_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_FINAL_BLOCK_BLOCK_2_BIAS, "bias", 1124), {256}, 0);
+                    decoder_estimator_final_proj_bias = create_tensor(tn(LLM_TENSOR_DECODER_ESTIMATOR_FINAL_PROJ_BIAS, "bias"), {80}, 0);
 
 
                 } break;
             default:
                 throw std::runtime_error("unknown architecture");
         }
-
+        // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&& n_moved_tensors is: %d\n", n_moved_tensors);
         if (n_moved_tensors > 0) {
             LLAMA_LOG_DEBUG("%s: tensor '%s' (%s) (and %d others) cannot be used with preferred buffer type %s, using %s instead\n",
                 __func__, first_moved_tensor->name, ggml_type_name(first_moved_tensor->type), n_moved_tensors - 1,
                 ggml_backend_buft_name(first_moved_from_buft), ggml_backend_buft_name(first_moved_to_buft));
         }
     }
-    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&& check flow ok!!!!!!!!!!!!!!!!!!!\n");
+    
     ml.done_getting_tensors();
-
+    
     ml.init_mappings(true, use_mlock ? &pimpl->mlock_mmaps : nullptr);
     pimpl->mappings.reserve(ml.mappings.size());
-
+    
     // create the backend buffers
     std::vector<std::pair<ggml_context *, llama_buf_map>> ctx_bufs;
     ctx_bufs.reserve(ctx_map.size());
-
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& check here1 !!!!!!!!!!!!\n");
     // Ensure we have enough capacity for the maximum backend buffer we will potentially create
     const size_t n_max_backend_buffer = ctx_map.size() * ml.files.size();
     pimpl->bufs.reserve(n_max_backend_buffer);
@@ -5873,16 +6366,17 @@ bool llama_model::load_tensors(llama_model_loader & ml) {
     for (auto & it : ctx_map) {
         ggml_backend_buffer_type_t buft = it.first;
         ggml_context * ctx              = it.second;
-
+        // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& check here2 !!!!!!!!!!!!\n");
         // skip contexts without tensors
         if (ggml_get_first_tensor(ctx) == nullptr) {
             continue;
         }
-
+        // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& check here3 !!!!!!!!!!!!\n");
         llama_buf_map buf_map;
         buf_map.reserve(n_max_backend_buffer);
 
         // check if it is possible to use buffer_from_host_ptr with this buffer type
+        // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& check here4 !!!!!!!!!!!!\n");
         ggml_backend_dev_t dev = ggml_backend_buft_get_device(buft);
         if (!dev) {
             // FIXME: workaround for CPU backend buft having a NULL device
@@ -5895,7 +6389,7 @@ bool llama_model::load_tensors(llama_model_loader & ml) {
         ggml_backend_dev_get_props(dev, &props);
         bool buffer_from_host_ptr_supported = props.caps.buffer_from_host_ptr;
         bool is_default_buft = buft == ggml_backend_dev_buffer_type(dev);
-
+        // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& check here5 !!!!!!!!!!!!\n");
         if (ml.use_mmap && use_mmap_buffer && buffer_from_host_ptr_supported && is_default_buft) {
             for (uint32_t idx = 0; idx < ml.files.size(); idx++) {
                 // only the mmap region containing the tensors in the model is mapped to the backend buffer
@@ -5907,6 +6401,7 @@ bool llama_model::load_tensors(llama_model_loader & ml) {
                 if (first >= last) {
                     continue;
                 }
+                // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& check here6 !!!!!!!!!!!!\n");
                 const size_t max_size = ggml_get_max_tensor_size(ctx);
                 ggml_backend_buffer_t buf = ggml_backend_dev_buffer_from_host_ptr(dev, (char *) addr + first, last - first, max_size);
                 if (buf == nullptr) {
@@ -5914,9 +6409,11 @@ bool llama_model::load_tensors(llama_model_loader & ml) {
                 }
                 pimpl->bufs.emplace_back(buf);
                 buf_map.emplace(idx, buf);
+                // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& check here7 !!!!!!!!!!!!\n");
             }
         }
         else {
+            
             ggml_backend_buffer_t buf = ggml_backend_alloc_ctx_tensors_from_buft(ctx, buft);
             if (buf == nullptr) {
                 throw std::runtime_error(format("unable to allocate %s buffer", ggml_backend_buft_name(buft)));
@@ -5936,7 +6433,7 @@ bool llama_model::load_tensors(llama_model_loader & ml) {
         if (pimpl->bufs.empty()) {
             throw std::runtime_error("failed to allocate buffer");
         }
-
+        
         for (auto & buf : buf_map) {
             // indicate that this buffer contains weights
             // this is used by ggml_backend_sched to improve op scheduling: ops that use a weight are preferably scheduled to the backend that contains the weight
@@ -5945,7 +6442,7 @@ bool llama_model::load_tensors(llama_model_loader & ml) {
 
         ctx_bufs.emplace_back(ctx, buf_map);
     }
-
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& check here9 !!!!!!!!!!!!\n");
     if (llama_supports_gpu_offload()) {
         const int n_gpu = std::min(n_gpu_layers, int(hparams.n_layer));
 
@@ -5959,7 +6456,7 @@ bool llama_model::load_tensors(llama_model_loader & ml) {
 
         LLAMA_LOG_INFO("%s: offloaded %d/%d layers to GPU\n", __func__, std::min(n_gpu_layers, max_offloadable_layers), max_backend_supported_layers);
     }
-
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& check here10 !!!!!!!!!!!!\n");
     // print memory requirements per buffer type
     for (auto & buf : pimpl->bufs) {
         LLAMA_LOG_INFO("%s: %12s model buffer size = %8.2f MiB\n", __func__, ggml_backend_buffer_name(buf.get()), ggml_backend_buffer_get_size(buf.get()) / 1024.0 / 1024.0);
@@ -5971,7 +6468,7 @@ bool llama_model::load_tensors(llama_model_loader & ml) {
             tensors_by_name.emplace_back(ggml_get_name(cur), cur);
         }
     }
-
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& check here11 !!!!!!!!!!!!\n");
     // load tensor data
     for (auto & it : ctx_bufs) {
         ggml_context * ctx = it.first;
@@ -5980,13 +6477,13 @@ bool llama_model::load_tensors(llama_model_loader & ml) {
             return false;
         }
     }
-
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& check here12 !!!!!!!!!!!!\n");
     if (use_mmap_buffer) {
         for (auto & mapping : ml.mappings) {
             pimpl->mappings.emplace_back(std::move(mapping));
         }
     }
-
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& check here13 !!!!!!!!!!!!\n");
     return true;
 }
 
@@ -17275,7 +17772,121 @@ struct llm_build_lfm2 : public llm_graph_context {
         return y;
     }
 };
+struct llm_build_flow : public llm_graph_context {
+    const llama_model & model;
+    llm_build_flow(const llama_model & model, const llm_graph_params & params, ggml_cgraph * gf) : llm_graph_context(params), model(model) {
 
+        const auto & hparams = model.hparams;
+        const int B  = 1;
+        const int T  = params.n_tokens;               // 总长度（prompt+target）
+        const int Tp = params.n_prompt_tokens;        // prompt 长度
+        const int C  = hparams.n_embd;                // 512
+        const int F  = hparams.n_mel_channels;        // 80
+        const int SpkDim = hparams.n_spk_dim; 
+
+        ggml_tensor * token        = build_inp_tokens();        // [B,T]   int32
+        ggml_tensor * token_len    = build_inp_token_len();     // [B]     int32
+        ggml_tensor * prompt_token = build_inp_prompt_tokens(); // [B,Tp]  int32
+        ggml_tensor * prompt_len   = build_inp_prompt_len();    // [B]     int32
+        ggml_tensor * prompt_feat  = build_inp_prompt_feat();   // [B,F,Tp] fp32
+        ggml_tensor * embedding    = build_inp_embedding();     // [B,SpkDim] fp32
+
+        embedding = ggml_norm(ctx0, embedding, 1e-12f);
+        ggml_tensor * spk = ggml_mul_mat(ctx0, model.spk_embed_affine_layer_weight, embedding);
+        spk = ggml_add(ctx0, spk, model.spk_embed_affine_layer_bias);
+
+        ggml_tensor * cat_token = ggml_concat(ctx0, prompt_token, token, 1);
+
+        ggml_tensor * cat_len = ggml_add(ctx0, prompt_len, token_len);
+
+        ggml_tensor * x = build_text_embed(cat_token, cat_len);
+
+        // encoder
+        ggml_tensor * mask = make_pad_mask(ctx0, cat_len, Tp + T); // [B,T_total]
+        x = build_encoder(x, mask);                                // [B,T_total,C]
+        x = ggml_mul_mat(ctx0, model.encoder_proj_w, x);           // [B,T_total,F]
+        x = ggml_add(ctx0, x, model.encoder_proj_b);
+
+         /* ---- 5. 构造 cond ---- */
+        ggml_tensor * zeros = ggml_new_tensor_3d(ctx0, GGML_TYPE_F32, F, Tp + T, B);
+        zeros = ggml_set_zero(zeros);
+        // conds[:, :Tp] = prompt_feat
+        ggml_tensor * conds = ggml_copy(ctx0, zeros);
+        conds = ggml_acc(ctx0, conds, prompt_feat,
+                        ggml_new_i32(0), ggml_new_i32(0), ggml_new_i32(0),
+                        ggml_new_i32(F), ggml_new_i32(Tp), ggml_new_i32(B));
+        conds = ggml_transpose(ctx0, conds); // [B,F,T_total]
+        
+        /* ---- 6. decoder (扩散采样 10 步，这里只建 estimator 图) ---- */
+        ggml_tensor * mu = ggml_transpose(ctx0, x); // [B,F,T_total]
+        ggml_tensor * feat = build_decoder(mu, mask, spk, conds); // [B,F,T_total]
+
+        /* ---- 7. 去掉 prompt 段 ---- */
+        feat = ggml_view_3d(ctx0, feat, F, T, B,
+                            feat->nb[1], feat->nb[2],
+                            /*offset*/ Tp * feat->nb[1]); // [B,F,T]
+
+        /* ---- 8. 输出 ---- */
+        res->t_out = feat;
+        ggml_build_forward_expand(gf, feat);
+        
+    }
+
+    ggml_tensor * build_text_embed(ggml_tensor * token, ggml_tensor * token_len) {
+        int B = token->ne[2];
+        int T = token->ne[1];
+        ggml_tensor * x = ggml_get_rows(ctx0, model.input_embedding_weight, token);
+        ggml_tensor * mask = make_pad_mask(ctx0, token_len, T);
+        mask = ggml.unsqueeze(ctx0, mask, GGML_TYPE_F32);
+        mask = ggml_cast(ctx0, mask, GGML_TYPE_F32);
+        return ggml_mul(ctx0, x, mask);
+    }
+
+    ggml_tesnor * build_encoder(ggml_tensor * x, ggml_tensor * mask) {
+        x = ggml_mul_mat(ctx0, model.enc_in_w, x);
+        x = ggml_add(ctx0, x, model.enc_in_b);
+        x = ggml_norm(ctx0, x, 1e-5f);
+        x = ggml_mul(ctx0, x, model.enc_in_gamma);
+        x = ggml_add(ctx0, x, model.enc_in_beta);
+
+        // 6 层 Conformer
+        for (int i = 0; i < 6; ++i) {
+            // self-attn
+            ggml_tensor * q = ggml_mul_mat(ctx0, model.enc[i].wq, x);
+            ggml_tensor * k = ggml_mul_mat(ctx0, model.enc[i].wk, x);
+            ggml_tensor * v = ggml_mul_mat(ctx0, model.enc[i].wv, x);
+            ggml_tensor * attn = build_rel_pos_attn(q, k, v, mask);
+            attn = ggml_mul_mat(ctx0, model.enc[i].wo, attn);
+            x = ggml_add(ctx0, x, attn);
+
+            // ffn
+            ggml_tensor * ffn = ggml_mul_mat(ctx0, model.enc[i].ffn_w1, x);
+            ffn = ggml_silu(ffn);
+            ffn = ggml_mul_mat(ctx0, model.enc[i].ffn_w2, ffn);
+            x = ggml_add(ctx0, x, ffn);
+        }
+        return x;
+    }
+
+    ggml_tensor * build_decoder(ggml_tensor * mu,
+                                    ggml_tensor * mask,
+                                    ggml_tensor * spk,
+                                    ggml_tensor * cond) {
+        // time mlp
+        ggml_tensor * t_emb = ggml_sin_emb(ctx0, mu, 320); // 简易 sinusoidal
+        t_emb = ggml_mul_mat(ctx0, model.time_mlp_w1, t_emb);
+        t_emb = ggml_silu(t_emb);
+        t_emb = ggml_mul_mat(ctx0, model.time_mlp_w2, t_emb); // [B,1024]
+
+        // 向下/向上/中间 block 简化成 3 个 Resnet+Transformer
+        ggml_tensor * h = mu;
+        h = build_resnet_block(h, t_emb, spk, cond, 0);
+        h = build_transformer_block(h);
+        h = build_final_proj(h); // [B,F,T]
+        return h;
+    }
+
+}
 llama_memory_i * llama_model::create_memory(const llama_memory_params & params, llama_cparams & cparams) const {
     llama_memory_i * res;
 
@@ -17348,7 +17959,7 @@ llama_memory_i * llama_model::create_memory(const llama_memory_params & params, 
                                 padding);
                     } else {
                         GGML_ASSERT(!hparams.is_swa_any());
-                        // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&&&& check here!!!!!!!!!!!\n");
+                        // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&&&& params.type_k is: %d, params.type_v is: %d\n", params.type_k, params.type_v);
                         res = new llama_kv_cache_unified(
                                 *this,
                                 nullptr,
@@ -17686,6 +18297,10 @@ llm_graph_result_ptr llama_model::build_graph(
         case LLM_ARCH_LFM2:
             {
                 llm = std::make_unique<llm_build_lfm2>(*this, params, gf);
+            } break;
+        case LLM_ARCH_COSYVOICEFLOW:
+            {
+                llm = std::make_unique<llm_build_flow>(*this, params, gf);
             } break;
         default:
             GGML_ABORT("fatal error");
