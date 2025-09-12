@@ -366,8 +366,6 @@ struct llama_layer {
     struct ggml_tensor * encoders_bk           = nullptr;
     struct ggml_tensor * encoders_bv           = nullptr;
     struct ggml_tensor * encoders_bo           = nullptr;
-    // struct ggml_tensor * encoder_encoders_bposv = nullptr;
-    // struct ggml_tensor * encoder_encoders_bposu = nullptr;
     
     struct ggml_tensor * encoders_ffn_w1       = nullptr;
     struct ggml_tensor * encoders_ffn_w2       = nullptr;
@@ -378,23 +376,29 @@ struct llama_layer {
     struct ggml_tensor * encoders_normmha_w    = nullptr;
     struct ggml_tensor * encoders_normffn_b    = nullptr;
     struct ggml_tensor * encoders_normmha_b    = nullptr;
+    struct ggml_tensor * encoders_pos_bias_u   = nullptr;
+    struct ggml_tensor * encoders_pos_bias_v   = nullptr;
 
     //up_encoders
-    struct ggml_tensors * up_encoder_wq                = nullptr;
-    struct ggml_tensors * up_encoder_wk                = nullptr;
-    struct ggml_tensors * up_encoder_wv                = nullptr;
-    struct ggml_tensors * up_encoder_wo                = nullptr;
-    struct ggml_tensors * up_encoder_wpos              = nullptr;
-    struct ggml_tensors * up_encoder_bq                = nullptr;
-    struct ggml_tensors * up_encoder_bk                = nullptr;
-    struct ggml_tensors * up_encoder_bv                = nullptr;
-    struct ggml_tensors * up_encoder_bo                = nullptr;
-    struct ggml_tensors * up_encoder_ffn_w1            = nullptr;
-    struct ggml_tensors * up_encoder_ffn_w2            = nullptr;
-    struct ggml_tensors * up_encoder_ffn_b1            = nullptr;
-    struct ggml_tensors * up_encoder_ffn_b2            = nullptr;
-    struct ggml_tensors * up_encoder_normffn_w         = nullptr;
-    struct ggml_tensors * up_encoder_normmha_w         = nullptr;
+    struct ggml_tensors * up_encoders_wq        = nullptr;
+    struct ggml_tensors * up_encoders_wk        = nullptr;
+    struct ggml_tensors * up_encoders_wv        = nullptr;
+    struct ggml_tensors * up_encoders_wo        = nullptr;
+    struct ggml_tensors * up_encoders_wpos      = nullptr;
+    struct ggml_tensors * up_encoders_bq        = nullptr;
+    struct ggml_tensors * up_encoders_bk        = nullptr;
+    struct ggml_tensors * up_encoders_bv        = nullptr;
+    struct ggml_tensors * up_encoders_bo        = nullptr;
+    struct ggml_tensors * up_encoders_ffn_w1    = nullptr;
+    struct ggml_tensors * up_encoders_ffn_w2    = nullptr;
+    struct ggml_tensors * up_encoders_ffn_b1    = nullptr;
+    struct ggml_tensors * up_encoders_ffn_b2    = nullptr;
+    struct ggml_tensors * up_encoders_normffn_w = nullptr;
+    struct ggml_tensors * up_encoders_normmha_w = nullptr;
+    struct ggml_tensor *  up_encoders_normffn_b = nullptr;
+    struct ggml_tensor *  up_encoders_normmha_b = nullptr;
+    struct ggml_tensor *  up_encoders_pos_bias_u= nullptr;
+    struct ggml_tensor *  up_encoders_pos_bias_v= nullptr;
 
     //decoder
     // down_block
@@ -423,8 +427,8 @@ struct llama_layer {
     struct ggml_tensor * mid_block2_b                  = nullptr;
     struct ggml_tensor * mid_block2_norm_w             = nullptr;
     struct ggml_tensor * mid_block2_norm_b             = nullptr;
-    struct ggml_tensor * mid_block_res_w                     = nullptr;
-    struct ggml_tensor * mid_block_res_b                     = nullptr;
+    struct ggml_tensor * mid_block_res_w               = nullptr;
+    struct ggml_tensor * mid_block_res_b               = nullptr;
     
     struct ggml_tensor * mid_block1_norm1_w           = nullptr;
     struct ggml_tensor * mid_block1_norm1_b           = nullptr;
@@ -439,6 +443,21 @@ struct llama_layer {
     struct ggml_tensor * mid_block1_ffn_w2            = nullptr;
     struct ggml_tensor * mid_block1_ffn_b0            = nullptr;
     struct ggml_tensor * mid_block1_ffn_b2            = nullptr;
+
+    //up_block
+    struct ggml_tensor * up_block1_norm1_w           = nullptr;
+    struct ggml_tensor * up_block1_norm1_b           = nullptr;
+    struct ggml_tensor * up_block1_norm3_w           = nullptr;
+    struct ggml_tensor * up_block1_norm3_b           = nullptr;
+    struct ggml_tensor * up_block1_wq                = nullptr;
+    struct ggml_tensor * up_block1_wk                = nullptr;
+    struct ggml_tensor * up_block1_wv                = nullptr;
+    struct ggml_tensor * up_block1_wo                = nullptr;
+    struct ggml_tensor * up_block1_bo                = nullptr;
+    struct ggml_tensor * up_block1_ffn_w0            = nullptr;
+    struct ggml_tensor * up_block1_ffn_w2            = nullptr;
+    struct ggml_tensor * up_block1_ffn_b0            = nullptr;
+    struct ggml_tensor * up_block1_ffn_b2            = nullptr; 
 };
 
 struct llama_model {
@@ -1024,60 +1043,6 @@ struct llama_model {
     struct ggml_tensor * encoder_after_norm_weight = nullptr;
     struct ggml_tensor * encoder_embed_out_0_weight = nullptr;
     struct ggml_tensor * encoder_embed_out_1_weight = nullptr;
-    // struct ggml_tensor * encoder_encoders_0_feed_forward_w_1_weight = nullptr;
-    // struct ggml_tensor * encoder_encoders_0_feed_forward_w_2_weight = nullptr;
-    // struct ggml_tensor * encoder_encoders_0_norm_ff_weight = nullptr;
-    // struct ggml_tensor * encoder_encoders_0_norm_mha_weight = nullptr;
-    // struct ggml_tensor * encoder_encoders_0_self_attn_linear_k_weight = nullptr;
-    // struct ggml_tensor * encoder_encoders_0_self_attn_linear_out_weight = nullptr;
-    // struct ggml_tensor * encoder_encoders_0_self_attn_linear_pos_weight = nullptr;
-    // struct ggml_tensor * encoder_encoders_0_self_attn_linear_q_weight = nullptr;
-    // struct ggml_tensor * encoder_encoders_0_self_attn_linear_v_weight = nullptr;
-    // struct ggml_tensor * encoder_encoders_1_feed_forward_w_1_weight = nullptr;
-    // struct ggml_tensor * encoder_encoders_1_feed_forward_w_2_weight = nullptr;
-    // struct ggml_tensor * encoder_encoders_1_norm_ff_weight = nullptr;
-    // struct ggml_tensor * encoder_encoders_1_norm_mha_weight = nullptr;
-    // struct ggml_tensor * encoder_encoders_1_self_attn_linear_k_weight = nullptr;
-    // struct ggml_tensor * encoder_encoders_1_self_attn_linear_out_weight = nullptr;
-    // struct ggml_tensor * encoder_encoders_1_self_attn_linear_pos_weight = nullptr;
-    // struct ggml_tensor * encoder_encoders_1_self_attn_linear_q_weight = nullptr;
-    // struct ggml_tensor * encoder_encoders_1_self_attn_linear_v_weight = nullptr;
-    // struct ggml_tensor * encoder_encoders_2_feed_forward_w_1_weight = nullptr;
-    // struct ggml_tensor * encoder_encoders_2_feed_forward_w_2_weight = nullptr;
-    // struct ggml_tensor * encoder_encoders_2_norm_ff_weight = nullptr;
-    // struct ggml_tensor * encoder_encoders_2_norm_mha_weight = nullptr;
-    // struct ggml_tensor * encoder_encoders_2_self_attn_linear_k_weight = nullptr;
-    // struct ggml_tensor * encoder_encoders_2_self_attn_linear_out_weight = nullptr;
-    // struct ggml_tensor * encoder_encoders_2_self_attn_linear_pos_weight = nullptr;
-    // struct ggml_tensor * encoder_encoders_2_self_attn_linear_q_weight = nullptr;
-    // struct ggml_tensor * encoder_encoders_2_self_attn_linear_v_weight = nullptr;
-    // struct ggml_tensor * encoder_encoders_3_feed_forward_w_1_weight = nullptr;
-    // struct ggml_tensor * encoder_encoders_3_feed_forward_w_2_weight = nullptr;
-    // struct ggml_tensor * encoder_encoders_3_norm_ff_weight = nullptr;
-    // struct ggml_tensor * encoder_encoders_3_norm_mha_weight = nullptr;
-    // struct ggml_tensor * encoder_encoders_3_self_attn_linear_k_weight = nullptr;
-    // struct ggml_tensor * encoder_encoders_3_self_attn_linear_out_weight = nullptr;
-    // struct ggml_tensor * encoder_encoders_3_self_attn_linear_pos_weight = nullptr;
-    // struct ggml_tensor * encoder_encoders_3_self_attn_linear_q_weight = nullptr;
-    // struct ggml_tensor * encoder_encoders_3_self_attn_linear_v_weight = nullptr;
-    // struct ggml_tensor * encoder_encoders_4_feed_forward_w_1_weight = nullptr;
-    // struct ggml_tensor * encoder_encoders_4_feed_forward_w_2_weight = nullptr;
-    // struct ggml_tensor * encoder_encoders_4_norm_ff_weight = nullptr;
-    // struct ggml_tensor * encoder_encoders_4_norm_mha_weight = nullptr;
-    // struct ggml_tensor * encoder_encoders_4_self_attn_linear_k_weight = nullptr;
-    // struct ggml_tensor * encoder_encoders_4_self_attn_linear_out_weight = nullptr;
-    // struct ggml_tensor * encoder_encoders_4_self_attn_linear_pos_weight = nullptr;
-    // struct ggml_tensor * encoder_encoders_4_self_attn_linear_q_weight = nullptr;
-    // struct ggml_tensor * encoder_encoders_4_self_attn_linear_v_weight = nullptr;
-    // struct ggml_tensor * encoder_encoders_5_feed_forward_w_1_weight = nullptr;
-    // struct ggml_tensor * encoder_encoders_5_feed_forward_w_2_weight = nullptr;
-    // struct ggml_tensor * encoder_encoders_5_norm_ff_weight = nullptr;
-    // struct ggml_tensor * encoder_encoders_5_norm_mha_weight = nullptr;
-    // struct ggml_tensor * encoder_encoders_5_self_attn_linear_k_weight = nullptr;
-    // struct ggml_tensor * encoder_encoders_5_self_attn_linear_out_weight = nullptr;
-    // struct ggml_tensor * encoder_encoders_5_self_attn_linear_pos_weight = nullptr;
-    // struct ggml_tensor * encoder_encoders_5_self_attn_linear_q_weight = nullptr;
-    // struct ggml_tensor * encoder_encoders_5_self_attn_linear_v_weight = nullptr;
     struct ggml_tensor * encoder_pre_lookahead_layer_conv1_weight = nullptr;
     struct ggml_tensor * encoder_pre_lookahead_layer_conv2_weight = nullptr;
     struct ggml_tensor * encoder_up_embed_out_0_weight = nullptr;
