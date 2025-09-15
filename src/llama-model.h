@@ -380,25 +380,25 @@ struct llama_layer {
     struct ggml_tensor * encoders_pos_bias_v   = nullptr;
 
     //up_encoders
-    struct ggml_tensors * up_encoders_wq        = nullptr;
-    struct ggml_tensors * up_encoders_wk        = nullptr;
-    struct ggml_tensors * up_encoders_wv        = nullptr;
-    struct ggml_tensors * up_encoders_wo        = nullptr;
-    struct ggml_tensors * up_encoders_wpos      = nullptr;
-    struct ggml_tensors * up_encoders_bq        = nullptr;
-    struct ggml_tensors * up_encoders_bk        = nullptr;
-    struct ggml_tensors * up_encoders_bv        = nullptr;
-    struct ggml_tensors * up_encoders_bo        = nullptr;
-    struct ggml_tensors * up_encoders_ffn_w1    = nullptr;
-    struct ggml_tensors * up_encoders_ffn_w2    = nullptr;
-    struct ggml_tensors * up_encoders_ffn_b1    = nullptr;
-    struct ggml_tensors * up_encoders_ffn_b2    = nullptr;
-    struct ggml_tensors * up_encoders_normffn_w = nullptr;
-    struct ggml_tensors * up_encoders_normmha_w = nullptr;
-    struct ggml_tensor *  up_encoders_normffn_b = nullptr;
-    struct ggml_tensor *  up_encoders_normmha_b = nullptr;
-    struct ggml_tensor *  up_encoders_pos_bias_u= nullptr;
-    struct ggml_tensor *  up_encoders_pos_bias_v= nullptr;
+    struct ggml_tensor * up_encoders_wq        = nullptr;
+    struct ggml_tensor * up_encoders_wk        = nullptr;
+    struct ggml_tensor * up_encoders_wv        = nullptr;
+    struct ggml_tensor * up_encoders_wo        = nullptr;
+    struct ggml_tensor * up_encoders_wpos      = nullptr;
+    struct ggml_tensor * up_encoders_bq        = nullptr;
+    struct ggml_tensor * up_encoders_bk        = nullptr;
+    struct ggml_tensor * up_encoders_bv        = nullptr;
+    struct ggml_tensor * up_encoders_bo        = nullptr;
+    struct ggml_tensor * up_encoders_ffn_w1    = nullptr;
+    struct ggml_tensor * up_encoders_ffn_w2    = nullptr;
+    struct ggml_tensor * up_encoders_ffn_b1    = nullptr;
+    struct ggml_tensor * up_encoders_ffn_b2    = nullptr;
+    struct ggml_tensor * up_encoders_normffn_w = nullptr;
+    struct ggml_tensor * up_encoders_normmha_w = nullptr;
+    struct ggml_tensor * up_encoders_normffn_b = nullptr;
+    struct ggml_tensor * up_encoders_normmha_b = nullptr;
+    struct ggml_tensor * up_encoders_pos_bias_u= nullptr;
+    struct ggml_tensor * up_encoders_pos_bias_v= nullptr;
 
     //decoder
     // down_block
@@ -1574,6 +1574,7 @@ struct llama_model {
 
 
     std::vector<llama_layer> layers;
+    std::vector<llama_layer> mid_block_sub_layers;
 
     llama_model_params params;
 

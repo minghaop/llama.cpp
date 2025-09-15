@@ -5233,6 +5233,7 @@ bool llama_model::load_tensors(llama_model_loader & ml) {
                     decoder_estimator_down_blocks_0_2_weight = create_tensor(tn(LLM_TENSOR_DOWN_BLOCKS_0_2_WEIGHT, "weight", 278), {3, 256, 256}, 0);
                     decoder_estimator_down_blocks_0_2_bias = create_tensor(tn(LLM_TENSOR_DOWN_BLOCKS_0_2_BIAS, "bias", 279), {256}, 0);
 
+                    mid_block_sub_layers.resize(48);
                     for(int i = 280; i < 292; ++i) {
                         auto & layer = layers[i];
                         layer.mid_block_mlp_b = create_tensor(tn(LLM_TENSOR_MID_BLOCKS_MLP_WEIGHT, "weight", i - 280), {1024, 256}, 0);
@@ -5248,20 +5249,22 @@ bool llama_model::load_tensors(llama_model_loader & ml) {
                         layer.mid_block_res_w = create_tensor(tn(LLM_TENSOR_MID_RES_WEIGHT, "weight", i - 280), {1, 256, 256}, 0);
                         layer.mid_block_res_b = create_tensor(tn(LLM_TENSOR_MID_RES_BIAS, "bias", i - 280), {256}, 0);
 
+                        
                         for(int j = 0; j < 4; ++j) {
-                            layer.mid_block1_norm1_w = create_tensor(tn(LLM_TENSOR_MID_BLOCKS1_NORM1_WEIGHT, "weight", i - 280, j), {256}, 0);
-                            layer.mid_block1_norm1_b = create_tensor(tn(LLM_TENSOR_MID_BLOCKS1_NORM1_BIAS, "bias", i - 280, j), {256}, 0);
-                            layer.mid_block1_wq = create_tensor(tn(LLM_TENSOR_MID_BLOCKS1_ATTN_TO_Q_WEIGHT, "weight", i - 280, j), {256, 512}, 0);
-                            layer.mid_block1_wk = create_tensor(tn(LLM_TENSOR_MID_BLOCKS1_ATTN_TO_K_WEIGHT, "weight", i - 280, j), {256, 512}, 0);
-                            layer.mid_block1_wv = create_tensor(tn(LLM_TENSOR_MID_BLOCKS1_ATTN_TO_V_WEIGHT, "weight", i - 280, j), {256, 512}, 0);
-                            layer.mid_block1_wo = create_tensor(tn(LLM_TENSOR_MID_BLOCKS1_ATTN_TO_OUT_WEIGHT, "weight", i -280, j), {512, 256}, 0);
-                            layer.mid_block1_bo = create_tensor(tn(LLM_TENSOR_MID_BLOCKS1_ATTN_TO_OUT_BIAS, "bias", i - 280, j), {256}, 0);
-                            layer.mid_block1_norm3_w = create_tensor(tn(LLM_TENSOR_MID_BLOCKS1_NORM3_WEIGHT, "weight", i - 280, j), {256}, 0);
-                            layer.mid_block1_norm1_b = create_tensor(tn(LLM_TENSOR_MID_BLOCKS1_NORM3_BIAS, "bias", i - 280, j), {256}, 0);
-                            layer.mid_block1_ffn_w0 = create_tensor(tn(LLM_TENSOR_MID_BLOCKS1_FF_0_WEIGHT, "weight", i - 280, j), {256, 1024}, 0);
-                            layer.mid_block1_ffn_w2 = create_tensor(tn(LLM_TENSOR_MID_BLOCKS1_FF_2_WEIGHT, "weight", i -280, j), {1024, 256}, 0);
-                            layer.mid_block1_ffn_b0 = create_tensor(tn(LLM_TENSOR_MID_BLOCKS1_FF_0_BIAS, "bias", i - 280, j), {1024}, 0);
-                            layer.mid_block1_ffn_b2 = create_tensor(tn(LLM_TENSOR_MID_BLOCKS1_FF_2_BIAS, "bias", i - 280, j), {256}, 0);
+                            auto & sub_layer = mid_block_sub_layers[(i - 280) * 4 + j];
+                            sub_layer.mid_block1_norm1_w = create_tensor(tn(LLM_TENSOR_MID_BLOCKS1_NORM1_WEIGHT, "weight", i - 280, j), {256}, 0);
+                            sub_layer.mid_block1_norm1_b = create_tensor(tn(LLM_TENSOR_MID_BLOCKS1_NORM1_BIAS, "bias", i - 280, j), {256}, 0);
+                            sub_layer.mid_block1_wq = create_tensor(tn(LLM_TENSOR_MID_BLOCKS1_ATTN_TO_Q_WEIGHT, "weight", i - 280, j), {256, 512}, 0);
+                            sub_layer.mid_block1_wk = create_tensor(tn(LLM_TENSOR_MID_BLOCKS1_ATTN_TO_K_WEIGHT, "weight", i - 280, j), {256, 512}, 0);
+                            sub_layer.mid_block1_wv = create_tensor(tn(LLM_TENSOR_MID_BLOCKS1_ATTN_TO_V_WEIGHT, "weight", i - 280, j), {256, 512}, 0);
+                            sub_layer.mid_block1_wo = create_tensor(tn(LLM_TENSOR_MID_BLOCKS1_ATTN_TO_OUT_WEIGHT, "weight", i -280, j), {512, 256}, 0);
+                            sub_layer.mid_block1_bo = create_tensor(tn(LLM_TENSOR_MID_BLOCKS1_ATTN_TO_OUT_BIAS, "bias", i - 280, j), {256}, 0);
+                            sub_layer.mid_block1_norm3_w = create_tensor(tn(LLM_TENSOR_MID_BLOCKS1_NORM3_WEIGHT, "weight", i - 280, j), {256}, 0);
+                            sub_layer.mid_block1_norm1_b = create_tensor(tn(LLM_TENSOR_MID_BLOCKS1_NORM3_BIAS, "bias", i - 280, j), {256}, 0);
+                            sub_layer.mid_block1_ffn_w0 = create_tensor(tn(LLM_TENSOR_MID_BLOCKS1_FF_0_WEIGHT, "weight", i - 280, j), {256, 1024}, 0);
+                            sub_layer.mid_block1_ffn_w2 = create_tensor(tn(LLM_TENSOR_MID_BLOCKS1_FF_2_WEIGHT, "weight", i -280, j), {1024, 256}, 0);
+                            sub_layer.mid_block1_ffn_b0 = create_tensor(tn(LLM_TENSOR_MID_BLOCKS1_FF_0_BIAS, "bias", i - 280, j), {1024}, 0);
+                            sub_layer.mid_block1_ffn_b2 = create_tensor(tn(LLM_TENSOR_MID_BLOCKS1_FF_2_BIAS, "bias", i - 280, j), {256}, 0);
                     }
 
                     decoder_estimator_up_blocks_0_0_mlp_1_weight = create_tensor(tn(LLM_TENSOR_UP_BLOCKS_MLP_WEIGHT, "weight", 1047), {1024, 256}, 0);
@@ -5280,19 +5283,19 @@ bool llama_model::load_tensors(llama_model_loader & ml) {
                     for(int i = 1059; i < 1063; ++i)
                     {
                         auto & layer = layers[i];
-                        layer.down_block1_norm1_w = create_tensor(tn(LLM_TENSOR_UP_BLOCKS_NORM1_WEIGHT, "weight", i - 1059), {256}, 0);
-                        layer.down_block1_wq = create_tensor(tn(LLM_TENSOR_UP_BLOCKS_ATTN_TO_Q_WEIGHT, "weight", i - 1059), {256, 512}, 0);
-                        layer.down_block1_wk = create_tensor(tn(LLM_TENSOR_UP_BLOCKS_ATTN_TO_K_WEIGHT, "weight", i - 1059), {256, 512}, 0);
-                        layer.down_block1_wv = create_tensor(tn(LLM_TENSOR_UP_BLOCKS_ATTN_TO_V_WEIGHT, "weight", i - 1059), {256, 512}, 0);
-                        layer.down_block1_wo = create_tensor(tn(LLM_TENSOR_UP_BLOCKS_ATTN_TO_OUT_WEIGHT, "weight", i - 1059), {512, 256},  0);
-                        layer.down_block1_norm3_w = create_tensor(tn(LLM_TENSOR_UP_BLOCKS_NORM3_WEIGHT, "weight", i - 1059), {256}, 0);
-                        layer.down_block1_ffn_w0 = create_tensor(tn(LLM_TENSOR_UP_BLOCKS_FF_0_WEIGHT, "weight", i - 1059), {256, 1024}, 0);
-                        layer.down_block1_ffn_w2 = create_tensor(tn(LLM_TENSOR_UP_BLOCKS_FF_2_WEIGHT, "weight", i - 1059), {1024, 256}, 0);
-                        layer.down_block1_norm1_b = create_tensor(tn(LLM_TENSOR_UP_BLOCKS_NORM1_BIAS, "bias", i - 1059), {256}, 0);
-                        layer.down_block1_wo_b = create_tensor(tn(LLM_TENSOR_UP_BLOCKS_ATTN_TO_OUT_BIAS, "bias", i - 1059), {256}, 0);
-                        layer.down_block1_norm3_b = create_tensor(tn(LLM_TENSOR_UP_BLOCKS_NORM3_BIAS, "bias", i - 1059), {256}, 0);
-                        layer.down_block1_ffn_w0_b = create_tensor(tn(LLM_TENSOR_UP_BLOCKS_FF_0_BIAS, "bias", i - 1059), {256}, 0);
-                        layer.down_block1_ffn_w2_b = create_tensor(tn(LLM_TENSOR_UP_BLOCKS_FF_2_BIAS, "bias", i - 1059), {256}, 0);
+                        layer.up_block1_norm1_w = create_tensor(tn(LLM_TENSOR_UP_BLOCKS_NORM1_WEIGHT, "weight", i - 1059), {256}, 0);
+                        layer.up_block1_wq = create_tensor(tn(LLM_TENSOR_UP_BLOCKS_ATTN_TO_Q_WEIGHT, "weight", i - 1059), {256, 512}, 0);
+                        layer.up_block1_wk = create_tensor(tn(LLM_TENSOR_UP_BLOCKS_ATTN_TO_K_WEIGHT, "weight", i - 1059), {256, 512}, 0);
+                        layer.up_block1_wv = create_tensor(tn(LLM_TENSOR_UP_BLOCKS_ATTN_TO_V_WEIGHT, "weight", i - 1059), {256, 512}, 0);
+                        layer.up_block1_wo = create_tensor(tn(LLM_TENSOR_UP_BLOCKS_ATTN_TO_OUT_WEIGHT, "weight", i - 1059), {512, 256},  0);
+                        layer.up_block1_norm3_w = create_tensor(tn(LLM_TENSOR_UP_BLOCKS_NORM3_WEIGHT, "weight", i - 1059), {256}, 0);
+                        layer.up_block1_ffn_w0 = create_tensor(tn(LLM_TENSOR_UP_BLOCKS_FF_0_WEIGHT, "weight", i - 1059), {256, 1024}, 0);
+                        layer.up_block1_ffn_w2 = create_tensor(tn(LLM_TENSOR_UP_BLOCKS_FF_2_WEIGHT, "weight", i - 1059), {1024, 256}, 0);
+                        layer.up_block1_norm1_b = create_tensor(tn(LLM_TENSOR_UP_BLOCKS_NORM1_BIAS, "bias", i - 1059), {256}, 0);
+                        layer.up_block1_wo_b = create_tensor(tn(LLM_TENSOR_UP_BLOCKS_ATTN_TO_OUT_BIAS, "bias", i - 1059), {256}, 0);
+                        layer.up_block1_norm3_b = create_tensor(tn(LLM_TENSOR_UP_BLOCKS_NORM3_BIAS, "bias", i - 1059), {256}, 0);
+                        layer.up_block1_ffn_w0_b = create_tensor(tn(LLM_TENSOR_UP_BLOCKS_FF_0_BIAS, "bias", i - 1059), {256}, 0);
+                        layer.up_block1_ffn_w2_b = create_tensor(tn(LLM_TENSOR_UP_BLOCKS_FF_2_BIAS, "bias", i - 1059), {256}, 0);
 
                         
                     }
@@ -17166,7 +17169,7 @@ struct llm_build_flow : public llm_graph_context {
         string mode == "encoders")
     {
         /* 1. Linear(w1) + bias + activation */
-        ggml_tensors * x;
+        ggml_tensor * x;
         if(mode == "encoders") {
             x = ggml_mul_mat(ctx, model.layer[layer_id].encoders_ffn_w1, xs);  // [B, L, hidden]
             x = ggml_add(ctx, x, model.layer[layer_id].encoders_ffn_b1);
@@ -17206,7 +17209,7 @@ struct llm_build_flow : public llm_graph_context {
         /* ===== 1. RelPosSelfAttention ===== */
         ggml_tensor * residual =  ggml_view_3d(ctx0, x, x->ne[0], x->ne[1], x->nb[1], 0);
         // Pre-Norm
-        ggml_tensors * q, k, v;
+        ggml_tensor * q, k, v;
         if(mode == "encoders") {
             x = build_layer_norm(ctx, x, model.layer[layer_id].encoders_normmha_w, model.layer[layer_id].encoders_normmha_b, 1e-12f);
             [q, k, v] = forward_qkv(ctx, x, &x, &x, &x, layer_id);
@@ -17354,7 +17357,7 @@ struct llm_build_flow : public llm_graph_context {
         masks = ggml_sub(ctx, ggml_new_f32(ctx0, 1.0f), masks);
         masks = ggml_unsqueeze(ctx, masks, 1);
         [xs, pos_emb, masks] = build_linear_no_subsample(ctx, xs, masks, 0, "up_embed");
-        ggml_tensors * mask_pad = ggml_view_3d(ctx, masks, masks->ne[0], masks->ne[1], masks->nb[1], 0);
+        ggml_tensor * mask_pad = ggml_view_3d(ctx, masks, masks->ne[0], masks->ne[1], masks->nb[1], 0);
         /* 9. 4 层 up-sample Conformer */
         for (int i = 0; i < 4; ++i) {
             [xs, chunk_masks] = build_encoder_encoders(ctx, xs, masks, pos_emb, mask_pad, i + 132, "up_encoders");
@@ -17454,15 +17457,37 @@ struct llm_build_flow : public llm_graph_context {
         /* 2. 分组卷积 stride=1, dilation=1 */
         ggml_tensor * model_weight;
         ggml_tensor * model_bias;
-        if (mode == "down_block") {
-            model_weight = model.decoder_estimator_down_blocks_0_0_block1_block_0_weight;
-            model_bias = model.decoder_estimator_down_blocks_0_0_block1_block_0_bias;
+       if (mode == "down_block") {
+            if (blk_id == 1) {
+                model_weight = model.decoder_estimator_down_blocks_0_0_block1_block_0_weight;
+                model_bias = model.decoder_estimator_down_blocks_0_0_block1_block_0_bias;
+            } else {
+                model_weight = model.decoder_estimator_down_blocks_0_0_block2_block_0_weight;
+                model_bias = model.decoder_estimator_down_blocks_0_0_block2_block_0_bias;
+            }
+            
         } else if(mode == "mid_block") {
-            model_weight = model.decoder_estimator_mid_blocks_0_0_block1_block_0_weight;
-            model_bias = model.decoder_estimator_mid_blocks_0_0_block1_block_0_bias;
+            if(blk_id == 1) {
+                model_weight = model.decoder_estimator_mid_blocks_0_0_block1_block_0_weight;
+                model_bias = model.decoder_estimator_mid_blocks_0_0_block1_block_0_bias;
+            } else {
+                model_weight = model.decoder_estimator_mid_blocks_0_0_block2_block_0_weight;
+                model_bias = model.decoder_estimator_mid_blocks_0_0_block2_block_0_bias;
+            }
+        }else if(mode == "up_block"){
+            if(blk_id == 1) {
+                model_weight = model.decoder_estimator_up_blocks_0_0_block1_block_0_weight;
+                model_bias = model.decoder_estimator_up_blocks_0_0_block1_block_0_bias; 
+            } else {
+                model_weight = model.decoder_estimator_up_blocks_0_0_block2_block_0_weight;
+                model_bias = model.decoder_estimator_up_blocks_0_0_block2_block_0_bias; 
+            } 
+        } else if (mode == "final_block"){
+            model_weight = model.decoder_estimator_final_block_block_0_weight;
+            model_bias = model.decoder_estimator_final_block_block_0_bias;
         } else {
-            model_weight = model.decoder_estimator_up_blocks_0_0_block1_block_0_weight;
-            model_bias = model.decoder_estimator_up_blocks_0_0_block1_block_0_bias;
+            model_weight = model.decoder_estimator_up_blocks_0_2_weight;
+            model_bias = model.decoder_estimator_up_blocks_0_2_bias;
         }
         ggml_tensor * y = ggml_conv_1d(ctx, model_weight, pad, 1, 0, 1);
 
@@ -17475,10 +17500,12 @@ struct llm_build_flow : public llm_graph_context {
         ggml_context * ctx,
         ggml_tensor * x,
         ggml_tensor * mask,
-        string mode)
+        string mode,
+        int blk_id)
     {
         /* 1. CausalConv1d */
-        x = causal_conv1d_forward(ctx, x, mode);
+        x = ggml_mul(ctx, x, mask);
+        x = causal_conv1d_forward(ctx, x, mode, blk_id);
 
         /* 2. 通道维转时间维  [T, dim_out, B] -> [T, B, dim_out]  为了 LayerNorm */
         x = ggml_cont(ctx, ggml_permute(ctx, x, 0, 2, 1, 3));
@@ -17486,15 +17513,34 @@ struct llm_build_flow : public llm_graph_context {
         /* 3. LayerNorm（权重广播） */
         ggml_tensor * model_weight;
         ggml_tensor * model_bias;
-        if (mode == "down_block") { 
-            model_weight = model.decoder_estimator_down_blocks_0_0_block1_block_1_weight;
-            model_bias = model.decoder_estimator_down_blocks_0_0_block1_block_1_bias;
+        if (mode == "down_block") {
+            if (blk_id == 1) {
+                model_weight = model.decoder_estimator_down_blocks_0_0_block1_block_2_weight;
+                model_bias = model.decoder_estimator_down_blocks_0_0_block1_block_2_bias;
+            } else {
+                model_weight = model.decoder_estimator_down_blocks_0_0_block2_block_2_weight;
+                model_bias = model.decoder_estimator_down_blocks_0_0_block2_block_2_bias;
+            }
+            
         } else if(mode == "mid_block") {
-            model_weight = model.decoder_estimator_mid_blocks_0_0_block1_block_1_weight;
-            model_bias = model.decoder_estimator_mid_blocks_0_0_block1_block_1_bias;
+            if(blk_id == 1) {
+                model_weight = model.decoder_estimator_mid_blocks_0_0_block1_block_2_weight;
+                model_bias = model.decoder_estimator_mid_blocks_0_0_block1_block_2_bias;
+            } else {
+                model_weight = model.decoder_estimator_mid_blocks_0_0_block2_block_2_weight;
+                model_bias = model.decoder_estimator_mid_blocks_0_0_block2_block_2_bias;
+            }
+        }else if(mode == "up_block"){
+            if(blk_id == 1) {
+                model_weight = model.decoder_estimator_up_blocks_0_0_block1_block_2_weight;
+                model_bias = model.decoder_estimator_up_blocks_0_0_block1_block_2_bias; 
+            } else {
+                model_weight = model.decoder_estimator_up_blocks_0_0_block2_block_2_weight;
+                model_bias = model.decoder_estimator_up_blocks_0_0_block2_block_2_bias; 
+            } 
         } else {
-            model_weight = model.decoder_estimator_up_blocks_0_0_block1_block_1_weight;
-            model_bias = model.decoder_estimator_up_blocks_0_0_block1_block_1_bias;
+            model_weight = model.decoder_estimator_final_block_block_2_weight;
+            model_bias = model.decoder_estimator_final_block_block_2_bias;
         }
         x = build_layer_norm(ctx, x, model_weight, model_bias, 1e-5f);
 
@@ -17514,29 +17560,200 @@ struct llm_build_flow : public llm_graph_context {
         ggml_context * ctx,
         ggml_tensor * x,
         ggml_tensor * mask,
-        ggml_tensor * t_emb)
+        ggml_tensor * t_emb,
+        int layer_id,
+        string mode)
     {
-        ggml_tensor * t_proj = ggml_mul_mat(ctx, block.time_mlp_w, t_emb);   // [B, dim_out]
-        t_proj = ggml_add(ctx, t_proj, block.time_mlp_b);
-        t_proj = ggml_cont(ctx, ggml_permute(ctx,
-                                            ggml_repeat(ctx,
-                                                        ggml_reshape_2d(ctx, t_proj, t_proj->ne[0], 1),
-                                                        ggml_new_tensor_3d(ctx, t_proj->type, x->ne[0], t_proj->ne[0], x->ne[2])),
-                                            0, 2, 1, 3));   // [T, dim_out, B]
 
         /* 2. block1 */
-        ggml_tensor * h = causal_block1d_forward(ctx, x, mask, block.block1);
+        x = causal_block1d_forward(ctx, x, mask, mode, 1);
 
-        /* 3. 加时间投影 */
-        h = ggml_add(ctx, h, t_proj);
+        x = ggml_mul(ctx, x, ggml_tanh(ctx, ggml_log(ctx, ggml_add(ctx,ggml_exp(ctx, x), ggml_new_f32(ctx, 1.0f)))));
+        if(mode == "down_block") {
+            t_emb = ggml_mul_mat(ctx, model.decoder_estimator_down_blocks_0_0_mlp_1_weight, t_emb);
+            t_emb = ggml_add(ctx, t_emb, model.decoder_estimator_down_blocks_0_0_mlp_1_bias);
+        }else if(mode == "mid_block") {
+            t_emb = ggml_mul_mat(ctx, model.layer[layer_id].mid_block_mlp_w, t_emb);
+            t_emb = ggml_add(ctx, t_emb, model.layer[layer_id].mid_block_mlp_b);
+        } else {
+            t_emb = ggml_mul_mat(ctx, model.decoder_estimator_up_blocks_0_0_mlp_1_weight, t_emb);
+            t_emb = ggml_add(ctx, t_emb, model.decoder_estimator_up_blocks_0_0_mlp_1_bias);
 
+        }
+        
+        t_emb = ggml_repeat(ctx, ggml_cont(ctx, ggml_permute(ctx, ggml_repeat(ctx, ggml_reshape_2d(ctx, time_emb, 256, 1), ggml_new_tensor_3d(ctx, time_emb->type, 1, 256, t_emb->ne[0])),
+                             0, 2, 1, 3)), t_emb); 
+        x = ggml_add(ctx, x, t_emb);   // 广播相加
         /* 4. block2 */
-        h = causal_block1d_forward(ctx, h, mask, block.block2);
+        x = causal_block1d_forward(ctx, x, mask, mode, 2);
 
-        /* 5. 残差连接（若 dim != dim_out 需 1×1 投影，这里假设已匹配） */
-        return ggml_add(ctx, h, x);
+        ggml_tensor * x_mask = ggml_mul(ctx, x, mask);
+        if(mode == "down_block") {
+            x_mask = ggml_mul_mat(ctx, model.decoder_estimator_down_blocks_0_0_res_conv_weight, x_mask);
+            x_mask = ggml_add(ctx, x_mask, model.decoder_estimator_down_blocks_0_0_res_conv_bias);
+        } else if(mode == "mid_block") {
+            x_mask = ggml_mul_mat(ctx, model.layer[layer_id].mid_block_res_w, x_mask);
+            x_mask = ggml_add(ctx, x_mask, model.layer[layer_id].mid_block_res_b);
+        } else {
+            x_mask = ggml_mul_mat(ctx, model.decoder_estimator_up_blocks_0_0_res_conv_weight, x_mask);
+            x_mask = ggml_add(ctx, x_mask, model.decoder_estimator_up_blocks_0_0_res_conv_bias);
+        }
+
+        x = ggml_add(ctx, x, x_mask);
+        
+        return x;
     }
 
+    ggml_tensor * ggml_mask_to_bias(
+        ggml_context * ctx,
+        ggml_tensor * mask,
+        ggml_type   dtype)
+    {
+        /* 1. 类型转换到目标浮点 */
+        mask = ggml_cast(ctx, mask, dtype);
+
+        /* 2. bias = (1 - mask) * -1e10 */
+        ggml_tensor * one = ggml_new_tensor_1d(ctx, dtype, 1);
+        ggml_set_f32(one, 1.0f);
+
+        ggml_tensor * neg_big = ggml_new_tensor_1d(ctx, dtype, 1);
+        ggml_set_f32(neg_big, -1.0e10f);
+
+        return ggml_mul(ctx, ggml_sub(ctx, one, mask), neg_big);
+    }
+
+    ggml_tensor * prepare_attention_mask(
+        ggml_context * ctx,
+        ggml_tensor * mask,
+        int target_len,
+        int batch_size,
+        int n_heads,
+        int out_dim)
+    {
+        const int64_t B  = mask->ne[2];   // ggml 倒序：ne[0]=T, ne[1]=T or 1, ne[2]=B
+        const int64_t T  = mask->ne[0];
+
+        /* 1. pad 到 target_len  (右 pad 0) */
+        if (T != target_len) {
+            ggml_tensor * pad = ggml_new_tensor_3d(ctx, mask->type, target_len - T, mask->ne[1], B);
+            ggml_set_f32(pad, 0.0f);   // pad value = 0
+            mask = ggml_concat(ctx, mask, pad, /*axis=*/0);   // 沿时间维拼接
+        }
+
+        /* 2. 重复到每个 head  */
+        if (out_dim == 3) {
+            /* 3D: [B, T, T] -> [B*n_heads, T, T]  沿 batch 维 repeat */
+            mask = ggml_repeat(ctx, mask,
+                            ggml_new_tensor_3d(ctx, mask->type, mask->ne[0], mask->ne[1], batch_size * n_heads));
+        } else {
+            /* 4D: [B, T, T] -> [B, n_heads, T, T]  先 unsqueeze(1) 再 repeat dim=1 */
+            mask = ggml_unsqueeze(ctx, mask, 1);                          // [B, 1, T, T]
+            mask = ggml_repeat(ctx, mask,
+                            ggml_new_tensor_4d(ctx, mask->type, mask->ne[0], mask->ne[1], n_heads, B));
+        }
+        return mask;
+    }
+
+    ggml_tensor * ggml_spda(ggml_context * ctx, ggml_tensor * q, ggml_tensor * k, ggml_tensor * v, ggml_tensor * mask, float droupout_p, 
+        bool is_causal, float scale, bool enable_gqa) {
+        GGML_ASSERT(ggml_n_dims(q) == 4 && ggml_n_dims(k) == 4 && ggml_n_dims(v) == 4);
+        const int64_t B      = q->ne[3];
+        const int64_t nq_h   = q->ne[2];   // query head 数
+        const int64_t nk_h   = k->ne[2];   // key   head 数
+        const int64_t L      = q->ne[1];   // q 序列长度
+        const int64_t S      = k->ne[1];   // k 序列长度
+        const int64_t D_head = q->ne[0];
+
+        if (enable_gqa && nq_h != nk_h) {
+            GGML_ASSERT(nq_h % nk_h == 0);
+            const int64_t group = nq_h / nk_h;
+            k = ggml_repeat_interleave(ctx, k, group, 2);   // 在维度 2 上重复
+            v = ggml_repeat_interleave(ctx, v, group, 2);
+        }
+        if (scale == 0.0f) scale = 1.0f / sqrtf(float(D_head));
+        ggml_tensor* sc = ggml_new_f32(ctx, scale);
+        q = ggml_scale(ctx, q, sc);
+        ggml_tensor* k_t = ggml_cont(ctx, ggml_transpose(ctx, k));
+        ggml_tensor* scores = ggml_mul_mat(ctx, k_t, q);
+        if (is_causal) {
+            ggml_tensor* causal = ggml_diag_mask_inf(ctx, scores, 0); // diagonal=0
+            scores = causal;
+        }
+        if (mask) {
+        // mask 可以是 bool 或 float；这里统一按 additive 处理
+            scores = ggml_add(ctx, scores, mask);
+        }
+
+        // ---------- 6. softmax ----------
+        ggml_tensor* probs = ggml_soft_max(ctx, scores);
+        if (dropout_p > 0.0f) {
+            probs = ggml_dropout(ctx, probs, dropout_p);
+        }
+
+        // ---------- 8. 加权求和得到输出 ----------
+        ggml_tensor* out = ggml_mul_mat(ctx, v, probs);
+        return out;
+    }
+
+    ggml_tensor * build_basic_attn(ggml_tensor * ctx, ggml_tensor * x, ggml_tensor * attn_mask, int layer_id, string mode="down_block") {
+
+        ggml_tensor * residual =  ggml_view_3d(ctx0, x, x->ne[0], x->ne[1], x->nb[1], 0);
+        int64_t input_ndim = ggml_n_dims(hidden_states);
+        const int64_t sequence_length = src->ne[1];   // T
+        const int64_t batch_size      = src->ne[2];   // B
+        const int64_t n_heads = 8;
+        const int64_t head_dim = 64;
+        attn_mask = prepare_attention_mask(ctx, attn_mask, sequence_length, batch_size, n_heads, input_ndim);
+        attn_mask = ggml_reshape_4d(ctx, mask, mask->ne[0], mask->ne[1], n_heads, batch_size);
+
+        ggml_tensor * wq, wk, wv;
+        if (mode == "down_block") {
+            wq = model.layer[layer_id].down_block1_wq;
+            wk = model.layer[layer_id].down_block1_wk;
+            wv = model.layer[layer_id].down_block1_wv;
+        } else if (mode == "mid_block") {
+            wq = model.sub_layer[layer_id].mid_block_wq;
+            wk = model.sub_layer[layer_id].mid_block_wk;
+            wv = model.sub_layer[layer_id].mid_block_wv;
+        } else {
+            wq = model.layer[layer_id].up_block1_wq;
+            wk = model.layer[layer_id].up_block1_wk;
+            wv = model.layer[layer_id].up_block1_wv;
+        }
+        ggml_tensor * q = ggml_mul_mat(ctx, wq, x);
+        ggml_tensor * k = ggml_mul_mat(ctx, wk, x);
+        ggml_tensor * v = ggml_mul_mat(ctx, wv, x);
+
+        int64_t inner_dim = k->ne[0];
+        int64_t d_k = inner_dim / n_heads;
+        q = ggml_reshape_4d(ctx, q, d_k, q->ne[2], n_heads, batch_size);
+        k = ggml_reshape_4d(ctx, k, d_k, k->ne[2], n_heads, batch_size);
+        v = ggml_reshape_4d(ctx, v, d_k, v->ne[2], n_heads, batch_size);
+        
+        ggml_tensor * attn_out = ggml_spda(ctx, q, k, v, attn_mask, 0.0f, false, 0.0f, false);
+        ggml_tensor * attn_out = ggml_reshape_3d(ctx,
+                                ggml_permute(ctx, attn_out, 0, 2, 1, 3),
+                                attn_out->ne[0] * attn_out->ne[1],              
+                                attn_out->ne[2],                       
+                                attn_out->ne[3]);
+        
+        attn_out = ggml_cast(ctx, attn_out, q->type);
+        ggml_tensor * wo, bo;
+        if (mode == "down_block") {
+            wo = model.layer[layer_id].down_block1_wo;
+            bo = model.layer[layer_id].down_block1_bo;
+        } else if (mode == "mid_block") {
+            wo = model.sub_layer[layer_id].mid_block_wo;
+            bo = model.sub_layer[layer_id].mid_block_bo;
+        } else {
+            wo = model.layer[layer_id].up_block1_wo;
+            bo = model.layer[layer_id].up_block1_bo;
+        }
+        attn_out = ggml_mul_mat(ctx, wo, attn_out);
+        attn_out = ggml_add(ctx, attn_out, bo);
+        
+        return attn_out;
+    }
 
     ggml_tensor * causal_conditional_decoder_forward(
         ggml_context * ctx,
@@ -17545,8 +17762,7 @@ struct llm_build_flow : public llm_graph_context {
         ggml_tensor * mu,         // [B, in_ch, T]
         ggml_tensor * t,          // [B]  整数步长 or 浮点时间
         ggml_tensor * spks,       // [B, spk_dim] 可选
-        ggml_tensor * cond,
-        int n_threads)
+        ggml_tensor * cond)
     {
         ggml_tensor * t_emb = ggml_sinusoidal_pos_emb(ctx, t, dim, 1000.0f);
         t_embed = timestep_embedding_forward(ctx, t_emb); // [B, time_embed_dim_out]
@@ -17563,36 +17779,80 @@ struct llm_build_flow : public llm_graph_context {
         std::vector<ggml_tensor *> hiddens;
         std::vector<ggml_tensor *> masks = {mask};
 
-        /* 5. Down 路径 */
-        for (size_t i = 0; i < down_blocks.size(); ++i) {
-            mask = masks.back();
-            x = down_block_forward(ctx, x, mask, t_emb, down_blocks[i], static_chunk_size);
-            hiddens.push_back(x);
-            masks.push_back(causal_downsample_mask(ctx, mask));   // stride=2
+        ggml_tensor * mask_down = masks.back();
+        x = causal_resnet_block1d_forward(ctx, x, mask_down, t_emb, "down_block");
+        x = ggml_cont(ctx, ggml_permute(ctx, x, 1, 0, 2, 3));
+        ggml_tensor * attn_mask = ggml_view_3d(ctx, mask_down, mask_down->ne[0], mask_down->ne[1], mask_down->nb[1], 0);
+        attn_mask = ggml_mask_to_bias(ctx, attn_mask, x->type);
+        
+        for (size_t i = 0; i < 4; ++i) {
+            x = build_layer_norm(ctx, x, model.layer[226 + i].down_block1_norm1_w, model.layer[226 + i].down_block1_norm1_b, 1e-5f);
+            ggml_tensor * attn_out = build_basic_attn(ctx, x, attn_mask, 226 + i, "down_block");
+            x = ggml_add(ctx, attn_out, x);
+            x = build_layer_norm(ctx, x, model.layer[226 + i].down_block1_norm3_w, model.layer[226 + i].down_block1_norm3_b, 1e-5f);
+            ggml_tensor * ff_out = ggml_mul_mat(ctx, model.layer[226 + i].down_block1_ffn_w0, x);
+            ff_out = ggml_add(ctx, ff_out, model.layer[226 + i].down_block1_ffn_b0);
+            ff_out = ggml_gelu(ctx, ff_out);
+            ff_out = ggml_mul_mat(ctx, model.layer[226 + i].down_block1_ffn_w2, ff_out);
+            ff_out = ggml_add(ctx, ff_out, model.layer[226 + i].down_block1_ffn_b2);
+            x = ggml_add(ctx, ff_out, x);
         }
-        masks.pop_back();   // 去掉最底层 mask
+        x = ggml_cont(ctx, ggml_permute(ctx, x, 0, 2, 1, 3));
+        hiddens.push_back(x);
+        x = causal_conv1d_forward(ctx, ggml_mul_mat(ctx, x, mask_down), "down_block");
+        ggml_tensor * mask_sub = ggml_view_3d(ctx, mask_down, mask_down->ne[0] / 2, mask_down->ne[1], mask_down->ne[2], 2 * ggml_type_size(mask_down->type), mask_down->nb[1], mask_down->nb[2], 0);
+        mask_sub = ggml_cont(ctx, mask_sub);
+        masks.push_back(mask_sub);
+        masks.pop_back(); 
+        ggml_tensor * mask_mid = masks.empty() ? nullptr : masks.back();
 
-        /* 6. Mid 路径 */
-        for (const auto & mid : mid_blocks) {
-            x = mid_block_forward(ctx, x, masks.back(), t_emb, mid,
-                                static_chunk_size, streaming, n_threads);
+        for(size_t i = 0; i < 12; i++) {
+            x = causal_resnet_block1d_forward(ctx, x, mask_mid, t_emb, 280 + i, "mid_block");
+            x = ggml_cont(ctx, ggml_permute(ctx, x, 1, 0, 2, 3));
+            ggml_tensor * attn_mask = ggml_view_3d(ctx, mask_mid, mask_mid->ne[0], mask_mid->ne[1], mask_mid->nb[1], 0);
+            attn_mask = ggml_mask_to_bias(ctx, attn_mask, x->type);
+            for (size_t j = 0; j < 4; ++j) {
+                x = build_layer_norm(ctx, x, model.layer[280 + i].mid_block1_norm1_w, model.layer[280 + i].mid_block1_norm1_b, 1e-5f);
+                ggml_tensor * attn_out = build_basic_attn(ctx, x, attn_mask, i * 4 + j, "mid_block");
+                x = ggml_add(ctx, attn_out, x);
+                x = build_layer_norm(ctx, x, model.layer[280 + i].mid_block1_norm3_w, model.layer[280 + i].mid_block1_norm3_b, 1e-5f);
+                ggml_tensor * ff_out = ggml_mul_mat(ctx, model.sub_layer[i *4 + j].mid_block1_ffn_w0, x);
+                ff_out = ggml_add(ctx, ff_out, model.sub_layer[i *4 + j].mid_block1_ffn_b0);
+                ff_out = ggml_gelu(ctx, ff_out);
+                ff_out = ggml_mul_mat(ctx, model.sub_layer[i *4 + j].mid_block1_ffn_w2, ff_out);
+                ff_out = ggml_add(ctx, ff_out, model.sub_layer[i *4 + j].mid_block1_ffn_b2);
+                x = ggml_add(ctx, ff_out, x);
+            }
+            x = ggml_cont(ctx, ggml_permute(ctx, x, 0, 2, 1, 3));
         }
 
-        /* 7. Up 路径 */
-        for (size_t i = 0; i < up_blocks.size(); ++i) {
-            ggml_tensor * skip = hiddens.back();
-            ggml_tensor * mask_up = masks.back();
-            hiddens.pop_back();
-            masks.pop_back();
-            x = up_block_forward(ctx, x, skip, mask_up, t_emb, up_blocks[i],
-                                static_chunk_size, streaming, n_threads);
+        ggml_tensor * mask_up = masks.back();
+        ggml_tensor * skip = hiddens.back();
+        ggml_tensor * x_trunc = ggml_view_3d(ctx, x, skip->ne[0], x->ne[1], x->ne[2], x->nb[0], x->nb[1], x->nb[2], 0);
+        x = ggml_concat(ctx, x_trunc, skip, 0);
+        x = causal_resnet_block1d_forward(ctx, x, mask_up, t_emb, "up_block");
+        x = ggml_cont(ctx, ggml_permute(ctx, x, 1, 0, 2, 3));
+        ggml_tensor * attn_mask = ggml_view_3d(ctx, mask_up, mask_up->ne[0], mask_up->ne[1], mask_up->nb[1], 0);
+        attn_mask = ggml_mask_to_bias(ctx, attn_mask, x->type);
+        
+        for (size_t i = 0; i < 4; ++i) {
+            x = build_layer_norm(ctx, x, model.layer[1059 + i].up_block1_norm1_w, model.layer[1059 + i].up_block1_norm1_b, 1e-5f);
+            ggml_tensor * attn_out = build_basic_attn(ctx, x, attn_mask, 226 + i, "down_block");
+            x = ggml_add(ctx, attn_out, x);
+            x = build_layer_norm(ctx, x, model.layer[1059 + i].up_block1_norm3_w, model.layer[1059 + i].up_block1_norm3_b, 1e-5f);
+            ggml_tensor * ff_out = ggml_mul_mat(ctx, model.layer[1059 + i].up_block1_ffn_w0, x);
+            ff_out = ggml_add(ctx, ff_out, model.layer[1059 + i].up_block1_ffn_b0);
+            ff_out = ggml_gelu(ctx, ff_out);
+            ff_out = ggml_mul_mat(ctx, model.layer[1059 + i].up_block1_ffn_w2, ff_out);
+            ff_out = ggml_add(ctx, ff_out, model.layer[1059 + i].up_block1_ffn_b2);
+            x = ggml_add(ctx, ff_out, x);
         }
-
-        /* 8. 最终卷积 */
-        x = causal_block_1d(ctx, x, mask_up, final_block);
+        x = ggml_cont(ctx, ggml_permute(ctx, x, 0, 2, 1, 3));
+        x = causal_conv1d_forward(ctx, ggml_mul_mat(ctx, x, mask_up), "");
+        x = causal_block1d_forward(ctx, x, mask_up, "final_block");
         x = ggml_mul(ctx, x, mask_up);                 // x *= mask
-        x = ggml_conv_1d(ctx, final_proj_w, x);        // 1×1 conv
-        if (final_proj_b) x = ggml_add(ctx, x, final_proj_b);
+        x = ggml_conv_1d(ctx, model.decoder_estimator_final_proj_weight, x);        // 1×1 conv
+        x = ggml_add(ctx, x, model.decoder_estimator_final_proj_bias);
 
         return ggml_mul(ctx, x, mask_up);              // return x * mask
     }
