@@ -486,6 +486,79 @@ ggml_tensor * llm_graph_context::build_norm(
     return cur;
 }
 
+ggml_tensor * llm_graph_context::build_F_normalize(
+         ggml_tensor * cur,
+         ggml_tensor * mw,
+         ggml_tensor * mb,
+         float        eps,
+         int il) const {
+    
+    const int64_t  last_dim = cur->ne[ggml_n_dims(cur) - 1];
+    cur = ggml_rms_norm    (ctx0, cur, eps);
+    float sqrt_n = sqrtf((float)last_dim);
+    cur = ggml_scale(ctx0, cur, ggml_new_f32(ctx0, sqrt_n));
+
+    if (mw || mb) {
+        cb(cur, "norm", il);
+    }
+
+    if (mw) {
+        cur = ggml_mul(ctx0, cur, mw);
+        if (mb) {
+            cb(cur, "norm_w", il);
+        }
+    }
+
+    if (mb) {
+        cur = ggml_add(ctx0, cur, mb);
+    }
+
+    return cur;
+}
+
+ggml_tensor * llm_graph_context::build_flow_embedding(
+         ggml_tensor * cur,
+         ggml_tensor * embd_w,
+                 int   il) const {
+    
+    ggml_tensor * token_clamp = ggml_clamp(ctx0, cur, 0, hparams.n_vocab - 1);
+    ggml_tensor * x = ggml_get_rows(ctx0, embd_w, token_clamp);
+    cb(cur, "flow_embd", il);
+
+    return cur;
+}
+
+
+ggml_tensor * llm_graph_context::build_pad_mask(
+        ggml_tensor * cur,
+        int           max_len = 0) const {
+    GGML_ASSERT(ggml_n_dims(cur) == 1);
+    const int B = cur->ne[0];
+
+    if (max_len <= 0) {
+        max_len = *(int32_t *)ggml_get_data(ggml_max(ctx0, cur));
+    }
+    ggml_tensor * idx = ggml_arange(ctx0, 0, max_len, 1);          
+    idx = ggml_cast(ctx0, idx, GGML_TYPE_F32);                  
+    idx = ggml_repeat(ctx0, idx, ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, max_len, B));
+    idx = ggml_cont(ctx0, idx);
+
+    ggml_tensor * len = ggml_cast(ctx0, cur, GGML_TYPE_F32);
+    len = ggml_reshape_1d(ctx0, len, B);                        
+    len = ggml_repeat(ctx0, len, ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, max_len, B));
+    len = ggml_cont(ctx0, len);
+
+    ggml_tensor * diff = ggml_sub(ctx0, idx, len);          
+
+    ggml_tensor * sign = ggml_sign(ctx0, diff);
+
+    ggml_tensor * ge_mask = ggml_step(ctx0, sign);
+    ggml_tensor * mask = ggml_sub(ctx0, ggml_new_tensor_3d(ctx0, GGML_TYPE_F32, ge_mask->ne[0], ge_mask->ne[1], 1), ge_mask);
+
+    cb(mask, "non_pad_mask", -1);
+    return mask;
+}
+
 ggml_tensor * llm_graph_context::build_ffn(
          ggml_tensor * cur,
          ggml_tensor * up,
@@ -810,10 +883,18 @@ ggml_tensor * llm_graph_context::build_inp_embd(ggml_tensor * tok_embd) const {
             cur = ggml_add(ctx0, cur, inpL_delta);
         }
     } else {
-        inp->embd = ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, n_embd, ubatch.n_tokens);
+        if(hparams.use_flow) {
+            inp->embd = ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, hparams.spk_embed_dim, 1);
+        } else {
+            inp->embd = ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, n_embd, ubatch.n_tokens);
+        }
         ggml_backend_buffer_t buf = ggml_backend_alloc_ctx_tensors(ctx0, backend_cpu);
         ggml_set_input(inp->embd);
-        ggml_backend_tensor_set(inp->embd, ubatch.embd, 0, ubatch.n_tokens*n_embd*ggml_element_size(inp->embd));
+        if(hparams.use_flow) {
+            ggml_backend_tensor_set(inp->embd, ubatch.embd, 0, hparams.spk_embed_dim*ggml_element_size(inp->embd));
+        } else {
+            ggml_backend_tensor_set(inp->embd, ubatch.embd, 0, ubatch.n_tokens*n_embd*ggml_element_size(inp->embd));
+        }
         cur = inp->embd;
     }
 
@@ -827,20 +908,53 @@ ggml_tensor * llm_graph_context::build_inp_embd(ggml_tensor * tok_embd) const {
     return cur;
 }
 
-ggml_tensor * llm_graph_context::build_inp_speaker(ggml_tensor * spk_embd_weight, ggml_tensor * spk_embd_bias) const {
+ggml_tensor * llm_graph_context::build_inp_token() const {
 
-    const int64_t spk_input = hparams.spk_embed_dim;
+    const int64_t token_len = ubatch.token_len;
     
-    auto inp = std::make_unique<llm_graph_spk_embd>();
+    auto inp = std::make_unique<llm_graph_input_token>();
 
     ggml_tensor * cur = nullptr;
-
-    inp->spk_embd = ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, spk_input, 1);
+    inp->input_token = ggml_new_tensor_1d(ctx0, GGML_TYPE_I32, token_len);
     ggml_backend_buffer_t buf = ggml_backend_alloc_ctx_tensors(ctx0, backend_cpu);
-    ggml_set_input(inp->embd);
-    ggml_backend_tensor_set(inp->embd, ubatch.embd, 0, ubatch.n_tokens*n_embd*ggml_element_size(inp->embd));
-    cur = inp->embd;
-    cb(cur, "inp_embd", -1);
+    ggml_set_input(inp->input_token);
+    ggml_backend_tensor_set(inp->input_token, ubatch.embd, hparams.spk_embed_dim, token_len * ggml_element_size(inp->input_token));
+    cur = inp->input_token;
+    cb(cur, "inp_token", -1);
+    res->add_input(std::move(inp));
+    return cur;
+}
+
+ggml_tensor * llm_graph_context::build_inp_prompt_token() const {
+
+    const int64_t token_len = ubatch.prompt_token_len;
+    
+    auto inp = std::make_unique<llm_graph_input_prompt_token>();
+
+    ggml_tensor * cur = nullptr;
+    inp->input_prompt_token = ggml_new_tensor_1d(ctx0, GGML_TYPE_I32, token_len);
+    ggml_backend_buffer_t buf = ggml_backend_alloc_ctx_tensors(ctx0, backend_cpu);
+    ggml_set_input(inp->input_prompt_token);
+    ggml_backend_tensor_set(inp->input_prompt_token, ubatch.embd, hparams.spk_embed_dim, token_len * ggml_element_size(inp->input_prompt_token));
+    cur = inp->input_prompt_token;
+    cb(cur, "inp_prompt_token", -1);
+    res->add_input(std::move(inp));
+    return cur;
+}
+
+ggml_tensor * llm_graph_context::build_inp_prompt_feat() const {
+
+    const int64_t feat_len = ubatch.prompt_feat_len;
+    
+    auto inp = std::make_unique<llm_graph_input_prompt_feat>();
+
+    ggml_tensor * cur = nullptr;
+    inp->input_prompt_feat = ggml_new_tensor_2d(ctx0, GGML_TYPE_I32, hparam.output_size, feat_len);
+    ggml_backend_buffer_t buf = ggml_backend_alloc_ctx_tensors(ctx0, backend_cpu);
+    ggml_set_input(inp->input_prompt_feat);
+    ggml_backend_tensor_set(inp->input_prompt_feat, ubatch.embd, hparams.spk_embed_dim + ubatch.token_len + ubatch.prompt_token_len, feat_len * hparams.output_size * ggml_element_size(inp->input_prompt_token));
+    cur = inp->input_prompt_feat;
+    cb(cur, "inp_prompt_feat", -1);
     res->add_input(std::move(inp));
     return cur;
 }

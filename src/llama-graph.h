@@ -94,15 +94,36 @@ public:
     ggml_tensor * embd   = nullptr; // F32 [n_embd, n_batch]
 };
 
-// class llm_graph_spk_embd : public llm_graph_input_i {
-// public:
-//     llm_graph_spk_embd()            = default;
-//     virtual ~llm_graph_input_embd() = default;
+class llm_graph_input_token : public llm_graph_input_i {
+public:
+    llm_graph_input_token()            = default;
+    virtual ~llm_graph_input_token()   = default;
     
-//     void set_input(const llm_ubatch * ubatch) override;
+    void set_input(const llm_ubatch * ubatch) override;
     
-//     ggml_tensor * spk_embd = nullptr;
-// };
+    ggml_tensor * input_token = nullptr; //I32 [token_len]
+};
+
+class llm_graph_input_prompt_token : public llm_graph_input_i {
+public:
+    llm_graph_input_prompt_token()            = default;
+    virtual ~llm_graph_input_prompt_token()   = default;
+    
+    void set_input(const llm_ubatch * ubatch) override;
+    
+    ggml_tensor * input_prompt_token = nullptr; //I32 [token_len]
+};
+
+class llm_graph_input_prompt_feat : public llm_graph_input_i {
+public:
+    llm_graph_input_prompt_feat()            = default;
+    virtual ~llm_graph_input_prompt_feat()   = default;
+    
+    void set_input(const llm_ubatch * ubatch) override;
+    
+    ggml_tensor * input_prompt_feat = nullptr; //F32 [token_len, seq_len]
+};
+
 
 class llm_graph_input_pos : public llm_graph_input_i {
 public:
@@ -518,6 +539,23 @@ struct llm_graph_context {
              ggml_tensor * mb,
            llm_norm_type   type,
                      int   il) const;
+    
+    ggml_tensor * build_F_normalize(
+             ggml_tensor * cur,
+             ggml_tensor * mw,
+             ggml_tensor * mb,
+             float         eps,
+                     int   il) const;
+    
+    ggml_tensor * build_flow_embedding(
+             ggml_tensor * cur,
+             ggml_tensor * embd_w,
+                     int   il) const;
+    
+    ggml_tensor * build_pad_mask(
+             ggml_tensor * cur,
+                     int   max_len = 0) const;
+            
 
     ggml_tensor * build_ffn(
              ggml_tensor * cur,
@@ -568,7 +606,10 @@ struct llm_graph_context {
     ggml_tensor * build_pos_bias(ggml_tensor * pos_bucket, ggml_tensor * attn_rel_b) const;
 
     //CosyVoiceFlow
-    ggml_tensor * build_inp_spk_embd(ggml_tensor * spk_embd_weight, ggml_tensor * spk_embd_bias) const;
+    ggml_tensor * build_inp_token() const;
+    ggml_tensor * build_inp_prompt_token() const;
+    ggml_tensor * build_inp_prompt_feat() const;
+
 
     //
     // attention
