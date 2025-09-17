@@ -16760,10 +16760,10 @@ struct llm_build_flow : public llm_graph_context {
 
         ggml_tensor * embedding = build_inp_embd(model.inp_embed_w);
         ggml_tensor * token = build_inp_token();
-        ggml_tensor * token_len = ggml_new_tensor_1d(ctx0, GGML_TYPE_I32, 1);
+        ggml_tensor * token_len = ggml_new_tensor_1d(ctx0, 26, 1);
         ggml_set_i32(token_len, params.ubatch.token_len);
         ggml_tensor * prompt_token = build_inp_prompt_token();
-        ggml_tensor * prompt_token_len = ggml_new_tensor_1d(ctx0, GGML_TYPE_I32, 1);
+        ggml_tensor * prompt_token_len = ggml_new_tensor_1d(ctx0, 26, 1);
         ggml_set_i32(prompt_token_len, params.ubatch.prompt_token_len);
         ggml_tensor * prompt_feat = build_inp_prompt_feat();
 
@@ -16781,12 +16781,73 @@ struct llm_build_flow : public llm_graph_context {
         cb(token_len, "get_token_len", -1);
 
         ggml_tensor * mask = build_pad_mask(ctx0, token_len);
-
         token = build_flow_embedding(token, model.inp_embed_w, -1);
 
         // encoder
-        ggml_tensor * context = ggml_new_tensor_3d(ctx0, GGML_TYPE_F32, 0, 0, 0);
-        x = build_encoder(ctx0, token, token_len, context);              // [B,T_total,C]
+        ggml_tensor * context = ggml_new_tensor_3d(ctx0, 0, 0, 0, 0);
+        const int B  = token->ne[2];
+        const int T  = token->ne[1];
+        const int D  = token->ne[0];
+        ggml_tensor * masks = build_pad_mask(ctx0, token_len, T);
+        masks = ggml_reshape_3d(ctx0, masks, B, 1, T);
+        ggml_tensor * x = build_linear_no_subsampling(token, model.embed_out_0_w, model.embed_out_0_b, model.embed_out_1_w, model.embed_out_1_b);
+        ggml_tensor * t = ggml_new_tensor_2d(ctx0, 0, 5000, 1);
+        ggml_tensor * pe = build_pe(gf, t);
+        pe = build_pe(gf, x);
+        x = build_espnet_pos_encode(x);
+        ggml_tensor * pos_emb = build_pos_encoding(pe, x->ne[1], 0);
+        ggml_tensor * mask_pad = masks;
+        ggml_tensor * chunk_mask = masks;
+        x = build_pre_lookahead_layer(x, mode.pre_look_conv1_w, model.pre_look_conv1_b, model.pre_look_conv2_w, model.pre_look_conv2_b, context);
+        for(int i = 0; i < 6; i++) {
+            ggml_tensor * residual = ggml_view_3d(ctx0, x, x->ne[0], x->ne[1], x->nb[1], 0);
+            x = ggml_norm(ctx0, model.layers[i + 13].encoders_normmha_w, model.layers[i + 13].encoders_normmha_b, LLM_NORM, i);
+            ggml_tensor * query = build_rel_pos_attn(gf, x, model.layers[i + 13].encoders_wq, model.layers[i + 13].encoders_bq);
+            cb(query, "attn_q", il);
+            ggml_tensor * key = build_rel_pos_attn(gf, x, model.layers[i + 13].encoders_wk, model.layers[i + 13].encoders_bk);
+            cb(key, "attn_k", il);
+            ggml_tensor * value = build_rel_pos_attn(gf, x, model.layers[i + 13].encoders_wv, model.layers[i + 13].encoders_bv);
+            cb(value, "attn_v", il);
+            query = ggml_cont(ctx0, ggml_permute(ctx0, query, 0, 2, 1, 3));
+            int n_batch_pos = pos_emb->ne[2];
+            ggml_tensor * p = ggml_mul_mat(ctx0, model.layers[i + 13].encoders_wpos, pos_emb);
+            p = ggml_reshape_4d(ctx0, p, 64, 8, p->ne[1], n_batch_pos);
+            p = ggml_cont(ctx0, ggml_permute(ctx0, p, 0, 2, 1, 3));
+            ggml_tensor * q_with_bias_u = ggml_cont(ctx0, ggml_permute(ctx0, ggml_add(ctx0, query, model.layers[i + 13].encoders_pos_bias_u), 0, 2, 1, 3));
+            ggml_tensor * q_with_bias_v = ggml_cont(ctx0, ggml_permute(ctx0, ggml_add(ctx0, query, model.layers[i + 13].encoders_pos_bias_v), 0, 2, 1, 3));
+            ggml_tensor * matrix_ac = ggml_mul_mat(ctx0, q_with_bias_u, ggml_cont(ctx0, ggml_permute(ctx0, key 0, 1, 3, 2)));
+            ggml_tensor * matrix_bd = ggml_mul_mat(ctx0, q_with_bias_v, ggml_cont(ctx0, ggml_permute(ctx0, p, 0, 1, 3, 2)));
+            if (!ggml_can_mul_mat(matrix_ac, matrix_bd)) {
+                matrix_bd = build_rel_shift(matrix_bd);
+            }
+            ggml_tensor * scores = ggml_scale(ctx0, ggml_add(ctx0, matrix_ac, matrix_bd), 1.0f / sqrtf(float(64.0f)));
+            ggml_tensor * x_att = build_attn_scores(ctx0, value, scores, mask, model.layers[i + 13].encoders_wo, model.layers[i + 13].encoders_bo);
+            x = ggml_add(ctx0, residual, x_att);
+            residual = ggml_view_3d(ctx0, x, x->ne[0], x->ne[1], x->nb[1], 0);
+            x = build_norm(x, model.layers[i + 13].encoders_normffn_w, model.layers[i + 13].encoders_normffn_b);
+            x = build_pos_ffn(x, model.layers[i + 13].encoders_ffn_w1, model.layers[i + 13].encoders_ffn_b1, model.layers[i + 13].encoders_ffn_w2, model.layers[i + 13].encoders_ffn_b2);
+            x = ggml_add(ctx0, residual, x);
+        }
+        x = ggml_permute(ctx0, x, 0, 2, 1, 3);
+        x = build_upsample_1d(x, model.up_layer_conv_w, model.up_layer_conv_b, 2);
+        x = ggml_permute(ctx0, x, 0, 2, 1, 3);
+        x = ggml_mul(ctx0, token_len, ggml_new_i32(ctx0, 2));               
+        
+        /* 8. up_embed：重复一次 embed 逻辑（权重不同）*/
+        T = xs->ne[1];
+        masks = make_pad_mask(ctx, xs_lens, T);
+        masks = ggml_sub(ctx, ggml_new_f32(ctx0, 1.0f), masks);
+        masks = ggml_unsqueeze(ctx, masks, 1);
+        [xs, pos_emb, masks] = build_linear_no_subsample(ctx, xs, masks, 0, "up_embed");
+        ggml_tensor * mask_pad = ggml_view_3d(ctx, masks, masks->ne[0], masks->ne[1], masks->nb[1], 0);
+        /* 9. 4 层 up-sample Conformer */
+        for (int i = 0; i < 4; ++i) {
+            [xs, chunk_masks] = build_encoder_encoders(ctx, xs, masks, pos_emb, mask_pad, i + 132, "up_encoders");
+        }
+
+        /* 10. final LayerNorm（normalize_before=True）*/
+        xs = build_layer_norm(ctx, xs, model.encoder_after_norm_weight, model.encoder_after_norm_bias, 1e-5f);
+        
         int64_t mel_len1 = prompt_feat->ne[1]; 
         int64_t mel_len2 = x->ne[1] - prompt_feat->ne[1];
 
@@ -16817,238 +16878,7 @@ struct llm_build_flow : public llm_graph_context {
         
     }
 
-    ggml_tensor * build_layer_norm(ggml_context * ctx, ggml_tensor * x, ggml_tensor * weight, ggml_tensor * bias, float eps) {
-        x = ggml_norm(ctx, x, eps);
-        x = ggml_mul(ctx, x, weight);
-        if (bias) {
-            x = ggml_add(ctx, x, bias);
-        }
-        return x;
-    }
     
-    ggml_tensor * make_pad_mask(ggml_context * ctx, ggml_tensor * lengths,   int max_len = 0)
-    {
-        const int B = lengths->ne[0];
-        /* 1. 取 max_len */
-        if (max_len <= 0) {
-            int32_t * p = (int32_t *)ggml_get_data(lengths);
-            max_len = *std::max_element(p, p + B);
-            max_len = max_len > 0 ? max_len : 1;
-        }
-
-        /* 2. 构造 [0..max_len-1] -> [max_len] */
-        ggml_tensor * ar = ggml_new_tensor_1d(ctx, GGML_TYPE_F32, max_len);
-        float * dst = (float *)ggml_get_data(ar);
-        for (int i = 0; i < max_len; ++i) dst[i] = float(i);
-
-        /* 3. 扩成 [B, max_len] */
-        ar = ggml_repeat(ctx, ar,
-                        ggml_new_tensor_2d(ctx, GGML_TYPE_F32, max_len, B));
-
-        /* 4. lengths -> [B, max_len] */
-        ggml_tensor * len_exp = ggml_repeat(ctx,
-                                            ggml_reshape_2d(ctx, lengths, 1, B),
-                                            ggml_new_tensor_2d(ctx, lengths->type, 1, B));
-        len_exp = ggml_repeat(ctx, len_exp,
-                            ggml_new_tensor_2d(ctx, GGML_TYPE_F32, max_len, B));
-
-        /* 5. 算术实现 ar >= len_exp ：
-            diff = len_exp - ar - 1e-6f
-            step = (diff > 0) ? 1 : 0   ->  ggml_step(diff)
-            mask = 1 - step             ->  ar >= len_exp 时 1
-        */
-        ggml_tensor * diff = ggml_sub(ctx, len_exp, ar);
-        diff = ggml_sub(ctx, diff, ggml_new_f32(ctx, 1e-6f));
-        ggml_tensor * step = ggml_step(ctx, diff);      // 1.0 when diff > 0
-        return ggml_sub(ctx, ggml_new_f32(ctx, 1.0f), step); // [B, max_len]
-    }
-
-    ggml_tensor * build_text_embed(ggml_tensor * token, ggml_tensor * token_len) {
-
-        ggml_tensor * token_clamp = ggml_clamp(ctx0, token, 0, nullptr);
-        int B = token_clamp->ne[2];
-        int T = token_clamp->ne[1];
-        ggml_tensor * x = ggml_get_rows(ctx0, model.input_embedding_weight, token_clamp);
-        ggml_tensor * mask = make_pad_mask(ctx0, token_len, T);
-        mask = ggml_sub(ctx0, ggml_new_f32(ctx0, 1.0f), mask);
-        mask = ggml_reshape_3d(ctx0, mask, T, 1, B); 
-        mask = ggml_repeat(ctx0, mask, x);
-        return ggml_mul(ctx0, x, mask);
-    }
-
-
-    ggml_tensor * build_espnet_rel_pos_emb(ggml_context * ctx,
-                                                int32_t T,
-                                                int32_t d_model,
-                                                int32_t max_len = 5000)
-    {
-        GGML_ASSERT(T <= max_len);
-        const int pe_len = 2 * T - 1;
-
-        /* 1. 构造 position = arange(0, T, dtype=float32).unsqueeze(1) */
-        std::vector<float> position(T);
-        for (int i = 0; i < T; ++i) position[i] = float(i);
-
-        /* 2. 构造 div_term = exp(-log(10000)/d_model * [0,2,4,...]) */
-        std::vector<float> div_term(d_model / 2);
-        for (int j = 0; j < d_model / 2; ++j)
-            div_term[j] = std::exp(-std::log(10000.0f) / d_model * (2 * j));
-
-        /* 3. 生成 pe_positive & pe_negative [T, d_model] */
-        std::vector<float> pe_pos(T * d_model, 0.0f);
-        std::vector<float> pe_neg(T * d_model, 0.0f);
-        for (int i = 0; i < T; ++i) {
-            float pos = position[i];
-            for (int j = 0; j < d_model / 2; ++j) {
-                float angle = pos * div_term[j];
-                /* positive */
-                pe_pos[i * d_model + 2 * j]     = std::sin(angle);
-                pe_pos[i * d_model + 2 * j + 1] = std::cos(angle);
-                /* negative */
-                pe_neg[i * d_model + 2 * j]     = std::sin(-angle);
-                pe_neg[i * d_model + 2 * j + 1] = std::cos(-angle);
-            }
-        }
-
-        /* 4. pe_positive = torch.flip(pe_positive, [0]).unsqueeze(0) */
-        std::vector<float> pe_flip(T * d_model);
-        for (int i = 0; i < T; ++i)
-            std::memcpy(pe_flip.data() + i * d_model,
-                        pe_pos.data() + (T - 1 - i) * d_model,
-                        d_model * sizeof(float));
-
-        /* 5. pe_negative = pe_negative[1:].unsqueeze(0) */
-        const int neg_len = T - 1;
-        std::vector<float> pe_cat(1 * (T + neg_len) * d_model);
-        /* cat [pe_flip, pe_neg[1:]] */
-        std::memcpy(pe_cat.data(), pe_flip.data(), T * d_model * sizeof(float));
-        std::memcpy(pe_cat.data() + T * d_model,
-                    pe_neg.data() + d_model,
-                    neg_len * d_model * sizeof(float));
-
-        /* 6. 写入 ggml 常量张量 [1, 2*T-1, d_model] */
-        ggml_tensor * pe = ggml_new_tensor_3d(ctx, GGML_TYPE_F32, d_model, pe_len, 1);
-        std::memcpy(pe->data, pe_cat.data(), pe_cat.size() * sizeof(float));
-        return pe;
-    }
-
-    ggml_tensor * espnet_rel_pos_encoding(
-        ggml_context * ctx,
-        ggml_tensor * pe,          // 预生成常量 [1, 2*max_len-1, d_model]
-        int32_t       offset,      // 起始偏移（int 模式）
-        int32_t       size,        // 所需长度 T
-        int           d_model)
-    {
-        const int max_len = (pe->ne[1] + 1) / 2;
-        int start = max_len - size - offset + 1;
-        int end   = max_len + size + offset;        // 与 PyTorch 切片一致
-        start = std::max(0, start);
-        end   = std::min(int(pe->ne[1]), end);
-
-        /* 切片：ggml_view_3d */
-        return ggml_view_3d(ctx, pe,
-                            d_model,                 // ne0
-                            end - start,             // ne1
-                            1,                       // ne2
-                            pe->nb[0],               // nb0
-                            pe->nb[1],               // nb1
-                            start * pe->nb[1]);      // offset
-    }
-
-    std::tuple<ggml_tensor *, ggml_tensor *>
-    espnet_rel_pos_forward(
-            ggml_context * ctx,
-            ggml_tensor * x,           // [B,T,d_model]
-            int32_t       offset,      // int 偏移
-            const llama_model & model)
-    {
-        const int B     = x->ne[2];
-        const int T     = x->ne[1];
-        const int d_model = x->ne[0];
-        const float xscale = std::sqrt(float(d_model));
-
-        ggml_tensor * pe = build_espnet_rel_pos_em(ctx, 5000, 512);
-
-        /* 3.1 切片得到 pos_emb [1, 2*T-1, d_model] */
-        ggml_tensor * pos_emb = espnet_rel_pos_encoding(ctx,
-                                                        pe,
-                                                        offset, T, d_model);
-
-        /* 3.2 x = x * xscale */
-        x = ggml_mul(ctx, x, xscale);
-
-        /* 3.3 dropout：推理跳过 */
-        return {x, pos_emb};
-    }
-
-    std::tuple<ggml_tensor *, ggml_tensor *, ggml_tensor *>
-    build_linear_no_subsample(ggml_context * ctx,
-                            ggml_tensor * x,        // [B,T,idim]
-                            ggml_tensor * x_mask,   // [B,1,T]
-                            int32_t     offset,
-                            string     mode = "embed")
-    {
-        const int B  = x->ne[2];
-        const int T  = x->ne[1];
-        const int idim = x->ne[0];
-        const int odim = 512;
-
-        /* 1. Linear(idim, odim) */
-        if (mode == "embed") {
-            x = ggml_mul_mat(ctx, model.encoder_embed_out_0_weight, x);   // [B,T,odim]
-            x = ggml_add(ctx, x, model.encoder_embed_out_0_bias);
-            x = build_layer_norm(ctx, x, model.encoder_embed_out_1_weight, model.encoder_embed_out_1_bias, 1e-5f);
-        } else {
-            x = ggml_mul_mat(ctx, model.encoder_up_embed_out_0_weight, x);   // [B,T,odim]
-            x = ggml_add(ctx, x, model.encoder_up_embed_out_0_bias);
-            x = build_layer_norm(ctx, x, model.encoder_up_embed_out_1_weight, model.encoder_up_embed_out_1_bias, 1e-5f);
-        }
-
-        /* 4. 相对位置编码：返回预生成常量 + 同一 mask */
-        ggml_tensor * pos_emb = espnet_rel_pos_forward(ctx, x, 0); // [1,n_head,T,T]
-
-        /* 5. mask 未改变，直接返回 */
-        return {x, pos_emb, x_mask};
-    }
-
-    ggml_tensor * build_pre_lookahead_layer(
-        ggml_context * ctx,
-        ggml_tensor * inputs,
-        ggml_tensor * context)
-    {
-        const int B      = inputs->ne[2];
-        const int T      = inputs->ne[1];
-        const int C      = inputs->ne[0];
-        const int lookahead = hparams.pre_lookahead_len;   // 默认 1
-        const bool has_ctx = (context && context->ne[1] > 0);
-
-        /* 1. transpose -> [B, channels, T]  */
-        ggml_tensor * x = ggml_permute(ctx, inputs, 0, 2, 1, 3);  // [B, C, T]
-        ggml_tensor * ctx_t = ggml_permute(ctx, context, 0, 2, 1, 3);
-
-        /* 3. 右侧零填充到 T + lookahead */
-        int pad_right = has_ctx ? lookahead - context->ne[1] : lookahead;
-        x = ggml_pad(ctx, x, 0, pad_right, 0, 0);           // [B, C, T + lookahead]
-
-        /* 4. conv1 (causal, kernel=lookahead+1, stride=1, pad=0) */
-        x = ggml_conv_1d(ctx, model.encoder_pre_lookahead_layer_conv1_weight, x, 1, 0, 1);
-        x = ggml_add(ctx, x, model.encoder_pre_lookahead_layer_conv1_bias);
-
-        /* 5. LeakyReLU (negative_slope=0.01) */
-        x = ggml_leaky_relu(ctx, x, 0.01f);
-
-        /* 6. conv2 (causal, kernel=3, pad=0) -> 左侧再补 2 个 0 */
-        x = ggml_pad(ctx, x, 2, 0, 0, 0);                 // 左侧补 2
-        x = ggml_conv_1d(ctx, model.encoder_pre_lookahead_layer_conv2_weight, x, 1, 0, 1);
-        x = ggml_add(ctx, x, model.encoder_pre_lookahead_layer_conv2_bias);
-
-        /* 7. transpose back -> [B, T, C] */
-        x = ggml_permute(ctx, x, 0, 2, 1, 3);
-
-        /* 8. residual：outputs + inputs */
-        return ggml_add(ctx, x, inputs);
-    }
-
     ggml_tensor * espnet_rel_shift(ggml_context * ctx, ggml_tensor * x)
     {
         const int B      = x->ne[3];
@@ -17187,8 +17017,8 @@ struct llm_build_flow : public llm_graph_context {
 
         /* 3. Linear(w2) + bias */
         if(mode == "encoders") {
-            x = ggml_mul_mat(ctx, model.layer[layer_id].encoders_ffn_w1, xs);  // [B, L, hidden]
-            x = ggml_add(ctx, x, model.layer[layer_id].encoders_ffn_b1);
+            x = ggml_mul_mat(ctx, model.layer[layer_id].encoders_ffn_w2, xs);  // [B, L, hidden]
+            x = ggml_add(ctx, x, model.layer[layer_id].encoders_ffn_b2);
         } else {
             x = ggml_mul_mat(ctx, model.layer[layer_id].up_encoders_ffn_w2, xs);  // [B, L, hidden]
             x = ggml_add(ctx, x, model.layer[layer_id].up_encoders_ffn_b2);
