@@ -555,7 +555,42 @@ struct llm_graph_context {
     ggml_tensor * build_pad_mask(
              ggml_tensor * cur,
                      int   max_len = 0) const;
-            
+    
+
+    ggml_tensor * build_linear_no_subsampling(
+             ggml_tensor * cur,
+             ggml_tensor * linear_mw,
+             ggml_tensor * linear_mb,
+             ggml_tensor * norm_mw,
+             ggml_tensor * norm_mb) const;
+    
+    ggml_tensor * build_pe(
+             ggml_tensor * cur) const;
+
+    ggml_tensor * build_pos_encoding(
+         ggml_tensor * cur,
+         size_t offset, 
+         size_t size) const;
+    
+    ggml_tensor * build_espnet_pos_encode(
+         ggml_tensor * cur) const;
+    
+    ggml_tensor * build_pre_lookahead_layer(
+         ggml_tensor * cur,
+         ggml_tensor * conv1_mw,
+         ggml_tensor * conv1_mb,
+         ggml_tensor * conv2_mw,
+         ggml_tensor * conv_mb,
+         ggml_tensor * context) const;
+
+    ggml_tensor * build_Rel_pos_attn(
+         ggml_cgraph * gf,
+         ggml_tensor * cur,
+         ggml_tensor * mw,
+         ggml_tensor * mb) const;
+    
+    ggml_tensor * llm_graph_context::build_rel_shift(
+         ggml_tensor * cur) const;
 
     ggml_tensor * build_ffn(
              ggml_tensor * cur,

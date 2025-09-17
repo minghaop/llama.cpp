@@ -486,6 +486,18 @@ ggml_tensor * llm_graph_context::build_norm(
     return cur;
 }
 
+ggml_tensor * llm_graph_context::build_layer_norm(
+         ggml_tensor * cur,
+         ggml_tensor * mw,
+         ggml_tensor * mb,
+         float eps) const{
+        
+        cur = ggml_norm(ctx0, cur, eps);
+        cur = ggml_mul(ctx0, cur, mw);
+        cur = ggml_add(ctx0, cur, mb);
+
+}
+
 ggml_tensor * llm_graph_context::build_F_normalize(
          ggml_tensor * cur,
          ggml_tensor * mw,
@@ -558,6 +570,239 @@ ggml_tensor * llm_graph_context::build_pad_mask(
     cb(mask, "non_pad_mask", -1);
     return mask;
 }
+
+ggml_tensor * llm_graph_context::build_linear_no_subsampling(
+         ggml_tensor * cur,
+         ggml_tensor * linear_mw,
+         ggml_tensor * linear_mb,
+         ggml_tensor * norm_mw,
+         ggml_tensor * norm_mb,
+         ) const{
+        
+        const int B  = x->ne[2];
+        const int T  = x->ne[1];
+        const int idim = x->ne[0];
+        const int odim = 512;
+        cur = ggml_mul_mat(ctx0, linear_mw, cur);
+        cur = ggml_add(ctx0, cur, linear_mb);
+        cur = build_norm(cur, norm_mw, norm_mb, LLM_NORM, -1);
+        cb(cur, "embed_linear_no_sub_sample", -1);
+
+        return cur;
+
+}
+
+ggml_tensor * llm_graph_context::build_pe(
+         ggml_cgraph * gf,
+         ggml_tensor * cur) const{
+        int32_t max_len = 5000;
+        int32_t d_model = 512;
+        float inv_den = -std::log(10000.0f) / d_model;
+        ggml_tensor * pe_positive = ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, d_model, cur->ne[1]);
+        ggml_tensor * pe_negative = ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, d_model, cur->ne[1]);
+        ggml_tensor * position = ggml_reshape_2d(ctx0, ggml_cast(ctx0, ggml_arrange(ctx0, 0, cur->ne[1], 1), GGML_TYPE_F32));
+        ggml_tensor * arange = ggml_arange(ctx0, 0, d_model, 2);
+        arange = ggml_cast(ctx0, arange, GGML_TYPE_F32);
+        ggml_tensor * scale = ggml_new_f32(ctx0, inv_den);
+        ggml_tensor * exponent = ggml_mul(ctx0, arange, scale);
+        ggml_tensor * div_term = ggml_exp(ctx0, exponent);
+        ggml_tensor * angle = ggml_mul(ctx0, position, div_term);
+        ggml_tensor * sin_angle = ggml_sin(ctx0, angle);
+        ggml_tensor * cos_angle = ggml_cos(ctx0, angle);
+        const size_t col_stride = sizeof(float);
+        const size_t row_stride = d_model * sizeof(float);
+        ggml_tensor * pe_pos_even = ggml_view_2d(ctx0, pe_positive, d_model/2, max_len, row_stride, 0);
+        ggml_tensor * pe_neg_even = ggml_view_2d(ctx0, pe_negative, d_model / 2, max_len, row_stride, 0);
+        ggml_build_forward_expand(gf, ggml_cpy(ctx0, sin_angle, pe_pos_even));
+        ggml_build_forward_expand(gf, ggml_cpy(ctx0, sin_angle, pe_neg_even));
+        ggml_tensor * pe_pos_odd = ggml_view_2d(ctx0, pe_positive, d_model / 2, max_len, row_stride, col_stride);
+        ggml_tensor * pe_neg_odd = ggml_view_2d(ctx0, pe_negative, d_model / 2, max_len, row_stride, col_stride);
+        ggml_build_forward_expand(gf, ggml_cpy(ctx0, cos_angle, pe_pos_odd));
+        ggml_build_forward_expand(gf, ggml_cpy(ctx0, cos_angle, pe_neg_odd));
+        ggml_tensor * flipped = ggml_view_2d(ctx0, pe_positive, d_model, max_len, pe_positive->nb[0], -pe_positive->nb[1]);
+        flipped->data = (char *)pe_positive->data + (max_len + 1) * pe_positive->nb[1];
+        ggml_tensor * out = ggml_reshape_3d(ctx0, flipped, 1, max_len, d_model);
+        size_t row_offset = pe_negative->nb[1];
+        ggml_tensor * sliced = ggml_view_2d(ctx0, pe_negative, d_model, max_len -1, pe_negative->nb[0], row_offset);
+        pe_negative = ggml_reshape_3d(ctx0, sliced, 1, max_len - 1, d_model);
+        ggml_tensor * pe = ggml_concat(ctx0, pe_positive, pe_negative, 1);
+
+        cb(pe, "espnet_rel_pos_encode", -1);
+        return pe;
+}
+
+ggml_tensor * llm_graph_context::build_pos_encoding(
+         ggml_tensor * cur,
+         size_t offset, 
+         size_t size) const{
+        
+        int64_t start = cur->ne[1] / 2 - size - offset + 1;
+        int64_t end = cur->ne[1] / 2 + size + offset;
+        int64_t new_len = end - start;
+        size_t offset_bytes = start * sizeof(float);
+        ggml_tensor * pos_emb = ggml_view_2d(ctx0, cur, 5000, new_len, cur->nb[0], offset_bytes);
+        return pos_emb;
+}
+
+ggml_tensor * llm_graph_context::build_espnet_pos_encode(
+         ggml_tensor * cur) const{
+        const size_t d_model = 512;
+        float xscale = std::sqrt(static_cast<float>(d_model));
+        ggml_tensor * cur = ggml_scale(ctx0, cur, ggml_new_f32(ctx0, xscale));
+        cb(cur, "espnet_pos_encode", -1);
+        return cur;
+}
+
+ggml_tensor * llm_graph_context::build_pre_lookahead_layer(
+         ggml_tensor * cur,
+         ggml_tensor * conv1_mw,
+         ggml_tensor * conv1_mb,
+         ggml_tensor * conv2_mw,
+         ggml_tensor * conv_mb,
+         ggml_tensor * context) const{
+        
+        const int B = cur->ne[2];
+        const int T = cur->ne[1];
+        const int C = cut->ne[0];
+        const int lookahead = 3;
+        ggml_tensor * x = ggml_permute(ctx0, cur, 0, 2, 1, 3);  // [B, C, T]
+        ggml_tensor * ctx_t = ggml_permute(ctx0, context, 0, 2, 1, 3);
+        if(context->ne[0] == 0) {
+            x = ggml_pad(ctx0, x, 0, lookahead, 0, 0);
+        }
+        ggml_tensor * outputs = ggml_conv_1d(ctx0, conv1_mw, x, 1, 0, 1);
+        outputs = ggml_add(ctx0, outputs, conv1_mb);
+        outputs = ggml_leaky_relu(ctx0, outputs, 0.0f);
+        
+        outputs = ggml_pad(ctx0, outputs, 2, 0, 0, 0);
+        outputs = ggml_conv_1d(ctx0, conv2_mw, outputs);
+        outputs = ggml_add(ctx0, outputs, conv2_mb);
+        outputs = ggml_permute(ctx0, outputs, 0, 2, 1, 3);
+        outputs = ggml_add(ctx0, outputs, cur);
+        cb(outputs, "pre_look_ahead", -1);
+
+        return outputs;
+        
+}
+
+ggml_tensor * llm_graph_context::build_rel_pos_attn(
+         ggml_cgraph * gf,
+         ggml_tensor * cur,
+         ggml_tensor * mw,
+         ggml_tensor * mb
+) const{
+    ggml_build_forward_expand(gf, cur);
+
+    const int32_t d_k = 64;
+    const int32_t heads = 8;
+    const int32_t n_batch = cur->ne[2];
+    ggml_tensor * t = ggml_mul_mat(ctx0, mw, cur);
+    t = ggml_add(ctx0, t, mb);
+    t = ggml_reshape_4d(ctx0, t, d_k, heads, cur->ne[1], n_batch);
+    t = ggml_cont(ctx0, ggml_permute(ctx0, t, 0, 2, 1, 3));
+
+    return t;
+}
+
+ggml_tensor * llm_graph_context::build_rel_shift(
+         ggml_tensor * cur) const{
+        
+        const int B      = cur->ne[3];
+        const int n_head = cur->ne[2];
+        const int T      = cur->ne[1];
+        const int L      = cur->ne[0];
+
+        ggml_tensor * zero = ggml_new_tensor_4d(ctx0, cur->type, 1, T, n_head, B);
+        zero = ggml_set_zero(zero);
+        ggml_tensor * x_pad = ggml_concat(ctx0, zero, cur, 0);   
+
+        x_pad = ggml_reshape_4d(ctx0, x_pad, T, L+1, n_head, B);
+        x_pad = ggml_cont(ctx0, ggml_permute(ctx0, x_pad, 0, 3, 1, 2)); 
+
+        x_pad = ggml_view_3d(ctx0, x_pad, T, L, n_head*B, x_pad->nb[0], x_pad->nb[1], x_pad->nb[2]);
+
+        return ggml_view_4d(ctx0, x_pad, T, T, n_head, B, x_pad->nb[0], x_pad->nb[1], x_pad->nb[2], 0);
+        
+}
+
+ggml_tensor * llm_graph_context::build_attn_scores(
+         ggml_tensor * cur,
+         ggml_tensor * scores,
+         ggml_tensor * mask,
+         ggml_tensor * mw,
+         ggml_tensor * mb) const{
+            
+        const int B    = cur->ne[3];
+        const int n_head = cur->ne[1];
+        const int T    = cur->ne[2];
+        const int d_k  = cur->ne[0];
+        const int d    = n_head * d_k;
+
+        
+        if (mask && mask->ne[2] > 0) {
+            mask = ggml_unsqueeze(ctx0, mask, 1);               
+            mask = ggml_repeat(ctx0, mask, scores);             
+            mask = ggml_view_4d(ctx0, mask, T, T, mask->ne[2], mask->ne[3],
+                            mask->nb[0], mask->nb[1], mask->nb[2], 0);
+            scores = ggml_add(ctx0, scores, ggml_mul(ctx0, mask, ggml_new_f32(ctx0, -1e9f)));
+        }
+        ggml_tensor * attn = ggml_soft_max(ctx0, scores);
+        attn = ggml_mul(ctx0, attn, ggml_sub(ctx0, ggml_new_f32(ctx0, 1.0f), mask));
+
+        ggml_tensor * out = ggml_mul_mat(ctx0, ggml_permute(ctx0, cur, 0, 1, 3, 2), attn);
+        out = ggml_cont(ctx0, ggml_permute(ctx0, out, 0, 2, 1, 3));
+        out = ggml_reshape_3d(ctx0, out, d, T, B);
+        out = ggml_mul_mat(ctx0, mw, out);
+        out = ggml_add(ctx, out, mb);
+        return out;
+}
+
+
+ggml_tensor * llm_graph_context::build_pos_ffn(
+             ggml_tensor * cur,
+             ggml_tensor * mw_1,
+             ggml_tensor * mb_1,
+             ggml_tensor * mw_2,
+             ggml_tensor * mb_2) const{
+
+            cur = ggml_mul_mat(ctx0, mw_1, cur);
+            cur = ggml_add(ctx0, cur, mb_1);
+            cur = ggml_silu(ctx0, cur);
+            cur = ggml_mul_mat(ctx0, mw_2, cur);
+            cur = ggml_add(ctx0, cur, mb_2);
+
+            return cur;
+}
+
+ggml_tensor * llm_graph_context::build_upsample_1d(
+         ggml_tensor * cur,
+         ggml_tensor * mw,
+         ggml_tensor * mb) const{
+        
+        const int T = cur->ne[0];
+        const int C = cur->ne[1];
+        const int B = cur->ne[2];
+        const int stride = 2;
+        const int kernel = 5;
+
+        ggml_tensor * y = ggml_new_tensor_3d(ctx0, cur->type, T * 2, C, B);
+        for (int b = 0; b < B; ++b) {
+            for (int c = 0; c < C; ++c) {
+                for (int t = 0; t < T; ++t) {
+                    float v = *(float *) ((char *) cur->data + b * cur->nb[2] + c * cur->nb[1] + t * cur->nb[0]);
+                    for (int s = 0; s < 2; ++s)
+                        *(float *) ((char *) y->data + b * y->nb[2] + c * y->nb[1] + (t * 2 + s) * y->nb[0]) = v;
+                }
+            }
+        }
+        y = ggml_pad(ctx0, y, 4, 0, 0, 0);
+        y = ggml_conv_1d(ctx0, mw, y, 1, 0, 1);
+        y = ggml_add(ctx0, y, mb);
+        
+        return y;
+}
+
+
 
 ggml_tensor * llm_graph_context::build_ffn(
          ggml_tensor * cur,
