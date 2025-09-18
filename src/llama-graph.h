@@ -540,6 +540,12 @@ struct llm_graph_context {
            llm_norm_type   type,
                      int   il) const;
     
+    ggml_tensor * build_layer_norm(
+         ggml_tensor * cur,
+         ggml_tensor * mw,
+         ggml_tensor * mb,
+         float eps) const;
+    
     ggml_tensor * build_F_normalize(
              ggml_tensor * cur,
              ggml_tensor * mw,
@@ -583,14 +589,119 @@ struct llm_graph_context {
          ggml_tensor * conv_mb,
          ggml_tensor * context) const;
 
-    ggml_tensor * build_Rel_pos_attn(
+    ggml_tensor * build_rel_pos_attn(
          ggml_cgraph * gf,
          ggml_tensor * cur,
          ggml_tensor * mw,
          ggml_tensor * mb) const;
     
-    ggml_tensor * llm_graph_context::build_rel_shift(
+    ggml_tensor * build_rel_shift(
          ggml_tensor * cur) const;
+    
+    ggml_tensor * build_attn_scores(
+         ggml_tensor * cur,
+         ggml_tensor * scores,
+         ggml_tensor * mask,
+         ggml_tensor * mw,
+         ggml_tensor * mb) const;
+    
+    ggml_tensor * build_pos_ffn(
+             ggml_tensor * cur,
+             ggml_tensor * mw_1,
+             ggml_tensor * mb_1,
+             ggml_tensor * mw_2,
+             ggml_tensor * mb_2) const;
+    
+    ggml_tensor * build_upsample_1d(
+         ggml_tensor * cur,
+         ggml_tensor * mw,
+         ggml_tensor * mb) const;
+    
+    ggml_tensor * build_rand_noise(
+         ggml_tensor * cur,
+         float tempture) const;
+    
+    ggml_tensor * build_causal_cond_cfm(
+         ggml_tensor * cur,
+         int64_t n_timesteps) const;
+    
+    ggml_tensor * build_sinusoidal_pos_emb(
+         ggml_tensor * cur,
+         int dim = 320,
+         int scale = 1000.0f) const;
+    
+    ggml_tensor * build_timestep_embedding(
+         ggml_tensor * cur,
+         ggml_tensor * mw_1,
+         ggml_tensor * mb_1,
+         ggml_tensor * mw_2,
+         ggml_tensor * mb_2) const;
+    
+    ggml_tensor * prepare_attention_mask(
+         ggml_tensor * mask,
+         int target_len,
+         int batch_size,
+         int n_heads,
+         int out_dim) const;
+    
+    ggml_tensor * ggml_spda(
+         ggml_tensor * q, 
+         ggml_tensor * k, 
+         ggml_tensor * v, 
+         ggml_tensor * mask, 
+         float dropout_p, 
+         bool is_causal, 
+         float scale, 
+         bool enable_gqa) const;
+    
+    ggml_tensor * build_basic_attn(
+         ggml_tensor * x, 
+         ggml_tensor * attn_mask, 
+         int layer_id, 
+         string mode="down_block",
+         const llama_model & model) const;
+    
+    ggml_tensor * causal_conv1d_forward(
+        ggml_tensor * x,
+        string mode,
+        const llama_model & model) const;
+    
+    ggml_tensor * causal_block1d_forward(
+        ggml_tensor * x,
+        ggml_tensor * mask,
+        string mode,
+        int blk_id,
+        const llama_model & model) const;
+    
+    ggml_tensor * causal_resnet_block1d_forward(
+        ggml_tensor * x,
+        ggml_tensor * mask,
+        ggml_tensor * t_emb,
+        int layer_id,
+        string mode,
+        const llama_model & model) const;
+    
+    ggml_tensor * mask_to_bias(
+        ggml_tensor * mask,
+        ggml_type   dtype) const;
+    
+    ggml_tensor * build_causal_cond_decoder(
+         ggml_tensor * x,
+         ggml_tensor * mask,
+         ggml_tensor * mu,
+         ggml_tensor * t,
+         ggml_tensor * spks,
+         ggml_tensor * cond,
+         const llama_model & model) const;
+    
+    ggml_tensor * build_solver_euler(
+         ggml_tensor * z,
+         ggml_tensor * t_span,
+         ggml_tensor * mu,
+         ggml_tensor * mask,
+         ggml_tensor * spks,
+         ggml_tensor * cond,
+         const llama_model & model) const;
 
     ggml_tensor * build_ffn(
              ggml_tensor * cur,
