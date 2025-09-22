@@ -34,6 +34,12 @@ struct llama_ubatch {
     llama_seq_id *  seq_id_unq; // [n_seqs_unq]       | s   | seq_id
     int32_t      *  seq_idx;    // [LLAMA_MAX_SEQ]    | -   | seq_idx
     int8_t       *  output;     // [n_tokens]         | i   | -
+
+    //CosyVoiceFlow
+    float        *  flow_token_data;
+    llama_token  *  token_len;
+    llama_token  *  prompt_token_len;
+    llama_token  *  prompt_feat_len;
 };
 
 // a helper for sanitizing, fulfilling and splitting a batch
@@ -145,6 +151,7 @@ private:
         std::vector<llama_seq_id>   seq_id_unq;
         std::vector<int32_t>        seq_idx;
         std::vector<int8_t>         output;
+        std::vector<float>          flow_token_data;
     };
 
     // current splitting state:

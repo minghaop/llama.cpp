@@ -99,7 +99,7 @@ public:
     llm_graph_input_token()            = default;
     virtual ~llm_graph_input_token()   = default;
     
-    void set_input(const llm_ubatch * ubatch) override;
+    void set_input(const llama_ubatch * ubatch) override;
     
     ggml_tensor * input_token = nullptr; //I32 [token_len]
 };
@@ -109,7 +109,7 @@ public:
     llm_graph_input_prompt_token()            = default;
     virtual ~llm_graph_input_prompt_token()   = default;
     
-    void set_input(const llm_ubatch * ubatch) override;
+    void set_input(const llama_ubatch * ubatch) override;
     
     ggml_tensor * input_prompt_token = nullptr; //I32 [token_len]
 };
@@ -119,7 +119,7 @@ public:
     llm_graph_input_prompt_feat()            = default;
     virtual ~llm_graph_input_prompt_feat()   = default;
     
-    void set_input(const llm_ubatch * ubatch) override;
+    void set_input(const llama_ubatch * ubatch) override;
     
     ggml_tensor * input_prompt_feat = nullptr; //F32 [token_len, seq_len]
 };
@@ -551,16 +551,16 @@ struct llm_graph_context {
              ggml_tensor * mw,
              ggml_tensor * mb,
              float         eps,
-                     int   il) const;
+             int   il) const;
     
     ggml_tensor * build_flow_embedding(
              ggml_tensor * cur,
              ggml_tensor * embd_w,
-                     int   il) const;
+             int   il) const;
     
     ggml_tensor * build_pad_mask(
              ggml_tensor * cur,
-                     int   max_len = 0) const;
+             int max_len = 0) const;
     
 
     ggml_tensor * build_linear_no_subsampling(
@@ -571,6 +571,7 @@ struct llm_graph_context {
              ggml_tensor * norm_mb) const;
     
     ggml_tensor * build_pe(
+             ggml_cgraph * gf,
              ggml_tensor * cur) const;
 
     ggml_tensor * build_pos_encoding(
@@ -586,7 +587,7 @@ struct llm_graph_context {
          ggml_tensor * conv1_mw,
          ggml_tensor * conv1_mb,
          ggml_tensor * conv2_mw,
-         ggml_tensor * conv_mb,
+         ggml_tensor * conv2_mb,
          ggml_tensor * context) const;
 
     ggml_tensor * build_rel_pos_attn(
@@ -622,7 +623,6 @@ struct llm_graph_context {
          float tempture) const;
     
     ggml_tensor * build_causal_cond_cfm(
-         ggml_tensor * cur,
          int64_t n_timesteps) const;
     
     ggml_tensor * build_sinusoidal_pos_emb(
@@ -657,28 +657,31 @@ struct llm_graph_context {
     ggml_tensor * build_basic_attn(
          ggml_tensor * x, 
          ggml_tensor * attn_mask, 
-         int layer_id, 
-         string mode="down_block",
+         int64_t layer_id, 
+         std::string mode,
          const llama_model & model) const;
     
     ggml_tensor * causal_conv1d_forward(
         ggml_tensor * x,
-        string mode,
+        std::string mode,
+        int64_t layer_id,
+        int64_t blk_id,
         const llama_model & model) const;
     
     ggml_tensor * causal_block1d_forward(
         ggml_tensor * x,
         ggml_tensor * mask,
-        string mode,
-        int blk_id,
+        std::string mode,
+        int64_t layer_id,
+        int64_t blk_id,
         const llama_model & model) const;
     
     ggml_tensor * causal_resnet_block1d_forward(
         ggml_tensor * x,
         ggml_tensor * mask,
         ggml_tensor * t_emb,
-        int layer_id,
-        string mode,
+        int64_t layer_id,
+        std::string mode,
         const llama_model & model) const;
     
     ggml_tensor * mask_to_bias(
