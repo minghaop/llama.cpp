@@ -851,7 +851,7 @@ struct llama_batch llama_batch_get_one(
     };
 }
 
-struct llama_batch llama_batch_init(int32_t n_tokens_alloc, int32_t embd, int32_t n_seq_max) {
+struct llama_batch llama_batch_init(int32_t n_tokens_alloc, int32_t embd, int32_t n_seq_max, bool is_flow) {
     llama_batch batch = {
         /*n_tokens =*/ 0,
         /*tokens   =*/ nullptr,
@@ -860,12 +860,20 @@ struct llama_batch llama_batch_init(int32_t n_tokens_alloc, int32_t embd, int32_
         /*n_seq_id =*/ nullptr,
         /*seq_id   =*/ nullptr,
         /*logits   =*/ nullptr,
+        /*flow_token_data =*/ nullptr,
+        /*token_len =*/ nullptr,
+        /*prompt_token_len = */ nullptr,
+        /*prompt_feat_len =*/ nullptr,
     };
 
     if (embd) {
         batch.embd = (float *) malloc(sizeof(float) * n_tokens_alloc * embd);
     }else {
         batch.token = (llama_token *) malloc(sizeof(llama_token) * n_tokens_alloc);
+    }
+
+    if (is_flow) {
+        batch.flow_token_data = (float *)malloc(sizeof(float) * n_tokens_alloc * embd);
     }
     
     batch.pos      = (llama_pos *)     malloc(sizeof(llama_pos)      * n_tokens_alloc);
