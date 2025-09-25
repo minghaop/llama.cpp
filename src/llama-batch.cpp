@@ -741,6 +741,10 @@ llama_ubatch llama_batch_allocr::ubatch_add(const std::vector<int32_t> & idxs, u
         /*.seq_id_unq   =*/ ubatch.seq_id_unq.data(),
         /*.seq_idx      =*/ ubatch.seq_idx.data(),
         /*.output       =*/ ubatch.output.data(),
+        /*flow_token_data =*/ batch.flow_token_data ? ubatch.flow_token_data.data() : nullptr,
+        /*token_len =*/ 0,
+        /*prompt_token_len =*/ 0,
+        /*prompt_feat_len =*/ 0,
     };
     // LLAMA_LOG_INFO("********************************************************************** ubatch_add check6\n");
     if (debug > 0) {
@@ -848,6 +852,10 @@ struct llama_batch llama_batch_get_one(
         /*n_seq_id =*/ nullptr,
         /*seq_id   =*/ nullptr,
         /*logits   =*/ nullptr,
+        /*flow_token_data =*/ nullptr,
+        /*token_len =*/ 0,
+        /*prompt_token_len =*/ 0,
+        /*prompt_feat_len =*/ 0,
     };
 }
 
@@ -861,9 +869,9 @@ struct llama_batch llama_batch_init(int32_t n_tokens_alloc, int32_t embd, int32_
         /*seq_id   =*/ nullptr,
         /*logits   =*/ nullptr,
         /*flow_token_data =*/ nullptr,
-        /*token_len =*/ nullptr,
-        /*prompt_token_len = */ nullptr,
-        /*prompt_feat_len =*/ nullptr,
+        /*token_len =*/ 0,
+        /*prompt_token_len =*/ 0,
+        /*prompt_feat_len =*/ 0,
     };
 
     if (embd) {
@@ -873,7 +881,10 @@ struct llama_batch llama_batch_init(int32_t n_tokens_alloc, int32_t embd, int32_
     }
 
     if (is_flow) {
-        batch.flow_token_data = (float *)malloc(sizeof(float) * n_tokens_alloc * embd);
+        batch.flow_token_data = (llama_token *)malloc(sizeof(llama_token) * n_tokens_alloc * embd);
+        // batch.token_len = (int32_t *)      malloc(sizeof(int32_t) * n_tokens_alloc);
+        // batch.prompt_token_len = (int32_t *) malloc(sizeof(int32_t) * n_tokens_alloc);
+        // batch.prompt_feat_len = (int32_t *) malloc(sizeof(int32_t) * n_tokens_alloc * embd);
     }
     
     batch.pos      = (llama_pos *)     malloc(sizeof(llama_pos)      * n_tokens_alloc);
