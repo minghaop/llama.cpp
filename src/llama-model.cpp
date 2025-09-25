@@ -5136,7 +5136,7 @@ bool llama_model::load_tensors(llama_model_loader & ml) {
                         auto & layer = layers[i];
                         
                         layer.encoders_wq = create_tensor(tn(LLM_TENSOR_ENCODERS_ATTN_Q_WEIGHT, "weight", i - 13), {512, 512}, 0);
-                        larer.encoders_wk = create_tensor(tn(LLM_TENSOR_ENCODERS_ATTN_K_WEIGHT, "weight", i - 13), {512, 512}, 0);
+                        layer.encoders_wk = create_tensor(tn(LLM_TENSOR_ENCODERS_ATTN_K_WEIGHT, "weight", i - 13), {512, 512}, 0);
                         layer.encoders_wv = create_tensor(tn(LLM_TENSOR_ENCODERS_ATTN_V_WEIGHT, "weight", i - 13), {512, 512}, 0);
                         layer.encoders_wo = create_tensor(tn(LLM_TENSOR_ENCODERS_ATTN_OUT_WEIGHT, "weight", i - 13), {512, 512}, 0);
                         layer.encoders_wpos = create_tensor(tn(LLM_TENSOR_ENCODERS_ATTN_POS_WEIGHT, "weight", i - 13), {512, 512}, 0);
@@ -5167,7 +5167,7 @@ bool llama_model::load_tensors(llama_model_loader & ml) {
                         auto & layer = layers[i];
 
                         layer.up_encoders_wq = create_tensor(tn(LLM_TENSOR_UP_ENCODERS_ATTN_Q_WEIGHT, "weight", i - 132), {512, 512}, 0);
-                        larer.up_encoders_wk = create_tensor(tn(LLM_TENSOR_UP_ENCODERS_ATTN_K_WEIGHT, "weight", i - 132), {512, 512}, 0);
+                        layer.up_encoders_wk = create_tensor(tn(LLM_TENSOR_UP_ENCODERS_ATTN_K_WEIGHT, "weight", i - 132), {512, 512}, 0);
                         layer.up_encoders_wv = create_tensor(tn(LLM_TENSOR_UP_ENCODERS_ATTN_V_WEIGHT, "weight", i - 132), {512, 512}, 0);
                         layer.up_encoders_wo = create_tensor(tn(LLM_TENSOR_UP_ENCODERS_ATTN_OUT_WEIGHT, "weight", i - 132), {512, 512}, 0);
                         layer.up_encoders_wpos = create_tensor(tn(LLM_TENSOR_UP_ENCODERS_ATTN_POS_WEIGHT, "weight", i - 132), {512, 512}, 0);
@@ -5222,11 +5222,10 @@ bool llama_model::load_tensors(llama_model_loader & ml) {
                         layer.down_block1_ffn_w0 = create_tensor(tn(LLM_TENSOR_DOWN_BLOCKS_FF_0_WEIGHT, "weight", i - 226), {256, 1024}, 0);
                         layer.down_block1_ffn_w2 = create_tensor(tn(LLM_TENSOR_DOWN_BLOCKS_FF_2_WEIGHT, "weight", i - 226), {1024, 256}, 0);
                         layer.down_block1_norm1_b = create_tensor(tn(LLM_TENSOR_DOWN_BLOCKS_NORM1_BIAS, "bias", i - 226), {256}, 0);
-                        layer.down_block1_wo_b = create_tensor(tn(LLM_TENSOR_DOWN_BLOCKS_ATTN_TO_OUT_BIAS, "bias", i - 226), {256}, 0);
+                        layer.down_block1_bo = create_tensor(tn(LLM_TENSOR_DOWN_BLOCKS_ATTN_TO_OUT_BIAS, "bias", i - 226), {256}, 0);
                         layer.down_block1_norm3_b = create_tensor(tn(LLM_TENSOR_DOWN_BLOCKS_NORM3_BIAS, "bias", i - 226), {256}, 0);
-                        layer.down_block1_ffn_w0_b = create_tensor(tn(LLM_TENSOR_DOWN_BLOCKS_FF_0_BIAS, "bias", i - 226), {256}, 0);
-                        layer.down_block1_ffn_w2_b = create_tensor(tn(LLM_TENSOR_DOWN_BLOCKS_FF_2_BIAS, "bias", i - 226), {256}, 0);
-
+                        layer.down_block1_ffn_b0 = create_tensor(tn(LLM_TENSOR_DOWN_BLOCKS_FF_0_BIAS, "bias", i - 226), {256}, 0);
+                        layer.down_block1_ffn_b2 = create_tensor(tn(LLM_TENSOR_DOWN_BLOCKS_FF_2_BIAS, "bias", i - 226), {256}, 0);
 
                     }
 
@@ -5266,6 +5265,7 @@ bool llama_model::load_tensors(llama_model_loader & ml) {
                             sub_layer.mid_block1_ffn_b0 = create_tensor(tn(LLM_TENSOR_MID_BLOCKS1_FF_0_BIAS, "bias", i - 280, j), {1024}, 0);
                             sub_layer.mid_block1_ffn_b2 = create_tensor(tn(LLM_TENSOR_MID_BLOCKS1_FF_2_BIAS, "bias", i - 280, j), {256}, 0);
                     }
+                }
 
                     up_blk_mlp_w = create_tensor(tn(LLM_TENSOR_UP_BLOCKS_MLP_WEIGHT, "weight", 1047), {1024, 256}, 0);
                     up_blk1_conv_w = create_tensor(tn(LLM_TENSOR_UP_BLOCK1_WEIGHT, "weight", 1048), {3, 512, 256}, 0);
@@ -5292,10 +5292,10 @@ bool llama_model::load_tensors(llama_model_loader & ml) {
                         layer.up_block1_ffn_w0 = create_tensor(tn(LLM_TENSOR_UP_BLOCKS_FF_0_WEIGHT, "weight", i - 1059), {256, 1024}, 0);
                         layer.up_block1_ffn_w2 = create_tensor(tn(LLM_TENSOR_UP_BLOCKS_FF_2_WEIGHT, "weight", i - 1059), {1024, 256}, 0);
                         layer.up_block1_norm1_b = create_tensor(tn(LLM_TENSOR_UP_BLOCKS_NORM1_BIAS, "bias", i - 1059), {256}, 0);
-                        layer.up_block1_wo_b = create_tensor(tn(LLM_TENSOR_UP_BLOCKS_ATTN_TO_OUT_BIAS, "bias", i - 1059), {256}, 0);
+                        layer.up_block1_bo = create_tensor(tn(LLM_TENSOR_UP_BLOCKS_ATTN_TO_OUT_BIAS, "bias", i - 1059), {256}, 0);
                         layer.up_block1_norm3_b = create_tensor(tn(LLM_TENSOR_UP_BLOCKS_NORM3_BIAS, "bias", i - 1059), {256}, 0);
-                        layer.up_block1_ffn_w0_b = create_tensor(tn(LLM_TENSOR_UP_BLOCKS_FF_0_BIAS, "bias", i - 1059), {256}, 0);
-                        layer.up_block1_ffn_w2_b = create_tensor(tn(LLM_TENSOR_UP_BLOCKS_FF_2_BIAS, "bias", i - 1059), {256}, 0);
+                        layer.up_block1_ffn_b0 = create_tensor(tn(LLM_TENSOR_UP_BLOCKS_FF_0_BIAS, "bias", i - 1059), {256}, 0);
+                        layer.up_block1_ffn_b2 = create_tensor(tn(LLM_TENSOR_UP_BLOCKS_FF_2_BIAS, "bias", i - 1059), {256}, 0);
 
                         
                     }
@@ -16747,30 +16747,23 @@ struct llm_build_flow : public llm_graph_context {
     const llama_model & model;
     llm_build_flow(const llama_model & model, const llm_graph_params & params, ggml_cgraph * gf) : llm_graph_context(params), model(model) {
 
-        const auto & hparams = model.hparams;
-        const int B  = 1;
-        const int T  = params.n_tokens;               // 总长度（prompt+target）
-        const int Tp = params.n_prompt_tokens;        // prompt 长度
-        const int C  = hparams.n_embd;                // 512
-        const int F  = hparams.n_mel_channels;        // 80
-        const int SpkDim = hparams.n_spk_dim;
-
-        const int embd_len = params.ubatch.embd_len;
-        const int token_len = params.ubatch.token_len;
+        // const int embd_len = params.ubatch.embd_len;
+        // const int token_len = params.ubatch.token_len;
+        // const int prompt_feat_len = params.ubatch.prompt_feat_len;
 
         ggml_tensor * embedding = build_inp_embd(model.inp_embed_w);
         ggml_tensor * token = build_inp_token();
-        ggml_tensor * token_len = ggml_new_tensor_1d(ctx0, 26, 1);
+        ggml_tensor * token_len = ggml_new_tensor_1d(ctx0, GGML_TYPE_I32, 1);
         ggml_set_i32(token_len, params.ubatch.token_len);
         ggml_tensor * prompt_token = build_inp_prompt_token();
-        ggml_tensor * prompt_token_len = ggml_new_tensor_1d(ctx0, 26, 1);
+        ggml_tensor * prompt_token_len = ggml_new_tensor_1d(ctx0, GGML_TYPE_I32, 1);
         ggml_set_i32(prompt_token_len, params.ubatch.prompt_token_len);
         ggml_tensor * prompt_feat = build_inp_prompt_feat();
 
         embedding = build_F_normalize(embedding, NULL, NULL, 1e-12f, -1);
         cb(embedding, "inp_embed_norm", -1);
 
-        ggml_tensor * spk = ggml_mul_mat(ctx0, model.spk_embed_w, cur);
+        ggml_tensor * spk = ggml_mul_mat(ctx0, model.spk_embed_w, embedding);
         spk = ggml_add(ctx0, spk, model.spk_embed_b);
         cb(spk, "after_spk_embd", -1);
 
@@ -16780,27 +16773,26 @@ struct llm_build_flow : public llm_graph_context {
         token_len = ggml_add(ctx0, prompt_token_len, token_len);
         cb(token_len, "get_token_len", -1);
 
-        ggml_tensor * mask = build_pad_mask(ctx0, token_len);
+        ggml_tensor * mask = build_pad_mask(token_len);
         token = build_flow_embedding(token, model.inp_embed_w, -1);
 
         // encoder
-        ggml_tensor * context = ggml_new_tensor_3d(ctx0, 0, 0, 0, 0);
+        ggml_tensor * context = ggml_new_tensor_3d(ctx0, GGML_TYPE_F32, 0, 0, 0);
         const int B  = token->ne[2];
         const int T  = token->ne[1];
-        const int D  = token->ne[0];
-        ggml_tensor * masks = build_pad_mask(ctx0, token_len, T);
+        ggml_tensor * masks = build_pad_mask(token_len, T);
         masks = ggml_reshape_3d(ctx0, masks, B, 1, T);
         ggml_tensor * x = build_linear_no_subsampling(token, model.embed_out_0_w, model.embed_out_0_b, model.embed_out_1_w, model.embed_out_1_b);
-        ggml_tensor * t = ggml_new_tensor_2d(ctx0, 0, 5000, 1);
+        ggml_tensor * t = ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, 5000, 1);
         ggml_tensor * pe = build_pe(gf, t);
         pe = build_pe(gf, x);
         x = build_espnet_pos_encode(x);
         ggml_tensor * pos_emb = build_pos_encoding(pe, x->ne[1], 0);
         ggml_tensor * mask_pad = masks;
         ggml_tensor * chunk_mask = masks;
-        x = build_pre_lookahead_layer(x, mode.pre_look_conv1_w, model.pre_look_conv1_b, model.pre_look_conv2_w, model.pre_look_conv2_b, context);
+        x = build_pre_lookahead_layer(x, model.pre_look_conv1_w, model.pre_look_conv1_b, model.pre_look_conv2_w, model.pre_look_conv2_b, context);
         for(int i = 0; i < 6; i++) {
-            ggml_tensor * residual = ggml_view_3d(ctx0, x, x->ne[0], x->ne[1], x->nb[1], 0);
+            ggml_tensor * residual = ggml_dup(ctx0, x);
             build_layer_norm(x, model.layers[i + 13].encoders_normmha_w, model.layers[i + 13].encoders_normmha_b, 1e-12);
             ggml_tensor * query = build_rel_pos_attn(gf, x, model.layers[i + 13].encoders_wq, model.layers[i + 13].encoders_bq);
             cb(query, "encoder_attn_q", i);
@@ -16815,28 +16807,29 @@ struct llm_build_flow : public llm_graph_context {
             p = ggml_cont(ctx0, ggml_permute(ctx0, p, 0, 2, 1, 3));
             ggml_tensor * q_with_bias_u = ggml_cont(ctx0, ggml_permute(ctx0, ggml_add(ctx0, query, model.layers[i + 13].encoders_pos_bias_u), 0, 2, 1, 3));
             ggml_tensor * q_with_bias_v = ggml_cont(ctx0, ggml_permute(ctx0, ggml_add(ctx0, query, model.layers[i + 13].encoders_pos_bias_v), 0, 2, 1, 3));
-            ggml_tensor * matrix_ac = ggml_mul_mat(ctx0, q_with_bias_u, ggml_cont(ctx0, ggml_permute(ctx0, key 0, 1, 3, 2)));
+            ggml_tensor * matrix_ac = ggml_mul_mat(ctx0, q_with_bias_u, ggml_cont(ctx0, ggml_permute(ctx0, key, 0, 1, 3, 2)));
             ggml_tensor * matrix_bd = ggml_mul_mat(ctx0, q_with_bias_v, ggml_cont(ctx0, ggml_permute(ctx0, p, 0, 1, 3, 2)));
-            if (!ggml_can_mul_mat(matrix_ac, matrix_bd)) {
-                matrix_bd = build_rel_shift(matrix_bd);
-            }
+            // if (!ggml_can_mul_mat(matrix_ac, matrix_bd)) {
+            //     matrix_bd = build_rel_shift(matrix_bd);
+            // }
+            matrix_bd = build_rel_shift(matrix_bd);
             ggml_tensor * scores = ggml_scale(ctx0, ggml_add(ctx0, matrix_ac, matrix_bd), 1.0f / sqrtf(float(64.0f)));
-            ggml_tensor * x_att = build_attn_scores(ctx0, value, scores, mask, model.layers[i + 13].encoders_wo, model.layers[i + 13].encoders_bo);
+            ggml_tensor * x_att = build_attn_scores(value, scores, mask, model.layers[i + 13].encoders_wo, model.layers[i + 13].encoders_bo);
             x = ggml_add(ctx0, residual, x_att);
-            residual = ggml_view_3d(ctx0, x, x->ne[0], x->ne[1], x->nb[1], 0);
+            residual = ggml_dup(ctx0, x);
             x = build_layer_norm(x, model.layers[i + 13].encoders_normffn_w, model.layers[i + 13].encoders_normffn_b, 1e-12);
             x = build_pos_ffn(x, model.layers[i + 13].encoders_ffn_w1, model.layers[i + 13].encoders_ffn_b1, model.layers[i + 13].encoders_ffn_w2, model.layers[i + 13].encoders_ffn_b2);
             x = ggml_add(ctx0, residual, x);
         }
         x = ggml_permute(ctx0, x, 0, 2, 1, 3);
-        x = build_upsample_1d(x, model.up_layer_conv_w, model.up_layer_conv_b, 2);
+        x = build_upsample_1d(x, model.up_layer_conv_w, model.up_layer_conv_b);
         x = ggml_permute(ctx0, x, 0, 2, 1, 3);
         token_len = ggml_mul(ctx0, token_len, ggml_new_i32(ctx0, 2));
         masks = build_pad_mask(token_len, x->ne[1]);
         masks = ggml_reshape_3d(ctx0, masks, masks->ne[0], 1, masks->ne[1]);
-        x = build_linear_no_subsampling(x, model.up_embed_out_0_w, model.up_embd_out_0_b, model.up_embed_out_1_w, model.up_embed_out_1_b);
-        ggml_tensor * t = ggml_new_tensor_2d(ctx0, 0, 5000, 1);
-        ggml_tensor * pe = build_pe(gf, t);
+        x = build_linear_no_subsampling(x, model.up_embed_out_0_w, model.up_embed_out_0_b, model.up_embed_out_1_w, model.up_embed_out_1_b);
+        t = ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, 5000, 1);
+        pe = build_pe(gf, t);
         pe = build_pe(gf, x);
         x = build_espnet_pos_encode(x);
         pos_emb = build_pos_encoding(pe, x->ne[1], 0);
@@ -16844,7 +16837,7 @@ struct llm_build_flow : public llm_graph_context {
         chunk_mask = masks;
         //build up_encoders
         for(int i = 0; i < 4; i++) {
-            ggml_tensor * residual = ggml_view_3d(ctx0, x, x->ne[0], x->ne[1], x->nb[1], 0);
+            ggml_tensor * residual = ggml_dup(ctx0, x);
             x = build_layer_norm(x, model.layers[i + 13].up_encoders_normmha_w, model.layers[i + 132].up_encoders_normmha_b, 1e-12);
             ggml_tensor * query = build_rel_pos_attn(gf, x, model.layers[i + 132].up_encoders_wq, model.layers[i + 132].up_encoders_bq);
             cb(query, "up_encoders_attn_q", i);
@@ -16859,20 +16852,21 @@ struct llm_build_flow : public llm_graph_context {
             p = ggml_cont(ctx0, ggml_permute(ctx0, p, 0, 2, 1, 3));
             ggml_tensor * q_with_bias_u = ggml_cont(ctx0, ggml_permute(ctx0, ggml_add(ctx0, query, model.layers[i + 132].up_encoders_pos_bias_u), 0, 2, 1, 3));
             ggml_tensor * q_with_bias_v = ggml_cont(ctx0, ggml_permute(ctx0, ggml_add(ctx0, query, model.layers[i + 132].up_encoders_pos_bias_v), 0, 2, 1, 3));
-            ggml_tensor * matrix_ac = ggml_mul_mat(ctx0, q_with_bias_u, ggml_cont(ctx0, ggml_permute(ctx0, key 0, 1, 3, 2)));
+            ggml_tensor * matrix_ac = ggml_mul_mat(ctx0, q_with_bias_u, ggml_cont(ctx0, ggml_permute(ctx0, key, 0, 1, 3, 2)));
             ggml_tensor * matrix_bd = ggml_mul_mat(ctx0, q_with_bias_v, ggml_cont(ctx0, ggml_permute(ctx0, p, 0, 1, 3, 2)));
-            if (!ggml_can_mul_mat(matrix_ac, matrix_bd)) {
-                matrix_bd = build_rel_shift(matrix_bd);
-            }
+            // if (!ggml_can_mul_mat(matrix_ac, matrix_bd)) {
+                
+            // }
+            matrix_bd = build_rel_shift(matrix_bd);
             ggml_tensor * scores = ggml_scale(ctx0, ggml_add(ctx0, matrix_ac, matrix_bd), 1.0f / sqrtf(float(64.0f)));
-            ggml_tensor * x_att = build_attn_scores(ctx0, value, scores, mask, model.layers[i + 132].up_encoders_wo, model.layers[i + 132].up_encoders_bo);
+            ggml_tensor * x_att = build_attn_scores(value, scores, mask, model.layers[i + 132].up_encoders_wo, model.layers[i + 132].up_encoders_bo);
             x = ggml_add(ctx0, residual, x_att);
-            residual = ggml_view_3d(ctx0, x, x->ne[0], x->ne[1], x->nb[1], 0);
+            residual = ggml_dup(ctx0, x);
             x = build_layer_norm(x, model.layers[i + 132].up_encoders_normffn_w, model.layers[i + 132].up_encoders_normffn_b, 1e-12);
             x = build_pos_ffn(x, model.layers[i + 132].up_encoders_ffn_w1, model.layers[i + 132].up_encoders_ffn_b1, model.layers[i + 132].up_encoders_ffn_w2, model.layers[i + 132].up_encoders_ffn_b2);
             x = ggml_add(ctx0, residual, x);
         }
-        x = build_layer_norm(x, model.encoder_after_norm_weight, model.encoder_after_norm_bias, 1e-5f);
+        x = build_layer_norm(x, model.after_norm_w, model.after_norm_b, 1e-5f);
         x = ggml_mul_mat(ctx0, model.encoder_proj_w, x);
         x = ggml_mul(ctx0, x, model.encoder_proj_b);
         //build decoder
@@ -16880,10 +16874,10 @@ struct llm_build_flow : public llm_graph_context {
         int64_t mel_len2 = x->ne[1] - mel_len1;
         ggml_tensor * conds = ggml_new_tensor_3d(ctx0, x->type, prompt_feat->ne[0], mel_len1 + mel_len2, B);
         conds = ggml_set_zero(conds);
-        ggml_tensor * dest_view = ggml_view_3d(ctx0, conds, prompt_feat->ne[0], mel_len1, conds->nb[0], 0);
-        ggml_build_forward_expand(gf, ggml_cpy(ctx0, prompt_feat, dst_view));
+        ggml_tensor * dest_view = ggml_view_3d(ctx0, conds, prompt_feat->ne[0], mel_len1, conds->nb[0], conds->nb[1], conds->nb[2], 0);
+        ggml_build_forward_expand(gf, ggml_cpy(ctx0, prompt_feat, dest_view));
         conds = ggml_cont(ctx0, ggml_transpose(ctx0, conds));
-        ggml_tensor * mel_len = ggml_set_i32(ggml_new_tensor_1d(ctx0, GGML_TYPE_I32, 1, 0, mel_len1 + mel_len2));
+        ggml_tensor * mel_len = ggml_set_i32(ggml_new_tensor_1d(ctx0, GGML_TYPE_I32, mel_len1 + mel_len2), mel_len1 + mel_len2);
         mask = build_pad_mask(mel_len, 0);
         ggml_tensor * spks = embedding;
         ggml_tensor * cond = conds;
@@ -16895,13 +16889,11 @@ struct llm_build_flow : public llm_graph_context {
         ggml_tensor * feat = build_solver_euler(z, t_span, mu, mask, spks, cond, model);
         ggml_tensor * sliced = ggml_view_3d(ctx0, feat, feat->ne[0], feat->ne[1] - mel_len1, feat->ne[2], feat->nb[0],
                                             feat->nb[1], mel_len1 * feat->nb[1]);
-        res->t_out = sliced;
+        res->t_logits = sliced;
         ggml_build_forward_expand(gf, sliced);
         
     }
-
-
-}
+};
 
 llama_memory_i * llama_model::create_memory(const llama_memory_params & params, llama_cparams & cparams) const {
     llama_memory_i * res;

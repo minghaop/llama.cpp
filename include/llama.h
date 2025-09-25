@@ -231,7 +231,10 @@ extern "C" {
         int8_t       *  logits;   // TODO: rename this to "output"
         // float        *  inputs_embeds;
         // bool            use_inputs_embeds; // if true, use inputs_embeds instead of embd 
-        float        *  flow_token_data;
+        llama_token  *  flow_token_data;
+        int32_t        token_len;
+        int32_t        prompt_token_len;
+        int32_t        prompt_feat_len;
     } llama_batch;
 
     enum llama_model_kv_override_type {
