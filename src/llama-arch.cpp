@@ -1905,8 +1905,8 @@ static const std::map<llm_arch, std::map<llm_tensor, const char *>> LLM_TENSOR_N
             { LLM_TENSOR_DOWN_BLOCKS_NORM1_WEIGHT, "decoder.estimator.down_blocks.0.1.%d.norm1" },
             { LLM_TENSOR_DOWN_BLOCKS_NORM3_WEIGHT, "decoder.estimator.down_blocks.0.1.%d.norm3" },
             { LLM_TENSOR_DOWN_BLOCKS_ATTN_TO_OUT_BIAS, "decoder.estimator.down_blocks.0.1.%d.attn1.to_out.0"},
-            { LLM_TENSOR_DOWN_BLOCKS_FF_0_WEIGHT, "decoder.estimator.down_blocks.0.1.%d.ff.net.0.proj"},
-            { LLM_TENSOR_DOWN_BLOCKS_FF_0_BIAS, "decoder.estimator.down_blocks.0.1.%d.ff.net.2"},
+            { LLM_TENSOR_DOWN_BLOCKS_FF_0_BIAS, "decoder.estimator.down_blocks.0.1.%d.ff.net.0.proj"},
+            { LLM_TENSOR_DOWN_BLOCKS_FF_2_BIAS, "decoder.estimator.down_blocks.0.1.%d.ff.net.2"},
             { LLM_TENSOR_DOWN_BLOCKS_NORM1_BIAS, "decoder.estimator.down_blocks.0.1.%d.norm1"},
             { LLM_TENSOR_DOWN_BLOCKS_NORM3_BIAS, "decoder.estimator.down_blocks.0.1.%d.norm3"},
             
@@ -1971,13 +1971,15 @@ static const std::map<llm_arch, std::map<llm_tensor, const char *>> LLM_TENSOR_N
             { LLM_TENSOR_ENCODERS_ATTN_OUT_BIAS, "encoder.encoders.%d.self_attn.linear_out"},
             { LLM_TENSOR_ENCODERS_ATTN_Q_BIAS, "encoder.encoders.%d.self_attn.linear_q"},
             { LLM_TENSOR_ENCODERS_ATTN_V_BIAS, "encoder.encoders.%d.self_attn.linear_v"},
+            { LLM_TENSOR_ENCODERS_POS_BIAS_U, "encoder.encoders.%d.self_attn"},
+            { LLM_TENSOR_ENCODERS_POS_BIAS_V, "encoder.encoders.%d.self_attn"},
             
             { LLM_TENSOR_PRE_LOOKAHEAD_LAYER_CONV1_WEIGHT, "encoder.pre_lookahead_layer.conv1" },
             { LLM_TENSOR_PRE_LOOKAHEAD_LAYER_CONV2_WEIGHT, "encoder.pre_lookahead_layer.conv2" },
             { LLM_TENSOR_UP_EMBED_OUT_0_WEIGHT, "encoder.up_embed.out.0" },
             { LLM_TENSOR_UP_EMBED_OUT_1_WEIGHT, "encoder.up_embed.out.1" },
 
-            { LLM_TENSOR_UP_ENCODERS_FF_W_1_WEIGHT, "encoder.up_encoders%d.feed_forward.w_1" },
+            { LLM_TENSOR_UP_ENCODERS_FF_W_1_WEIGHT, "encoder.up_encoders.%d.feed_forward.w_1" },
             { LLM_TENSOR_UP_ENCODERS_FF_W_2_WEIGHT, "encoder.up_encoders.%d.feed_forward.w_2" },
             { LLM_TENSOR_UP_ENCODERS_NORM_FF_WEIGHT, "encoder.up_encoders.%d.norm_ff" },
             { LLM_TENSOR_UP_ENCODERS_NORM_MHA_WEIGHT, "encoder.up_encoders.%d.norm_mha" },
@@ -2385,6 +2387,7 @@ static const std::map<llm_tensor, llm_tensor_info> LLM_TENSOR_INFOS = {
     { LLM_TENSOR_UP_BLOCKS_FF_2_BIAS, {LLM_TENSOR_LAYER_REPEATING, GGML_OP_ADD} },
     { LLM_TENSOR_UP_BLOCKS_NORM1_BIAS, {LLM_TENSOR_LAYER_REPEATING, GGML_OP_ADD} },
     { LLM_TENSOR_UP_BLOCKS_NORM3_BIAS, {LLM_TENSOR_LAYER_REPEATING, GGML_OP_ADD} },
+    { LLM_TENSOR_UP_BLOCKS_0_2_BIAS, {LLM_TENSOR_LAYER_REPEATING, GGML_OP_ADD} },
     
     { LLM_TENSOR_ENCODER_AFTER_NORM_BIAS, {LLM_TENSOR_LAYER_REPEATING, GGML_OP_ADD} },
     { LLM_TENSOR_ENCODER_EMBED_OUT_0_BIAS, {LLM_TENSOR_LAYER_REPEATING, GGML_OP_ADD} },
