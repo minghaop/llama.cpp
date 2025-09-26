@@ -102,7 +102,7 @@ static int llama_model_load(const std::string & fname, std::vector<std::string> 
             throw std::runtime_error("error loading model architecture: " + std::string(e.what()));
         }
         if (!params.is_flow) {
-            LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&& check is_flow is: %d\n", params.is_flow);
+            // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&& check is_flow is: %d\n", params.is_flow);
             model.hparams.vocab_only = params.vocab_only;
             try {
                 model.load_hparams(ml);

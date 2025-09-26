@@ -36,7 +36,8 @@ struct llama_ubatch {
     int8_t       *  output;     // [n_tokens]         | i   | -
 
     //CosyVoiceFlow
-    llama_token  *  flow_token_data;
+    llama_token  *  flow_token;
+    float        *  flow_feat;
     uint32_t        token_len;
     uint32_t        prompt_token_len;
     uint32_t        prompt_feat_len;
@@ -151,7 +152,11 @@ private:
         std::vector<llama_seq_id>   seq_id_unq;
         std::vector<int32_t>        seq_idx;
         std::vector<int8_t>         output;
-        std::vector<llama_token>    flow_token_data;
+        std::vector<llama_token>    flow_token;
+        std::vector<float>          flow_feat;
+        uint32_t                    token_len;
+        uint32_t                    prompt_token_len;
+        uint32_t                    prompt_feat_len;
     };
 
     // current splitting state:

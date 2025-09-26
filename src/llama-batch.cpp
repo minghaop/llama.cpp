@@ -232,6 +232,14 @@ bool llama_batch_allocr::init(
             /*.seq_id_unq   =*/ this->seq_id_unq.data(),
             /*.seq_idx      =*/ this->seq_idx.data(),
             /*.output       =*/ batch.logits,
+            
+            //CosyVoiceFlow
+            /*flow_token    =*/ batch.flow_token,
+            /*flow_feat     =*/ batch.flow_feat,
+            /*token_len     =*/  (uint32_t) batch.token_len,
+            /*prompt_token_len =*/ (uint32_t) batch.prompt_token_len,
+            /*prompt_feat_len =*/ (uint32_t) batch.prompt_feat_len,
+
         };
 
         ubatch_print(ubatch, debug);
@@ -391,6 +399,9 @@ llama_ubatch llama_batch_allocr::ubatch_reserve(uint32_t n_seq_tokens, uint32_t 
     ubatch.seq_id_unq.resize(0);
     ubatch.seq_idx   .resize(LLAMA_MAX_SEQ, -1);
     ubatch.output    .resize(n_tokens);
+    ubatch.flow_token.resize(ubatch.token_len + ubatch.prompt_token_len);
+    ubatch.flow_feat .resize(ubatch.prompt_feat_len);
+
 
     for (uint32_t s = 0; s < n_seqs; ++s) {
         ubatch.seq_idx[s] = s;
@@ -412,6 +423,13 @@ llama_ubatch llama_batch_allocr::ubatch_reserve(uint32_t n_seq_tokens, uint32_t 
         /*.seq_id_unq   =*/ ubatch.seq_id_unq.data(),
         /*.seq_idx      =*/ ubatch.seq_idx.data(),
         /*.output       =*/ ubatch.output.data(),
+
+        //CosyVoiceFlows
+        /*flow_token    =*/ ubatch.flow_token.data(),
+        /*flow_feat     =*/ ubatch.flow_feat.data(),
+        /*token_len     =*/ ubatch.token_len,
+        /*prompt_token_len =*/ ubatch.prompt_token_len,
+        /*prompt_feat_len =*/ ubatch.prompt_feat_len,
     };
 
     return res;
@@ -678,8 +696,9 @@ llama_ubatch llama_batch_allocr::ubatch_add(const std::vector<int32_t> & idxs, u
     const int64_t n_embd_all = batch.embd ? (int64_t) n_tokens*n_embd : 0;
     // LLAMA_LOG_INFO("********************************************************************** n_embd_all is: %d\n", n_embd_all);
     const int64_t n_pos_all  =              (int64_t) n_tokens*n_pos_cur;
-    // LLAMA_LOG_INFO("********************************************************************** n_pos_all is: %d\n", n_pos_all);
-    // /LLAMA_LOG_INFO("********************************************************************** ubatch_add check2\n");
+    
+    const int64_t flow_token_data_len = batch.prompt_token_len + batch.token_len;
+
     ubatch.token     .resize(n_tokens);
     ubatch.embd      .resize(n_embd_all);
     ubatch.pos       .resize(n_pos_all);
@@ -688,44 +707,43 @@ llama_ubatch llama_batch_allocr::ubatch_add(const std::vector<int32_t> & idxs, u
     ubatch.seq_id_unq.resize(0);
     ubatch.seq_idx   .resize(LLAMA_MAX_SEQ, -1);
     ubatch.output    .resize(n_tokens);
-    // LLAMA_LOG_INFO("********************************************************************** ubatch_add check3\n");
+
+    //CosyVoiceFlow
+    ubatch.flow_token.resize(flow_token_data_len);
+    ubatch.flow_feat .resize(batch.prompt_feat_len);
+
+
+    
     seq_set_t seq_set_unq;
-    // LLAMA_LOG_INFO("********************************************************************** idxs.size() is: %d\n", idxs.size());
+    
     for (size_t i = 0; i < idxs.size(); ++i) {
         if (batch.token) {
             ubatch.token[i] = batch.token[idxs[i]];
         }
         if (batch.embd) {
-            // LLAMA_LOG_INFO("********************************************************************** batch.embd pos is: %p, (int64_t) idxs[i]*n_embd is: %d\n", (void*)batch.embd + (int64_t) idxs[i]*n_embd, (int64_t) idxs[i]*n_embd);
             memcpy(ubatch.embd.data() + i*n_embd, batch.embd + (int64_t) idxs[i]*n_embd, n_embd*sizeof(float));
         }
-        // LLAMA_LOG_INFO("********************************************************************** copy data is: %d\n", ubatch.embd.data()[0]);
         for (int j = 0; j < n_pos_cur; ++j) {
-            // LLAMA_LOG_INFO("********************************************************************** j*n_tokens + i is: %d, j*batch.n_tokens + idxs[i] is: %d\n", j*n_tokens + i, j*batch.n_tokens + idxs[i]);
             ubatch.pos[j*n_tokens + i] = batch.pos[j*batch.n_tokens + idxs[i]];
         }
-        // LLAMA_LOG_INFO("********************************************************************** ubatch_add check4\n");
+        
+
         ubatch.n_seq_id[i] = batch.n_seq_id[idxs[i]];
         ubatch.seq_id[i]   = batch.seq_id[idxs[i]];
         ubatch.output[i]   = batch.logits[idxs[i]];
-        // LLAMA_LOG_INFO("********************************************************************** ubatch.seq_id[i][s] is: %d\n", ubatch.seq_id[i][0]);
-        // LLAMA_LOG_INFO("********************************************************************** n_tokens is: %d\n", n_tokens);
         for (int s = 0; s < ubatch.n_seq_id[i]; ++s) {
             seq_set_unq.set(ubatch.seq_id[i][s]);
         }
-
         if (ubatch.output[i]) {
             out_ids.push_back(idxs[i]);
         }
     }
-    // LLAMA_LOG_INFO("********************************************************************** ubatch_add check4\n");
     for (int32_t s = 0; s < LLAMA_MAX_SEQ; ++s) {
         if (seq_set_unq.test(s)) {
             ubatch.seq_idx[s] = ubatch.seq_id_unq.size();
             ubatch.seq_id_unq.push_back(s);
         }
     }
-    // LLAMA_LOG_INFO("********************************************************************** ubatch_add check5\n");
     llama_ubatch res {
         /*.equal_seqs   =*/ equal_seqs,
         /*.n_tokens     =*/ n_tokens,
@@ -741,12 +759,12 @@ llama_ubatch llama_batch_allocr::ubatch_add(const std::vector<int32_t> & idxs, u
         /*.seq_id_unq   =*/ ubatch.seq_id_unq.data(),
         /*.seq_idx      =*/ ubatch.seq_idx.data(),
         /*.output       =*/ ubatch.output.data(),
-        /*flow_token_data =*/ batch.flow_token_data ? ubatch.flow_token_data.data() : nullptr,
-        /*token_len =*/ 0,
-        /*prompt_token_len =*/ 0,
-        /*prompt_feat_len =*/ 0,
+        /*flow_token    =*/ batch.flow_token ? ubatch.flow_token.data() : nullptr,
+        /*flow_feat     =*/ batch.flow_feat ? ubatch.flow_feat.data() : nullptr,
+        /*token_len     =*/ batch.token_len,
+        /*prompt_token_len =*/ batch.prompt_token_len,
+        /*prompt_feat_len =*/ batch.prompt_feat_len,
     };
-    // LLAMA_LOG_INFO("********************************************************************** ubatch_add check6\n");
     if (debug > 0) {
         LLAMA_LOG_DEBUG("%s: added ubatch %d to split:\n", __func__, (int) ubatches.size() - 1);
 
@@ -859,7 +877,7 @@ struct llama_batch llama_batch_get_one(
     };
 }
 
-struct llama_batch llama_batch_init(int32_t n_tokens_alloc, int32_t embd, int32_t n_seq_max, bool is_flow) {
+struct llama_batch llama_batch_init(int32_t n_tokens_alloc, int32_t embd, int32_t n_seq_max, int32_t is_flow) {
     llama_batch batch = {
         /*n_tokens =*/ 0,
         /*tokens   =*/ nullptr,
@@ -868,7 +886,8 @@ struct llama_batch llama_batch_init(int32_t n_tokens_alloc, int32_t embd, int32_
         /*n_seq_id =*/ nullptr,
         /*seq_id   =*/ nullptr,
         /*logits   =*/ nullptr,
-        /*flow_token_data =*/ nullptr,
+        /*flow_token =*/ nullptr,
+        /*flow_feat =*/ nullptr,
         /*token_len =*/ 0,
         /*prompt_token_len =*/ 0,
         /*prompt_feat_len =*/ 0,
@@ -881,10 +900,8 @@ struct llama_batch llama_batch_init(int32_t n_tokens_alloc, int32_t embd, int32_
     }
 
     if (is_flow) {
-        batch.flow_token_data = (llama_token *)malloc(sizeof(llama_token) * n_tokens_alloc * embd);
-        // batch.token_len = (int32_t *)      malloc(sizeof(int32_t) * n_tokens_alloc);
-        // batch.prompt_token_len = (int32_t *) malloc(sizeof(int32_t) * n_tokens_alloc);
-        // batch.prompt_feat_len = (int32_t *) malloc(sizeof(int32_t) * n_tokens_alloc * embd);
+        batch.flow_token = (llama_token *)malloc(sizeof(llama_token) * n_tokens_alloc * embd);
+        batch.flow_feat = (float *)malloc(sizeof(float) * n_tokens_alloc * embd);
     }
     
     batch.pos      = (llama_pos *)     malloc(sizeof(llama_pos)      * n_tokens_alloc);

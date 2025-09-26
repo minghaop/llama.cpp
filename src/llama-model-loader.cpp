@@ -515,6 +515,7 @@ llama_model_loader::llama_model_loader(
         n_elements += ggml_nelements(cur);
         n_bytes    += ggml_nbytes(cur);
         weights_map.emplace(tensor_name, llama_tensor_weight(files.back().get(), 0, meta.get(), cur));
+        
     }
     uint16_t n_split = 0;
     get_key(llm_kv(LLM_KV_SPLIT_COUNT), n_split, false);
@@ -599,15 +600,9 @@ llama_model_loader::llama_model_loader(
     }
 
     n_kv      = gguf_get_n_kv(meta.get());
-    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&& arch_name is: %s\n", arch_name.c_str());
-    if (arch_name == "CosyVoiceFlow")
-    {
-        n_tensors = 1127;
-    }else {
-        n_tensors = weights_map.size();
-    }
-    
+    n_tensors = weights_map.size();
 
+    
     fver = (enum llama_fver) gguf_get_version(meta.get());
 
     LLAMA_LOG_INFO("%s: loaded meta data with %d key-value pairs and %d tensors from %s (version %s)\n",
@@ -751,6 +746,11 @@ const llama_model_loader::llama_tensor_weight & llama_model_loader::require_weig
 
 struct ggml_tensor * llama_model_loader::get_tensor_meta(const char * name) const {
     const auto * weight = get_weight(name);
+    std::string s(name);
+    // if( s== "decoder.estimator.down_blocks.0.1.0.norm3.bias");
+    // {
+    //     LLAMA_LOG_INFO("&&&&&&&&&&&&& weight is nnullptr ? %d\n", weight == nullptr ? 1 : 0);
+    // }
     if (!weight) {
         return nullptr;
     }

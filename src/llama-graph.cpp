@@ -31,6 +31,30 @@ void llm_graph_input_embd::set_input(const llama_ubatch * ubatch) {
     }
 }
 
+void llm_graph_input_token::set_input(const llama_ubatch * ubatch) {
+    if(ubatch->flow_token) {
+        const int64_t total_token_len = ubatch->token_len;
+
+        ggml_backend_tensor_set(input_token, ubatch->flow_token, 0, total_token_len*ggml_element_size(input_token));
+    }
+}
+
+void llm_graph_input_prompt_token::set_input(const llama_ubatch * ubatch) {
+    if(ubatch->flow_token) {
+        const int64_t total_token_len = ubatch->prompt_token_len;
+
+        ggml_backend_tensor_set(input_prompt_token, ubatch->flow_token, ubatch->token_len * ggml_element_size(input_prompt_token), total_token_len*ggml_element_size(input_prompt_token));
+    }
+}
+
+void llm_graph_input_prompt_feat::set_input(const llama_ubatch * ubatch) {
+    if(ubatch->flow_feat) {
+        const int64_t feat_len = ubatch->prompt_feat_len;
+
+        ggml_backend_tensor_set(input_prompt_feat, ubatch->flow_feat, 0, feat_len*ggml_element_size(input_prompt_feat));
+    }
+}
+
 void llm_graph_input_pos::set_input(const llama_ubatch * ubatch) {
     if (ubatch->pos && pos) {
         const int64_t n_tokens = ubatch->n_tokens;

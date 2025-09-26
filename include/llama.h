@@ -231,10 +231,11 @@ extern "C" {
         int8_t       *  logits;   // TODO: rename this to "output"
         // float        *  inputs_embeds;
         // bool            use_inputs_embeds; // if true, use inputs_embeds instead of embd 
-        llama_token  *  flow_token_data;
-        int32_t        token_len;
-        int32_t        prompt_token_len;
-        int32_t        prompt_feat_len;
+        llama_token  *  flow_token;
+        float        *  flow_feat;
+        int32_t         token_len;
+        int32_t         prompt_token_len;
+        int32_t         prompt_feat_len;
     } llama_batch;
 
     enum llama_model_kv_override_type {
@@ -893,7 +894,8 @@ extern "C" {
     LLAMA_API struct llama_batch llama_batch_init(
             int32_t n_tokens,
             int32_t embd,
-            int32_t n_seq_max);
+            int32_t n_seq_max,
+            int32_t is_flow);
 
     // Frees a batch of tokens allocated with llama_batch_init()
     LLAMA_API void llama_batch_free(struct llama_batch batch);
