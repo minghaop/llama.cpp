@@ -1926,9 +1926,7 @@ bool llama_model::load_tensors(llama_model_loader & ml) {
 
         auto create_tensor = [&](const LLM_TN_IMPL & tn, const std::initializer_list<int64_t> & ne, int flags) -> ggml_tensor * {
 
-            // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&& get_tensor_meta before!!!!!!!!!!!!!\n");
             auto name = tn.str();          // 先拿到字符串
-            // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&& tn.str() = %s\n", name.c_str());
             ggml_tensor * t_meta = ml.get_tensor_meta(tn.str().c_str());
             
             if (!t_meta) {
@@ -1941,7 +1939,6 @@ bool llama_model::load_tensors(llama_model_loader & ml) {
             // some models use the token embedding tensor as the output, but since these are used in different layers and with different ops
             // the tensor is duplicated
             // to handle this, we check if the tensor is duplicated, and if so, we assume that it is being loaded as the output tensor
-            // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&& check create_tensor func1\n");
             llm_tensor tn_tensor = tn.tensor;
             if (tn.tensor == LLM_TENSOR_TOKEN_EMBD && flags & TENSOR_DUPLICATED) {
                 tn_tensor = LLM_TENSOR_OUTPUT;
@@ -1953,7 +1950,6 @@ bool llama_model::load_tensors(llama_model_loader & ml) {
             } catch (const std::out_of_range & e) {
                 throw std::runtime_error(format("missing tensor info mapping for %s", tn.str().c_str()));
             }
-            // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&& check create_tensor func2\n");
             // skip unused tensors
             if (info.op == GGML_OP_NONE) {
                 const size_t nbytes = ggml_nbytes(t_meta);
@@ -1973,7 +1969,6 @@ bool llama_model::load_tensors(llama_model_loader & ml) {
             } else {
                 op = info.op;
             }
-            // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&& check create_tensor func3\n");
             // sanity checks
             if (info.layer == LLM_TENSOR_LAYER_INPUT || info.layer == LLM_TENSOR_LAYER_OUTPUT) {
                 if (tn.bid != -1) {
@@ -2002,7 +1997,6 @@ bool llama_model::load_tensors(llama_model_loader & ml) {
             }
 
             ggml_backend_buffer_type_t buft = nullptr;
-            // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&& check create_tensor func4\n");
             // check overrides
             if (ml.tensor_buft_overrides) {
                 std::string tensor_name = tn.str();
@@ -2054,14 +2048,11 @@ bool llama_model::load_tensors(llama_model_loader & ml) {
                     return t;
                 }
             }
-            // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&& check create_tensor func5\n");
             return ml.create_tensor(ctx, tn, ne, flags);
         };
         layers.resize(n_layer);
-        // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&& check flow swicth ok!!!!!!!!!!!!!!!!!!!\n");
         // TODO: move to a separate function
         const auto tn = LLM_TN(arch);
-        // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& check here !!!!!!!!\n");
         switch (arch) {
             case LLM_ARCH_LLAMA:
             case LLM_ARCH_REFACT:
@@ -5147,7 +5138,7 @@ bool llama_model::load_tensors(llama_model_loader & ml) {
                         layer.encoders_ffn_w1 = create_tensor(tn(LLM_TENSOR_ENCODERS_FF_W_1_WEIGHT, "weight", i - 13), {512, 2048}, 0);
                         layer.encoders_ffn_w2 = create_tensor(tn(LLM_TENSOR_ENCODERS_FF_W_2_WEIGHT, "weight", i - 13), {2048, 512}, 0);
                         layer.encoders_ffn_b1 = create_tensor(tn(LLM_TENSOR_ENCODERS_FF_W_1_BIAS, "bias", i - 13), {2048}, 0);
-                        layer.encoders_ffn_b2 = create_tensor(tn(LLM_TENSOR_ENCODERS_FF_W_1_BIAS, "bias", i - 13), {512}, 0);
+                        layer.encoders_ffn_b2 = create_tensor(tn(LLM_TENSOR_ENCODERS_FF_W_2_BIAS, "bias", i - 13), {512}, 0);
                         layer.encoders_normffn_w = create_tensor(tn(LLM_TENSOR_ENCODERS_NORM_FF_WEIGHT, "weight", i - 13), {512}, 0);
                         layer.encoders_normmha_w = create_tensor(tn(LLM_TENSOR_ENCODERS_NORM_MHA_WEIGHT, "weight", i - 13), {512}, 0);
                         layer.encoders_normffn_b = create_tensor(tn(LLM_TENSOR_ENCODERS_NORM_FF_BIAS, "bias", i - 13), {512}, 0);
@@ -5178,7 +5169,7 @@ bool llama_model::load_tensors(llama_model_loader & ml) {
                         layer.up_encoders_ffn_w1 = create_tensor(tn(LLM_TENSOR_UP_ENCODERS_FF_W_1_WEIGHT, "weight", i - 132), {512, 2048}, 0);
                         layer.up_encoders_ffn_w2 = create_tensor(tn(LLM_TENSOR_UP_ENCODERS_FF_W_2_WEIGHT, "weight", i - 132), {2048, 512}, 0);
                         layer.up_encoders_ffn_b1 = create_tensor(tn(LLM_TENSOR_UP_ENCODERS_FF_W_1_BIAS, "bias", i - 132), {2048}, 0);
-                        layer.up_encoders_ffn_b2 = create_tensor(tn(LLM_TENSOR_UP_ENCODERS_FF_W_1_BIAS, "bias", i - 132), {512}, 0);
+                        layer.up_encoders_ffn_b2 = create_tensor(tn(LLM_TENSOR_UP_ENCODERS_FF_W_2_BIAS, "bias", i - 132), {512}, 0);
                         layer.up_encoders_normffn_w = create_tensor(tn(LLM_TENSOR_UP_ENCODERS_NORM_FF_WEIGHT, "weight", i - 132), {512}, 0);
                         layer.up_encoders_normmha_w = create_tensor(tn(LLM_TENSOR_UP_ENCODERS_NORM_MHA_WEIGHT, "weight", i - 132), {512}, 0);
                         layer.up_encoders_normffn_b = create_tensor(tn(LLM_TENSOR_UP_ENCODERS_NORM_FF_BIAS, "bias", i - 132), {512}, 0);
@@ -5224,9 +5215,8 @@ bool llama_model::load_tensors(llama_model_loader & ml) {
                         layer.down_block1_norm1_b = create_tensor(tn(LLM_TENSOR_DOWN_BLOCKS_NORM1_BIAS, "bias", i - 226), {256}, 0);
                         layer.down_block1_bo = create_tensor(tn(LLM_TENSOR_DOWN_BLOCKS_ATTN_TO_OUT_BIAS, "bias", i - 226), {256}, 0);
                         layer.down_block1_norm3_b = create_tensor(tn(LLM_TENSOR_DOWN_BLOCKS_NORM3_BIAS, "bias", i - 226), {256}, 0);
-                        layer.down_block1_ffn_b0 = create_tensor(tn(LLM_TENSOR_DOWN_BLOCKS_FF_0_BIAS, "bias", i - 226), {256}, 0);
+                        layer.down_block1_ffn_b0 = create_tensor(tn(LLM_TENSOR_DOWN_BLOCKS_FF_0_BIAS, "bias", i - 226), {1024}, 0);
                         layer.down_block1_ffn_b2 = create_tensor(tn(LLM_TENSOR_DOWN_BLOCKS_FF_2_BIAS, "bias", i - 226), {256}, 0);
-
                     }
 
                     down_blk_conv_w = create_tensor(tn(LLM_TENSOR_DOWN_BLOCKS_0_2_WEIGHT, "weight", 278), {3, 256, 256}, 0);
@@ -5294,7 +5284,7 @@ bool llama_model::load_tensors(llama_model_loader & ml) {
                         layer.up_block1_norm1_b = create_tensor(tn(LLM_TENSOR_UP_BLOCKS_NORM1_BIAS, "bias", i - 1059), {256}, 0);
                         layer.up_block1_bo = create_tensor(tn(LLM_TENSOR_UP_BLOCKS_ATTN_TO_OUT_BIAS, "bias", i - 1059), {256}, 0);
                         layer.up_block1_norm3_b = create_tensor(tn(LLM_TENSOR_UP_BLOCKS_NORM3_BIAS, "bias", i - 1059), {256}, 0);
-                        layer.up_block1_ffn_b0 = create_tensor(tn(LLM_TENSOR_UP_BLOCKS_FF_0_BIAS, "bias", i - 1059), {256}, 0);
+                        layer.up_block1_ffn_b0 = create_tensor(tn(LLM_TENSOR_UP_BLOCKS_FF_0_BIAS, "bias", i - 1059), {1024}, 0);
                         layer.up_block1_ffn_b2 = create_tensor(tn(LLM_TENSOR_UP_BLOCKS_FF_2_BIAS, "bias", i - 1059), {256}, 0);
 
                         
