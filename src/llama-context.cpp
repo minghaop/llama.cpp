@@ -747,7 +747,7 @@ int llama_context::encode(const llama_batch & batch_inp) {
     const uint32_t n_tokens = balloc->get_n_tokens();
 
     const llama_ubatch ubatch = balloc->split_simple(n_tokens);
-
+    
     // micro-batching is not possible for non-causal encoding, so we process the batch in a single shot
     GGML_ASSERT(cparams.n_ubatch >= n_tokens && "encoder requires n_ubatch >= n_tokens");
 
@@ -908,7 +908,13 @@ int llama_context::decode(const llama_batch & batch_inp) {
     const auto & hparams = model.hparams;
 
     const int32_t n_vocab = vocab.n_tokens();
-    const int64_t n_embd  = hparams.n_embd;
+    int64_t n_embd;
+    if (hparams.use_flow) {
+        n_embd = 512;
+    } else {
+        n_embd = hparams.n_embd;
+    }
+    // const int64_t n_embd  = hparams.n_embd;
 
     // when computing embeddings, all tokens are output
     const bool output_all = cparams.embeddings;
@@ -916,10 +922,9 @@ int llama_context::decode(const llama_batch & batch_inp) {
         LLAMA_LOG_ERROR("%s: failed to initialize batch\n", __func__);
         return -1;
     }
-
     const uint32_t n_tokens_all  = balloc->get_n_tokens();
     const uint32_t n_outputs_all = balloc->get_n_outputs();
-    // LLAMA_LOG_INFO("%s: n_tokens_all = %d, n_outputs_all = %d\n", __func__, n_tokens_all, n_outputs_all);
+    LLAMA_LOG_INFO("%s: n_tokens_all = %d, n_outputs_all = %d\n", __func__, n_tokens_all, n_outputs_all);
 
     if (output_all) {
         // require that all tokens are output

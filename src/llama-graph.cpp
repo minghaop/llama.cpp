@@ -570,36 +570,23 @@ ggml_tensor * llm_graph_context::build_flow_embedding(
 }
 
 
-ggml_tensor * llm_graph_context::build_pad_mask(
-        ggml_tensor * cur,
-        int           max_len) const {
-    GGML_ASSERT(ggml_n_dims(cur) == 1);
-    const int B = cur->ne[0];
-
-    if (max_len <= 0) {
-        float max_val = 0.0f;
-        const float * p = (float *)cur->data;
-        for (int i = 0; i < ggml_nelements(cur); ++i)
-            max_val = std::max(max_val, p[i]);
-        max_len = max_val;
+ggml_tensor * llm_graph_context::build_pad_mask(int32_t total_len, int32_t max_len) const {
+    
+    if (max_len > 0) {
+        max_len = max_len;
+    } else {
+        max_len = total_len;
     }
-    ggml_tensor * idx = ggml_arange(ctx0, 0, max_len, 1);          
-    idx = ggml_cast(ctx0, idx, GGML_TYPE_F32);                  
-    idx = ggml_repeat(ctx0, idx, ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, max_len, B));
-    idx = ggml_cont(ctx0, idx);
-
-    ggml_tensor * len = ggml_cast(ctx0, cur, GGML_TYPE_F32);
-    len = ggml_reshape_1d(ctx0, len, B);                        
-    len = ggml_repeat(ctx0, len, ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, max_len, B));
-    len = ggml_cont(ctx0, len);
-
-    ggml_tensor * diff = ggml_sub(ctx0, idx, len);          
-
-    ggml_tensor * sign = ggml_sgn(ctx0, diff);
-
-    ggml_tensor * ge_mask = ggml_step(ctx0, sign);
-    ggml_tensor * mask = ggml_sub(ctx0, ggml_new_tensor_3d(ctx0, GGML_TYPE_F32, ge_mask->ne[0], ge_mask->ne[1], 1), ge_mask);
-
+    std::vector<float> mask_host(max_len, 0.0f);
+    for (int t = 0; t < max_len; ++t)
+        mask_host[t] = (t >= total_len) ? 1.0f : 0.0f;
+    ggml_tensor * mask = ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, max_len, 1);
+    ggml_backend_alloc_ctx_tensors(ctx0, backend_cpu);
+    ggml_backend_tensor_set(mask, mask_host.data(), 0, mask_host.size() * sizeof(float));
+    mask = ggml_neg(ctx0, mask);
+    ggml_set_no_alloc(ctx0, false);
+    mask = ggml_add1(ctx0, mask, ggml_new_f32(ctx0, 1.0f));
+    ggml_set_no_alloc(ctx0, true);
     cb(mask, "non_pad_mask", -1);
     return mask;
 }
@@ -621,42 +608,80 @@ ggml_tensor * llm_graph_context::build_linear_no_subsampling(
 }
 
 ggml_tensor * llm_graph_context::build_pe(
-         ggml_cgraph * gf,
          ggml_tensor * cur) const{
-        int32_t max_len = 5000;
-        int32_t d_model = 512;
-        float inv_den = -std::log(10000.0f) / d_model;
-        ggml_tensor * pe_positive = ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, d_model, cur->ne[1]);
-        ggml_tensor * pe_negative = ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, d_model, cur->ne[1]);
-        ggml_tensor * position = ggml_reshape_2d(ctx0, ggml_cast(ctx0, ggml_arange(ctx0, 0, cur->ne[1], 1), GGML_TYPE_F32), 1, cur->ne[1]);
-        ggml_tensor * arange = ggml_arange(ctx0, 0, d_model, 2);
-        arange = ggml_cast(ctx0, arange, GGML_TYPE_F32);
-        ggml_tensor * scale = ggml_new_f32(ctx0, inv_den);
-        ggml_tensor * exponent = ggml_mul(ctx0, arange, scale);
-        ggml_tensor * div_term = ggml_exp(ctx0, exponent);
-        ggml_tensor * angle = ggml_mul(ctx0, position, div_term);
-        ggml_tensor * sin_angle = ggml_sin(ctx0, angle);
-        ggml_tensor * cos_angle = ggml_cos(ctx0, angle);
-        const size_t col_stride = sizeof(float);
-        const size_t row_stride = d_model * sizeof(float);
-        ggml_tensor * pe_pos_even = ggml_view_2d(ctx0, pe_positive, d_model/2, max_len, row_stride, 0);
-        ggml_tensor * pe_neg_even = ggml_view_2d(ctx0, pe_negative, d_model / 2, max_len, row_stride, 0);
-        ggml_build_forward_expand(gf, ggml_cpy(ctx0, sin_angle, pe_pos_even));
-        ggml_build_forward_expand(gf, ggml_cpy(ctx0, sin_angle, pe_neg_even));
-        ggml_tensor * pe_pos_odd = ggml_view_2d(ctx0, pe_positive, d_model / 2, max_len, row_stride, col_stride);
-        ggml_tensor * pe_neg_odd = ggml_view_2d(ctx0, pe_negative, d_model / 2, max_len, row_stride, col_stride);
-        ggml_build_forward_expand(gf, ggml_cpy(ctx0, cos_angle, pe_pos_odd));
-        ggml_build_forward_expand(gf, ggml_cpy(ctx0, cos_angle, pe_neg_odd));
-        ggml_tensor * flipped = ggml_view_2d(ctx0, pe_positive, d_model, max_len, pe_positive->nb[0], -pe_positive->nb[1]);
-        flipped->data = (char *)pe_positive->data + (max_len + 1) * pe_positive->nb[1];
-        // ggml_tensor * out = ggml_reshape_3d(ctx0, flipped, 1, max_len, d_model);
-        size_t row_offset = pe_negative->nb[1];
-        ggml_tensor * sliced = ggml_view_2d(ctx0, pe_negative, d_model, max_len -1, pe_negative->nb[0], row_offset);
-        pe_negative = ggml_reshape_3d(ctx0, sliced, 1, max_len - 1, d_model);
-        ggml_tensor * pe = ggml_concat(ctx0, pe_positive, pe_negative, 1);
+        
+    const int32_t d_model = 512;
+    GGML_ASSERT(d_model % 2 == 0);
+    const int64_t seq_len = cur->ne[0];            // 只关心序列长度
+    const int64_t half    = d_model / 2;
 
-        cb(pe, "espnet_rel_pos_encode", -1);
-        return pe;
+    /* ---------- 1. position [seq_len, 1]  ---------- */
+    ggml_tensor * position = ggml_arange(ctx0, 0, seq_len, 1);
+    position = ggml_reshape_2d(ctx0, position, 1, seq_len);   // [1, seq_len]
+
+    /* ---------- 2. div_term = exp( arange(0,d_model,2) * -log(10000)/d_model )  ---------- */
+    ggml_tensor * div_term = ggml_arange(ctx0, 0, half, 1);
+    float inv_den = -std::log(10000.0f) / d_model;
+    div_term = ggml_mul(ctx0, div_term, ggml_new_f32(ctx0, inv_den));
+    div_term = ggml_exp(ctx0, div_term);                      // [half]
+
+    /* ---------- 3. angle = position * div_term （广播） ---------- */
+    ggml_tensor * angle = ggml_mul(
+        ctx0,
+        ggml_repeat(ctx0, div_term, ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, half, seq_len)),
+        ggml_repeat(ctx0, position, ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, half, seq_len))
+    );   // [half, seq_len]
+
+    /* ---------- 4. pe_positive / pe_negative  ---------- */
+    ggml_tensor * pe_pos_half = ggml_sin(ctx0, angle);                 // [half, seq_len]
+    ggml_tensor * pe_neg_half = ggml_sin(ctx0, ggml_scale(ctx0, angle, -1.0f));
+
+    /* ---------- 5. 拼成完整 [d_model, seq_len] （偶列 sin，奇列 cos） ---------- */
+    ggml_tensor * pe_pos = ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, d_model, seq_len);
+    ggml_tensor * pe_neg = ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, d_model, seq_len);
+    // 偶列拷贝
+    pe_pos = ggml_cpy(ctx0,
+        ggml_repeat(ctx0, pe_pos_half, ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, half, seq_len)),
+        ggml_view_2d(ctx0, pe_pos, half, seq_len, pe_pos->nb[1], 0));
+    pe_neg = ggml_cpy(ctx0,
+        ggml_repeat(ctx0, pe_neg_half, ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, half, seq_len)),
+        ggml_view_2d(ctx0, pe_neg, half, seq_len, pe_neg->nb[1], 0));
+    // 奇列拷贝（cos 部分）
+    ggml_tensor * cos_pos = ggml_cos(ctx0, angle);
+    ggml_tensor * cos_neg = ggml_cos(ctx0, ggml_scale(ctx0, angle, -1.0f));
+    pe_pos = ggml_cpy(ctx0,
+        ggml_repeat(ctx0, cos_pos, ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, half, seq_len)),
+        ggml_view_2d(ctx0, pe_pos, half, seq_len, pe_pos->nb[1], pe_pos->nb[0] * sizeof(float))); // 偏移到奇列
+    pe_neg = ggml_cpy(ctx0,
+        ggml_repeat(ctx0, cos_neg, ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, half, seq_len)),
+        ggml_view_2d(ctx0, pe_neg, half, seq_len, pe_neg->nb[1], pe_neg->nb[0] * sizeof(float)));
+
+    /* ---------- 6. flip(pe_pos, 0) 去掉第 0 行，pe_neg 去掉第 0 行  ---------- */
+    // flip dim=0：手动反向 view 拼接（无 STL 版）
+    ggml_tensor * slices_pos[4096];
+    GGML_ASSERT(seq_len <= 4096);
+    for (int64_t i = 0; i < seq_len; ++i)
+        slices_pos[i] = ggml_view_2d(ctx0, pe_pos, d_model, 1, pe_pos->nb[1], i * pe_pos->nb[1]);
+    ggml_tensor * flip_pos = slices_pos[seq_len - 1];
+    for (int64_t i = seq_len - 2; i >= 0; --i)
+        flip_pos = ggml_concat(ctx0, flip_pos, slices_pos[i], 1); // 沿 seq 维拼
+
+    ggml_tensor * slices_neg[4096];
+    for (int64_t i = 1; i < seq_len; ++i)                     // 从 1 开始
+        slices_neg[i-1] = ggml_view_2d(ctx0, pe_neg, d_model, 1, pe_neg->nb[1], i * pe_neg->nb[1]);
+    ggml_tensor * neg_cut = slices_neg[0];
+    for (int64_t i = 1; i < seq_len - 1; ++i)
+        neg_cut = ggml_concat(ctx0, neg_cut, slices_neg[i], 1);
+
+    /* ---------- 7. concat [flip_pos, neg_cut] 沿 seq 维 -> [d_model, 2*seq_len-1]  ---------- */
+    ggml_tensor * pe_cat = ggml_concat(ctx0, flip_pos, neg_cut, 1);
+
+    /* ---------- 8. unsqueeze batch 维 -> [1, 2*seq_len-1, d_model]  ---------- */
+    pe_cat = ggml_reshape_3d(ctx0, pe_cat, d_model, 2 * seq_len - 1, 1);
+
+ 
+    cb(pe_cat, "espnet_rel_pos_encode", -1);
+    return pe_cat;
 }
 
 ggml_tensor * llm_graph_context::build_pos_encoding(
@@ -1693,7 +1718,7 @@ ggml_tensor * llm_graph_context::build_inp_token() const {
     inp->input_token = ggml_new_tensor_1d(ctx0, GGML_TYPE_I32, token_len);
     ggml_backend_buffer_t buf = ggml_backend_alloc_ctx_tensors(ctx0, backend_cpu);
     ggml_set_input(inp->input_token);
-    ggml_backend_tensor_set(inp->input_token, ubatch.embd, hparams.spk_embed_dim, token_len * ggml_element_size(inp->input_token));
+    ggml_backend_tensor_set(inp->input_token, ubatch.flow_token, 0, token_len * ggml_element_size(inp->input_token));
     cur = inp->input_token;
     cb(cur, "inp_token", -1);
     res->add_input(std::move(inp));
@@ -1703,14 +1728,14 @@ ggml_tensor * llm_graph_context::build_inp_token() const {
 ggml_tensor * llm_graph_context::build_inp_prompt_token() const {
 
     const uint32_t token_len = ubatch.prompt_token_len;
-    
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&& token_len is: %d\n", token_len);
     auto inp = std::make_unique<llm_graph_input_prompt_token>();
 
     ggml_tensor * cur = nullptr;
     inp->input_prompt_token = ggml_new_tensor_1d(ctx0, GGML_TYPE_I32, token_len);
     ggml_backend_buffer_t buf = ggml_backend_alloc_ctx_tensors(ctx0, backend_cpu);
     ggml_set_input(inp->input_prompt_token);
-    ggml_backend_tensor_set(inp->input_prompt_token, ubatch.embd, hparams.spk_embed_dim, token_len * ggml_element_size(inp->input_prompt_token));
+    ggml_backend_tensor_set(inp->input_prompt_token, ubatch.flow_token + ubatch.token_len, 0, token_len * ggml_element_size(inp->input_prompt_token));
     cur = inp->input_prompt_token;
     cb(cur, "inp_prompt_token", -1);
     res->add_input(std::move(inp));
@@ -1727,7 +1752,7 @@ ggml_tensor * llm_graph_context::build_inp_prompt_feat() const {
     inp->input_prompt_feat = ggml_new_tensor_2d(ctx0, GGML_TYPE_I32, hparams.output_size, feat_len);
     ggml_backend_buffer_t buf = ggml_backend_alloc_ctx_tensors(ctx0, backend_cpu);
     ggml_set_input(inp->input_prompt_feat);
-    ggml_backend_tensor_set(inp->input_prompt_feat, ubatch.embd, (int64_t)(hparams.spk_embed_dim + ubatch.token_len + ubatch.prompt_token_len), feat_len * hparams.output_size * ggml_element_size(inp->input_prompt_feat));
+    ggml_backend_tensor_set(inp->input_prompt_feat, ubatch.flow_feat, 0, feat_len * ggml_element_size(inp->input_prompt_feat));
     cur = inp->input_prompt_feat;
     cb(cur, "inp_prompt_feat", -1);
     res->add_input(std::move(inp));
