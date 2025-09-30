@@ -255,21 +255,20 @@ void ggml_backend_tensor_get_async(ggml_backend_t backend, const struct ggml_ten
 }
 
 void ggml_backend_tensor_set(struct ggml_tensor * tensor, const void * data, size_t offset, size_t size) {
-    GGML_ASSERT(tensor);
-    // GGML_LOG_INFO(" ################ tensor->view_src->buffer is: %d\n", tensor->view_src->buffer == NULL);    
-    // GGML_LOG_INFO(" ################ tensor->buffer is: %d\n", tensor->buffer == NULL);    
+    GGML_ASSERT(tensor);    
     
     ggml_backend_buffer_t buf = tensor->view_src ? tensor->view_src->buffer : tensor->buffer;
 
     if (size == 0) {
         return;
     }
-    // GGML_LOG_INFO(" ################ offset is: %d, size is: %d, buf is: %d\n", offset, size, buf == NULL);
+    // GGML_LOG_INFO(" ################ offset is: %d, size is: %d, ggml_nbytes(tensor) is: %d\n", offset, size, ggml_nbytes(tensor));
     GGML_ASSERT(buf != NULL && "tensor buffer not set");
     GGML_ASSERT(tensor->data != NULL && "tensor not allocated");
     GGML_ASSERT(offset + size <= ggml_nbytes(tensor) && "tensor write out of bounds");
-
+    
     buf->iface.set_tensor(buf, tensor, data, offset, size);
+    // GGML_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&& check here!!!!!!\n");
 }
 
 void ggml_backend_tensor_get(const struct ggml_tensor * tensor, void * data, size_t offset, size_t size) {
@@ -335,7 +334,7 @@ enum ggml_status ggml_backend_graph_compute(ggml_backend_t backend, struct ggml_
 }
 
 enum ggml_status ggml_backend_graph_compute_async(ggml_backend_t backend, struct ggml_cgraph * cgraph) {
-    GGML_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& backend->iface beckend name is: %s\n", backend->iface.get_name(backend));
+    // GGML_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& backend->iface beckend name is: %s\n", backend->iface.get_name(backend));
     return backend->iface.graph_compute(backend, cgraph);
 }
 

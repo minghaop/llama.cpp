@@ -232,6 +232,9 @@ static const std::map<llm_kv, const char *> LLM_KV_NAMES = {
     { LLM_KV_TOKENIZER_PREFIX_ID, "tokenizer.ggml.prefix_token_id" },
     { LLM_KV_TOKENIZER_SUFFIX_ID, "tokenizer.ggml.suffix_token_id" },
     { LLM_KV_TOKENIZER_MIDDLE_ID, "tokenizer.ggml.middle_token_id" },
+
+    //CosyVoiceFlow
+    { LLM_KV_INPUT_SIZE, "cosyvoice.input_size" },
 };
 
 static const std::map<llm_arch, std::map<llm_tensor, const char *>> LLM_TENSOR_NAMES = {
@@ -2406,11 +2409,6 @@ static const std::map<llm_tensor, llm_tensor_info> LLM_TENSOR_INFOS = {
     { LLM_TENSOR_UP_LAYER_CONV_BIAS, {LLM_TENSOR_LAYER_REPEATING, GGML_OP_ADD} },
     { LLM_TENSOR_PROJ_BIAS, {LLM_TENSOR_LAYER_REPEATING, GGML_OP_ADD} },
     { LLM_TENSOR_SPK_EMBED_AFFINE_LAYER_BIAS, {LLM_TENSOR_LAYER_REPEATING, GGML_OP_ADD} },
-
-
-
-
-
 
 };
 

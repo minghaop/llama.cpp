@@ -559,8 +559,8 @@ struct llm_graph_context {
              int   il) const;
     
     ggml_tensor * build_pad_mask(
-             ggml_tensor * cur,
-             int max_len = 0) const;
+             int32_t total_len,
+             int32_t max_len = 0) const;
     
 
     ggml_tensor * build_linear_no_subsampling(
@@ -571,7 +571,6 @@ struct llm_graph_context {
              ggml_tensor * norm_mb) const;
     
     ggml_tensor * build_pe(
-             ggml_cgraph * gf,
              ggml_tensor * cur) const;
 
     ggml_tensor * build_pos_encoding(
