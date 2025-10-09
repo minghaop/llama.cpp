@@ -519,7 +519,13 @@ ggml_tensor * llm_graph_context::build_layer_norm(
          ggml_tensor * mb,
          float eps) const{
         
+        mw = ggml_reshape_4d(ctx0, mw, 1, cur->ne[1], 1, 1);
+        mb = ggml_reshape_4d(ctx0, mb, 1, cur->ne[1], 1, 1);
+        mw = ggml_cast(ctx0, mw, cur->type);
+        mb = ggml_cast(ctx0, mb, cur->type);
         cur = ggml_norm(ctx0, cur, eps);
+        mw = ggml_repeat(ctx0, mw, cur);
+        mb = ggml_repeat(ctx0, mb, cur);
         cur = ggml_mul(ctx0, cur, mw);
         cur = ggml_add(ctx0, cur, mb);
         cb(cur, "layer_norm", -1);
@@ -622,7 +628,9 @@ ggml_tensor * llm_graph_context::build_pe(
     /* ---------- 2. div_term = exp( arange(0,d_model,2) * -log(10000)/d_model )  ---------- */
     ggml_tensor * div_term = ggml_arange(ctx0, 0, half, 1);
     float inv_den = -std::log(10000.0f) / d_model;
+    ggml_set_no_alloc(ctx0, false);
     div_term = ggml_mul(ctx0, div_term, ggml_new_f32(ctx0, inv_den));
+    ggml_set_no_alloc(ctx0, true);
     div_term = ggml_exp(ctx0, div_term);                      // [half]
 
     /* ---------- 3. angle = position * div_term （广播） ---------- */
@@ -658,26 +666,31 @@ ggml_tensor * llm_graph_context::build_pe(
 
     /* ---------- 6. flip(pe_pos, 0) 去掉第 0 行，pe_neg 去掉第 0 行  ---------- */
     // flip dim=0：手动反向 view 拼接（无 STL 版）
-    ggml_tensor * slices_pos[4096];
-    GGML_ASSERT(seq_len <= 4096);
-    for (int64_t i = 0; i < seq_len; ++i)
-        slices_pos[i] = ggml_view_2d(ctx0, pe_pos, d_model, 1, pe_pos->nb[1], i * pe_pos->nb[1]);
-    ggml_tensor * flip_pos = slices_pos[seq_len - 1];
-    for (int64_t i = seq_len - 2; i >= 0; --i)
-        flip_pos = ggml_concat(ctx0, flip_pos, slices_pos[i], 1); // 沿 seq 维拼
+    ggml_tensor * flip = ggml_view_2d(ctx0, pe_pos,
+                                  pe_pos->ne[0], 1,
+                                  pe_pos->nb[1],
+                                  (seq_len - 1) * pe_pos->nb[1]);
+    for (int64_t i = seq_len - 2; i >= 0; --i) {
+        ggml_tensor * row = ggml_view_2d(ctx0, pe_pos,
+                                        pe_pos->ne[0], 1,
+                                        pe_pos->nb[1],
+                                        i * pe_pos->nb[1]);
+        flip = ggml_concat(ctx0, flip, row, 1);
+    }
 
-    ggml_tensor * slices_neg[4096];
-    for (int64_t i = 1; i < seq_len; ++i)                     // 从 1 开始
-        slices_neg[i-1] = ggml_view_2d(ctx0, pe_neg, d_model, 1, pe_neg->nb[1], i * pe_neg->nb[1]);
-    ggml_tensor * neg_cut = slices_neg[0];
-    for (int64_t i = 1; i < seq_len - 1; ++i)
-        neg_cut = ggml_concat(ctx0, neg_cut, slices_neg[i], 1);
+    ggml_tensor * neg_cut = ggml_view_2d(ctx0, pe_neg,
+                                        pe_neg->ne[0], 1,
+                                        pe_neg->nb[1],
+                                        1 * pe_neg->nb[1]);
+    for (int64_t i = 2; i < seq_len; ++i) {
+        ggml_tensor * row = ggml_view_2d(ctx0, pe_neg,
+                                        pe_neg->ne[0], 1,
+                                        pe_neg->nb[1],
+                                        i * pe_neg->nb[1]);
+        neg_cut = ggml_concat(ctx0, neg_cut, row, 1);
+    }
 
-    /* ---------- 7. concat [flip_pos, neg_cut] 沿 seq 维 -> [d_model, 2*seq_len-1]  ---------- */
-    ggml_tensor * pe_cat = ggml_concat(ctx0, flip_pos, neg_cut, 1);
-
-    /* ---------- 8. unsqueeze batch 维 -> [1, 2*seq_len-1, d_model]  ---------- */
-    pe_cat = ggml_reshape_3d(ctx0, pe_cat, d_model, 2 * seq_len - 1, 1);
+    ggml_tensor * pe_cat = ggml_concat(ctx0, flip, neg_cut, 1);
 
  
     cb(pe_cat, "espnet_rel_pos_encode", -1);
@@ -688,13 +701,19 @@ ggml_tensor * llm_graph_context::build_pos_encoding(
          ggml_tensor * cur,
          size_t offset, 
          size_t size) const{
-        
-        int64_t start = cur->ne[1] / 2 - size - offset + 1;
-        int64_t end = cur->ne[1] / 2 + size + offset;
-        int64_t new_len = end - start;
-        size_t offset_bytes = start * sizeof(float);
-        ggml_tensor * pos_emb = ggml_view_2d(ctx0, cur, 5000, new_len, cur->nb[0], offset_bytes);
-        return pos_emb;
+   
+    int64_t cols = cur->ne[0];           
+    int64_t rows = cur->ne[1];               
+    int64_t start = std::max(int64_t(0), rows / 2 - static_cast<int64_t>(size) - static_cast<int64_t>(offset) + 1);
+    int64_t end = std::min(rows, rows / 2 + static_cast<int64_t>(size) + static_cast<int64_t>(offset));
+    int64_t new_len = end - start;
+    GGML_ASSERT(new_len > 0);
+
+    ggml_tensor * pos_emb = ggml_view_2d(ctx0, cur,
+                                     cols, new_len,
+                                     cur->nb[1],
+                                     start * cur->nb[1]); 
+    return pos_emb;
 }
 
 ggml_tensor * llm_graph_context::build_espnet_pos_encode(
@@ -717,17 +736,38 @@ ggml_tensor * llm_graph_context::build_pre_lookahead_layer(
         const int lookahead = 3;
         ggml_tensor * x = ggml_permute(ctx0, cur, 0, 2, 1, 3);  // [B, C, T]
         ggml_tensor * ctx_t = ggml_permute(ctx0, context, 0, 2, 1, 3);
-        if(ctx_t->ne[0] == 0) {
-            x = ggml_pad(ctx0, x, 0, lookahead, 0, 0);
+        // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&& context shape is: {%d} {%d} {%d} {%d}\n", context->ne[0], context->ne[1], context->ne[2], context->ne[3]);
+        if(ctx_t->ne[2] == 0) {
+            x = ggml_permute(ctx0, x, 0, 1, 3, 2);
+            x = ggml_cont(ctx0, x);
+            x = ggml_pad(ctx0, x, 0, 0, 0, lookahead);
+            x = ggml_permute(ctx0, x, 0, 1, 3, 2);
+            x = ggml_cont(ctx0, x);
         }
+        
+        x = ggml_permute(ctx0, x, 1, 2, 0, 3);   // [length, in_channels, batch, 1]
+        x = ggml_cont(ctx0, x);
         ggml_tensor * outputs = ggml_conv_1d(ctx0, conv1_mw, x, 1, 0, 1);
+        
+        
+        conv1_mb = ggml_reshape_4d(ctx0, conv1_mb, 1, 512, 1, 1);
+        conv1_mb = ggml_repeat(ctx0, conv1_mb, outputs);
+        conv1_mb = ggml_reshape_4d(ctx0, conv1_mb,
+                           outputs->ne[0], outputs->ne[1],
+                           outputs->ne[2], outputs->ne[3]);
+        conv1_mb = ggml_cont(ctx0, conv1_mb);
         outputs = ggml_add(ctx0, outputs, conv1_mb);
         outputs = ggml_leaky_relu(ctx0, outputs, 0.01f, true);
         
         outputs = ggml_pad(ctx0, outputs, 2, 0, 0, 0);
         outputs = ggml_conv_1d(ctx0, conv2_mw, outputs, 1, 0, 1);
-        outputs = ggml_add(ctx0, outputs, conv2_mb);
-        outputs = ggml_permute(ctx0, outputs, 0, 2, 1, 3);
+        conv2_mb = ggml_reshape_3d(ctx0, conv2_mb, 1, 512, 1);
+        conv2_mb = ggml_repeat(ctx0, conv2_mb, outputs);
+        outputs  = ggml_add(ctx0, outputs, conv2_mb);
+        outputs = ggml_reshape_3d(ctx0, outputs, outputs->ne[0], outputs->ne[1], outputs->ne[2]);
+        outputs = ggml_cont(ctx0, outputs);
+        cur     = ggml_reshape_3d(ctx0, cur, outputs->ne[0], outputs->ne[1], outputs->ne[2]);
+        cur = ggml_cont(ctx0, cur);
         outputs = ggml_add(ctx0, outputs, cur);
         cb(outputs, "pre_look_ahead", -1);
 
@@ -746,7 +786,8 @@ ggml_tensor * llm_graph_context::build_rel_pos_attn(
     const int32_t d_k = 64;
     const int32_t heads = 8;
     const int32_t n_batch = cur->ne[2];
-    ggml_tensor * t = ggml_mul_mat(ctx0, mw, cur);
+    ggml_tensor * flat = ggml_reshape_2d(ctx0, cur, cur->ne[0], n_batch * cur->ne[1]);
+    ggml_tensor * t = ggml_mul_mat(ctx0, mw, flat);
     t = ggml_add(ctx0, t, mb);
     t = ggml_reshape_4d(ctx0, t, d_k, heads, cur->ne[1], n_batch);
     t = ggml_cont(ctx0, ggml_permute(ctx0, t, 0, 2, 1, 3));

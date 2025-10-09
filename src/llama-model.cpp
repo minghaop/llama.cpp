@@ -459,7 +459,7 @@ void llama_model::load_hparams(llama_model_loader & ml) {
     if (hparams.use_flow) {
         hparams.n_embd = 512;
         // ml.get_key(LLM_KV_INPUT_SIZE, hparams.n_embd);
-        LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&& check here !!!!!!!!!!\n");
+        // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&& check here !!!!!!!!!!\n");
         // ml.get_key(LLM_KV_TOKEN_MEL_RATIO, hparams.token_mel_ratio);
         // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&& check here !!!!!!!!!!\n");
         // ml.get_key(LLM_KV_SPK_EMBED_DIM, hparams.spk_embed_dim);
@@ -16776,17 +16776,23 @@ struct llm_build_flow : public llm_graph_context {
         ggml_tensor * masks = build_pad_mask(params.ubatch.prompt_token_len + params.ubatch.token_len, T);
         masks = ggml_reshape_3d(ctx0, masks, B, 1, T);
         ggml_tensor * x = build_linear_no_subsampling(token, model.embed_out_0_w, model.embed_out_0_b, model.embed_out_1_w, model.embed_out_1_b);
-        ggml_tensor * t = ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, 5000, 1);
-        ggml_tensor * pe = build_pe(t);
-        pe = build_pe(x);
+        // ggml_tensor * t = ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, 5000, 1);
+        // ggml_tensor * pe = build_pe(t);
+        LLAMA_LOG_INFO("&&&&&&&&&& x shape is: {%d} {%d} {%d} \n", x->ne[0], x->ne[1], x->ne[2]);
+        ggml_tensor * pe = build_pe(x);
         x = build_espnet_pos_encode(x);
         ggml_tensor * pos_emb = build_pos_encoding(pe, x->ne[1], 0);
         ggml_tensor * mask_pad = masks;
         ggml_tensor * chunk_mask = masks;
         x = build_pre_lookahead_layer(x, model.pre_look_conv1_w, model.pre_look_conv1_b, model.pre_look_conv2_w, model.pre_look_conv2_b, context);
+        // x = ggml_permute(ctx0, x, 1, 0, 2, 3);
+        // x = ggml_cont(ctx0, x);
+        
         for(int i = 0; i < 6; i++) {
             ggml_tensor * residual = ggml_dup(ctx0, x);
-            build_layer_norm(x, model.layers[i + 13].encoders_normmha_w, model.layers[i + 13].encoders_normmha_b, 1e-12);
+            x = build_layer_norm(x, model.layers[i + 13].encoders_normmha_w, model.layers[i + 13].encoders_normmha_b, 1e-12);
+            x = ggml_permute(ctx0, x, 1, 0, 2, 3);
+            x = ggml_cont(ctx0, x);
             ggml_tensor * query = build_rel_pos_attn(gf, x, model.layers[i + 13].encoders_wq, model.layers[i + 13].encoders_bq);
             cb(query, "encoder_attn_q", i);
             ggml_tensor * key = build_rel_pos_attn(gf, x, model.layers[i + 13].encoders_wk, model.layers[i + 13].encoders_bk);
@@ -16814,6 +16820,7 @@ struct llm_build_flow : public llm_graph_context {
             x = build_pos_ffn(x, model.layers[i + 13].encoders_ffn_w1, model.layers[i + 13].encoders_ffn_b1, model.layers[i + 13].encoders_ffn_w2, model.layers[i + 13].encoders_ffn_b2);
             x = ggml_add(ctx0, residual, x);
         }
+        // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& check3 \n");
         x = ggml_permute(ctx0, x, 0, 2, 1, 3);
         x = build_upsample_1d(x, model.up_layer_conv_w, model.up_layer_conv_b);
         x = ggml_permute(ctx0, x, 0, 2, 1, 3);
@@ -16821,13 +16828,14 @@ struct llm_build_flow : public llm_graph_context {
         masks = build_pad_mask((params.ubatch.prompt_token_len + params.ubatch.token_len) * 2, x->ne[1]);
         masks = ggml_reshape_3d(ctx0, masks, masks->ne[0], 1, masks->ne[1]);
         x = build_linear_no_subsampling(x, model.up_embed_out_0_w, model.up_embed_out_0_b, model.up_embed_out_1_w, model.up_embed_out_1_b);
-        t = ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, 5000, 1);
-        pe = build_pe(t);
+        ggml_tensor * t = ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, 5000, 1);
+        // pe = build_pe(t);
         pe = build_pe(x);
         x = build_espnet_pos_encode(x);
         pos_emb = build_pos_encoding(pe, x->ne[1], 0);
         mask_pad = masks;
         chunk_mask = masks;
+        // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& check4 \n");
         //build up_encoders
         for(int i = 0; i < 4; i++) {
             ggml_tensor * residual = ggml_dup(ctx0, x);
@@ -16859,6 +16867,7 @@ struct llm_build_flow : public llm_graph_context {
             x = build_pos_ffn(x, model.layers[i + 132].up_encoders_ffn_w1, model.layers[i + 132].up_encoders_ffn_b1, model.layers[i + 132].up_encoders_ffn_w2, model.layers[i + 132].up_encoders_ffn_b2);
             x = ggml_add(ctx0, residual, x);
         }
+        // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& check5 \n");
         x = build_layer_norm(x, model.after_norm_w, model.after_norm_b, 1e-5f);
         x = ggml_mul_mat(ctx0, model.encoder_proj_w, x);
         x = ggml_mul(ctx0, x, model.encoder_proj_b);
