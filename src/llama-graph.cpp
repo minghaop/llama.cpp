@@ -618,81 +618,75 @@ ggml_tensor * llm_graph_context::build_pe(
         
     const int32_t d_model = 512;
     GGML_ASSERT(d_model % 2 == 0);
-    const int64_t seq_len = cur->ne[0];            // 只关心序列长度
-    const int64_t half    = d_model / 2;
+    const int64_t seq_len = cur->ne[0];
+    const int64_t half = d_model / 2;
+    const int64_t total_pe_len = 2 * seq_len - 1;
 
-    /* ---------- 1. position [seq_len, 1]  ---------- */
+    // 1. 创建位置索引 [0, 1, 2, ..., seq_len-1]
     ggml_tensor * position = ggml_arange(ctx0, 0, seq_len, 1);
-    position = ggml_reshape_2d(ctx0, position, 1, seq_len);   // [1, seq_len]
+    position = ggml_reshape_2d(ctx0, position, seq_len, 1);   // [seq_len, 1]
 
-    /* ---------- 2. div_term = exp( arange(0,d_model,2) * -log(10000)/d_model )  ---------- */
+    // 2. 计算div_term
     ggml_tensor * div_term = ggml_arange(ctx0, 0, half, 1);
-    float inv_den = -std::log(10000.0f) / d_model;
-    ggml_set_no_alloc(ctx0, false);
-    div_term = ggml_mul(ctx0, div_term, ggml_new_f32(ctx0, inv_den));
-    ggml_set_no_alloc(ctx0, true);
+    float inv_den = -logf(10000.0f) / d_model;
+    div_term = ggml_scale(ctx0, div_term, inv_den);
     div_term = ggml_exp(ctx0, div_term);                      // [half]
+    div_term = ggml_reshape_2d(ctx0, div_term, 1, half);      // [1, half]
 
-    /* ---------- 3. angle = position * div_term （广播） ---------- */
-    ggml_tensor * angle = ggml_mul(
-        ctx0,
-        ggml_repeat(ctx0, div_term, ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, half, seq_len)),
-        ggml_repeat(ctx0, position, ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, half, seq_len))
-    );   // [half, seq_len]
+    // 3. 计算角度矩阵 - 使用广播乘法
+    ggml_tensor * angle = ggml_mul(ctx0,
+        ggml_repeat(ctx0, position, ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, seq_len, half)),
+        ggml_repeat(ctx0, div_term, ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, seq_len, half))
+    );                                                       // [seq_len, half]
 
-    /* ---------- 4. pe_positive / pe_negative  ---------- */
-    ggml_tensor * pe_pos_half = ggml_sin(ctx0, angle);                 // [half, seq_len]
-    ggml_tensor * pe_neg_half = ggml_sin(ctx0, ggml_scale(ctx0, angle, -1.0f));
+    // 4. 转置角度矩阵以便后续concat操作
+    angle = ggml_cont(ctx0, ggml_transpose(ctx0, angle));    // [half, seq_len]
 
-    /* ---------- 5. 拼成完整 [d_model, seq_len] （偶列 sin，奇列 cos） ---------- */
-    ggml_tensor * pe_pos = ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, d_model, seq_len);
-    ggml_tensor * pe_neg = ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, d_model, seq_len);
-    // 偶列拷贝
-    pe_pos = ggml_cpy(ctx0,
-        ggml_repeat(ctx0, pe_pos_half, ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, half, seq_len)),
-        ggml_view_2d(ctx0, pe_pos, half, seq_len, pe_pos->nb[1], 0));
-    pe_neg = ggml_cpy(ctx0,
-        ggml_repeat(ctx0, pe_neg_half, ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, half, seq_len)),
-        ggml_view_2d(ctx0, pe_neg, half, seq_len, pe_neg->nb[1], 0));
-    // 奇列拷贝（cos 部分）
-    ggml_tensor * cos_pos = ggml_cos(ctx0, angle);
-    ggml_tensor * cos_neg = ggml_cos(ctx0, ggml_scale(ctx0, angle, -1.0f));
-    pe_pos = ggml_cpy(ctx0,
-        ggml_repeat(ctx0, cos_pos, ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, half, seq_len)),
-        ggml_view_2d(ctx0, pe_pos, half, seq_len, pe_pos->nb[1], pe_pos->nb[0] * sizeof(float))); // 偏移到奇列
-    pe_neg = ggml_cpy(ctx0,
-        ggml_repeat(ctx0, cos_neg, ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, half, seq_len)),
-        ggml_view_2d(ctx0, pe_neg, half, seq_len, pe_neg->nb[1], pe_neg->nb[0] * sizeof(float)));
+    // 5. 计算正负位置编码
+    ggml_tensor * pe_sin = ggml_sin(ctx0, angle);
+    ggml_tensor * pe_cos = ggml_cos(ctx0, angle);
+    ggml_tensor * pe_positive = ggml_concat(ctx0, pe_sin, pe_cos, 0);      // [d_model, seq_len]
 
-    /* ---------- 6. flip(pe_pos, 0) 去掉第 0 行，pe_neg 去掉第 0 行  ---------- */
-    // flip dim=0：手动反向 view 拼接（无 STL 版）
-    ggml_tensor * flip = ggml_view_2d(ctx0, pe_pos,
-                                  pe_pos->ne[0], 1,
-                                  pe_pos->nb[1],
-                                  (seq_len - 1) * pe_pos->nb[1]);
-    for (int64_t i = seq_len - 2; i >= 0; --i) {
-        ggml_tensor * row = ggml_view_2d(ctx0, pe_pos,
-                                        pe_pos->ne[0], 1,
-                                        pe_pos->nb[1],
-                                        i * pe_pos->nb[1]);
-        flip = ggml_concat(ctx0, flip, row, 1);
+    // 负位置编码使用角度取反
+    ggml_tensor * neg_angle = ggml_neg(ctx0, angle);
+    ggml_tensor * pe_neg_sin = ggml_sin(ctx0, neg_angle);
+    ggml_tensor * pe_neg_cos = ggml_cos(ctx0, neg_angle);
+    ggml_tensor * pe_negative = ggml_concat(ctx0, pe_neg_sin, pe_neg_cos, 0); // [d_model, seq_len]
+
+    // 6. 转置以便于后续操作
+    pe_positive = ggml_cont(ctx0, ggml_transpose(ctx0, pe_positive));  // [seq_len, d_model]
+    pe_negative = ggml_cont(ctx0, ggml_transpose(ctx0, pe_negative));  // [seq_len, d_model]
+
+    // 7. 直接构建最终的位置编码张量
+    ggml_tensor * pe_cat = ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, total_pe_len, d_model);
+
+    // 7.1 复制翻转的正位置编码 (前seq_len行)
+    for (int64_t i = 0; i < seq_len; ++i) {
+        int64_t src_pos = seq_len - 1 - i;  // 翻转索引
+        
+        // 修正：使用正确的视图创建方式
+        ggml_tensor * src_row = ggml_view_1d(ctx0, pe_positive, d_model, 
+                                            src_pos * d_model * sizeof(float));
+        ggml_tensor * dst_row = ggml_view_1d(ctx0, pe_cat, d_model, 
+                                            i * d_model * sizeof(float));
+        ggml_cpy(ctx0, src_row, dst_row);
     }
 
-    ggml_tensor * neg_cut = ggml_view_2d(ctx0, pe_neg,
-                                        pe_neg->ne[0], 1,
-                                        pe_neg->nb[1],
-                                        1 * pe_neg->nb[1]);
-    for (int64_t i = 2; i < seq_len; ++i) {
-        ggml_tensor * row = ggml_view_2d(ctx0, pe_neg,
-                                        pe_neg->ne[0], 1,
-                                        pe_neg->nb[1],
-                                        i * pe_neg->nb[1]);
-        neg_cut = ggml_concat(ctx0, neg_cut, row, 1);
+    // 7.2 复制负位置编码的后seq_len-1行
+    for (int64_t i = 0; i < seq_len - 1; ++i) {
+        // 修正：使用正确的视图创建方式
+        ggml_tensor * src_row = ggml_view_1d(ctx0, pe_negative, d_model, 
+                                            (i + 1) * d_model * sizeof(float));
+        ggml_tensor * dst_row = ggml_view_1d(ctx0, pe_cat, d_model, 
+                                            (seq_len + i) * d_model * sizeof(float));
+        ggml_cpy(ctx0, src_row, dst_row);
     }
 
-    ggml_tensor * pe_cat = ggml_concat(ctx0, flip, neg_cut, 1);
+    // 8. 转置回 [d_model, total_pe_len] 格式
+    pe_cat = ggml_cont(ctx0, ggml_transpose(ctx0, pe_cat));
 
- 
+
+
     cb(pe_cat, "espnet_rel_pos_encode", -1);
     return pe_cat;
 }
@@ -797,22 +791,29 @@ ggml_tensor * llm_graph_context::build_rel_pos_attn(
 
 ggml_tensor * llm_graph_context::build_rel_shift(
          ggml_tensor * cur) const{
-        
-        const int B      = cur->ne[3];
-        const int n_head = cur->ne[2];
-        const int T      = cur->ne[1];
-        const int L      = cur->ne[0];
+    cur = ggml_permute(ctx0, cur, 1,0,2,3);
+    const int B = cur->ne[3];   
+    const int n_head = cur->ne[2]; 
+    const int T = cur->ne[1];    
+    const int L = cur->ne[0];
 
-        ggml_tensor * zero = ggml_new_tensor_4d(ctx0, cur->type, 1, T, n_head, B);
-        zero = ggml_set_zero(zero);
-        ggml_tensor * x_pad = ggml_concat(ctx0, zero, cur, 0);   
+    auto zero_pad = ggml_new_tensor_4d(ctx0, GGML_TYPE_F32, 1, T, n_head, 1);
+    zero_pad = ggml_scale(ctx0, zero_pad, 0.0f);  
+    ggml_tensor *x_padded = ggml_concat(ctx0, zero_pad, cur, /*dim=*/0);
+    auto reshaped = ggml_reshape_4d(ctx0, x_padded, T, L + 1, n_head, B);
+    ggml_tensor * result = ggml_view_4d(
+                                    ctx0,
+                                    reshaped,
+                                    792,                    
+                                    792,                    
+                                    8,                      
+                                    1,                     
+                                    reshaped->nb[1],
+                                    reshaped->nb[2],
+                                    reshaped->nb[3],
+                                    0);    
 
-        x_pad = ggml_reshape_4d(ctx0, x_pad, T, L+1, n_head, B);
-        x_pad = ggml_cont(ctx0, ggml_permute(ctx0, x_pad, 0, 3, 1, 2)); 
-
-        x_pad = ggml_view_3d(ctx0, x_pad, T, L, n_head*B, x_pad->nb[0], x_pad->nb[1], x_pad->nb[2]);
-
-        return ggml_view_4d(ctx0, x_pad, T, T, n_head, B, x_pad->nb[0], x_pad->nb[1], x_pad->nb[2], 0);
+    return result;
         
 }
 
@@ -828,24 +829,21 @@ ggml_tensor * llm_graph_context::build_attn_scores(
         const int T    = cur->ne[2];
         const int d_k  = cur->ne[0];
         const int d    = n_head * d_k;
+        const int time1 = scores->ne[2];
 
-        
         if (mask && mask->ne[2] > 0) {
-            mask = ggml_reshape_4d(ctx0, mask, mask->ne[0], 1, mask->ne[1], mask->ne[2]);               
-            mask = ggml_repeat(ctx0, mask, scores);             
-            mask = ggml_view_4d(ctx0, mask, T, T, mask->ne[2], mask->ne[3],
-                            mask->nb[0], mask->nb[1], mask->nb[2], 0);
-            scores = ggml_add(ctx0, scores, ggml_mul(ctx0, mask, ggml_new_f32(ctx0, -1e9f)));
+            ggml_tensor * fmask = ggml_cast(ctx0, mask, GGML_TYPE_F32);
+            ggml_tensor * inf_mask = ggml_scale(ctx0, fmask, -INFINITY);
+            scores = ggml_add(ctx0, scores, inf_mask);
         }
-        ggml_tensor * attn = ggml_soft_max(ctx0, scores);
-        attn = ggml_mul(ctx0, attn, ggml_sub(ctx0, ggml_new_f32(ctx0, 1.0f), mask));
-
-        ggml_tensor * out = ggml_mul_mat(ctx0, ggml_permute(ctx0, cur, 0, 1, 3, 2), attn);
-        out = ggml_cont(ctx0, ggml_permute(ctx0, out, 0, 2, 1, 3));
-        out = ggml_reshape_3d(ctx0, out, d, T, B);
-        out = ggml_mul_mat(ctx0, mw, out);
-        out = ggml_add(ctx0, out, mb);
-        return out;
+        ggml_tensor * attn = ggml_soft_max_inplace(ctx0, scores);
+        ggml_tensor * attn_T = ggml_cont(ctx0, ggml_permute(ctx0, attn, 1, 0, 2, 3));
+        ggml_tensor * cur_T = ggml_cont(ctx0, ggml_permute(ctx0, cur, 1, 0, 2, 3));
+        ggml_tensor * x = ggml_mul_mat(ctx0, cur_T, attn_T);
+        x = ggml_reshape_3d(ctx0, x, time1 * d_k, n_head, B);
+        x = ggml_mul_mat(ctx0, mw, x);
+        x = ggml_add(ctx0, x, mb);
+        return x;
 }
 
 
@@ -855,40 +853,31 @@ ggml_tensor * llm_graph_context::build_pos_ffn(
              ggml_tensor * mb_1,
              ggml_tensor * mw_2,
              ggml_tensor * mb_2) const{
+    
+    cur = ggml_mul_mat(ctx0, mw_1, cur);
+    cur = ggml_add(ctx0, cur, mb_1);
+    cur = ggml_silu(ctx0, cur);
+    cur = ggml_mul_mat(ctx0, mw_2, cur);
+    cur = ggml_add(ctx0, cur, mb_2);
 
-            cur = ggml_mul_mat(ctx0, mw_1, cur);
-            cur = ggml_add(ctx0, cur, mb_1);
-            cur = ggml_silu(ctx0, cur);
-            cur = ggml_mul_mat(ctx0, mw_2, cur);
-            cur = ggml_add(ctx0, cur, mb_2);
-
-            return cur;
+    return cur;
 }
 
 ggml_tensor * llm_graph_context::build_upsample_1d(
          ggml_tensor * cur,
          ggml_tensor * mw,
          ggml_tensor * mb) const{
-        
-        const int T = cur->ne[0];
-        const int C = cur->ne[1];
-        const int B = cur->ne[2];
-
-        ggml_tensor * y = ggml_new_tensor_3d(ctx0, cur->type, T * 2, C, B);
-        for (int b = 0; b < B; ++b) {
-            for (int c = 0; c < C; ++c) {
-                for (int t = 0; t < T; ++t) {
-                    float v = *(float *) ((char *) cur->data + b * cur->nb[2] + c * cur->nb[1] + t * cur->nb[0]);
-                    for (int s = 0; s < 2; ++s)
-                        *(float *) ((char *) y->data + b * y->nb[2] + c * y->nb[1] + (t * 2 + s) * y->nb[0]) = v;
-                }
-            }
-        }
-        y = ggml_pad(ctx0, y, 4, 0, 0, 0);
-        y = ggml_conv_1d(ctx0, mw, y, 1, 0, 1);
-        y = ggml_add(ctx0, y, mb);
-        
-        return y;
+    
+    const int T = cur->ne[0];
+    const int C = cur->ne[1];
+    const int B = cur->ne[2];
+    ggml_tensor * up = ggml_upscale(ctx0, cur, 2, GGML_SCALE_MODE_NEAREST);
+    ggml_tensor * pad = ggml_pad(ctx0, up, 0, 0, 4, 0);
+    LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&& up shape is: {%d} {%d} {%d}\n", up->ne[0], up->ne[1], up->ne[2]);
+    ggml_tensor * out = ggml_conv_2d(ctx0, mw, pad, 1, 1, 0, 0, 1, 1);
+    out = ggml_add(ctx0, out, mb);
+    
+    return out;
 }
 
 ggml_tensor * llm_graph_context::build_rand_noise(
