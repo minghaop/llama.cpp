@@ -16776,10 +16776,9 @@ struct llm_build_flow : public llm_graph_context {
         ggml_tensor * masks = build_pad_mask(params.ubatch.prompt_token_len + params.ubatch.token_len, T);
         masks = ggml_reshape_3d(ctx0, masks, B, 1, T);
         ggml_tensor * x = build_linear_no_subsampling(token, model.embed_out_0_w, model.embed_out_0_b, model.embed_out_1_w, model.embed_out_1_b);
-        // ggml_tensor * t = ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, 5000, 1);
-        // ggml_tensor * pe = build_pe(t);
-        LLAMA_LOG_INFO("&&&&&&&&&& x shape is: {%d} {%d} {%d} \n", x->ne[0], x->ne[1], x->ne[2]);
-        ggml_tensor * pe = build_pe(x);
+        ggml_tensor * t = ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, 5000, 1);
+        ggml_tensor * pe = build_pe(t);
+        // ggml_tensor * pe = build_pe(x);
         x = build_espnet_pos_encode(x);
         ggml_tensor * pos_emb = build_pos_encoding(pe, x->ne[1], 0);
         ggml_tensor * mask_pad = masks;
@@ -16787,7 +16786,6 @@ struct llm_build_flow : public llm_graph_context {
         x = build_pre_lookahead_layer(x, model.pre_look_conv1_w, model.pre_look_conv1_b, model.pre_look_conv2_w, model.pre_look_conv2_b, context);
         // x = ggml_permute(ctx0, x, 1, 0, 2, 3);
         // x = ggml_cont(ctx0, x);
-        
         for(int i = 0; i < 6; i++) {
             ggml_tensor * residual = ggml_dup(ctx0, x);
             x = build_layer_norm(x, model.layers[i + 13].encoders_normmha_w, model.layers[i + 13].encoders_normmha_b, 1e-12);
@@ -16806,36 +16804,38 @@ struct llm_build_flow : public llm_graph_context {
             p = ggml_cont(ctx0, ggml_permute(ctx0, p, 0, 2, 1, 3));
             ggml_tensor * q_with_bias_u = ggml_cont(ctx0, ggml_permute(ctx0, ggml_add(ctx0, query, model.layers[i + 13].encoders_pos_bias_u), 0, 2, 1, 3));
             ggml_tensor * q_with_bias_v = ggml_cont(ctx0, ggml_permute(ctx0, ggml_add(ctx0, query, model.layers[i + 13].encoders_pos_bias_v), 0, 2, 1, 3));
-            ggml_tensor * matrix_ac = ggml_mul_mat(ctx0, q_with_bias_u, ggml_cont(ctx0, ggml_permute(ctx0, key, 0, 1, 3, 2)));
-            ggml_tensor * matrix_bd = ggml_mul_mat(ctx0, q_with_bias_v, ggml_cont(ctx0, ggml_permute(ctx0, p, 0, 1, 3, 2)));
-            // if (!ggml_can_mul_mat(matrix_ac, matrix_bd)) {
-            //     matrix_bd = build_rel_shift(matrix_bd);
-            // }
+            ggml_tensor * matrix_ac = ggml_mul_mat(ctx0, q_with_bias_u, key);
+            ggml_tensor * matrix_bd = ggml_mul_mat(ctx0, q_with_bias_v, p);
             matrix_bd = build_rel_shift(matrix_bd);
             ggml_tensor * scores = ggml_scale(ctx0, ggml_add(ctx0, matrix_ac, matrix_bd), 1.0f / sqrtf(float(64.0f)));
             ggml_tensor * x_att = build_attn_scores(value, scores, mask, model.layers[i + 13].encoders_wo, model.layers[i + 13].encoders_bo);
+            residual = ggml_permute(ctx0, residual, 1, 0, 2, 3);
             x = ggml_add(ctx0, residual, x_att);
             residual = ggml_dup(ctx0, x);
+            x = ggml_permute(ctx0, x, 1, 0, 2, 3);
             x = build_layer_norm(x, model.layers[i + 13].encoders_normffn_w, model.layers[i + 13].encoders_normffn_b, 1e-12);
+            x = ggml_permute(ctx0, x, 1, 0, 2, 3);
             x = build_pos_ffn(x, model.layers[i + 13].encoders_ffn_w1, model.layers[i + 13].encoders_ffn_b1, model.layers[i + 13].encoders_ffn_w2, model.layers[i + 13].encoders_ffn_b2);
             x = ggml_add(ctx0, residual, x);
+            x = ggml_permute(ctx0, x, 1, 0, 2, 3);
         }
-        // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& check3 \n");
-        x = ggml_permute(ctx0, x, 0, 2, 1, 3);
+        LLAMA_LOG_INFO("&&&&&&&&&&&& x shape is: {%d} {%d} {%d} {%d}\n", x->ne[0], x->ne[1], x->ne[2], x->ne[3]);
         x = build_upsample_1d(x, model.up_layer_conv_w, model.up_layer_conv_b);
         x = ggml_permute(ctx0, x, 0, 2, 1, 3);
+        LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& check4 \n");
         // token_len = ggml_mul(ctx0, token_len, ggml_new_i32(ctx0, 2));
         masks = build_pad_mask((params.ubatch.prompt_token_len + params.ubatch.token_len) * 2, x->ne[1]);
         masks = ggml_reshape_3d(ctx0, masks, masks->ne[0], 1, masks->ne[1]);
         x = build_linear_no_subsampling(x, model.up_embed_out_0_w, model.up_embed_out_0_b, model.up_embed_out_1_w, model.up_embed_out_1_b);
-        ggml_tensor * t = ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, 5000, 1);
-        // pe = build_pe(t);
-        pe = build_pe(x);
+        t = ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, 5000, 1);
+        pe = build_pe(t);
+        // pe = build_pe(x);
+        LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&& pe shape is: {%d} {%d} {%d} \n", pe->ne[0], pe->ne[1], pe->ne[2]);
         x = build_espnet_pos_encode(x);
         pos_emb = build_pos_encoding(pe, x->ne[1], 0);
         mask_pad = masks;
         chunk_mask = masks;
-        // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& check4 \n");
+        LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& check4 \n");
         //build up_encoders
         for(int i = 0; i < 4; i++) {
             ggml_tensor * residual = ggml_dup(ctx0, x);
