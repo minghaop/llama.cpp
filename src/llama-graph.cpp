@@ -578,21 +578,32 @@ ggml_tensor * llm_graph_context::build_flow_embedding(
 
 ggml_tensor * llm_graph_context::build_pad_mask(int32_t total_len, int32_t max_len) const {
     
-    if (max_len > 0) {
-        max_len = max_len;
-    } else {
+    if(max_len <= 0) {
         max_len = total_len;
     }
-    std::vector<float> mask_host(max_len, 0.0f);
+    // std::vector<float> mask_host(max_len, 0.0f);
+    // for (int t = 0; t < max_len; ++t)
+    //     mask_host[t] = (t >= total_len) ? 1.0f : 0.0f;
+    // ggml_tensor * mask = ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, max_len, 1);
+    // // ggml_allocr_alloc(allocr, mask);
+    // ggml_backend_alloc_ctx_tensors(ctx0, backend_cpu);
+    // ggml_backend_tensor_set(mask, mask_host.data(), 0, mask_host.size() * sizeof(float));
+    // mask = ggml_neg(ctx0, mask);
+    // ggml_set_no_alloc(ctx0, false);
+    // mask = ggml_add1(ctx0, mask, ggml_new_f32(ctx0, 1.0f));
+    // ggml_set_no_alloc(ctx0, true);
+    // ggml_tensor * seq_range = ggml_arange(ctx0, 0.0f, (float)max_len, 1.0f);
+    // seq_range = ggml_cast(ctx0, seq_range, GGML_TYPE_I32);
+    // ggml_tensor * seq_range_expand = ggml_reshape_2d(ctx0, seq_range, max_len, 1);
+    std::vector<int32_t> mask_host(max_len, 0);
     for (int t = 0; t < max_len; ++t)
-        mask_host[t] = (t >= total_len) ? 1.0f : 0.0f;
-    ggml_tensor * mask = ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, max_len, 1);
-    ggml_backend_alloc_ctx_tensors(ctx0, backend_cpu);
-    ggml_backend_tensor_set(mask, mask_host.data(), 0, mask_host.size() * sizeof(float));
-    mask = ggml_neg(ctx0, mask);
-    ggml_set_no_alloc(ctx0, false);
-    mask = ggml_add1(ctx0, mask, ggml_new_f32(ctx0, 1.0f));
-    ggml_set_no_alloc(ctx0, true);
+        mask_host[t] = (t < total_len) ? 1 : 0;
+    ggml_tensor * mask = ggml_new_tensor_2d(ctx0, GGML_TYPE_I32, max_len, 1);
+    ggml_backend_t backend = ggml_backend_cpu_init();   // 或 cuda/metal
+    ggml_backend_buffer_t buffer =
+            ggml_backend_alloc_ctx_tensors(ctx0, backend);
+    ggml_backend_tensor_set(mask, mask_host.data(), 0, mask_host.size() * sizeof(int32_t));
+
     cb(mask, "non_pad_mask", -1);
     return mask;
 }
@@ -864,19 +875,38 @@ ggml_tensor * llm_graph_context::build_pos_ffn(
 }
 
 ggml_tensor * llm_graph_context::build_upsample_1d(
-         ggml_tensor * cur,
-         ggml_tensor * mw,
-         ggml_tensor * mb) const{
-    
-    const int T = cur->ne[0];
-    const int C = cur->ne[1];
-    const int B = cur->ne[2];
-    ggml_tensor * up = ggml_upscale(ctx0, cur, 2, GGML_SCALE_MODE_NEAREST);
-    ggml_tensor * pad = ggml_pad(ctx0, up, 0, 0, 4, 0);
-    LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&& up shape is: {%d} {%d} {%d}\n", up->ne[0], up->ne[1], up->ne[2]);
-    ggml_tensor * out = ggml_conv_2d(ctx0, mw, pad, 1, 1, 0, 0, 1, 1);
+        ggml_tensor * cur,
+        ggml_tensor * mw,
+        ggml_tensor * mb) const
+{
+    const int64_t stride = 2;
+    int64_t L_old = cur->ne[0];
+    int64_t L_new = L_old * stride;
+
+    // --- 1. 仅长度方向最近邻上采样 ---
+    ggml_tensor * flat = ggml_reshape_4d(ctx0,
+                                     ggml_cont(ctx0, cur),   // 先连续
+                                     L_old,
+                                     cur->ne[1] * cur->ne[2] * cur->ne[3],
+                                     1, 1);
+    ggml_tensor * up_flat = ggml_repeat(ctx0,
+                                        flat,
+                                        ggml_new_tensor_4d(ctx0, cur->type,
+                                                           L_new,
+                                                           flat->ne[1],
+                                                           1, 1));
+    ggml_tensor * up = ggml_reshape_3d(ctx0, up_flat,
+                                       L_new,
+                                       cur->ne[1],
+                                       cur->ne[2] * cur->ne[3]);
+
+    // --- 2. 右侧零填充 ---
+    ggml_tensor * pad = ggml_pad(ctx0, up, 4, 0, 0, 0);
+    // --- 3. 1-D 卷积 ---
+    ggml_tensor * out = ggml_conv_1d(ctx0, mw, pad, 1, 0, 1);
+    mb = ggml_reshape_3d(ctx0, mb, 1, 512, 1);
+    mb = ggml_repeat(ctx0, mb, out);
     out = ggml_add(ctx0, out, mb);
-    
     return out;
 }
 
