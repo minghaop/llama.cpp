@@ -696,7 +696,7 @@ struct llm_graph_context {
          ggml_tensor * cond,
          const llama_model & model) const;
     
-    ggml_tensor * build_solver_euler(
+    ggml_tensor * build_solve_euler(
          ggml_tensor * z,
          ggml_tensor * t_span,
          ggml_tensor * mu,
