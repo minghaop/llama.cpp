@@ -518,18 +518,21 @@ ggml_tensor * llm_graph_context::build_layer_norm(
          ggml_tensor * mw,
          ggml_tensor * mb,
          float eps) const{
-        
-        mw = ggml_reshape_4d(ctx0, mw, 1, cur->ne[1], 1, 1);
-        mb = ggml_reshape_4d(ctx0, mb, 1, cur->ne[1], 1, 1);
-        mw = ggml_cast(ctx0, mw, cur->type);
-        mb = ggml_cast(ctx0, mb, cur->type);
-        cur = ggml_norm(ctx0, cur, eps);
-        mw = ggml_repeat(ctx0, mw, cur);
-        mb = ggml_repeat(ctx0, mb, cur);
-        cur = ggml_mul(ctx0, cur, mw);
-        cur = ggml_add(ctx0, cur, mb);
-        cb(cur, "layer_norm", -1);
-        return cur;
+    
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&& cur shape is: %d, %d, %d, %d \n", cur->ne[0], cur->ne[1], cur->ne[2], cur->ne[3]);
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&& mw shape is: %d, %d, %d, %d \n", mw->ne[0], mw->ne[1], mw->ne[2], mw->ne[3]);
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&& mb shape is: %d, %d, %d, %d \n", mb->ne[0], mb->ne[1], mb->ne[2], mb->ne[3]);
+    mw = ggml_reshape_4d(ctx0, mw, 1, cur->ne[1], 1, 1);
+    mb = ggml_reshape_4d(ctx0, mb, 1, cur->ne[1], 1, 1);
+    mw = ggml_cast(ctx0, mw, cur->type);
+    mb = ggml_cast(ctx0, mb, cur->type);
+    cur = ggml_norm(ctx0, cur, eps);
+    mw = ggml_repeat(ctx0, mw, cur);
+    mb = ggml_repeat(ctx0, mb, cur);
+    cur = ggml_mul(ctx0, cur, mw);
+    cur = ggml_add(ctx0, cur, mb);
+    cb(cur, "layer_norm", -1);
+    return cur;
 
 }
 
@@ -581,20 +584,6 @@ ggml_tensor * llm_graph_context::build_pad_mask(int32_t total_len, int32_t max_l
     if(max_len <= 0) {
         max_len = total_len;
     }
-    // std::vector<float> mask_host(max_len, 0.0f);
-    // for (int t = 0; t < max_len; ++t)
-    //     mask_host[t] = (t >= total_len) ? 1.0f : 0.0f;
-    // ggml_tensor * mask = ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, max_len, 1);
-    // // ggml_allocr_alloc(allocr, mask);
-    // ggml_backend_alloc_ctx_tensors(ctx0, backend_cpu);
-    // ggml_backend_tensor_set(mask, mask_host.data(), 0, mask_host.size() * sizeof(float));
-    // mask = ggml_neg(ctx0, mask);
-    // ggml_set_no_alloc(ctx0, false);
-    // mask = ggml_add1(ctx0, mask, ggml_new_f32(ctx0, 1.0f));
-    // ggml_set_no_alloc(ctx0, true);
-    // ggml_tensor * seq_range = ggml_arange(ctx0, 0.0f, (float)max_len, 1.0f);
-    // seq_range = ggml_cast(ctx0, seq_range, GGML_TYPE_I32);
-    // ggml_tensor * seq_range_expand = ggml_reshape_2d(ctx0, seq_range, max_len, 1);
     std::vector<int32_t> mask_host(max_len, 0);
     for (int t = 0; t < max_len; ++t)
         mask_host[t] = (t < total_len) ? 1 : 0;
@@ -914,6 +903,7 @@ ggml_tensor * llm_graph_context::build_rand_noise(
          ggml_tensor * cur,
          float tempture) const{
     ggml_tensor * out = ggml_new_tensor_3d(ctx0, cur->type, 50*300, 80, 1);
+    ggml_backend_alloc_ctx_tensors(ctx0, backend_cpu);
     const int64_t n_elm = ggml_nelements(out);
     std::vector<float> tmp(n_elm);
     std::mt19937 gen(42);
@@ -921,7 +911,7 @@ ggml_tensor * llm_graph_context::build_rand_noise(
     for (int64_t i = 0; i < n_elm; ++i) tmp[i] = dist(gen);
     ggml_backend_tensor_set(out, tmp.data(), 0, tmp.size()*sizeof(float));
     ggml_tensor * z = ggml_view_3d(ctx0, out, 80, cur->ne[0], cur->ne[2], out->nb[0], out->nb[1], 0);
-    z = ggml_scale(ctx0, z, tempture);
+    // z = ggml_scale_inplace(ctx0, z, tempture);
     return z;
 }
 
@@ -930,13 +920,21 @@ ggml_tensor * llm_graph_context::build_causal_cond_cfm(
          int64_t n_timesteps) const{
         
     ggml_tensor * t_span = ggml_new_tensor_1d(ctx0, GGML_TYPE_F32, n_timesteps + 1);
+    ggml_backend_alloc_ctx_tensors(ctx0, backend_cpu);
     float * ptr = (float *)t_span->data;
     float start = 0.0f, end = 1.0f;
     int steps = n_timesteps + 1;
     for (int i = 0; i < steps; ++i) {
         ptr[i] = start + i * (end - start) / (steps - 1);
     }
-    t_span = ggml_sub(ctx0, ggml_new_f32(ctx0, 1.0f), ggml_cos(ctx0, ggml_mul(ctx0, t_span, ggml_new_f32(ctx0, 0.5f * M_PI))));
+    // Temporarily disable no-alloc to create scalar constants, then re-allocate newly created tensors
+    ggml_set_no_alloc(ctx0, false);
+    // 修正广播问题：将 1.0f 扩展为与 cos(...) 结果相同 shape
+    ggml_tensor *t_cos = ggml_cos(ctx0, ggml_mul(ctx0, t_span, ggml_new_f32(ctx0, 0.5f * M_PI)));
+    ggml_tensor *one_broadcast = ggml_repeat(ctx0, ggml_new_f32(ctx0, 1.0f), t_cos);
+    t_span = ggml_sub(ctx0, one_broadcast, t_cos);
+    ggml_set_no_alloc(ctx0, true);
+    // ggml_backend_alloc_ctx_tensors(ctx0, backend_cpu);
     
     cb(t_span, "causal_cond_cfm", -1);
     return t_span;
@@ -947,23 +945,25 @@ ggml_tensor * llm_graph_context::build_sinusoidal_pos_emb(
          int dim,
          int scale) const{
         
-    const int64_t n_token = cur->ne[0];
+    const int64_t n_token = cur->ne[1];
     const int half_dim = dim / 2;
 
     float emb_div = std::log(10000.0f) / (half_dim - 1);
     ggml_tensor * idx = ggml_arange(ctx0, 0, half_dim, 1);
     idx = ggml_cast(ctx0, idx, GGML_TYPE_F32);
     ggml_tensor * emb = ggml_scale(ctx0, idx, -emb_div);
-    emb = ggml_exp(ctx0, emb);                 
+    emb = ggml_exp(ctx0, emb);
+    LLAMA_LOG_INFO("&&&&&&&&&&&&& cur shape is: %d, %d, %d \n", cur->ne[0], cur->ne[1], cur->ne[2]);           
     ggml_tensor * x_col = ggml_reshape_2d(ctx0, cur, n_token, 1);   
     ggml_tensor * emb_row = ggml_reshape_2d(ctx0, emb, 1, half_dim); 
-    ggml_tensor * xx = ggml_scale(ctx0, x_col, scale);           
-    ggml_tensor * out = ggml_mul_mat(ctx0, emb_row, xx);       
+    ggml_tensor * xx = ggml_scale(ctx0, x_col, scale);
+    xx = ggml_reshape_2d(ctx0, xx, 1, n_token);          
+    ggml_tensor * out = ggml_mul_mat(ctx0, xx, emb_row);       
 
     ggml_tensor * sin_t = ggml_sin(ctx0, out);
     ggml_tensor * cos_t = ggml_cos(ctx0, out);
     ggml_tensor * emb_final = ggml_concat(ctx0, sin_t, cos_t, 1); 
-
+    LLAMA_LOG_INFO("&&&&&&&&&&&&& pos emb shape is: %d, %d \n", emb_final->ne[0], emb_final->ne[1]);
     return emb_final;
 }
 
@@ -1266,9 +1266,13 @@ ggml_tensor * llm_graph_context::build_causal_cond_decoder(
          ggml_tensor * spks,
          ggml_tensor * cond,
          const llama_model & model) const{
-        
+    
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&& t shape is: {%d} {%d}\n", t->ne[0], );
+    t = build_sinusoidal_pos_emb(t, 320, 1000);
+    t = build_timestep_embedding(t, model.time_mlp_1_w, model.time_mlp_1_b, model.time_mlp_2_w, model.time_mlp_2_b);
     x = ggml_concat(ctx0, x, mu, 2);
-
+    LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&& x shape is: {%d} {%d} {%d}\n", x->ne[0], x->ne[1], x->ne[2]);
+    LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&& spks shape is: {%d} {%d} {%d}\n", spks->ne[0], spks->ne[1], spks->ne[2]);
     if (spks) {
         ggml_tensor * spks_t = ggml_repeat(ctx0, ggml_reshape_2d(ctx0, spks, spks->ne[0], 1), ggml_new_tensor_3d(ctx0, spks->type, x->ne[0], 1, x->ne[2]));
         x = ggml_concat(ctx0, x, spks_t, 2);
@@ -1358,7 +1362,7 @@ ggml_tensor * llm_graph_context::build_causal_cond_decoder(
     return ggml_mul(ctx0, x, mask_up);
 }
 
-ggml_tensor * llm_graph_context::build_solver_euler(
+ggml_tensor * llm_graph_context::build_solve_euler(
          ggml_tensor * z,
          ggml_tensor * t_span,
          ggml_tensor * mu,
@@ -1372,14 +1376,20 @@ ggml_tensor * llm_graph_context::build_solver_euler(
     const int64_t N   = t_span->ne[0]; 
     const int64_t spk_dim = spks ? spks->ne[0] : 0;
 
-    float t0, t1, dt;
-    ggml_backend_tensor_get(t_span, &t0, 0, sizeof(float));
-    ggml_backend_tensor_get(t_span, &t1, (N-1)*sizeof(float), sizeof(float));
-    ggml_backend_tensor_get(t_span, &dt, sizeof(float), sizeof(float));
+    // float t0, t1, dt;
+    // ggml_backend_buffer_t buffer = ggml_backend_alloc_buffer(ggml_backend_cpu_buffer_type(), ggml_nbytes(t_span));
+    // ggml_set_backend_buffer(t_span, buffer);
+    // ggml_backend_tensor_get(t_span, &t0, 0, sizeof(float)); 
+    // ggml_backend_tensor_get(t_span, &t1, (N-1)*sizeof(float), sizeof(float));
+    // ggml_backend_tensor_get(t_span, &dt, sizeof(float), sizeof(float));
+    float * ptr = (float *)t_span->data;
+    float t0 = ptr[0];
+    float t1 = ptr[N-1];
+    float dt = ptr[1] - ptr[0]; // 或其它方式
 
     ggml_tensor * t = ggml_new_tensor_1d(ctx0, z->type, B);
+    ggml_backend_alloc_ctx_tensors(ctx0, backend_cpu);
     ggml_set_f32(t, t0);
-
     ggml_tensor * z_in   = ggml_new_tensor_3d(ctx0, z->type, T, 80, 2*B);
     ggml_tensor * mask_in= ggml_new_tensor_3d(ctx0, mask->type, T, 1, 2*B);
     ggml_tensor * mu_in  = ggml_new_tensor_3d(ctx0, mu->type, T, 80, 2*B);
@@ -1387,6 +1397,7 @@ ggml_tensor * llm_graph_context::build_solver_euler(
     ggml_tensor * spks_in= ggml_new_tensor_2d(ctx0, spks->type, spk_dim, 2*B);
     ggml_tensor * cond_in= ggml_new_tensor_3d(ctx0, cond->type, T, 80, 2*B);
     std::vector<ggml_tensor *> sol;
+    
     for (int64_t step = 1; step < N; ++step) {
         z_in = ggml_cpy(ctx0, ggml_repeat(ctx0, z, ggml_new_tensor_3d(ctx0, z->type, T, 80, 2*B)), z_in);
         mask_in = ggml_cpy(ctx0, ggml_repeat(ctx0, mask, ggml_new_tensor_3d(ctx0, mask->type, T, 1, 2*B)), mask_in);
@@ -1804,10 +1815,10 @@ ggml_tensor * llm_graph_context::build_inp_prompt_token() const {
 
 ggml_tensor * llm_graph_context::build_inp_prompt_feat() const {
 
-    const uint32_t feat_len = ubatch.prompt_feat_len;
+    const uint32_t feat_len = ubatch.prompt_feat_len / 80;
     
     auto inp = std::make_unique<llm_graph_input_prompt_feat>();
-
+    LLAMA_LOG_INFO("&&&&&&&&&&&&& feat_len is: %d\n", feat_len);
     ggml_tensor * cur = nullptr;
     inp->input_prompt_feat = ggml_new_tensor_2d(ctx0, GGML_TYPE_I32, hparams.output_size, feat_len);
     ggml_backend_buffer_t buf = ggml_backend_alloc_ctx_tensors(ctx0, backend_cpu);
