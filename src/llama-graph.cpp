@@ -953,7 +953,6 @@ ggml_tensor * llm_graph_context::build_sinusoidal_pos_emb(
     idx = ggml_cast(ctx0, idx, GGML_TYPE_F32);
     ggml_tensor * emb = ggml_scale(ctx0, idx, -emb_div);
     emb = ggml_exp(ctx0, emb);
-    LLAMA_LOG_INFO("&&&&&&&&&&&&& cur shape is: %d, %d, %d \n", cur->ne[0], cur->ne[1], cur->ne[2]);           
     ggml_tensor * x_col = ggml_reshape_2d(ctx0, cur, n_token, 1);   
     ggml_tensor * emb_row = ggml_reshape_2d(ctx0, emb, 1, half_dim); 
     ggml_tensor * xx = ggml_scale(ctx0, x_col, scale);
@@ -963,7 +962,6 @@ ggml_tensor * llm_graph_context::build_sinusoidal_pos_emb(
     ggml_tensor * sin_t = ggml_sin(ctx0, out);
     ggml_tensor * cos_t = ggml_cos(ctx0, out);
     ggml_tensor * emb_final = ggml_concat(ctx0, sin_t, cos_t, 1); 
-    LLAMA_LOG_INFO("&&&&&&&&&&&&& pos emb shape is: %d, %d \n", emb_final->ne[0], emb_final->ne[1]);
     return emb_final;
 }
 
@@ -973,12 +971,13 @@ ggml_tensor * llm_graph_context::build_timestep_embedding(
          ggml_tensor * mb_1,
          ggml_tensor * mw_2,
          ggml_tensor * mb_2) const{
+    
+    cur = ggml_permute(ctx0, cur, 1, 0, 2, 3);
     cur = ggml_mul_mat(ctx0, mw_1, cur);
     cur = ggml_add(ctx0, cur, mb_1);
     cur = ggml_silu(ctx0, cur);
     cur = ggml_mul_mat(ctx0, mw_2, cur);
     cur = ggml_add(ctx0, cur, mb_2);
-
     return cur;
 }
 
@@ -1109,6 +1108,7 @@ ggml_tensor * llm_graph_context::causal_conv1d_forward(
     const int causal_pad = 3 - 1;
     
     ggml_tensor * pad = ggml_new_tensor_3d(ctx0, x->type, x->ne[0] + causal_pad, x->ne[1], x->ne[2]);
+    ggml_backend_alloc_ctx_tensors(ctx0, backend_cpu);
     ggml_set_f32(pad, 0.0f);
     pad = ggml_cpy(ctx0, ggml_view_3d(ctx0, pad, x->ne[0], x->ne[1], x->ne[2], pad->nb[1], pad->nb[2], causal_pad * pad->nb[0]), x);
     ggml_tensor * model_weight;
@@ -1150,9 +1150,9 @@ ggml_tensor * llm_graph_context::causal_conv1d_forward(
         model_weight = model.f_blk_norm_w;
         model_bias = model.f_blk_norm_b;
     }
-    ggml_tensor * y = ggml_conv_1d(ctx0, model_weight, pad, 1, 0, 1);
-    y = ggml_add(ctx0, y, ggml_repeat(ctx0, ggml_reshape_1d(ctx0, model_bias, model_bias->ne[0]), y));
-    
+    ggml_tensor * y = ggml_conv_1d(ctx0, model_weight, pad, 1, 1, 1);
+    y = ggml_add(ctx0, y, ggml_repeat(ctx0, ggml_reshape_3d(ctx0, model_bias, 1, model_bias->ne[0], 1), y));
+    LLAMA_LOG_INFO("&&&&&&&&&&&&&&&& y shape is: {%d} {%d} {%d}\n", y->ne[0], y->ne[1], y->ne[2]);
     return y;
 }
 
@@ -1164,8 +1164,8 @@ ggml_tensor * llm_graph_context::causal_block1d_forward(
         int64_t blk_id,
         const llama_model & model) const{
     x = ggml_mul(ctx0, x, mask);
+    LLAMA_LOG_INFO("&&&&&&&&&&&&&&&& x after mask shape is: {%d} {%d} {%d}\n", x->ne[0], x->ne[1], x->ne[2]);
     x = causal_conv1d_forward(x, mode, layer_id, blk_id, model);
-    x = ggml_cont(ctx0, ggml_permute(ctx0, x, 0, 2, 1, 3));
     ggml_tensor * model_weight;
     ggml_tensor * model_bias;
     if (mode == "down_block") {
@@ -1197,9 +1197,15 @@ ggml_tensor * llm_graph_context::causal_block1d_forward(
         model_weight = model.f_blk_norm_w;
         model_bias = model.f_blk_norm_b;
     }
+   
     x = build_layer_norm(x, model_weight, model_bias, 1e-5f);
     x = ggml_cont(ctx0, ggml_permute(ctx0, x, 0, 2, 1, 3));
-    x = ggml_mul(ctx0, x, ggml_tanh(ctx0, ggml_log(ctx0, ggml_add(ctx0, ggml_exp(ctx0, x), ggml_new_f32(ctx0, 1.0f)))));
+    ggml_tensor * tmp = ggml_new_tensor_1d(ctx0, GGML_TYPE_F32, 1);
+    ggml_backend_alloc_ctx_tensors(ctx0, backend_cpu); // 先分配
+    float val = 1.0f;
+    ggml_backend_tensor_set(tmp, &val, 0, sizeof(float));
+    x = ggml_mul(ctx0, x, ggml_tanh(ctx0, ggml_log(ctx0, ggml_add(ctx0, ggml_exp(ctx0, x), tmp))));
+    
     if (mask)
         x = ggml_mul(ctx0, x, mask);
     return x;
@@ -1212,8 +1218,14 @@ ggml_tensor * llm_graph_context::causal_resnet_block1d_forward(
         int64_t layer_id,
         std::string mode,
         const llama_model & model) const{
+    ggml_tensor * x_dup = ggml_dup(ctx0, x);
+    LLAMA_LOG_INFO("&&&&&&&&&&&&&&&& x before causal shape is: {%d} {%d} {%d}\n", x->ne[0], x->ne[1], x->ne[2]);
     x = causal_block1d_forward(x, mask, mode, layer_id, 1, model);
-    x = ggml_mul(ctx0, x, ggml_tanh(ctx0, ggml_log(ctx0, ggml_add(ctx0,ggml_exp(ctx0, x), ggml_new_f32(ctx0, 1.0f)))));
+    ggml_tensor * tmp = ggml_new_tensor_1d(ctx0, GGML_TYPE_F32, 1);
+    ggml_backend_alloc_ctx_tensors(ctx0, backend_cpu); 
+    float val = 1.0f;
+    ggml_backend_tensor_set(tmp, &val, 0, sizeof(float));
+    x = ggml_mul(ctx0, x, ggml_tanh(ctx0, ggml_log(ctx0, ggml_add(ctx0,ggml_exp(ctx0, x), tmp))));
     if(mode == "down_block") {
         t_emb = ggml_mul_mat(ctx0, model.down_blk_mlp_w, t_emb);
         t_emb = ggml_add(ctx0, t_emb, model.down_blk_mlp_b);
@@ -1224,23 +1236,31 @@ ggml_tensor * llm_graph_context::causal_resnet_block1d_forward(
         t_emb = ggml_mul_mat(ctx0, model.up_blk_mlp_w, t_emb);
         t_emb = ggml_add(ctx0, t_emb, model.up_blk_mlp_b);
     }
-    
-    t_emb = ggml_repeat(ctx0, ggml_cont(ctx0, ggml_permute(ctx0, ggml_repeat(ctx0, ggml_reshape_2d(ctx0, t_emb, 256, 1), ggml_new_tensor_3d(ctx0, t_emb->type, 1, 256, t_emb->ne[0])),
-                            0, 2, 1, 3)), t_emb); 
+    t_emb = ggml_repeat(ctx0, ggml_reshape_3d(ctx0, t_emb, 1, t_emb->ne[1], t_emb->ne[0]), x); 
     x = ggml_add(ctx0, x, t_emb);
+    x = ggml_cont(ctx0, ggml_permute(ctx0, x, 0, 2, 1, 3));
     x = causal_block1d_forward(x, mask, mode, layer_id, 2, model);
-    ggml_tensor * x_mask = ggml_mul(ctx0, x, mask);
+    ggml_tensor * x_mask = ggml_mul(ctx0, x_dup, mask);
+    ggml_tensor * x_mask_flat = ggml_reshape_2d(ctx0, x_mask, x_mask->ne[0] * x_mask->ne[2], x_mask->ne[1]);
+    x_mask_flat = ggml_cont(ctx0, ggml_permute(ctx0, x_mask_flat, 1, 0, 2, 3)); 
     if(mode == "down_block") {
-        x_mask = ggml_mul_mat(ctx0, model.down_blk_res_w, x_mask);
+        ggml_tensor * w = ggml_reshape_2d(ctx0, model.down_blk_res_w, model.down_blk_res_w->ne[1], model.down_blk_res_w->ne[2]);
+        x_mask = ggml_mul_mat(ctx0, w, x_mask_flat);
+        x_mask = ggml_reshape_3d(ctx0, x_mask, x_mask->ne[0], x_mask->ne[1] / 2, 2);
         x_mask = ggml_add(ctx0, x_mask, model.down_blk_res_b);
     } else if(mode == "mid_block") {
-        x_mask = ggml_mul_mat(ctx0, model.layers[layer_id].mid_block_res_w, x_mask);
+        ggml_tensor * w = ggml_reshape_2d(ctx0, model.layers[layer_id].mid_block_res_w, model.layers[layer_id].mid_block_res_w->ne[1], model.layers[layer_id].mid_block_res_w->ne[2]);
+        x_mask = ggml_mul_mat(ctx0, w, x_mask_flat);
         x_mask = ggml_add(ctx0, x_mask, model.layers[layer_id].mid_block_res_b);
     } else {
-        x_mask = ggml_mul_mat(ctx0, model.up_blk_res_w, x_mask);
+        ggml_tensor * w = ggml_reshape_2d(ctx0, model.up_blk_res_w, model.up_blk_res_w->ne[1], model.up_blk_res_w->ne[2]);
+        x_mask = ggml_mul_mat(ctx0, w, x_mask_flat);
         x_mask = ggml_add(ctx0, x_mask, model.up_blk_res_b);
     }
-
+    LLAMA_LOG_INFO("&&&&&&&&&&&&&&&& x shape is: {%d} {%d} {%d}\n", x->ne[0], x->ne[1], x->ne[2]);
+    LLAMA_LOG_INFO("&&&&&&&&&&&&&&&& x_mask shape is: {%d} {%d} {%d}\n", x_mask->ne[0], x_mask->ne[1], x_mask->ne[2]);
+    x = ggml_cont(ctx0, ggml_permute(ctx0, x, 0, 2, 1, 3));
+    x = ggml_cont(ctx0, ggml_permute(ctx0, x, 1, 0, 2, 3));
     x = ggml_add(ctx0, x, x_mask);
     
     return x;
@@ -1251,8 +1271,10 @@ ggml_tensor * llm_graph_context::mask_to_bias(
         ggml_type   dtype) const{
     mask = ggml_cast(ctx0, mask, dtype);
     ggml_tensor * one = ggml_new_tensor_1d(ctx0, dtype, 1);
+    ggml_backend_alloc_ctx_tensors(ctx0, backend_cpu); 
     ggml_set_f32(one, 1.0f);
     ggml_tensor * neg_big = ggml_new_tensor_1d(ctx0, dtype, 1);
+    ggml_backend_alloc_ctx_tensors(ctx0, backend_cpu); 
     ggml_set_f32(neg_big, -1.0e10f);
     return ggml_mul(ctx0, ggml_sub(ctx0, one, mask), neg_big);
 }
@@ -1270,22 +1292,27 @@ ggml_tensor * llm_graph_context::build_causal_cond_decoder(
     // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&& t shape is: {%d} {%d}\n", t->ne[0], );
     t = build_sinusoidal_pos_emb(t, 320, 1000);
     t = build_timestep_embedding(t, model.time_mlp_1_w, model.time_mlp_1_b, model.time_mlp_2_w, model.time_mlp_2_b);
-    x = ggml_concat(ctx0, x, mu, 2);
-    LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&& x shape is: {%d} {%d} {%d}\n", x->ne[0], x->ne[1], x->ne[2]);
-    LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&& spks shape is: {%d} {%d} {%d}\n", spks->ne[0], spks->ne[1], spks->ne[2]);
+    x = ggml_concat(ctx0, x, mu, 1);
+    
     if (spks) {
-        ggml_tensor * spks_t = ggml_repeat(ctx0, ggml_reshape_2d(ctx0, spks, spks->ne[0], 1), ggml_new_tensor_3d(ctx0, spks->type, x->ne[0], 1, x->ne[2]));
-        x = ggml_concat(ctx0, x, spks_t, 2);
+        ggml_tensor * spks_t = ggml_repeat(ctx0, ggml_reshape_3d(ctx0, spks, 1, spks->ne[0], spks->ne[1]), ggml_new_tensor_3d(ctx0, spks->type, x->ne[0], spks->ne[0], spks->ne[1]));
+        x = ggml_concat(ctx0, x, spks_t, 1);
     }
     if (cond) {
-        x = ggml_concat(ctx0, x, cond, 2);
+        x = ggml_concat(ctx0, x, cond, 1);
     }
 
     std::vector<ggml_tensor *> hiddens;
     std::vector<ggml_tensor *> masks = {mask};
-
+    
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&& here1\n");
     ggml_tensor * mask_down = masks.back();
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&& here2\n");
+    // LLAMA_LOG_INFO("&&&&&&&&&&&& x shape is: {%d} {%d} {%d}\n", x->ne[0], x->ne[1], x->ne[2]);
+    // LLAMA_LOG_INFO("&&&&&&&&&&&& mask_down shape is: {%d} {%d} {%d}\n", mask_down->ne[0], mask_down->ne[1], mask_down->ne[2]);
+    // LLAMA_LOG_INFO("&&&&&&&&&&&& t shape is: {%d} {%d} {%d}\n", t->ne[0], t->ne[1], t->ne[2]);
     x = causal_resnet_block1d_forward(x, mask_down, t, 0, "down_block", model);
+    LLAMA_LOG_INFO("&&&&&&&&&&&&&&&& here3\n");
     x = ggml_cont(ctx0, ggml_permute(ctx0, x, 1, 0, 2, 3));
     ggml_tensor * attn_mask = ggml_view_3d(ctx0, mask_down, mask_down->ne[0], mask_down->ne[1], mask_down->ne[2], mask_down->nb[1], mask_down->nb[2], 0);
     attn_mask = mask_to_bias(attn_mask, x->type);
@@ -1375,7 +1402,7 @@ ggml_tensor * llm_graph_context::build_solve_euler(
     const int64_t T   = z->ne[0];
     const int64_t N   = t_span->ne[0]; 
     const int64_t spk_dim = spks ? spks->ne[0] : 0;
-
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&& spks shape is: {%d} {%d} {%d}\n", spks->ne[0], spks->ne[1], spks->ne[2]);
     // float t0, t1, dt;
     // ggml_backend_buffer_t buffer = ggml_backend_alloc_buffer(ggml_backend_cpu_buffer_type(), ggml_nbytes(t_span));
     // ggml_set_backend_buffer(t_span, buffer);
@@ -1390,21 +1417,26 @@ ggml_tensor * llm_graph_context::build_solve_euler(
     ggml_tensor * t = ggml_new_tensor_1d(ctx0, z->type, B);
     ggml_backend_alloc_ctx_tensors(ctx0, backend_cpu);
     ggml_set_f32(t, t0);
-    ggml_tensor * z_in   = ggml_new_tensor_3d(ctx0, z->type, T, 80, 2*B);
-    ggml_tensor * mask_in= ggml_new_tensor_3d(ctx0, mask->type, T, 1, 2*B);
-    ggml_tensor * mu_in  = ggml_new_tensor_3d(ctx0, mu->type, T, 80, 2*B);
-    ggml_tensor * t_in   = ggml_new_tensor_2d(ctx0, z->type, 1, 2*B);
-    ggml_tensor * spks_in= ggml_new_tensor_2d(ctx0, spks->type, spk_dim, 2*B);
-    ggml_tensor * cond_in= ggml_new_tensor_3d(ctx0, cond->type, T, 80, 2*B);
+    ggml_tensor * z_in   = ggml_new_tensor_3d(ctx0, z->type, T, 80, 2);
+    ggml_tensor * mask_in= ggml_new_tensor_3d(ctx0, mask->type, T, 1, 2);
+    ggml_tensor * mu_in  = ggml_new_tensor_3d(ctx0, mu->type, T, 80, 2);
+    ggml_tensor * t_in   = ggml_new_tensor_2d(ctx0, z->type, 1, 2);
+    ggml_tensor * spks_in= ggml_new_tensor_2d(ctx0, spks->type, 80, 2);
+    ggml_tensor * cond_in= ggml_new_tensor_3d(ctx0, cond->type, T, 80, 2);
     std::vector<ggml_tensor *> sol;
-    
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&& z_in shape is: {%d} {%d} {%d}\n", z_in->ne[0], z_in->ne[1], z_in->ne[2]);
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&& mask_in shape is: {%d} {%d} {%d}\n", mask_in->ne[0], mask_in->ne[1], mask_in->ne[2]);
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&& mu_in shape is: {%d} {%d} {%d}\n", mu_in->ne[0], mu_in->ne[1], mu_in->ne[2]);
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&& t_in shape is: {%d} {%d}\n", t_in->ne[0], t_in->ne[1]);
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&& spks_in shape is: {%d} {%d} {%d}\n", spks_in->ne[0], spks_in->ne[1], spks_in->ne[2]);
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&& cond_in shape is: {%d} {%d} {%d}\n", cond_in->ne[0], cond_in->ne[1], cond_in->ne[2]);
     for (int64_t step = 1; step < N; ++step) {
         z_in = ggml_cpy(ctx0, ggml_repeat(ctx0, z, ggml_new_tensor_3d(ctx0, z->type, T, 80, 2*B)), z_in);
         mask_in = ggml_cpy(ctx0, ggml_repeat(ctx0, mask, ggml_new_tensor_3d(ctx0, mask->type, T, 1, 2*B)), mask_in);
         mu_in = ggml_cpy(ctx0, ggml_repeat(ctx0, mu, ggml_new_tensor_3d(ctx0, mu->type, T, 80, 2*B)), mu_in);
         t_in  = ggml_cpy(ctx0, ggml_repeat(ctx0, t, ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, 1, 2*B)), t_in);
         if (spks) {
-            spks_in = ggml_cpy(ctx0, ggml_repeat(ctx0, spks, ggml_new_tensor_2d(ctx0, spks->type, spk_dim, 2*B)), spks_in);
+            spks_in = ggml_cpy(ctx0, ggml_repeat(ctx0, spks, ggml_new_tensor_2d(ctx0, spks->type, 80, 2*B)), spks_in);
         }
         if (cond) {
             cond_in = ggml_cpy(ctx0, ggml_repeat(ctx0, cond, ggml_new_tensor_3d(ctx0, cond->type, T, 80, 2*B)), cond_in);
