@@ -5204,7 +5204,7 @@ bool llama_model::load_tensors(llama_model_loader & ml) {
                     down_blk_res_b = create_tensor(tn(LLM_TENSOR_DOWN_BLOCKS_RES_CONV_BIAS, "bias", 226), {256}, 0);
                     
                     for (int i = 226; i < 230; ++i) {
-                        auto & layer = layers[i - 226];
+                        auto & layer = layers[i];
 
                         layer.down_block1_norm1_w = create_tensor(tn(LLM_TENSOR_DOWN_BLOCKS_NORM1_WEIGHT, "weight", i - 226), {256}, 0);
                         layer.down_block1_wq = create_tensor(tn(LLM_TENSOR_DOWN_BLOCKS_ATTN_TO_Q_WEIGHT, "weight", i - 226), {256, 512}, 0);
