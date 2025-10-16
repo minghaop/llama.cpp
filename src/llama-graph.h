@@ -639,9 +639,7 @@ struct llm_graph_context {
     ggml_tensor * prepare_attention_mask(
          ggml_tensor * mask,
          int target_len,
-         int batch_size,
-         int n_heads,
-         int out_dim) const;
+         int batch_size) const;
     
     ggml_tensor * ggml_spda(
          ggml_tensor * q, 
