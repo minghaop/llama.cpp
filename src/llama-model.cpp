@@ -5227,7 +5227,7 @@ bool llama_model::load_tensors(llama_model_loader & ml) {
                     mid_block_sub_layers.resize(48);
                     for(int i = 280; i < 292; ++i) {
                         auto & layer = layers[i];
-                        layer.mid_block_mlp_b = create_tensor(tn(LLM_TENSOR_MID_BLOCKS_MLP_WEIGHT, "weight", i - 280), {1024, 256}, 0);
+                        layer.mid_block_mlp_w = create_tensor(tn(LLM_TENSOR_MID_BLOCKS_MLP_WEIGHT, "weight", i - 280), {1024, 256}, 0);
                         layer.mid_block_mlp_b = create_tensor(tn(LLM_TENSOR_MID_BLOCKS_MLP_BIAS, "bias", i - 280), {256}, 0);
                         layer.mid_block1_w = create_tensor(tn(LLM_TENSOR_MID_BLOCKS1_WEIGHT, "weight", i - 280), {3, 256, 256}, 0);
                         layer.mid_block1_b = create_tensor(tn(LLM_TENSOR_MID_BLOCKS1_BIAS, "bias", i - 280), {256}, 0);
