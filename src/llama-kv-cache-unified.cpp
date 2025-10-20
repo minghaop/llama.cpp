@@ -40,7 +40,7 @@ llama_kv_cache_unified::llama_kv_cache_unified(
     }
 
     if(model.arch == LLM_ARCH_COSYVOICEFLOW){
-        n_layer_cache = 62;
+        n_layer_cache = 1127;
     }
     // create a context for each buffer type
     std::map<ggml_backend_buffer_type_t, ggml_context *> ctx_map;
@@ -52,6 +52,14 @@ llama_kv_cache_unified::llama_kv_cache_unified(
                 /*.mem_buffer =*/ NULL,
                 /*.no_alloc   =*/ true,
             };
+            // ggml_init_params params = {
+            //     /*.mem_size   =*/ size_t(2048u*2048u*2048u),
+            //     /*.mem_buffer =*/ NULL,
+            //     /*.no_alloc   =*/ true,
+            // };
+            LLAMA_LOG_INFO("&&&&&&&&&&&&& mem_size is: %zu\n", params.mem_size);
+            LLAMA_LOG_INFO("&&&&&&&&&&&&& kv_size is: %d\n", kv_size);
+            // params.mem_size = std::max(params.mem_size, size_t(2048u*2048u*2048u));
 
             ggml_context * ctx = ggml_init(params);
             if (!ctx) {
