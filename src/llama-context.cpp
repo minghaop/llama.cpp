@@ -1312,6 +1312,8 @@ ggml_cgraph * llama_context::graph_init() {
         /*.mem_buffer =*/ buf_compute_meta.data(),
         /*.no_alloc   =*/ true,
     };
+    LLAMA_LOG_DEBUG("%s: initializing compute graph with max nodes = %d\n", __func__, graph_max_nodes());
+    LLAMA_LOG_DEBUG("%s: compute buffer size = %.02f MiB\n", __func__, buf_compute_meta.size() / 1024.0 / 1024.0);
 
     ctx_compute.reset(ggml_init(params));
 

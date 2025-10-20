@@ -16739,7 +16739,7 @@ struct llm_build_lfm2 : public llm_graph_context {
 struct llm_build_flow : public llm_graph_context {
     const llama_model & model;
     llm_build_flow(const llama_model & model, const llm_graph_params & params, ggml_cgraph * gf) : llm_graph_context(params), model(model) {
-
+        LLAMA_LOG_INFO("ggml_get_mem_size is: %zu\n", ggml_get_mem_size(ctx0));
         // const int embd_len = params.ubatch.embd_len;
         // const int token_len = params.ubatch.token_len;
         // const int prompt_feat_len = params.ubatch.prompt_feat_len;

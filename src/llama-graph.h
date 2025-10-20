@@ -638,6 +638,7 @@ struct llm_graph_context {
     
     ggml_tensor * prepare_attention_mask(
          ggml_tensor * mask,
+         ggml_tensor * mask_tmpl,
          int target_len,
          int batch_size) const;
     
@@ -645,7 +646,8 @@ struct llm_graph_context {
          ggml_tensor * q, 
          ggml_tensor * k, 
          ggml_tensor * v, 
-         ggml_tensor * mask, 
+         ggml_tensor * mask,
+         ggml_tensor * attn_bias,
          float dropout_p, 
          bool is_causal, 
          float scale, 
@@ -653,7 +655,9 @@ struct llm_graph_context {
     
     ggml_tensor * build_basic_attn(
          ggml_tensor * x, 
-         ggml_tensor * attn_mask, 
+         ggml_tensor * attn_mask,
+         ggml_tensor * attn_bias,
+         ggml_tensor * mask_tmpl,
          int64_t layer_id, 
          std::string mode,
          const llama_model & model) const;
@@ -663,6 +667,7 @@ struct llm_graph_context {
         std::string mode,
         int64_t layer_id,
         int64_t blk_id,
+        std::vector<ggml_tensor *> & pad_list,
         const llama_model & model) const;
     
     ggml_tensor * causal_block1d_forward(
@@ -671,6 +676,7 @@ struct llm_graph_context {
         std::string mode,
         int64_t layer_id,
         int64_t blk_id,
+        std::vector<ggml_tensor *> & pad_list,
         const llama_model & model) const;
     
     ggml_tensor * causal_resnet_block1d_forward(
@@ -679,10 +685,13 @@ struct llm_graph_context {
         ggml_tensor * t_emb,
         int64_t layer_id,
         std::string mode,
+        std::vector<ggml_tensor *> & pad_list,
         const llama_model & model) const;
     
     ggml_tensor * mask_to_bias(
         ggml_tensor * mask,
+        ggml_tensor * one,
+        ggml_tensor * neg_big,
         ggml_type   dtype) const;
     
     ggml_tensor * build_causal_cond_decoder(
@@ -692,6 +701,13 @@ struct llm_graph_context {
          ggml_tensor * t,
          ggml_tensor * spks,
          ggml_tensor * cond,
+         ggml_tensor * spk_t,
+         ggml_tensor * attn_mask_t,
+         ggml_tensor * mask_tmpl,
+         ggml_tensor * mask_to_bias_one,
+         ggml_tensor * mask_to_bias_neg,
+         ggml_tensor * attn_bias,
+         std::vector<ggml_tensor *> & pad_list,
          const llama_model & model) const;
     
     ggml_tensor * build_solve_euler(
