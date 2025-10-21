@@ -229,7 +229,7 @@ llama_context::llama_context(
         LLAMA_LOG_DEBUG("%s: max_nodes = %zu\n", __func__, max_nodes);
 
         // buffer used to store the computation graph and the tensor meta data
-        // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& cap is : %d\n", ggml_tensor_overhead()*max_nodes + ggml_graph_overhead_custom(max_nodes, false));
+        LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& cap is : %d\n", ggml_tensor_overhead()*max_nodes + ggml_graph_overhead_custom(max_nodes, false));
         buf_compute_meta.resize(ggml_tensor_overhead()*max_nodes + ggml_graph_overhead_custom(max_nodes, false));
 
         // TODO: move these checks to ggml_backend_sched
@@ -710,9 +710,7 @@ llm_graph_result_ptr llama_context::process_ubatch(const llama_ubatch & ubatch, 
         ret = GGML_STATUS_ALLOC_FAILED;
         return nullptr;
     }
-    //LLAMA_LOG_INFO("############################################################################################################################## %s\n", __func__);
     res->set_inputs(&ubatch);
-    // LLAMA_LOG_INFO("############################################################################################################################## %s\n", __func__);
     const auto status = graph_compute(gf, ubatch.n_tokens > 1);
     if (status != GGML_STATUS_SUCCESS) {
         LLAMA_LOG_ERROR("%s: failed to compute graph, compute status: %d\n", __func__, status);
@@ -1031,10 +1029,7 @@ int llama_context::decode(const llama_batch & batch_inp) {
         ggml_backend_sched_set_eval_callback(sched.get(), cparams.cb_eval, cparams.cb_eval_user_data);
 
         ggml_status status;
-        // LLAMA_LOG_INFO("********************************************************************** cparams.n_ubatch is: %d\n", cparams.n_ubatch);
         const auto res = process_ubatch(ubatch, LLM_GRAPH_TYPE_DECODER, mctx.get(), status);
-        //LLAMA_LOG_INFO("##############################################################################################################################\n");
-        // LLAMA_LOG_INFO("%s: res ptr is:  %d\n", __func__, res ? 1 : 0);
         if (!res) {
             // the last ubatch failed or was aborted -> remove all positions of that ubatch from the KV cache
             llama_pos pos_min[LLAMA_MAX_SEQ];
@@ -1092,13 +1087,10 @@ int llama_context::decode(const llama_batch & batch_inp) {
                 ggml_backend_tensor_get_async(backend_res, t_logits, logits_out, 0, n_outputs*n_vocab*sizeof(float));
             }
         }
-        // LLAMA_LOG_INFO("-------------------------------------- %s: n_outputs = %d\n", __func__, n_outputs);
         // extract embeddings
         if (t_embd && n_outputs > 0) {
             ggml_backend_t backend_embd = ggml_backend_sched_get_tensor_backend(sched.get(), t_embd);
             GGML_ASSERT(backend_embd != nullptr);
-            // LLAMA_LOG_INFO("-------------------------------------- %s: cparams.pooling_type = %d\n", __func__, cparams.pooling_type);
-            // LLAMA_LOG_INFO("-------------------------------------- %s: n_outputs_prev = %d\n", __func__, n_outputs_prev);
             switch (cparams.pooling_type) {
                 case LLAMA_POOLING_TYPE_NONE:
                     {
@@ -1303,7 +1295,7 @@ uint32_t llama_context::output_reserve(int32_t n_outputs) {
 //
 
 int32_t llama_context::graph_max_nodes() const {
-    return std::max<int32_t>(65536, 5*model.n_tensors());
+    return std::max<int32_t>(6553600, 5*model.n_tensors());
 }
 
 ggml_cgraph * llama_context::graph_init() {
@@ -1313,9 +1305,10 @@ ggml_cgraph * llama_context::graph_init() {
         /*.no_alloc   =*/ true,
     };
     LLAMA_LOG_DEBUG("%s: initializing compute graph with max nodes = %d\n", __func__, graph_max_nodes());
-    LLAMA_LOG_DEBUG("%s: compute buffer size = %.02f MiB\n", __func__, buf_compute_meta.size() / 1024.0 / 1024.0);
+    LLAMA_LOG_DEBUG("%s: compute buffer size = %0.2f MiB\n", __func__, buf_compute_meta.size() / 1024.0/ 1024.0);
 
     ctx_compute.reset(ggml_init(params));
+    LLAMA_LOG_DEBUG("%s: compute graph context = %p\n", __func__, (void *) ctx_compute.get());
 
     return ggml_new_graph_custom(ctx_compute.get(), graph_max_nodes(), false);
 }

@@ -42,7 +42,8 @@ llama_kv_cache_unified::llama_kv_cache_unified(
     if(model.arch == LLM_ARCH_COSYVOICEFLOW){
         n_layer_cache = 1127;
     }
-    // create a context for each buffer type
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&& n_layer_cache is: %d\n", n_layer_cache);
+    //p create a context for each buffer type
     std::map<ggml_backend_buffer_type_t, ggml_context *> ctx_map;
     auto ctx_for_buft = [&](ggml_backend_buffer_type_t buft) -> ggml_context * {
         auto it = ctx_map.find(buft);
@@ -57,11 +58,12 @@ llama_kv_cache_unified::llama_kv_cache_unified(
             //     /*.mem_buffer =*/ NULL,
             //     /*.no_alloc   =*/ true,
             // };
-            LLAMA_LOG_INFO("&&&&&&&&&&&&& mem_size is: %zu\n", params.mem_size);
-            LLAMA_LOG_INFO("&&&&&&&&&&&&& kv_size is: %d\n", kv_size);
+            // LLAMA_LOG_INFO("&&&&&&&&&&&&& mem_size is: %zu\n", params.mem_size);
+            // LLAMA_LOG_INFO("&&&&&&&&&&&&& kv_size is: %d\n", kv_size);
             // params.mem_size = std::max(params.mem_size, size_t(2048u*2048u*2048u));
 
             ggml_context * ctx = ggml_init(params);
+            // LLAMA_LOG_INFO("&&&&&&&&&&&&& ctx is: %p\n", (void*)ctx);  
             if (!ctx) {
                 return nullptr;
             }
@@ -356,34 +358,25 @@ llama_memory_context_ptr llama_kv_cache_unified::init_batch(
             uint32_t n_ubatch,
             bool embd_all) {
     GGML_UNUSED(embd_all);
-    // LLAMA_LOG_INFO("********************************************************************** llama_kv_cache_unified init_batch\n");
     
     do {
         balloc.split_reset();
-        // LLAMA_LOG_INFO("********************************************************************** check here3\n");
         std::vector<llama_ubatch> ubatches;
         while (true) {
-            // LLAMA_LOG_INFO("********************************************************************** n_ubatch is: %d\n", n_ubatch);
             auto ubatch = balloc.split_simple(n_ubatch);
-            // LLAMA_LOG_INFO("********************************************************************** ubatch.n_tokens is: %d\n", ubatch.n_tokens);
             if (ubatch.n_tokens == 0) {
                 break;
             }
-            // LLAMA_LOG_INFO("********************************************************************** ubatches.size() is: %d, ubatches.capacity() is: %d\n", ubatches.size(), ubatches.capacity());
             ubatches.push_back(std::move(ubatch)); // NOLINT
-            // LLAMA_LOG_INFO("********************************************************************** check here4\n");
         }
-        // LLAMA_LOG_INFO("********************************************************************** check here5\n");
         if (balloc.get_n_used() < balloc.get_n_tokens()) {
             // failed to find a suitable split
             break;
         }
-        // LLAMA_LOG_INFO("********************************************************************** check here6\n");
         auto sinfos = prepare(ubatches);
         if (sinfos.empty()) {
             break;
         }
-        // LLAMA_LOG_INFO("********************************************************************** check here7\n");
         return std::make_unique<llama_kv_cache_unified_context>(
                 this, std::move(sinfos), std::move(ubatches));
     } while (false);

@@ -8,7 +8,7 @@
 #include "llama-kv-cache-unified-iswa.h"
 #include "llama-memory-hybrid.h"
 #include "llama-memory-recurrent.h"
-
+#include "ggml-cuda.h"
 #include <cassert>
 #include <cmath>
 #include <cstring>
@@ -585,9 +585,8 @@ ggml_tensor * llm_graph_context::build_pad_mask(int32_t total_len, int32_t max_l
     for (int t = 0; t < max_len; ++t)
         mask_host[t] = (t < total_len) ? 1 : 0;
     ggml_tensor * mask = ggml_new_tensor_2d(ctx0, GGML_TYPE_I32, max_len, 1);
-    ggml_backend_t backend = ggml_backend_cpu_init();   // 或 cuda/metal
-    ggml_backend_buffer_t buffer =
-            ggml_backend_alloc_ctx_tensors(ctx0, backend);
+    ggml_backend_t backend = ggml_backend_cuda_init(0);   // 或 cuda/metal
+    ggml_backend_buffer_t buffer = ggml_backend_alloc_ctx_tensors(ctx0, backend);
     ggml_backend_tensor_set(mask, mask_host.data(), 0, mask_host.size() * sizeof(int32_t));
 
     cb(mask, "non_pad_mask", -1);
@@ -899,6 +898,8 @@ ggml_tensor * llm_graph_context::build_upsample_1d(
 ggml_tensor * llm_graph_context::build_rand_noise(
          ggml_tensor * cur,
          float tempture) const{
+    ggml_backend_t backend_cuda = ggml_backend_cuda_init(0);
+    
     ggml_tensor * out = ggml_new_tensor_3d(ctx0, cur->type, 50*300, 80, 1);
     ggml_backend_alloc_ctx_tensors(ctx0, backend_cpu);
     const int64_t n_elm = ggml_nelements(out);
@@ -915,7 +916,8 @@ ggml_tensor * llm_graph_context::build_rand_noise(
 
 ggml_tensor * llm_graph_context::build_causal_cond_cfm(
          int64_t n_timesteps) const{
-        
+    
+    ggml_backend_t backend_cuda = ggml_backend_cuda_init(0);
     ggml_tensor * t_span = ggml_new_tensor_1d(ctx0, GGML_TYPE_F32, n_timesteps + 1);
     ggml_backend_alloc_ctx_tensors(ctx0, backend_cpu);
     float * ptr = (float *)t_span->data;
@@ -987,6 +989,7 @@ ggml_tensor * llm_graph_context::prepare_attention_mask(
     const int64_t n_heads = 8;
     const int64_t B  = mask->ne[2];   
     const int64_t T  = mask->ne[0];
+    ggml_backend_t backend_cuda = ggml_backend_cuda_init(0);
     if (T != target_len) {
         ggml_tensor * pad = ggml_new_tensor_3d(ctx0, mask->type, target_len - T, mask->ne[1], B);
         ggml_backend_alloc_ctx_tensors(ctx0, backend_cpu);
@@ -1438,6 +1441,8 @@ ggml_tensor * llm_graph_context::build_solve_euler(
     float t0 = ptr[0];
     float t1 = ptr[N-1];
     float dt = ptr[1] - ptr[0]; // 或其它方式
+    ggml_backend_t backend_cuda = ggml_backend_cuda_init(0);
+    
 
     ggml_tensor * t = ggml_new_tensor_1d(ctx0, z->type, B);
     ggml_backend_alloc_ctx_tensors(ctx0, backend_cpu);
@@ -1840,6 +1845,7 @@ ggml_tensor * llm_graph_context::build_inp_embd(ggml_tensor * tok_embd) const {
         } else {
             inp->embd = ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, n_embd, ubatch.n_tokens);
         }
+        ggml_backend_t backend_cuda = ggml_backend_cuda_init(0);
         ggml_backend_buffer_t buf = ggml_backend_alloc_ctx_tensors(ctx0, backend_cpu);
         ggml_set_input(inp->embd);
         if(hparams.use_flow) {
@@ -1868,6 +1874,7 @@ ggml_tensor * llm_graph_context::build_inp_token() const {
 
     ggml_tensor * cur = nullptr;
     inp->input_token = ggml_new_tensor_1d(ctx0, GGML_TYPE_I32, token_len);
+    ggml_backend_t backend_cuda = ggml_backend_cuda_init(0);
     ggml_backend_buffer_t buf = ggml_backend_alloc_ctx_tensors(ctx0, backend_cpu);
     ggml_set_input(inp->input_token);
     ggml_backend_tensor_set(inp->input_token, ubatch.flow_token, 0, token_len * ggml_element_size(inp->input_token));
@@ -1885,6 +1892,7 @@ ggml_tensor * llm_graph_context::build_inp_prompt_token() const {
 
     ggml_tensor * cur = nullptr;
     inp->input_prompt_token = ggml_new_tensor_1d(ctx0, GGML_TYPE_I32, token_len);
+    ggml_backend_t backend_cuda = ggml_backend_cuda_init(0);
     ggml_backend_buffer_t buf = ggml_backend_alloc_ctx_tensors(ctx0, backend_cpu);
     ggml_set_input(inp->input_prompt_token);
     ggml_backend_tensor_set(inp->input_prompt_token, ubatch.flow_token + ubatch.token_len, 0, token_len * ggml_element_size(inp->input_prompt_token));
@@ -1902,6 +1910,7 @@ ggml_tensor * llm_graph_context::build_inp_prompt_feat() const {
     LLAMA_LOG_INFO("&&&&&&&&&&&&& feat_len is: %d\n", feat_len);
     ggml_tensor * cur = nullptr;
     inp->input_prompt_feat = ggml_new_tensor_2d(ctx0, GGML_TYPE_I32, hparams.output_size, feat_len);
+    ggml_backend_t backend_cuda = ggml_backend_cuda_init(0);
     ggml_backend_buffer_t buf = ggml_backend_alloc_ctx_tensors(ctx0, backend_cpu);
     ggml_set_input(inp->input_prompt_feat);
     ggml_backend_tensor_set(inp->input_prompt_feat, ubatch.flow_feat, 0, feat_len * ggml_element_size(inp->input_prompt_feat));
