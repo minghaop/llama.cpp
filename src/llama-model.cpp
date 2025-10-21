@@ -12,6 +12,8 @@
 #include "llama-memory-recurrent.h"
 
 #include "ggml-cpp.h"
+#include "ggml-cuda.h"
+#include "ggml.h" 
 
 #include <algorithm>
 #include <cassert>
@@ -1796,7 +1798,6 @@ bool llama_model::load_tensors(llama_model_loader & ml) {
     }else {
         n_layer = hparams.n_layer;
     }
-    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&& n_layer is:%d\n", n_layer);
     const bool use_mmap_buffer = true;
 
     LLAMA_LOG_INFO("%s: loading model tensors, this can take a while... (mmap = %s)\n", __func__, ml.use_mmap ? "true" : "false");
@@ -1881,8 +1882,9 @@ bool llama_model::load_tensors(llama_model_loader & ml) {
                 /*.mem_buffer =*/ NULL,
                 /*.no_alloc   =*/ true,
             };
-
+            
             ggml_context * ctx = ggml_init(params);
+            // LLAMA_LOG_INFO("%s: &&&&&&&&&& ctx is: %p, size=%zu\n", __func__, (void *)ctx, ctx_size);
             if (!ctx) {
                 throw std::runtime_error(format("failed to create ggml context"));
             }
@@ -16739,10 +16741,10 @@ struct llm_build_lfm2 : public llm_graph_context {
 struct llm_build_flow : public llm_graph_context {
     const llama_model & model;
     llm_build_flow(const llama_model & model, const llm_graph_params & params, ggml_cgraph * gf) : llm_graph_context(params), model(model) {
+        
+        // ggml_backend_t backend_cpu = ggml_backend_cpu_init(0);
         LLAMA_LOG_INFO("ggml_get_mem_size is: %zu\n", ggml_get_mem_size(ctx0));
-        // const int embd_len = params.ubatch.embd_len;
-        // const int token_len = params.ubatch.token_len;
-        // const int prompt_feat_len = params.ubatch.prompt_feat_len;
+        LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&& ctx0 is: %p\n", (void*)ctx0);
         ggml_tensor * embedding = build_inp_embd(model.inp_embed_w);
         ggml_tensor * token = build_inp_token();
         ggml_tensor * token_len = ggml_new_tensor_1d(ctx0, GGML_TYPE_I32, 1);
@@ -16778,14 +16780,11 @@ struct llm_build_flow : public llm_graph_context {
         ggml_tensor * x = build_linear_no_subsampling(token, model.embed_out_0_w, model.embed_out_0_b, model.embed_out_1_w, model.embed_out_1_b);
         ggml_tensor * t = ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, 5000, 1);
         ggml_tensor * pe = build_pe(t);
-        // ggml_tensor * pe = build_pe(x);
         x = build_espnet_pos_encode(x);
         ggml_tensor * pos_emb = build_pos_encoding(pe, x->ne[1], 0);
         ggml_tensor * mask_pad = masks;
         ggml_tensor * chunk_mask = masks;
         x = build_pre_lookahead_layer(x, model.pre_look_conv1_w, model.pre_look_conv1_b, model.pre_look_conv2_w, model.pre_look_conv2_b, context);
-        // x = ggml_permute(ctx0, x, 1, 0, 2, 3);
-        // x = ggml_cont(ctx0, x);
         for(int i = 0; i < 6; i++) {
             ggml_tensor * residual = ggml_dup(ctx0, x);
             x = build_layer_norm(x, model.layers[i + 13].encoders_normmha_w, model.layers[i + 13].encoders_normmha_b, 1e-12);
@@ -16821,7 +16820,6 @@ struct llm_build_flow : public llm_graph_context {
         }
         x = build_upsample_1d(x, model.up_layer_conv_w, model.up_layer_conv_b);
         x = ggml_permute(ctx0, x, 1, 0, 2, 3);
-        // token_len = ggml_mul(ctx0, token_len, ggml_new_i32(ctx0, 2));
         masks = build_pad_mask(x->ne[1], x->ne[1]);
         masks = ggml_reshape_3d(ctx0, masks, masks->ne[0], 1, masks->ne[1]);
         x = build_linear_no_subsampling(x, model.up_embed_out_0_w, model.up_embed_out_0_b, model.up_embed_out_1_w, model.up_embed_out_1_b);
@@ -16830,6 +16828,7 @@ struct llm_build_flow : public llm_graph_context {
         mask_pad = masks;
         chunk_mask = masks;
         x = ggml_permute(ctx0, x, 1, 0, 2, 3);
+
         //build up_encoders
         for(int i = 0; i < 4; i++) {
             
@@ -16897,7 +16896,30 @@ struct llm_build_flow : public llm_graph_context {
         ggml_tensor * sliced = ggml_view_3d(ctx0, feat, feat->ne[0], feat->ne[1] - mel_len1, feat->ne[2], feat->nb[0],
                                             feat->nb[1], mel_len1 * feat->nb[1]);
         res->t_logits = sliced;
+        LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&& check here 12!!!!!!!!!!\n");
         ggml_build_forward_expand(gf, sliced);
+        ggml_graph_dump_dot(gf, NULL, "debug.dot");
+        // for (int i = 0; i < gf->n_nodes; ++i) {
+        //     ggml_tensor * t = gf->nodes[i];
+        //     if (!t || !t->data) continue;
+
+        //     std::ostringstream  fname;
+        //     fname << "debug" << "_" << t->name << ".bin";
+
+        //     // 申请一块 CPU 临时内存
+        //     size_t nbytes = ggml_nbytes(t);
+        //     void * cpu_buf = malloc(nbytes);
+        //     if (!cpu_buf) continue;
+
+        //     // 搬数据
+        //     ggml_backend_tensor_get(t, cpu_buf, 0, nbytes);
+
+        //     // 写文件
+        //     std::ofstream fs(fname.str(), std::ios::binary);
+        //     fs.write(static_cast<char*>(cpu_buf), nbytes);
+
+        //     free(cpu_buf);
+        // }
     }
 };
 
@@ -17321,8 +17343,10 @@ llm_graph_result_ptr llama_model::build_graph(
     }
 
     // add on pooling layer
-    llm->build_pooling(gf, cls, cls_b, cls_out, cls_out_b);
-
+    if (arch != LLM_ARCH_COSYVOICEFLOW) {
+        llm->build_pooling(gf, cls, cls_b, cls_out, cls_out_b);
+    }
+    
     return std::move(llm->res);
 }
 
