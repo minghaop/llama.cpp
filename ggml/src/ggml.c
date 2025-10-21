@@ -1576,8 +1576,9 @@ static struct ggml_object * ggml_new_object(struct ggml_context * ctx, enum ggml
 
     char * const mem_buffer = ctx->mem_buffer;
     struct ggml_object * const obj_new = (struct ggml_object *)(mem_buffer + cur_end);
-
+    
     if (cur_end + size_needed + GGML_OBJECT_SIZE > ctx->mem_size) {
+        GGML_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&& ctx fail is: %p\n", (const void *) ctx);
         GGML_LOG_WARN("%s: not enough space in the context's memory pool (needed %zu, available %zu)\n",
                 __func__, cur_end + size_needed + GGML_OBJECT_SIZE, ctx->mem_size);
 #ifndef NDEBUG
@@ -6733,15 +6734,15 @@ void ggml_graph_dump_dot(const struct ggml_cgraph * gb, const struct ggml_cgraph
             fprintf(fp, " | (");
             for (int j = 0; j < ggml_nelements(node); j++) {
                 // FIXME: use ggml-backend to obtain the tensor data
-                //if (node->type == GGML_TYPE_I8 || node->type == GGML_TYPE_I16 || node->type == GGML_TYPE_I32) {
+                // if (node->type == GGML_TYPE_I8 || node->type == GGML_TYPE_I16 || node->type == GGML_TYPE_I32) {
                 //    fprintf(fp, "%d", ggml_get_i32_1d(node, j));
-                //}
-                //else if (node->type == GGML_TYPE_F32 ||
+                // }
+                // else if (node->type == GGML_TYPE_F32 ||
                 //         node->type == GGML_TYPE_F16 ||
                 //         node->type == GGML_TYPE_BF16) {
                 //    fprintf(fp, "%.1e", (double)ggml_get_f32_1d(node, j));
-                //}
-                //else
+                // }
+                // else
                 {
                     fprintf(fp, "#");
                 }
