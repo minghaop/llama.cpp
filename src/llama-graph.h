@@ -563,6 +563,7 @@ struct llm_graph_context {
              int32_t total_len,
              int32_t max_len = 0) const;
     
+    ggml_tensor * build_cpu_gpu(ggml_tensor * cur) const;
 
     ggml_tensor * build_linear_no_subsampling(
              ggml_tensor * cur,
@@ -571,8 +572,7 @@ struct llm_graph_context {
              ggml_tensor * norm_mw,
              ggml_tensor * norm_mb) const;
     
-    ggml_tensor * build_pe(
-             ggml_tensor * cur) const;
+    ggml_tensor * build_pe(int64_t max_len = 5000) const;
 
     ggml_tensor * build_pos_encoding(
          ggml_tensor * cur,
@@ -587,8 +587,7 @@ struct llm_graph_context {
          ggml_tensor * conv1_mw,
          ggml_tensor * conv1_mb,
          ggml_tensor * conv2_mw,
-         ggml_tensor * conv2_mb,
-         ggml_tensor * context) const;
+         ggml_tensor * conv2_mb) const;
 
     ggml_tensor * build_rel_pos_attn(
          ggml_cgraph * gf,

@@ -16747,14 +16747,18 @@ struct llm_build_flow : public llm_graph_context {
         LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&& ctx0 is: %p\n", (void*)ctx0);
         ggml_tensor * embedding = build_inp_embd(model.inp_embed_w);
         ggml_tensor * token = build_inp_token();
-        ggml_tensor * token_len = ggml_new_tensor_1d(ctx0, GGML_TYPE_I32, 1);
-        ggml_backend_buffer_t buf = ggml_backend_alloc_ctx_tensors(ctx0, backend_cpu);
-        ggml_set_i32(token_len, params.ubatch.token_len);
-        ggml_tensor * prompt_token = build_inp_prompt_token();
-        ggml_tensor * prompt_token_len = ggml_new_tensor_1d(ctx0, GGML_TYPE_I32, 1);
-        buf = ggml_backend_alloc_ctx_tensors(ctx0, backend_cpu);
-        ggml_set_i32(prompt_token_len, params.ubatch.prompt_token_len);
-        
+        // ggml_tensor * token_len = ggml_new_tensor_1d(ctx0, GGML_TYPE_I32, 1);
+        // ggml_backend_alloc_ctx_tensors(ctx0, backend_cpu);
+        // // ggml_set_i32(token_len, params.ubatch.token_len);
+        // int32_t val = params.ubatch.token_len;
+        // ggml_backend_tensor_set(token_len, &val, 0, sizeof(val));
+        // LLAMA_LOG_INFO("&&&&&&&&&&&&& check token!!!!!\n");
+        // ggml_tensor * prompt_token = build_inp_prompt_token();
+        // ggml_tensor * prompt_token_len = ggml_new_tensor_1d(ctx0, GGML_TYPE_I32, 1);
+        // ggml_backend_alloc_ctx_tensors(ctx0, backend_cpu);
+        // // ggml_set_i32(prompt_token_len, params.ubatch.prompt_token_len);
+        // val = params.ubatch.prompt_token_len;
+        // ggml_backend_tensor_set(prompt_token_len, &val, 0, sizeof(val));
         ggml_tensor * prompt_feat = build_inp_prompt_feat();
         // float buff[32];
         // ggml_backend_tensor_get(prompt_feat, buff, 0, sizeof(buff));   // 直接拷 32 字节
@@ -16766,25 +16770,34 @@ struct llm_build_flow : public llm_graph_context {
         ggml_tensor * spk = ggml_mul_mat(ctx0, model.spk_embed_w, embedding);
         spk = ggml_add(ctx0, spk, model.spk_embed_b);
         cb(spk, "after_spk_embd", -1);
-        token = ggml_concat(ctx0, prompt_token, token, 0);
-        cb(token, "get_token", -1);
+        // token = ggml_concat(ctx0, prompt_token, token, 0);
+        // cb(token, "get_token", -1);
         
         ggml_tensor * mask = build_pad_mask(params.ubatch.prompt_token_len + params.ubatch.token_len);
+        mask = ggml_cont(ctx0, ggml_permute(ctx0, mask, 1, 0, 2, 3));
+        // cb(mask, "mask_unsqueeze", -1);
         token = build_flow_embedding(token, model.inp_embed_w, -1);
+        token = ggml_mul(ctx0, token, mask);
+        cb(token, "token * mask", -1);
+        LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&& token shape is: {%d, %d, %d, %d}\n", token->ne[0], token->ne[1], token->ne[2], token->ne[3]);
         // encoder
-        ggml_tensor * context = ggml_new_tensor_3d(ctx0, GGML_TYPE_F32, 0, 0, 0);
         const int B  = token->ne[2];
         const int T  = token->ne[1];
         ggml_tensor * masks = build_pad_mask(params.ubatch.prompt_token_len + params.ubatch.token_len, T);
         masks = ggml_reshape_3d(ctx0, masks, B, 1, T);
         ggml_tensor * x = build_linear_no_subsampling(token, model.embed_out_0_w, model.embed_out_0_b, model.embed_out_1_w, model.embed_out_1_b);
-        ggml_tensor * t = ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, 5000, 1);
-        ggml_tensor * pe = build_pe(t);
+        ggml_tensor * pe = build_pe();
         x = build_espnet_pos_encode(x);
         ggml_tensor * pos_emb = build_pos_encoding(pe, x->ne[1], 0);
         ggml_tensor * mask_pad = masks;
         ggml_tensor * chunk_mask = masks;
-        x = build_pre_lookahead_layer(x, model.pre_look_conv1_w, model.pre_look_conv1_b, model.pre_look_conv2_w, model.pre_look_conv2_b, context);
+        // x = ggml_cont(ctx0, ggml_permute(ctx0, x, 1, 0, 2, 3));
+        LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&& x shape is: {%d, %d, %d, %d}\n", x->ne[0], x->ne[1], x->ne[2], x->ne[3]);
+        // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&& norm_mw shape is: {%d, %d, %d, %d}\n", norm_mw->ne[0], norm_mw->ne[1], norm_mw->ne[2], norm_mw->ne[3]);
+        // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&& norm_mb shape is: {%d, %d, %d, %d}\n", norm_mb->ne[0], norm_mb->ne[1], norm_mb->ne[2], norm_mb->ne[3]);
+        x = build_pre_lookahead_layer(x, model.pre_look_conv1_w, model.pre_look_conv1_b, model.pre_look_conv2_w, model.pre_look_conv2_b);
+        // x = ggml_cont(ctx0, ggml_permute(ctx0, x, 1, 0, 2, 3));
+        LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&& x shape is: {%d, %d, %d, %d}\n", x->ne[0], x->ne[1], x->ne[2], x->ne[3]);
         for(int i = 0; i < 6; i++) {
             ggml_tensor * residual = ggml_dup(ctx0, x);
             x = build_layer_norm(x, model.layers[i + 13].encoders_normmha_w, model.layers[i + 13].encoders_normmha_b, 1e-12);
@@ -16872,13 +16885,13 @@ struct llm_build_flow : public llm_graph_context {
         int32_t mel_len1 = prompt_feat->ne[1];
         int32_t mel_len2 = x->ne[1] - mel_len1;
         ggml_tensor * conds = ggml_new_tensor_3d(ctx0, x->type, prompt_feat->ne[0], mel_len1 + mel_len2, B);
-        buf = ggml_backend_alloc_ctx_tensors(ctx0, backend_cpu);
+        ggml_backend_alloc_ctx_tensors(ctx0, backend_cpu);
         conds = ggml_set_zero(conds);
         ggml_tensor * dest_view = ggml_view_3d(ctx0, conds, prompt_feat->ne[0], mel_len1, prompt_feat->ne[2], 0, 0, 0);
         ggml_build_forward_expand(gf, ggml_cpy(ctx0, prompt_feat, dest_view));
         conds = ggml_cont(ctx0, ggml_transpose(ctx0, conds));
         ggml_tensor * mel_len  = ggml_new_tensor_1d(ctx0, GGML_TYPE_I32, 1);
-        buf = ggml_backend_alloc_ctx_tensors(ctx0, backend_cpu);
+        ggml_backend_alloc_ctx_tensors(ctx0, backend_cpu);
         int32_t len = mel_len1 + mel_len2;
         ggml_backend_tensor_set(mel_len, &len, 0, sizeof(int32_t));
         mask = build_pad_mask(mel_len1 + mel_len2);
