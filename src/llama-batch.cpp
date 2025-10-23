@@ -222,6 +222,7 @@ bool llama_batch_allocr::init(
             /*token_len     =*/  (uint32_t) batch.token_len,
             /*prompt_token_len =*/ (uint32_t) batch.prompt_token_len,
             /*prompt_feat_len =*/ (uint32_t) batch.prompt_feat_len,
+            /*rand_noise     =*/ batch.rand_noise,
 
         };
 
@@ -380,6 +381,7 @@ llama_ubatch llama_batch_allocr::ubatch_reserve(uint32_t n_seq_tokens, uint32_t 
     ubatch.output    .resize(n_tokens);
     ubatch.flow_token.resize(ubatch.token_len + ubatch.prompt_token_len);
     ubatch.flow_feat .resize(ubatch.prompt_feat_len);
+    ubatch.rand_noise.resize(80*50*300);
 
 
     for (uint32_t s = 0; s < n_seqs; ++s) {
@@ -409,6 +411,7 @@ llama_ubatch llama_batch_allocr::ubatch_reserve(uint32_t n_seq_tokens, uint32_t 
         /*token_len     =*/ ubatch.token_len,
         /*prompt_token_len =*/ ubatch.prompt_token_len,
         /*prompt_feat_len =*/ ubatch.prompt_feat_len,
+        /*rand_noise     =*/ ubatch.rand_noise.data(),
     };
 
     return res;
@@ -689,7 +692,7 @@ llama_ubatch llama_batch_allocr::ubatch_add(const std::vector<int32_t> & idxs, u
     //CosyVoiceFlow
     ubatch.flow_token.resize(flow_token_data_len);
     ubatch.flow_feat .resize(batch.prompt_feat_len);
-
+    ubatch.rand_noise .resize(80*50*300);
 
     
     seq_set_t seq_set_unq;
@@ -729,6 +732,9 @@ llama_ubatch llama_batch_allocr::ubatch_add(const std::vector<int32_t> & idxs, u
         for(int32_t j = 0; j < batch.prompt_feat_len; ++j) {
             memcpy(ubatch.flow_feat.data() + j, batch.flow_feat + j, sizeof(float));
         }
+        for(int32_t k = 0; k < 80 * 50 * 300; ++k) {
+            memcpy(ubatch.rand_noise.data() + k, batch.rand_noise + k, sizeof(float));
+        }
     }
     
     for (int32_t s = 0; s < LLAMA_MAX_SEQ; ++s) {
@@ -757,6 +763,7 @@ llama_ubatch llama_batch_allocr::ubatch_add(const std::vector<int32_t> & idxs, u
         /*token_len     =*/ batch.token_len,
         /*prompt_token_len =*/ batch.prompt_token_len,
         /*prompt_feat_len =*/ batch.prompt_feat_len,
+        /*rand_noise     =*/ batch.rand_noise ? ubatch.rand_noise.data() : nullptr,
     };
     if (debug > 0) {
         LLAMA_LOG_DEBUG("%s: added ubatch %d to split:\n", __func__, (int) ubatches.size() - 1);
@@ -884,6 +891,7 @@ struct llama_batch llama_batch_init(int32_t n_tokens_alloc, int32_t embd, int32_
         /*token_len =*/ 0,
         /*prompt_token_len =*/ 0,
         /*prompt_feat_len =*/ 0,
+        /*rand_noise =*/ nullptr,
     };
 
     if (embd) {
@@ -895,6 +903,7 @@ struct llama_batch llama_batch_init(int32_t n_tokens_alloc, int32_t embd, int32_
     if (is_flow) {
         batch.flow_token = (llama_token *)malloc(sizeof(llama_token) * n_tokens_alloc * embd);
         batch.flow_feat = (float *)malloc(sizeof(float) * n_tokens_alloc * embd);
+        batch.rand_noise = (float *)malloc(sizeof(float) * 80*50*300);
     }
     
     batch.pos      = (llama_pos *)     malloc(sizeof(llama_pos)      * n_tokens_alloc);
