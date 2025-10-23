@@ -124,6 +124,15 @@ public:
     ggml_tensor * input_prompt_feat = nullptr; //F32 [token_len, seq_len]
 };
 
+class llm_graph_input_rand_noise : public llm_graph_input_i {
+public:
+    llm_graph_input_rand_noise()            = default;
+    virtual ~llm_graph_input_rand_noise()   = default;
+    
+    void set_input(const llama_ubatch * ubatch) override;
+    
+    ggml_tensor * input_rand_noise = nullptr; //F32 [token_len, seq_len]
+};
 
 class llm_graph_input_pos : public llm_graph_input_i {
 public:
@@ -771,6 +780,7 @@ struct llm_graph_context {
     ggml_tensor * build_inp_token() const;
     ggml_tensor * build_inp_prompt_token() const;
     ggml_tensor * build_inp_prompt_feat() const;
+    ggml_tensor * build_inp_rand_noise() const;
 
 
     //

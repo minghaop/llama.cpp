@@ -16785,7 +16785,9 @@ struct llm_build_flow : public llm_graph_context {
         const int T  = token->ne[1];
         ggml_tensor * masks = build_pad_mask(params.ubatch.prompt_token_len + params.ubatch.token_len, T);
         masks = ggml_reshape_3d(ctx0, masks, B, 1, T);
+        LLAMA_LOG_INFO("&&&&&&&&&& begin no_subsampleing\n");
         ggml_tensor * x = build_linear_no_subsampling(token, model.embed_out_0_w, model.embed_out_0_b, model.embed_out_1_w, model.embed_out_1_b);
+        LLAMA_LOG_INFO("&&&&&&&&&& end no_subsampleing\n");
         ggml_tensor * pe = build_pe();
         x = build_espnet_pos_encode(x);
         ggml_tensor * pos_emb = build_pos_encoding(pe, x->ne[1], 0);
@@ -16831,17 +16833,21 @@ struct llm_build_flow : public llm_graph_context {
             x = ggml_add(ctx0, residual, x);
             x = ggml_permute(ctx0, x, 1, 0, 2, 3);
         }
+        LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&& check here1 \n");
         x = build_upsample_1d(x, model.up_layer_conv_w, model.up_layer_conv_b);
         x = ggml_permute(ctx0, x, 1, 0, 2, 3);
         masks = build_pad_mask(x->ne[1], x->ne[1]);
         masks = ggml_reshape_3d(ctx0, masks, masks->ne[0], 1, masks->ne[1]);
         x = build_linear_no_subsampling(x, model.up_embed_out_0_w, model.up_embed_out_0_b, model.up_embed_out_1_w, model.up_embed_out_1_b);
+        LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&& check here2 \n");
         x = build_espnet_pos_encode(x);
+        LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&& check here3 \n");
         pos_emb = build_pos_encoding(pe, x->ne[1], 0);
+        LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&& check here4 \n");
         mask_pad = masks;
         chunk_mask = masks;
         x = ggml_permute(ctx0, x, 1, 0, 2, 3);
-
+        LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&& check here5 \n");
         //build up_encoders
         for(int i = 0; i < 4; i++) {
             
@@ -16877,6 +16883,7 @@ struct llm_build_flow : public llm_graph_context {
             x = ggml_add(ctx0, residual, x);
             x = ggml_permute(ctx0, x, 1, 0, 2, 3);
         }
+        LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&& check here6 \n");
         x = build_layer_norm(x, model.after_norm_w, model.after_norm_b, 1e-5f);
         x = ggml_permute(ctx0, x, 1, 0, 2, 3);
         x = ggml_mul_mat(ctx0, model.encoder_proj_w, x);
@@ -16884,26 +16891,32 @@ struct llm_build_flow : public llm_graph_context {
         //build decoder
         int32_t mel_len1 = prompt_feat->ne[1];
         int32_t mel_len2 = x->ne[1] - mel_len1;
-        ggml_tensor * conds = ggml_new_tensor_3d(ctx0, x->type, prompt_feat->ne[0], mel_len1 + mel_len2, B);
-        ggml_backend_alloc_ctx_tensors(ctx0, backend_cpu);
-        conds = ggml_set_zero(conds);
+        LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&& check here7 \n");
+        ggml_set_no_alloc(ctx0, false);
+        ggml_tensor * one = ggml_new_f32(ctx0, 1.0f);
+        ggml_set_no_alloc(ctx0, true);
+        ggml_tensor * zero = ggml_sub(ctx0, one, one);
+        ggml_tensor * target_shape = ggml_new_tensor_3d(ctx0, x->type, prompt_feat->ne[0], mel_len1 + mel_len2, B);
+        ggml_tensor * conds = ggml_repeat(ctx0, zero, target_shape);  
+        // ggml_backend_alloc_ctx_tensors(ctx0, backend_cpu);
+        // conds = ggml_set_zero(conds);
+        LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&& check here8 \n");
         ggml_tensor * dest_view = ggml_view_3d(ctx0, conds, prompt_feat->ne[0], mel_len1, prompt_feat->ne[2], 0, 0, 0);
         ggml_build_forward_expand(gf, ggml_cpy(ctx0, prompt_feat, dest_view));
         conds = ggml_cont(ctx0, ggml_transpose(ctx0, conds));
-        ggml_tensor * mel_len  = ggml_new_tensor_1d(ctx0, GGML_TYPE_I32, 1);
-        ggml_backend_alloc_ctx_tensors(ctx0, backend_cpu);
-        int32_t len = mel_len1 + mel_len2;
-        ggml_backend_tensor_set(mel_len, &len, 0, sizeof(int32_t));
         mask = build_pad_mask(mel_len1 + mel_len2);
         ggml_tensor * spks = spk;
         ggml_tensor * cond = conds;
         int64_t n_timesteps = 10;
         ggml_tensor * mu = ggml_cont(ctx0, ggml_transpose(ctx0, x));
         mask = ggml_reshape_3d(ctx0, mask, mask->ne[0], 1, mask->ne[1]);
-        ggml_tensor * z = build_rand_noise(mu, 1.0f);
+        LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&& check here9 \n");
+        ggml_tensor * rand_noise = build_inp_rand_noise();
+        ggml_tensor * z = ggml_view_3d(ctx0, rand_noise, mu->ne[0], 80, 1, rand_noise->nb[0], rand_noise->nb[1], 0);
+        // ggml_tensor * z = build_rand_noise(mu, 1.0f);
         ggml_tensor * t_span = build_causal_cond_cfm(n_timesteps);
         LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&& check here 10!!!!!!!!!!\n");
-        z = ggml_permute(ctx0, z, 1, 0, 2, 3);
+        // z = ggml_permute(ctx0, z, 1, 0, 2, 3);
         ggml_tensor * feat = build_solve_euler(z, t_span, mu, mask, spks, cond, model);
         LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&& check here 11!!!!!!!!!!\n");
         ggml_tensor * sliced = ggml_view_3d(ctx0, feat, feat->ne[0], feat->ne[1] - mel_len1, feat->ne[2], feat->nb[0],
