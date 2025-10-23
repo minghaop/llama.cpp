@@ -236,6 +236,7 @@ extern "C" {
         int32_t         token_len;
         int32_t         prompt_token_len;
         int32_t         prompt_feat_len;
+        float        *  rand_noise;
     } llama_batch;
 
     enum llama_model_kv_override_type {

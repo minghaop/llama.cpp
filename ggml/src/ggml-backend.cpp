@@ -751,7 +751,9 @@ static int ggml_backend_sched_backend_id_from_cur(ggml_backend_sched_t sched, st
     if (tensor->buffer || (tensor->view_src && tensor->view_src->buffer)) {
         // since the tensor is pre-allocated, it cannot be moved to another backend
         ggml_backend_buffer_t buffer = tensor->view_src ? tensor->view_src->buffer : tensor->buffer;
-        GGML_LOG_INFO("buffer is: %p\n", (void *)buffer);
+        // GGML_LOG_INFO("pre-alloc check fail: %s  buf=%s  usage=0x%x  compute=%d\n", tensor->name, ggml_backend_buft_name(ggml_backend_buffer_get_type(tensor->buffer)),
+        //     ggml_backend_buffer_get_usage(tensor->buffer),
+        //     !!(ggml_backend_buffer_get_usage(tensor->buffer) & GGML_BACKEND_BUFFER_USAGE_COMPUTE));
         GGML_ABORT("pre-allocated tensor (%s) in a buffer (%s) that cannot run the operation (%s)", tensor->name, ggml_backend_buffer_name(buffer), ggml_op_name(tensor->op));
     }
 
