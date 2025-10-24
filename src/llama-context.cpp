@@ -703,7 +703,6 @@ llm_graph_result_ptr llama_context::process_ubatch(const llama_ubatch & ubatch, 
         return nullptr;
     }
     
-    
 
     if (!ggml_backend_sched_alloc_graph(sched.get(), gf)) {
         LLAMA_LOG_ERROR("%s: failed to allocate graph\n", __func__);
@@ -1304,11 +1303,8 @@ ggml_cgraph * llama_context::graph_init() {
         /*.mem_buffer =*/ buf_compute_meta.data(),
         /*.no_alloc   =*/ true,
     };
-    LLAMA_LOG_DEBUG("%s: initializing compute graph with max nodes = %d\n", __func__, graph_max_nodes());
-    LLAMA_LOG_DEBUG("%s: compute buffer size = %0.2f MiB\n", __func__, buf_compute_meta.size() / 1024.0/ 1024.0);
 
     ctx_compute.reset(ggml_init(params));
-    LLAMA_LOG_DEBUG("%s: compute graph context = %p\n", __func__, (void *) ctx_compute.get());
 
     return ggml_new_graph_custom(ctx_compute.get(), graph_max_nodes(), false);
 }
