@@ -569,6 +569,7 @@ struct llm_graph_context {
              int   il) const;
     
     ggml_tensor * build_pad_mask(
+             ggml_cgraph * gf,
              int32_t total_len,
              int32_t max_len = 0) const;
     
@@ -581,7 +582,7 @@ struct llm_graph_context {
              ggml_tensor * norm_mw,
              ggml_tensor * norm_mb) const;
     
-    ggml_tensor * build_pe(int64_t max_len = 5000) const;
+    ggml_tensor * build_pe(ggml_cgraph * gf, int64_t max_len = 5000) const;
 
     ggml_tensor * build_pos_encoding(
          ggml_tensor * cur,
@@ -631,6 +632,7 @@ struct llm_graph_context {
          float tempture) const;
     
     ggml_tensor * build_causal_cond_cfm(
+         ggml_cgraph * gf,
          int64_t n_timesteps) const;
     
     ggml_tensor * build_sinusoidal_pos_emb(
@@ -720,6 +722,7 @@ struct llm_graph_context {
          const llama_model & model) const;
     
     ggml_tensor * build_solve_euler(
+         ggml_cgraph * gf,
          ggml_tensor * z,
          ggml_tensor * t_span,
          ggml_tensor * mu,

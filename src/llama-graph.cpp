@@ -578,30 +578,32 @@ ggml_tensor * llm_graph_context::build_flow_embedding(
     
     ggml_tensor * token_clamp = ggml_clamp(ctx0, cur, 0, 3.40282346638528859811704183484516925e+38F);
     cur = ggml_get_rows(ctx0, embd_w, token_clamp);
+    ggml_set_name(cur, "flow_embd");
     cb(cur, "flow_embd", il);
 
     return cur;
 }
 
 
-ggml_tensor * llm_graph_context::build_pad_mask(int32_t total_len, int32_t max_len) const {
+ggml_tensor * llm_graph_context::build_pad_mask(ggml_cgraph * gf, int32_t total_len, int32_t max_len) const {
     
     if(max_len <= 0) {
         max_len = total_len;
     }
-    LLAMA_LOG_INFO("&&&&&&&&&&& begin build_mask\n");
     ggml_tensor * seq_range = ggml_arange(ctx0, 0.0f, (float)max_len, 1.0f);
     ggml_tensor * seq_range_expand = ggml_reshape_2d(ctx0, seq_range, max_len, 1);
     ggml_set_no_alloc(ctx0, false);
     ggml_tensor * seq_length_expand = ggml_new_i32(ctx0, total_len);
+    ggml_set_name(seq_length_expand, "seq_length_expand");
+    seq_length_expand->flags |= GGML_TENSOR_FLAG_PARAM;
+    ggml_build_forward_expand(gf, seq_length_expand);
     seq_length_expand = ggml_reshape_2d(ctx0, seq_length_expand, 1, 1);
     ggml_set_no_alloc(ctx0, true);
     ggml_set_name(seq_length_expand, "seq_length_expand");
     // seq_length_expand = ggml_scale(ctx0, seq_length_expand, (float)total_len);
     ggml_tensor * mask = ggml_step(ctx0, ggml_sub(ctx0, seq_range_expand, seq_length_expand));
     mask = ggml_neg(ctx0, mask);
-    LLAMA_LOG_INFO("&&&&&&&&&&& end build_mask\n");
-
+    ggml_set_name(mask, "mask");
     // std::vector<int32_t> mask_host(max_len, 0);
     // for (int t = 0; t < max_len; ++t)
     //     mask_host[t] = (t < total_len) ? 1 : 0;
@@ -651,18 +653,18 @@ ggml_tensor * llm_graph_context::build_linear_no_subsampling(
     
     // LLAMA_LOG_INFO("CPU supports MUL_MAT ? %d\n", ggml_backend_supports_op(backend_cpu, linear_mw));
     // cur = build_cpu_gpu(cur);
-    ggml_gallocr_t galloc = ggml_gallocr_new(ggml_backend_cuda_buffer_type(0));
+    // ggml_gallocr_t galloc = ggml_gallocr_new(ggml_backend_cuda_buffer_type(0));
 
-    // 2. 把要搬迁的张量（例如 cur）加入一张临时计算图
-    struct ggml_cgraph * gf = ggml_new_graph(ctx0);
-    ggml_build_forward_expand(gf, cur);       // 只用来估算内存，不会真算
+    // // 2. 把要搬迁的张量（例如 cur）加入一张临时计算图
+    // struct ggml_cgraph * gf = ggml_new_graph(ctx0);
+    // ggml_build_forward_expand(gf, cur);       // 只用来估算内存，不会真算
 
-    // 3. 一次性为整张图（其实只有 cur）预分配 CUDA0 内存
-    ggml_gallocr_reserve(galloc, gf);         // 内部已含对齐、生命周期分析
-    ggml_gallocr_alloc_graph(galloc, gf);  
+    // // 3. 一次性为整张图（其实只有 cur）预分配 CUDA0 内存
+    // ggml_gallocr_reserve(galloc, gf);         // 内部已含对齐、生命周期分析
+    // ggml_gallocr_alloc_graph(galloc, gf);  
     
-    LLAMA_LOG_INFO("&&&&&&&&&&& cur backend buf is: %s\n", ggml_backend_buft_name(ggml_backend_buffer_get_type(cur->buffer)));
-    LLAMA_LOG_INFO("&&&&&&&&&&& linear_mw backend buf is: %s\n", ggml_backend_buft_name(ggml_backend_buffer_get_type(linear_mw->buffer)));
+    // LLAMA_LOG_INFO("&&&&&&&&&&& cur backend buf is: %s\n", ggml_backend_buft_name(ggml_backend_buffer_get_type(cur->buffer)));
+    // LLAMA_LOG_INFO("&&&&&&&&&&& linear_mw backend buf is: %s\n", ggml_backend_buft_name(ggml_backend_buffer_get_type(linear_mw->buffer)));
     cur = ggml_mul_mat(ctx0, linear_mw, cur);
     cur = ggml_add(ctx0, cur, linear_mb);
     cur = ggml_cont(ctx0, ggml_permute(ctx0, cur, 1, 0, 2, 3));
@@ -674,7 +676,7 @@ ggml_tensor * llm_graph_context::build_linear_no_subsampling(
 
 }
 
-ggml_tensor * llm_graph_context::build_pe(int64_t max_len) const{
+ggml_tensor * llm_graph_context::build_pe(ggml_cgraph * gf, int64_t max_len) const{
         
     const int32_t d_model = 512;
     GGML_ASSERT(d_model % 2 == 0);
@@ -719,6 +721,9 @@ ggml_tensor * llm_graph_context::build_pe(int64_t max_len) const{
 
     // 7. 直接构建最终的位置编码张量
     ggml_tensor * pe_cat = ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, total_pe_len, d_model);
+    ggml_set_name(pe_cat , "solve_euler_t");
+    pe_cat->flags |= GGML_TENSOR_FLAG_PARAM;
+    ggml_build_forward_expand(gf, pe_cat);
 
     // 7.1 复制翻转的正位置编码 (前seq_len行)
     for (int64_t i = 0; i < seq_len; ++i) {
@@ -978,12 +983,17 @@ ggml_tensor * llm_graph_context::build_rand_noise(
 
 
 ggml_tensor * llm_graph_context::build_causal_cond_cfm(
+         ggml_cgraph * gf,
          int64_t n_timesteps) const{
     
     ggml_tensor * t_span = ggml_arange(ctx0, 0.0f, 1.1f, 0.1f);
     ggml_tensor *t_cos = ggml_cos(ctx0, ggml_scale(ctx0, t_span, 0.5f * M_PI));
     ggml_set_no_alloc(ctx0, false);
-    ggml_tensor *one_broadcast = ggml_repeat(ctx0, ggml_new_f32(ctx0, 1.0f), t_cos);
+    ggml_tensor * one = ggml_new_f32(ctx0, 1.0f);
+    ggml_set_name(one, "cause_cond_cfm_one");
+    one->flags |= GGML_TENSOR_FLAG_PARAM;
+    ggml_build_forward_expand(gf, one);
+    ggml_tensor *one_broadcast = ggml_repeat(ctx0, one, t_cos);
     t_span = ggml_sub(ctx0, one_broadcast, t_cos);
     ggml_set_no_alloc(ctx0, true);
     
@@ -1087,7 +1097,8 @@ ggml_tensor * llm_graph_context::ggml_spda(
     }
     // ggml_tensor * attn_bias = ggml_new_tensor_4d(ctx0, q->type, q->ne[1], k->ne[1], q->ne[2], q->ne[3]);
     // ggml_backend_alloc_ctx_tensors(ctx0, backend_cpu);
-    attn_bias = ggml_set_zero(attn_bias);
+    attn_bias = ggml_scale(ctx0, attn_bias, 0.0f);
+    // attn_bias = ggml_set_zero(attn_bias);
     // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&& attn_bias shape is: {%d} {%d} {%d} {%d}\n", attn_bias->ne[0], attn_bias->ne[1], attn_bias->ne[2], attn_bias->ne[3]);
     if (mask) {
         attn_bias = ggml_add(ctx0, mask, attn_bias);
@@ -1370,7 +1381,12 @@ ggml_tensor * llm_graph_context::build_causal_cond_decoder(
     
     t = build_sinusoidal_pos_emb(t, 320, 1000);
     t = build_timestep_embedding(t, model.time_mlp_1_w, model.time_mlp_1_b, model.time_mlp_2_w, model.time_mlp_2_b);
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&& x shape is: {%d, %d, %d, %d}\n", x->ne[0], x->ne[1], x->ne[2], x->ne[3]);
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&& mu shape is: {%d, %d, %d, %d}\n", mu->ne[0], mu->ne[1], mu->ne[2], mu->ne[3]);
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&& spks_t shape is: {%d, %d, %d, %d}\n", spks_t->ne[0], spks_t->ne[1], spks_t->ne[2], spks_t->ne[3]);
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&& cond shape is: {%d, %d, %d, %d}\n", cond->ne[0], cond->ne[1], cond->ne[2], cond->ne[3]);
     x = ggml_concat(ctx0, x, mu, 1);
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&& x shape is: {%d, %d, %d, %d}\n", x->ne[0], x->ne[1], x->ne[2], x->ne[3]);
     
     if (spks) {
         x = ggml_concat(ctx0, x, spks_t, 1);
@@ -1443,6 +1459,8 @@ ggml_tensor * llm_graph_context::build_causal_cond_decoder(
     ggml_tensor * mask_up = masks.back();
     ggml_tensor * skip = hiddens.back();
     skip = ggml_permute(ctx0, skip, 1, 0, 2, 3);
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&& x type is: %d\n", x->type);
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&& skip type is: %d\n", skip->type);
     x = ggml_concat(ctx0, x, skip, 1);
     x = causal_resnet_block1d_forward(x, mask_up, t, 0, "up_block", pad_list, model);
     x = ggml_cont(ctx0, ggml_permute(ctx0, x, 1, 0, 2, 3));
@@ -1478,6 +1496,7 @@ ggml_tensor * llm_graph_context::build_causal_cond_decoder(
 }
 
 ggml_tensor * llm_graph_context::build_solve_euler(
+         ggml_cgraph * gf,
          ggml_tensor * z,
          ggml_tensor * t_span,
          ggml_tensor * mu,
@@ -1486,7 +1505,8 @@ ggml_tensor * llm_graph_context::build_solve_euler(
          ggml_tensor * cond,
          const llama_model & model) const{
         
-    const int64_t B   = z->ne[2];   
+    const int64_t B   = z->ne[2];
+    const int64_t C   = z->ne[1]; 
     const int64_t T   = z->ne[0];
     const int64_t N   = t_span->ne[0]; 
     const int64_t spk_dim = spks ? spks->ne[0] : 0;
@@ -1505,8 +1525,16 @@ ggml_tensor * llm_graph_context::build_solve_euler(
     // ggml_set_f32(dt_t, dt);
     ggml_set_no_alloc(ctx0, false);
     ggml_tensor * t = ggml_new_f32(ctx0, t0);
+    ggml_set_name(t , "solve_euler_t");
+    t->flags |= GGML_TENSOR_FLAG_PARAM;
+    ggml_build_forward_expand(gf, t);
+
     ggml_tensor * dt_t = ggml_new_f32(ctx0, dt);
+    ggml_set_name(dt_t , "solve_euler_dt_t");
+    dt_t->flags |= GGML_TENSOR_FLAG_PARAM;
+    ggml_build_forward_expand(gf, dt_t);
     ggml_set_no_alloc(ctx0, true);
+
     ggml_tensor * z_in   = ggml_new_tensor_3d(ctx0, z->type, T, 80, 2);
     z_in = ggml_scale(ctx0, z_in, 0.0f);
     ggml_tensor * mask_in= ggml_new_tensor_3d(ctx0, mask->type, T, 1, 2);
@@ -1522,11 +1550,19 @@ ggml_tensor * llm_graph_context::build_solve_euler(
     ggml_tensor * spk_t = ggml_new_tensor_3d(ctx0, spks_in->type, z_in->ne[0], spks_in->ne[0], spks_in->ne[1]);
     ggml_tensor * attn_mask_t = ggml_new_tensor_3d(ctx0, GGML_TYPE_F32, T, T, 2);
     ggml_tensor * attn_bias = ggml_new_tensor_4d(ctx0, mask->type, T, T, 8, 2);
-    LLAMA_LOG_INFO("&&&&&&&&&& z bf shape is: {%d} {%d} {%d} {%d}\n", z->ne[0], z->ne[1], z->ne[2], z->ne[3]);
-    LLAMA_LOG_INFO("&&&&&&&&&& z_in shape is: {%d} {%d} {%d} {%d}\n", z_in->ne[0], z_in->ne[1], z_in->ne[2], z_in->ne[3]);
+    // LLAMA_LOG_INFO("&&&&&&&&&& z bf shape is: {%d} {%d} {%d} {%d}\n", z->ne[0], z->ne[1], z->ne[2], z->ne[3]);
+    // LLAMA_LOG_INFO("&&&&&&&&&& z_in shape is: {%d} {%d} {%d} {%d}\n", z_in->ne[0], z_in->ne[1], z_in->ne[2], z_in->ne[3]);
     ggml_set_no_alloc(ctx0, false);
     ggml_tensor * one = ggml_new_f32(ctx0, 1.0f);
+    ggml_set_name(one , "solve_euler_one");
+    one->flags |= GGML_TENSOR_FLAG_PARAM;
+    ggml_build_forward_expand(gf, one);
+
     ggml_tensor * neg_big = ggml_new_f32(ctx0, -1.0e10f);
+    ggml_set_name(neg_big , "solve_euler_neg_big");
+    neg_big->flags |= GGML_TENSOR_FLAG_PARAM;
+    ggml_build_forward_expand(gf, neg_big);
+
     ggml_set_no_alloc(ctx0, true);
     std::vector<ggml_tensor *> pad_list;
     ggml_tensor * pad_320 = ggml_new_tensor_3d(ctx0, z->type, z->ne[0] + 2, 320, 2);
@@ -1543,36 +1579,42 @@ ggml_tensor * llm_graph_context::build_solve_euler(
     pad_list.push_back(pad_256);
     pad_list.push_back(pad_512);
     std::vector<ggml_tensor *> sol;
-    LLAMA_LOG_INFO("&&&&&&&&&& mask shape is: {%d, %d, %d, %d}\n", mask->ne[0], mask->ne[1], mask->ne[2], mask->ne[3]);
-    LLAMA_LOG_INFO("&&&&&&&&&& mask_in shape is: {%d, %d, %d, %d}\n", mask_in->ne[0], mask_in->ne[1], mask_in->ne[2], mask_in->ne[3]);
-    LLAMA_LOG_INFO("&&&&&&&&&& mu shape is: {%d, %d, %d, %d}\n", mu->ne[0], mu->ne[1], mu->ne[2], mu->ne[3]);
-    LLAMA_LOG_INFO("&&&&&&&&&& mu_in shape is: {%d, %d, %d, %d}\n", mu_in->ne[0], mu_in->ne[1], mu_in->ne[2], mu_in->ne[3]);
-    LLAMA_LOG_INFO("&&&&&&&&&& t_in shape is: {%d, %d, %d, %d}\n", t_in->ne[0], t_in->ne[1], t_in->ne[2], t_in->ne[3]);
-    LLAMA_LOG_INFO("&&&&&&&&&& spks_in shape is: {%d, %d, %d, %d}\n", spks_in->ne[0], spks_in->ne[1], spks_in->ne[2], spks_in->ne[3]);
-    LLAMA_LOG_INFO("&&&&&&&&&& cond_in shape is: {%d, %d, %d, %d}\n", cond_in->ne[0], cond_in->ne[1], cond_in->ne[2], cond_in->ne[3]);
+    // LLAMA_LOG_INFO("&&&&&&&&&& mask shape is: {%d, %d, %d, %d}\n", mask->ne[0], mask->ne[1], mask->ne[2], mask->ne[3]);
+    // LLAMA_LOG_INFO("&&&&&&&&&& mask_in shape is: {%d, %d, %d, %d}\n", mask_in->ne[0], mask_in->ne[1], mask_in->ne[2], mask_in->ne[3]);
+    // LLAMA_LOG_INFO("&&&&&&&&&& mu shape is: {%d, %d, %d, %d}\n", mu->ne[0], mu->ne[1], mu->ne[2], mu->ne[3]);
+    // LLAMA_LOG_INFO("&&&&&&&&&& mu_in shape is: {%d, %d, %d, %d}\n", mu_in->ne[0], mu_in->ne[1], mu_in->ne[2], mu_in->ne[3]);
+    // LLAMA_LOG_INFO("&&&&&&&&&& t_in shape is: {%d, %d, %d, %d}\n", t_in->ne[0], t_in->ne[1], t_in->ne[2], t_in->ne[3]);
+    // LLAMA_LOG_INFO("&&&&&&&&&& spks_in shape is: {%d, %d, %d, %d}\n", spks_in->ne[0], spks_in->ne[1], spks_in->ne[2], spks_in->ne[3]);
+    // LLAMA_LOG_INFO("&&&&&&&&&& cond_in shape is: {%d, %d, %d, %d}\n", cond_in->ne[0], cond_in->ne[1], cond_in->ne[2], cond_in->ne[3]);
     // LLAMA_LOG_INFO("&&&&&&&&&& mu shape is: {%d, %d, %d, %d}\n", mu_in->ne[0], mu_in->ne[1], mu_in->ne[2], mu_in->ne[3]);
     ggml_tensor * mask_tmpl = ggml_new_tensor_4d(ctx0, mask->type, mask->ne[0], mask->ne[0], 2 * 8, 1);
     // ggml_backend_alloc_ctx_tensors(ctx0, backend_cpu);
+    ggml_tensor * z_in_cpy, * mask_in_cpy, * t_in_cpy;
     for (int64_t step = 1; step < N; ++step) {
-        LLAMA_LOG_INFO("&&&&&& check z_in cpy \n");
-        z_in = ggml_cpy(ctx0, ggml_repeat(ctx0, z, z_in), z_in);
-        LLAMA_LOG_INFO("&&&&&& check mask_in cpy \n");
-        mask_in = ggml_cpy(ctx0, ggml_repeat(ctx0, mask, mask_in), mask_in);
-        LLAMA_LOG_INFO("&&&&&& check mu_in cpy \n");
-        mu_in = ggml_cpy(ctx0, mu, ggml_view_3d(ctx0, mu_in, mu->ne[2], mu->ne[1], mu->ne[0], mu->nb[1], mu->nb[2], 0));
-        LLAMA_LOG_INFO("&&&&&& check t_in cpy \n");
-        t_in  = ggml_cpy(ctx0, ggml_repeat(ctx0, t, t_in), t_in);
-        LLAMA_LOG_INFO("&&&&&& check t_in cpy \n");
+        z_in_cpy = ggml_cpy(ctx0, ggml_repeat(ctx0, ggml_reshape_3d(ctx0, ggml_cont(ctx0, z), T, C, B), z_in), z_in);
+        // LLAMA_LOG_INFO("&&&& check z_in\n");
+        mask_in_cpy = ggml_cpy(ctx0, ggml_repeat(ctx0, ggml_reshape_3d(ctx0, ggml_cont(ctx0, mask), T, 1, B), mask_in), mask_in);
+        // LLAMA_LOG_INFO("&&&& check mask_in\n");
+        ggml_cpy(ctx0, ggml_view_3d(ctx0, mu, T, C, 1, mu->nb[1], mu->nb[2], 0), ggml_view_3d(ctx0, mu_in, T, C, 1, mu_in->nb[1], mu_in->nb[2], 0));
+        // LLAMA_LOG_INFO("&&&& check mu_in\n");
+        t_in_cpy  = ggml_cpy(ctx0, ggml_repeat(ctx0, ggml_reshape_1d(ctx0, ggml_cont(ctx0, t), 1), t_in), t_in);
+        // LLAMA_LOG_INFO("&&&& check t_in\n");
         if (spks) {
-            spks_in = ggml_cpy(ctx0, spks, ggml_view_2d(ctx0, spks_in, 80, 1, spks_in->nb[1], 0));
-            LLAMA_LOG_INFO("&&&&&& check spks_in cpy \n");
+            ggml_cpy(ctx0, ggml_view_2d(ctx0, spks, 80, 1, spks->nb[1], 0), ggml_view_2d(ctx0, spks_in, 80, 1, spks_in->nb[1], 0));
+            // LLAMA_LOG_INFO("&&&& check spks_in\n");
         }
         if (cond) {
-            cond_in = ggml_cpy(ctx0, cond, ggml_view_3d(ctx0, cond_in, cond->ne[2], cond->ne[1], cond->ne[0], cond->nb[1], cond->nb[2], 0));
-            LLAMA_LOG_INFO("&&&&&& check cond_in cpy \n");
+            ggml_cpy(ctx0, ggml_view_3d(ctx0, cond, T, C, 1, cond->nb[1], cond->nb[2], 0), ggml_view_3d(ctx0, cond_in, T, C, 1, cond_in->nb[1], cond_in->nb[2], 0));
+            // LLAMA_LOG_INFO("&&&& check cond_in\n");
         }
-        ggml_tensor * spks_t = ggml_repeat(ctx0, ggml_reshape_3d(ctx0, spks_in, 1, spks_in->ne[0], spks_in->ne[1]), ggml_view_tensor(ctx0, spk_t));
-        ggml_tensor * dphi_dt = build_causal_cond_decoder(z_in, mask_in, mu_in, t_in, spks_in, cond_in, spk_t, attn_mask_t, mask_tmpl, one, neg_big, attn_bias, pad_list, model);
+        // LLAMA_LOG_INFO("&&&&&&&&&& z_in_cpy shape is: {%d, %d, %d, %d}\n", z_in_cpy->ne[0], z_in_cpy->ne[1], z_in_cpy->ne[2], z_in_cpy->ne[3]);
+        // LLAMA_LOG_INFO("&&&&&&&&&& mask_in_cpy shape is: {%d, %d, %d, %d}\n", mask_in_cpy->ne[0], mask_in_cpy->ne[1], mask_in_cpy->ne[2], mask_in_cpy->ne[3]);
+        // LLAMA_LOG_INFO("&&&&&&&&&& mu_in_cpy shape is: {%d, %d, %d, %d}\n", mu_in_cpy->ne[0], mu_in_cpy->ne[1], mu_in_cpy->ne[2], mu_in_cpy->ne[3]);
+        // LLAMA_LOG_INFO("&&&&&&&&&& t_in_cpy shape is: {%d, %d, %d, %d}\n", t_in_cpy->ne[0], t_in_cpy->ne[1], t_in_cpy->ne[2], t_in_cpy->ne[3]);
+        // LLAMA_LOG_INFO("&&&&&&&&&& spks_in_cpy shape is: {%d, %d, %d, %d}\n", spks_in_cpy->ne[0], spks_in_cpy->ne[1], spks_in_cpy->ne[2], spks_in_cpy->ne[3]);
+        // LLAMA_LOG_INFO("&&&&&&&&&& cond_in_cpy shape is: {%d, %d, %d, %d}\n", cond_in_cpy->ne[0], cond_in_cpy->ne[1], cond_in_cpy->ne[2], cond_in_cpy->ne[3]);
+        ggml_tensor * spks_t = ggml_repeat(ctx0, ggml_cont(ctx0, ggml_reshape_3d(ctx0, spks_in, 1, spks_in->ne[0], spks_in->ne[1])), ggml_view_tensor(ctx0, spk_t));
+        ggml_tensor * dphi_dt = build_causal_cond_decoder(z_in_cpy, mask_in_cpy, mu_in, t_in_cpy, spks_in, cond_in, spk_t, attn_mask_t, mask_tmpl, one, neg_big, attn_bias, pad_list, model);
         ggml_tensor * dphi_dt_split   = ggml_view_3d(ctx0, dphi_dt, T, z->ne[1], B, dphi_dt->nb[1], dphi_dt->nb[2], 0);
         ggml_tensor * cfg_dphi_dt  = ggml_view_3d(ctx0, dphi_dt, T, z->ne[1], B, dphi_dt->nb[1], dphi_dt->nb[2], B * dphi_dt->nb[2]);
         ggml_tensor * dphi  = ggml_sub(ctx0, ggml_scale(ctx0, dphi_dt_split, 1.7f), ggml_scale(ctx0, cfg_dphi_dt, 0.7f));
@@ -1584,6 +1626,9 @@ ggml_tensor * llm_graph_context::build_solve_euler(
             // ggml_set_f32(dt_t, dt);
             ggml_set_no_alloc(ctx0, false);
             dt_t = ggml_new_f32(ctx0, dt);
+            ggml_set_name(dt_t , "solve_euler_dt_t_for");
+            dt_t->flags |= GGML_TENSOR_FLAG_PARAM;
+            ggml_build_forward_expand(gf, dt_t);
             ggml_set_no_alloc(ctx0, true);
         }
         LLAMA_LOG_INFO("&&&&&&&&&& step is: %d\n", step);
@@ -2008,7 +2053,7 @@ ggml_tensor * llm_graph_context::build_inp_rand_noise() const {
     auto inp = std::make_unique<llm_graph_input_rand_noise>();
     // LLAMA_LOG_INFO("&&&&&&&&&&&&& feat_len is: %d\n", feat_len);
     ggml_tensor * cur = nullptr;
-    inp->input_rand_noise = ggml_new_tensor_3d(ctx0, GGML_TYPE_I32, 50 * 300, 80, 1);
+    inp->input_rand_noise = ggml_new_tensor_3d(ctx0, GGML_TYPE_F32, 50 * 300, 80, 1);
     // ggml_backend_t backend_cuda = ggml_backend_cuda_init(0);
     // ggml_backend_buffer_t buf = ggml_backend_alloc_ctx_tensors(ctx0, backend_cuda);
     ggml_set_input(inp->input_rand_noise);
