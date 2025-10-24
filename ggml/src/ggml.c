@@ -33,9 +33,14 @@
 #include <limits.h>
 #include <stdarg.h>
 #include <signal.h>
+
+#include <stdio.h>
+
 #if defined(__gnu_linux__)
 #include <syscall.h>
 #endif
+
+
 
 #if defined(__APPLE__)
 #include <unistd.h>
@@ -6584,31 +6589,39 @@ struct ggml_tensor * ggml_graph_get_grad_acc(const struct ggml_cgraph * cgraph, 
 }
 
 void ggml_graph_print(const struct ggml_cgraph * cgraph) {
-    GGML_LOG_INFO("=== GRAPH ===\n");
+    
+    FILE *file = fopen("computation_graph.txt", "w");
+    if (file == NULL) {
+        printf("Failed to open file for writing\n");
+        return;
+    }
 
-    GGML_LOG_INFO("n_nodes = %d\n", cgraph->n_nodes);
+    fprintf(file, "=== GRAPH ===\n");
+
+    fprintf(file, "n_nodes = %d\n", cgraph->n_nodes);
     for (int i = 0; i < cgraph->n_nodes; i++) {
         struct ggml_tensor * node = cgraph->nodes[i];
 
-        GGML_LOG_INFO(" - %3d: [ %5" PRId64 ", %5" PRId64 ", %5" PRId64 "] %16s %s\n",
+        fprintf(file, " - %3d: [ %5" PRId64 ", %5" PRId64 ", %5" PRId64 "] %16s %s\n",
                 i,
                 node->ne[0], node->ne[1], node->ne[2],
                 ggml_op_name(node->op), (node->flags & GGML_TENSOR_FLAG_PARAM) ? "x" :
                       ggml_graph_get_grad(cgraph, node) ? "g" : " ");
     }
 
-    GGML_LOG_INFO("n_leafs = %d\n", cgraph->n_leafs);
+    fprintf(file, "n_leafs = %d\n", cgraph->n_leafs);
     for (int i = 0; i < cgraph->n_leafs; i++) {
         struct ggml_tensor * node = cgraph->leafs[i];
 
-        GGML_LOG_INFO(" - %3d: [ %5" PRId64 ", %5" PRId64 "] %8s %16s\n",
+        fprintf(file, " - %3d: [ %5" PRId64 ", %5" PRId64 "] %8s %16s\n",
                 i,
                 node->ne[0], node->ne[1],
                 ggml_op_name(node->op),
                 ggml_get_name(node));
     }
 
-    GGML_LOG_INFO("========================================\n");
+    fprintf(file, "========================================\n");
+    fclose(file);
 }
 
 // check if node is part of the graph

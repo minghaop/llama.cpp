@@ -572,6 +572,8 @@ static void ggml_gallocr_alloc_graph_impl(ggml_gallocr_t galloc, struct ggml_cgr
     // these may be tensors that the application is not using in the graph, but may still want to allocate for other purposes
     for (int i = 0; i < graph->n_leafs; i++) {
         struct ggml_tensor * leaf = graph->leafs[i];
+        // GGML_LOG_INFO("Leaf %d: name=%s, buffer_id=%d, data=%p\n", 
+        //           i, leaf->name ? leaf->name : "unnamed", get_node_buffer_id(leaf_buffer_ids, i), leaf->data);
         ggml_gallocr_allocate_node(galloc, leaf, get_node_buffer_id(leaf_buffer_ids, i));
     }
 
