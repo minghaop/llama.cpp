@@ -21,13 +21,18 @@ void llm_graph_input_embd::set_input(const llama_ubatch * ubatch) {
         const int64_t n_tokens = ubatch->n_tokens;
 
         ggml_backend_tensor_set(tokens, ubatch->token, 0, n_tokens*ggml_element_size(tokens));
+        
     }
 
     if (ubatch->embd) {
         const int64_t n_embd   = embd->ne[0];
         const int64_t n_tokens = ubatch->n_tokens;
-
-        ggml_backend_tensor_set(embd, ubatch->embd, 0, n_tokens*n_embd*ggml_element_size(embd));
+        // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&& n_tokens is: %d, n_embed is: %d, embd_size is: %d\n", n_tokens, n_embd, ggml_element_size(embd));
+        ggml_backend_tensor_set(embd, ubatch->embd, 0, n_embd*ggml_element_size(embd));
+        // LLAMA_LOG_INFO("&&&&&&&&&&&&& check input_embed\n");
+        // float buff[32];
+        // ggml_backend_tensor_get(embd, buff, 0, sizeof(buff));   // 直接拷 32 字节
+        // for (int i = 0; i < 8; ++i) printf("embd is: %d ", buff[i]);
     }
 }
 
@@ -36,6 +41,7 @@ void llm_graph_input_token::set_input(const llama_ubatch * ubatch) {
         const int64_t total_token_len = ubatch->token_len;
 
         ggml_backend_tensor_set(input_token, ubatch->flow_token, 0, total_token_len*ggml_element_size(input_token));
+        // LLAMA_LOG_INFO("&&&&&&&&&&&&& check input_token\n");
     }
 }
 
@@ -44,6 +50,10 @@ void llm_graph_input_prompt_token::set_input(const llama_ubatch * ubatch) {
         const int64_t total_token_len = ubatch->prompt_token_len;
 
         ggml_backend_tensor_set(input_prompt_token, ubatch->flow_token, ubatch->token_len * ggml_element_size(input_prompt_token), total_token_len*ggml_element_size(input_prompt_token));
+        // int64_t buff[32];
+        // ggml_backend_tensor_get(input_prompt_token, buff, 0, sizeof(buff));   // 直接拷 32 字节
+        // for (int i = 0; i < 8; ++i) printf("input_prompt_token is: %d ", buff[i]);
+        
     }
 }
 
@@ -52,6 +62,10 @@ void llm_graph_input_prompt_feat::set_input(const llama_ubatch * ubatch) {
         const int64_t feat_len = ubatch->prompt_feat_len;
 
         ggml_backend_tensor_set(input_prompt_feat, ubatch->flow_feat, 0, feat_len*ggml_element_size(input_prompt_feat));
+        // LLAMA_LOG_INFO("&&&&&&&&&&&&& check input_prompt_feat\n");
+        // float buff[32];
+        // ggml_backend_tensor_get(input_prompt_feat, buff, 0, sizeof(buff));   // 直接拷 32 字节
+        // for (int i = 0; i < 8; ++i) printf("input_prompt_feat is: %d ", buff[i]);
     }
 }
 
@@ -60,6 +74,7 @@ void llm_graph_input_rand_noise::set_input(const llama_ubatch * ubatch) {
         const int64_t rand_noise_len = 80 * 50 * 300;
 
         ggml_backend_tensor_set(input_rand_noise, ubatch->rand_noise, 0, rand_noise_len*ggml_element_size(input_rand_noise));
+        // LLAMA_LOG_INFO("&&&&&&&&&&&&& check input_rand_noise\n");
     }
 }
 
@@ -576,8 +591,9 @@ ggml_tensor * llm_graph_context::build_flow_embedding(
          ggml_tensor * embd_w,
                  int   il) const {
     
-    ggml_tensor * token_clamp = ggml_clamp(ctx0, cur, 0, 3.40282346638528859811704183484516925e+38F);
-    cur = ggml_get_rows(ctx0, embd_w, token_clamp);
+    LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&& cur type is : %d\n", cur->type);
+    // ggml_tensor * token_clamp_I32 = ggml_cast(ctx0, token_clamp, GGML_TYPE_I32);
+    cur = ggml_get_rows(ctx0, embd_w, cur);
     ggml_set_name(cur, "flow_embd");
     cb(cur, "flow_embd", il);
 
@@ -590,29 +606,68 @@ ggml_tensor * llm_graph_context::build_pad_mask(ggml_cgraph * gf, int32_t total_
     if(max_len <= 0) {
         max_len = total_len;
     }
-    ggml_tensor * seq_range = ggml_arange(ctx0, 0.0f, (float)max_len, 1.0f);
-    ggml_tensor * seq_range_expand = ggml_reshape_2d(ctx0, seq_range, max_len, 1);
+    float fill_value = (max_len >= total_len) ? 1.0f : 0.0f;
     ggml_set_no_alloc(ctx0, false);
-    ggml_tensor * seq_length_expand = ggml_new_i32(ctx0, total_len);
-    ggml_set_name(seq_length_expand, "seq_length_expand");
-    seq_length_expand->flags |= GGML_TENSOR_FLAG_PARAM;
-    ggml_build_forward_expand(gf, seq_length_expand);
-    seq_length_expand = ggml_reshape_2d(ctx0, seq_length_expand, 1, 1);
+    ggml_tensor * scalar = ggml_new_f32(ctx0, fill_value);
+    ggml_set_name(scalar, fill_value == 1.0f ? "mask_one" : "mask_zero");
+    scalar->flags |= GGML_TENSOR_FLAG_PARAM;
+    
+    // 创建目标形状
+    ggml_tensor * target_shape = ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, total_len, 1);
+    
+    // 扩展标量
+    ggml_tensor * mask = ggml_repeat(ctx0, scalar, target_shape);
+    ggml_set_name(mask, "pad_mask");
+    
+    // 添加到计算图
+    ggml_build_forward_expand(gf, mask);
     ggml_set_no_alloc(ctx0, true);
-    ggml_set_name(seq_length_expand, "seq_length_expand");
-    // seq_length_expand = ggml_scale(ctx0, seq_length_expand, (float)total_len);
-    ggml_tensor * mask = ggml_step(ctx0, ggml_sub(ctx0, seq_range_expand, seq_length_expand));
-    mask = ggml_neg(ctx0, mask);
-    ggml_set_name(mask, "mask");
-    // std::vector<int32_t> mask_host(max_len, 0);
-    // for (int t = 0; t < max_len; ++t)
-    //     mask_host[t] = (t < total_len) ? 1 : 0;
-    // ggml_tensor * mask = ggml_new_tensor_2d(ctx0, GGML_TYPE_I32, max_len, 1);
-    // ggml_backend_t backend = ggml_backend_cuda_init(0);   // 或 cuda/metal
-    // ggml_backend_buffer_t buffer = ggml_backend_alloc_ctx_tensors(ctx0, backend_cpu);
-    // ggml_backend_tensor_set(mask, mask_host.data(), 0, mask_host.size() * sizeof(int32_t));
-
-    cb(mask, "non_pad_mask", -1);
+    
+    LLAMA_LOG_INFO("Created pad mask: shape=[%d, %d], fill_value=%f\n", 
+                   mask->ne[0], mask->ne[1], fill_value);
+    // ggml_tensor * seq_range = ggml_arange(ctx0, 0.0f, (float)max_len, 1.0f);
+    // ggml_tensor * seq_range_expand = ggml_reshape_2d(ctx0, seq_range, max_len, 1);
+    // ggml_set_no_alloc(ctx0, false);
+    // ggml_tensor * seq_length_expand = ggml_new_f32(ctx0, (float)total_len);
+    // ggml_set_name(seq_length_expand, "seq_length_expand");
+    // seq_length_expand->flags |= GGML_TENSOR_FLAG_PARAM;
+    // ggml_build_forward_expand(gf, seq_length_expand);
+    // seq_length_expand = ggml_reshape_2d(ctx0, seq_length_expand, 1, 1);
+    // ggml_set_no_alloc(ctx0, true);
+    // ggml_set_name(seq_length_expand, "seq_length_expand");
+    // // seq_length_expand = ggml_scale(ctx0, seq_length_expand, (float)total_len);
+    // ggml_tensor * seq_diff = ggml_sub(ctx0, seq_range_expand, seq_length_expand);
+    // LLAMA_LOG_INFO("&&&&&&&&&&&& seq_diff shape is: {%d, %d, %d, %d}\n", seq_diff->ne[0], seq_diff->ne[1], seq_diff->ne[2], seq_diff->ne[3]);
+    // ggml_tensor * seq_diff_scaled = ggml_scale(ctx0, seq_diff, 100.0f);
+    // ggml_set_name(seq_diff_scaled, "seq_diff_scaled");
+    // ggml_tensor * sigmoid_mask = ggml_sigmoid(ctx0, seq_diff_scaled);    // 近似阶跃函数
+    // ggml_set_name(sigmoid_mask, "sigmoid_mask");
+    // ggml_tensor * mask = ggml_neg(ctx0, sigmoid_mask);
+    // ggml_set_name(mask, "mask");
+    
+    // ggml_tensor* seq_range = ggml_arange(ctx0, 0, max_len, 1);
+    // ggml_tensor* seq_range_expand = ggml_repeat(ctx0, 
+    //     ggml_reshape_2d(ctx0, seq_range, max_len, 1),
+    //     ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, max_len, 1)
+    // );
+    
+    // // 创建固定的lengths值
+    // ggml_set_no_alloc(ctx0, false);
+    // ggml_tensor* fixed_length = ggml_new_f32(ctx0, (float)total_len);
+    // ggml_set_name(fixed_length, "seq_length_expand");
+    // fixed_length->flags |= GGML_TENSOR_FLAG_PARAM;
+    // ggml_build_forward_expand(gf, fixed_length);
+    // ggml_tensor* seq_length_expand = ggml_repeat(ctx0, fixed_length,
+    //     ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, max_len, 1)
+    // );
+    
+    // // 计算差值并生成掩码
+    // ggml_tensor* diff = ggml_sub(ctx0, seq_range_expand, seq_length_expand);
+    // ggml_tensor* sgn = ggml_sgn(ctx0, diff);
+    // ggml_tensor* mask = ggml_relu(ctx0, sgn);
+    // ggml_set_name(mask, "mask");
+    cb(mask, "non-pad-mask", -1);
+    
     return mask;
 }
 
@@ -794,7 +849,6 @@ ggml_tensor * llm_graph_context::build_pre_lookahead_layer(
         const int lookahead = 3;
         ggml_tensor * x = ggml_permute(ctx0, cur, 0, 2, 1, 3);  // [B, C, T]
         // ggml_tensor * ctx_t = ggml_permute(ctx0, context, 0, 2, 1, 3);
-        // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&& context shape is: {%d} {%d} {%d} {%d}\n", context->ne[0], context->ne[1], context->ne[2], context->ne[3]);
         // if(ctx_t->ne[2] == 0) {
         x = ggml_permute(ctx0, x, 0, 1, 3, 2);
         x = ggml_cont(ctx0, x);
@@ -1381,12 +1435,7 @@ ggml_tensor * llm_graph_context::build_causal_cond_decoder(
     
     t = build_sinusoidal_pos_emb(t, 320, 1000);
     t = build_timestep_embedding(t, model.time_mlp_1_w, model.time_mlp_1_b, model.time_mlp_2_w, model.time_mlp_2_b);
-    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&& x shape is: {%d, %d, %d, %d}\n", x->ne[0], x->ne[1], x->ne[2], x->ne[3]);
-    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&& mu shape is: {%d, %d, %d, %d}\n", mu->ne[0], mu->ne[1], mu->ne[2], mu->ne[3]);
-    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&& spks_t shape is: {%d, %d, %d, %d}\n", spks_t->ne[0], spks_t->ne[1], spks_t->ne[2], spks_t->ne[3]);
-    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&& cond shape is: {%d, %d, %d, %d}\n", cond->ne[0], cond->ne[1], cond->ne[2], cond->ne[3]);
     x = ggml_concat(ctx0, x, mu, 1);
-    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&& x shape is: {%d, %d, %d, %d}\n", x->ne[0], x->ne[1], x->ne[2], x->ne[3]);
     
     if (spks) {
         x = ggml_concat(ctx0, x, spks_t, 1);
@@ -1459,8 +1508,6 @@ ggml_tensor * llm_graph_context::build_causal_cond_decoder(
     ggml_tensor * mask_up = masks.back();
     ggml_tensor * skip = hiddens.back();
     skip = ggml_permute(ctx0, skip, 1, 0, 2, 3);
-    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&& x type is: %d\n", x->type);
-    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&& skip type is: %d\n", skip->type);
     x = ggml_concat(ctx0, x, skip, 1);
     x = causal_resnet_block1d_forward(x, mask_up, t, 0, "up_block", pad_list, model);
     x = ggml_cont(ctx0, ggml_permute(ctx0, x, 1, 0, 2, 3));

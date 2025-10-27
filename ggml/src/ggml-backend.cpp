@@ -1370,18 +1370,19 @@ static bool ggml_backend_sched_alloc_splits(ggml_backend_sched_t sched) {
 static enum ggml_status ggml_backend_sched_compute_splits(ggml_backend_sched_t sched) {
     struct ggml_backend_sched_split * splits = sched->splits;
 
+    GGML_LOG_INFO("&&&&&&&&&&&&&&&&&&&&& split is: %d\n", sched->n_splits);
     for (int i = 0; i < sched->n_splits; i++) {
         struct ggml_backend_sched_split * split = &splits[i];
         int split_backend_id = split->backend_id;
-        // GGML_LOG_INFO("## SPLIT #%d: %s # %d inputs\n", i, ggml_backend_name(sched->backends[split_backend_id]),
-        //     split->n_inputs);
+        GGML_LOG_INFO("## SPLIT #%d: %s # %d inputs\n", i, ggml_backend_name(sched->backends[split_backend_id]),
+            split->n_inputs);
         ggml_backend_t split_backend = sched->backends[split_backend_id];
         // copy the input tensors to the split backend
         for (int j = 0; j < split->n_inputs; j++) {
             ggml_backend_t input_backend = ggml_backend_sched_get_tensor_backend(sched, split->inputs[j]);
             struct ggml_tensor * input = split->inputs[j];
             struct ggml_tensor * input_cpy = tensor_copy(input, split_backend_id, sched->cur_copy);
-
+            GGML_LOG_INFO("&&&&&&&&&&&&&&&& total is: %d, j is: %d, input flags is: %d\n", split->n_inputs, j, input->flags);
             if (input->flags & GGML_TENSOR_FLAG_INPUT) {
                 // inputs from the user must be copied immediately to prevent the user overwriting the data before the copy is done
                 if (sched->events[split_backend_id][sched->cur_copy] != NULL) {
@@ -1410,10 +1411,15 @@ static enum ggml_status ggml_backend_sched_compute_splits(ggml_backend_sched_t s
                 }
             }
         }
-        // GGML_LOG_INFO("################################################################################################################################# %s, sched->callback_eval is: %d\n", 
-        //     __func__, sched->callback_eval != NULL);
+        GGML_LOG_INFO("################################################################################################################################# %s, sched->callback_eval is: %d\n", 
+            __func__, sched->callback_eval != NULL);
         if (!sched->callback_eval) {
+            ggml_graph_print(&split->graph);
+            GGML_LOG_INFO("&&&&&&&&&&&& check here1 !!!\n");
+            
             enum ggml_status ec = ggml_backend_graph_compute_async(split_backend, &split->graph);
+            GGML_LOG_INFO("&&&&&&&&&&&& check here2 !!!\n");
+            GGML_LOG_INFO("&&&&&&&&&&&& ec is: %d\n", ec);
             if (ec != GGML_STATUS_SUCCESS) {
                 return ec;
             }
@@ -1451,12 +1457,14 @@ static enum ggml_status ggml_backend_sched_compute_splits(ggml_backend_sched_t s
             }
         }
 
+        GGML_LOG_INFO("&&&&&&&&&&&& check here3 !!!\n");
         // record the event of this copy
         if (split->n_inputs > 0) {
             if (sched->events[split_backend_id][sched->cur_copy] != NULL) {
                 ggml_backend_event_record(sched->events[split_backend_id][sched->cur_copy], split_backend);
             }
         }
+        GGML_LOG_INFO("&&&&&&&&&&&& check here4 !!!\n");
     }
 
     sched->cur_copy = (sched->cur_copy + 1) % sched->n_copies;
@@ -1600,7 +1608,7 @@ enum ggml_status ggml_backend_sched_graph_compute_async(ggml_backend_sched_t sch
     if (!sched->is_reset && !sched->is_alloc) {
         ggml_backend_sched_reset(sched);
     }
-    // GGML_LOG_INFO("################################################################################################################################# %s, sched->is_alloc is:%d\n", __func__, sched->is_alloc);
+    GGML_LOG_INFO("################################################################################################################################# %s, sched->is_alloc is:%d\n", __func__, sched->is_alloc);
     if (!sched->is_alloc) {
         if (!ggml_backend_sched_alloc_graph(sched, graph)) {
             return GGML_STATUS_ALLOC_FAILED;

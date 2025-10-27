@@ -16753,9 +16753,7 @@ struct llm_build_flow : public llm_graph_context {
         // check_tensor_validity(token, "token");
         ggml_tensor * prompt_feat = build_inp_prompt_feat();
         ggml_build_forward_expand(gf, prompt_feat);
-        // float buff[32];
-        // ggml_backend_tensor_get(prompt_feat, buff, 0, sizeof(buff));   // 直接拷 32 字节
-        // for (int i = 0; i < 8; ++i) printf("%f ", buff[i]);
+        
         embedding = build_F_normalize(embedding, NULL, NULL, 1e-12f, -1);
         cb(embedding, "inp_embed_norm", -1);
         ggml_build_forward_expand(gf, embedding);
@@ -16767,6 +16765,9 @@ struct llm_build_flow : public llm_graph_context {
         ggml_tensor * mask = build_pad_mask(gf, params.ubatch.prompt_token_len + params.ubatch.token_len);
         mask = ggml_cont(ctx0, ggml_permute(ctx0, mask, 1, 0, 2, 3));
         token = build_flow_embedding(token, model.inp_embed_w, -1);
+        // int32_t buff[32];
+        // ggml_backend_tensor_get(token, buff, 0, sizeof(buff));   // 直接拷 32 字节
+        // for (int i = 0; i < 8; ++i) printf("%d ", buff[i]);
         token = ggml_mul(ctx0, token, mask);
         cb(token, "token * mask", -1);
         // ggml_build_forward_expand(gf, token);
@@ -16905,7 +16906,7 @@ struct llm_build_flow : public llm_graph_context {
         res->t_logits = sliced;
         LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&& sliced shape is: {%d, %d, %d, %d}\n", sliced->ne[0], sliced->ne[1], sliced->ne[2], sliced->ne[3]);
         ggml_build_forward_expand(gf, sliced);
-        ggml_graph_print(gf);
+        // ggml_graph_print(gf);
         
         // ggml_graph_dump_dot(gf, NULL, "debug.dot");
         // for (int i = 0; i < gf->n_nodes; ++i) {
