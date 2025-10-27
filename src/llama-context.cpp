@@ -710,12 +710,14 @@ llm_graph_result_ptr llama_context::process_ubatch(const llama_ubatch & ubatch, 
         return nullptr;
     }
     res->set_inputs(&ubatch);
+    LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&& before graph_compute\n");
     const auto status = graph_compute(gf, ubatch.n_tokens > 1);
     if (status != GGML_STATUS_SUCCESS) {
         LLAMA_LOG_ERROR("%s: failed to compute graph, compute status: %d\n", __func__, status);
         ret = status;
         return nullptr;
     }
+    LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&& after graph_compute\n");
 
     ret = GGML_STATUS_SUCCESS;
     
@@ -1390,7 +1392,7 @@ ggml_status llama_context::graph_compute(
         set_n_threads_fn.second(set_n_threads_fn.first, n_threads);
     }
 
-    // LLAMA_LOG_INFO("################################################################################################################################# %s\n", __func__);
+    LLAMA_LOG_INFO("################################################################################################################################# %s\n", __func__);
     auto status = ggml_backend_sched_graph_compute_async(sched.get(), gf);
     if (status != GGML_STATUS_SUCCESS) {
         LLAMA_LOG_ERROR("%s: ggml_backend_sched_graph_compute_async failed with error %d\n", __func__, status);

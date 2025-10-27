@@ -1157,7 +1157,7 @@ void ggml_compute_forward_dup(
         ggml_tensor * dst) {
 
     const ggml_tensor * src0 = dst->src[0];
-
+    GGML_LOG_INFO("&&&&&&&&&&&&&&&&&&& src0 type is: %d, dst type is: %d\n", src0->type, dst->type);
     if (src0->type == dst->type) {
         ggml_compute_forward_dup_bytes(params, dst);
         return;
