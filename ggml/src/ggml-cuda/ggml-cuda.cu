@@ -974,11 +974,14 @@ static const ggml_backend_buffer_i ggml_backend_cuda_split_buffer_interface = {
 
 static const char * ggml_backend_cuda_split_buffer_type_get_name(ggml_backend_buffer_type_t buft) {
     ggml_backend_cuda_split_buffer_type_context * ctx = (ggml_backend_cuda_split_buffer_type_context *)buft->context;
-
     return ctx->name.c_str();
 }
 
 static bool ggml_backend_buft_is_cuda_split(ggml_backend_buffer_type_t buft) {
+    // ggml_backend_cuda_split_buffer_type_context * ctx = (ggml_backend_cuda_split_buffer_type_context *)buft->context;
+    // const char * name = buft->iface.get_name(buft);
+    // GGML_LOG_INFO("&&&&&&&&&&&&&&&&&&&&& buft->iface.get_name is: %p\n", (void *)buft->iface.get_name);
+    // GGML_LOG_INFO("&&&&&&&&&&&&&&&&&&&&& ggml_backend_cuda_split_buffer_type_get_name is: %p\n", (void *)ggml_backend_cuda_split_buffer_type_get_name);
     return buft->iface.get_name == ggml_backend_cuda_split_buffer_type_get_name;
 }
 
@@ -2218,6 +2221,9 @@ static void ggml_cuda_mul_mat_id(ggml_backend_cuda_context & ctx, ggml_tensor * 
 }
 
 static bool ggml_cuda_compute_forward(ggml_backend_cuda_context & ctx, struct ggml_tensor * dst) {
+
+    GGML_LOG_INFO("&&&&&&&&&&&&&& check enter here!!!!! \n");
+    GGML_LOG_INFO("&&&&&&&&&&&&&& dst->src[0]->buffer == nullptr is : %d\n", dst->src[0] == nullptr || dst->src[0]->buffer == nullptr);
     if (dst->src[0] != nullptr && ggml_backend_buft_is_cuda_split(dst->src[0]->buffer->buft)) {
         ggml_cuda_set_peer_access(dst->src[1]->ne[1], ctx.device);
     }
@@ -2240,7 +2246,7 @@ static bool ggml_cuda_compute_forward(ggml_backend_cuda_context & ctx, struct gg
     //     GGML_LOG_INFO("res is: %s\n", res.c_str());
     // }
     // get_k();
-    
+    GGML_LOG_INFO("&&&&&&&&&&&&&& dst->op is: %d\n", dst->op);
     switch (dst->op) {
         case GGML_OP_ARGMAX:
             ggml_cuda_argmax(ctx, dst);
@@ -2249,7 +2255,7 @@ static bool ggml_cuda_compute_forward(ggml_backend_cuda_context & ctx, struct gg
             ggml_cuda_count_equal(ctx, dst);
             break;
         case GGML_OP_REPEAT:
-            ggml_cuda_op_repeat(ctx, dst);
+            ggml_cuda_dup(ctx, dst);
             break;
         case GGML_OP_REPEAT_BACK:
             ggml_cuda_op_repeat_back(ctx, dst);
@@ -2807,10 +2813,11 @@ static void evaluate_and_capture_cuda_graph(ggml_backend_cuda_context * cuda_ctx
     bool & graph_evaluated_or_captured, bool & use_cuda_graph, bool & cuda_graph_update_required) {
     // flag used to determine whether it is an integrated_gpu
     const bool integrated = ggml_cuda_info().devices[cuda_ctx->device].integrated;
-
+    GGML_LOG_INFO("&&&&&&&&&&&&&&&&&& check cuda eval1 !!!!!!\n");
     while (!graph_evaluated_or_captured) {
         // Only perform the graph execution if CUDA graphs are not enabled, or we are capturing the graph.
         // With the use of CUDA graphs, the execution will be performed by the graph launch.
+        GGML_LOG_INFO("&&&&&&&&&&&&&&&&&& cgraph n_nodes is: %d\n", cgraph->n_nodes);
         if (!use_cuda_graph || cuda_graph_update_required) {
             for (int i = 0; i < cgraph->n_nodes; i++) {
                 ggml_tensor * node = cgraph->nodes[i];
@@ -2818,7 +2825,7 @@ static void evaluate_and_capture_cuda_graph(ggml_backend_cuda_context * cuda_ctx
                 if (ggml_is_empty(node) || node->op == GGML_OP_RESHAPE || node->op == GGML_OP_TRANSPOSE || node->op == GGML_OP_VIEW || node->op == GGML_OP_PERMUTE || node->op == GGML_OP_NONE) {
                     continue;
                 }
-
+                GGML_LOG_INFO("&&&&&&&&&&&&&&&&&& check cuda eval2 !!!!!!\n");
 #ifndef NDEBUG
                 assert(node->buffer->buft == ggml_backend_cuda_buffer_type(cuda_ctx->device));
                 for (int j = 0; j < GGML_MAX_SRC; j++) {
@@ -2831,15 +2838,16 @@ static void evaluate_and_capture_cuda_graph(ggml_backend_cuda_context * cuda_ctx
 #else
                 GGML_UNUSED(integrated);
 #endif // NDEBUG
-
+                GGML_LOG_INFO("&&&&&&&&&&&&&&&&&& check cuda eval3 !!!!!!\n");
+                GGML_LOG_INFO("&&&&&&&&&&&&&&&&&& node name is: %s\n", node->name);
                 bool ok = ggml_cuda_compute_forward(*cuda_ctx, node);
+                GGML_LOG_INFO("&&&&&&&&&&&&&&&&&& check cuda eval4 !!!!!!\n");
                 if (!ok) {
                     GGML_LOG_ERROR("%s: op not supported %s (%s)\n", __func__, node->name, ggml_op_name(node->op));
                 }
                 GGML_ASSERT(ok);
             }
         }
-
 #ifdef USE_CUDA_GRAPH
         if (use_cuda_graph && cuda_graph_update_required) { // End CUDA graph capture
             if (cuda_ctx->cuda_graph->graph != nullptr) {
@@ -2888,7 +2896,7 @@ static enum ggml_status ggml_backend_cuda_graph_compute(ggml_backend_t backend, 
     ggml_backend_cuda_context * cuda_ctx = (ggml_backend_cuda_context *)backend->context;
 
     ggml_cuda_set_device(cuda_ctx->device);
-
+    GGML_LOG_INFO("&&&&&&&&&&&&&&&&&& check cuda1 !!!!!!\n");
 #ifdef USE_CUDA_GRAPH
     static const bool disable_cuda_graphs_due_to_env = (getenv("GGML_CUDA_DISABLE_GRAPHS") != nullptr);
 
@@ -2896,10 +2904,10 @@ static enum ggml_status ggml_backend_cuda_graph_compute(ggml_backend_t backend, 
     if (cuda_ctx->cuda_graph == nullptr) {
         cuda_ctx->cuda_graph.reset(new ggml_cuda_graph());
     }
-
+    
     bool use_cuda_graph = true;
     bool cuda_graph_update_required = false;
-
+    GGML_LOG_INFO("&&&&&&&&&&&&&&&&&& check cuda3 !!!!!!\n");
     if (cuda_ctx->cuda_graph->graph == nullptr) {
         if (ggml_cuda_info().devices[cuda_ctx->device].cc < GGML_CUDA_CC_AMPERE) {
             cuda_ctx->cuda_graph->disable_due_to_gpu_arch = true;
@@ -2908,7 +2916,7 @@ static enum ggml_status ggml_backend_cuda_graph_compute(ggml_backend_t backend, 
 #endif
         }
     }
-
+    GGML_LOG_INFO("&&&&&&&&&&&&&&&&&& check cuda4 !!!!!!\n");
     // Disable CUDA graphs in presence of env var, old GPU, use-case which is changing too rapidly,
     // or previous graph capture failure.
     // Also disable for multi-gpu for now. TO DO investigate
@@ -2918,7 +2926,7 @@ static enum ggml_status ggml_backend_cuda_graph_compute(ggml_backend_t backend, 
         || cuda_ctx->cuda_graph->disable_due_to_failed_graph_capture) {
         use_cuda_graph = false;
     }
-
+    GGML_LOG_INFO("&&&&&&&&&&&&&&&&&& check cuda5 !!!!!!\n");
     if (use_cuda_graph) {
         cuda_graph_update_required = is_cuda_graph_update_required(cuda_ctx, cgraph);
 
@@ -2938,7 +2946,7 @@ static enum ggml_status ggml_backend_cuda_graph_compute(ggml_backend_t backend, 
 #endif
         }
     }
-
+    GGML_LOG_INFO("&&&&&&&&&&&&&&&&&& check cuda6 !!!!!!\n");
     if (use_cuda_graph && cuda_graph_update_required) {
         // Start CUDA graph capture
         {
@@ -2952,16 +2960,16 @@ static enum ggml_status ggml_backend_cuda_graph_compute(ggml_backend_t backend, 
     if (!use_cuda_graph) {
         cuda_ctx->cuda_graph->use_cpy_indirection = false;
     }
-
+    GGML_LOG_INFO("&&&&&&&&&&&&&&&&&& check cuda7 !!!!!!\n");
 #else
     bool use_cuda_graph = false;
     bool cuda_graph_update_required = false;
 #endif // USE_CUDA_GRAPH
 
     bool graph_evaluated_or_captured = false;
-
+    GGML_LOG_INFO("&&&&&&&&&&&&&&&&&& check cuda8 !!!!!!\n");
     evaluate_and_capture_cuda_graph(cuda_ctx, cgraph, graph_evaluated_or_captured, use_cuda_graph, cuda_graph_update_required);
-
+    GGML_LOG_INFO("&&&&&&&&&&&&&&&&&& check cuda9 !!!!!!\n");
     return GGML_STATUS_SUCCESS;
 }
 

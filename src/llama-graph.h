@@ -572,8 +572,6 @@ struct llm_graph_context {
              ggml_cgraph * gf,
              int32_t total_len,
              int32_t max_len = 0) const;
-    
-    ggml_tensor * build_cpu_gpu(ggml_tensor * cur) const;
 
     ggml_tensor * build_linear_no_subsampling(
              ggml_tensor * cur,
