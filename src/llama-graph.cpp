@@ -542,15 +542,25 @@ ggml_tensor * llm_graph_context::build_layer_norm(
          ggml_tensor * mb,
          float eps) const{
     
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&& cur shape is: {%d, %d, %d, %d}\n", cur->ne[0], cur->ne[1], cur->ne[2], cur->ne[3]);
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&& mw shape is: {%d, %d, %d, %d}\n", mw->ne[0], mw->ne[1], mw->ne[2], mw->ne[3]);
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&& mb shape is: {%d, %d, %d, %d}\n", mb->ne[0], mb->ne[1], mb->ne[2], mb->ne[3]);
     mw = ggml_reshape_4d(ctx0, mw, 1, cur->ne[1], 1, 1);
     mb = ggml_reshape_4d(ctx0, mb, 1, cur->ne[1], 1, 1);
     mw = ggml_cast(ctx0, mw, cur->type);
     mb = ggml_cast(ctx0, mb, cur->type);
     cur = ggml_norm_inplace(ctx0, cur, eps);
-    mw = ggml_repeat(ctx0, mw, cur);
-    mb = ggml_repeat(ctx0, mb, cur);
+    
+    // cb(cur, "af norm cur", -1);
+    // cb(mw, "af norm mw", -1);
+    // cb(mb, "af norm mb", -1);
+    // mw = ggml_repeat(ctx0, mw, cur);
+    // mb = ggml_repeat(ctx0, mb, cur);
     cur = ggml_mul(ctx0, cur, mw);
     cur = ggml_add(ctx0, cur, mb);
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&& cur shape is: {%d, %d, %d, %d}\n", cur->ne[0], cur->ne[1], cur->ne[2], cur->ne[3]);
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&& mw shape is: {%d, %d, %d, %d}\n", mw->ne[0], mw->ne[1], mw->ne[2], mw->ne[3]);
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&& mb shape is: {%d, %d, %d, %d}\n", mb->ne[0], mb->ne[1], mb->ne[2], mb->ne[3]);
     cb(cur, "layer_norm", -1);
     return cur;
 
@@ -591,7 +601,7 @@ ggml_tensor * llm_graph_context::build_flow_embedding(
          ggml_tensor * embd_w,
                  int   il) const {
     
-    LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&& cur type is : %d\n", cur->type);
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&& cur type is : %d\n", cur->type);
     // ggml_tensor * token_clamp_I32 = ggml_cast(ctx0, token_clamp, GGML_TYPE_I32);
     cur = ggml_get_rows(ctx0, embd_w, cur);
     ggml_set_name(cur, "flow_embd");
@@ -606,96 +616,29 @@ ggml_tensor * llm_graph_context::build_pad_mask(ggml_cgraph * gf, int32_t total_
     if(max_len <= 0) {
         max_len = total_len;
     }
-    float fill_value = (max_len >= total_len) ? 1.0f : 0.0f;
-    ggml_set_no_alloc(ctx0, false);
-    ggml_tensor * scalar = ggml_new_f32(ctx0, fill_value);
-    ggml_set_name(scalar, fill_value == 1.0f ? "mask_one" : "mask_zero");
-    scalar->flags |= GGML_TENSOR_FLAG_PARAM;
-    
-    // 创建目标形状
-    ggml_tensor * target_shape = ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, total_len, 1);
-    
-    // 扩展标量
-    ggml_tensor * mask = ggml_repeat(ctx0, scalar, target_shape);
-    ggml_set_name(mask, "pad_mask");
-    
-    // 添加到计算图
-    ggml_build_forward_expand(gf, mask);
-    ggml_set_no_alloc(ctx0, true);
-    
-    LLAMA_LOG_INFO("Created pad mask: shape=[%d, %d], fill_value=%f\n", 
-                   mask->ne[0], mask->ne[1], fill_value);
-    // ggml_tensor * seq_range = ggml_arange(ctx0, 0.0f, (float)max_len, 1.0f);
-    // ggml_tensor * seq_range_expand = ggml_reshape_2d(ctx0, seq_range, max_len, 1);
+    ggml_tensor * mask = ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, max_len, 1);
+    ggml_tensor * zero = ggml_scale(ctx0, mask, 0.0f);
+    ggml_tensor * one = ggml_exp(ctx0, zero);
+    mask = ggml_sub(ctx0, one, zero);
     // ggml_set_no_alloc(ctx0, false);
-    // ggml_tensor * seq_length_expand = ggml_new_f32(ctx0, (float)total_len);
-    // ggml_set_name(seq_length_expand, "seq_length_expand");
-    // seq_length_expand->flags |= GGML_TENSOR_FLAG_PARAM;
-    // ggml_build_forward_expand(gf, seq_length_expand);
-    // seq_length_expand = ggml_reshape_2d(ctx0, seq_length_expand, 1, 1);
+    // float fill_value = (max_len >= total_len) ? 1.0f : 0.0f;
+    // ggml_tensor * scalar = ggml_new_f32(ctx0, fill_value);
+    // ggml_set_name(scalar, fill_value == 1.0f ? "mask_one" : "mask_zero");
+    // ggml_tensor * target_shape = ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, total_len, 1);
+    // ggml_tensor * mask = ggml_repeat(ctx0, scalar, target_shape);
+    // ggml_set_name(mask, "pad_mask");
+    
+    // // mask->flags |= GGML_TENSOR_FLAG_PARAM;
+    
+    // ggml_build_forward_expand(gf, mask);
     // ggml_set_no_alloc(ctx0, true);
-    // ggml_set_name(seq_length_expand, "seq_length_expand");
-    // // seq_length_expand = ggml_scale(ctx0, seq_length_expand, (float)total_len);
-    // ggml_tensor * seq_diff = ggml_sub(ctx0, seq_range_expand, seq_length_expand);
-    // LLAMA_LOG_INFO("&&&&&&&&&&&& seq_diff shape is: {%d, %d, %d, %d}\n", seq_diff->ne[0], seq_diff->ne[1], seq_diff->ne[2], seq_diff->ne[3]);
-    // ggml_tensor * seq_diff_scaled = ggml_scale(ctx0, seq_diff, 100.0f);
-    // ggml_set_name(seq_diff_scaled, "seq_diff_scaled");
-    // ggml_tensor * sigmoid_mask = ggml_sigmoid(ctx0, seq_diff_scaled);    // 近似阶跃函数
-    // ggml_set_name(sigmoid_mask, "sigmoid_mask");
-    // ggml_tensor * mask = ggml_neg(ctx0, sigmoid_mask);
-    // ggml_set_name(mask, "mask");
     
-    // ggml_tensor* seq_range = ggml_arange(ctx0, 0, max_len, 1);
-    // ggml_tensor* seq_range_expand = ggml_repeat(ctx0, 
-    //     ggml_reshape_2d(ctx0, seq_range, max_len, 1),
-    //     ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, max_len, 1)
-    // );
+    // LLAMA_LOG_INFO("Created pad mask: shape=[%d, %d], fill_value=%f\n", 
+    //                mask->ne[0], mask->ne[1], fill_value);
     
-    // // 创建固定的lengths值
-    // ggml_set_no_alloc(ctx0, false);
-    // ggml_tensor* fixed_length = ggml_new_f32(ctx0, (float)total_len);
-    // ggml_set_name(fixed_length, "seq_length_expand");
-    // fixed_length->flags |= GGML_TENSOR_FLAG_PARAM;
-    // ggml_build_forward_expand(gf, fixed_length);
-    // ggml_tensor* seq_length_expand = ggml_repeat(ctx0, fixed_length,
-    //     ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, max_len, 1)
-    // );
-    
-    // // 计算差值并生成掩码
-    // ggml_tensor* diff = ggml_sub(ctx0, seq_range_expand, seq_length_expand);
-    // ggml_tensor* sgn = ggml_sgn(ctx0, diff);
-    // ggml_tensor* mask = ggml_relu(ctx0, sgn);
-    // ggml_set_name(mask, "mask");
     cb(mask, "non-pad-mask", -1);
     
     return mask;
-}
-
-
-ggml_tensor * llm_graph_context::build_cpu_gpu(ggml_tensor * cur) const {
-    
-    int src_dim  = ggml_n_dims(cur);
-    int64_t src_ne[4];
-    for (int i = 0; i < src_dim; ++i) src_ne[i] = cur->ne[i];
-
-    ggml_tensor * dst = nullptr;
-    switch (src_dim) {
-    case 1: dst = ggml_new_tensor_1d(ctx0, cur->type, src_ne[0]); break;
-    case 2: dst = ggml_new_tensor_2d(ctx0, cur->type, src_ne[0], src_ne[1]); break;
-    case 3: dst = ggml_new_tensor_3d(ctx0, cur->type, src_ne[0], src_ne[1], src_ne[2]); break;
-    case 4: dst = ggml_new_tensor_4d(ctx0, cur->type, src_ne[0], src_ne[1], src_ne[2], src_ne[3]); break;
-    }
-    
-    ggml_backend_t backend = ggml_backend_cuda_init(0);
-    ggml_backend_alloc_ctx_tensors(ctx0, backend);   // 绑 CUDA/CPU
-    ggml_backend_tensor_set(dst, cur->data, 0, ggml_nbytes(cur));
-    ggml_tensor * probe;
-    probe->op     = GGML_OP_MUL_MAT;
-    probe->buffer = cur->buffer;
-    LLAMA_LOG_INFO("CPU supports MUL_MAT ? %d\n", ggml_backend_supports_op(backend_cpu, probe));
-    LLAMA_LOG_INFO("GPU supports MUL_MAT ? %d\n", ggml_backend_supports_op(backend, probe));
-    cb(dst, "cpu_2_gpu", -1);
-    return dst;
 }
 
 
@@ -742,19 +685,21 @@ ggml_tensor * llm_graph_context::build_pe(ggml_cgraph * gf, int64_t max_len) con
     // 1. 创建位置索引 [0, 1, 2, ..., seq_len-1]
     ggml_tensor * position = ggml_arange(ctx0, 0, seq_len, 1);
     position = ggml_reshape_2d(ctx0, position, seq_len, 1);   // [seq_len, 1]
-
+    position = ggml_repeat(ctx0, position, ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, seq_len, half));
+    ggml_set_name(position , "position");
     // 2. 计算div_term
-    ggml_tensor * div_term = ggml_arange(ctx0, 0, half, 1);
+    ggml_tensor * div_term = ggml_arange(ctx0, 0, d_model, 2);
     float inv_den = -logf(10000.0f) / d_model;
     div_term = ggml_scale(ctx0, div_term, inv_den);
     div_term = ggml_exp(ctx0, div_term);                      // [half]
     div_term = ggml_reshape_2d(ctx0, div_term, 1, half);      // [1, half]
+    div_term = ggml_repeat(ctx0, div_term, ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, seq_len, half));
+    ggml_set_name(div_term , "div_term");
 
     // 3. 计算角度矩阵 - 使用广播乘法
-    ggml_tensor * angle = ggml_mul(ctx0,
-        ggml_repeat(ctx0, position, ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, seq_len, half)),
-        ggml_repeat(ctx0, div_term, ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, seq_len, half))
-    );                                                       // [seq_len, half]
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&& position shape is: {%d, %d, %d, %d}\n", position->ne[0], position->ne[1], position->ne[2], position->ne[3]);
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&& div_term shape is: {%d, %d, %d, %d}\n", div_term->ne[0], div_term->ne[1], div_term->ne[2], div_term->ne[3]);
+    ggml_tensor * angle = ggml_mul(ctx0, position, div_term);
 
     // 4. 转置角度矩阵以便后续concat操作
     angle = ggml_cont(ctx0, ggml_transpose(ctx0, angle));    // [half, seq_len]
@@ -847,40 +792,24 @@ ggml_tensor * llm_graph_context::build_pre_lookahead_layer(
          ggml_tensor * conv2_mb) const{
         
         const int lookahead = 3;
-        ggml_tensor * x = ggml_permute(ctx0, cur, 0, 2, 1, 3);  // [B, C, T]
-        // ggml_tensor * ctx_t = ggml_permute(ctx0, context, 0, 2, 1, 3);
-        // if(ctx_t->ne[2] == 0) {
-        x = ggml_permute(ctx0, x, 0, 1, 3, 2);
-        x = ggml_cont(ctx0, x);
-        x = ggml_pad(ctx0, x, 0, 0, 0, lookahead);
-        x = ggml_permute(ctx0, x, 0, 1, 3, 2);
-        x = ggml_cont(ctx0, x);
-        // }
-        
-        x = ggml_permute(ctx0, x, 1, 2, 0, 3);   // [length, in_channels, batch, 1]
-        x = ggml_cont(ctx0, x);
+        ggml_tensor * x = ggml_cont(ctx0, ggml_permute(ctx0, cur, 1, 0, 2, 3));  // [B, C, T]
+        x = ggml_reshape_4d(ctx0, x, x->ne[0], x->ne[1], 1, 1);
+        x = ggml_pad(ctx0, x, lookahead, 0, 0, 0);
         ggml_tensor * outputs = ggml_conv_1d(ctx0, conv1_mw, x, 1, 0, 1);
         
-        
         conv1_mb = ggml_reshape_4d(ctx0, conv1_mb, 1, 512, 1, 1);
-        conv1_mb = ggml_repeat(ctx0, conv1_mb, outputs);
-        conv1_mb = ggml_reshape_4d(ctx0, conv1_mb,
-                           outputs->ne[0], outputs->ne[1],
-                           outputs->ne[2], outputs->ne[3]);
-        conv1_mb = ggml_cont(ctx0, conv1_mb);
         outputs = ggml_add(ctx0, outputs, conv1_mb);
         outputs = ggml_leaky_relu(ctx0, outputs, 0.01f, true);
-        
+        // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&& outputs shape is: {%d, %d, %d, %d}\n", outputs->ne[0], outputs->ne[1], outputs->ne[2], outputs->ne[3]);
         outputs = ggml_pad(ctx0, outputs, 2, 0, 0, 0);
+        // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&& outputs shape is: {%d, %d, %d, %d}\n", outputs->ne[0], outputs->ne[1], outputs->ne[2], outputs->ne[3]);
         outputs = ggml_conv_1d(ctx0, conv2_mw, outputs, 1, 0, 1);
         conv2_mb = ggml_reshape_3d(ctx0, conv2_mb, 1, 512, 1);
-        conv2_mb = ggml_repeat(ctx0, conv2_mb, outputs);
         outputs  = ggml_add(ctx0, outputs, conv2_mb);
-        outputs = ggml_reshape_3d(ctx0, outputs, outputs->ne[0], outputs->ne[1], outputs->ne[2]);
-        outputs = ggml_cont(ctx0, outputs);
-        cur     = ggml_reshape_3d(ctx0, cur, outputs->ne[0], outputs->ne[1], outputs->ne[2]);
-        cur = ggml_cont(ctx0, cur);
+        outputs = ggml_cont(ctx0, ggml_permute(ctx0, outputs, 1, 0, 2, 3));
         outputs = ggml_add(ctx0, outputs, cur);
+        outputs = ggml_cont(ctx0, ggml_permute(ctx0, outputs, 1, 0, 2, 3));
+
         cb(outputs, "pre_look_ahead", -1);
 
         return outputs;
@@ -917,7 +846,7 @@ ggml_tensor * llm_graph_context::build_rel_shift(
 
     auto zero_pad = ggml_new_tensor_4d(ctx0, GGML_TYPE_F32, 1, T, n_head, 1);
     zero_pad = ggml_scale(ctx0, zero_pad, 0.0f);  
-    ggml_tensor *x_padded = ggml_concat(ctx0, zero_pad, cur, /*dim=*/0);
+    ggml_tensor * x_padded = ggml_concat(ctx0, zero_pad, cur, /*dim=*/0);
     auto reshaped = ggml_reshape_4d(ctx0, x_padded, T, L + 1, n_head, B);
     ggml_tensor * result = ggml_view_4d(
                                     ctx0,
@@ -930,7 +859,7 @@ ggml_tensor * llm_graph_context::build_rel_shift(
                                     reshaped->nb[2],
                                     reshaped->nb[3],
                                     0);    
-
+    cb(result, "rel_shift", -1);
     return result;
         
 }
@@ -1002,10 +931,11 @@ ggml_tensor * llm_graph_context::build_upsample_1d(
                                                            L_new,
                                                            flat->ne[1],
                                                            1, 1));
-    ggml_tensor * up = ggml_reshape_3d(ctx0, up_flat,
+    ggml_tensor * up = ggml_reshape_4d(ctx0, up_flat,
                                        L_new,
                                        cur->ne[1],
-                                       cur->ne[2] * cur->ne[3]);
+                                       cur->ne[2] * cur->ne[3], 1);
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&& up shape is: {%d, %d, %d, %d}\n", up->ne[0], up->ne[1], up->ne[2], up->ne[3]);
 
     // --- 2. 右侧零填充 ---
     ggml_tensor * pad = ggml_pad(ctx0, up, 4, 0, 0, 0);
