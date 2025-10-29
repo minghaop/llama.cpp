@@ -719,10 +719,11 @@ struct llm_graph_context {
          std::vector<ggml_tensor *> & pad_list,
          const llama_model & model) const;
     
+    ggml_tensor * build_repeat(ggml_tensor * cur, int32_t current_length, int32_t target_length, int32_t dim) const;
+    
     ggml_tensor * build_solve_euler(
          ggml_cgraph * gf,
          ggml_tensor * z,
-         ggml_tensor * t_span,
          ggml_tensor * mu,
          ggml_tensor * mask,
          ggml_tensor * spks,
