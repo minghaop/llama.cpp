@@ -26,7 +26,7 @@ void llm_graph_input_embd::set_input(const llama_ubatch * ubatch) {
 
     if (ubatch->embd) {
         const int64_t n_embd   = embd->ne[0];
-        const int64_t n_tokens = ubatch->n_tokens;
+        // const int64_t n_tokens = ubatch->n_tokens;
         // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&& n_tokens is: %d, n_embed is: %d, embd_size is: %d\n", n_tokens, n_embd, ggml_element_size(embd));
         ggml_backend_tensor_set(embd, ubatch->embd, 0, n_embd*ggml_element_size(embd));
         // LLAMA_LOG_INFO("&&&&&&&&&&&&& check input_embed\n");
@@ -1543,9 +1543,6 @@ ggml_tensor * llm_graph_context::build_solve_euler(
         // int64_t current_length = 1;
         int64_t target_length = 1584;
         spks_in_reshape = build_repeat(spks_in_reshape, 1, target_length, 0);
-        LLAMA_LOG_INFO("&&&&&&&&&&&&&&&& spks_in_reshape shape is: {%d, %d, %d, %d}\n", spks_in_reshape->ne[0], spks_in_reshape->ne[1], spks_in_reshape->ne[2], spks_in_reshape->ne[3]);
-        // ggml_tensor * new_spk_tensor = ggml_new_tensor_3d(ctx0, GGML_TYPE_F32, T, 80, 2);
-        // ggml_tensor * spks_t = ggml_repeat_4d(ctx0, spks_in_reshape, T, 80, 2, 1);
         ggml_tensor * dphi_dt = build_causal_cond_decoder(z_in_cpy, mask_in_cpy, mu_in_cpy, t_in_cpy, spks_in_cpy, cond_in_cpy, spks_in_reshape, attn_mask_t, mask_tmpl, one, neg_big, attn_bias, pad_list, model);
         ggml_tensor * dphi_dt_split   = ggml_view_3d(ctx0, dphi_dt, T, z->ne[1], B, dphi_dt->nb[1], dphi_dt->nb[2], 0);
         ggml_tensor * cfg_dphi_dt  = ggml_view_3d(ctx0, dphi_dt, T, z->ne[1], B, dphi_dt->nb[1], dphi_dt->nb[2], B * dphi_dt->nb[2]);
