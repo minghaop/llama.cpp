@@ -710,14 +710,12 @@ llm_graph_result_ptr llama_context::process_ubatch(const llama_ubatch & ubatch, 
         return nullptr;
     }
     res->set_inputs(&ubatch);
-    LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&& before graph_compute\n");
     const auto status = graph_compute(gf, ubatch.n_tokens > 1);
     if (status != GGML_STATUS_SUCCESS) {
         LLAMA_LOG_ERROR("%s: failed to compute graph, compute status: %d\n", __func__, status);
         ret = status;
         return nullptr;
     }
-    LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&& after graph_compute\n");
 
     ret = GGML_STATUS_SUCCESS;
     
@@ -906,17 +904,20 @@ int llama_context::decode(const llama_batch & batch_inp) {
     const auto & vocab   = model.vocab;
     const auto & hparams = model.hparams;
 
-    const int32_t n_vocab = vocab.n_tokens();
+    int32_t n_vocab;
     int64_t n_embd;
     if (hparams.use_flow) {
         n_embd = 512;
+        n_vocab = 1;
     } else {
         n_embd = hparams.n_embd;
+        n_vocab = vocab.n_tokens();
     }
     // const int64_t n_embd  = hparams.n_embd;
 
     // when computing embeddings, all tokens are output
     const bool output_all = cparams.embeddings;
+    LLAMA_LOG_INFO("%s: output_all = %d\n", __func__, output_all);
     if (!balloc->init(batch_inp, vocab, memory.get(), n_embd, output_all)) {
         LLAMA_LOG_ERROR("%s: failed to initialize batch\n", __func__);
         return -1;
@@ -956,7 +957,7 @@ int llama_context::decode(const llama_batch & batch_inp) {
     while (true) {
         // LLAMA_LOG_INFO("********************************************************************** check here\n");
         mctx = memory->init_batch(*balloc, cparams.n_ubatch, output_all);
-        // LLAMA_LOG_INFO("********************************************************************** check here2\n");
+        // LLAMA_LOG_INFO("********************************************************************** mctx is : %d\n", mctx == nullptr);
         if (!mctx) {
             return -2;
         }
@@ -999,6 +1000,7 @@ int llama_context::decode(const llama_batch & batch_inp) {
         break;
     }
     
+    LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&& n_outputs_all is: %d\n", n_outputs_all);
     // reserve output buffer
     if (output_reserve(n_outputs_all) < n_outputs_all) {
         LLAMA_LOG_ERROR("%s: could not reserve space for batch with %d outputs\n", __func__, n_outputs_all);
@@ -1069,11 +1071,11 @@ int llama_context::decode(const llama_batch & batch_inp) {
 
         auto * t_logits = res->get_logits();
         auto * t_embd   = cparams.embeddings ? res->get_embd() : nullptr;
-
+        LLAMA_LOG_INFO("-------------------------------------- %s: t_logits = %d, t_embd = %d\n", __func__, t_logits? 1 : 0, t_embd ? 1 : 0);
         if (t_embd && res->get_embd_pooled()) {
             t_embd = res->get_embd_pooled();
         }
-        // LLAMA_LOG_INFO("-------------------------------------- %s: t_logits = %d, t_embd = %d\n", __func__, t_logits? 1 : 0, t_embd ? 1 : 0);
+        
         // extract logits
         if (t_logits && n_outputs > 0) {
             ggml_backend_t backend_res = ggml_backend_sched_get_tensor_backend(sched.get(), t_logits);
@@ -1088,6 +1090,7 @@ int llama_context::decode(const llama_batch & batch_inp) {
                 ggml_backend_tensor_get_async(backend_res, t_logits, logits_out, 0, n_outputs*n_vocab*sizeof(float));
             }
         }
+        LLAMA_LOG_INFO("-------------------------------------- %s: n_outputs_prev = %d, n_embd = %d\n", __func__, n_outputs_prev, n_embd);
         // extract embeddings
         if (t_embd && n_outputs > 0) {
             ggml_backend_t backend_embd = ggml_backend_sched_get_tensor_backend(sched.get(), t_embd);
@@ -1228,9 +1231,14 @@ uint32_t llama_context::output_reserve(int32_t n_outputs) {
     const int64_t n_outputs_max = std::max<int64_t>(n_outputs, n_seq_max());
 
     const auto n_batch = cparams.n_batch;
-    const auto n_vocab = vocab.n_tokens();
-    const auto n_embd  = hparams.n_embd;
-
+    uint32_t n_vocab, n_embd;
+    if(model.arch == LLM_ARCH_COSYVOICEFLOW) {
+        n_vocab = 10;
+        n_embd = 10;
+    } else {
+        n_vocab = vocab.n_tokens();
+        n_embd  = hparams.n_embd;
+    } 
     bool has_logits = true;
     bool has_embd   = cparams.embeddings;
 
@@ -1242,7 +1250,8 @@ uint32_t llama_context::output_reserve(int32_t n_outputs) {
 
     logits_size = has_logits ? n_vocab*n_outputs_max : 0;
     embd_size   = has_embd   ?  n_embd*n_outputs_max : 0;
-
+    LLAMA_LOG_INFO("&&&&&&&&&&&&&&&& has_logits is: %d\n", has_logits);
+    LLAMA_LOG_INFO("&&&&&&&&&&&&&&&& has_embd is: %d\n", has_embd);
     if (output_ids.empty()) {
         // init, never resized afterwards
         output_ids.resize(n_batch);
@@ -1250,7 +1259,8 @@ uint32_t llama_context::output_reserve(int32_t n_outputs) {
 
     const size_t prev_size = buf_output ? ggml_backend_buffer_get_size(buf_output.get()) : 0;
     const size_t new_size  = (logits_size + embd_size) * sizeof(float);
-
+    LLAMA_LOG_INFO("&&&&&&&&&&&&&&&& logits size is: %d, embd_size is: %d, new_size is: %d\n", logits_size, embd_size, new_size);
+    LLAMA_LOG_INFO("&&&&&&&&&&&&&&&& n_vocab is: %d, n_outputs_max is: %d\n", n_vocab, n_outputs_max);
     // alloc only when more than the current capacity is required
     // TODO: also consider shrinking the buffer
     if (!buf_output || prev_size < new_size) {
@@ -1279,10 +1289,10 @@ uint32_t llama_context::output_reserve(int32_t n_outputs) {
     }
 
     float * output_base = (float *) ggml_backend_buffer_get_base(buf_output.get());
-
+    LLAMA_LOG_INFO("&&&&&&&&&&&&&&&& output_base is: %d\n", output_base == nullptr);
     logits = has_logits ? output_base               : nullptr;
     embd   = has_embd   ? output_base + logits_size : nullptr;
-
+    LLAMA_LOG_INFO("&&&&&&&&&&&&&&&& logits is: %d\n", logits == nullptr);
     // set all ids as invalid (negative)
     std::fill(output_ids.begin(), output_ids.end(), -1);
 
@@ -1392,7 +1402,7 @@ ggml_status llama_context::graph_compute(
         set_n_threads_fn.second(set_n_threads_fn.first, n_threads);
     }
 
-    LLAMA_LOG_INFO("################################################################################################################################# %s\n", __func__);
+    // LLAMA_LOG_INFO("################################################################################################################################# %s\n", __func__);
     auto status = ggml_backend_sched_graph_compute_async(sched.get(), gf);
     if (status != GGML_STATUS_SUCCESS) {
         LLAMA_LOG_ERROR("%s: ggml_backend_sched_graph_compute_async failed with error %d\n", __func__, status);

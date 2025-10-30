@@ -39,7 +39,7 @@ bool llama_batch_allocr::init(
     // validate input batch
     //
     
-    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&& n_embd is: %d\n", n_embd);
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&& batch.logits is nullptr: %d\n", batch.logits == nullptr);
     if (batch.token) {
         for (int32_t i = 0; i < batch.n_tokens; ++i) {
             if (batch.token[i] < 0 || (uint32_t) batch.token[i] >= vocab.n_tokens()) {
@@ -694,20 +694,25 @@ llama_ubatch llama_batch_allocr::ubatch_add(const std::vector<int32_t> & idxs, u
     ubatch.flow_feat .resize(batch.prompt_feat_len);
     ubatch.rand_noise .resize(80*50*300);
 
-    
+    // LLAMA_LOG_INFO("&&&&&&&&& flow_token_data_len is: %d\n", flow_token_data_len);
     seq_set_t seq_set_unq;
     // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&& idxs.size is: %d\n", idxs.size());
 
     for (size_t i = 0; i < idxs.size(); ++i) {
+        // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&& idxs[i] is: %d\n", (int64_t)idxs[i]);
         if (batch.token) {
             ubatch.token[i] = batch.token[idxs[i]];
         }
-        if (batch.embd) {
-            memcpy(ubatch.embd.data() + i*n_embd, batch.embd + (int64_t) idxs[i]*n_embd, n_embd*sizeof(float));
+        if (batch.token_len) {
+            if (batch.embd) {
+                memcpy(ubatch.embd.data() + i, batch.embd + (int64_t) idxs[i], sizeof(float));
+            }
+        }else {
+            if (batch.embd) {
+                memcpy(ubatch.embd.data() + i*n_embd, batch.embd + (int64_t) idxs[i]*n_embd, n_embd*sizeof(float));
+            }
         }
-        // if(batch.flow_token) {
         
-        // }
         for (int j = 0; j < n_pos_cur; ++j) {
             ubatch.pos[j*n_tokens + i] = batch.pos[j*batch.n_tokens + idxs[i]];
         }
@@ -723,20 +728,18 @@ llama_ubatch llama_batch_allocr::ubatch_add(const std::vector<int32_t> & idxs, u
             out_ids.push_back(idxs[i]);
         }
     }
+    
     if(batch.token_len) {
-        for(int32_t i = 0; i < batch.token_len + batch.prompt_token_len; ++i) {
-            if(batch.flow_token) {
-                ubatch.flow_token[i] = batch.flow_token[i];
-            }
+        if (batch.flow_token) {
+            memcpy(ubatch.flow_token.data(), batch.flow_token, flow_token_data_len * sizeof(float));
         }
-        for(int32_t j = 0; j < batch.prompt_feat_len; ++j) {
-            memcpy(ubatch.flow_feat.data() + j, batch.flow_feat + j, sizeof(float));
+        if (batch.flow_feat) {
+            memcpy(ubatch.flow_feat.data(), batch.flow_feat, batch.prompt_feat_len * sizeof(float));
         }
-        for(int32_t k = 0; k < 80 * 50 * 300; ++k) {
-            memcpy(ubatch.rand_noise.data() + k, batch.rand_noise + k, sizeof(float));
+        if (batch.rand_noise) {
+            memcpy(ubatch.rand_noise.data(), batch.rand_noise, 80 * 50 * 300 * sizeof(float));
         }
     }
-    
     for (int32_t s = 0; s < LLAMA_MAX_SEQ; ++s) {
         if (seq_set_unq.test(s)) {
             ubatch.seq_idx[s] = ubatch.seq_id_unq.size();
@@ -903,7 +906,7 @@ struct llama_batch llama_batch_init(int32_t n_tokens_alloc, int32_t embd, int32_
     if (is_flow) {
         batch.flow_token = (llama_token *)malloc(sizeof(llama_token) * n_tokens_alloc * embd);
         batch.flow_feat = (float *)malloc(sizeof(float) * n_tokens_alloc * embd);
-        batch.rand_noise = (float *)malloc(sizeof(float) * 80*50*300);
+        batch.rand_noise = (float *)malloc(sizeof(float) * 80 * 50 * 300 * 2);
     }
     
     batch.pos      = (llama_pos *)     malloc(sizeof(llama_pos)      * n_tokens_alloc);
@@ -931,4 +934,7 @@ void llama_batch_free(struct llama_batch batch) {
         free(batch.seq_id);
     }
     if (batch.logits)   free(batch.logits);
+    if (batch.flow_token) free(batch.flow_token);
+    if (batch.flow_feat) free(batch.flow_feat);
+    if (batch.rand_noise) free(batch.rand_noise);
 }
