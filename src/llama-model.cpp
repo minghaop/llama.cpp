@@ -16747,13 +16747,12 @@ struct llm_build_flow : public llm_graph_context {
 
         ggml_tensor * embedding = build_inp_embd(model.inp_embed_w);
         
-        // check_tensor_validity(embedding, "embedding");
         ggml_tensor * token = build_inp_token();
-        ggml_build_forward_expand(gf, token);
-        // check_tensor_validity(token, "token");
+        // ggml_build_forward_expand(gf, token);
         ggml_tensor * prompt_feat = build_inp_prompt_feat();
         ggml_build_forward_expand(gf, prompt_feat);
         
+        printf("c  ptr=0x%p, name is: %s\n", (void*)prompt_feat, prompt_feat->name);
         embedding = build_F_normalize(embedding, NULL, NULL, 1e-12f, -1);
         cb(embedding, "inp_embed_norm", -1);
         ggml_build_forward_expand(gf, embedding);
@@ -16770,26 +16769,26 @@ struct llm_build_flow : public llm_graph_context {
         // for (int i = 0; i < 8; ++i) printf("%d ", buff[i]);
         token = ggml_mul(ctx0, token, mask);
         cb(token, "token * mask", -1);
-        // ggml_build_forward_expand(gf, token);
+        ggml_build_forward_expand(gf, token);
         // encoder
         const int B  = token->ne[2];
         const int T  = token->ne[1];
         ggml_tensor * masks = build_pad_mask(gf, params.ubatch.prompt_token_len + params.ubatch.token_len, T);
         masks = ggml_reshape_3d(ctx0, masks, B, 1, T);
         ggml_tensor * x = build_linear_no_subsampling(token, model.embed_out_0_w, model.embed_out_0_b, model.embed_out_1_w, model.embed_out_1_b);
-        ggml_build_forward_expand(gf, x);
+        // ggml_build_forward_expand(gf, x);
 
         ggml_tensor * pe = build_pe(gf);
         x = build_espnet_pos_encode(x);
-        ggml_build_forward_expand(gf, x);
+        // ggml_build_forward_expand(gf, x);
 
         ggml_tensor * pos_emb = build_pos_encoding(pe, x->ne[1], 0);
         ggml_tensor * mask_pad = masks;
         ggml_tensor * chunk_mask = masks;
         x = build_pre_lookahead_layer(x, model.pre_look_conv1_w, model.pre_look_conv1_b, model.pre_look_conv2_w, model.pre_look_conv2_b);
-        ggml_build_forward_expand(gf, x);
-        //check_tensor_validity(token, "after_prelookahead");
+        // ggml_build_forward_expand(gf, x);
 
+        // ggml_set_name(x, "afetr_pre_lookahead_layer");
         for(int i = 0; i < 6; i++) {
             ggml_tensor * residual = ggml_cont(ctx0, x);
             x = build_layer_norm(x, model.layers[i + 13].encoders_normmha_w, model.layers[i + 13].encoders_normmha_b, 1e-12);
@@ -16828,9 +16827,9 @@ struct llm_build_flow : public llm_graph_context {
             x = ggml_add(ctx0, residual, x);
             x = ggml_cont(ctx0, ggml_permute(ctx0, x, 1, 0, 2, 3));
         }
-        // check_tensor_validity(x, "after encoders");
+        ggml_set_name(x, "after encoders");
         x = build_upsample_1d(x, model.up_layer_conv_w, model.up_layer_conv_b);
-        cb(x, "upsample_1d", -1);
+        ggml_set_name(x, "after build_upsample_1d");
         x = ggml_cont(ctx0, ggml_permute(ctx0, x, 1, 0, 2, 3));
         masks = build_pad_mask(gf, x->ne[1], x->ne[1]);
         masks = ggml_reshape_3d(ctx0, masks, masks->ne[0], 1, masks->ne[1]);
@@ -16840,8 +16839,8 @@ struct llm_build_flow : public llm_graph_context {
         mask_pad = masks;
         chunk_mask = masks;
         x = ggml_cont(ctx0, ggml_permute(ctx0, x, 1, 0, 2, 3));
+
         //build up_encoders
-        // check_tensor_validity(x, "before up_encoders");
         for(int i = 0; i < 4; i++) {
             ggml_tensor * residual = ggml_cont(ctx0, x);
             x = build_layer_norm(x, model.layers[i + 132].up_encoders_normmha_w, model.layers[i + 132].up_encoders_normmha_b, 1e-12);
@@ -16878,11 +16877,12 @@ struct llm_build_flow : public llm_graph_context {
             x = ggml_add(ctx0, residual, x);
             x = ggml_cont(ctx0, ggml_permute(ctx0, x, 1, 0, 2, 3));
         }
-        // check_tensor_validity(x, "after up_encoders");
+
         x = build_layer_norm(x, model.after_norm_w, model.after_norm_b, 1e-5f);
         x = ggml_cont(ctx0, ggml_permute(ctx0, x, 1, 0, 2, 3));
         x = ggml_mul_mat(ctx0, model.encoder_proj_w, x);
         x = ggml_mul(ctx0, x, model.encoder_proj_b);
+
         //build decoder
         int32_t mel_len1 = prompt_feat->ne[1];
         int32_t mel_len2 = x->ne[1] - mel_len1;
@@ -16890,7 +16890,10 @@ struct llm_build_flow : public llm_graph_context {
         ggml_tensor * conds = ggml_new_tensor_3d(ctx0, x->type, prompt_feat->ne[0], mel_len1 + mel_len2, B);
         conds = ggml_scale(ctx0, conds, 0.0f);
         ggml_tensor * dest_view = ggml_view_3d(ctx0, conds, prompt_feat->ne[0], mel_len1, prompt_feat->ne[2], 0, 0, 0);
-        ggml_build_forward_expand(gf, ggml_cpy(ctx0, prompt_feat, dest_view));
+        // ggml_cpy(ctx0, prompt_feat, dest_view);
+        ggml_tensor * cpy = ggml_cpy(ctx0, prompt_feat, dest_view);
+        ggml_set_name(cpy, "get_dest_view");
+        ggml_build_forward_expand(gf, cpy);
         conds = ggml_cont(ctx0, ggml_transpose(ctx0, conds));
         mask = build_pad_mask(gf, mel_len1 + mel_len2);
         ggml_tensor * spks = spk;
@@ -16902,34 +16905,13 @@ struct llm_build_flow : public llm_graph_context {
         ggml_tensor * z = ggml_view_3d(ctx0, rand_noise, mu->ne[0], 80, 1, rand_noise->nb[0], rand_noise->nb[1], 0);
         ggml_tensor * feat = build_solve_euler(gf, z, mu, mask, spks, cond, model);
         ggml_tensor * sliced = ggml_view_3d(ctx0, feat, feat->ne[0] - mel_len1, feat->ne[1], feat->ne[2], feat->nb[0], feat->nb[1], mel_len1 * feat->nb[0]);
-        res->t_logits = sliced;
+
+        cb(sliced, "result_norm", -1);
+        res->t_embd = sliced;
+        printf("c  ptr=0x%p, name is: %s\n", (void*)prompt_feat, prompt_feat->name);
         LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&& sliced shape is: {%d, %d, %d, %d}\n", sliced->ne[0], sliced->ne[1], sliced->ne[2], sliced->ne[3]);
         ggml_build_forward_expand(gf, sliced);
         // ggml_graph_dump_dot(gf, NULL, "debug.dot");
-        // ggml_graph_print(gf);
-        
-        // ggml_graph_dump_dot(gf, NULL, "debug.dot");
-        // for (int i = 0; i < gf->n_nodes; ++i) {
-        //     ggml_tensor * t = gf->nodes[i];
-        //     if (!t || !t->data) continue;
-
-        //     std::ostringstream  fname;
-        //     fname << "debug" << "_" << t->name << ".bin";
-
-        //     // 申请一块 CPU 临时内存
-        //     size_t nbytes = ggml_nbytes(t);
-        //     void * cpu_buf = malloc(nbytes);
-        //     if (!cpu_buf) continue;
-
-        //     // 搬数据
-        //     ggml_backend_tensor_get(t, cpu_buf, 0, nbytes);
-
-        //     // 写文件
-        //     std::ofstream fs(fname.str(), std::ios::binary);
-        //     fs.write(static_cast<char*>(cpu_buf), nbytes);
-
-        //     free(cpu_buf);
-        // }
     }
 };
 

@@ -192,6 +192,7 @@ public:
 
     // zero-out inputs and create the ctx_compute for the compute graph
     ggml_cgraph * graph_init();
+    
 
     // returns the result of ggml_backend_sched_graph_compute_async execution
     ggml_status graph_compute(ggml_cgraph * gf, bool batched);
