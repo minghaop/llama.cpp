@@ -32,7 +32,7 @@ void llm_graph_input_embd::set_input(const llama_ubatch * ubatch) {
         // LLAMA_LOG_INFO("&&&&&&&&&&&&& check input_embed\n");
         // float buff[32];
         // ggml_backend_tensor_get(embd, buff, 0, sizeof(buff));   // 直接拷 32 字节
-        // for (int i = 0; i < 8; ++i) printf("embd is: %d ", buff[i]);
+        // for (int i = 0; i < 8; ++i) printf("embd is: %f ", buff[i]);
     }
 }
 
@@ -41,7 +41,9 @@ void llm_graph_input_token::set_input(const llama_ubatch * ubatch) {
         const int64_t total_token_len = ubatch->token_len;
 
         ggml_backend_tensor_set(input_token, ubatch->flow_token, 0, total_token_len*ggml_element_size(input_token));
-        // LLAMA_LOG_INFO("&&&&&&&&&&&&& check input_token\n");
+        // int32_t buff[32];
+        // ggml_backend_tensor_get(input_token, buff, 0, sizeof(buff));   // 直接拷 32 字节
+        // for (int i = 0; i < 8; ++i) printf("input_token is: %d ", buff[i]);
     }
 }
 
@@ -63,9 +65,9 @@ void llm_graph_input_prompt_feat::set_input(const llama_ubatch * ubatch) {
 
         ggml_backend_tensor_set(input_prompt_feat, ubatch->flow_feat, 0, feat_len*ggml_element_size(input_prompt_feat));
         // LLAMA_LOG_INFO("&&&&&&&&&&&&& check input_prompt_feat\n");
-        // float buff[32];
+        // float buff[8];
         // ggml_backend_tensor_get(input_prompt_feat, buff, 0, sizeof(buff));   // 直接拷 32 字节
-        // for (int i = 0; i < 8; ++i) printf("input_prompt_feat is: %d ", buff[i]);
+        // for (int i = 0; i < 8; ++i) printf("input_prompt_feat is: %f ", buff[i]);
     }
 }
 
@@ -594,7 +596,7 @@ ggml_tensor * llm_graph_context::build_F_normalize(
     if (mb) {
         cur = ggml_add(ctx0, cur, mb);
     }
-
+    ggml_set_name(cur, "embedding");
     return cur;
 }
 
@@ -636,20 +638,6 @@ ggml_tensor * llm_graph_context::build_linear_no_subsampling(
          ggml_tensor * norm_mw,
          ggml_tensor * norm_mb) const{
     
-    // LLAMA_LOG_INFO("CPU supports MUL_MAT ? %d\n", ggml_backend_supports_op(backend_cpu, linear_mw));
-    // cur = build_cpu_gpu(cur);
-    // ggml_gallocr_t galloc = ggml_gallocr_new(ggml_backend_cuda_buffer_type(0));
-
-    // // 2. 把要搬迁的张量（例如 cur）加入一张临时计算图
-    // struct ggml_cgraph * gf = ggml_new_graph(ctx0);
-    // ggml_build_forward_expand(gf, cur);       // 只用来估算内存，不会真算
-
-    // // 3. 一次性为整张图（其实只有 cur）预分配 CUDA0 内存
-    // ggml_gallocr_reserve(galloc, gf);         // 内部已含对齐、生命周期分析
-    // ggml_gallocr_alloc_graph(galloc, gf);  
-    
-    // LLAMA_LOG_INFO("&&&&&&&&&&& cur backend buf is: %s\n", ggml_backend_buft_name(ggml_backend_buffer_get_type(cur->buffer)));
-    // LLAMA_LOG_INFO("&&&&&&&&&&& linear_mw backend buf is: %s\n", ggml_backend_buft_name(ggml_backend_buffer_get_type(linear_mw->buffer)));
     cur = ggml_mul_mat(ctx0, linear_mw, cur);
     cur = ggml_add(ctx0, cur, linear_mb);
     cur = ggml_cont(ctx0, ggml_permute(ctx0, cur, 1, 0, 2, 3));
@@ -793,11 +781,17 @@ ggml_tensor * llm_graph_context::build_pre_lookahead_layer(
         outputs = ggml_conv_1d(ctx0, conv2_mw, outputs, 1, 0, 1);
         conv2_mb = ggml_reshape_3d(ctx0, conv2_mb, 1, 512, 1);
         outputs  = ggml_add(ctx0, outputs, conv2_mb);
-        outputs = ggml_cont(ctx0, ggml_permute(ctx0, outputs, 1, 0, 2, 3));
+        outputs = ggml_permute(ctx0, outputs, 1, 0, 2, 3);
+        ggml_set_name(outputs, "pre_look_permute");
+        outputs = ggml_cont(ctx0, outputs);
+        ggml_set_name(outputs, "pre_look_cont");
         outputs = ggml_add(ctx0, outputs, cur);
-        outputs = ggml_cont(ctx0, ggml_permute(ctx0, outputs, 1, 0, 2, 3));
+        ggml_set_name(outputs, "pre_look_add");
+        outputs = ggml_permute(ctx0, outputs, 1, 0, 2, 3);
+        ggml_set_name(outputs, "pre_look_permute_2");
+        outputs = ggml_cont(ctx0, outputs);
 
-        cb(outputs, "pre_look_ahead", -1);
+        ggml_set_name(outputs, "pre_look_res");
 
         return outputs;
         
@@ -1882,7 +1876,7 @@ ggml_tensor * llm_graph_context::build_inp_embd(ggml_tensor * tok_embd) const {
             const float scale = lw->get_scale(lora.first->alpha, adapter_scale);
 
             ggml_tensor * inpL_delta = ggml_scale(ctx0, ggml_mul_mat(
-                        ctx0, lw->b, // non-transposed lora_b
+                        ctx0, lw->b,
                         ggml_get_rows(ctx0, lw->a, inp->tokens)
                         ), scale);
 
@@ -1964,7 +1958,7 @@ ggml_tensor * llm_graph_context::build_inp_prompt_feat() const {
     ggml_set_input(inp->input_prompt_feat);
     // ggml_backend_tensor_set(inp->input_prompt_feat, ubatch.flow_feat, 0, feat_len * ggml_element_size(inp->input_prompt_feat));
     cur = inp->input_prompt_feat;
-    cb(cur, "inp_prompt_feat", -1);
+    ggml_set_name(cur, "prompt_feat");
     res->add_input(std::move(inp));
     return cur;
 }
