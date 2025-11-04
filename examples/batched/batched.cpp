@@ -116,7 +116,7 @@ int main(int argc, char ** argv) {
     GGML_ASSERT(batch.n_tokens == (int) tokens_list.size());
 
     if (llama_model_has_encoder(model)) {
-        if (llama_encode(ctx, batch)) {
+        if (llama_encode(ctx, batch, 0)) {
             LOG_ERR("%s : failed to eval\n", __func__);
             return 1;
         }

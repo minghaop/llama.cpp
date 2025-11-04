@@ -687,7 +687,7 @@ bool llama_context::apply_adapter_cvec(
     return cvec.apply(model, data, len, n_embd, il_start, il_end);
 }
 
-llm_graph_result_ptr llama_context::process_ubatch(const llama_ubatch & ubatch, llm_graph_type gtype, llama_memory_context_i * mctx, ggml_status & ret) {
+llm_graph_result_ptr llama_context::process_ubatch(const llama_ubatch & ubatch, llm_graph_type gtype, llama_memory_context_i * mctx, ggml_status & ret, int dot_debug) {
     if (mctx && !mctx->apply()) {
         LLAMA_LOG_ERROR("%s: failed to apply memory context\n", __func__);
         ret = GGML_STATUS_FAILED;
@@ -706,7 +706,9 @@ llm_graph_result_ptr llama_context::process_ubatch(const llama_ubatch & ubatch, 
         ret = GGML_STATUS_FAILED;
         return nullptr;
     }
-    
+    if (dot_debug) {
+        ggml_graph_dump_dot(gf, NULL, "debug.dot");
+    }
 
     if (!ggml_backend_sched_alloc_graph(sched.get(), gf)) {
         LLAMA_LOG_ERROR("%s: failed to allocate graph\n", __func__);
@@ -721,54 +723,7 @@ llm_graph_result_ptr llama_context::process_ubatch(const llama_ubatch & ubatch, 
         return nullptr;
     }
 
-    // ggml_backend_sched_t sched_raw = sched.get();
-    // ggml_backend_sched_synchronize(sched_raw);
-    // const char *target_name = "prompt_feat";
-    // ggml_tensor *t = nullptr;
-    // for (int i = 0; i < gf->n_nodes; ++i) {
-    //     ggml_tensor *node = gf->nodes[i];
-    //     if (node && node->name && std::strcmp(node->name, target_name) == 0) {
-    //         t = node;
-    //         break;
-    //     }
-    // }
-    // if (!t) {
-    //     LLAMA_LOG_WARN("node '%s' not found\n", target_name);
-    // }
-
-    // size_t  nelt  = ggml_nelements(t);
-    // size_t  nbytes = ggml_nbytes(t);
-    // std::vector<float> cpu_buf(nbytes);
-    // if (ggml_backend_buffer_is_host(t->buffer)) {
-    //     memcpy(cpu_buf.data(), t->data, nbytes);
-    // } else {
-    //     ggml_backend_tensor_get(t, cpu_buf.data(), 0, nbytes);
-    // }
-
-    // int  ndim = ggml_n_dims(t);
-    // printf("==== tensor '%s'  shape=[", t->name);
-    // for (int d = 0; d < ndim; ++d) {
-    //     printf("%" PRId64, t->ne[d]);
-    //     if (d + 1 < ndim) printf(",");
-    // }
-    // printf("]  elems=%zu  dtype=%s\n", nelt, ggml_type_name(t->type));
-    // if (t->type == GGML_TYPE_F32) {
-    //     float *p = reinterpret_cast<float *>(cpu_buf.data());
-    //     for (size_t i = 0; i < std::min(nelt, size_t(20)); ++i) {
-    //         printf("%.6f ", p[i]);
-    //         if ((i + 1) % 10 == 0) printf("\n");
-    //     }
-    //     if (nelt > 20) printf("... (%zu more)\n", nelt - 20);
-    // } else if (t->type == GGML_TYPE_F16) {
-    //     ggml_fp16_t *p = reinterpret_cast<ggml_fp16_t *>(cpu_buf.data());
-    //     for (size_t i = 0; i < std::min(nelt, size_t(20)); ++i) {
-    //         printf("%.6f ", ggml_fp16_to_fp32(p[i]));
-    //         if ((i + 1) % 10 == 0) printf("\n");
-    //     }
-    //     if (nelt > 20) printf("... (%zu more)\n", nelt - 20);
-    // } else {
-    //     printf("（打印函数未实现该类型）\n");
-    // }
+    
     
 
     ret = GGML_STATUS_SUCCESS;
@@ -776,7 +731,7 @@ llm_graph_result_ptr llama_context::process_ubatch(const llama_ubatch & ubatch, 
     return res;
 }
 
-int llama_context::encode(const llama_batch & batch_inp) {
+int llama_context::encode(const llama_batch & batch_inp, int dot_debug) {
     GGML_ASSERT((!batch_inp.token && batch_inp.embd) || (batch_inp.token && !batch_inp.embd)); // NOLINT
 
     if (batch_inp.n_tokens == 0) {
@@ -842,7 +797,7 @@ int llama_context::encode(const llama_batch & batch_inp) {
     cparams.causal_attn = false;
 
     ggml_status status;
-    const auto res = process_ubatch(ubatch, LLM_GRAPH_TYPE_ENCODER, nullptr, status);
+    const auto res = process_ubatch(ubatch, LLM_GRAPH_TYPE_ENCODER, nullptr, status, dot_debug);
     // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&& check here6 !\n");
     cparams.causal_attn = causal_attn_org;
 
@@ -980,7 +935,7 @@ int llama_context::decode(const llama_batch & batch_inp) {
     GGML_ASSERT((!batch_inp.token && batch_inp.embd) || (batch_inp.token && !batch_inp.embd)); // NOLINT
     if (!memory) {
         LLAMA_LOG_DEBUG("%s: cannot decode batches with this context (calling encode() instead)\n", __func__);
-        return encode(batch_inp);
+        return encode(batch_inp, 0);
     }
 
     if (batch_inp.n_tokens == 0) {
@@ -1131,7 +1086,7 @@ int llama_context::decode(const llama_batch & batch_inp) {
         ggml_backend_sched_set_eval_callback(sched.get(), cparams.cb_eval, cparams.cb_eval_user_data);
 
         ggml_status status;
-        const auto res = process_ubatch(ubatch, LLM_GRAPH_TYPE_DECODER, mctx.get(), status);
+        const auto res = process_ubatch(ubatch, LLM_GRAPH_TYPE_DECODER, mctx.get(), status, 0);
         if (!res) {
             // the last ubatch failed or was aborted -> remove all positions of that ubatch from the KV cache
             llama_pos pos_min[LLAMA_MAX_SEQ];
@@ -2905,8 +2860,9 @@ size_t llama_state_seq_load_file(llama_context * ctx, const char * filepath, lla
 
 int32_t llama_encode(
         llama_context * ctx,
-          llama_batch   batch) {
-    const int ret = ctx->encode(batch);
+        llama_batch   batch,
+        int dot_debug) {
+    const int ret = ctx->encode(batch, dot_debug);
     if (ret != 0) {
         LLAMA_LOG_ERROR("%s: failed to encode, ret = %d\n", __func__, ret);
     }

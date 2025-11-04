@@ -558,10 +558,7 @@ struct llm_graph_context {
     
     ggml_tensor * build_F_normalize(
              ggml_tensor * cur,
-             ggml_tensor * mw,
-             ggml_tensor * mb,
-             float         eps,
-             int   il) const;
+             float         eps) const;
     
     ggml_tensor * build_flow_embedding(
              ggml_tensor * cur,
@@ -569,16 +566,17 @@ struct llm_graph_context {
              int   il) const;
     
     ggml_tensor * build_pad_mask(
-             ggml_cgraph * gf,
              int32_t total_len,
-             int32_t max_len = 0) const;
+             int32_t max_len = 0, 
+             int32_t il = 0) const;
 
     ggml_tensor * build_linear_no_subsampling(
              ggml_tensor * cur,
              ggml_tensor * linear_mw,
              ggml_tensor * linear_mb,
              ggml_tensor * norm_mw,
-             ggml_tensor * norm_mb) const;
+             ggml_tensor * norm_mb, 
+             int32_t il) const;
     
     ggml_tensor * build_pe(ggml_cgraph * gf, int64_t max_len = 5000) const;
 

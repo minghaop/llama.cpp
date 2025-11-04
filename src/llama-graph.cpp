@@ -30,7 +30,7 @@ void llm_graph_input_embd::set_input(const llama_ubatch * ubatch) {
         // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&& n_tokens is: %d, n_embed is: %d, embd_size is: %d\n", n_tokens, n_embd, ggml_element_size(embd));
         ggml_backend_tensor_set(embd, ubatch->embd, 0, n_embd*ggml_element_size(embd));
         // LLAMA_LOG_INFO("&&&&&&&&&&&&& check input_embed\n");
-        // float buff[32];
+        // float buff[8];
         // ggml_backend_tensor_get(embd, buff, 0, sizeof(buff));   // 直接拷 32 字节
         // for (int i = 0; i < 8; ++i) printf("embd is: %f ", buff[i]);
     }
@@ -571,51 +571,25 @@ ggml_tensor * llm_graph_context::build_layer_norm(
 }
 
 ggml_tensor * llm_graph_context::build_F_normalize(
-         ggml_tensor * cur,
-         ggml_tensor * mw,
-         ggml_tensor * mb,
-         float        eps,
-         int il) const {
-    
-    const int64_t  last_dim = cur->ne[ggml_n_dims(cur) - 1];
-    cur = ggml_rms_norm    (ctx0, cur, eps);
-    float sqrt_n = sqrtf((float)last_dim);
-    cur = ggml_scale(ctx0, cur, sqrt_n);
-
-    if (mw || mb) {
-        cb(cur, "norm", il);
-    }
-
-    if (mw) {
-        cur = ggml_mul(ctx0, cur, mw);
-        if (mb) {
-            cb(cur, "norm_w", il);
-        }
-    }
-
-    if (mb) {
-        cur = ggml_add(ctx0, cur, mb);
-    }
-    ggml_set_name(cur, "embedding");
-    return cur;
+         ggml_tensor * x,
+         float        eps) const {
+    ggml_tensor * l2_norm = ggml_l2_norm(ctx0, x, eps);
+    cb(l2_norm, "F_norm", -1);
+    ggml_set_name(l2_norm, "F_norm");
+    return l2_norm;
 }
 
 ggml_tensor * llm_graph_context::build_flow_embedding(
          ggml_tensor * cur,
          ggml_tensor * embd_w,
                  int   il) const {
-    
-    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&& cur type is : %d\n", cur->type);
-    // ggml_tensor * token_clamp_I32 = ggml_cast(ctx0, token_clamp, GGML_TYPE_I32);
     cur = ggml_get_rows(ctx0, embd_w, cur);
-    ggml_set_name(cur, "flow_embd");
     cb(cur, "flow_embd", il);
-
     return cur;
 }
 
 
-ggml_tensor * llm_graph_context::build_pad_mask(ggml_cgraph * gf, int32_t total_len, int32_t max_len) const {
+ggml_tensor * llm_graph_context::build_pad_mask(int32_t total_len, int32_t max_len, int32_t il) const {
     
     if(max_len <= 0) {
         max_len = total_len;
@@ -624,8 +598,8 @@ ggml_tensor * llm_graph_context::build_pad_mask(ggml_cgraph * gf, int32_t total_
     ggml_tensor * zero = ggml_scale(ctx0, mask, 0.0f);
     ggml_tensor * one = ggml_exp(ctx0, zero);
     mask = ggml_sub(ctx0, one, zero);
-    
-    cb(mask, "non-pad-mask", -1);
+    ggml_set_name(mask, ("non_pad_mask_" + std::to_string(il)).c_str());
+    cb(mask, ("non_pad_mask_" + std::to_string(il)).c_str(), il);
     
     return mask;
 }
@@ -636,14 +610,15 @@ ggml_tensor * llm_graph_context::build_linear_no_subsampling(
          ggml_tensor * linear_mw,
          ggml_tensor * linear_mb,
          ggml_tensor * norm_mw,
-         ggml_tensor * norm_mb) const{
+         ggml_tensor * norm_mb,
+         int32_t il) const{
     
     cur = ggml_mul_mat(ctx0, linear_mw, cur);
     cur = ggml_add(ctx0, cur, linear_mb);
     cur = ggml_cont(ctx0, ggml_permute(ctx0, cur, 1, 0, 2, 3));
     cur = build_layer_norm(cur, norm_mw, norm_mb, 1e-05);
     cur = ggml_cont(ctx0, ggml_permute(ctx0, cur, 1, 0, 2, 3));
-    cb(cur, "embed_linear_no_sub_sample", -1);
+    ggml_set_name(cur, ("embed_linear_no_sub_sample_" + std::to_string(il)).c_str());
 
     return cur;
 
@@ -1905,6 +1880,7 @@ ggml_tensor * llm_graph_context::build_inp_embd(ggml_tensor * tok_embd) const {
     }
 
     cb(cur, "inp_embd", -1);
+    ggml_set_name(cur, "inp_embd");
     res->add_input(std::move(inp));
     return cur;
 }
@@ -1922,6 +1898,7 @@ ggml_tensor * llm_graph_context::build_inp_token() const {
     ggml_set_input(inp->input_token);
     // ggml_backend_tensor_set(inp->input_token, ubatch.flow_token, 0, token_len * ggml_element_size(inp->input_token));
     cur = inp->input_token;
+    ggml_set_name(cur, "inp_token");
     cb(cur, "inp_token", -1);
     res->add_input(std::move(inp));
     return cur;
