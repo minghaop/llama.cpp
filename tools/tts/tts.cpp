@@ -1024,7 +1024,7 @@ lovely<|t_0.56|><|code_start|><|634|><|596|><|1766|><|1556|><|1306|><|1285|><|14
     }
     GGML_ASSERT(batch.n_tokens == n_codes);
 
-    if (llama_encode(ctx_cts, batch) != 0) {
+    if (llama_encode(ctx_cts, batch, 0) != 0) {
         LOG_ERR("%s: llama_encode() failed\n", __func__);
         return 1;
     }

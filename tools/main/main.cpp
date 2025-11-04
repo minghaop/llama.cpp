@@ -548,7 +548,7 @@ int main(int argc, char ** argv) {
         int enc_input_size = embd_inp.size();
         llama_token * enc_input_buf = embd_inp.data();
 
-        if (llama_encode(ctx, llama_batch_get_one(enc_input_buf, enc_input_size))) {
+        if (llama_encode(ctx, llama_batch_get_one(enc_input_buf, enc_input_size), 0)) {
             LOG_ERR("%s : failed to eval\n", __func__);
             return 1;
         }

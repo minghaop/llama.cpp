@@ -909,7 +909,8 @@ extern "C" {
     // < 0 - error. the memory state is restored to the state before this call
     LLAMA_API int32_t llama_encode(
             struct llama_context * ctx,
-              struct llama_batch   batch);
+              struct llama_batch   batch,
+                int dot_debug);
 
     // Process a batch of tokens.
     // Requires the context to have a memory.
