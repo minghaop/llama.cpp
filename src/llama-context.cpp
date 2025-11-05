@@ -1130,7 +1130,7 @@ int llama_context::decode(const llama_batch & batch_inp) {
             t_embd = res->get_embd_pooled();
         }
         
-        LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&& n_outputs is: %d\n", n_outputs);
+        // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&& n_outputs is: %d\n", n_outputs);
         // extract logits
         if (t_logits && n_outputs > 0) {
             ggml_backend_t backend_res = ggml_backend_sched_get_tensor_backend(sched.get(), t_logits);
@@ -1293,7 +1293,7 @@ uint32_t llama_context::output_reserve(int32_t n_outputs) {
     const auto & hparams = model.hparams;
     const auto & vocab   = model.vocab;
 
-    LLAMA_LOG_INFO("&&&&&&&&&&&&&& n_outputs is: %d, n_seq_max is: %d\n", n_outputs, n_seq_max());
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&& n_outputs is: %d, n_seq_max is: %d\n", n_outputs, n_seq_max());
     const int64_t n_outputs_max = std::max<int64_t>(n_outputs, n_seq_max());
 
     const auto n_batch = cparams.n_batch;
@@ -1328,7 +1328,7 @@ uint32_t llama_context::output_reserve(int32_t n_outputs) {
     const size_t prev_size = buf_output ? ggml_backend_buffer_get_size(buf_output.get()) : 0;
     const size_t new_size  = (logits_size + embd_size) * sizeof(float);
     // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&& logits size is: %d, embd_size is: %d, new_size is: %d\n", logits_size, embd_size, new_size);
-    LLAMA_LOG_INFO("&&&&&&&&&&&&&&&& prev_size is: %d, new_size is: %d\n", prev_size, new_size);
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&& prev_size is: %d, new_size is: %d\n", prev_size, new_size);
     // alloc only when more than the current capacity is required
     // TODO: also consider shrinking the buffer
     if (!buf_output || prev_size < new_size) {
@@ -1349,7 +1349,7 @@ uint32_t llama_context::output_reserve(int32_t n_outputs) {
         if (output_dev_host_buft) {
             buft = output_dev_host_buft;
         }
-        LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&& check alloc buffer!!! \n");
+        // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&& check alloc buffer!!! \n");
         buf_output.reset(ggml_backend_buft_alloc_buffer(buft, new_size));
         if (buf_output == nullptr) {
             LLAMA_LOG_ERROR("%s: failed to allocate output buffer of size %.2f MiB\n", __func__, new_size / (1024.0 * 1024.0));
@@ -1361,7 +1361,7 @@ uint32_t llama_context::output_reserve(int32_t n_outputs) {
     // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&& output_base is: %d\n", output_base == nullptr);
     logits = has_logits ? output_base               : nullptr;
     embd   = has_embd   ? output_base + logits_size : nullptr;
-    LLAMA_LOG_INFO("&&&&&&&&&&&&&&&& logits_size is: %d\n", logits_size);
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&& logits_size is: %d\n", logits_size);
     // set all ids as invalid (negative)
     std::fill(output_ids.begin(), output_ids.end(), -1);
 
