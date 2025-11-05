@@ -717,7 +717,7 @@ llama_ubatch llama_batch_allocr::ubatch_add(const std::vector<int32_t> & idxs, u
     
     // LLAMA_LOG_INFO("&&&&&&&&& flow_token_data_len is: %d\n", flow_token_data_len);
     seq_set_t seq_set_unq;
-    LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&& idxs.size is: %d\n", idxs.size());
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&& idxs.size is: %d\n", idxs.size());
 
     for (size_t i = 0; i < idxs.size(); ++i) {
         // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&& idxs[i] is: %d\n", (int64_t)idxs[i]);
