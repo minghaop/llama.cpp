@@ -554,7 +554,8 @@ struct llm_graph_context {
          ggml_tensor * cur,
          ggml_tensor * mw,
          ggml_tensor * mb,
-         float eps) const;
+         float eps, 
+         int32_t il) const;
     
     ggml_tensor * build_F_normalize(
              ggml_tensor * cur,
