@@ -716,6 +716,8 @@ static void ggml_compute_forward_dup_f32(
                     }
                 }
             } else {
+                GGML_LOG_INFO("&&&&&&& dst op name is: %d\n", dst->op);
+                GGML_LOG_INFO("&&&&&&& dst name is: %s\n", dst->name);
                 GGML_ABORT("fatal error"); // TODO: implement
             }
         } else {
