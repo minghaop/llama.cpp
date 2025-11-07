@@ -635,7 +635,6 @@ ggml_tensor * llm_graph_context::build_pe(ggml_cgraph * gf, int64_t max_len) con
     div_term = ggml_reshape_2d(ctx0, div_term, 1, half);      // [1, half]
     
     ggml_tensor * angle = ggml_mul_mat(ctx0, position, div_term);
-    LLAMA_LOG_INFO("&&&&&&&&&&&&&&& angle shape is: {%d, %d, %d, %d}\n", angle->ne[0], angle->ne[1], angle->ne[2], angle->ne[3]);
 
     angle = ggml_cont(ctx0, ggml_transpose(ctx0, angle));    // [half, seq_len]
     ggml_set_name(angle, "angle");
@@ -729,11 +728,11 @@ ggml_tensor * llm_graph_context::build_pre_lookahead_layer(
         x = ggml_pad(ctx0, x, lookahead, 0, 0, 0);
         ggml_set_name(x, "x_pad");
         ggml_tensor * outputs = ggml_conv_1d(ctx0, conv1_mw, x, 1, 0, 1);
-        ggml_set_name(outputs, "x_conv_1d");
-        
         conv1_mb = ggml_reshape_4d(ctx0, conv1_mb, 1, 512, 1, 1);
         outputs = ggml_add(ctx0, outputs, conv1_mb);
+        ggml_set_name(outputs, "x_conv_1d");
         outputs = ggml_leaky_relu(ctx0, outputs, 0.01f, true);
+        ggml_set_name(outputs, "leaky_relu");
         // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&& outputs shape is: {%d, %d, %d, %d}\n", outputs->ne[0], outputs->ne[1], outputs->ne[2], outputs->ne[3]);
         outputs = ggml_pad(ctx0, outputs, 2, 0, 0, 0);
         // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&& outputs shape is: {%d, %d, %d, %d}\n", outputs->ne[0], outputs->ne[1], outputs->ne[2], outputs->ne[3]);
