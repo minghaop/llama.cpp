@@ -16768,18 +16768,16 @@ struct llm_build_flow : public llm_graph_context {
         token = build_flow_embedding(token, model.inp_embed_w, -1);   //✅
         ggml_tensor * token_mask = ggml_mul(ctx0, token, mask);
         ggml_set_name(token_mask, "flow_embd_token");                 //✅
-        // ggml_build_forward_expand(gf, token);
+        
         // encoder
         const int B  = token_mask->ne[2];
         const int T  = token_mask->ne[1];
         ggml_tensor * masks = build_pad_mask(params.ubatch.prompt_token_len + params.ubatch.token_len, T, 1);
         masks = ggml_reshape_3d(ctx0, masks, B, 1, T);
         ggml_tensor * x = build_linear_no_subsampling(token_mask, model.embed_out_0_w, model.embed_out_0_b, model.embed_out_1_w, model.embed_out_1_b, 1); //✅
-        // ggml_build_forward_expand(gf, x);
         ggml_tensor * pe = build_pe(gf);
         ggml_build_forward_expand(gf, pe);
         x = build_espnet_pos_encode(x);      //✅
-        // ggml_build_forward_expand(gf, x);
 
         ggml_tensor * pos_emb = build_pos_encoding(pe, x->ne[1], 0);
         ggml_tensor * mask_pad = masks;
