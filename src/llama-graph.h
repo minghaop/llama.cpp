@@ -595,6 +595,8 @@ struct llm_graph_context {
          ggml_tensor * conv1_mb,
          ggml_tensor * conv2_mw,
          ggml_tensor * conv2_mb) const;
+    
+    ggml_tensor * flip_weight(ggml_cgraph * gf, ggml_tensor * conv_mw) const;
 
     ggml_tensor * build_rel_pos_attn(
          ggml_cgraph * gf,
