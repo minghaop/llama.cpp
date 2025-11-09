@@ -715,6 +715,25 @@ ggml_tensor * llm_graph_context::build_espnet_pos_encode(
         return cur;
 }
 
+ggml_tensor * llm_graph_context::flip_weight(ggml_cgraph * gf, ggml_tensor * conv1_mw) const {
+    ggml_tensor * conv1_mw_new = ggml_new_tensor_3d(ctx0, GGML_TYPE_F32, 4, 512, 512);
+    for (int64_t k = 0; k < 4; k++) {
+        ggml_tensor * src_slice = ggml_view_3d(ctx0, conv1_mw,
+            1, 512, 512,                          // shape: [1, 512, 512]
+            conv1_mw->nb[0],             // stride
+            conv1_mw->nb[1],
+            k * conv1_mw->nb[0]          // offset
+        );
+        ggml_tensor * dst_slice = ggml_view_3d(ctx0, conv1_mw_new,
+            1, 512, 512,
+            conv1_mw_new->nb[0],
+            conv1_mw_new->nb[1],
+            (3 - k) * conv1_mw_new->nb[0]
+        );
+        ggml_build_forward_expand(gf, ggml_cpy(ctx0, src_slice, dst_slice));
+    }
+}
+
 ggml_tensor * llm_graph_context::build_pre_lookahead_layer(
          ggml_tensor * cur,
          ggml_tensor * conv1_mw,
@@ -722,36 +741,36 @@ ggml_tensor * llm_graph_context::build_pre_lookahead_layer(
          ggml_tensor * conv2_mw,
          ggml_tensor * conv2_mb) const{
         
-        const int lookahead = 3;
-        ggml_tensor * x = ggml_cont(ctx0, ggml_permute(ctx0, cur, 1, 0, 2, 3));  // [B, C, T]
-        x = ggml_reshape_4d(ctx0, x, x->ne[0], x->ne[1], 1, 1);
-        x = ggml_pad(ctx0, x, lookahead, 0, 0, 0);
-        ggml_set_name(x, "x_pad");
-        ggml_tensor * outputs = ggml_conv_1d(ctx0, conv1_mw, x, 1, 0, 1);
-        conv1_mb = ggml_reshape_4d(ctx0, conv1_mb, 1, 512, 1, 1);
-        outputs = ggml_add(ctx0, outputs, conv1_mb);
-        ggml_set_name(outputs, "x_conv_1d");
-        outputs = ggml_leaky_relu(ctx0, outputs, 0.01f, true);
-        ggml_set_name(outputs, "leaky_relu");
-        // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&& outputs shape is: {%d, %d, %d, %d}\n", outputs->ne[0], outputs->ne[1], outputs->ne[2], outputs->ne[3]);
-        outputs = ggml_pad(ctx0, outputs, 2, 0, 0, 0);
-        // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&& outputs shape is: {%d, %d, %d, %d}\n", outputs->ne[0], outputs->ne[1], outputs->ne[2], outputs->ne[3]);
-        outputs = ggml_conv_1d(ctx0, conv2_mw, outputs, 1, 0, 1);
-        conv2_mb = ggml_reshape_3d(ctx0, conv2_mb, 1, 512, 1);
-        outputs  = ggml_add(ctx0, outputs, conv2_mb);
-        outputs = ggml_permute(ctx0, outputs, 1, 0, 2, 3);
-        ggml_set_name(outputs, "pre_look_permute");
-        outputs = ggml_cont(ctx0, outputs);
-        ggml_set_name(outputs, "pre_look_cont");
-        outputs = ggml_add(ctx0, outputs, cur);
-        // ggml_set_name(outputs, "pre_look_add");
-        // outputs = ggml_permute(ctx0, outputs, 1, 0, 2, 3);
-        // ggml_set_name(outputs, "pre_look_permute_2");
-        // outputs = ggml_cont(ctx0, outputs);
+    const int lookahead = 3;
+    ggml_tensor * x = ggml_cont(ctx0, ggml_permute(ctx0, cur, 1, 0, 2, 3));  // [B, C, T]
+    x = ggml_reshape_4d(ctx0, x, x->ne[0], x->ne[1], 1, 1);
+    x = ggml_pad(ctx0, x, lookahead, 0, 0, 0);
+    ggml_set_name(x, "x_pad");
+    ggml_tensor * outputs = ggml_conv_1d(ctx0, conv1_mw, x, 1, 0, 1);
+    
+    // ggml_set_name(conv1_mw, "conv1_mw");
+    conv1_mb = ggml_reshape_4d(ctx0, conv1_mb, 1, 512, 1, 1);
+    outputs = ggml_add(ctx0, outputs, conv1_mb);
+    ggml_set_name(outputs, "x_conv_1d");
+    outputs = ggml_leaky_relu(ctx0, outputs, 0.01f, true);
+    ggml_set_name(outputs, "leaky_relu");
+    outputs = ggml_pad(ctx0, outputs, 2, 0, 0, 0);
+    ggml_set_name(outputs, "x_pad_2");
+    outputs = ggml_conv_1d(ctx0, conv2_mw, outputs, 1, 0, 1);
+    conv2_mb = ggml_reshape_3d(ctx0, conv2_mb, 1, 512, 1);
+    outputs  = ggml_add(ctx0, outputs, conv2_mb);
+    ggml_set_name(outputs, "x_conv_1d_2");
+    outputs = ggml_permute(ctx0, outputs, 1, 0, 2, 3);
+    outputs = ggml_cont(ctx0, outputs);
+    outputs = ggml_add(ctx0, outputs, cur);
+    // ggml_set_name(outputs, "pre_look_add");
+    // outputs = ggml_permute(ctx0, outputs, 1, 0, 2, 3);
+    // ggml_set_name(outputs, "pre_look_permute_2");
+    // outputs = ggml_cont(ctx0, outputs);
 
-        ggml_set_name(outputs, "pre_look_res");
+    ggml_set_name(outputs, "pre_look_res");
 
-        return outputs;
+    return outputs;
         
 }
 

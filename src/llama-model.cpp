@@ -16768,7 +16768,7 @@ struct llm_build_flow : public llm_graph_context {
         token = build_flow_embedding(token, model.inp_embed_w, -1);   //✅
         ggml_tensor * token_mask = ggml_mul(ctx0, token, mask);
         ggml_set_name(token_mask, "flow_embd_token");                 //✅
-        
+
         // encoder
         const int B  = token_mask->ne[2];
         const int T  = token_mask->ne[1];
@@ -16782,6 +16782,7 @@ struct llm_build_flow : public llm_graph_context {
         ggml_tensor * pos_emb = build_pos_encoding(pe, x->ne[1], 0);
         ggml_tensor * mask_pad = masks;
         ggml_tensor * chunk_mask = masks;
+        // ggml_tensor * pre_look_mw = flip_weight(gf, model.pre_look_conv1_w);
         x = build_pre_lookahead_layer(x, model.pre_look_conv1_w, model.pre_look_conv1_b, model.pre_look_conv2_w, model.pre_look_conv2_b);
         ggml_build_forward_expand(gf, x);
         for(int i = 0; i < 6; i++) {
