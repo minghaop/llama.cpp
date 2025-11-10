@@ -16754,6 +16754,9 @@ struct llm_build_flow : public llm_graph_context {
         ggml_tensor * prompt_feat = build_inp_prompt_feat(); //✅
         ggml_build_forward_expand(gf, prompt_feat);
         
+        ggml_tensor * extend_pe = build_inp_extend_pe();    //✅
+        ggml_build_forward_expand(gf, extend_pe);
+
         embedding = build_F_normalize(embedding, 1e-12f); //✅
         
         ggml_tensor * spk_mul = ggml_mul_mat(ctx0, model.spk_embed_w, embedding); 
@@ -16775,16 +16778,19 @@ struct llm_build_flow : public llm_graph_context {
         ggml_tensor * masks = build_pad_mask(params.ubatch.prompt_token_len + params.ubatch.token_len, T, 1);
         masks = ggml_reshape_3d(ctx0, masks, B, 1, T);
         ggml_tensor * x = build_linear_no_subsampling(token_mask, model.embed_out_0_w, model.embed_out_0_b, model.embed_out_1_w, model.embed_out_1_b, 1); //✅
-        ggml_tensor * pe = build_pe(gf);
-        ggml_build_forward_expand(gf, pe);
-        x = build_espnet_pos_encode(x);      //✅
+        
+        x = build_espnet_pos_encode(x, 1);      //✅
 
-        ggml_tensor * pos_emb = build_pos_encoding(pe, x->ne[1], 0);
+        ggml_tensor * extend_pe_cpy = ggml_dup(ctx0, extend_pe);
+        ggml_set_name(extend_pe_cpy, "extend_pe_cpy");
+        ggml_tensor * pos_emb = build_pos_encoding(extend_pe_cpy, x->ne[1], 0, 1); //✅
         ggml_tensor * mask_pad = masks;
         ggml_tensor * chunk_mask = masks;
         // ggml_tensor * pre_look_mw = flip_weight(gf, model.pre_look_conv1_w);
-        x = build_pre_lookahead_layer(x, model.pre_look_conv1_w, model.pre_look_conv1_b, model.pre_look_conv2_w, model.pre_look_conv2_b);
+        x = build_pre_lookahead_layer(x, model.pre_look_conv1_w, model.pre_look_conv1_b, model.pre_look_conv2_w, model.pre_look_conv2_b);  //✅
         ggml_build_forward_expand(gf, x);
+        ggml_tensor * x_dup = ggml_dup(ctx0, x);
+        //encoders
         for(int i = 0; i < 6; i++) {
             ggml_tensor * residual = ggml_cont(ctx0, x);
             x = build_layer_norm(x, model.layers[i + 13].encoders_normmha_w, model.layers[i + 13].encoders_normmha_b, 1e-12, i);
@@ -16803,10 +16809,15 @@ struct llm_build_flow : public llm_graph_context {
             cb(q_with_bias_u, "q_with_bias_u", i);
             ggml_tensor * q_with_bias_v = ggml_cont(ctx0, ggml_permute(ctx0, ggml_add(ctx0, query, model.layers[i + 13].encoders_pos_bias_v), 0, 2, 1, 3));
             cb(q_with_bias_v, "q_with_bias_v", i);
-            ggml_tensor * matrix_ac = ggml_mul_mat(ctx0, q_with_bias_u, key);
-            ggml_tensor * matrix_bd = ggml_mul_mat(ctx0, q_with_bias_v, p);
+            ggml_tensor * matrix_ac = ggml_mul_mat(ctx0, key, q_with_bias_u);
+            cb(matrix_ac, "matrix_ac", i);
+            ggml_tensor * matrix_bd = ggml_mul_mat(ctx0, p, q_with_bias_v);
+            cb(matrix_bd, "matrix_bd", i);
             matrix_bd = build_rel_shift(matrix_bd);
-            ggml_tensor * scores = ggml_scale(ctx0, ggml_add(ctx0, matrix_ac, matrix_bd), 1.0f / sqrtf(float(64.0f)));
+            cb(matrix_bd, "matrix_bd_rel_shift", i);
+            ggml_tensor * ac_bd = ggml_add(ctx0, matrix_ac, matrix_bd);
+            cb(ac_bd, "ac_plus_bd", i);
+            ggml_tensor * scores = ggml_scale(ctx0, ac_bd, 1.0f / sqrtf(float(64.0f)));
             cb(scores, "scores", i);
             ggml_tensor * x_att = build_attn_scores(value, scores, mask, model.layers[i + 13].encoders_wo, model.layers[i + 13].encoders_bo);
             cb(x_att, "x_att", i);
@@ -16826,8 +16837,9 @@ struct llm_build_flow : public llm_graph_context {
         masks = build_pad_mask(x->ne[1], x->ne[1], 2);
         masks = ggml_reshape_3d(ctx0, masks, masks->ne[0], 1, masks->ne[1]);
         x = build_linear_no_subsampling(x, model.up_embed_out_0_w, model.up_embed_out_0_b, model.up_embed_out_1_w, model.up_embed_out_1_b, 2);
-        x = build_espnet_pos_encode(x);
-        pos_emb = build_pos_encoding(pe, x->ne[1], 0);
+        x = build_espnet_pos_encode(x, 2);
+        ggml_tensor * extend_pe_cpy2 = ggml_dup(ctx0, extend_pe);
+        pos_emb = build_pos_encoding(extend_pe_cpy2, x->ne[1], 0, 2);
         mask_pad = masks;
         chunk_mask = masks;
         // x = ggml_cont(ctx0, ggml_permute(ctx0, x, 1, 0, 2, 3));
@@ -16849,16 +16861,16 @@ struct llm_build_flow : public llm_graph_context {
             p = ggml_reshape_4d(ctx0, p, 64, 8, p->ne[1], n_batch_pos);
             p = ggml_cont(ctx0, ggml_permute(ctx0, p, 0, 2, 1, 3));
             ggml_tensor * q_with_bias_u = ggml_cont(ctx0, ggml_permute(ctx0, ggml_add(ctx0, query, model.layers[i + 132].up_encoders_pos_bias_u), 0, 2, 1, 3));
-            cb(q_with_bias_u, "q_with_bias_u", i);
+            cb(q_with_bias_u, "up_encoder_q_with_bias_u", i);
             ggml_tensor * q_with_bias_v = ggml_cont(ctx0, ggml_permute(ctx0, ggml_add(ctx0, query, model.layers[i + 132].up_encoders_pos_bias_v), 0, 2, 1, 3));
-            cb(q_with_bias_v, "q_with_bias_v", i);
+            cb(q_with_bias_v, "up_encoder_q_with_bias_v", i);
             ggml_tensor * matrix_ac = ggml_mul_mat(ctx0, q_with_bias_u, key);
             ggml_tensor * matrix_bd = ggml_mul_mat(ctx0, q_with_bias_v, p);
             matrix_bd = build_rel_shift(matrix_bd);
             ggml_tensor * scores = ggml_scale(ctx0, ggml_add(ctx0, matrix_ac, matrix_bd), 1.0f / sqrtf(float(64.0f)));
-            cb(scores, "scores", i);
+            cb(scores, "up_scores", i);
             ggml_tensor * x_att = build_attn_scores(value, scores, mask, model.layers[i + 132].up_encoders_wo, model.layers[i + 132].up_encoders_bo);
-            cb(x_att, "x_att", i);
+            cb(x_att, "up_x_att", i);
             // residual = ggml_cont(ctx0, ggml_permute(ctx0, residual, 1, 0, 2, 3));
             x = ggml_add(ctx0, residual, x_att);
             residual = ggml_cont(ctx0, x);
