@@ -83,6 +83,15 @@ void llm_graph_input_rand_noise::set_input(const llama_ubatch * ubatch) {
     }
 }
 
+void llm_graph_input_extend_pe::set_input(const llama_ubatch * ubatch) {
+    if(ubatch->extend_pe) {
+        const int64_t extend_pe_len = 9999 * 512;
+
+        ggml_backend_tensor_set(input_extend_pe, ubatch->extend_pe, 0, extend_pe_len*ggml_element_size(input_extend_pe));
+        // LLAMA_LOG_INFO("&&&&&&&&&&&&& check input_rand_noise\n");
+    }
+}
+
 
 void llm_graph_input_pos::set_input(const llama_ubatch * ubatch) {
     if (ubatch->pos && pos) {
@@ -689,29 +698,33 @@ ggml_tensor * llm_graph_context::build_pe(ggml_cgraph * gf, int64_t max_len) con
 ggml_tensor * llm_graph_context::build_pos_encoding(
          ggml_tensor * cur,
          size_t offset, 
-         size_t size) const{
-   
-    int64_t cols = cur->ne[0];           
-    int64_t rows = cur->ne[1];               
+         size_t size, 
+         size_t il) const{
+    
+    ggml_tensor * new_cur = ggml_dup(ctx0, cur);
+    int64_t cols = new_cur->ne[0];           
+    int64_t rows = new_cur->ne[1];               
     int64_t start = std::max(int64_t(0), rows / 2 - static_cast<int64_t>(size) - static_cast<int64_t>(offset) + 1);
     int64_t end = std::min(rows, rows / 2 + static_cast<int64_t>(size) + static_cast<int64_t>(offset));
     int64_t new_len = end - start;
     GGML_ASSERT(new_len > 0);
 
-    ggml_tensor * pos_emb = ggml_view_2d(ctx0, cur,
+    ggml_tensor * pos_emb = ggml_view_2d(ctx0, new_cur,
                                      cols, new_len,
-                                     cur->nb[1],
-                                     start * cur->nb[1]); 
+                                     new_cur->nb[1],
+                                     start * new_cur->nb[1]);
+    ggml_set_name(pos_emb, ("pos_emb_" + std::to_string(il)).c_str());
     return pos_emb;
 }
 
 ggml_tensor * llm_graph_context::build_espnet_pos_encode(
-         ggml_tensor * cur) const{
+         ggml_tensor * cur,
+         int32_t il) const{
         const size_t d_model = 512;
         float xscale = std::sqrt(static_cast<float>(d_model));
         cur = ggml_scale(ctx0, cur, xscale);
-        ggml_set_name(cur, "espnet_pos_encode");
-        cb(cur, "espnet_pos_encode", -1);
+        ggml_set_name(cur, ("espnet_pos_encode" + std::to_string(il)).c_str());
+        cb(cur, "espnet_pos_encode", il);
         return cur;
 }
 
@@ -747,26 +760,23 @@ ggml_tensor * llm_graph_context::build_pre_lookahead_layer(
     x = ggml_pad(ctx0, x, lookahead, 0, 0, 0);
     ggml_set_name(x, "x_pad");
     ggml_tensor * outputs = ggml_conv_1d(ctx0, conv1_mw, x, 1, 0, 1);
-    
-    // ggml_set_name(conv1_mw, "conv1_mw");
     conv1_mb = ggml_reshape_4d(ctx0, conv1_mb, 1, 512, 1, 1);
     outputs = ggml_add(ctx0, outputs, conv1_mb);
     ggml_set_name(outputs, "x_conv_1d");
-    outputs = ggml_leaky_relu(ctx0, outputs, 0.01f, true);
+    outputs = ggml_leaky_relu(ctx0, outputs, 0.01f, false);
     ggml_set_name(outputs, "leaky_relu");
-    outputs = ggml_pad(ctx0, outputs, 2, 0, 0, 0);
+    ggml_tensor * zeros = ggml_new_tensor_4d(ctx0, GGML_TYPE_F32, 2, outputs->ne[1], outputs->ne[2], outputs->ne[3]);
+    zeros = ggml_scale(ctx0, zeros, 0.0f);
+    outputs = ggml_concat(ctx0, zeros, outputs, 0);
+    outputs = ggml_cont(ctx0, outputs);
     ggml_set_name(outputs, "x_pad_2");
     outputs = ggml_conv_1d(ctx0, conv2_mw, outputs, 1, 0, 1);
-    conv2_mb = ggml_reshape_3d(ctx0, conv2_mb, 1, 512, 1);
+    conv2_mb = ggml_reshape_4d(ctx0, conv2_mb, 1, 512, 1, 1);
     outputs  = ggml_add(ctx0, outputs, conv2_mb);
     ggml_set_name(outputs, "x_conv_1d_2");
     outputs = ggml_permute(ctx0, outputs, 1, 0, 2, 3);
     outputs = ggml_cont(ctx0, outputs);
     outputs = ggml_add(ctx0, outputs, cur);
-    // ggml_set_name(outputs, "pre_look_add");
-    // outputs = ggml_permute(ctx0, outputs, 1, 0, 2, 3);
-    // ggml_set_name(outputs, "pre_look_permute_2");
-    // outputs = ggml_cont(ctx0, outputs);
 
     ggml_set_name(outputs, "pre_look_res");
 
@@ -1911,6 +1921,20 @@ ggml_tensor * llm_graph_context::build_inp_prompt_feat() const {
     // ggml_backend_tensor_set(inp->input_prompt_feat, ubatch.flow_feat, 0, feat_len * ggml_element_size(inp->input_prompt_feat));
     cur = inp->input_prompt_feat;
     ggml_set_name(cur, "prompt_feat");
+    res->add_input(std::move(inp));
+    return cur;
+}
+
+ggml_tensor * llm_graph_context::build_inp_extend_pe() const {
+
+    const uint32_t pe_len = 9999 * 512;
+    
+    auto inp = std::make_unique<llm_graph_input_extend_pe>();
+    ggml_tensor * cur = nullptr;
+    inp->input_extend_pe = ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, 512, 9999);
+    ggml_set_input(inp->input_extend_pe);
+    cur = inp->input_extend_pe;
+    ggml_set_name(cur, "extend_pe");
     res->add_input(std::move(inp));
     return cur;
 }

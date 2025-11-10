@@ -124,6 +124,16 @@ public:
     ggml_tensor * input_prompt_feat = nullptr; //F32 [token_len, seq_len]
 };
 
+class llm_graph_input_extend_pe : public llm_graph_input_i {
+public:
+    llm_graph_input_extend_pe()            = default;
+    virtual ~llm_graph_input_extend_pe()   = default;
+    
+    void set_input(const llama_ubatch * ubatch) override;
+    
+    ggml_tensor * input_extend_pe = nullptr; //F32 [512, 9999]
+};
+
 class llm_graph_input_rand_noise : public llm_graph_input_i {
 public:
     llm_graph_input_rand_noise()            = default;
@@ -584,10 +594,12 @@ struct llm_graph_context {
     ggml_tensor * build_pos_encoding(
          ggml_tensor * cur,
          size_t offset, 
-         size_t size) const;
+         size_t size, 
+         size_t il) const;
     
     ggml_tensor * build_espnet_pos_encode(
-         ggml_tensor * cur) const;
+         ggml_tensor * cur, 
+         int32_t il) const;
     
     ggml_tensor * build_pre_lookahead_layer(
          ggml_tensor * cur,
@@ -784,6 +796,7 @@ struct llm_graph_context {
     ggml_tensor * build_inp_prompt_token() const;
     ggml_tensor * build_inp_prompt_feat() const;
     ggml_tensor * build_inp_rand_noise() const;
+    ggml_tensor * build_inp_extend_pe() const;
 
 
     //

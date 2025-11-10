@@ -42,6 +42,7 @@ struct llama_ubatch {
     uint32_t        prompt_token_len;
     uint32_t        prompt_feat_len;
     float        *  rand_noise;
+    float        *  extend_pe;
 };
 
 // a helper for sanitizing, fulfilling and splitting a batch
@@ -159,6 +160,7 @@ private:
         uint32_t                    prompt_token_len;
         uint32_t                    prompt_feat_len;
         std::vector<float>          rand_noise;
+        std::vector<float>          extend_pe;
     };
 
     // current splitting state:
