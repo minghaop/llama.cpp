@@ -806,39 +806,50 @@ ggml_tensor * llm_graph_context::build_rel_pos_attn(
 }
 
 ggml_tensor * llm_graph_context::build_rel_shift(
+         ggml_cgraph * gf,
          ggml_tensor * cur) const{
-    cur = ggml_permute(ctx0, cur, 1,0,2,3);
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&& rel_shift cur shape is: {%d, %d, %d, %d}\n", cur->ne[0], cur->ne[1], cur->ne[2], cur->ne[3]); 
+    // cur = ggml_permute(ctx0, cur, 1,0,2,3);
     const int B = cur->ne[3];   
     const int n_head = cur->ne[2]; 
     const int T = cur->ne[1];    
     const int L = cur->ne[0];
 
-    auto zero_pad = ggml_new_tensor_4d(ctx0, GGML_TYPE_F32, 1, T, n_head, 1);
+    auto zero_pad = ggml_new_tensor_4d(ctx0, GGML_TYPE_F32, 1, T, n_head, B);
     zero_pad = ggml_scale(ctx0, zero_pad, 0.0f);  
-    ggml_tensor * x_padded = ggml_concat(ctx0, zero_pad, cur, /*dim=*/0);
+    ggml_tensor * x_padded = ggml_concat(ctx0, zero_pad, cur, 0);
+    // ggml_tensor * dest_view = ggml_view_4d(ctx0, x_padded, L, T, n_head, B, );
     auto reshaped = ggml_reshape_4d(ctx0, ggml_cont(ctx0, x_padded), T, L + 1, n_head, B);
-    ggml_tensor * result = ggml_view_4d(
-                                    ctx0,
-                                    reshaped,
-                                    792,                    
-                                    792,                    
-                                    8,                      
-                                    1,                     
-                                    reshaped->nb[1],
-                                    reshaped->nb[2],
-                                    reshaped->nb[3],
-                                    0);    
-    cb(result, "rel_shift", -1);
+    ggml_tensor* x_sliced = ggml_view_4d(ctx0,
+                                         reshaped,
+                                         T, L, n_head, B,
+                                         reshaped->nb[1],
+                                         reshaped->nb[2],
+                                         reshaped->nb[3],
+                                         reshaped->nb[1]);
+    ggml_tensor* x_back = ggml_reshape_4d(ctx0, ggml_cont(ctx0, x_sliced), L, T, n_head, B);
+    ggml_tensor* result = ggml_view_4d(ctx0,
+                                       x_back,
+                                       T, T, n_head, B,
+                                       x_back->nb[1],
+                                       x_back->nb[2],
+                                       x_back->nb[3],
+                                       0);
+    result = ggml_cont(ctx0, result);
     return result;
         
 }
+
+
 
 ggml_tensor * llm_graph_context::build_attn_scores(
          ggml_tensor * cur,
          ggml_tensor * scores,
          ggml_tensor * mask,
          ggml_tensor * mw,
-         ggml_tensor * mb) const{
+         ggml_tensor * mb,
+         std::string attn_type,
+         int32_t il) const{
             
     const int B    = cur->ne[3];
     const int n_head = cur->ne[1];
@@ -851,13 +862,18 @@ ggml_tensor * llm_graph_context::build_attn_scores(
         // ggml_tensor * mask_ext = ggml_reshape_4d(ctx0, mask, mask->ne[0], 1, 1, 1);
         ggml_tensor * mask_ext = ggml_scale(ctx0, mask, 0.0f);
     }
-    ggml_tensor * attn = ggml_soft_max_inplace(ctx0, scores);
-    ggml_tensor * attn_T = ggml_cont(ctx0, ggml_permute(ctx0, attn, 1, 0, 2, 3));
+    ggml_tensor * attn = ggml_soft_max(ctx0, scores);
+    cb(attn, ("soft_max_attn_" + attn_type).c_str(), il);
+    // ggml_tensor * attn_T = ggml_cont(ctx0, ggml_permute(ctx0, attn, 1, 0, 2, 3));
     ggml_tensor * cur_T = ggml_cont(ctx0, ggml_permute(ctx0, cur, 1, 0, 2, 3));
-    ggml_tensor * x = ggml_mul_mat(ctx0, cur_T, attn_T);
-    x = ggml_reshape_3d(ctx0, ggml_cont(ctx0, x), time1 * d_k, n_head, B);
+    ggml_tensor * x = ggml_mul_mat(ctx0, cur_T, attn);
+    cb(x, ("attn_x_" + attn_type).c_str(), il);
+    x = ggml_reshape_3d(ctx0, ggml_cont(ctx0, ggml_permute(ctx0, x, 0, 2, 1, 3)), time1 * d_k, n_head, B);
+    cb(x, ("reshape_x_" + attn_type).c_str(), il);
+    // mw = ggml_cont(ctx0, ggml_transpose(ctx0, mw));
     x = ggml_mul_mat(ctx0, mw, x);
     x = ggml_add(ctx0, x, mb);
+    cb(x, ("linear_out_x_" + attn_type).c_str(), il);
     return x;
 }
 
