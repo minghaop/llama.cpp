@@ -617,6 +617,7 @@ struct llm_graph_context {
          ggml_tensor * mb) const;
     
     ggml_tensor * build_rel_shift(
+         ggml_cgraph * gf,
          ggml_tensor * cur) const;
     
     ggml_tensor * build_attn_scores(
@@ -624,7 +625,9 @@ struct llm_graph_context {
          ggml_tensor * scores,
          ggml_tensor * mask,
          ggml_tensor * mw,
-         ggml_tensor * mb) const;
+         ggml_tensor * mb,
+         std::string attn_type,
+         int32_t il) const;
     
     ggml_tensor * build_pos_ffn(
              ggml_tensor * cur,
