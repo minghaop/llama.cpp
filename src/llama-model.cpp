@@ -16796,7 +16796,8 @@ struct llm_build_flow : public llm_graph_context {
         ggml_tensor * x_dup = ggml_dup(ctx0, x);
         //encoders
         for(int i = 0; i < 6; i++) {
-            ggml_tensor * residual = ggml_dup(ctx0, x);
+            ggml_tensor* residual = x;
+            cb(x, "before_x", i);
             x = build_layer_norm(x, model.layers[i + 13].encoders_normmha_w, model.layers[i + 13].encoders_normmha_b, 1e-12, i);
             ggml_tensor * query = build_rel_pos_attn(gf, x, model.layers[i + 13].encoders_wq, model.layers[i + 13].encoders_bq);
             cb(query, "encoder_attn_q", i);
@@ -16818,24 +16819,25 @@ struct llm_build_flow : public llm_graph_context {
             cb(matrix_ac, "matrix_ac", i);
             ggml_tensor * matrix_bd = ggml_mul_mat(ctx0, p, q_with_bias_v);
             cb(matrix_bd, "matrix_bd", i);
-            matrix_bd = build_rel_shift(matrix_bd);
+            matrix_bd = build_rel_shift(gf, matrix_bd);
             cb(matrix_bd, "matrix_bd_rel_shift", i);
             ggml_tensor * ac_bd = ggml_add(ctx0, matrix_ac, matrix_bd);
             cb(ac_bd, "ac_plus_bd", i);
             ggml_tensor * scores = ggml_scale(ctx0, ac_bd, 1.0f / sqrtf(float(64.0f)));
             cb(scores, "scores", i);
-            ggml_tensor * x_att = build_attn_scores(value, scores, mask, model.layers[i + 13].encoders_wo, model.layers[i + 13].encoders_bo);
+            ggml_tensor * x_att = build_attn_scores(value, scores, mask, model.layers[i + 13].encoders_wo, model.layers[i + 13].encoders_bo, "encoders", i);
             cb(x_att, "x_att", i);
+            cb(residual, "residual", i);
             x = ggml_add(ctx0, residual, x_att);
-            residual =  ggml_dup(ctx0, x);
-            // x = ggml_cont(ctx0, ggml_permute(ctx0, x, 1, 0, 2, 3));
+            ggml_build_forward_expand(gf, x);
+            cb(x, "res+x", i);
+            residual =  x;
             x = build_layer_norm(x, model.layers[i + 13].encoders_normffn_w, model.layers[i + 13].encoders_normffn_b, 1e-12, i * 6 + 1);
-            // x = ggml_cont(ctx0, ggml_permute(ctx0, x, 1, 0, 2, 3));
+            cb(x, "normffn", i);
             x = build_pos_ffn(x, model.layers[i + 13].encoders_ffn_w1, model.layers[i + 13].encoders_ffn_b1, model.layers[i + 13].encoders_ffn_w2, model.layers[i + 13].encoders_ffn_b2);
             cb(x, "ffn_out", i);
             x = ggml_add(ctx0, residual, x);
             cb(x, "encoders_out", i);
-            // x = ggml_cont(ctx0, ggml_permute(ctx0, x, 1, 0, 2, 3));
         }
         ggml_set_name(x, "after encoders");
         x = build_upsample_1d(x, model.up_layer_conv_w, model.up_layer_conv_b);
@@ -16854,7 +16856,7 @@ struct llm_build_flow : public llm_graph_context {
 
         //build up_encoders
         for(int i = 0; i < 4; i++) {
-            ggml_tensor * residual = ggml_dup(ctx0, x);
+            ggml_tensor * residual = x;
             x = build_layer_norm(x, model.layers[i + 132].up_encoders_normmha_w, model.layers[i + 132].up_encoders_normmha_b, 1e-12, 12 + i);
             // x = ggml_cont(ctx0, ggml_permute(ctx0, x, 1, 0, 2, 3));
             ggml_tensor * query = build_rel_pos_attn(gf, x, model.layers[i + 132].up_encoders_wq, model.layers[i + 132].up_encoders_bq);
@@ -16875,13 +16877,13 @@ struct llm_build_flow : public llm_graph_context {
             cb(q_with_bias_v, "up_encoder_q_with_bias_v", i);
             ggml_tensor * matrix_ac = ggml_mul_mat(ctx0, key, q_with_bias_u);
             ggml_tensor * matrix_bd = ggml_mul_mat(ctx0, p, q_with_bias_v);
-            matrix_bd = build_rel_shift(matrix_bd);
+            matrix_bd = build_rel_shift(gf, matrix_bd);
             ggml_tensor * scores = ggml_scale(ctx0, ggml_add(ctx0, matrix_ac, matrix_bd), 1.0f / sqrtf(float(64.0f)));
             cb(scores, "up_scores", i);
-            ggml_tensor * x_att = build_attn_scores(value, scores, mask, model.layers[i + 132].up_encoders_wo, model.layers[i + 132].up_encoders_bo);
+            ggml_tensor * x_att = build_attn_scores(value, scores, mask, model.layers[i + 132].up_encoders_wo, model.layers[i + 132].up_encoders_bo, "up_encoders", i);
             cb(x_att, "up_x_att", i);
             x = ggml_add(ctx0, residual, x_att);
-            residual =  ggml_dup(ctx0, x);
+            residual =  x;
             x = build_layer_norm(x, model.layers[i + 132].up_encoders_normffn_w, model.layers[i + 132].up_encoders_normffn_b, 1e-12, 16 + i);
             x = build_pos_ffn(x, model.layers[i + 132].up_encoders_ffn_w1, model.layers[i + 132].up_encoders_ffn_b1, model.layers[i + 132].up_encoders_ffn_w2, model.layers[i + 132].up_encoders_ffn_b2);
             cb(x, "up_fn_out", i);
