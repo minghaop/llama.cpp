@@ -557,6 +557,7 @@ ggml_tensor * llm_graph_context::build_layer_norm(
          ggml_tensor * mw,
          ggml_tensor * mb,
          float eps,
+         std::string blk_type,
          int32_t il) const{
     
     // mw = ggml_reshape_4d(ctx0, mw, 1, cur->ne[1], 1, 1);
@@ -567,8 +568,8 @@ ggml_tensor * llm_graph_context::build_layer_norm(
     
     cur = ggml_mul(ctx0, cur, mw);
     cur = ggml_add(ctx0, cur, mb);
-    ggml_set_name(cur, ("layer_norm_" + std::to_string(il)).c_str());
-    cb(cur, ("layer_norm_" + std::to_string(il)).c_str(), -1);
+    ggml_set_name(cur, ("layer_norm_" + blk_type + "_" + std::to_string(il)).c_str());
+    // cb(cur, ("layer_norm_" + std::to_string(il)).c_str(), -1);
     return cur;
 
 }
@@ -619,7 +620,7 @@ ggml_tensor * llm_graph_context::build_linear_no_subsampling(
     cur = ggml_mul_mat(ctx0, linear_mw, cur);
     cur = ggml_add(ctx0, cur, linear_mb);
     ggml_set_name(cur, ("1st_mul_mat" + std::to_string(il)).c_str());
-    cur = build_layer_norm(cur, norm_mw, norm_mb, 1e-05, il);
+    cur = build_layer_norm(cur, norm_mw, norm_mb, 1e-05, "sub_sampling", il);
     // cur = ggml_cont(ctx0, ggml_permute(ctx0, cur, 1, 0, 2, 3));
     ggml_set_name(cur, ("embed_linear_no_sub_sample_" + std::to_string(il)).c_str());
 
@@ -894,17 +895,24 @@ ggml_tensor * llm_graph_context::build_pos_ffn(
 }
 
 ggml_tensor * llm_graph_context::build_upsample_1d(
+        ggml_cgraph * gf,
         ggml_tensor * cur,
         ggml_tensor * mw,
         ggml_tensor * mb) const
 {
+    LLAMA_LOG_INFO("&&&&&&&&&&&&&&& upsample_1d cur shape is: {%d, %d, %d, %d}\n", cur->ne[0], cur->ne[1], cur->ne[2], cur->ne[3]);
     ggml_tensor * up = ggml_interpolate(ctx0, cur, cur->ne[0], cur->ne[1] * 2, cur->ne[2], cur->ne[3], 0);
+    // ggml_tensor * up_reshaped = ggml_cont(ctx0, ggml_permute(ctx0, up, up->ne[1], up->ne[0], cur->ne[2], cur->ne[3]));
     cb(up, "interpolate", -1);
-    ggml_tensor * pad = ggml_pad(ctx0, up, 0, 4, 0, 0);
+    ggml_tensor * zeros = ggml_new_tensor_4d(ctx0, GGML_TYPE_F32, up->ne[0], 4, up->ne[2], up->ne[3]);
+    zeros = ggml_scale(ctx0, zeros, 0.0f);
+    ggml_tensor * pad = ggml_concat(ctx0, zeros, up, 1);
+    cb(pad, "upsample_pad", -1);
     pad = ggml_cont(ctx0, ggml_permute(ctx0, pad, 1, 0, 2, 3));
     ggml_tensor * out = ggml_conv_1d(ctx0, mw, pad, 1, 0, 1);
     mb = ggml_reshape_3d(ctx0, ggml_cont(ctx0, mb), 1, cur->ne[0], 1);
     out = ggml_add(ctx0, out, mb);
+    cb(out, "upsample_conv_1d", -1);
     return out;
 }
 
@@ -1209,7 +1217,7 @@ ggml_tensor * llm_graph_context::causal_block1d_forward(
         model_bias = model.f_blk_norm_b;
     }
     x = ggml_cont(ctx0, ggml_permute(ctx0, x, 1, 0, 2, 3));
-    x = build_layer_norm(x, model_weight, model_bias, 1e-5f, 100);
+    x = build_layer_norm(x, model_weight, model_bias, 1e-5f, "blk_1d", 100);
     x = ggml_cont(ctx0, ggml_permute(ctx0, x, 1, 0, 2, 3));
     x = ggml_mul(ctx0, x, ggml_tanh(ctx0, ggml_log(ctx0, ggml_scale(ctx0, ggml_exp(ctx0, x), 1.0f))));
     if (mask)
@@ -1315,11 +1323,11 @@ ggml_tensor * llm_graph_context::build_causal_cond_decoder(
     attn_mask = build_repeat(attn_mask, 1, 1584, 1);
     attn_mask = mask_to_bias(attn_mask, mask_to_bias_one, mask_to_bias_neg, x->type);
     for (size_t i = 0; i < 4; ++i) {
-        x = build_layer_norm(x, model.layers[226 + i].down_block1_norm1_w, model.layers[226 + i].down_block1_norm1_b, 1e-5f, 20 + i);
+        x = build_layer_norm(x, model.layers[226 + i].down_block1_norm1_w, model.layers[226 + i].down_block1_norm1_b, 1e-5f, "down_block", 20 + i);
         ggml_tensor * attn_out = build_basic_attn(x, attn_mask, attn_bias,  mask_tmpl, 226 + i, "down_block", model);
         x = ggml_add(ctx0, attn_out, x);
 
-        x = build_layer_norm(x, model.layers[226 + i].down_block1_norm3_w, model.layers[226 + i].down_block1_norm3_b, 1e-5f, 24 + i);
+        x = build_layer_norm(x, model.layers[226 + i].down_block1_norm3_w, model.layers[226 + i].down_block1_norm3_b, 1e-5f, "down_block", 24 + i);
         ggml_tensor * ff_out = ggml_mul_mat(ctx0, model.layers[226 + i].down_block1_ffn_w0, x);
         ff_out = ggml_add(ctx0, ff_out, model.layers[226 + i].down_block1_ffn_b0);
         ff_out = ggml_gelu(ctx0, ff_out);
@@ -1343,10 +1351,10 @@ ggml_tensor * llm_graph_context::build_causal_cond_decoder(
         attn_mask = mask_to_bias(attn_mask, mask_to_bias_one, mask_to_bias_neg, x->type);
         
         for (size_t j = 0; j < 4; ++j) {
-            x = build_layer_norm(x, model.mid_block_sub_layers[i * 4 + j].mid_block1_norm1_w, model.mid_block_sub_layers[i * 4 + j].mid_block1_norm1_b, 1e-5f, 28 + i + j);
+            x = build_layer_norm(x, model.mid_block_sub_layers[i * 4 + j].mid_block1_norm1_w, model.mid_block_sub_layers[i * 4 + j].mid_block1_norm1_b, 1e-5f, "mid_block", 28 + i + j);
             ggml_tensor * attn_out = build_basic_attn(x, attn_mask, attn_bias, mask_tmpl, i * 4 + j, "mid_block", model);
             x = ggml_add(ctx0, attn_out, x);
-            x = build_layer_norm(x, model.mid_block_sub_layers[i * 4 + j].mid_block1_norm3_w, model.mid_block_sub_layers[i * 4 + j].mid_block1_norm1_b, 1e-5f, 76 + i +j);
+            x = build_layer_norm(x, model.mid_block_sub_layers[i * 4 + j].mid_block1_norm3_w, model.mid_block_sub_layers[i * 4 + j].mid_block1_norm1_b, 1e-5f, "mid_block", 76 + i +j);
             ggml_tensor * ff_out = ggml_mul_mat(ctx0, model.mid_block_sub_layers[i *4 + j].mid_block1_ffn_w0, x);
             ff_out = ggml_add(ctx0, ff_out, model.mid_block_sub_layers[i *4 + j].mid_block1_ffn_b0);
             ff_out = ggml_gelu(ctx0, ff_out);
@@ -1365,10 +1373,10 @@ ggml_tensor * llm_graph_context::build_causal_cond_decoder(
     x = causal_resnet_block1d_forward(x, mask_up, t, 0, "up_block", pad_list, model);
     attn_mask = mask_to_bias(attn_mask, mask_to_bias_one, mask_to_bias_neg, x->type);
     for (size_t i = 0; i < 4; ++i) {
-        x = build_layer_norm(x, model.layers[1059 + i].up_block1_norm1_w, model.layers[1059 + i].up_block1_norm1_b, 1e-5f, 124 + i);
+        x = build_layer_norm(x, model.layers[1059 + i].up_block1_norm1_w, model.layers[1059 + i].up_block1_norm1_b, 1e-5f, "up_block", 124 + i);
         ggml_tensor * attn_out = build_basic_attn(x, attn_mask, attn_bias, mask_tmpl, 1059 + i, "up_block", model);
         x = ggml_add(ctx0, attn_out, x);
-        x = build_layer_norm(x, model.layers[1059 + i].up_block1_norm3_w, model.layers[1059 + i].up_block1_norm3_b, 1e-5f, 128 + i);
+        x = build_layer_norm(x, model.layers[1059 + i].up_block1_norm3_w, model.layers[1059 + i].up_block1_norm3_b, 1e-5f, "up_block", 128 + i);
         ggml_tensor * ff_out = ggml_mul_mat(ctx0, model.layers[1059 + i].up_block1_ffn_w0, x);
         ff_out = ggml_add(ctx0, ff_out, model.layers[1059 + i].up_block1_ffn_b0);
         ff_out = ggml_gelu(ctx0, ff_out);
