@@ -564,7 +564,8 @@ struct llm_graph_context {
          ggml_tensor * cur,
          ggml_tensor * mw,
          ggml_tensor * mb,
-         float eps, 
+         float eps,
+         std::string blk_type,
          int32_t il) const;
     
     ggml_tensor * build_F_normalize(
@@ -637,6 +638,7 @@ struct llm_graph_context {
              ggml_tensor * mb_2) const;
     
     ggml_tensor * build_upsample_1d(
+         ggml_cgraph * gf,
          ggml_tensor * cur,
          ggml_tensor * mw,
          ggml_tensor * mb) const;
