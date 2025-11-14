@@ -16927,7 +16927,8 @@ struct llm_build_flow : public llm_graph_context {
         ggml_set_name(mu, "mu");
         mask = ggml_reshape_3d(ctx0, mask, mask->ne[0], 1, mask->ne[1]);
         ggml_tensor * rand_noise = build_inp_rand_noise();
-        ggml_tensor * z = ggml_view_3d(ctx0, rand_noise, mu->ne[0], 80, 1, rand_noise->nb[0], rand_noise->nb[1], 0);
+        ggml_tensor * z = ggml_view_3d(ctx0, rand_noise, mu->ne[0], rand_noise->ne[1], rand_noise->ne[2], rand_noise->nb[1], rand_noise->nb[2], 0);
+        z = ggml_cont(ctx0, z);
         ggml_set_name(z, "z");
         ggml_tensor * feat = build_solve_euler(gf, z, mu, mask, spks, cond, model);
         // ggml_tensor * sliced = ggml_view_3d(ctx0, feat, feat->ne[0] - mel_len1, feat->ne[1], feat->ne[2], feat->nb[0], feat->nb[1], mel_len1 * feat->nb[0]);
