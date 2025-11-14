@@ -692,25 +692,28 @@ struct llm_graph_context {
     ggml_tensor * causal_conv1d_forward(
         ggml_tensor * x,
         std::string mode,
-        int64_t layer_id,
-        int64_t blk_id,
+        int32_t layer_id,
+        int32_t blk_id,
         std::vector<ggml_tensor *> & pad_list,
-        const llama_model & model) const;
+        const llama_model & model,
+        int32_t step) const;
     
     ggml_tensor * causal_block1d_forward(
         ggml_tensor * x,
         ggml_tensor * mask,
         std::string mode,
-        int64_t layer_id,
-        int64_t blk_id,
+        int32_t layer_id,
+        int32_t blk_id,
         std::vector<ggml_tensor *> & pad_list,
-        const llama_model & model) const;
+        const llama_model & model,
+        int32_t step) const;
     
     ggml_tensor * causal_resnet_block1d_forward(
         ggml_tensor * x,
         ggml_tensor * mask,
         ggml_tensor * t_emb,
-        int64_t layer_id,
+        int32_t step,
+        int32_t layer_id,
         std::string mode,
         std::vector<ggml_tensor *> & pad_list,
         const llama_model & model) const;
@@ -735,7 +738,8 @@ struct llm_graph_context {
          ggml_tensor * mask_to_bias_neg,
          ggml_tensor * attn_bias,
          std::vector<ggml_tensor *> & pad_list,
-         const llama_model & model) const;
+         const llama_model & model,
+         int32_t step) const;
     
     ggml_tensor * build_repeat(ggml_tensor * cur, int32_t current_length, int32_t target_length, int32_t dim) const;
     
