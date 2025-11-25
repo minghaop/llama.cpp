@@ -1039,6 +1039,72 @@ class GGUFWriter:
         self.add_float32(Keys.CosyVoiceFlow.decoder.TRAIN_CFG_RATE, rate)
     
 
+
+
+    # CosyVoiceHiFT specific
+    #
+    def add_cosyvoicehift_in_channels(self, value: int) -> None:
+        self.add_uint32(Keys.CosyVoiceHiFT.IN_CHANNELS, value)
+
+    def add_cosyvoicehift_base_channels(self, value: int) -> None:
+        self.add_uint32(Keys.CosyVoiceHiFT.BASE_CHANNELS, value)
+
+    def add_cosyvoicehift_nb_harmonics(self, value: int) -> None:
+        self.add_uint32(Keys.CosyVoiceHiFT.NB_HARMONICS, value)
+
+    def add_cosyvoicehift_sampling_rate(self, value: int) -> None:
+        self.add_uint32(Keys.CosyVoiceHiFT.SAMPLING_RATE, value)
+
+    def add_cosyvoicehift_nsf_alpha(self, value: float) -> None:
+        self.add_float32(Keys.CosyVoiceHiFT.NSF_ALPHA, value)
+
+    def add_cosyvoicehift_nsf_sigma(self, value: float) -> None:
+        self.add_float32(Keys.CosyVoiceHiFT.NSF_SIGMA, value)
+
+    def add_cosyvoicehift_nsf_voiced_threshold(self, value: float) -> None:
+        self.add_float32(Keys.CosyVoiceHiFT.NSF_VOICED_THRESHOLD, value)
+
+    def add_cosyvoicehift_lrelu_slope(self, value: float) -> None:
+        self.add_float32(Keys.CosyVoiceHiFT.LRELU_SLOPE, value)
+
+    def add_cosyvoicehift_audio_limit(self, value: float) -> None:
+        self.add_float32(Keys.CosyVoiceHiFT.AUDIO_LIMIT, value)
+
+    def add_cosyvoicehift_upsample_rates(self, value: Sequence[int]) -> None:
+        self.add_array(Keys.CosyVoiceHiFT.UPSAMPLE_RATES, value)
+
+    def add_cosyvoicehift_upsample_kernel_sizes(self, value: Sequence[int]) -> None:
+        self.add_array(Keys.CosyVoiceHiFT.UPSAMPLE_KERNEL_SIZES, value)
+
+    def add_cosyvoicehift_istft_n_fft(self, value: int) -> None:
+        self.add_uint32(Keys.CosyVoiceHiFT.ISTFT_N_FFT, value)
+
+    def add_cosyvoicehift_istft_hop_len(self, value: int) -> None:
+        self.add_uint32(Keys.CosyVoiceHiFT.ISTFT_HOP_LEN, value)
+
+    def add_cosyvoicehift_resblock_kernel_sizes(self, value: Sequence[int]) -> None:
+        self.add_array(Keys.CosyVoiceHiFT.RESBLOCK_KERNEL_SIZES, value)
+
+    def add_cosyvoicehift_resblock_dilation_sizes(self, value: Sequence[int]) -> None:
+        self.add_array(Keys.CosyVoiceHiFT.RESBLOCK_DILATION_SIZES, value)
+
+    def add_cosyvoicehift_source_resblock_kernel_sizes(self, value: Sequence[int]) -> None:
+        self.add_array(Keys.CosyVoiceHiFT.SOURCE_RESBLOCK_KERNEL_SIZES, value)
+
+    def add_cosyvoicehift_source_resblock_dilation_sizes(self, value: Sequence[int]) -> None:
+        self.add_array(Keys.CosyVoiceHiFT.SOURCE_RESBLOCK_DILATION_SIZES, value)
+
+    # F0 Predictor nested fields
+    def add_cosyvoicehift_f0_predictor_num_class(self, value: int) -> None:
+        self.add_uint32(Keys.CosyVoiceHiFT.f0_predictor.NUM_CLASS, value)
+
+    def add_cosyvoicehift_f0_predictor_in_channels(self, value: int) -> None:
+        self.add_uint32(Keys.CosyVoiceHiFT.f0_predictor.IN_CHANNELS, value)
+
+    def add_cosyvoicehift_f0_predictor_cond_channels(self, value: int) -> None:
+        self.add_uint32(Keys.CosyVoiceHiFT.f0_predictor.COND_CHANNELS, value)
+
+
     def add_chat_template(self, value: str | Sequence[Mapping[str, str]]) -> None:
         if not isinstance(value, str):
             template_default = None

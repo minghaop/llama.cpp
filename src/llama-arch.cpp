@@ -86,7 +86,8 @@ static const std::map<llm_arch, const char *> LLM_ARCH_NAMES = {
     { LLM_ARCH_SMOLLM3,          "smollm3"          },
     { LLM_ARCH_LFM2,             "lfm2"             },
     { LLM_ARCH_UNKNOWN,          "(unknown)"        },
-    { LLM_ARCH_COSYVOICEFLOW,    "CosyVoiceFlow"   },
+    { LLM_ARCH_COSYVOICEFLOW,    "CosyVoiceFlow"    },
+    { LLM_ARCH_COSYVOICEHIFT,    "CosyVoiceHift"    },
 };
 
 static const std::map<llm_kv, const char *> LLM_KV_NAMES = {
@@ -2066,6 +2067,56 @@ static const std::map<llm_arch, std::map<llm_tensor, const char *>> LLM_TENSOR_N
             { LLM_TENSOR_PROJ_BIAS, "encoder_proj"},
             { LLM_TENSOR_SPK_EMBED_AFFINE_LAYER_BIAS, "spk_embed_affine_layer"},
         }
+        
+    },
+    {
+        LLM_ARCH_COSYVOICEHIFT,
+        {
+            { LLM_TENSOR_CONV_POST_BIAS,        "conv_post" },
+            { LLM_TENSOR_CONV_POST_WEIGHT,      "conv_post" },
+            { LLM_TENSOR_CONV_PRE_BIAS,         "conv_pre" },
+            { LLM_TENSOR_CONV_PRE_WEIGHT,       "conv_pre" },
+
+            { LLM_TENSOR_F0_PREDICTOR_CLASSIFIER_BIAS,   "f0_predictor.classifier" },
+            { LLM_TENSOR_F0_PREDICTOR_CLASSIFIER_WEIGHT, "f0_predictor.classifier" },
+            { LLM_TENSOR_F0_PREDICTOR_CONDNET_BIAS,    "f0_predictor.condnet.%d" },
+            { LLM_TENSOR_F0_PREDICTOR_CONDNET_WEIGHT,  "f0_predictor.condnet.%d" },
+
+            { LLM_TENSOR_M_SOURCE_L_LINEAR_BIAS,   "m_source.l_linear" },
+            { LLM_TENSOR_M_SOURCE_L_LINEAR_WEIGHT, "m_source.l_linear" },
+
+            // ResBlock 0-8
+            { LLM_TENSOR_RESBLOCKS_ACTIVATIONS1_ALPHA, "resblocks.%d.activations1.%d" },
+            { LLM_TENSOR_RESBLOCKS_ACTIVATIONS2_ALPHA, "resblocks.%d.activations2.%d" },
+            
+            { LLM_TENSOR_RESBLOCKS_CONVS1_BIAS,        "resblocks.%d.convs1.%d" },
+            { LLM_TENSOR_RESBLOCKS_CONVS1_WEIGHT,      "resblocks.%d.convs1.%d" },
+            
+            { LLM_TENSOR_RESBLOCKS_CONVS2_BIAS,        "resblocks.%d.convs2.%d" },
+            { LLM_TENSOR_RESBLOCKS_CONVS2_WEIGHT,      "resblocks.%d.convs2.%d" },
+
+           
+
+            { LLM_TENSOR_SOURCE_DOWNS_BIAS,   "source_downs.%d" },
+            { LLM_TENSOR_SOURCE_DOWNS_WEIGHT, "source_downs.%d" },
+           
+
+            // Source ResBlock 0-2
+            { LLM_TENSOR_SOURCE_RESBLOCKS_ACTIVATIONS1_ALPHA, "source_resblocks.%d.activations1.%d" },
+            
+            { LLM_TENSOR_SOURCE_RESBLOCKS_ACTIVATIONS2_ALPHA, "source_resblocks.%d.activations2.%d" },
+
+            { LLM_TENSOR_SOURCE_RESBLOCKS_CONVS1_BIAS,        "source_resblocks.%d.convs1.%d" },
+            { LLM_TENSOR_SOURCE_RESBLOCKS_CONVS1_WEIGHT,      "source_resblocks.%d.convs1.%d" },
+            
+            { LLM_TENSOR_SOURCE_RESBLOCKS_CONVS2_BIAS,        "source_resblocks.%d.convs2.%d" },
+            { LLM_TENSOR_SOURCE_RESBLOCKS_CONVS2_WEIGHT,      "source_resblocks.%d.convs2.%d" },
+            
+            // up 0-2
+            { LLM_TENSOR_UPS_BIAS,   "ups.%d" },
+            { LLM_TENSOR_UPS_WEIGHT, "ups.%d" },
+            
+        }
     },
     {
         LLM_ARCH_UNKNOWN,
@@ -2409,6 +2460,47 @@ static const std::map<llm_tensor, llm_tensor_info> LLM_TENSOR_INFOS = {
     { LLM_TENSOR_UP_LAYER_CONV_BIAS, {LLM_TENSOR_LAYER_REPEATING, GGML_OP_ADD} },
     { LLM_TENSOR_PROJ_BIAS, {LLM_TENSOR_LAYER_REPEATING, GGML_OP_ADD} },
     { LLM_TENSOR_SPK_EMBED_AFFINE_LAYER_BIAS, {LLM_TENSOR_LAYER_REPEATING, GGML_OP_ADD} },
+
+    //--------------CosyVoiceHift-------------------------
+    {LLM_TENSOR_CONV_POST_BIAS,        {LLM_TENSOR_LAYER_REPEATING, GGML_OP_ADD}},
+    {LLM_TENSOR_CONV_POST_WEIGHT,      {LLM_TENSOR_LAYER_REPEATING, GGML_OP_MUL_MAT}},
+    {LLM_TENSOR_CONV_PRE_BIAS,         {LLM_TENSOR_LAYER_REPEATING, GGML_OP_ADD}},
+    {LLM_TENSOR_CONV_PRE_WEIGHT,       {LLM_TENSOR_LAYER_REPEATING, GGML_OP_MUL_MAT}},
+
+    {LLM_TENSOR_F0_PREDICTOR_CLASSIFIER_BIAS,   {LLM_TENSOR_LAYER_OUTPUT, GGML_OP_ADD}},
+    {LLM_TENSOR_F0_PREDICTOR_CLASSIFIER_WEIGHT, {LLM_TENSOR_LAYER_OUTPUT, GGML_OP_MUL_MAT}},
+    {LLM_TENSOR_F0_PREDICTOR_CONDNET_BIAS,      {LLM_TENSOR_LAYER_REPEATING, GGML_OP_ADD}},
+    {LLM_TENSOR_F0_PREDICTOR_CONDNET_WEIGHT,    {LLM_TENSOR_LAYER_REPEATING, GGML_OP_MUL_MAT}},
+
+    {LLM_TENSOR_M_SOURCE_L_LINEAR_BIAS,   {LLM_TENSOR_LAYER_REPEATING, GGML_OP_ADD}},
+    {LLM_TENSOR_M_SOURCE_L_LINEAR_WEIGHT, {LLM_TENSOR_LAYER_REPEATING, GGML_OP_MUL_MAT}},
+
+    // ResBlock 0-8
+    {LLM_TENSOR_RESBLOCKS_ACTIVATIONS1_ALPHA, {LLM_TENSOR_LAYER_REPEATING, GGML_OP_MUL_MAT}}, // Assuming alpha is a weight-like parameter
+    {LLM_TENSOR_RESBLOCKS_ACTIVATIONS2_ALPHA, {LLM_TENSOR_LAYER_REPEATING, GGML_OP_MUL_MAT}}, // Assuming alpha is a weight-like parameter
+
+    {LLM_TENSOR_RESBLOCKS_CONVS1_BIAS,        {LLM_TENSOR_LAYER_REPEATING, GGML_OP_ADD}},
+    {LLM_TENSOR_RESBLOCKS_CONVS1_WEIGHT,      {LLM_TENSOR_LAYER_REPEATING, GGML_OP_MUL_MAT}},
+
+    {LLM_TENSOR_RESBLOCKS_CONVS2_BIAS,        {LLM_TENSOR_LAYER_REPEATING, GGML_OP_ADD}},
+    {LLM_TENSOR_RESBLOCKS_CONVS2_WEIGHT,      {LLM_TENSOR_LAYER_REPEATING, GGML_OP_MUL_MAT}},
+
+    {LLM_TENSOR_SOURCE_DOWNS_BIAS,   {LLM_TENSOR_LAYER_REPEATING, GGML_OP_ADD}},
+    {LLM_TENSOR_SOURCE_DOWNS_WEIGHT, {LLM_TENSOR_LAYER_REPEATING, GGML_OP_MUL_MAT}},
+
+    // Source ResBlock 0-2
+    {LLM_TENSOR_SOURCE_RESBLOCKS_ACTIVATIONS1_ALPHA, {LLM_TENSOR_LAYER_REPEATING, GGML_OP_MUL_MAT}}, // Assuming alpha is a weight-like parameter
+    {LLM_TENSOR_SOURCE_RESBLOCKS_ACTIVATIONS2_ALPHA, {LLM_TENSOR_LAYER_REPEATING, GGML_OP_MUL_MAT}}, // Assuming alpha is a weight-like parameter
+
+    {LLM_TENSOR_SOURCE_RESBLOCKS_CONVS1_BIAS,        {LLM_TENSOR_LAYER_REPEATING, GGML_OP_ADD}},
+    {LLM_TENSOR_SOURCE_RESBLOCKS_CONVS1_WEIGHT,      {LLM_TENSOR_LAYER_REPEATING, GGML_OP_MUL_MAT}},
+
+    {LLM_TENSOR_SOURCE_RESBLOCKS_CONVS2_BIAS,        {LLM_TENSOR_LAYER_REPEATING, GGML_OP_ADD}},
+    {LLM_TENSOR_SOURCE_RESBLOCKS_CONVS2_WEIGHT,      {LLM_TENSOR_LAYER_REPEATING, GGML_OP_MUL_MAT}},
+
+    // up 0-2
+    {LLM_TENSOR_UPS_BIAS,   {LLM_TENSOR_LAYER_REPEATING, GGML_OP_ADD}},
+    {LLM_TENSOR_UPS_WEIGHT, {LLM_TENSOR_LAYER_REPEATING, GGML_OP_MUL_MAT}},
 
 };
 

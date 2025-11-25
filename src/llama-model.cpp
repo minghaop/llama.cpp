@@ -442,7 +442,7 @@ void llama_model::load_arch(llama_model_loader & ml) {
 
 void llama_model::load_hparams(llama_model_loader & ml) {
     const gguf_context * ctx = ml.meta.get();
-
+    LLAMA_LOG_INFO("loading model hyperparameters from GGUF metadata\n");
     // get metadata as string
     for (int i = 0; i < gguf_get_n_kv(ctx); i++) {
         gguf_type type = gguf_get_kv_type(ctx, i);
@@ -513,8 +513,9 @@ void llama_model::load_hparams(llama_model_loader & ml) {
         // std::fill(hparams.decoder_channels.begin(), hparams.decoder_channels.end(), 256);
         // std::fill(hparams.swa_layers.begin(), hparams.swa_layers.end(), 0);
         
-    }
-    else {
+    } else if (hparams.use_hift) {
+        hparams.n_embd = 512;
+    } else {
         ml.get_key(LLM_KV_CONTEXT_LENGTH,    hparams.n_ctx_train);
         ml.get_key(LLM_KV_EMBEDDING_LENGTH,  hparams.n_embd);
         ml.get_key(LLM_KV_BLOCK_COUNT,       hparams.n_layer);
@@ -1793,12 +1794,15 @@ bool llama_model::load_tensors(llama_model_loader & ml) {
     const auto & n_gpu_layers = params.n_gpu_layers;
     const auto & use_mlock    = params.use_mlock;
     const auto & tensor_split = params.tensor_split;
-
+    LLAMA_LOG_INFO("%s: loading model tensors...\n", __func__);
     int n_layer = hparams.n_layer;
     if (hparams.use_flow){
         n_layer = 1127;
         hparams.n_layer = n_layer;
-    }else {
+    } else if (hparams.use_flow) {
+        n_layer = 246;
+        hparams.n_layer = n_layer;
+    } else {
         n_layer = hparams.n_layer;
     }
     const bool use_mmap_buffer = true;
@@ -1901,11 +1905,16 @@ bool llama_model::load_tensors(llama_model_loader & ml) {
     };
     const auto TENSOR_DUPLICATED   = llama_model_loader::TENSOR_DUPLICATED;
     const auto TENSOR_NOT_REQUIRED = llama_model_loader::TENSOR_NOT_REQUIRED;
+    LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& check tensor load1 !\n");
 
     // create tensors for the weights
+    // const int64_t n_embd        = hparams.n_embd;
+    // const int64_t n_embd_head_k = hparams.n_embd_head_k;
+    // const int64_t n_ff          = hparams.n_ff();
+    // if (!hparams.use_flow && !hparams.use_hift){
     {
         // note: cast to int64_t since we will use these for the tensor dimensions
-        const int64_t n_head        = hparams.n_head();
+        // const int64_t n_head        = hparams.n_head();
         const int64_t n_head_kv     = hparams.n_head_kv();
         const int64_t n_embd        = hparams.n_embd;
         const int64_t n_embd_k_gqa  = hparams.n_embd_k_gqa();
@@ -1920,7 +1929,9 @@ bool llama_model::load_tensors(llama_model_loader & ml) {
         const int64_t n_expert      = hparams.n_expert;
         const int64_t n_expert_used = hparams.n_expert_used;
         const int64_t n_ctx_train   = hparams.n_ctx_train;
-
+    
+    
+        LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& check tensor load2 !\n");
 
         if (n_expert > 0 && hparams.n_expert_used == 0) {
             throw std::runtime_error("model has expert layers but no expert layers are used");
@@ -1931,6 +1942,7 @@ bool llama_model::load_tensors(llama_model_loader & ml) {
         ggml_backend_buffer_type_t first_moved_from_buft = nullptr;
         ggml_backend_buffer_type_t first_moved_to_buft = nullptr;
 
+        LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& check tensor load3 !\n");
         auto create_tensor = [&](const LLM_TN_IMPL & tn, const std::initializer_list<int64_t> & ne, int flags) -> ggml_tensor * {
 
             auto name = tn.str();          // 先拿到字符串
@@ -2059,6 +2071,7 @@ bool llama_model::load_tensors(llama_model_loader & ml) {
         };
         layers.resize(n_layer);
         // TODO: move to a separate function
+        LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& check tensor load4 !\n");
         const auto tn = LLM_TN(arch);
         switch (arch) {
             case LLM_ARCH_LLAMA:
@@ -5099,7 +5112,7 @@ bool llama_model::load_tensors(llama_model_loader & ml) {
                         if (!hparams.is_recurrent(i)) {
                             layer.attn_q_norm = create_tensor(tn(LLM_TENSOR_ATTN_Q_NORM, "weight", i), {n_embd_head_k}, 0);
                             layer.attn_k_norm = create_tensor(tn(LLM_TENSOR_ATTN_K_NORM, "weight", i), {n_embd_head_k}, 0);
-                            GGML_ASSERT(n_embd_v_gqa == n_embd_k_gqa);
+                            // GGML_ASSERT(n_embd_v_gqa == n_embd_k_gqa);
 
                             layer.wq = create_tensor(tn(LLM_TENSOR_ATTN_Q, "weight", i), {n_embd, n_embd}, 0);
                             layer.wk = create_tensor(tn(LLM_TENSOR_ATTN_K, "weight", i), {n_embd, hparams.n_embd_k_gqa(i)}, 0);
@@ -5261,8 +5274,8 @@ bool llama_model::load_tensors(llama_model_loader & ml) {
                             sub_layer.mid_block1_ffn_w2 = create_tensor(tn(LLM_TENSOR_MID_BLOCKS1_FF_2_WEIGHT, "weight", i -280, j), {1024, 256}, 0);
                             sub_layer.mid_block1_ffn_b0 = create_tensor(tn(LLM_TENSOR_MID_BLOCKS1_FF_0_BIAS, "bias", i - 280, j), {1024}, 0);
                             sub_layer.mid_block1_ffn_b2 = create_tensor(tn(LLM_TENSOR_MID_BLOCKS1_FF_2_BIAS, "bias", i - 280, j), {256}, 0);
+                        }
                     }
-                }
 
                     up_blk_mlp_w = create_tensor(tn(LLM_TENSOR_UP_BLOCKS_MLP_WEIGHT, "weight", 1047), {1024, 256}, 0);
                     up_blk1_conv_w = create_tensor(tn(LLM_TENSOR_UP_BLOCK1_WEIGHT, "weight", 1048), {3, 512, 256}, 0);
@@ -5307,6 +5320,79 @@ bool llama_model::load_tensors(llama_model_loader & ml) {
 
                     f_proj_w = create_tensor(tn(LLM_TENSOR_FINAL_PROJ_WEIGHT, "weight"), {1, 256, 80}, 0);
                     f_proj_b = create_tensor(tn(LLM_TENSOR_FINAL_PROJ_BIAS, "bias"), {80}, 0);
+                } break;
+            case LLM_ARCH_COSYVOICEHIFT:
+                {
+                    f0_w_1st = create_tensor(tn(LLM_TENSOR_F0_PREDICTOR_CONDNET_WEIGHT, "weight", 0), {3, 80, 512}, 0);
+                    f0_b_1st = create_tensor(tn(LLM_TENSOR_F0_PREDICTOR_CONDNET_BIAS, "bias", 0), {512}, 0);
+                    conv_pre_w = create_tensor(tn(LLM_TENSOR_CONV_PRE_WEIGHT, "weight", 1), {7, 80, 512}, 0);
+                    conv_pre_b = create_tensor(tn(LLM_TENSOR_CONV_PRE_BIAS, "bias", 1), {512}, 0);
+                    conv_post_w = create_tensor(tn(LLM_TENSOR_CONV_POST_WEIGHT, "weight", 2), {7, 64, 18}, 0);
+                    conv_post_b = create_tensor(tn(LLM_TENSOR_CONV_POST_BIAS, "bias", 2), {18}, 0);
+
+                    for(int i = 2; i < 10; i += 2){
+                        auto & layer = layers[i];
+
+                        layer.f0_w = create_tensor(tn(LLM_TENSOR_F0_PREDICTOR_CONDNET_WEIGHT, "weight", i), {3, 512, 512}, 0);
+                        layer.f0_b = create_tensor(tn(LLM_TENSOR_F0_PREDICTOR_CONDNET_BIAS, "bias", i), {512}, 0);
+                    }
+
+                    m_source_w =  create_tensor(tn(LLM_TENSOR_M_SOURCE_L_LINEAR_WEIGHT, "weight", 3), {9, 1}, 0);
+                    m_source_b =  create_tensor(tn(LLM_TENSOR_M_SOURCE_L_LINEAR_BIAS, "bias", 3), {1}, 0);
+
+                    std::vector<int> resblk_vec = {3, 7, 11};
+                    std::vector<int> dims = {256, 128, 64};
+                    for(int i = 11; i < 20; i++) {
+                        auto & layer = layers[i];
+                        int index = (i - 11) % 3;
+                        int dim_value = dims[index];
+
+                        for (int j = 0; j < 3; j++) {
+                            layer.resblock_act1 = create_tensor(tn(LLM_TENSOR_RESBLOCKS_ACTIVATIONS1_ALPHA, "alpha", i - 11, j), {dim_value}, 0);
+                            layer.resblock_act2 = create_tensor(tn(LLM_TENSOR_RESBLOCKS_ACTIVATIONS2_ALPHA, "alpha", i - 11, j), {dim_value}, 0);
+
+                            layer.reblock_conv1_w = create_tensor(tn(LLM_TENSOR_RESBLOCKS_CONVS1_WEIGHT, "weight", i - 11, j), {resblk_vec[index], dim_value, dim_value}, 0);
+                            layer.reblock_conv1_b = create_tensor(tn(LLM_TENSOR_RESBLOCKS_CONVS1_BIAS, "bias", i - 11, j), {dim_value}, 0);
+
+                            layer.reblock_conv2_w = create_tensor(tn(LLM_TENSOR_RESBLOCKS_CONVS2_WEIGHT, "weight", i - 11, j), {resblk_vec[index], dim_value, dim_value}, 0);
+                            layer.reblock_conv2_b = create_tensor(tn(LLM_TENSOR_RESBLOCKS_CONVS2_BIAS, "bias", i - 11, j), {dim_value}, 0);
+                        }
+                    }
+
+                    std::vector<int> source_down_vec = {30, 6, 1};
+                    for(int i = 20; i < 23; i++) {
+                        auto & layer = layers[i];
+                        int index = i - 20; 
+                        layer.source_downs_w = create_tensor(tn(LLM_TENSOR_SOURCE_DOWNS_WEIGHT, "weight", index), {source_down_vec[index], 18, dims[index]}, 0);
+                        layer.source_downs_b = create_tensor(tn(LLM_TENSOR_SOURCE_DOWNS_BIAS, "bias", index), {dims[index]}, 0);
+                    }
+
+                    for(int i = 23; i < 26; i++) {
+                        auto & layer = layers[i];
+                        int index = (i - 23) % 3;
+                        if(index == 0) index += 1;
+                        int dim_value = dims[index];
+
+                        for (int j = 0; j < 3; j++) {
+                            layer.source_resblock_act1 = create_tensor(tn(LLM_TENSOR_SOURCE_RESBLOCKS_ACTIVATIONS1_ALPHA, "alpha", i - 23, j), {dim_value}, 0);
+                            layer.source_resblock_act2 = create_tensor(tn(LLM_TENSOR_SOURCE_RESBLOCKS_ACTIVATIONS2_ALPHA, "alpha", i - 23, j), {dim_value}, 0);
+
+                            layer.source_reblock_conv1_w = create_tensor(tn(LLM_TENSOR_SOURCE_RESBLOCKS_CONVS1_WEIGHT, "weight", i - 23, j), {resblk_vec[index], dim_value, dim_value}, 0);
+                            layer.source_reblock_conv1_b = create_tensor(tn(LLM_TENSOR_SOURCE_RESBLOCKS_CONVS1_BIAS, "bias", i - 23, j), {dim_value}, 0);
+
+                            layer.source_reblock_conv2_w = create_tensor(tn(LLM_TENSOR_SOURCE_RESBLOCKS_CONVS2_WEIGHT, "weight", i - 23, j), {resblk_vec[index], dim_value, dim_value}, 0);
+                            layer.source_reblock_conv2_b = create_tensor(tn(LLM_TENSOR_SOURCE_RESBLOCKS_CONVS2_BIAS, "bias", i - 23, j), {dim_value}, 0);
+                        }
+                    }
+
+                    std::vector<int> ups_vec = {16, 11, 7};
+                    for(int i = 26; i < 29; i++) {
+                        auto & layer = layers[i];
+                        int index = i - 26;
+                        layer.ups_w = create_tensor(tn(LLM_TENSOR_UPS_WEIGHT, "weight", index), {ups_vec[index], dims[index], dims[index] * 2}, 0);
+                        layer.ups_b = create_tensor(tn(LLM_TENSOR_UPS_BIAS, "bias", index), {dims[index]}, 0);
+                    }
+
                 } break;
             default:
                 throw std::runtime_error("unknown architecture");
@@ -5519,7 +5605,7 @@ void llama_model::print_info() const {
     LLAMA_LOG_INFO("%s: arch             = %s\n",     __func__, arch_name().c_str());
     LLAMA_LOG_INFO("%s: vocab_only       = %d\n",     __func__, hparams.vocab_only);
 
-    if (!hparams.vocab_only && !hparams.use_flow) {
+    if (!hparams.vocab_only && !hparams.use_flow && !hparams.use_hift) {
         LLAMA_LOG_INFO("%s: n_ctx_train      = %u\n",     __func__, hparams.n_ctx_train);
         LLAMA_LOG_INFO("%s: n_embd           = %u\n",     __func__, hparams.n_embd);
         LLAMA_LOG_INFO("%s: n_layer          = %u\n",     __func__, hparams.n_layer);
@@ -5635,10 +5721,9 @@ void llama_model::print_info() const {
         LLAMA_LOG_INFO("%s: expert_weights_scale = %.1f\n",   __func__, hparams.expert_weights_scale);
         LLAMA_LOG_INFO("%s: expert_weights_norm  = %d\n",     __func__, hparams.expert_weights_norm);
     }
-    if (!hparams.use_flow) {
+    if (!hparams.use_flow && !hparams.use_hift) {
         vocab.print_info();
     }
-    
 }
 
 ggml_backend_dev_t llama_model::dev_layer(int il) const {
@@ -16940,6 +17025,30 @@ struct llm_build_flow : public llm_graph_context {
     }
 };
 
+
+struct llm_build_hift : public llm_graph_context {
+    // const llama_model & model;
+    llm_build_hift(const llama_model & model, const llm_graph_params & params, ggml_cgraph * gf) : llm_graph_context(params) {
+        ggml_tensor * speech_feat = build_inp_embd(model.f0_w_1st);
+
+        ggml_tensor * cur;
+        for (int i = 2; i < 10; i += 2) {
+            cur = bulid_f0_predictor(speech_feat, layer[i].f0_w, layer[i].f0_b);
+        }
+        
+        ggml_tensor * f0 = ggml_reshape_3d(ctx0, cur, cur->ne[0], 1, 1);
+
+        ggml_tensor * s = ggml_upscale(ctx0, f0, 480, GGML_SCALE_MODE_NEAREST);
+
+        s = ggml_cont(ctx0, ggml_transpose(ctx0, s));
+
+        ggml_tensor * s_source = build_m_source(s, m_source_w, m_source_b);
+        
+
+
+
+    }
+};
 llama_memory_i * llama_model::create_memory(const llama_memory_params & params, llama_cparams & cparams) const {
     llama_memory_i * res;
 
@@ -17355,6 +17464,10 @@ llm_graph_result_ptr llama_model::build_graph(
             {
                 llm = std::make_unique<llm_build_flow>(*this, params, gf);
             } break;
+        // case LLM_ARCH_COSYVOICEHIFT:
+        //     {
+        //         llm = std::make_unique<llm_build_hift>(*this, params, gf);
+        //     } break;
         default:
             GGML_ABORT("fatal error");
     }
@@ -17386,7 +17499,8 @@ llama_model_params llama_model_default_params() {
         /*.use_mmap                    =*/ true,
         /*.use_mlock                   =*/ false,
         /*.check_tensors               =*/ false,
-        /*.is_flow                     =*/ true,
+        /*.is_flow                     =*/ false,
+        /*.is_hift                     =*/ true,
     };
 
 #ifdef GGML_USE_METAL

@@ -297,7 +297,8 @@ extern "C" {
         bool use_mmap;      // use mmap if possible
         bool use_mlock;     // force system to keep model in RAM
         bool check_tensors; // validate model tensor data
-        bool is_flow;       // when model is CosyVoiceFlow 
+        bool is_flow;       // when model is CosyVoiceFlow
+        bool is_hift;       // when model is CosyVoiceHift
     };
 
     // NOTE: changing the default values of parameters marked as [EXPERIMENTAL] may cause crashes or incorrect results in certain configurations

@@ -1375,7 +1375,7 @@ uint32_t llama_context::output_reserve(int32_t n_outputs) {
 //
 
 int32_t llama_context::graph_max_nodes() const {
-    return std::max<int32_t>(6553600, 5*model.n_tensors());
+    return std::max<int32_t>(65536, 5*model.n_tensors());
 }
 
 ggml_cgraph * llama_context::graph_init() {
