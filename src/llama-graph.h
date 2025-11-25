@@ -537,6 +537,15 @@ struct llm_graph_context {
     //
     // common
     //
+    ggml_tensor * bulid_f0_predictor(
+            ggml_tensor * cur,
+            ggml_tensor * mw,
+            ggml_tensor * mb) const;
+    
+    ggml_tensor *  build_m_source(
+        ggml_tensor * cur,
+        ggml_tensor * mw,
+        ggml_tensor * mb) const;
 
     ggml_tensor * build_cvec(
              ggml_tensor * cur,
