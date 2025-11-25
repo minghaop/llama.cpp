@@ -1231,6 +1231,354 @@ class TensorNameMap:
         MODEL_TENSOR.SPK_EMBED_AFFINE_LAYER_BIAS: ("spk_embed_affine_layer.bias"),
         MODEL_TENSOR.SPK_EMBED_AFFINE_LAYER_WEIGHT: ("spk_embed_affine_layer.weight"),
 
+        # CosyVoiceHift
+        MODEL_TENSOR.CONV_PRE_WEIGHT:  ("conv_pre.weight"),
+        MODEL_TENSOR.CONV_PRE_BIAS:    ("conv_pre.bias"),
+
+        # Conv Post
+        MODEL_TENSOR.CONV_POST_WEIGHT: ("conv_post.weight"),
+        MODEL_TENSOR.CONV_POST_BIAS:   ("conv_post.bias"),
+    
+        # F0 Predictor Classifier
+        MODEL_TENSOR.F0_PREDICTOR_CLASSIFIER_BIAS:   ("f0_predictor.classifier.bias"),
+        MODEL_TENSOR.F0_PREDICTOR_CLASSIFIER_WEIGHT: ("f0_predictor.classifier.weight"),
+
+        # F0 Predictor CondNet Layer 0
+        MODEL_TENSOR.F0_PREDICTOR_CONDNET_0_BIAS:    ("f0_predictor.condnet.0.bias"),
+        MODEL_TENSOR.F0_PREDICTOR_CONDNET_0_WEIGHT:  ("f0_predictor.condnet.0.weight"), # 之前是 original0/1，现在合并为 weight
+
+        # F0 Predictor CondNet Layer 2
+        MODEL_TENSOR.F0_PREDICTOR_CONDNET_2_BIAS:    ("f0_predictor.condnet.2.bias"),
+        MODEL_TENSOR.F0_PREDICTOR_CONDNET_2_WEIGHT:  ("f0_predictor.condnet.2.weight"),
+
+        # F0 Predictor CondNet Layer 4
+        MODEL_TENSOR.F0_PREDICTOR_CONDNET_4_BIAS:    ("f0_predictor.condnet.4.bias"),
+        MODEL_TENSOR.F0_PREDICTOR_CONDNET_4_WEIGHT:  ("f0_predictor.condnet.4.weight"),
+
+        # F0 Predictor CondNet Layer 6
+        MODEL_TENSOR.F0_PREDICTOR_CONDNET_6_BIAS:    ("f0_predictor.condnet.6.bias"),
+        MODEL_TENSOR.F0_PREDICTOR_CONDNET_6_WEIGHT:  ("f0_predictor.condnet.6.weight"),
+
+        # F0 Predictor CondNet Layer 8
+        MODEL_TENSOR.F0_PREDICTOR_CONDNET_8_BIAS:    ("f0_predictor.condnet.8.bias"),
+        MODEL_TENSOR.F0_PREDICTOR_CONDNET_8_WEIGHT:  ("f0_predictor.condnet.8.weight"),
+
+        MODEL_TENSOR.M_SOURCE_L_LINEAR_BIAS: ("m_source.l_linear.bias"),
+        MODEL_TENSOR.M_SOURCE_L_LINEAR_WEIGHT: ("m_source.l_linear.weight"),
+        MODEL_TENSOR.RESBLOCKS_0_ACTIVATIONS1_0_ALPHA: ("resblocks.0.activations1.0.alpha"),
+        MODEL_TENSOR.RESBLOCKS_0_ACTIVATIONS1_1_ALPHA: ("resblocks.0.activations1.1.alpha"),
+        MODEL_TENSOR.RESBLOCKS_0_ACTIVATIONS1_2_ALPHA: ("resblocks.0.activations1.2.alpha"),
+        MODEL_TENSOR.RESBLOCKS_0_ACTIVATIONS2_0_ALPHA: ("resblocks.0.activations2.0.alpha"),
+        MODEL_TENSOR.RESBLOCKS_0_ACTIVATIONS2_1_ALPHA: ("resblocks.0.activations2.1.alpha"),
+        MODEL_TENSOR.RESBLOCKS_0_ACTIVATIONS2_2_ALPHA: ("resblocks.0.activations2.2.alpha"),
+        MODEL_TENSOR.RESBLOCKS_0_CONVS1_0_BIAS: ("resblocks.0.convs1.0.bias"),
+
+        MODEL_TENSOR.RESBLOCKS_0_CONVS1_0_WEIGHT: ("resblocks.0.convs1.0.weight"),
+        MODEL_TENSOR.RESBLOCKS_0_CONVS1_0_BIAS:   ("resblocks.0.convs1.0.bias"),
+        MODEL_TENSOR.RESBLOCKS_0_CONVS1_1_WEIGHT: ("resblocks.0.convs1.1.weight"),
+        MODEL_TENSOR.RESBLOCKS_0_CONVS1_1_BIAS:   ("resblocks.0.convs1.1.bias"),
+        MODEL_TENSOR.RESBLOCKS_0_CONVS1_2_WEIGHT: ("resblocks.0.convs1.2.weight"),
+        MODEL_TENSOR.RESBLOCKS_0_CONVS1_2_BIAS:   ("resblocks.0.convs1.2.bias"),
+
+        MODEL_TENSOR.RESBLOCKS_0_CONVS2_0_WEIGHT: ("resblocks.0.convs2.0.weight"),
+        MODEL_TENSOR.RESBLOCKS_0_CONVS2_0_BIAS:   ("resblocks.0.convs2.0.bias"),
+        MODEL_TENSOR.RESBLOCKS_0_CONVS2_1_WEIGHT: ("resblocks.0.convs2.1.weight"),
+        MODEL_TENSOR.RESBLOCKS_0_CONVS2_1_BIAS:   ("resblocks.0.convs2.1.bias"),
+        MODEL_TENSOR.RESBLOCKS_0_CONVS2_2_WEIGHT: ("resblocks.0.convs2.2.weight"),
+        MODEL_TENSOR.RESBLOCKS_0_CONVS2_2_BIAS:   ("resblocks.0.convs2.2.bias"),
+
+        # ResBlock 1
+        MODEL_TENSOR.RESBLOCKS_1_CONVS1_0_WEIGHT: ("resblocks.1.convs1.0.weight"),
+        MODEL_TENSOR.RESBLOCKS_1_CONVS1_0_BIAS:   ("resblocks.1.convs1.0.bias"),
+        MODEL_TENSOR.RESBLOCKS_1_CONVS1_1_WEIGHT: ("resblocks.1.convs1.1.weight"),
+        MODEL_TENSOR.RESBLOCKS_1_CONVS1_1_BIAS:   ("resblocks.1.convs1.1.bias"),
+        MODEL_TENSOR.RESBLOCKS_1_CONVS1_2_WEIGHT: ("resblocks.1.convs1.2.weight"),
+        MODEL_TENSOR.RESBLOCKS_1_CONVS1_2_BIAS:   ("resblocks.1.convs1.2.bias"),
+
+        MODEL_TENSOR.RESBLOCKS_1_CONVS2_0_WEIGHT: ("resblocks.1.convs2.0.weight"),
+        MODEL_TENSOR.RESBLOCKS_1_CONVS2_0_BIAS:   ("resblocks.1.convs2.0.bias"),
+        MODEL_TENSOR.RESBLOCKS_1_CONVS2_1_WEIGHT: ("resblocks.1.convs2.1.weight"),
+        MODEL_TENSOR.RESBLOCKS_1_CONVS2_1_BIAS:   ("resblocks.1.convs2.1.bias"),
+        MODEL_TENSOR.RESBLOCKS_1_CONVS2_2_WEIGHT: ("resblocks.1.convs2.2.weight"),
+        MODEL_TENSOR.RESBLOCKS_1_CONVS2_2_BIAS:   ("resblocks.1.convs2.2.bias"),
+
+        # ResBlock 2
+        MODEL_TENSOR.RESBLOCKS_2_CONVS1_0_WEIGHT: ("resblocks.2.convs1.0.weight"),
+        MODEL_TENSOR.RESBLOCKS_2_CONVS1_0_BIAS:   ("resblocks.2.convs1.0.bias"),
+        MODEL_TENSOR.RESBLOCKS_2_CONVS1_1_WEIGHT: ("resblocks.2.convs1.1.weight"),
+        MODEL_TENSOR.RESBLOCKS_2_CONVS1_1_BIAS:   ("resblocks.2.convs1.1.bias"),
+        MODEL_TENSOR.RESBLOCKS_2_CONVS1_2_WEIGHT: ("resblocks.2.convs1.2.weight"),
+        MODEL_TENSOR.RESBLOCKS_2_CONVS1_2_BIAS:   ("resblocks.2.convs1.2.bias"),
+
+        MODEL_TENSOR.RESBLOCKS_2_CONVS2_0_WEIGHT: ("resblocks.2.convs2.0.weight"),
+        MODEL_TENSOR.RESBLOCKS_2_CONVS2_0_BIAS:   ("resblocks.2.convs2.0.bias"),
+        MODEL_TENSOR.RESBLOCKS_2_CONVS2_1_WEIGHT: ("resblocks.2.convs2.1.weight"),
+        MODEL_TENSOR.RESBLOCKS_2_CONVS2_1_BIAS:   ("resblocks.2.convs2.1.bias"),
+        MODEL_TENSOR.RESBLOCKS_2_CONVS2_2_WEIGHT: ("resblocks.2.convs2.2.weight"),
+        MODEL_TENSOR.RESBLOCKS_2_CONVS2_2_BIAS:   ("resblocks.2.convs2.2.bias"),
+
+        # ResBlock 3
+        MODEL_TENSOR.RESBLOCKS_3_CONVS1_0_WEIGHT: ("resblocks.3.convs1.0.weight"),
+        MODEL_TENSOR.RESBLOCKS_3_CONVS1_0_BIAS:   ("resblocks.3.convs1.0.bias"),
+        MODEL_TENSOR.RESBLOCKS_3_CONVS1_1_WEIGHT: ("resblocks.3.convs1.1.weight"),
+        MODEL_TENSOR.RESBLOCKS_3_CONVS1_1_BIAS:   ("resblocks.3.convs1.1.bias"),
+        MODEL_TENSOR.RESBLOCKS_3_CONVS1_2_WEIGHT: ("resblocks.3.convs1.2.weight"),
+        MODEL_TENSOR.RESBLOCKS_3_CONVS1_2_BIAS:   ("resblocks.3.convs1.2.bias"),
+
+        MODEL_TENSOR.RESBLOCKS_3_CONVS2_0_WEIGHT: ("resblocks.3.convs2.0.weight"),
+        MODEL_TENSOR.RESBLOCKS_3_CONVS2_0_BIAS:   ("resblocks.3.convs2.0.bias"),
+        MODEL_TENSOR.RESBLOCKS_3_CONVS2_1_WEIGHT: ("resblocks.3.convs2.1.weight"),
+        MODEL_TENSOR.RESBLOCKS_3_CONVS2_1_BIAS:   ("resblocks.3.convs2.1.bias"),
+        MODEL_TENSOR.RESBLOCKS_3_CONVS2_2_WEIGHT: ("resblocks.3.convs2.2.weight"),
+        MODEL_TENSOR.RESBLOCKS_3_CONVS2_2_BIAS:   ("resblocks.3.convs2.2.bias"),
+
+        # ResBlock 4
+        MODEL_TENSOR.RESBLOCKS_4_CONVS1_0_WEIGHT: ("resblocks.4.convs1.0.weight"),
+        MODEL_TENSOR.RESBLOCKS_4_CONVS1_0_BIAS:   ("resblocks.4.convs1.0.bias"),
+        MODEL_TENSOR.RESBLOCKS_4_CONVS1_1_WEIGHT: ("resblocks.4.convs1.1.weight"),
+        MODEL_TENSOR.RESBLOCKS_4_CONVS1_1_BIAS:   ("resblocks.4.convs1.1.bias"),
+        MODEL_TENSOR.RESBLOCKS_4_CONVS1_2_WEIGHT: ("resblocks.4.convs1.2.weight"),
+        MODEL_TENSOR.RESBLOCKS_4_CONVS1_2_BIAS:   ("resblocks.4.convs1.2.bias"),
+
+        MODEL_TENSOR.RESBLOCKS_4_CONVS2_0_WEIGHT: ("resblocks.4.convs2.0.weight"),
+        MODEL_TENSOR.RESBLOCKS_4_CONVS2_0_BIAS:   ("resblocks.4.convs2.0.bias"),
+        MODEL_TENSOR.RESBLOCKS_4_CONVS2_1_WEIGHT: ("resblocks.4.convs2.1.weight"),
+        MODEL_TENSOR.RESBLOCKS_4_CONVS2_1_BIAS:   ("resblocks.4.convs2.1.bias"),
+        MODEL_TENSOR.RESBLOCKS_4_CONVS2_2_WEIGHT: ("resblocks.4.convs2.2.weight"),
+        MODEL_TENSOR.RESBLOCKS_4_CONVS2_2_BIAS:   ("resblocks.4.convs2.2.bias"),
+
+        # ResBlock 5
+        MODEL_TENSOR.RESBLOCKS_5_CONVS1_0_WEIGHT: ("resblocks.5.convs1.0.weight"),
+        MODEL_TENSOR.RESBLOCKS_5_CONVS1_0_BIAS:   ("resblocks.5.convs1.0.bias"),
+        MODEL_TENSOR.RESBLOCKS_5_CONVS1_1_WEIGHT: ("resblocks.5.convs1.1.weight"),
+        MODEL_TENSOR.RESBLOCKS_5_CONVS1_1_BIAS:   ("resblocks.5.convs1.1.bias"),
+        MODEL_TENSOR.RESBLOCKS_5_CONVS1_2_WEIGHT: ("resblocks.5.convs1.2.weight"),
+        MODEL_TENSOR.RESBLOCKS_5_CONVS1_2_BIAS:   ("resblocks.5.convs1.2.bias"),
+
+        MODEL_TENSOR.RESBLOCKS_5_CONVS2_0_WEIGHT: ("resblocks.5.convs2.0.weight"),
+        MODEL_TENSOR.RESBLOCKS_5_CONVS2_0_BIAS:   ("resblocks.5.convs2.0.bias"),
+        MODEL_TENSOR.RESBLOCKS_5_CONVS2_1_WEIGHT: ("resblocks.5.convs2.1.weight"),
+        MODEL_TENSOR.RESBLOCKS_5_CONVS2_1_BIAS:   ("resblocks.5.convs2.1.bias"),
+        MODEL_TENSOR.RESBLOCKS_5_CONVS2_2_WEIGHT: ("resblocks.5.convs2.2.weight"),
+        MODEL_TENSOR.RESBLOCKS_5_CONVS2_2_BIAS:   ("resblocks.5.convs2.2.bias"),
+
+        # ResBlock 6
+        MODEL_TENSOR.RESBLOCKS_6_CONVS1_0_WEIGHT: ("resblocks.6.convs1.0.weight"),
+        MODEL_TENSOR.RESBLOCKS_6_CONVS1_0_BIAS:   ("resblocks.6.convs1.0.bias"),
+        MODEL_TENSOR.RESBLOCKS_6_CONVS1_1_WEIGHT: ("resblocks.6.convs1.1.weight"),
+        MODEL_TENSOR.RESBLOCKS_6_CONVS1_1_BIAS:   ("resblocks.6.convs1.1.bias"),
+        MODEL_TENSOR.RESBLOCKS_6_CONVS1_2_WEIGHT: ("resblocks.6.convs1.2.weight"),
+        MODEL_TENSOR.RESBLOCKS_6_CONVS1_2_BIAS:   ("resblocks.6.convs1.2.bias"),
+
+        MODEL_TENSOR.RESBLOCKS_6_CONVS2_0_WEIGHT: ("resblocks.6.convs2.0.weight"),
+        MODEL_TENSOR.RESBLOCKS_6_CONVS2_0_BIAS:   ("resblocks.6.convs2.0.bias"),
+        MODEL_TENSOR.RESBLOCKS_6_CONVS2_1_WEIGHT: ("resblocks.6.convs2.1.weight"),
+        MODEL_TENSOR.RESBLOCKS_6_CONVS2_1_BIAS:   ("resblocks.6.convs2.1.bias"),
+        MODEL_TENSOR.RESBLOCKS_6_CONVS2_2_WEIGHT: ("resblocks.6.convs2.2.weight"),
+        MODEL_TENSOR.RESBLOCKS_6_CONVS2_2_BIAS:   ("resblocks.6.convs2.2.bias"),
+
+        # ResBlock 7
+        MODEL_TENSOR.RESBLOCKS_7_CONVS1_0_WEIGHT: ("resblocks.7.convs1.0.weight"),
+        MODEL_TENSOR.RESBLOCKS_7_CONVS1_0_BIAS:   ("resblocks.7.convs1.0.bias"),
+        MODEL_TENSOR.RESBLOCKS_7_CONVS1_1_WEIGHT: ("resblocks.7.convs1.1.weight"),
+        MODEL_TENSOR.RESBLOCKS_7_CONVS1_1_BIAS:   ("resblocks.7.convs1.1.bias"),
+        MODEL_TENSOR.RESBLOCKS_7_CONVS1_2_WEIGHT: ("resblocks.7.convs1.2.weight"),
+        MODEL_TENSOR.RESBLOCKS_7_CONVS1_2_BIAS:   ("resblocks.7.convs1.2.bias"),
+
+        MODEL_TENSOR.RESBLOCKS_7_CONVS2_0_WEIGHT: ("resblocks.7.convs2.0.weight"),
+        MODEL_TENSOR.RESBLOCKS_7_CONVS2_0_BIAS:   ("resblocks.7.convs2.0.bias"),
+        MODEL_TENSOR.RESBLOCKS_7_CONVS2_1_WEIGHT: ("resblocks.7.convs2.1.weight"),
+        MODEL_TENSOR.RESBLOCKS_7_CONVS2_1_BIAS:   ("resblocks.7.convs2.1.bias"),
+        MODEL_TENSOR.RESBLOCKS_7_CONVS2_2_WEIGHT: ("resblocks.7.convs2.2.weight"),
+        MODEL_TENSOR.RESBLOCKS_7_CONVS2_2_BIAS:   ("resblocks.7.convs2.2.bias"),
+
+        # ResBlock 8
+        MODEL_TENSOR.RESBLOCKS_8_CONVS1_0_WEIGHT: ("resblocks.8.convs1.0.weight"),
+        MODEL_TENSOR.RESBLOCKS_8_CONVS1_0_BIAS:   ("resblocks.8.convs1.0.bias"),
+        MODEL_TENSOR.RESBLOCKS_8_CONVS1_1_WEIGHT: ("resblocks.8.convs1.1.weight"),
+        MODEL_TENSOR.RESBLOCKS_8_CONVS1_1_BIAS:   ("resblocks.8.convs1.1.bias"),
+        MODEL_TENSOR.RESBLOCKS_8_CONVS1_2_WEIGHT: ("resblocks.8.convs1.2.weight"),
+        MODEL_TENSOR.RESBLOCKS_8_CONVS1_2_BIAS:   ("resblocks.8.convs1.2.bias"),
+
+        MODEL_TENSOR.RESBLOCKS_8_CONVS2_0_WEIGHT: ("resblocks.8.convs2.0.weight"),
+        MODEL_TENSOR.RESBLOCKS_8_CONVS2_0_BIAS:   ("resblocks.8.convs2.0.bias"),
+        MODEL_TENSOR.RESBLOCKS_8_CONVS2_1_WEIGHT: ("resblocks.8.convs2.1.weight"),
+        MODEL_TENSOR.RESBLOCKS_8_CONVS2_1_BIAS:   ("resblocks.8.convs2.1.bias"),
+        MODEL_TENSOR.RESBLOCKS_8_CONVS2_2_WEIGHT: ("resblocks.8.convs2.2.weight"),
+        MODEL_TENSOR.RESBLOCKS_8_CONVS2_2_BIAS:   ("resblocks.8.convs2.2.bias"),
+
+            # ==========================================
+        # ResBlocks Activations (Main)
+        # ==========================================
+        
+        # ResBlock 0
+        MODEL_TENSOR.RESBLOCKS_0_ACTIVATIONS1_0_ALPHA: "resblocks.0.activations1.0.alpha",
+        MODEL_TENSOR.RESBLOCKS_0_ACTIVATIONS1_1_ALPHA: "resblocks.0.activations1.1.alpha",
+        MODEL_TENSOR.RESBLOCKS_0_ACTIVATIONS1_2_ALPHA: "resblocks.0.activations1.2.alpha",
+        MODEL_TENSOR.RESBLOCKS_0_ACTIVATIONS2_0_ALPHA: "resblocks.0.activations2.0.alpha",
+        MODEL_TENSOR.RESBLOCKS_0_ACTIVATIONS2_1_ALPHA: "resblocks.0.activations2.1.alpha",
+        MODEL_TENSOR.RESBLOCKS_0_ACTIVATIONS2_2_ALPHA: "resblocks.0.activations2.2.alpha",
+
+        # ResBlock 1
+        MODEL_TENSOR.RESBLOCKS_1_ACTIVATIONS1_0_ALPHA: "resblocks.1.activations1.0.alpha",
+        MODEL_TENSOR.RESBLOCKS_1_ACTIVATIONS1_1_ALPHA: "resblocks.1.activations1.1.alpha",
+        MODEL_TENSOR.RESBLOCKS_1_ACTIVATIONS1_2_ALPHA: "resblocks.1.activations1.2.alpha",
+        MODEL_TENSOR.RESBLOCKS_1_ACTIVATIONS2_0_ALPHA: "resblocks.1.activations2.0.alpha",
+        MODEL_TENSOR.RESBLOCKS_1_ACTIVATIONS2_1_ALPHA: "resblocks.1.activations2.1.alpha",
+        MODEL_TENSOR.RESBLOCKS_1_ACTIVATIONS2_2_ALPHA: "resblocks.1.activations2.2.alpha",
+
+        # ResBlock 2
+        MODEL_TENSOR.RESBLOCKS_2_ACTIVATIONS1_0_ALPHA: "resblocks.2.activations1.0.alpha",
+        MODEL_TENSOR.RESBLOCKS_2_ACTIVATIONS1_1_ALPHA: "resblocks.2.activations1.1.alpha",
+        MODEL_TENSOR.RESBLOCKS_2_ACTIVATIONS1_2_ALPHA: "resblocks.2.activations1.2.alpha",
+        MODEL_TENSOR.RESBLOCKS_2_ACTIVATIONS2_0_ALPHA: "resblocks.2.activations2.0.alpha",
+        MODEL_TENSOR.RESBLOCKS_2_ACTIVATIONS2_1_ALPHA: "resblocks.2.activations2.1.alpha",
+        MODEL_TENSOR.RESBLOCKS_2_ACTIVATIONS2_2_ALPHA: "resblocks.2.activations2.2.alpha",
+
+        # ResBlock 3
+        MODEL_TENSOR.RESBLOCKS_3_ACTIVATIONS1_0_ALPHA: "resblocks.3.activations1.0.alpha",
+        MODEL_TENSOR.RESBLOCKS_3_ACTIVATIONS1_1_ALPHA: "resblocks.3.activations1.1.alpha",
+        MODEL_TENSOR.RESBLOCKS_3_ACTIVATIONS1_2_ALPHA: "resblocks.3.activations1.2.alpha",
+        MODEL_TENSOR.RESBLOCKS_3_ACTIVATIONS2_0_ALPHA: "resblocks.3.activations2.0.alpha",
+        MODEL_TENSOR.RESBLOCKS_3_ACTIVATIONS2_1_ALPHA: "resblocks.3.activations2.1.alpha",
+        MODEL_TENSOR.RESBLOCKS_3_ACTIVATIONS2_2_ALPHA: "resblocks.3.activations2.2.alpha",
+
+        # ResBlock 4
+        MODEL_TENSOR.RESBLOCKS_4_ACTIVATIONS1_0_ALPHA: "resblocks.4.activations1.0.alpha",
+        MODEL_TENSOR.RESBLOCKS_4_ACTIVATIONS1_1_ALPHA: "resblocks.4.activations1.1.alpha",
+        MODEL_TENSOR.RESBLOCKS_4_ACTIVATIONS1_2_ALPHA: "resblocks.4.activations1.2.alpha",
+        MODEL_TENSOR.RESBLOCKS_4_ACTIVATIONS2_0_ALPHA: "resblocks.4.activations2.0.alpha",
+        MODEL_TENSOR.RESBLOCKS_4_ACTIVATIONS2_1_ALPHA: "resblocks.4.activations2.1.alpha",
+        MODEL_TENSOR.RESBLOCKS_4_ACTIVATIONS2_2_ALPHA: "resblocks.4.activations2.2.alpha",
+
+        # ResBlock 5
+        MODEL_TENSOR.RESBLOCKS_5_ACTIVATIONS1_0_ALPHA: "resblocks.5.activations1.0.alpha",
+        MODEL_TENSOR.RESBLOCKS_5_ACTIVATIONS1_1_ALPHA: "resblocks.5.activations1.1.alpha",
+        MODEL_TENSOR.RESBLOCKS_5_ACTIVATIONS1_2_ALPHA: "resblocks.5.activations1.2.alpha",
+        MODEL_TENSOR.RESBLOCKS_5_ACTIVATIONS2_0_ALPHA: "resblocks.5.activations2.0.alpha",
+        MODEL_TENSOR.RESBLOCKS_5_ACTIVATIONS2_1_ALPHA: "resblocks.5.activations2.1.alpha",
+        MODEL_TENSOR.RESBLOCKS_5_ACTIVATIONS2_2_ALPHA: "resblocks.5.activations2.2.alpha",
+
+        # ResBlock 6
+        MODEL_TENSOR.RESBLOCKS_6_ACTIVATIONS1_0_ALPHA: "resblocks.6.activations1.0.alpha",
+        MODEL_TENSOR.RESBLOCKS_6_ACTIVATIONS1_1_ALPHA: "resblocks.6.activations1.1.alpha",
+        MODEL_TENSOR.RESBLOCKS_6_ACTIVATIONS1_2_ALPHA: "resblocks.6.activations1.2.alpha",
+        MODEL_TENSOR.RESBLOCKS_6_ACTIVATIONS2_0_ALPHA: "resblocks.6.activations2.0.alpha",
+        MODEL_TENSOR.RESBLOCKS_6_ACTIVATIONS2_1_ALPHA: "resblocks.6.activations2.1.alpha",
+        MODEL_TENSOR.RESBLOCKS_6_ACTIVATIONS2_2_ALPHA: "resblocks.6.activations2.2.alpha",
+
+        # ResBlock 7
+        MODEL_TENSOR.RESBLOCKS_7_ACTIVATIONS1_0_ALPHA: "resblocks.7.activations1.0.alpha",
+        MODEL_TENSOR.RESBLOCKS_7_ACTIVATIONS1_1_ALPHA: "resblocks.7.activations1.1.alpha",
+        MODEL_TENSOR.RESBLOCKS_7_ACTIVATIONS1_2_ALPHA: "resblocks.7.activations1.2.alpha",
+        MODEL_TENSOR.RESBLOCKS_7_ACTIVATIONS2_0_ALPHA: "resblocks.7.activations2.0.alpha",
+        MODEL_TENSOR.RESBLOCKS_7_ACTIVATIONS2_1_ALPHA: "resblocks.7.activations2.1.alpha",
+        MODEL_TENSOR.RESBLOCKS_7_ACTIVATIONS2_2_ALPHA: "resblocks.7.activations2.2.alpha",
+
+        # ResBlock 8
+        MODEL_TENSOR.RESBLOCKS_8_ACTIVATIONS1_0_ALPHA: "resblocks.8.activations1.0.alpha",
+        MODEL_TENSOR.RESBLOCKS_8_ACTIVATIONS1_1_ALPHA: "resblocks.8.activations1.1.alpha",
+        MODEL_TENSOR.RESBLOCKS_8_ACTIVATIONS1_2_ALPHA: "resblocks.8.activations1.2.alpha",
+        MODEL_TENSOR.RESBLOCKS_8_ACTIVATIONS2_0_ALPHA: "resblocks.8.activations2.0.alpha",
+        MODEL_TENSOR.RESBLOCKS_8_ACTIVATIONS2_1_ALPHA: "resblocks.8.activations2.1.alpha",
+        MODEL_TENSOR.RESBLOCKS_8_ACTIVATIONS2_2_ALPHA: "resblocks.8.activations2.2.alpha",
+
+        # ==========================================
+        # Source ResBlocks Activations
+        # ==========================================
+
+        # Source ResBlock 0
+        MODEL_TENSOR.SOURCE_RESBLOCKS_0_ACTIVATIONS1_0_ALPHA: "source_resblocks.0.activations1.0.alpha",
+        MODEL_TENSOR.SOURCE_RESBLOCKS_0_ACTIVATIONS1_1_ALPHA: "source_resblocks.0.activations1.1.alpha",
+        MODEL_TENSOR.SOURCE_RESBLOCKS_0_ACTIVATIONS1_2_ALPHA: "source_resblocks.0.activations1.2.alpha",
+        MODEL_TENSOR.SOURCE_RESBLOCKS_0_ACTIVATIONS2_0_ALPHA: "source_resblocks.0.activations2.0.alpha",
+        MODEL_TENSOR.SOURCE_RESBLOCKS_0_ACTIVATIONS2_1_ALPHA: "source_resblocks.0.activations2.1.alpha",
+        MODEL_TENSOR.SOURCE_RESBLOCKS_0_ACTIVATIONS2_2_ALPHA: "source_resblocks.0.activations2.2.alpha",
+
+        # Source ResBlock 1
+        MODEL_TENSOR.SOURCE_RESBLOCKS_1_ACTIVATIONS1_0_ALPHA: "source_resblocks.1.activations1.0.alpha",
+        MODEL_TENSOR.SOURCE_RESBLOCKS_1_ACTIVATIONS1_1_ALPHA: "source_resblocks.1.activations1.1.alpha",
+        MODEL_TENSOR.SOURCE_RESBLOCKS_1_ACTIVATIONS1_2_ALPHA: "source_resblocks.1.activations1.2.alpha",
+        MODEL_TENSOR.SOURCE_RESBLOCKS_1_ACTIVATIONS2_0_ALPHA: "source_resblocks.1.activations2.0.alpha",
+        MODEL_TENSOR.SOURCE_RESBLOCKS_1_ACTIVATIONS2_1_ALPHA: "source_resblocks.1.activations2.1.alpha",
+        MODEL_TENSOR.SOURCE_RESBLOCKS_1_ACTIVATIONS2_2_ALPHA: "source_resblocks.1.activations2.2.alpha",
+
+        # Source ResBlock 2
+        MODEL_TENSOR.SOURCE_RESBLOCKS_2_ACTIVATIONS1_0_ALPHA: "source_resblocks.2.activations1.0.alpha",
+        MODEL_TENSOR.SOURCE_RESBLOCKS_2_ACTIVATIONS1_1_ALPHA: "source_resblocks.2.activations1.1.alpha",
+        MODEL_TENSOR.SOURCE_RESBLOCKS_2_ACTIVATIONS1_2_ALPHA: "source_resblocks.2.activations1.2.alpha",
+        MODEL_TENSOR.SOURCE_RESBLOCKS_2_ACTIVATIONS2_0_ALPHA: "source_resblocks.2.activations2.0.alpha",
+        MODEL_TENSOR.SOURCE_RESBLOCKS_2_ACTIVATIONS2_1_ALPHA: "source_resblocks.2.activations2.1.alpha",
+        MODEL_TENSOR.SOURCE_RESBLOCKS_2_ACTIVATIONS2_2_ALPHA: "source_resblocks.2.activations2.2.alpha",
+
+
+        # ==========================================
+        # Source Downs
+        # ==========================================
+        MODEL_TENSOR.SOURCE_DOWNS_0_WEIGHT: ("source_downs.0.weight"),
+        MODEL_TENSOR.SOURCE_DOWNS_0_BIAS:   ("source_downs.0.bias"),
+        MODEL_TENSOR.SOURCE_DOWNS_1_WEIGHT: ("source_downs.1.weight"),
+        MODEL_TENSOR.SOURCE_DOWNS_1_BIAS:   ("source_downs.1.bias"),
+        MODEL_TENSOR.SOURCE_DOWNS_2_WEIGHT: ("source_downs.2.weight"),
+        MODEL_TENSOR.SOURCE_DOWNS_2_BIAS:   ("source_downs.2.bias"),
+
+        # ==========================================
+        # Source ResBlocks
+        # ==========================================
+        # Source ResBlock 0
+        MODEL_TENSOR.SOURCE_RESBLOCKS_0_CONVS1_0_WEIGHT: ("source_resblocks.0.convs1.0.weight"),
+        MODEL_TENSOR.SOURCE_RESBLOCKS_0_CONVS1_0_BIAS:   ("source_resblocks.0.convs1.0.bias"),
+        MODEL_TENSOR.SOURCE_RESBLOCKS_0_CONVS1_1_WEIGHT: ("source_resblocks.0.convs1.1.weight"),
+        MODEL_TENSOR.SOURCE_RESBLOCKS_0_CONVS1_1_BIAS:   ("source_resblocks.0.convs1.1.bias"),
+        MODEL_TENSOR.SOURCE_RESBLOCKS_0_CONVS1_2_WEIGHT: ("source_resblocks.0.convs1.2.weight"),
+        MODEL_TENSOR.SOURCE_RESBLOCKS_0_CONVS1_2_BIAS:   ("source_resblocks.0.convs1.2.bias"),
+
+        MODEL_TENSOR.SOURCE_RESBLOCKS_0_CONVS2_0_WEIGHT: ("source_resblocks.0.convs2.0.weight"),
+        MODEL_TENSOR.SOURCE_RESBLOCKS_0_CONVS2_0_BIAS:   ("source_resblocks.0.convs2.0.bias"),
+        MODEL_TENSOR.SOURCE_RESBLOCKS_0_CONVS2_1_WEIGHT: ("source_resblocks.0.convs2.1.weight"),
+        MODEL_TENSOR.SOURCE_RESBLOCKS_0_CONVS2_1_BIAS:   ("source_resblocks.0.convs2.1.bias"),
+        MODEL_TENSOR.SOURCE_RESBLOCKS_0_CONVS2_2_WEIGHT: ("source_resblocks.0.convs2.2.weight"),
+        MODEL_TENSOR.SOURCE_RESBLOCKS_0_CONVS2_2_BIAS:   ("source_resblocks.0.convs2.2.bias"),
+
+        # Source ResBlock 1
+        MODEL_TENSOR.SOURCE_RESBLOCKS_1_CONVS1_0_WEIGHT: ("source_resblocks.1.convs1.0.weight"),
+        MODEL_TENSOR.SOURCE_RESBLOCKS_1_CONVS1_0_BIAS:   ("source_resblocks.1.convs1.0.bias"),
+        MODEL_TENSOR.SOURCE_RESBLOCKS_1_CONVS1_1_WEIGHT: ("source_resblocks.1.convs1.1.weight"),
+        MODEL_TENSOR.SOURCE_RESBLOCKS_1_CONVS1_1_BIAS:   ("source_resblocks.1.convs1.1.bias"),
+        MODEL_TENSOR.SOURCE_RESBLOCKS_1_CONVS1_2_WEIGHT: ("source_resblocks.1.convs1.2.weight"),
+        MODEL_TENSOR.SOURCE_RESBLOCKS_1_CONVS1_2_BIAS:   ("source_resblocks.1.convs1.2.bias"),
+
+        MODEL_TENSOR.SOURCE_RESBLOCKS_1_CONVS2_0_WEIGHT: ("source_resblocks.1.convs2.0.weight"),
+        MODEL_TENSOR.SOURCE_RESBLOCKS_1_CONVS2_0_BIAS:   ("source_resblocks.1.convs2.0.bias"),
+        MODEL_TENSOR.SOURCE_RESBLOCKS_1_CONVS2_1_WEIGHT: ("source_resblocks.1.convs2.1.weight"),
+        MODEL_TENSOR.SOURCE_RESBLOCKS_1_CONVS2_1_BIAS:   ("source_resblocks.1.convs2.1.bias"),
+        MODEL_TENSOR.SOURCE_RESBLOCKS_1_CONVS2_2_WEIGHT: ("source_resblocks.1.convs2.2.weight"),
+        MODEL_TENSOR.SOURCE_RESBLOCKS_1_CONVS2_2_BIAS:   ("source_resblocks.1.convs2.2.bias"),
+
+        # Source ResBlock 2
+        MODEL_TENSOR.SOURCE_RESBLOCKS_2_CONVS1_0_WEIGHT: ("source_resblocks.2.convs1.0.weight"),
+        MODEL_TENSOR.SOURCE_RESBLOCKS_2_CONVS1_0_BIAS:   ("source_resblocks.2.convs1.0.bias"),
+        MODEL_TENSOR.SOURCE_RESBLOCKS_2_CONVS1_1_WEIGHT: ("source_resblocks.2.convs1.1.weight"),
+        MODEL_TENSOR.SOURCE_RESBLOCKS_2_CONVS1_1_BIAS:   ("source_resblocks.2.convs1.1.bias"),
+        MODEL_TENSOR.SOURCE_RESBLOCKS_2_CONVS1_2_WEIGHT: ("source_resblocks.2.convs1.2.weight"),
+        MODEL_TENSOR.SOURCE_RESBLOCKS_2_CONVS1_2_BIAS:   ("source_resblocks.2.convs1.2.bias"),
+
+        MODEL_TENSOR.SOURCE_RESBLOCKS_2_CONVS2_0_WEIGHT: ("source_resblocks.2.convs2.0.weight"),
+        MODEL_TENSOR.SOURCE_RESBLOCKS_2_CONVS2_0_BIAS:   ("source_resblocks.2.convs2.0.bias"),
+        MODEL_TENSOR.SOURCE_RESBLOCKS_2_CONVS2_1_WEIGHT: ("source_resblocks.2.convs2.1.weight"),
+        MODEL_TENSOR.SOURCE_RESBLOCKS_2_CONVS2_1_BIAS:   ("source_resblocks.2.convs2.1.bias"),
+        MODEL_TENSOR.SOURCE_RESBLOCKS_2_CONVS2_2_WEIGHT: ("source_resblocks.2.convs2.2.weight"),
+        MODEL_TENSOR.SOURCE_RESBLOCKS_2_CONVS2_2_BIAS:   ("source_resblocks.2.convs2.2.bias"),
+
+        # ==========================================
+        # Upsample Layers
+        # ==========================================
+        MODEL_TENSOR.UPS_0_WEIGHT: ("ups.0.weight"),
+        MODEL_TENSOR.UPS_0_BIAS:   ("ups.0.bias"),
+        MODEL_TENSOR.UPS_1_WEIGHT: ("ups.1.weight"),
+        MODEL_TENSOR.UPS_1_BIAS:   ("ups.1.bias"),
+        MODEL_TENSOR.UPS_2_WEIGHT: ("ups.2.weight"),
+        MODEL_TENSOR.UPS_2_BIAS:   ("ups.2.bias"),
     }
 
     block_mappings_cfg: dict[MODEL_TENSOR, tuple[str, ...]] = {

@@ -332,6 +332,7 @@ struct gguf_context * gguf_init_from_file_impl(FILE * file, struct gguf_init_par
             gguf_free(ctx);
             return nullptr;
         }
+        
 
         for (uint32_t i = 0; i < magic.size(); i++) {
             if (magic[i] != GGUF_MAGIC[i]) {

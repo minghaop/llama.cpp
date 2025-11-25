@@ -101,7 +101,7 @@ static int llama_model_load(const std::string & fname, std::vector<std::string> 
         } catch(const std::exception & e) {
             throw std::runtime_error("error loading model architecture: " + std::string(e.what()));
         }
-        if (!params.is_flow) {
+        if (!params.is_flow && !params.is_hift) {
             // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&& check is_flow is: %d\n", params.is_flow);
             model.hparams.vocab_only = params.vocab_only;
             try {
@@ -115,10 +115,8 @@ static int llama_model_load(const std::string & fname, std::vector<std::string> 
                 throw std::runtime_error("error loading model vocabulary: " + std::string(e.what()));
             }
         }
-
         model.load_stats(ml);
         model.print_info();
-
         if (params.vocab_only) {
             LLAMA_LOG_INFO("%s: vocab only - skipping tensors\n", __func__);
             return 0;

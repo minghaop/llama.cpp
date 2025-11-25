@@ -457,7 +457,29 @@ struct llama_layer {
     struct ggml_tensor * up_block1_ffn_w0            = nullptr;
     struct ggml_tensor * up_block1_ffn_w2            = nullptr;
     struct ggml_tensor * up_block1_ffn_b0            = nullptr;
-    struct ggml_tensor * up_block1_ffn_b2            = nullptr; 
+    struct ggml_tensor * up_block1_ffn_b2            = nullptr;
+    
+    
+    //------------ CosyVoiceHift--------------------------
+    struct ggml_tensor * f0_w                        = nullptr;
+    struct ggml_tensor * f0_b                        = nullptr;
+    struct ggml_tensor * resblock_act1               = nullptr;
+    struct ggml_tensor * resblock_act2               = nullptr;
+    struct ggml_tensor * reblock_conv1_w             = nullptr;
+    struct ggml_tensor * reblock_conv1_b             = nullptr;
+    struct ggml_tensor * reblock_conv2_w             = nullptr;
+    struct ggml_tensor * reblock_conv2_b             = nullptr;
+    struct ggml_tensor * source_downs_w              = nullptr;
+    struct ggml_tensor * source_downs_b              = nullptr;
+    struct ggml_tensor * source_resblock_act1        = nullptr;
+    struct ggml_tensor * source_resblock_act2        = nullptr;
+    struct ggml_tensor * source_reblock_conv1_w      = nullptr;
+    struct ggml_tensor * source_reblock_conv1_b      = nullptr;
+    struct ggml_tensor * source_reblock_conv2_w      = nullptr;
+    struct ggml_tensor * source_reblock_conv2_b      = nullptr;
+    struct ggml_tensor * ups_w                       = nullptr;
+    struct ggml_tensor * ups_b                       = nullptr;
+
 };
 
 struct llama_model {
@@ -560,6 +582,17 @@ struct llama_model {
     struct ggml_tensor * f_blk_norm_b     = nullptr;
     struct ggml_tensor * f_proj_w         = nullptr;
     struct ggml_tensor * f_proj_b         = nullptr;
+
+
+    //---------CosyVoiceHift-----------------
+    struct ggml_tensor * f0_w_1st         = nullptr;
+    struct ggml_tensor * f0_b_1st         = nullptr;
+    struct ggml_tensor * conv_pre_w       = nullptr;
+    struct ggml_tensor * conv_pre_b       = nullptr;
+    struct ggml_tensor * conv_post_w      = nullptr;
+    struct ggml_tensor * conv_post_b      = nullptr;
+    struct ggml_tensor * m_source_w       = nullptr;
+    struct ggml_tensor * m_source_b       = nullptr;
 
     std::vector<llama_layer> layers;
     std::vector<llama_layer> mid_block_sub_layers;

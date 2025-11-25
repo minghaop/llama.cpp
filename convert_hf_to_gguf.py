@@ -32,6 +32,90 @@ import gguf
 logger = logging.getLogger("hf-to-gguf")
 
 
+from typing import List, Dict, Optional, Any
+from transformers import PretrainedConfig
+
+class CosyVoiceHiFTConfig(PretrainedConfig):
+    """
+    Configuration for CosyVoice HiFT Generator (HiFTGenerator + F0Predictor)
+    """
+    model_type = "cosy_voice_hift"
+
+    def __init__(
+        self,
+        # ----------------- HiFTGenerator General -----------------
+        in_channels: int = 80,
+        base_channels: int = 512,
+        nb_harmonics: int = 8,
+        sampling_rate: int = 22050,  # 对应 YAML 中的 !ref <sample_rate>
+        nsf_alpha: float = 0.1,
+        nsf_sigma: float = 0.003,
+        nsf_voiced_threshold: float = 10.0,
+        lrelu_slope: float = 0.1,
+        audio_limit: float = 0.99,
+        
+        # ----------------- Upsampling & Resolution -----------------
+        # YAML: upsample_rates: [8, 5, 3]
+        upsample_rates: List[int] = [8, 5, 3],
+        # YAML: upsample_kernel_sizes: [16, 11, 7]
+        upsample_kernel_sizes: List[int] = [16, 11, 7],
+        # YAML: istft_params: {n_fft: 16, hop_len: 4}
+        istft_n_fft: int = 16,
+        istft_hop_len: int = 4,
+
+        # ----------------- Residual Blocks (Main) -----------------
+        # YAML: resblock_kernel_sizes: [3, 7, 11]
+        resblock_kernel_sizes: List[int] = [3, 7, 11],
+        # YAML: resblock_dilation_sizes: [[1, 3, 5], [1, 3, 5], [1, 3, 5]]
+        resblock_dilation_sizes: List[List[int]] = [[1, 3, 5], [1, 3, 5], [1, 3, 5]],
+
+        # ----------------- Residual Blocks (Source) -----------------
+        # YAML: source_resblock_kernel_sizes: [7, 7, 11]
+        source_resblock_kernel_sizes: List[int] = [7, 7, 11],
+        # YAML: source_resblock_dilation_sizes: [[1, 3, 5], [1, 3, 5], [1, 3, 5]]
+        source_resblock_dilation_sizes: List[List[int]] = [[1, 3, 5], [1, 3, 5], [1, 3, 5]],
+
+        # ----------------- F0 Predictor -----------------
+        # 对应 YAML 中的 f0_predictor: !new:cosyvoice.hifigan.f0_predictor.ConvRNNF0Predictor
+        f0_predictor_num_class: int = 1,
+        f0_predictor_in_channels: int = 80,
+        f0_predictor_cond_channels: int = 512,
+
+        **kwargs,
+    ):
+        # 1. 把局部变量一次性写进 self 的属性
+        self.in_channels = in_channels
+        self.base_channels = base_channels
+        self.nb_harmonics = nb_harmonics
+        self.sampling_rate = sampling_rate
+        self.nsf_alpha = nsf_alpha
+        self.nsf_sigma = nsf_sigma
+        self.nsf_voiced_threshold = nsf_voiced_threshold
+        self.lrelu_slope = lrelu_slope
+        self.audio_limit = audio_limit
+
+        # Upsample params
+        self.upsample_rates = upsample_rates
+        self.upsample_kernel_sizes = upsample_kernel_sizes
+        
+        # iSTFT params (Reconstruct dict in model init if needed)
+        self.istft_n_fft = istft_n_fft
+        self.istft_hop_len = istft_hop_len
+        self.istft_params = {"n_fft": istft_n_fft, "hop_len": istft_hop_len}
+
+        # ResBlock params
+        self.resblock_kernel_sizes = resblock_kernel_sizes
+        self.resblock_dilation_sizes = resblock_dilation_sizes
+        self.source_resblock_kernel_sizes = source_resblock_kernel_sizes
+        self.source_resblock_dilation_sizes = source_resblock_dilation_sizes
+
+        # F0 Predictor params
+        self.f0_predictor_num_class = f0_predictor_num_class
+        self.f0_predictor_in_channels = f0_predictor_in_channels
+        self.f0_predictor_cond_channels = f0_predictor_cond_channels
+
+        # 2. 让父类保存其余 kwargs
+        super().__init__(**kwargs)
 
 ###### Custome Config ######
 class CosyVoiceFlowConfig(PretrainedConfig):
@@ -519,7 +603,7 @@ class ModelBase:
         self.metadata.set_gguf_meta_model(self.gguf_writer)
 
         logger.info("Set model parameters")
-        self.set_flow_guff_parameters()
+        self.set_hift_guff_parameters()
 
         logger.info("Set model quantization version")
         self.gguf_writer.add_quantization_version(gguf.GGML_QUANT_VERSION)
@@ -552,7 +636,7 @@ class ModelBase:
             # for security reason, we don't allow loading remote code by default
             # if a model need remote code, we will fallback to config.json
             # config = AutoConfig.from_pretrained(dir_model, trust_remote_code=False).to_dict()
-            config = CosyVoiceFlowConfig.from_pretrained("/home/yangkun/CosyVoice/CosyVoice_ori/CosyVoice/pretrained_models/CosyVoice2-0.5B/flow")
+            config = CosyVoiceHiFTConfig.from_pretrained("/home/yangkun/CosyVoice/CosyVoice_ori/CosyVoice/pretrained_models/CosyVoice2-0.5B/hift")
         except Exception as e:
             logger.warning(f"Failed to load model config from {dir_model}: {e}")
             logger.warning("Trying to load config.json instead")
@@ -802,6 +886,72 @@ class TextModel(ModelBase):
         self.gguf_writer.add_cosyvoiceflow_decoder_t_scheduler(decoder_t_scheduler)
         self.gguf_writer.add_cosyvoiceflow_decoder_training_cfg_rate(decoder_training_cfg_rate)
 
+    def set_hift_guff_parameters(self):
+        
+        ######## General ########
+        cfg_dict = self.hparams.to_dict()
+        in_channels = cfg_dict["in_channels"]
+        base_channels = cfg_dict["base_channels"]
+        nb_harmonics = cfg_dict["nb_harmonics"]
+        sampling_rate = cfg_dict["sampling_rate"]
+        nsf_alpha = cfg_dict["nsf_alpha"]
+        nsf_sigma = cfg_dict["nsf_sigma"]
+        nsf_voiced_threshold = cfg_dict["nsf_voiced_threshold"]
+        lrelu_slope = cfg_dict["lrelu_slope"]
+        audio_limit = cfg_dict["audio_limit"]
+
+        ######## Upsampling & STFT ########
+        upsample_rates = cfg_dict["upsample_rates"]
+        upsample_kernel_sizes = cfg_dict["upsample_kernel_sizes"]
+        istft_n_fft = cfg_dict["istft_n_fft"]
+        istft_hop_len = cfg_dict["istft_hop_len"]
+
+        ######## ResBlocks (Main & Source) ########
+        resblock_kernel_sizes = cfg_dict["resblock_kernel_sizes"]
+        # 注意：GGUF通常只支持一维数组，这里将二维数组展平
+        # [[1,3,5], [1,3,5]] -> [1,3,5, 1,3,5]
+        resblock_dilation_sizes = [item for sublist in cfg_dict["resblock_dilation_sizes"] for item in sublist]
+        
+        source_resblock_kernel_sizes = cfg_dict["source_resblock_kernel_sizes"]
+        source_resblock_dilation_sizes = [item for sublist in cfg_dict["source_resblock_dilation_sizes"] for item in sublist]
+
+        ######## F0 Predictor ########
+        f0_predictor_num_class = cfg_dict["f0_predictor_num_class"]
+        f0_predictor_in_channels = cfg_dict["f0_predictor_in_channels"]
+        f0_predictor_cond_channels = cfg_dict["f0_predictor_cond_channels"]
+
+        # ---------------------------------------------------------
+        # Write to GGUF
+        # ---------------------------------------------------------
+        
+        # General
+        self.gguf_writer.add_cosyvoicehift_in_channels(in_channels)
+        self.gguf_writer.add_cosyvoicehift_base_channels(base_channels)
+        self.gguf_writer.add_cosyvoicehift_nb_harmonics(nb_harmonics)
+        self.gguf_writer.add_cosyvoicehift_sampling_rate(sampling_rate)
+        self.gguf_writer.add_cosyvoicehift_nsf_alpha(nsf_alpha)
+        self.gguf_writer.add_cosyvoicehift_nsf_sigma(nsf_sigma)
+        self.gguf_writer.add_cosyvoicehift_nsf_voiced_threshold(nsf_voiced_threshold)
+        self.gguf_writer.add_cosyvoicehift_lrelu_slope(lrelu_slope)
+        self.gguf_writer.add_cosyvoicehift_audio_limit(audio_limit)
+
+        # Upsampling & STFT
+        self.gguf_writer.add_cosyvoicehift_upsample_rates(upsample_rates)
+        self.gguf_writer.add_cosyvoicehift_upsample_kernel_sizes(upsample_kernel_sizes)
+        self.gguf_writer.add_cosyvoicehift_istft_n_fft(istft_n_fft)
+        self.gguf_writer.add_cosyvoicehift_istft_hop_len(istft_hop_len)
+
+        # ResBlocks
+        self.gguf_writer.add_cosyvoicehift_resblock_kernel_sizes(resblock_kernel_sizes)
+        self.gguf_writer.add_cosyvoicehift_resblock_dilation_sizes(resblock_dilation_sizes)
+        
+        self.gguf_writer.add_cosyvoicehift_source_resblock_kernel_sizes(source_resblock_kernel_sizes)
+        self.gguf_writer.add_cosyvoicehift_source_resblock_dilation_sizes(source_resblock_dilation_sizes)
+
+        # F0 Predictor
+        self.gguf_writer.add_cosyvoicehift_f0_predictor_num_class(f0_predictor_num_class)
+        self.gguf_writer.add_cosyvoicehift_f0_predictor_in_channels(f0_predictor_in_channels)
+        self.gguf_writer.add_cosyvoicehift_f0_predictor_cond_channels(f0_predictor_cond_channels)
 
     def write_vocab(self):
         if len(self.gguf_writer.tensors) != 1:
@@ -3020,8 +3170,110 @@ class CosyVoiceFlow(TextModel):
 
     def set_flow_parameters(self):
         super().set_flow_guff_parameters()
+
+@ModelBase.register("CosyVoiceHiFT")
+class CosyVoiceHiFT(TextModel):
+    model_arch = gguf.MODEL_ARCH.COSYVOICEHIFT
+
+    def set_hift_parameters(self):
+        super().set_hift_guff_parameters()
+    
+    def get_tensors(self):
+        # 1. 获取父类加载的所有原始张量 (Lazy Load)
+        raw_tensors_iter = super().get_tensors()
         
-        
+        # 将迭代器转为字典，方便查找配对
+        tensors_dict = {}
+        for name, data in raw_tensors_iter:
+            tensors_dict[name] = data
+
+        final_tensors = {}
+        processed_keys = set()
+
+        print("正在处理 Weight Norm 合并...")
+
+        for name, data in tensors_dict.items():
+            if name in processed_keys:
+                continue
+
+            # 检查是否是 weight_norm 的 gain 分量 (g) -> original0
+            if "parametrizations.weight.original0" in name:
+                # 构造对应的 vector 分量名 (v) -> original1
+                v_name = name.replace("original0", "original1")
+                
+                # 构造最终目标的 weight 名 (去掉中间的 parametrizations)
+                new_name = name.replace(".parametrizations.weight.original0", ".weight")
+
+                if v_name in tensors_dict:
+                    # === 发现一对 g 和 v，开始合并 ===
+                    try:
+                        g_obj = data
+                        v_obj = tensors_dict[v_name]
+
+                        # 辅助函数：强制将各种对象转为 float32 的 numpy 数组
+                        def to_numpy(obj):
+                            # 1. 如果是 PyTorch Tensor
+                            if hasattr(obj, "detach"):
+                                return obj.detach().cpu().numpy().astype(np.float32)
+                            # 2. 如果是 LazyTensor (llama.cpp)，尝试调用 load
+                            if hasattr(obj, "load"):
+                                return obj.load().astype(np.float32)
+                            # 3. 如果已经是 numpy 数组
+                            if isinstance(obj, np.ndarray):
+                                return obj.astype(np.float32)
+                            # 4. 最后的手段：尝试直接转换
+                            return np.array(obj).astype(np.float32)
+
+                        g_data_np = to_numpy(g_obj)
+                        v_data_np = to_numpy(v_obj)
+                        
+                        # 转为 PyTorch Tensor 进行计算
+                        g_tensor = torch.from_numpy(g_data_np)
+                        v_tensor = torch.from_numpy(v_data_np)
+
+                        # 计算 Norm
+                        # Conv1d 的 weight_norm 通常是在 dim=0 (输出通道) 上进行归一化
+                        # 我们需要对除了 dim=0 以外的所有维度求范数
+                        if v_tensor.ndim > 1:
+                            dims_to_norm = list(range(1, v_tensor.ndim))
+                            norm = torch.norm(v_tensor, p=2, dim=dims_to_norm, keepdim=True)
+                            # 应用公式 W = g * (v / ||v||)
+                            w_tensor = g_tensor * (v_tensor / (norm + 1e-6))
+                        else:
+                            # 1D 情况直接乘
+                            w_tensor = g_tensor * v_tensor
+
+                        # 存入 final_tensors (此时是 Tensor 类型)
+                        final_tensors[new_name] = w_tensor
+                        
+                        # 标记 g 和 v 都已处理，后续循环跳过
+                        processed_keys.add(name)
+                        processed_keys.add(v_name)
+                        print(f"  [合并成功] {new_name} | Shape: {w_tensor.shape}")
+                        
+                    except Exception as e:
+                        print(f"  [合并失败] {new_name}: {e}")
+                        raise RuntimeError(f"Failed to merge weight norm for {new_name}") from e
+                else:
+                    # 只有 g 没有 v，照原样
+                    final_tensors[name] = data
+            
+            elif "parametrizations.weight.original1" in name:
+                # 这是 v 分量，应该在上面被 g 处理掉了
+                if name not in processed_keys:
+                    pass 
+            
+            else:
+                # 普通张量 (Bias, Alpha 等)
+                final_tensors[name] = data
+
+        # 返回生成器
+        for k, v in final_tensors.items():
+            # 【关键修正】确保返回 PyTorch Tensor，因为 prepare_tensors 会调用 .to()
+            if isinstance(v, np.ndarray):
+                v = torch.from_numpy(v)
+            
+            yield k, v
 
 @ModelBase.register("Ernie4_5_ForCausalLM")
 class Ernie4_5Model(TextModel):
@@ -7854,6 +8106,8 @@ def main() -> None:
     with torch.inference_mode():
         output_type = ftype_map[args.outtype]
         model_type = ModelType.MMPROJ if args.mmproj else ModelType.TEXT
+        # import pdb
+        # pdb.set_trace()
         hparams = ModelBase.load_hparams(dir_model)
         model_architecture = get_model_architecture(hparams, model_type)
         logger.info(f"Model architecture: {model_architecture}")
