@@ -17042,7 +17042,8 @@ struct llm_build_hift : public llm_graph_context {
 
         s = ggml_cont(ctx0, ggml_transpose(ctx0, s));
 
-        ggml_tensor * s_source = build_m_source(s, m_source_w, m_source_b);
+        ggml_tensor * s_source = build_m_source(s, model.m_source_w, model.m_source_b);
+
         
 
 

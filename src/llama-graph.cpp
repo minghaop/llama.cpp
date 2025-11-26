@@ -1923,7 +1923,17 @@ ggml_tensor * llm_graph_context::build_m_source(
         ggml_tensor * mb) const {
     
     ggml_tensor * cur_dup = ggml_dup(ctx0, cur);
-    
+    ggml_tensor * arrange_tensor = ggml_arange(ctx0, 1.0, 10.0, 1.0);
+    arrange_tensor = ggml_reshape_3d(ctx0, arrange_tensor, arrange_tensor->ne[0], 1, 1);
+
+    cur_dup = ggml_mul(ctx0, cur_dup, arrange_tensor);
+
+    ggml_tensor * rad_values = ggml_scale(ctx0, cur_dup, 1/ 24000);
+    int n_tasks = 1;
+    ggml_tensor * rad_values = ggml_map_custom1(ctx0, rad_values, custom_op_mod_1, n_tasks, NULL);
+    ggml_tensor * dummy_input = ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, rad_values->ne[2], rad_values->ne[0]);
+    ggml_tensor * rand_ini = ggml_map_custom1(ctx0, dummy_input, custom_op_rand_uniform, 1, NULL);
+
 
 }
 
