@@ -33,6 +33,10 @@
 #include <limits.h>
 #include <stdarg.h>
 #include <signal.h>
+#include <cmath>      // for std::floor
+#include <algorithm>
+#include <random>
+#include <ctime>
 
 #include <stdio.h>
 
@@ -5266,6 +5270,57 @@ struct ggml_tensor * ggml_unary_inplace(
 }
 
 // ggml_map_custom1
+
+static std::mt19937 g_rng(1234);
+
+static void custom_op_mod_1(
+    struct ggml_tensor * dst,       // 输出张量
+    const struct ggml_tensor * a,   // 输入张量
+    int ith,                        // 当前线程 ID
+    int nth,                        // 线程总数
+    void * userdata)                // 用户数据 (这里不用)
+{
+    // 1. 获取元素总数
+    const int ne = ggml_nelements(dst);
+
+    // 2. 计算当前线程负责的数据范围 (分片)
+    // 简单的并行策略：每个线程处理一段连续的数据
+    const int dr = (ne + nth - 1) / nth; 
+    const int ie0 = dr * ith; 
+    const int ie1 = std::min(ie0 + dr, ne);
+
+    // 3. 获取数据指针 (假设是 F32 类型)
+    const float * src_data = (const float *) a->data;
+    float * dst_data = (float *) dst->data;
+
+    // 4. 循环计算
+    for (int i = ie0; i < ie1; i++) {
+        // 核心逻辑: x % 1 = x - floor(x)
+        dst_data[i] = src_data[i] - std::floor(src_data[i]);
+    }
+}
+
+static void custom_op_rand_uniform(
+    struct ggml_tensor * dst,       
+    const struct ggml_tensor * a,   // 这里的 a 只是为了提供 shape，不读数据
+    int ith,                        
+    int nth,                        
+    void * userdata)                
+{
+    const int ne = ggml_nelements(dst);
+    const int dr = (ne + nth - 1) / nth; 
+    const int ie0 = dr * ith; 
+    const int ie1 = std::min(ie0 + dr, ne);
+
+    float * dst_data = (float *) dst->data;
+    
+    std::mt19937 local_rng(g_rng() + ith); // 用全局 RNG 生成局部种子
+    std::uniform_real_distribution<float> dist(0.0f, 1.0f);
+
+    for (int i = ie0; i < ie1; i++) {
+        dst_data[i] = dist(local_rng);
+    }
+}
 
 static struct ggml_tensor * ggml_map_custom1_impl(
         struct ggml_context      * ctx,
