@@ -1927,13 +1927,115 @@ ggml_tensor * llm_graph_context::build_m_source(
     arrange_tensor = ggml_reshape_3d(ctx0, arrange_tensor, arrange_tensor->ne[0], 1, 1);
 
     cur_dup = ggml_mul(ctx0, cur_dup, arrange_tensor);
-
+    
+    //_f02sine函数
     ggml_tensor * rad_values = ggml_scale(ctx0, cur_dup, 1/ 24000);
-    int n_tasks = 1;
-    ggml_tensor * rad_values = ggml_map_custom1(ctx0, rad_values, custom_op_mod_1, n_tasks, NULL);
-    ggml_tensor * dummy_input = ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, rad_values->ne[2], rad_values->ne[0]);
-    ggml_tensor * rand_ini = ggml_map_custom1(ctx0, dummy_input, custom_op_rand_uniform, 1, NULL);
+    ggml_tensor * rad_values = ggml_map_custom1(ctx0, rad_values, custom_op_mod_1, 1, NULL);
 
+    const int dim = rad_values->ne[0];
+    const int time = rad_values->ne[1];
+    const int batch = rad_values->ne[2];
+
+    struct ggml_tensor * rand_ini = ggml_new_tensor_3d(ctx0, GGML_TYPE_F32, dim, 1, batch);
+    rand_ini = ggml_map_custom1(ctx0, rand_ini, custom_op_rand_masked, 1, NULL);
+
+    if (time > 1) {
+        struct ggml_tensor * zeros = ggml_new_tensor_3d(ctx0, GGML_TYPE_F32, dim, time - 1, batch);
+        struct ggml_tensor * zero_const = ggml_new_f32(ctx0, 0.0f);
+        zeros = ggml_scale(ctx0, zeros, zero_const);
+        struct ggml_tensor * noise_full = ggml_concat(ctx0, rand_ini, zeros, 1);
+        rad_values = ggml_add(ctx0, rad_values, noise_full);
+    } else{
+        rad_values = ggml_add(ctx0, rad_values, rand_ini);
+    }
+
+    ggml_tensor * rad_values_dup = ggml_dup(ctx0, ggml_cont(ctx0, rad_values));
+
+    ggml_tensor * rad_values_downsampled = ggml_interpolate(ctx0, rad_values_dup, dim, time / 480, batch, 1, 1);
+
+    struct ggml_tensor * phase = ggml_new_tensor_3d(ctx0, GGML_TYPE_F32, rad_values_downsampled->ne[0], rad_values_downsampled->ne[1], rad_values_downsampled->ne[2]);
+    phase = ggml_map_custom1(ctx0, rad_values_downsampled, custom_op_cumsum_ne1, GGML_N_TASKS_MAX, NULL);
+    phase = ggml_scale(ctx0, phase, 2 * 3.14159265358979323846f);
+    ggml_tensor * phase_scaled = ggml_interpolate(ctx0, ggml_cont(ctx0, phase), phase->ne[0], phase->ne[1], phase->ne[2], 1, 1);
+    ggml_tensor * sines = ggml_sin(ctx0, phase_scaled);
+
+    //_f02uv
+    float threshold_val = 10.0f;
+    ggml_tensor * uv = ggml_map_custom1(ctx0, cur_dup, custom_op_threshold_uv, GGML_N_TASKS_MAX, &threshold_val);
+    ggml_tensor * zeros = ggml_scale(ctx0, uv, 0.0f);
+    ggml_tensor * ones = ggml_exp(ctx0, zeros);
+
+    ggml_tensor * term1 = ggml_scale(ctx0, uv, 0.03);
+    ggml_tensor * term2 = ggml_sub(ctx0, ones, uv);
+    term2 = ggml_scale(ctx0, term2, 0.1 / 3);
+    ggml_tensor * noise_amp = ggml_add(ctx0, term1, term2);
+
+    ggml_tensor * noise = ggml_new_tensor(ctx0, sines->type, sines->n_dims, sines->ne);
+    noise = ggml_map_custom1(ctx0, sines, custom_op_randn, GGML_N_TASKS_MAX, NULL);
+    noise = ggml_mul(ctx0, noise_amp, noise);
+
+    ggml_tensor * sine_waves = ggml_mul(ctx0, sines, uv);
+    sine_waves = ggml_add(ctx0, sine_waves, noise);
+
+    ggml_tensor * sine_wavs = ggml_mul_mat(ctx0, mw, sine_waves);
+    sine_wavs = ggml_add(ctx0, sine_wavs, mb);
+
+    ggml_tensor * sine_merge = ggml_tanh(ctx0, sine_wavs);
+
+    ggml_set_name(sine_merge, "sine_merge");
+    return sine_merge;
+}
+
+ggml_tensor * llm_graph_context::build_res_blk(
+            ggml_tensor * cur,
+            ggml_tensor * convs1_mw,
+            ggml_tensor * convs1_mb,
+            ggml_tensor * convs2_mw,
+            ggml_tensor * convs2_mb,
+            ggml_tensor * act1,
+            ggml_tensor * act2) const {
+    
+    ggml_tensor * res_cur = ggml_dup(ctx0, ggml_cont(ctx0, cur));
+    // ggml_tensor * si_res_blk = NULL;
+    for(int j = 0; j < 3; j++) {
+        //-------act1------
+        ggml_tensor * alpha = ggml_reshape_3d(ctx0, act1, 1, act1->ne[0], 1);
+        ggml_tensor * alpha_zeros = ggml_scale(ctx0, alpha, 0.0f);
+        ggml_tensor * alpha_ones = ggml_exp(ctx0, alpha_zeros);
+        ggml_tensor * no_div_by_zero = ggml_add(ctx0, alpha_zeros, 0.000000001f);
+        ggml_tensor * alpha_by_zero = ggml_add(ctx0, alpha, no_div_by_zero);
+        ggml_tensor * alpha_div = ggml_div(ctx0, alpha_ones, alpha_by_zero);
+        ggml_tensor * alpha_sin = ggml_mul(ctx0, res_cur, alpha);
+        alpha_sin = ggml_sin(ctx0, alpha_sin);
+        alpha_sin = ggml_sqr(ctx0, alpha_sin);
+        ggml_tensor * alpha_mul = ggml_mul(ctx0, alpha_div, alpha_sin);
+        ggml_tensor * act1_res = ggml_add(ctx0, res_cur, alpha_mul);
+
+        //-----convs1------
+        ggml_tensor * si_res_convs1 = ggml_conv_1d(ctx0, convs1_mw, act1_res);
+        si_res_convs1 = ggml_add(ctx0, si_res_convs1, convs1_mb);
+
+        //------act2-------
+        ggml_tensor * alpha2 = ggml_reshape_3d(ctx0, act2, 1, act2->ne[0], 1);
+        ggml_tensor * alpha2_zeros = ggml_scale(ctx0, alpha2, 0.0f);
+        ggml_tensor * alpha2_ones = ggml_exp(ctx0, alpha2_zeros);
+        ggml_tensor * no_div_by_zero2 = ggml_add(ctx0, alpha2_zeros, 0.000000001f);
+        ggml_tensor * alpha2_by_zero = ggml_add(ctx0, alpha2, no_div_by_zero2);
+        ggml_tensor * alpha2_div = ggml_div(ctx0, alpha2_ones, alpha2_by_zero);
+        ggml_tensor * alpha2_sin = ggml_mul(ctx0, si_res_convs1, alpha2);
+        alpha2_sin = ggml_sin(ctx0, alpha2_sin);
+        alpha2_sin = ggml_sqr(ctx0, alpha2_sin);
+        ggml_tensor * alpha2_mul = ggml_mul(ctx0, alpha2_div, alpha2_sin);
+        ggml_tensor * act2_res = ggml_add(ctx0, si_res_convs1, alpha2_mul);
+
+        //-----convs2-----
+        ggml_tensor * si_res_convs2 = ggml_conv_1d(ctx0, convs2_mw, act2_res);
+        si_res_convs2 = ggml_add(ctx0, si_res_convs2, convs2_mb);
+
+        res_cur = ggml_add(ctx0, si_res_convs2, res_cur);
+    }
+
+    return res_cur;
 
 }
 
@@ -2071,7 +2173,6 @@ ggml_tensor * llm_graph_context::build_inp_extend_pe() const {
 
 ggml_tensor * llm_graph_context::build_inp_rand_noise() const {
 
-    const uint32_t rand_noise_len = 80 * 50 * 300;
     
     auto inp = std::make_unique<llm_graph_input_rand_noise>();
     // LLAMA_LOG_INFO("&&&&&&&&&&&&& feat_len is: %d\n", feat_len);
@@ -2083,6 +2184,8 @@ ggml_tensor * llm_graph_context::build_inp_rand_noise() const {
     res->add_input(std::move(inp));
     return cur;
 }
+
+
 
 ggml_tensor * llm_graph_context::build_inp_pos() const {
     auto inp = std::make_unique<llm_graph_input_pos>(hparams.n_pos_per_embd());

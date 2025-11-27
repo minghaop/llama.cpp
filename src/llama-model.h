@@ -596,6 +596,8 @@ struct llama_model {
 
     std::vector<llama_layer> layers;
     std::vector<llama_layer> mid_block_sub_layers;
+    std::vector<llama_layer> source_resblk_sub_layer;
+    std::vector<llama_layer> resblk_sub_layer;
 
     llama_model_params params;
 

@@ -5271,8 +5271,6 @@ struct ggml_tensor * ggml_unary_inplace(
 
 // ggml_map_custom1
 
-static std::mt19937 g_rng(1234);
-
 static void custom_op_mod_1(
     struct ggml_tensor * dst,       // 输出张量
     const struct ggml_tensor * a,   // 输入张量
@@ -5300,13 +5298,15 @@ static void custom_op_mod_1(
     }
 }
 
-static void custom_op_rand_uniform(
+static std::mt19937 g_rng(1234);
+
+static void custom_op_rand_masked(
     struct ggml_tensor * dst,       
-    const struct ggml_tensor * a,   // 这里的 a 只是为了提供 shape，不读数据
-    int ith,                        
-    int nth,                        
-    void * userdata)                
+    const struct ggml_tensor * a,   
+    int ith, int nth, void * userdata)                
 {
+    // 获取 Dim 大小 (ne[0])
+    const int dim = dst->ne[0]; 
     const int ne = ggml_nelements(dst);
     const int dr = (ne + nth - 1) / nth; 
     const int ie0 = dr * ith; 
@@ -5314,11 +5314,168 @@ static void custom_op_rand_uniform(
 
     float * dst_data = (float *) dst->data;
     
-    std::mt19937 local_rng(g_rng() + ith); // 用全局 RNG 生成局部种子
+    std::mt19937 local_rng(g_rng() + ith);
     std::uniform_real_distribution<float> dist(0.0f, 1.0f);
 
     for (int i = ie0; i < ie1; i++) {
+        // i % dim == 0 代表这是该向量的第一个元素 (基频)
+        if (i % dim == 0) {
+            dst_data[i] = 0.0f; // Mask 0
+        } else {
+            dst_data[i] = dist(local_rng); // Random
+        }
+    }
+}
+
+// 输入布局: [Dim=9, Time=910, Batch=1]
+static void custom_op_cumsum_ne1(
+    struct ggml_tensor * dst,       
+    const struct ggml_tensor * a,   
+    int ith, int nth, void * userdata)                
+{
+    const int dim   = dst->ne[0]; // 9
+    const int time  = dst->ne[1]; // 910
+    const int batch = dst->ne[2]; // 1
+
+    // 并行策略：
+    // Cumsum 是沿 Time 轴有依赖的，所以 Time 轴内部不能并行。
+    // 我们可以在 Dim 轴和 Batch 轴上并行。
+    // 总任务数 = Dim * Batch (9 * 1 = 9 个任务)
+    const int n_tasks = dim * batch;
+    
+    const int dr = (n_tasks + nth - 1) / nth; 
+    const int ie0 = dr * ith; 
+    const int ie1 = std::min(ie0 + dr, n_tasks);
+
+    const float * src_data = (const float *) a->data;
+    float * dst_data = (float *) dst->data;
+
+    // 循环处理分配给当前线程的任务 (Dim 列)
+    for (int i = ie0; i < ie1; i++) {
+        // 解算坐标：当前处理哪一个 Dim (d) 和 Batch (b)
+        // i = b * dim + d
+        int d = i % dim;
+        int b = i / dim;
+
+        // 核心累加逻辑
+        float sum = 0.0f;
+        for (int t = 0; t < time; t++) {
+            // 计算内存索引
+            // index = b * (time * dim) + t * dim + d
+            // 因为 dim 是最内层 ne0
+            int idx = b * (time * dim) + t * dim + d;
+            
+            sum += src_data[idx];
+            dst_data[idx] = sum;
+        }
+    }
+}
+
+// 自定义算子：阈值二值化
+// dst[i] = (src[i] > threshold) ? 1.0f : 0.0f
+static void custom_op_threshold_uv(
+    struct ggml_tensor * dst,       
+    const struct ggml_tensor * a,   
+    int ith, int nth, void * userdata)                
+{
+    // 从 userdata 获取阈值 (float*)
+    const float threshold = *(const float *)userdata;
+
+    const int ne = ggml_nelements(dst);
+    const int dr = (ne + nth - 1) / nth; 
+    const int ie0 = dr * ith; 
+    const int ie1 = std::min(ie0 + dr, ne);
+
+    const float * src_data = (const float *) a->data;
+    float * dst_data = (float *) dst->data;
+
+    for (int i = ie0; i < ie1; i++) {
+        // 核心逻辑: f0 > threshold -> 1.0, else -> 0.0
+        dst_data[i] = (src_data[i] > threshold) ? 1.0f : 0.0f;
+    }
+}
+
+static std::mt19937 g_rng(1234);
+
+// 自定义算子：标准正态分布 (Mean=0, Std=1)
+static void custom_op_randn(
+    struct ggml_tensor * dst,       
+    const struct ggml_tensor * a,   // 这里的 a 只是为了提供 shape (randn_like)
+    int ith, int nth, void * userdata)                
+{
+    const int ne = ggml_nelements(dst);
+    const int dr = (ne + nth - 1) / nth; 
+    const int ie0 = dr * ith; 
+    const int ie1 = std::min(ie0 + dr, ne);
+
+    float * dst_data = (float *) dst->data;
+
+    // 线程局部 RNG
+    std::mt19937 local_rng(g_rng() + ith);
+    // 使用 std::normal_distribution 生成高斯噪声
+    std::normal_distribution<float> dist(0.0f, 1.0f);
+
+    for (int i = ie0; i < ie1; i++) {
         dst_data[i] = dist(local_rng);
+    }
+}
+
+// 硬编码的 Hann Window (16点)
+static const float HANN_WINDOW_16[16] = {
+    0.0000f, 0.0381f, 0.1464f, 0.3087f, 0.5000f, 0.6913f, 0.8536f, 0.9619f, 
+    1.0000f, 0.9619f, 0.8536f, 0.6913f, 0.5000f, 0.3087f, 0.1464f, 0.0381f
+};
+
+// 自定义算子：运行时生成 STFT Basis
+// 输出形状: [Kernel=16, In=1, Out=18]
+static void custom_op_gen_stft_basis(
+    struct ggml_tensor * dst,       
+    const struct ggml_tensor * a,   
+    int ith, int nth, void * userdata) {
+    
+    const int n_fft = 16;
+    const int n_out = n_fft / 2 + 1; // 9 (Nyquist)
+    
+    // 并行分片
+    const int ne = ggml_nelements(dst);
+    const int dr = (ne + nth - 1) / nth; 
+    const int ie0 = dr * ith; 
+    const int ie1 = std::min(ie0 + dr, ne);
+
+    float * dst_data = (float *) dst->data;
+
+    for (int i = ie0; i < ie1; i++) {
+        // 1. 解析索引
+        // Layout: [Kernel(Time), In, Out(Channel)]
+        // ne0=16, ne1=1, ne2=18
+        // i = out * (1*16) + in * 16 + n
+        
+        int n = i % n_fft;          // Kernel Time Index (0~15)
+        int ch = i / n_fft;         // Output Channel Index (0~17)
+        
+        // 2. 判断是实部还是虚部
+        // 0~8: Real (Cos), 9~17: Imag (Sin)
+        int k;      // Frequency Index (0~8)
+        bool is_real; 
+        
+        if (ch < n_out) {
+            k = ch;
+            is_real = true;
+        } else {
+            k = ch - n_out;
+            is_real = false;
+        }
+
+        // 3. 计算值
+        float angle = 2.0f * M_PI * k * n / n_fft;
+        float w = HANN_WINDOW_16[n];
+        
+        if (is_real) {
+            dst_data[i] = w * std::cos(angle);
+        } else {
+            // PyTorch stft definition: exp(-j*w*t) -> -sin
+            dst_data[i] = w * -std::sin(angle);
+        }
     }
 }
 
