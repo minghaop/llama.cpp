@@ -547,6 +547,13 @@ struct llm_graph_context {
         ggml_tensor * mw,
         ggml_tensor * mb) const;
 
+    ggml_tensor * build_res_blk(
+        ggml_tensor * cur,
+        ggml_tensor * convs1_mw,
+        ggml_tensor * convs1_mb,
+        ggml_tensor * act1,
+        ggml_tensor * act2) const;
+
     ggml_tensor * build_cvec(
              ggml_tensor * cur,
                      int   il) const;

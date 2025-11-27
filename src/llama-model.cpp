@@ -5342,12 +5342,13 @@ bool llama_model::load_tensors(llama_model_loader & ml) {
 
                     std::vector<int> resblk_vec = {3, 7, 11};
                     std::vector<int> dims = {256, 128, 64};
+                    resblk_sub_layer.resize(27);
                     for(int i = 11; i < 20; i++) {
-                        auto & layer = layers[i];
                         int index = (i - 11) % 3;
                         int dim_value = dims[index];
 
                         for (int j = 0; j < 3; j++) {
+                            auto & layer = resblk_sub_layer[(i - 11) * 3 + j];
                             layer.resblock_act1 = create_tensor(tn(LLM_TENSOR_RESBLOCKS_ACTIVATIONS1_ALPHA, "alpha", i - 11, j), {dim_value}, 0);
                             layer.resblock_act2 = create_tensor(tn(LLM_TENSOR_RESBLOCKS_ACTIVATIONS2_ALPHA, "alpha", i - 11, j), {dim_value}, 0);
 
@@ -5367,21 +5368,22 @@ bool llama_model::load_tensors(llama_model_loader & ml) {
                         layer.source_downs_b = create_tensor(tn(LLM_TENSOR_SOURCE_DOWNS_BIAS, "bias", index), {dims[index]}, 0);
                     }
 
+                    source_resblk_sub_layer.resize(9);
                     for(int i = 23; i < 26; i++) {
-                        auto & layer = layers[i];
                         int index = (i - 23) % 3;
                         if(index == 0) index += 1;
                         int dim_value = dims[index];
 
                         for (int j = 0; j < 3; j++) {
-                            layer.source_resblock_act1 = create_tensor(tn(LLM_TENSOR_SOURCE_RESBLOCKS_ACTIVATIONS1_ALPHA, "alpha", i - 23, j), {dim_value}, 0);
-                            layer.source_resblock_act2 = create_tensor(tn(LLM_TENSOR_SOURCE_RESBLOCKS_ACTIVATIONS2_ALPHA, "alpha", i - 23, j), {dim_value}, 0);
+                            auto & sub_layer = source_resblk_sub_layer[(i - 23) * 3 + j];
+                            sub_layer.source_resblock_act1 = create_tensor(tn(LLM_TENSOR_SOURCE_RESBLOCKS_ACTIVATIONS1_ALPHA, "alpha", i - 23, j), {dim_value}, 0);
+                            sub_layer.source_resblock_act2 = create_tensor(tn(LLM_TENSOR_SOURCE_RESBLOCKS_ACTIVATIONS2_ALPHA, "alpha", i - 23, j), {dim_value}, 0);
 
-                            layer.source_reblock_conv1_w = create_tensor(tn(LLM_TENSOR_SOURCE_RESBLOCKS_CONVS1_WEIGHT, "weight", i - 23, j), {resblk_vec[index], dim_value, dim_value}, 0);
-                            layer.source_reblock_conv1_b = create_tensor(tn(LLM_TENSOR_SOURCE_RESBLOCKS_CONVS1_BIAS, "bias", i - 23, j), {dim_value}, 0);
+                            sub_layer.source_reblock_conv1_w = create_tensor(tn(LLM_TENSOR_SOURCE_RESBLOCKS_CONVS1_WEIGHT, "weight", i - 23, j), {resblk_vec[index], dim_value, dim_value}, 0);
+                            sub_layer.source_reblock_conv1_b = create_tensor(tn(LLM_TENSOR_SOURCE_RESBLOCKS_CONVS1_BIAS, "bias", i - 23, j), {dim_value}, 0);
 
-                            layer.source_reblock_conv2_w = create_tensor(tn(LLM_TENSOR_SOURCE_RESBLOCKS_CONVS2_WEIGHT, "weight", i - 23, j), {resblk_vec[index], dim_value, dim_value}, 0);
-                            layer.source_reblock_conv2_b = create_tensor(tn(LLM_TENSOR_SOURCE_RESBLOCKS_CONVS2_BIAS, "bias", i - 23, j), {dim_value}, 0);
+                            sub_layer.source_reblock_conv2_w = create_tensor(tn(LLM_TENSOR_SOURCE_RESBLOCKS_CONVS2_WEIGHT, "weight", i - 23, j), {resblk_vec[index], dim_value, dim_value}, 0);
+                            sub_layer.source_reblock_conv2_b = create_tensor(tn(LLM_TENSOR_SOURCE_RESBLOCKS_CONVS2_BIAS, "bias", i - 23, j), {dim_value}, 0);
                         }
                     }
 
@@ -17037,18 +17039,162 @@ struct llm_build_hift : public llm_graph_context {
         }
         
         ggml_tensor * f0 = ggml_reshape_3d(ctx0, cur, cur->ne[0], 1, 1);
-
         ggml_tensor * s = ggml_upscale(ctx0, f0, 480, GGML_SCALE_MODE_NEAREST);
-
         s = ggml_cont(ctx0, ggml_transpose(ctx0, s));
-
         ggml_tensor * s_source = build_m_source(s, model.m_source_w, model.m_source_b);
+        s_source = ggml_cont(ctx0, ggml_tranpose(ctx0, s_source));
+        // s_source = ggml_reshape_2d(ctx0, s_source, s_source->ne[0], 1);
 
+        //-----------------------decode---------------
+        //------------stft-----------
+        ggml_tensor * stft_basis = ggml_new_tensor_3d(ctx0, GGML_TYPE_F32, 16, 1, 18);
+        stft_basis = ggml_map_custom1(ctx0, stft_basis, custom_op_gen_stft_basis, GGML_N_TASKS_MAX, NULL);
+        const int n_fft = 16;
+        const int hop_len = 4;
+        ggml_tensor * s_source_padded = ggml_pad(ctx0, s_source, n_fft/2, n_fft/2, 0, 0);
+        ggml_tensor * stft_out = ggml_conv_1d(ctx0, stft_basis, s_source_padded, hop_len, 0, 1);
+        const int n_freq = n_fft / 2 + 1;
+        size_t stride_ch = stft_out->nb[1];
+        ggml_tensor * s_stft_real = ggml_view_3d(
+            ctx0, stft_out,
+            stft_out->ne[0],
+            n_freq,
+            stft_out->ne[2],
+            stft_out->nb[1],
+            stft_out->nb[2],
+            0);
         
+        struct ggml_tensor * s_stft_imag = ggml_view_3d(
+            ctx0, stft_out,
+            stft_out->ne[0], 
+            n_freq,
+            stft_out->ne[2],
+            stft_out->nb[1],
+            stft_out->nb[2],
+            n_freq * stft_out->nb[1]);
+        
+        ggml_tensor * s_stft = ggml_concat(ctx0, s_stft_real, s_stft_imag, 1);
 
+        //--------stft---------
 
+        //---------conv_pre-----------
+        ggml_tensor * conv_pre_input = ggml_dup(ctx0, ggml_cont(ctx0, s_stft));
+        ggml_tensor * conv_res = ggml_conv_1d(ctx0, model.conv_post_w, conv_pre_input);
+        conv_res = ggml_add(ctx0, conv_res, model.conv_post_b);
+        //---------conv_pre-----------
+        
+        //--------up_sample---------
+        ggml_tensor * up_sample = ggml_dup(ctx0, ggml_cont(ctx0, conv_res));
+        int num_upsamples = 3;
+        std::vector<int> strides = {8, 5, 3};
+        std::vector<int> paddings = {4, 3, 2};
+        for (int i = 0; i < num_upsamples; i++) {
+            up_sample = ggml_leaky_relu(ctx0, up_sample, 0.1);
+            //-----ups--------
+            up_sample = ggml_conv_transpose_1d(ctx0, layer[26 + i].ups_w, up_sample, strides[i], paddings[i], 1);
+            up_sample = ggml_add(ctx0, up_sample, ggml_reshape_3d(ctx0, layer[26 + i].ups_b, 1, layer[26 + i].ups_b->ne[0], 1));
+            if (i == num_upsamples - 1) {
+                up_sample = ggml_pad_reflect_1d(ctx0, up_sample, 0, 1);
+            }
+            //-------source_downs------
+            ggml_tensor * source_downs = ggml_dup(ctx0, ggml_cont(ctx0, up_sample));
+            ggml_tensor * si = ggml_conv_1d(ctx0, layer[20 + i].source_downs_w, source_downs);
+            si = ggml_add(ctx0, si, ggml_reshape_3d(ctx0, layer[20 + i].source_downs_b, 1, layer[20 + i].source_downs_b->ne[0], 1));
+            //------source_downs-------
 
+            //-----source_resblock-----
+            ggml_tensor * si_res_blk =  ggml_dup(ctx0, ggml_cont(ctx0, si));
+            for(int j = 0; j < 3; j++) {
+                //-------act1------
+                ggml_tensor * alpha = ggml_reshape_3d(ctx0, source_resblk_sub_layer[i * 3 + j].source_resblock_act1, 1, source_resblk_sub_layer[i * 3 + j].source_resblock_act1->ne[0], 1);
+                ggml_tensor * alpha_zeros = ggml_scale(ctx0, alpha, 0.0f);
+                ggml_tensor * alpha_ones = ggml_exp(ctx0, alpha_zeros);
+                ggml_tensor * no_div_by_zero = ggml_add(ctx0, alpha_zeros, 0.000000001f);
+                ggml_tensor * alpha_by_zero = ggml_add(ctx0, alpha, no_div_by_zero);
+                ggml_tensor * alpha_div = ggml_div(ctx0, alpha_ones, alpha_by_zero);
+                ggml_tensor * alpha_sin = ggml_mul(ctx0, si_res_blk, alpha);
+                alpha_sin = ggml_sin(ctx0, alpha_sin);
+                alpha_sin = ggml_sqr(ctx0, alpha_sin);
+                ggml_tensor * alpha_mul = ggml_mul(ctx0, alpha_div, alpha_sin);
+                ggml_tensor * act1_res = ggml_add(ctx0, si_res_blk, alpha_mul);
+
+                //-----convs1------
+                ggml_tensor * si_res_convs1 = ggml_conv_1d(ctx0, source_resblk_sub_layer[i * 3 + j].source_reblock_conv1_w, act1_res);
+                si_res_convs1 = ggml_add(ctx0, si_res_convs1, source_resblk_sub_layer[i * 3 + j].source_reblock_conv1_b);
+
+                //------act2-------
+                ggml_tensor * alpha2 = ggml_reshape_3d(ctx0, source_resblk_sub_layer[i * 3 + j].source_resblock_act2, 1, source_resblk_sub_layer[i * 3 + j].source_resblock_act2->ne[0], 1);
+                ggml_tensor * alpha2_zeros = ggml_scale(ctx0, alpha2, 0.0f);
+                ggml_tensor * alpha2_ones = ggml_exp(ctx0, alpha2_zeros);
+                ggml_tensor * no_div_by_zero2 = ggml_add(ctx0, alpha2_zeros, 0.000000001f);
+                ggml_tensor * alpha2_by_zero = ggml_add(ctx0, alpha2, no_div_by_zero2);
+                ggml_tensor * alpha2_div = ggml_div(ctx0, alpha2_ones, alpha2_by_zero);
+                ggml_tensor * alpha2_sin = ggml_mul(ctx0, si_res_convs1, alpha2);
+                alpha2_sin = ggml_sin(ctx0, alpha2_sin);
+                alpha2_sin = ggml_sqr(ctx0, alpha2_sin);
+                ggml_tensor * alpha2_mul = ggml_mul(ctx0, alpha2_div, alpha2_sin);
+                ggml_tensor * act2_res = ggml_add(ctx0, si_res_convs1, alpha2_mul);
+
+                //-----convs2-----
+                ggml_tensor * si_res_convs2 = ggml_conv_1d(ctx0, source_resblk_sub_layer[i * 3 + j].source_reblock_conv2_w, act2_res);
+                si_res_convs2 = ggml_add(ctx0, si_res_convs2, source_resblk_sub_layer[i * 3 + j].source_reblock_conv2_b);
+
+                si_res_blk = ggml_add(ctx0, si_res_convs2, si_res_blk);
+            }
+
+            ggml_tensor * x = ggml_cont(ctx0, ggml_add(ctx0, si, si_res_blk));
+            ggml_tensor * xs = NULL;
+            for(int k = 0; k < 3; k++) {
+                if(xs == NULL) {
+                    xs = build_res_blk(x, resblk_sub_layer[i * 3 + k].reblock_conv1_w, , resblk_sub_layer[i * 3 + k].reblock_conv1_b, 
+                        resblk_sub_layer[i * 3 + k].reblock_conv2_w, , resblk_sub_layer[i * 3 + k].reblock_conv2_b,
+                        resblk_sub_layer[i * 3 + k].reblock_act1, resblk_sub_layer[i * 3 + k].reblock_act2);
+                } else {
+                    ggml_tensor * resblk_res = build_res_blk(x, resblk_sub_layer[i * 3 + k].reblock_conv1_w, , resblk_sub_layer[i * 3 + k].reblock_conv1_b, 
+                        resblk_sub_layer[i * 3 + k].reblock_conv2_w, , resblk_sub_layer[i * 3 + k].reblock_conv2_b,
+                        resblk_sub_layer[i * 3 + k].reblock_act1, resblk_sub_layer[i * 3 + k].reblock_act2);
+                    
+                    xs = ggml_add(ctx0, xs, resblk_res);
+                }
+            }
+
+            xs = ggml_scale(ctx0, xs, 1 / 3);
+        }
+
+        ggml_tensor * xx = ggml_leaky_relu(ctx0, conv_res);
+        xx = ggml_conv_1d(ctx0, model.conv_post_w, xx);
+        xx = ggml_add(ctx0, xx, model.conv_post_b);
+        const int n_fft = 16;
+        const int cutoff = n_fft / 2 + 1; // 9
+        ggml_tensor * x_slice = ggml_view_3d(
+            ctx0, xx, xx->ne[0], 
+            cutoff,   
+            xx->ne[2],
+            xx->nb[1], 
+            xx->nb[2], 0);
+        
+        ggml_tensor * magnitude = ggml_exp(ctx0, x_slice);
+        ggml_tensor * phase = ggml_sin(ctx0, x_slice);
+        const int n_channels = x->ne[1];
+        const int remaining = n_channels - cutoff;
+        size_t offset = cutoff * xx->nb[1];
+        ggml_tensor * phase_slice = ggml_view_3d(
+            ctx0, xx,
+            xx->ne[0],
+            remaining,
+            xx->ne[2],
+            xx->nb[1],
+            xx->nb[2],
+            offset);
+        
+        magnitude = ggml_clamp(ctx0, magnitude, -1e38f, 1e12f);
+        ggml_tensor * phase_cos = ggml_cos(ctx0, phase);
+        ggml_tensor * phase_sin = ggml_sin(ctx0, phase);
+        ggml_tensor * real = ggml_mul(ctx0, magnitude, phase_cos);
+        ggml_tensor * img = ggml_mul(ctx0, magnitude, phase_sin);
+        ggml_tensor * spec = ggml_concat(ctx0, real, img, 1);
     }
+
 };
 llama_memory_i * llama_model::create_memory(const llama_memory_params & params, llama_cparams & cparams) const {
     llama_memory_i * res;
@@ -17465,10 +17611,10 @@ llm_graph_result_ptr llama_model::build_graph(
             {
                 llm = std::make_unique<llm_build_flow>(*this, params, gf);
             } break;
-        // case LLM_ARCH_COSYVOICEHIFT:
-        //     {
-        //         llm = std::make_unique<llm_build_hift>(*this, params, gf);
-        //     } break;
+        case LLM_ARCH_COSYVOICEHIFT:
+            {
+                llm = std::make_unique<llm_build_hift>(*this, params, gf);
+            } break;
         default:
             GGML_ABORT("fatal error");
     }
