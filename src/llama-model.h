@@ -465,10 +465,10 @@ struct llama_layer {
     struct ggml_tensor * f0_b                        = nullptr;
     struct ggml_tensor * resblock_act1               = nullptr;
     struct ggml_tensor * resblock_act2               = nullptr;
-    struct ggml_tensor * reblock_conv1_w             = nullptr;
-    struct ggml_tensor * reblock_conv1_b             = nullptr;
-    struct ggml_tensor * reblock_conv2_w             = nullptr;
-    struct ggml_tensor * reblock_conv2_b             = nullptr;
+    struct ggml_tensor * resblock_conv1_w            = nullptr;
+    struct ggml_tensor * resblock_conv1_b            = nullptr;
+    struct ggml_tensor * resblock_conv2_w            = nullptr;
+    struct ggml_tensor * resblock_conv2_b            = nullptr;
     struct ggml_tensor * source_downs_w              = nullptr;
     struct ggml_tensor * source_downs_b              = nullptr;
     struct ggml_tensor * source_resblock_act1        = nullptr;
@@ -585,8 +585,8 @@ struct llama_model {
 
 
     //---------CosyVoiceHift-----------------
-    struct ggml_tensor * f0_w_1st         = nullptr;
-    struct ggml_tensor * f0_b_1st         = nullptr;
+    struct ggml_tensor * f0_classifier_w  = nullptr;
+    struct ggml_tensor * f0_classifier_b  = nullptr;
     struct ggml_tensor * conv_pre_w       = nullptr;
     struct ggml_tensor * conv_pre_b       = nullptr;
     struct ggml_tensor * conv_post_w      = nullptr;
