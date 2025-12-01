@@ -103,6 +103,7 @@ llama_kv_cache_unified::llama_kv_cache_unified(
 
         if (!ctx) {
             throw std::runtime_error("failed to create ggml context for kv cache");
+            // continue;
         }
 
         
@@ -145,10 +146,11 @@ llama_kv_cache_unified::llama_kv_cache_unified(
         auto * ctx  = it.second;
 
         ggml_backend_buffer_t buf = ggml_backend_alloc_ctx_tensors_from_buft(ctx, buft);
-        // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&& buf is nullptr : %d\n", buf == nullptr);
+        LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&& buf is nullptr : %d\n", buf == nullptr);
         // LLAMA_LOG_INFO("%s: KV buffer requested = %.2f MiB\n", __func__, ggml_backend_buffer_get_size(buf)/1024.0/1024.0);
         if (!buf) {
-            throw std::runtime_error("failed to allocate buffer for kv cache");
+            // throw std::runtime_error("failed to allocate buffer for kv cache");
+            continue; 
         }
 
         LLAMA_LOG_INFO("%s: %10s KV buffer size = %8.2f MiB\n", __func__, ggml_backend_buffer_name(buf), ggml_backend_buffer_get_size(buf)/1024.0/1024.0);

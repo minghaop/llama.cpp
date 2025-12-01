@@ -30,6 +30,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <random>
 
 const char * llm_type_name(llm_type type) {
     switch (type) {
@@ -1799,7 +1800,7 @@ bool llama_model::load_tensors(llama_model_loader & ml) {
     if (hparams.use_flow){
         n_layer = 1127;
         hparams.n_layer = n_layer;
-    } else if (hparams.use_flow) {
+    } else if (hparams.use_hift) {
         n_layer = 246;
         hparams.n_layer = n_layer;
     } else {
@@ -1861,7 +1862,7 @@ bool llama_model::load_tensors(llama_model_loader & ml) {
         // LLAMA_LOG_DEBUG("load_tensors: layer %3d assigned to device %s, is_swa = %d\n", il, ggml_backend_dev_name(dev), is_swa);
         return {dev, &pimpl->gpu_buft_list.at(dev)};
     };
-    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&& check flow begin ok!!!!!!!!!!!!!!!!!!!\n");
+
     // assign the input layer
     // there is very little benefit to offloading the input layer, so always keep it on the CPU
     pimpl->dev_input = { cpu_dev, &pimpl->cpu_buft_list };
@@ -1905,7 +1906,7 @@ bool llama_model::load_tensors(llama_model_loader & ml) {
     };
     const auto TENSOR_DUPLICATED   = llama_model_loader::TENSOR_DUPLICATED;
     const auto TENSOR_NOT_REQUIRED = llama_model_loader::TENSOR_NOT_REQUIRED;
-    LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& check tensor load1 !\n");
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& check tensor load1 !\n");
 
     // create tensors for the weights
     // const int64_t n_embd        = hparams.n_embd;
@@ -1914,7 +1915,7 @@ bool llama_model::load_tensors(llama_model_loader & ml) {
     // if (!hparams.use_flow && !hparams.use_hift){
     {
         // note: cast to int64_t since we will use these for the tensor dimensions
-        // const int64_t n_head        = hparams.n_head();
+        const int64_t n_head        = hparams.n_head();
         const int64_t n_head_kv     = hparams.n_head_kv();
         const int64_t n_embd        = hparams.n_embd;
         const int64_t n_embd_k_gqa  = hparams.n_embd_k_gqa();
@@ -5323,40 +5324,46 @@ bool llama_model::load_tensors(llama_model_loader & ml) {
                 } break;
             case LLM_ARCH_COSYVOICEHIFT:
                 {
-                    f0_w_1st = create_tensor(tn(LLM_TENSOR_F0_PREDICTOR_CONDNET_WEIGHT, "weight", 0), {3, 80, 512}, 0);
-                    f0_b_1st = create_tensor(tn(LLM_TENSOR_F0_PREDICTOR_CONDNET_BIAS, "bias", 0), {512}, 0);
                     conv_pre_w = create_tensor(tn(LLM_TENSOR_CONV_PRE_WEIGHT, "weight", 1), {7, 80, 512}, 0);
                     conv_pre_b = create_tensor(tn(LLM_TENSOR_CONV_PRE_BIAS, "bias", 1), {512}, 0);
                     conv_post_w = create_tensor(tn(LLM_TENSOR_CONV_POST_WEIGHT, "weight", 2), {7, 64, 18}, 0);
                     conv_post_b = create_tensor(tn(LLM_TENSOR_CONV_POST_BIAS, "bias", 2), {18}, 0);
-
-                    for(int i = 2; i < 10; i += 2){
+                    
+                    int dims_1st = 512;
+                    for(int i = 0; i < 10; i += 2){
                         auto & layer = layers[i];
-
-                        layer.f0_w = create_tensor(tn(LLM_TENSOR_F0_PREDICTOR_CONDNET_WEIGHT, "weight", i), {3, 512, 512}, 0);
+                        if (i == 0) {
+                            dims_1st = 80;
+                        } else {
+                           dims_1st = 512; 
+                        }
+                        layer.f0_w = create_tensor(tn(LLM_TENSOR_F0_PREDICTOR_CONDNET_WEIGHT, "weight", i), {3, dims_1st, 512}, 0);
                         layer.f0_b = create_tensor(tn(LLM_TENSOR_F0_PREDICTOR_CONDNET_BIAS, "bias", i), {512}, 0);
                     }
 
-                    m_source_w =  create_tensor(tn(LLM_TENSOR_M_SOURCE_L_LINEAR_WEIGHT, "weight", 3), {9, 1}, 0);
-                    m_source_b =  create_tensor(tn(LLM_TENSOR_M_SOURCE_L_LINEAR_BIAS, "bias", 3), {1}, 0);
+                    f0_classifier_w = create_tensor(tn(LLM_TENSOR_F0_PREDICTOR_CLASSIFIER_WEIGHT, "weight", 3), {512, 1}, 0);
+                    f0_classifier_b = create_tensor(tn(LLM_TENSOR_F0_PREDICTOR_CLASSIFIER_BIAS, "bias", 3), {1}, 0);
 
-                    std::vector<int> resblk_vec = {3, 7, 11};
+                    m_source_w =  create_tensor(tn(LLM_TENSOR_M_SOURCE_L_LINEAR_WEIGHT, "weight", 4), {9, 1}, 0);
+                    m_source_b =  create_tensor(tn(LLM_TENSOR_M_SOURCE_L_LINEAR_BIAS, "bias", 4), {1}, 0);
+
+                    std::vector<int> resblk_kernels = {3, 7, 11};
                     std::vector<int> dims = {256, 128, 64};
                     resblk_sub_layer.resize(27);
                     for(int i = 11; i < 20; i++) {
-                        int index = (i - 11) % 3;
-                        int dim_value = dims[index];
-
+                        int block_idx = i - 11;
+                        int current_kernel = resblk_kernels[block_idx % 3];
+                        int dim_value = dims[block_idx / 3];
                         for (int j = 0; j < 3; j++) {
                             auto & layer = resblk_sub_layer[(i - 11) * 3 + j];
                             layer.resblock_act1 = create_tensor(tn(LLM_TENSOR_RESBLOCKS_ACTIVATIONS1_ALPHA, "alpha", i - 11, j), {dim_value}, 0);
                             layer.resblock_act2 = create_tensor(tn(LLM_TENSOR_RESBLOCKS_ACTIVATIONS2_ALPHA, "alpha", i - 11, j), {dim_value}, 0);
 
-                            layer.reblock_conv1_w = create_tensor(tn(LLM_TENSOR_RESBLOCKS_CONVS1_WEIGHT, "weight", i - 11, j), {resblk_vec[index], dim_value, dim_value}, 0);
-                            layer.reblock_conv1_b = create_tensor(tn(LLM_TENSOR_RESBLOCKS_CONVS1_BIAS, "bias", i - 11, j), {dim_value}, 0);
+                            layer.resblock_conv1_w = create_tensor(tn(LLM_TENSOR_RESBLOCKS_CONVS1_WEIGHT, "weight", i - 11, j), {current_kernel, dim_value, dim_value}, 0);
+                            layer.resblock_conv1_b = create_tensor(tn(LLM_TENSOR_RESBLOCKS_CONVS1_BIAS, "bias", i - 11, j), {dim_value}, 0);
 
-                            layer.reblock_conv2_w = create_tensor(tn(LLM_TENSOR_RESBLOCKS_CONVS2_WEIGHT, "weight", i - 11, j), {resblk_vec[index], dim_value, dim_value}, 0);
-                            layer.reblock_conv2_b = create_tensor(tn(LLM_TENSOR_RESBLOCKS_CONVS2_BIAS, "bias", i - 11, j), {dim_value}, 0);
+                            layer.resblock_conv2_w = create_tensor(tn(LLM_TENSOR_RESBLOCKS_CONVS2_WEIGHT, "weight", i - 11, j), {current_kernel, dim_value, dim_value}, 0);
+                            layer.resblock_conv2_b = create_tensor(tn(LLM_TENSOR_RESBLOCKS_CONVS2_BIAS, "bias", i - 11, j), {dim_value}, 0);
                         }
                     }
 
@@ -5368,21 +5375,23 @@ bool llama_model::load_tensors(llama_model_loader & ml) {
                         layer.source_downs_b = create_tensor(tn(LLM_TENSOR_SOURCE_DOWNS_BIAS, "bias", index), {dims[index]}, 0);
                     }
 
+                    std::vector<int> source_kernels = {7, 7, 11};
+                    // std::vector<int> dims = {256, 128, 64};
                     source_resblk_sub_layer.resize(9);
                     for(int i = 23; i < 26; i++) {
-                        int index = (i - 23) % 3;
-                        if(index == 0) index += 1;
+                        int block_idx = i - 23;
+                        int index = block_idx;
                         int dim_value = dims[index];
-
+                        int kernel_size = source_kernels[index];
                         for (int j = 0; j < 3; j++) {
                             auto & sub_layer = source_resblk_sub_layer[(i - 23) * 3 + j];
                             sub_layer.source_resblock_act1 = create_tensor(tn(LLM_TENSOR_SOURCE_RESBLOCKS_ACTIVATIONS1_ALPHA, "alpha", i - 23, j), {dim_value}, 0);
                             sub_layer.source_resblock_act2 = create_tensor(tn(LLM_TENSOR_SOURCE_RESBLOCKS_ACTIVATIONS2_ALPHA, "alpha", i - 23, j), {dim_value}, 0);
 
-                            sub_layer.source_reblock_conv1_w = create_tensor(tn(LLM_TENSOR_SOURCE_RESBLOCKS_CONVS1_WEIGHT, "weight", i - 23, j), {resblk_vec[index], dim_value, dim_value}, 0);
+                            sub_layer.source_reblock_conv1_w = create_tensor(tn(LLM_TENSOR_SOURCE_RESBLOCKS_CONVS1_WEIGHT, "weight", i - 23, j), {kernel_size, dim_value, dim_value}, 0);
                             sub_layer.source_reblock_conv1_b = create_tensor(tn(LLM_TENSOR_SOURCE_RESBLOCKS_CONVS1_BIAS, "bias", i - 23, j), {dim_value}, 0);
 
-                            sub_layer.source_reblock_conv2_w = create_tensor(tn(LLM_TENSOR_SOURCE_RESBLOCKS_CONVS2_WEIGHT, "weight", i - 23, j), {resblk_vec[index], dim_value, dim_value}, 0);
+                            sub_layer.source_reblock_conv2_w = create_tensor(tn(LLM_TENSOR_SOURCE_RESBLOCKS_CONVS2_WEIGHT, "weight", i - 23, j), {kernel_size, dim_value, dim_value}, 0);
                             sub_layer.source_reblock_conv2_b = create_tensor(tn(LLM_TENSOR_SOURCE_RESBLOCKS_CONVS2_BIAS, "bias", i - 23, j), {dim_value}, 0);
                         }
                     }
@@ -16728,16 +16737,13 @@ struct llm_build_qwen2 : public llm_graph_context {
 
         auto * inp_attn = build_attn_inp_kv_unified();
         ggml_tensor * inp_out_ids = build_inp_out_ids();
-        // LLAMA_LOG_DEBUG("&&&&&&&&&&&&&&&&&&&&&&&&&&&& n_layer is: %d", n_layer);
         for (int il = 0; il < n_layer; ++il) {
             ggml_tensor * inpSA = inpL;
-            // LLAMA_LOG_INFO("before build_norm **********************************************************************\n");
             // norm
             cur = build_norm(inpL,
                     model.layers[il].attn_norm, NULL,
                     LLM_NORM_RMS, il);
             cb(cur, "attn_norm", il);
-            // LLAMA_LOG_INFO("after build_norm **********************************************************************\n");
             // self-attention
             {
                 // compute Q and K and RoPE them
@@ -17031,18 +17037,22 @@ struct llm_build_flow : public llm_graph_context {
 struct llm_build_hift : public llm_graph_context {
     // const llama_model & model;
     llm_build_hift(const llama_model & model, const llm_graph_params & params, ggml_cgraph * gf) : llm_graph_context(params) {
-        ggml_tensor * speech_feat = build_inp_embd(model.f0_w_1st);
+        ggml_tensor * speech_feat = build_inp_embd(model.f0_classifier_w);
+        ggml_set_name(speech_feat, "speech_feat");
 
         ggml_tensor * cur;
         for (int i = 2; i < 10; i += 2) {
-            cur = bulid_f0_predictor(speech_feat, layer[i].f0_w, layer[i].f0_b);
+            cur = bulid_f0_predictor(speech_feat, model.layers[i].f0_w, model.layers[i].f0_b);
         }
         
         ggml_tensor * f0 = ggml_reshape_3d(ctx0, cur, cur->ne[0], 1, 1);
+        ggml_set_name(f0, "f0_pridictor");
         ggml_tensor * s = ggml_upscale(ctx0, f0, 480, GGML_SCALE_MODE_NEAREST);
         s = ggml_cont(ctx0, ggml_transpose(ctx0, s));
+        ggml_set_name(s, "s_pridictor");
         ggml_tensor * s_source = build_m_source(s, model.m_source_w, model.m_source_b);
-        s_source = ggml_cont(ctx0, ggml_tranpose(ctx0, s_source));
+        s_source = ggml_cont(ctx0, ggml_transpose(ctx0, s_source));
+        ggml_set_name(s_source, "m_source");
         // s_source = ggml_reshape_2d(ctx0, s_source, s_source->ne[0], 1);
 
         //-----------------------decode---------------
@@ -17061,8 +17071,7 @@ struct llm_build_hift : public llm_graph_context {
             n_freq,
             stft_out->ne[2],
             stft_out->nb[1],
-            stft_out->nb[2],
-            0);
+            stft_out->nb[2],0);
         
         struct ggml_tensor * s_stft_imag = ggml_view_3d(
             ctx0, stft_out,
@@ -17079,8 +17088,8 @@ struct llm_build_hift : public llm_graph_context {
 
         //---------conv_pre-----------
         ggml_tensor * conv_pre_input = ggml_dup(ctx0, ggml_cont(ctx0, s_stft));
-        ggml_tensor * conv_res = ggml_conv_1d(ctx0, model.conv_post_w, conv_pre_input);
-        conv_res = ggml_add(ctx0, conv_res, model.conv_post_b);
+        ggml_tensor * conv_res = ggml_conv_1d(ctx0, model.conv_pre_w, conv_pre_input, 1, 3, 1);
+        conv_res = ggml_add(ctx0, conv_res, model.conv_pre_b);
         //---------conv_pre-----------
         
         //--------up_sample---------
@@ -17088,28 +17097,35 @@ struct llm_build_hift : public llm_graph_context {
         int num_upsamples = 3;
         std::vector<int> strides = {8, 5, 3};
         std::vector<int> paddings = {4, 3, 2};
+        std::vector<int> source_downs_stride = {15, 3, 1};
+        std::vector<int> source_down_padding = {7, 1, 0};
+         std::vector<int> source_resblock_kernels = {7, 7, 11};
         for (int i = 0; i < num_upsamples; i++) {
-            up_sample = ggml_leaky_relu(ctx0, up_sample, 0.1);
+            up_sample = ggml_leaky_relu(ctx0, up_sample, 0.1f, false);
             //-----ups--------
-            up_sample = ggml_conv_transpose_1d(ctx0, layer[26 + i].ups_w, up_sample, strides[i], paddings[i], 1);
-            up_sample = ggml_add(ctx0, up_sample, ggml_reshape_3d(ctx0, layer[26 + i].ups_b, 1, layer[26 + i].ups_b->ne[0], 1));
+            up_sample = ggml_conv_transpose_1d(ctx0, model.layers[26 + i].ups_w, up_sample, strides[i], paddings[i], 1);
+            up_sample = ggml_add(ctx0, up_sample, ggml_reshape_3d(ctx0, model.layers[26 + i].ups_b, 1, model.layers[26 + i].ups_b->ne[0], 1));
             if (i == num_upsamples - 1) {
                 up_sample = ggml_pad_reflect_1d(ctx0, up_sample, 0, 1);
             }
             //-------source_downs------
             ggml_tensor * source_downs = ggml_dup(ctx0, ggml_cont(ctx0, up_sample));
-            ggml_tensor * si = ggml_conv_1d(ctx0, layer[20 + i].source_downs_w, source_downs);
-            si = ggml_add(ctx0, si, ggml_reshape_3d(ctx0, layer[20 + i].source_downs_b, 1, layer[20 + i].source_downs_b->ne[0], 1));
+            ggml_tensor * si = ggml_conv_1d(ctx0, model.layers[20 + i].source_downs_w, source_downs, source_downs_stride[i], source_down_padding[i], 1);
+            si = ggml_add(ctx0, si, ggml_reshape_3d(ctx0, model.layers[20 + i].source_downs_b, 1, model.layers[20 + i].source_downs_b->ne[0], 1));
             //------source_downs-------
 
             //-----source_resblock-----
             ggml_tensor * si_res_blk =  ggml_dup(ctx0, ggml_cont(ctx0, si));
             for(int j = 0; j < 3; j++) {
+                int kernel_size = source_resblock_kernels[i];
+                int dilation = (j == 0) ? 1 : ((j == 1) ? 3 : 5);
+                int padding = (dilation * (kernel_size - 1)) / 2;
+                int padding_plain = (1 * (kernel_size - 1)) / 2;
                 //-------act1------
-                ggml_tensor * alpha = ggml_reshape_3d(ctx0, source_resblk_sub_layer[i * 3 + j].source_resblock_act1, 1, source_resblk_sub_layer[i * 3 + j].source_resblock_act1->ne[0], 1);
+                ggml_tensor * alpha = ggml_reshape_3d(ctx0, model.source_resblk_sub_layer[i * 3 + j].source_resblock_act1, 1, model.source_resblk_sub_layer[i * 3 + j].source_resblock_act1->ne[0], 1);
                 ggml_tensor * alpha_zeros = ggml_scale(ctx0, alpha, 0.0f);
                 ggml_tensor * alpha_ones = ggml_exp(ctx0, alpha_zeros);
-                ggml_tensor * no_div_by_zero = ggml_add(ctx0, alpha_zeros, 0.000000001f);
+                ggml_tensor * no_div_by_zero = ggml_scale(ctx0, alpha_ones, 0.000000001f);
                 ggml_tensor * alpha_by_zero = ggml_add(ctx0, alpha, no_div_by_zero);
                 ggml_tensor * alpha_div = ggml_div(ctx0, alpha_ones, alpha_by_zero);
                 ggml_tensor * alpha_sin = ggml_mul(ctx0, si_res_blk, alpha);
@@ -17119,14 +17135,15 @@ struct llm_build_hift : public llm_graph_context {
                 ggml_tensor * act1_res = ggml_add(ctx0, si_res_blk, alpha_mul);
 
                 //-----convs1------
-                ggml_tensor * si_res_convs1 = ggml_conv_1d(ctx0, source_resblk_sub_layer[i * 3 + j].source_reblock_conv1_w, act1_res);
-                si_res_convs1 = ggml_add(ctx0, si_res_convs1, source_resblk_sub_layer[i * 3 + j].source_reblock_conv1_b);
+                ggml_tensor * si_res_convs1 = ggml_conv_1d(ctx0, model.source_resblk_sub_layer[i * 3 + j].source_reblock_conv1_w, act1_res, 1, padding, dilation);
+                ggml_tensor * b1_reshaped = ggml_reshape_3d(ctx0, model.source_resblk_sub_layer[i * 3 + j].source_reblock_conv1_b, 1, model.source_resblk_sub_layer[i * 3 + j].source_reblock_conv1_b->ne[0], 1);
+                si_res_convs1 = ggml_add(ctx0, si_res_convs1, b1_reshaped);
 
                 //------act2-------
-                ggml_tensor * alpha2 = ggml_reshape_3d(ctx0, source_resblk_sub_layer[i * 3 + j].source_resblock_act2, 1, source_resblk_sub_layer[i * 3 + j].source_resblock_act2->ne[0], 1);
+                ggml_tensor * alpha2 = ggml_reshape_3d(ctx0, model.source_resblk_sub_layer[i * 3 + j].source_resblock_act2, 1, model.source_resblk_sub_layer[i * 3 + j].source_resblock_act2->ne[0], 1);
                 ggml_tensor * alpha2_zeros = ggml_scale(ctx0, alpha2, 0.0f);
                 ggml_tensor * alpha2_ones = ggml_exp(ctx0, alpha2_zeros);
-                ggml_tensor * no_div_by_zero2 = ggml_add(ctx0, alpha2_zeros, 0.000000001f);
+                ggml_tensor * no_div_by_zero2 = ggml_scale(ctx0, alpha2_ones, 0.000000001f);
                 ggml_tensor * alpha2_by_zero = ggml_add(ctx0, alpha2, no_div_by_zero2);
                 ggml_tensor * alpha2_div = ggml_div(ctx0, alpha2_ones, alpha2_by_zero);
                 ggml_tensor * alpha2_sin = ggml_mul(ctx0, si_res_convs1, alpha2);
@@ -17136,24 +17153,30 @@ struct llm_build_hift : public llm_graph_context {
                 ggml_tensor * act2_res = ggml_add(ctx0, si_res_convs1, alpha2_mul);
 
                 //-----convs2-----
-                ggml_tensor * si_res_convs2 = ggml_conv_1d(ctx0, source_resblk_sub_layer[i * 3 + j].source_reblock_conv2_w, act2_res);
-                si_res_convs2 = ggml_add(ctx0, si_res_convs2, source_resblk_sub_layer[i * 3 + j].source_reblock_conv2_b);
+                ggml_tensor * si_res_convs2 = ggml_conv_1d(ctx0, model.source_resblk_sub_layer[i * 3 + j].source_reblock_conv2_w, act2_res, 1, padding_plain, 1);
+                ggml_tensor * b2_reshaped = ggml_reshape_3d(ctx0, model.source_resblk_sub_layer[i * 3 + j].source_reblock_conv2_b, 1, model.source_resblk_sub_layer[i * 3 + j].source_reblock_conv2_b->ne[0], 1);
+                si_res_convs2 = ggml_add(ctx0, si_res_convs2, b2_reshaped);
 
                 si_res_blk = ggml_add(ctx0, si_res_convs2, si_res_blk);
             }
 
             ggml_tensor * x = ggml_cont(ctx0, ggml_add(ctx0, si, si_res_blk));
             ggml_tensor * xs = NULL;
+            std::vector<int> resblk_kernels = {3, 7, 11};
             for(int k = 0; k < 3; k++) {
+                int current_kernel_size = resblk_kernels[k];
+                
+                ggml_tensor * resblk_res = build_res_blk(x, 
+                                            model.resblk_sub_layer[i * 3 + k].resblock_conv1_w, // 注意：这里需传入数组/Vector
+                                            model.resblk_sub_layer[i * 3 + k].resblock_conv1_b, 
+                                            model.resblk_sub_layer[i * 3 + k].resblock_conv2_w, 
+                                            model.resblk_sub_layer[i * 3 + k].resblock_conv2_b,
+                                            model.resblk_sub_layer[i * 3 + k].resblock_act1, 
+                                            model.resblk_sub_layer[i * 3 + k].resblock_act2,
+                                            current_kernel_size);
                 if(xs == NULL) {
-                    xs = build_res_blk(x, resblk_sub_layer[i * 3 + k].reblock_conv1_w, , resblk_sub_layer[i * 3 + k].reblock_conv1_b, 
-                        resblk_sub_layer[i * 3 + k].reblock_conv2_w, , resblk_sub_layer[i * 3 + k].reblock_conv2_b,
-                        resblk_sub_layer[i * 3 + k].reblock_act1, resblk_sub_layer[i * 3 + k].reblock_act2);
+                    xs = resblk_res;
                 } else {
-                    ggml_tensor * resblk_res = build_res_blk(x, resblk_sub_layer[i * 3 + k].reblock_conv1_w, , resblk_sub_layer[i * 3 + k].reblock_conv1_b, 
-                        resblk_sub_layer[i * 3 + k].reblock_conv2_w, , resblk_sub_layer[i * 3 + k].reblock_conv2_b,
-                        resblk_sub_layer[i * 3 + k].reblock_act1, resblk_sub_layer[i * 3 + k].reblock_act2);
-                    
                     xs = ggml_add(ctx0, xs, resblk_res);
                 }
             }
@@ -17161,10 +17184,10 @@ struct llm_build_hift : public llm_graph_context {
             xs = ggml_scale(ctx0, xs, 1 / 3);
         }
 
-        ggml_tensor * xx = ggml_leaky_relu(ctx0, conv_res);
-        xx = ggml_conv_1d(ctx0, model.conv_post_w, xx);
+        ggml_tensor * xx = ggml_leaky_relu(ctx0, conv_res, 0.01f, false);
+        xx = ggml_conv_1d(ctx0, model.conv_post_w, xx, 1, 3, 1);
         xx = ggml_add(ctx0, xx, model.conv_post_b);
-        const int n_fft = 16;
+        // const int n_fft = 16;
         const int cutoff = n_fft / 2 + 1; // 9
         ggml_tensor * x_slice = ggml_view_3d(
             ctx0, xx, xx->ne[0], 
@@ -17175,7 +17198,7 @@ struct llm_build_hift : public llm_graph_context {
         
         ggml_tensor * magnitude = ggml_exp(ctx0, x_slice);
         ggml_tensor * phase = ggml_sin(ctx0, x_slice);
-        const int n_channels = x->ne[1];
+        const int n_channels = xx->ne[1];
         const int remaining = n_channels - cutoff;
         size_t offset = cutoff * xx->nb[1];
         ggml_tensor * phase_slice = ggml_view_3d(
@@ -17193,9 +17216,71 @@ struct llm_build_hift : public llm_graph_context {
         ggml_tensor * real = ggml_mul(ctx0, magnitude, phase_cos);
         ggml_tensor * img = ggml_mul(ctx0, magnitude, phase_sin);
         ggml_tensor * spec = ggml_concat(ctx0, real, img, 1);
+        cb(spec, "result_spec", -1);
+        res->t_embd = spec;
+        ggml_build_forward_expand(gf, spec);
     }
 
+    // 硬编码的 Hann Window (16点)
+    static constexpr float HANN_WINDOW_16[16] = {
+        0.0000f, 0.0381f, 0.1464f, 0.3087f, 0.5000f, 0.6913f, 0.8536f, 0.9619f, 
+        1.0000f, 0.9619f, 0.8536f, 0.6913f, 0.5000f, 0.3087f, 0.1464f, 0.0381f
+    };
+
+    // 自定义算子：运行时生成 STFT Basis
+    // 输出形状: [Kernel=16, In=1, Out=18]
+    static void custom_op_gen_stft_basis(
+        struct ggml_tensor * dst,       
+        const struct ggml_tensor * a,   
+        int ith, int nth, void * userdata) {
+        
+        const int n_fft = 16;
+        const int n_out = n_fft / 2 + 1; // 9 (Nyquist)
+        
+        // 并行分片
+        const int ne = ggml_nelements(dst);
+        const int dr = (ne + nth - 1) / nth; 
+        const int ie0 = dr * ith; 
+        const int ie1 = std::min(ie0 + dr, ne);
+
+        float * dst_data = (float *) dst->data;
+
+        for (int i = ie0; i < ie1; i++) {
+            // 1. 解析索引
+            // Layout: [Kernel(Time), In, Out(Channel)]
+            // ne0=16, ne1=1, ne2=18
+            // i = out * (1*16) + in * 16 + n
+            
+            int n = i % n_fft;          // Kernel Time Index (0~15)
+            int ch = i / n_fft;         // Output Channel Index (0~17)
+            
+            // 2. 判断是实部还是虚部
+            // 0~8: Real (Cos), 9~17: Imag (Sin)
+            int k;      // Frequency Index (0~8)
+            bool is_real; 
+            
+            if (ch < n_out) {
+                k = ch;
+                is_real = true;
+            } else {
+                k = ch - n_out;
+                is_real = false;
+            }
+
+            // 3. 计算值
+            float angle = 2.0f * M_PI * k * n / n_fft;
+            float w = HANN_WINDOW_16[n];
+            
+            if (is_real) {
+                dst_data[i] = w * std::cos(angle);
+            } else {
+                // PyTorch stft definition: exp(-j*w*t) -> -sin
+                dst_data[i] = w * -std::sin(angle);
+            }
+        }
+    }
 };
+
 llama_memory_i * llama_model::create_memory(const llama_memory_params & params, llama_cparams & cparams) const {
     llama_memory_i * res;
 

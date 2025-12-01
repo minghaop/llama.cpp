@@ -19,6 +19,7 @@
 #include <iomanip>
 #include <cstdio>
 #include <stdio.h>
+#include <algorithm>
 
 void llm_graph_input_embd::set_input(const llama_ubatch * ubatch) {
     if (ubatch->token) {
@@ -1911,11 +1912,157 @@ ggml_tensor * llm_graph_context::bulid_f0_predictor(
             ggml_tensor * mb) const {
 
     ggml_tensor * cur_dup = ggml_dup(ctx0, cur);
-    cur_dup = ggml_conv_1d(ctx0, mw, cur_dup);
+    cur_dup = ggml_conv_1d(ctx0, mw, cur_dup, 1, 1, 1);
     cur_dup = ggml_add(ctx0, cur_dup, mb);
 
     return cur_dup;
 }
+
+static void custom_op_mod_1(
+        struct ggml_tensor * dst,       // 输出张量
+        const struct ggml_tensor * a,   // 输入张量
+        int ith,                        // 当前线程 ID
+        int nth,                        // 线程总数
+        void * userdata)                // 用户数据 (这里不用)
+    {
+    // 1. 获取元素总数
+        const int ne = ggml_nelements(dst);
+
+        // 2. 计算当前线程负责的数据范围 (分片)
+        // 简单的并行策略：每个线程处理一段连续的数据
+        const int dr = (ne + nth - 1) / nth; 
+        const int ie0 = dr * ith; 
+        const int ie1 = std::min(ie0 + dr, ne);
+
+        // 3. 获取数据指针 (假设是 F32 类型)
+        const float * src_data = (const float *) a->data;
+        float * dst_data = (float *) dst->data;
+
+        // 4. 循环计算
+        for (int i = ie0; i < ie1; i++) {
+            // 核心逻辑: x % 1 = x - floor(x)
+            dst_data[i] = src_data[i] - std::floor(src_data[i]);
+        }
+    }
+
+    
+
+static void custom_op_rand_masked(
+    struct ggml_tensor * dst,       
+    const struct ggml_tensor * a,   
+    int ith, int nth, void * userdata)                
+    {
+        // 获取 Dim 大小 (ne[0])
+        const int dim = dst->ne[0]; 
+        const int ne = ggml_nelements(dst);
+        const int dr = (ne + nth - 1) / nth; 
+        const int ie0 = dr * ith; 
+        const int ie1 = std::min(ie0 + dr, ne);
+
+        float * dst_data = (float *) dst->data;
+        std::mt19937 g_rng(1234);
+        std::mt19937 local_rng(g_rng() + ith);
+        std::uniform_real_distribution<float> dist(0.0f, 1.0f);
+
+        for (int i = ie0; i < ie1; i++) {
+            // i % dim == 0 代表这是该向量的第一个元素 (基频)
+            if (i % dim == 0) {
+                dst_data[i] = 0.0f; // Mask 0
+            } else {
+                dst_data[i] = dist(local_rng); // Random
+            }
+        }
+    }
+
+// 输入布局: [Dim=9, Time=910, Batch=1]
+static void custom_op_cumsum_ne1(
+    struct ggml_tensor * dst,       
+    const struct ggml_tensor * a,   
+    int ith, int nth, void * userdata)                
+    {
+        const int dim   = dst->ne[0]; // 9
+        const int time  = dst->ne[1]; // 910
+        const int batch = dst->ne[2]; // 1
+
+        // 并行策略：
+        // Cumsum 是沿 Time 轴有依赖的，所以 Time 轴内部不能并行。
+        // 我们可以在 Dim 轴和 Batch 轴上并行。
+        // 总任务数 = Dim * Batch (9 * 1 = 9 个任务)
+        const int n_tasks = dim * batch;
+        
+        const int dr = (n_tasks + nth - 1) / nth; 
+        const int ie0 = dr * ith; 
+        const int ie1 = std::min(ie0 + dr, n_tasks);
+
+        const float * src_data = (const float *) a->data;
+        float * dst_data = (float *) dst->data;
+
+        // 循环处理分配给当前线程的任务 (Dim 列)
+        for (int i = ie0; i < ie1; i++) {
+            // 解算坐标：当前处理哪一个 Dim (d) 和 Batch (b)
+            // i = b * dim + d
+            int d = i % dim;
+            int b = i / dim;
+
+            // 核心累加逻辑
+            float sum = 0.0f;
+            for (int t = 0; t < time; t++) {
+                // 计算内存索引
+                // index = b * (time * dim) + t * dim + d
+                // 因为 dim 是最内层 ne0
+                int idx = b * (time * dim) + t * dim + d;
+                
+                sum += src_data[idx];
+                dst_data[idx] = sum;
+            }
+        }
+    }
+
+static void custom_op_threshold_uv(
+    struct ggml_tensor * dst,       
+    const struct ggml_tensor * a,   
+    int ith, int nth, void * userdata)                
+    {
+        // 从 userdata 获取阈值 (float*)
+        const float threshold = *(const float *)userdata;
+
+        const int ne = ggml_nelements(dst);
+        const int dr = (ne + nth - 1) / nth; 
+        const int ie0 = dr * ith; 
+        const int ie1 = std::min(ie0 + dr, ne);
+
+        const float * src_data = (const float *) a->data;
+        float * dst_data = (float *) dst->data;
+
+        for (int i = ie0; i < ie1; i++) {
+            // 核心逻辑: f0 > threshold -> 1.0, else -> 0.0
+            dst_data[i] = (src_data[i] > threshold) ? 1.0f : 0.0f;
+        }
+    }
+
+// 自定义算子：标准正态分布 (Mean=0, Std=1)
+static void custom_op_randn(
+    struct ggml_tensor * dst,       
+    const struct ggml_tensor * a,   // 这里的 a 只是为了提供 shape (randn_like)
+    int ith, int nth, void * userdata)                
+    {
+        const int ne = ggml_nelements(dst);
+        const int dr = (ne + nth - 1) / nth; 
+        const int ie0 = dr * ith; 
+        const int ie1 = std::min(ie0 + dr, ne);
+
+        float * dst_data = (float *) dst->data;
+
+        // 线程局部 RNG
+        std::mt19937 g_rng(1234);
+        std::mt19937 local_rng(g_rng() + ith);
+        // 使用 std::normal_distribution 生成高斯噪声
+        std::normal_distribution<float> dist(0.0f, 1.0f);
+
+        for (int i = ie0; i < ie1; i++) {
+            dst_data[i] = dist(local_rng);
+        }
+    }
 
 ggml_tensor * llm_graph_context::build_m_source(
         ggml_tensor * cur,
@@ -1930,7 +2077,7 @@ ggml_tensor * llm_graph_context::build_m_source(
     
     //_f02sine函数
     ggml_tensor * rad_values = ggml_scale(ctx0, cur_dup, 1/ 24000);
-    ggml_tensor * rad_values = ggml_map_custom1(ctx0, rad_values, custom_op_mod_1, 1, NULL);
+    rad_values = ggml_map_custom1(ctx0, rad_values, custom_op_mod_1, 1, NULL);
 
     const int dim = rad_values->ne[0];
     const int time = rad_values->ne[1];
@@ -1941,9 +2088,8 @@ ggml_tensor * llm_graph_context::build_m_source(
 
     if (time > 1) {
         struct ggml_tensor * zeros = ggml_new_tensor_3d(ctx0, GGML_TYPE_F32, dim, time - 1, batch);
-        struct ggml_tensor * zero_const = ggml_new_f32(ctx0, 0.0f);
-        zeros = ggml_scale(ctx0, zeros, zero_const);
-        struct ggml_tensor * noise_full = ggml_concat(ctx0, rand_ini, zeros, 1);
+        struct ggml_tensor * zero_const = ggml_scale(ctx0, zeros, 0.0f);
+        struct ggml_tensor * noise_full = ggml_concat(ctx0, rand_ini, zero_const, 1);
         rad_values = ggml_add(ctx0, rad_values, noise_full);
     } else{
         rad_values = ggml_add(ctx0, rad_values, rand_ini);
@@ -1970,7 +2116,7 @@ ggml_tensor * llm_graph_context::build_m_source(
     term2 = ggml_scale(ctx0, term2, 0.1 / 3);
     ggml_tensor * noise_amp = ggml_add(ctx0, term1, term2);
 
-    ggml_tensor * noise = ggml_new_tensor(ctx0, sines->type, sines->n_dims, sines->ne);
+    ggml_tensor * noise = ggml_new_tensor(ctx0, sines->type, ggml_n_dims(sines), sines->ne);
     noise = ggml_map_custom1(ctx0, sines, custom_op_randn, GGML_N_TASKS_MAX, NULL);
     noise = ggml_mul(ctx0, noise_amp, noise);
 
@@ -1986,23 +2132,28 @@ ggml_tensor * llm_graph_context::build_m_source(
     return sine_merge;
 }
 
+// ggml_map_custom1
 ggml_tensor * llm_graph_context::build_res_blk(
-            ggml_tensor * cur,
-            ggml_tensor * convs1_mw,
-            ggml_tensor * convs1_mb,
-            ggml_tensor * convs2_mw,
-            ggml_tensor * convs2_mb,
-            ggml_tensor * act1,
-            ggml_tensor * act2) const {
+      ggml_tensor * cur,
+      ggml_tensor * convs1_mw,
+      ggml_tensor * convs1_mb,
+      ggml_tensor * convs2_mw,
+      ggml_tensor * convs2_mb,
+      ggml_tensor * act1,
+      ggml_tensor * act2,
+      int kernel_size) const {
     
     ggml_tensor * res_cur = ggml_dup(ctx0, ggml_cont(ctx0, cur));
     // ggml_tensor * si_res_blk = NULL;
     for(int j = 0; j < 3; j++) {
+        int dilation = (j == 0) ? 1 : ((j == 1) ? 3 : 5);
+        int padding = (dilation * (kernel_size - 1)) / 2;       // Dilated Conv 的 Padding
+        int padding_plain = (1 * (kernel_size - 1)) / 2;
         //-------act1------
         ggml_tensor * alpha = ggml_reshape_3d(ctx0, act1, 1, act1->ne[0], 1);
         ggml_tensor * alpha_zeros = ggml_scale(ctx0, alpha, 0.0f);
         ggml_tensor * alpha_ones = ggml_exp(ctx0, alpha_zeros);
-        ggml_tensor * no_div_by_zero = ggml_add(ctx0, alpha_zeros, 0.000000001f);
+        ggml_tensor * no_div_by_zero = ggml_scale(ctx0, alpha_ones, 0.000000001f);
         ggml_tensor * alpha_by_zero = ggml_add(ctx0, alpha, no_div_by_zero);
         ggml_tensor * alpha_div = ggml_div(ctx0, alpha_ones, alpha_by_zero);
         ggml_tensor * alpha_sin = ggml_mul(ctx0, res_cur, alpha);
@@ -2012,14 +2163,15 @@ ggml_tensor * llm_graph_context::build_res_blk(
         ggml_tensor * act1_res = ggml_add(ctx0, res_cur, alpha_mul);
 
         //-----convs1------
-        ggml_tensor * si_res_convs1 = ggml_conv_1d(ctx0, convs1_mw, act1_res);
+        ggml_tensor * si_res_convs1 = ggml_conv_1d(ctx0, convs1_mw, act1_res, 1, padding, dilation);
+        ggml_tensor * b1_reshaped = ggml_reshape_3d(ctx0, convs1_mb, 1, convs1_mb->ne[0], 1);
         si_res_convs1 = ggml_add(ctx0, si_res_convs1, convs1_mb);
 
         //------act2-------
         ggml_tensor * alpha2 = ggml_reshape_3d(ctx0, act2, 1, act2->ne[0], 1);
         ggml_tensor * alpha2_zeros = ggml_scale(ctx0, alpha2, 0.0f);
         ggml_tensor * alpha2_ones = ggml_exp(ctx0, alpha2_zeros);
-        ggml_tensor * no_div_by_zero2 = ggml_add(ctx0, alpha2_zeros, 0.000000001f);
+        ggml_tensor * no_div_by_zero2 = ggml_scale(ctx0, alpha2_ones, 0.000000001f);
         ggml_tensor * alpha2_by_zero = ggml_add(ctx0, alpha2, no_div_by_zero2);
         ggml_tensor * alpha2_div = ggml_div(ctx0, alpha2_ones, alpha2_by_zero);
         ggml_tensor * alpha2_sin = ggml_mul(ctx0, si_res_convs1, alpha2);
@@ -2029,7 +2181,8 @@ ggml_tensor * llm_graph_context::build_res_blk(
         ggml_tensor * act2_res = ggml_add(ctx0, si_res_convs1, alpha2_mul);
 
         //-----convs2-----
-        ggml_tensor * si_res_convs2 = ggml_conv_1d(ctx0, convs2_mw, act2_res);
+        ggml_tensor * si_res_convs2 = ggml_conv_1d(ctx0, convs2_mw, act2_res, 1, padding_plain, 1);
+        ggml_tensor * b2_reshaped = ggml_reshape_3d(ctx0, convs2_mb, 1, convs2_mb->ne[0], 1);
         si_res_convs2 = ggml_add(ctx0, si_res_convs2, convs2_mb);
 
         res_cur = ggml_add(ctx0, si_res_convs2, res_cur);
