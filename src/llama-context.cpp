@@ -744,14 +744,18 @@ int llama_context::encode(const llama_batch & batch_inp, int dot_debug) {
     if (hparams.use_flow) {
         n_embd = 512;
         n_vocab = 1;
-    } else {
+    } else if (hparams.use_hift) {
+        n_embd = 80;
+        n_vocab = 1;
+    } 
+    else {
         n_embd = hparams.n_embd;
         n_vocab = model.vocab.n_tokens();
     }
 
     // const int64_t n_embd  = hparams.n_embd;
     // const int32_t n_vocab = model.vocab.n_tokens();
-    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&& check here1 !\n");
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&& model.vocab is: %d, n_embd is: %d\n", model.vocab, n_embd);
     // note: during encode, we always pass the full sequence starting from pos = 0
     if (!balloc->init(batch_inp, model.vocab, nullptr, n_embd, true)) {
         LLAMA_LOG_ERROR("%s: failed to initialize batch\n", __func__);
@@ -761,7 +765,6 @@ int llama_context::encode(const llama_batch & batch_inp, int dot_debug) {
     const uint32_t n_tokens = balloc->get_n_tokens();
 
     const llama_ubatch ubatch = balloc->split_simple(n_tokens);
-    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&& check here2 !\n");
     // micro-batching is not possible for non-causal encoding, so we process the batch in a single shot
     GGML_ASSERT(cparams.n_ubatch >= n_tokens && "encoder requires n_ubatch >= n_tokens");
 
@@ -901,7 +904,7 @@ int llama_context::encode(const llama_batch & batch_inp, int dot_debug) {
     // Reset state for the next token before backend sync, to allow the CPU activities in the reset to
     // overlap with device computation.
     ggml_backend_sched_reset(sched.get());
-    LLAMA_LOG_INFO("&&&&&&&&&&&&&&&& check here9 !\n");
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&& check here9 !\n");
     // TODO: hacky solution
     if (model.arch == LLM_ARCH_T5 && t_embd) {
         //cross.t_embd = t_embd;
@@ -1045,7 +1048,7 @@ int llama_context::decode(const llama_batch & batch_inp) {
         break;
     }
     
-    LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&& n_outputs_all is: %d\n", n_outputs_all);
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&& n_outputs_all is: %d\n", n_outputs_all);
     // reserve output buffer
     if (output_reserve(n_outputs_all) < n_outputs_all) {
         LLAMA_LOG_ERROR("%s: could not reserve space for batch with %d outputs\n", __func__, n_outputs_all);
@@ -1078,7 +1081,7 @@ int llama_context::decode(const llama_batch & batch_inp) {
             }
 
             // needs to happen before the graph is built
-            LLAMA_LOG_INFO("&&&&&&&&&&&&&&& n_outputs_new is: %d\n", n_outputs_new);
+            // LLAMA_LOG_INFO("&&&&&&&&&&&&&&& n_outputs_new is: %d\n", n_outputs_new);
             n_outputs = n_outputs_new;
         }
         
@@ -1125,7 +1128,7 @@ int llama_context::decode(const llama_batch & batch_inp) {
 
         auto * t_logits = res->get_logits();
         auto * t_embd   = cparams.embeddings ? res->get_embd() : nullptr;
-        LLAMA_LOG_INFO("-------------------------------------- %s: t_logits = %d, t_embd = %d, cparams.embeddings is: %d\n", __func__, t_logits? 1 : 0, t_embd ? 1 : 0, cparams.embeddings);
+        // LLAMA_LOG_INFO("-------------------------------------- %s: t_logits = %d, t_embd = %d, cparams.embeddings is: %d\n", __func__, t_logits? 1 : 0, t_embd ? 1 : 0, cparams.embeddings);
         if (t_embd && res->get_embd_pooled()) {
             t_embd = res->get_embd_pooled();
         }
@@ -1153,7 +1156,7 @@ int llama_context::decode(const llama_batch & batch_inp) {
             // }
             // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&& logits_str is: %s\n", logits_str.c_str());
         }
-        LLAMA_LOG_INFO("-------------------------------------- %s: n_outputs_prev = %d, n_embd = %d, cparams.pooling_type is: %d\n", __func__, n_outputs_prev, n_embd, cparams.pooling_type);
+        // LLAMA_LOG_INFO("-------------------------------------- %s: n_outputs_prev = %d, n_embd = %d, cparams.pooling_type is: %d\n", __func__, n_outputs_prev, n_embd, cparams.pooling_type);
         // extract embeddings
         if (t_embd && n_outputs > 0) {
             ggml_backend_t backend_embd = ggml_backend_sched_get_tensor_backend(sched.get(), t_embd);
