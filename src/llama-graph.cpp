@@ -2074,22 +2074,22 @@ ggml_tensor * llm_graph_context::build_m_source(
     ggml_tensor * arrange_tensor = ggml_arange(ctx0, 1.0, 10.0, 1.0);
     ggml_tensor * target_shape = ggml_new_tensor_3d(ctx0, cur_dup->type, 9, cur_dup->ne[1], cur_dup->ne[2]);
     arrange_tensor = ggml_repeat(ctx0, arrange_tensor, target_shape);
-    cur_dup = ggml_repeat(ctx0, cur_dup, target_shape);
-    LLAMA_LOG_INFO("&&&&&&&&&&&&&&& arrange_tensor shape is: {%d, %d, %d, %d}\n", arrange_tensor->ne[0], arrange_tensor->ne[1], arrange_tensor->ne[2], arrange_tensor->ne[3]);
-    LLAMA_LOG_INFO("&&&&&&&&&&&&&&& cur_dup shape is: {%d, %d, %d, %d}\n", cur_dup->ne[0], cur_dup->ne[1], cur_dup->ne[2], cur_dup->ne[3]);
-    cur_dup = ggml_mul(ctx0, cur_dup, arrange_tensor);
+    ggml_tensor * cur_dup_repeat = ggml_repeat(ctx0, cur_dup, target_shape);
     
+    cur_dup_repeat = ggml_mul(ctx0, cur_dup_repeat, arrange_tensor);
+    
+    LLAMA_LOG_INFO("&&&&&&&&&&&&&&& cur_dup_repeat shape is: {%d, %d, %d, %d}\n", cur_dup_repeat->ne[0], cur_dup_repeat->ne[1], cur_dup_repeat->ne[2], cur_dup_repeat->ne[3]);
     //_f02sine函数
-    ggml_tensor * rad_values = ggml_scale(ctx0, cur_dup, 1/ 24000);
+    ggml_tensor * rad_values = ggml_scale(ctx0, cur_dup_repeat, 1/ 24000);
     rad_values = ggml_map_custom1(ctx0, rad_values, custom_op_mod_1, 1, NULL);
-
+    LLAMA_LOG_INFO("&&&&&&&&&&&&&&& rad_values shape is: {%d, %d, %d, %d}\n", rad_values->ne[0], rad_values->ne[1], rad_values->ne[2], rad_values->ne[3]);
     const int dim = rad_values->ne[0];
     const int time = rad_values->ne[1];
     const int batch = rad_values->ne[2];
 
     struct ggml_tensor * rand_ini = ggml_new_tensor_3d(ctx0, GGML_TYPE_F32, dim, 1, batch);
     rand_ini = ggml_map_custom1(ctx0, rand_ini, custom_op_rand_masked, 1, NULL);
-
+    LLAMA_LOG_INFO("&&&&&&&&&&&&&&& rand_ini shape is: {%d, %d, %d, %d}\n", rand_ini->ne[0], rand_ini->ne[1], rand_ini->ne[2], rand_ini->ne[3]);
     if (time > 1) {
         struct ggml_tensor * zeros = ggml_new_tensor_3d(ctx0, GGML_TYPE_F32, dim, time - 1, batch);
         struct ggml_tensor * zero_const = ggml_scale(ctx0, zeros, 0.0f);
@@ -2100,26 +2100,29 @@ ggml_tensor * llm_graph_context::build_m_source(
     }
 
     ggml_tensor * rad_values_dup = ggml_dup(ctx0, ggml_cont(ctx0, rad_values));
-
+    LLAMA_LOG_INFO("&&&&&&&&&&&&&&& rad_values_dup shape is: {%d, %d, %d, %d}\n", rad_values_dup->ne[0], rad_values_dup->ne[1], rad_values_dup->ne[2], rad_values_dup->ne[3]);
     ggml_tensor * rad_values_downsampled = ggml_interpolate(ctx0, rad_values_dup, dim, time / 480, batch, 1, 1);
-
+    LLAMA_LOG_INFO("&&&&&&&&&&&&&&& rad_values_downsampled shape is: {%d, %d, %d, %d}\n", rad_values_downsampled->ne[0], rad_values_downsampled->ne[1], rad_values_downsampled->ne[2], rad_values_downsampled->ne[3]);
     struct ggml_tensor * phase = ggml_new_tensor_3d(ctx0, GGML_TYPE_F32, rad_values_downsampled->ne[0], rad_values_downsampled->ne[1], rad_values_downsampled->ne[2]);
     phase = ggml_map_custom1(ctx0, rad_values_downsampled, custom_op_cumsum_ne1, GGML_N_TASKS_MAX, NULL);
-    phase = ggml_scale(ctx0, phase, 2 * 3.14159265358979323846f);
-    ggml_tensor * phase_scaled = ggml_interpolate(ctx0, ggml_cont(ctx0, phase), phase->ne[0], phase->ne[1], phase->ne[2], 1, 1);
+    phase = ggml_scale(ctx0, phase, 2 * 3.14159265358979323846f * 480);
+    LLAMA_LOG_INFO("&&&&&&&&&&&&&&& phase shape is: {%d, %d, %d, %d}\n", phase->ne[0], phase->ne[1], phase->ne[2], phase->ne[3]);
+    ggml_tensor * phase_scaled = ggml_interpolate(ctx0, ggml_cont(ctx0, phase), phase->ne[0], phase->ne[1] * 480, phase->ne[2], 1, 1);
+    LLAMA_LOG_INFO("&&&&&&&&&&&&&&& phase_scaled shape is: {%d, %d, %d, %d}\n", phase_scaled->ne[0], phase_scaled->ne[1], phase_scaled->ne[2], phase_scaled->ne[3]);
     ggml_tensor * sines = ggml_sin(ctx0, phase_scaled);
-
+    LLAMA_LOG_INFO("&&&&&&&&&&&&&&& sines shape is: {%d, %d, %d, %d}\n", sines->ne[0], sines->ne[1], sines->ne[2], sines->ne[3]);
     //_f02uv
     float threshold_val = 10.0f;
     ggml_tensor * uv = ggml_map_custom1(ctx0, cur_dup, custom_op_threshold_uv, GGML_N_TASKS_MAX, &threshold_val);
+    LLAMA_LOG_INFO("&&&&&&&&&&&&&&& uv shape is: {%d, %d, %d, %d}\n", uv->ne[0], uv->ne[1], uv->ne[2], uv->ne[3]);
     ggml_tensor * zeros = ggml_scale(ctx0, uv, 0.0f);
     ggml_tensor * ones = ggml_exp(ctx0, zeros);
 
-    ggml_tensor * term1 = ggml_scale(ctx0, uv, 0.03);
+    ggml_tensor * term1 = ggml_scale(ctx0, uv, 0.03f);
     ggml_tensor * term2 = ggml_sub(ctx0, ones, uv);
     term2 = ggml_scale(ctx0, term2, 0.1 / 3);
     ggml_tensor * noise_amp = ggml_add(ctx0, term1, term2);
-
+    noise_amp = ggml_repeat(ctx0, noise_amp, sines);
     ggml_tensor * noise = ggml_new_tensor(ctx0, sines->type, ggml_n_dims(sines), sines->ne);
     noise = ggml_map_custom1(ctx0, sines, custom_op_randn, GGML_N_TASKS_MAX, NULL);
     LLAMA_LOG_INFO("&&&&&&&&&&&&&&& noise shape is: {%d, %d, %d, %d}\n", noise->ne[0], noise->ne[1], noise->ne[2], noise->ne[3]);
@@ -2129,12 +2132,12 @@ ggml_tensor * llm_graph_context::build_m_source(
     LLAMA_LOG_INFO("&&&&&&&&&&&&&&& uv shape is: {%d, %d, %d, %d}\n", uv->ne[0], uv->ne[1], uv->ne[2], uv->ne[3]);
     ggml_tensor * sine_waves = ggml_mul(ctx0, sines, uv);
     sine_waves = ggml_add(ctx0, sine_waves, noise);
-
+    LLAMA_LOG_INFO("&&&&&&&&&&&&&&& sine_waves shape is: {%d, %d, %d, %d}\n", sine_waves->ne[0], sine_waves->ne[1], sine_waves->ne[2], sine_waves->ne[3]);
     ggml_tensor * sine_wavs = ggml_mul_mat(ctx0, mw, sine_waves);
     sine_wavs = ggml_add(ctx0, sine_wavs, mb);
 
     ggml_tensor * sine_merge = ggml_tanh(ctx0, sine_wavs);
-
+    LLAMA_LOG_INFO("&&&&&&&&&&&&&&& sine_merge shape is: {%d, %d, %d, %d}\n", sine_merge->ne[0], sine_merge->ne[1], sine_merge->ne[2], sine_merge->ne[3]);
     ggml_set_name(sine_merge, "sine_merge");
     return sine_merge;
 }
