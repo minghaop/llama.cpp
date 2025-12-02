@@ -17038,21 +17038,30 @@ struct llm_build_hift : public llm_graph_context {
     // const llama_model & model;
     llm_build_hift(const llama_model & model, const llm_graph_params & params, ggml_cgraph * gf) : llm_graph_context(params) {
         ggml_tensor * speech_feat = build_inp_embd(model.f0_classifier_w);
+        LLAMA_LOG_INFO("&&&&&&&&&&&&&&& speech_feat shape is: {%d, %d, %d, %d}\n", speech_feat->ne[0], speech_feat->ne[1], speech_feat->ne[2], speech_feat->ne[3]);
         ggml_set_name(speech_feat, "speech_feat");
 
-        ggml_tensor * cur;
-        for (int i = 2; i < 10; i += 2) {
-            cur = bulid_f0_predictor(speech_feat, model.layers[i].f0_w, model.layers[i].f0_b);
+        ggml_tensor * cur = ggml_dup(ctx0, ggml_cont(ctx0, speech_feat));
+        for (int i = 0; i < 10; i += 2) {
+            cur = bulid_f0_predictor(cur, model.layers[i].f0_w, model.layers[i].f0_b);
         }
-        
-        ggml_tensor * f0 = ggml_reshape_3d(ctx0, cur, cur->ne[0], 1, 1);
-        ggml_set_name(f0, "f0_pridictor");
-        ggml_tensor * s = ggml_upscale(ctx0, f0, 480, GGML_SCALE_MODE_NEAREST);
+        ggml_tensor * f0_output = ggml_cont(ctx0, ggml_transpose(ctx0, cur));
+        LLAMA_LOG_INFO("&&&&&&&&&&&&&&& f0_output shape is: {%d, %d, %d, %d}\n", f0_output->ne[0], f0_output->ne[1], f0_output->ne[2], f0_output->ne[3]);
+        ggml_tensor * f0 = ggml_mul_mat(ctx0, model.f0_classifier_w, f0_output);
+        ggml_tensor * classifier_b = ggml_reshape_3d(ctx0, model.f0_classifier_b, 1, model.f0_classifier_b->ne[0], 1);
+        f0 = ggml_add(ctx0, f0, classifier_b);
+        LLAMA_LOG_INFO("&&&&&&&&&&&&&&& f0 shape is: {%d, %d, %d, %d}\n", f0->ne[0], f0->ne[1], f0->ne[2], f0->ne[3]);
+        ggml_tensor * f0_trans = ggml_reshape_3d(ctx0, f0, f0->ne[1], 1, f0->ne[0]);
+        f0_trans = ggml_abs(ctx0, f0_trans);
+        LLAMA_LOG_INFO("&&&&&&&&&&&&&&& f0_trans shape is: {%d, %d, %d, %d}\n", f0_trans->ne[0], f0_trans->ne[1], f0_trans->ne[2], f0_trans->ne[3]);
+        ggml_tensor * s = ggml_upscale_ext(ctx0, f0_trans, f0_trans->ne[0] * 480, f0_trans->ne[1], f0_trans->ne[2], f0_trans->ne[3], GGML_SCALE_MODE_NEAREST);
         s = ggml_cont(ctx0, ggml_transpose(ctx0, s));
         ggml_set_name(s, "s_pridictor");
+        LLAMA_LOG_INFO("&&&&&&&&&&&&&&& s shape is: {%d, %d, %d, %d}\n", s->ne[0], s->ne[1], s->ne[2], s->ne[3]);
         ggml_tensor * s_source = build_m_source(s, model.m_source_w, model.m_source_b);
         s_source = ggml_cont(ctx0, ggml_transpose(ctx0, s_source));
         ggml_set_name(s_source, "m_source");
+        LLAMA_LOG_INFO("&&&&&&&&&&&&&&& s_source shape is: {%d, %d, %d, %d}\n", s_source->ne[0], s_source->ne[1], s_source->ne[2], s_source->ne[3]);
         // s_source = ggml_reshape_2d(ctx0, s_source, s_source->ne[0], 1);
 
         //-----------------------decode---------------

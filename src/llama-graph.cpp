@@ -1913,8 +1913,9 @@ ggml_tensor * llm_graph_context::bulid_f0_predictor(
 
     ggml_tensor * cur_dup = ggml_dup(ctx0, cur);
     cur_dup = ggml_conv_1d(ctx0, mw, cur_dup, 1, 1, 1);
+    mb = ggml_reshape_3d(ctx0, mb, 1, mb->ne[0], 1);
     cur_dup = ggml_add(ctx0, cur_dup, mb);
-
+    cur_dup = ggml_elu(ctx0, cur_dup);
     return cur_dup;
 }
 
@@ -2071,8 +2072,11 @@ ggml_tensor * llm_graph_context::build_m_source(
     
     ggml_tensor * cur_dup = ggml_dup(ctx0, cur);
     ggml_tensor * arrange_tensor = ggml_arange(ctx0, 1.0, 10.0, 1.0);
-    arrange_tensor = ggml_reshape_3d(ctx0, arrange_tensor, arrange_tensor->ne[0], 1, 1);
-
+    ggml_tensor * target_shape = ggml_new_tensor_3d(ctx0, cur_dup->type, 9, cur_dup->ne[1], cur_dup->ne[2]);
+    arrange_tensor = ggml_repeat(ctx0, arrange_tensor, target_shape);
+    cur_dup = ggml_repeat(ctx0, cur_dup, target_shape);
+    LLAMA_LOG_INFO("&&&&&&&&&&&&&&& arrange_tensor shape is: {%d, %d, %d, %d}\n", arrange_tensor->ne[0], arrange_tensor->ne[1], arrange_tensor->ne[2], arrange_tensor->ne[3]);
+    LLAMA_LOG_INFO("&&&&&&&&&&&&&&& cur_dup shape is: {%d, %d, %d, %d}\n", cur_dup->ne[0], cur_dup->ne[1], cur_dup->ne[2], cur_dup->ne[3]);
     cur_dup = ggml_mul(ctx0, cur_dup, arrange_tensor);
     
     //_f02sine函数
@@ -2118,8 +2122,11 @@ ggml_tensor * llm_graph_context::build_m_source(
 
     ggml_tensor * noise = ggml_new_tensor(ctx0, sines->type, ggml_n_dims(sines), sines->ne);
     noise = ggml_map_custom1(ctx0, sines, custom_op_randn, GGML_N_TASKS_MAX, NULL);
+    LLAMA_LOG_INFO("&&&&&&&&&&&&&&& noise shape is: {%d, %d, %d, %d}\n", noise->ne[0], noise->ne[1], noise->ne[2], noise->ne[3]);
+    LLAMA_LOG_INFO("&&&&&&&&&&&&&&& noise_amp shape is: {%d, %d, %d, %d}\n", noise_amp->ne[0], noise_amp->ne[1], noise_amp->ne[2], noise_amp->ne[3]);
     noise = ggml_mul(ctx0, noise_amp, noise);
-
+    LLAMA_LOG_INFO("&&&&&&&&&&&&&&& sines shape is: {%d, %d, %d, %d}\n", sines->ne[0], sines->ne[1], sines->ne[2], sines->ne[3]);
+    LLAMA_LOG_INFO("&&&&&&&&&&&&&&& uv shape is: {%d, %d, %d, %d}\n", uv->ne[0], uv->ne[1], uv->ne[2], uv->ne[3]);
     ggml_tensor * sine_waves = ggml_mul(ctx0, sines, uv);
     sine_waves = ggml_add(ctx0, sine_waves, noise);
 
@@ -2229,10 +2236,9 @@ ggml_tensor * llm_graph_context::build_inp_embd(ggml_tensor * tok_embd) const {
         if(hparams.use_flow) {
             inp->embd = ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, hparams.spk_embed_dim, 1);
         } 
-        // else if {
-        //     inp->embd = ggml_new_tensor_3d(ctx0, GGML_TYPE_F32, n_embd, 80, 1);
-        // } 
-        else {
+        else if (hparams.use_hift){
+            inp->embd = ggml_new_tensor_3d(ctx0, GGML_TYPE_F32, ubatch.n_tokens, 80, 1);
+        } else {
             inp->embd = ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, n_embd, ubatch.n_tokens);
         }
         // ggml_backend_t backend_cuda = ggml_backend_cuda_init(0);
