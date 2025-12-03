@@ -52,7 +52,7 @@ bool llama_batch_allocr::init(
     
     // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&& %s, batch.n_tokens is: %d, n_embd is: %d\n", __func__, batch.n_tokens, n_embd);
     int32_t seq_len = static_cast<int>(batch.n_tokens / n_embd);
-    LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&& %s, check here2\n", __func__);
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&& %s, check here2\n", __func__);
     
     if (batch.seq_id) {
         // LLAMA_LOG_INFO("********************************************************************** batch n_tokens is: %d\n", batch.n_tokens);
@@ -79,7 +79,7 @@ bool llama_batch_allocr::init(
         }
         batch.n_seq_id = n_seq_id.data();
     }
-    LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&& %s, check here3\n", __func__);
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&& %s, check here3\n", __func__);
     if (!batch.seq_id) {
         seq_id.resize(batch.n_tokens + 1);
         seq_id[batch.n_tokens] = NULL;
@@ -88,7 +88,7 @@ bool llama_batch_allocr::init(
         }
         batch.seq_id = seq_id.data();
     }
-    LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&& %s, check here4\n", __func__);
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&& %s, check here4\n", __func__);
     if (!batch.pos) {
         pos.resize(batch.n_tokens);
 
@@ -118,7 +118,7 @@ bool llama_batch_allocr::init(
 
         batch.pos = pos.data();
     }
-    LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&& %s, check here5\n", __func__);
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&& %s, check here5\n", __func__);
     if (!batch.logits) {
         if (output_all) {
             // return the output for all tokens
@@ -149,7 +149,7 @@ bool llama_batch_allocr::init(
     //
     // compute stats
     //
-    LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&& %s, check here6\n", __func__);
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&& %s, check here6\n", __func__);
     this->n_embd = n_embd;
 
     // count the outputs in this batch
@@ -163,7 +163,7 @@ bool llama_batch_allocr::init(
             n_outputs += batch.logits[i] != 0;
         }
     }
-    LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&& %s, check here7\n", __func__);
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&& %s, check here7\n", __func__);
     // determine coupled sequences
     // these are pairs of sequences that have at least one token in the input batch that is assigned to both of them
     for (int32_t i = 0; i < seq_len; ++i) {
@@ -317,7 +317,7 @@ bool llama_batch_allocr::init(
             }
         }
     }
-    LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&& %s, check here8\n", __func__);
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&& %s, check here8\n", __func__);
     // disallow partial sequence sub-sets:
     //
     // invalid:          x
@@ -367,9 +367,9 @@ bool llama_batch_allocr::init(
             }
         }
     }
-    LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&& %s, check here9\n", __func__);
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&& %s, check here9\n", __func__);
     split_reset();
-    LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&& %s, check here10\n", __func__);
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&& %s, check here10\n", __func__);
     return true;
 }
 
