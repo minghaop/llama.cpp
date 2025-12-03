@@ -543,6 +543,8 @@ float * llama_context::get_logits_ith(int32_t i) {
 }
 
 float * llama_context::get_embeddings() {
+    LLAMA_LOG_INFO("llama_context::get_embeddings called\n");
+    LLAMA_LOG_INFO("embd ptr: %p\n", this->embd);
     return embd;
 }
 
@@ -707,7 +709,7 @@ llm_graph_result_ptr llama_context::process_ubatch(const llama_ubatch & ubatch, 
         return nullptr;
     }
     if (dot_debug) {
-        ggml_graph_dump_dot(gf, NULL, "debug.dot");
+        ggml_graph_dump_dot(gf, NULL, "debug_hift.dot");
     }
 
     if (!ggml_backend_sched_alloc_graph(sched.get(), gf)) {
@@ -801,7 +803,7 @@ int llama_context::encode(const llama_batch & batch_inp, int dot_debug) {
 
     ggml_status status;
     const auto res = process_ubatch(ubatch, LLM_GRAPH_TYPE_ENCODER, nullptr, status, dot_debug);
-    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&& check here6 !\n");
+    LLAMA_LOG_INFO("&&&&&&&&&&&&&&&& res is nullptr: %d\n", res == nullptr);
     cparams.causal_attn = causal_attn_org;
 
     if (!res) {
@@ -817,7 +819,7 @@ int llama_context::encode(const llama_batch & batch_inp, int dot_debug) {
     auto * t_embd = res->get_embd_pooled() ? res->get_embd_pooled() : res->get_embd();
     // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&& res->get_embd_pooled is: %d\n", res->get_embd_pooled() == nullptr);
     // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&& res->get_embd is: %d\n", res->get_embd() == nullptr);
-    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&& embd is %d, t_embd is: %d\n", embd == nullptr, t_embd == nullptr);
+    LLAMA_LOG_INFO("&&&&&&&&&&&&&&&& embd is %d, t_embd is: %d\n", embd == nullptr, t_embd == nullptr);
     // extract logits
    if (logits && t_logits) {
         ggml_backend_t backend_res = ggml_backend_sched_get_tensor_backend(sched.get(), t_logits);
@@ -1296,7 +1298,7 @@ uint32_t llama_context::output_reserve(int32_t n_outputs) {
     const auto & hparams = model.hparams;
     const auto & vocab   = model.vocab;
 
-    // LLAMA_LOG_INFO("&&&&&&&&&&&&&& n_outputs is: %d, n_seq_max is: %d\n", n_outputs, n_seq_max());
+    LLAMA_LOG_INFO("&&&&&&&&&&&&&& n_outputs is: %d, n_seq_max is: %d\n", n_outputs, n_seq_max());
     const int64_t n_outputs_max = std::max<int64_t>(n_outputs, n_seq_max());
 
     const auto n_batch = cparams.n_batch;
@@ -1304,6 +1306,9 @@ uint32_t llama_context::output_reserve(int32_t n_outputs) {
     if(model.arch == LLM_ARCH_COSYVOICEFLOW) {
         n_vocab = 1000;
         n_embd = 1000;
+    } else if (model.arch == LLM_ARCH_COSYVOICEHIFT) {  // 添加 HIFT
+        n_vocab = 0;
+        n_embd = n_outputs * 80 * 50;  // 或动态计算 
     } else {
         n_vocab = vocab.n_tokens();
         n_embd  = hparams.n_embd;
