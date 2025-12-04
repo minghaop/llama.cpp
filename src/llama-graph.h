@@ -542,6 +542,8 @@ struct llm_graph_context {
         ggml_tensor * mw,
         ggml_tensor * mb) const;
     
+    ggml_tensor * build_snake(ggml_tensor * cur, ggml_tensor * alpha) const;
+    
     ggml_tensor *  build_m_source(
         ggml_tensor * cur,
         ggml_tensor * mw,
