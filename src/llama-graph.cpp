@@ -30,8 +30,14 @@ void llm_graph_input_embd::set_input(const llama_ubatch * ubatch) {
     }
 
     if (ubatch->embd) {
-        const int64_t n_embd   = embd->ne[0];
-        ggml_backend_tensor_set(embd, ubatch->embd, 0, n_embd*ggml_element_size(embd));
+        if(ubatch->flow_token != nullptr) {
+            const int64_t n_embd   = embd->ne[0];
+            ggml_backend_tensor_set(embd, ubatch->embd, 0, n_embd*ggml_element_size(embd));
+        } else{
+            const int64_t n_embd   = embd->ne[0] * embd->ne[1];
+            LLAMA_LOG_INFO("-------------------------------------- %s:  n_embd is: %d\n", __func__, n_embd);
+            ggml_backend_tensor_set(embd, ubatch->embd, 0, n_embd*ggml_element_size(embd));
+        }
     }
 }
 
@@ -1919,32 +1925,94 @@ ggml_tensor * llm_graph_context::bulid_f0_predictor(
     return cur_dup;
 }
 
-static void custom_op_mod_1(
-        struct ggml_tensor * dst,       // 输出张量
-        const struct ggml_tensor * a,   // 输入张量
-        int ith,                        // 当前线程 ID
-        int nth,                        // 线程总数
-        void * userdata)                // 用户数据 (这里不用)
-    {
-    // 1. 获取元素总数
-        const int ne = ggml_nelements(dst);
 
-        // 2. 计算当前线程负责的数据范围 (分片)
-        // 简单的并行策略：每个线程处理一段连续的数据
-        const int dr = (ne + nth - 1) / nth; 
-        const int ie0 = dr * ith; 
-        const int ie1 = std::min(ie0 + dr, ne);
-
-        // 3. 获取数据指针 (假设是 F32 类型)
-        const float * src_data = (const float *) a->data;
-        float * dst_data = (float *) dst->data;
-
-        // 4. 循环计算
-        for (int i = ie0; i < ie1; i++) {
-            // 核心逻辑: x % 1 = x - floor(x)
-            dst_data[i] = src_data[i] - std::floor(src_data[i]);
+static void ggml_compute_snake(
+    struct ggml_tensor * dst,
+    const struct ggml_tensor * src0,  // x
+    const struct ggml_tensor * src1,  // alpha
+    int ith, int nth, void * userdata) {
+    
+    (void) userdata;
+    
+    const int64_t ne0 = src0->ne[0];  // L (序列长度)
+    const int64_t ne1 = src0->ne[1];  // C (通道数)
+    const int64_t ne2 = src0->ne[2];  // B (batch)
+    
+    const float * x = (const float *) src0->data;
+    const float * alpha = (const float *) src1->data;
+    float * y = (float *) dst->data;
+    
+    // 获取 stride (字节转 float 索引)
+    const int64_t nb0 = src0->nb[0] / sizeof(float);  // 应该是 1
+    const int64_t nb1 = src0->nb[1] / sizeof(float);  // L 或其他
+    const int64_t nb2 = src0->nb[2] / sizeof(float);
+    
+    const int64_t dnb0 = dst->nb[0] / sizeof(float);
+    const int64_t dnb1 = dst->nb[1] / sizeof(float);
+    const int64_t dnb2 = dst->nb[2] / sizeof(float);
+    
+    // 按通道并行
+    const int64_t dr = (ne1 + nth - 1) / nth;
+    const int64_t c0 = dr * ith;
+    const int64_t c1 = std::min(c0 + dr, ne1);
+    
+    for (int64_t b = 0; b < ne2; b++) {
+        for (int64_t c = c0; c < c1; c++) {
+            const float a = alpha[c];
+            const float a_inv = 1.0f / (a + 1e-9f);
+            
+            for (int64_t l = 0; l < ne0; l++) {
+                const int64_t src_idx = b * nb2 + c * nb1 + l * nb0;
+                const int64_t dst_idx = b * dnb2 + c * dnb1 + l * dnb0;
+                
+                const float xi = x[src_idx];
+                const float ax = a * xi;
+                const float sin_ax = sinf(ax);
+                const float sin_sq = sin_ax * sin_ax;
+                
+                y[dst_idx] = xi + sin_sq * a_inv;
+            }
         }
     }
+}
+
+ggml_tensor * llm_graph_context::build_snake(ggml_tensor * cur, ggml_tensor * alpha) const {
+    // alpha 需要 reshape 为 [C] 1D
+    ggml_tensor * alpha_1d = ggml_reshape_1d(ctx0, alpha, alpha->ne[0]);
+    ggml_tensor * result = ggml_map_custom2(
+        ctx0, cur, alpha_1d, ggml_compute_snake, GGML_N_TASKS_MAX, nullptr);
+    
+    return result;
+}
+
+
+
+static void custom_op_mod_1(
+      struct ggml_tensor * dst,       // 输出张量
+      const struct ggml_tensor * a,   // 输入张量
+      int ith,                        // 当前线程 ID
+      int nth,                        // 线程总数
+      void * userdata)                // 用户数据 (这里不用)
+{
+// 1. 获取元素总数
+    const int ne = ggml_nelements(dst);
+
+    // 2. 计算当前线程负责的数据范围 (分片)
+    // 简单的并行策略：每个线程处理一段连续的数据
+    const int dr = (ne + nth - 1) / nth; 
+    const int ie0 = dr * ith; 
+    const int ie1 = std::min(ie0 + dr, ne);
+
+    // 3. 获取数据指针 (假设是 F32 类型)
+    const float * src_data = (const float *) a->data;
+    float * dst_data = (float *) dst->data;
+
+    // 4. 循环计算
+    for (int i = ie0; i < ie1; i++) {
+        // 核心逻辑: x % 1 = x - floor(x)
+        dst_data[i] = src_data[i] - std::floor(src_data[i]);
+    }
+}
 
     
 
@@ -1952,72 +2020,70 @@ static void custom_op_rand_masked(
     struct ggml_tensor * dst,       
     const struct ggml_tensor * a,   
     int ith, int nth, void * userdata)                
-    {
-        // 获取 Dim 大小 (ne[0])
-        const int dim = dst->ne[0]; 
-        const int ne = ggml_nelements(dst);
-        const int dr = (ne + nth - 1) / nth; 
-        const int ie0 = dr * ith; 
-        const int ie1 = std::min(ie0 + dr, ne);
+{
+    const int dim = dst->ne[0]; 
+    const int ne = ggml_nelements(dst);
+    const int dr = (ne + nth - 1) / nth; 
+    const int ie0 = dr * ith; 
+    const int ie1 = std::min(ie0 + dr, ne);
 
-        float * dst_data = (float *) dst->data;
-        std::mt19937 g_rng(1234);
-        std::mt19937 local_rng(g_rng() + ith);
-        std::uniform_real_distribution<float> dist(0.0f, 1.0f);
+    float * dst_data = (float *) dst->data;
+    
+    // 每个线程独立的真随机生成器
+    static thread_local std::random_device rd;
+    static thread_local std::mt19937 rng(rd());
+    std::uniform_real_distribution<float> dist(0.0f, 1.0f);
 
-        for (int i = ie0; i < ie1; i++) {
-            // i % dim == 0 代表这是该向量的第一个元素 (基频)
-            if (i % dim == 0) {
-                dst_data[i] = 0.0f; // Mask 0
-            } else {
-                dst_data[i] = dist(local_rng); // Random
-            }
+    for (int i = ie0; i < ie1; i++) {
+        if (i % dim == 0) {
+            dst_data[i] = 0.0f;
+        } else {
+            dst_data[i] = dist(rng);
         }
     }
+}
 
-// 输入布局: [Dim=9, Time=910, Batch=1]
+
 static void custom_op_cumsum_ne1(
     struct ggml_tensor * dst,       
     const struct ggml_tensor * a,   
     int ith, int nth, void * userdata)                
-    {
-        const int dim   = dst->ne[0]; // 9
-        const int time  = dst->ne[1]; // 910
-        const int batch = dst->ne[2]; // 1
+{
+    const int64_t ne0 = dst->ne[0];  // dim
+    const int64_t ne1 = dst->ne[1];  // time
+    const int64_t ne2 = dst->ne[2];  // batch
 
-        // 并行策略：
-        // Cumsum 是沿 Time 轴有依赖的，所以 Time 轴内部不能并行。
-        // 我们可以在 Dim 轴和 Batch 轴上并行。
-        // 总任务数 = Dim * Batch (9 * 1 = 9 个任务)
-        const int n_tasks = dim * batch;
+    const int64_t n_tasks = ne0 * ne2;
+    const int64_t tasks_per_thread = (n_tasks + nth - 1) / nth; 
+    const int64_t task_begin = tasks_per_thread * ith; 
+    const int64_t task_end = std::min(task_begin + tasks_per_thread, n_tasks);
+
+    const float * __restrict src = (const float *) a->data;
+    float * __restrict dst_ptr = (float *) dst->data;
+
+    for (int64_t task = task_begin; task < task_end; task++) {
+        const int64_t i0 = task % ne0;  // dim index
+        const int64_t i2 = task / ne0;  // batch index
         
-        const int dr = (n_tasks + nth - 1) / nth; 
-        const int ie0 = dr * ith; 
-        const int ie1 = std::min(ie0 + dr, n_tasks);
-
-        const float * src_data = (const float *) a->data;
-        float * dst_data = (float *) dst->data;
-
-        // 循环处理分配给当前线程的任务 (Dim 列)
-        for (int i = ie0; i < ie1; i++) {
-            // 解算坐标：当前处理哪一个 Dim (d) 和 Batch (b)
-            // i = b * dim + d
-            int d = i % dim;
-            int b = i / dim;
-
-            // 核心累加逻辑
-            float sum = 0.0f;
-            for (int t = 0; t < time; t++) {
-                // 计算内存索引
-                // index = b * (time * dim) + t * dim + d
-                // 因为 dim 是最内层 ne0
-                int idx = b * (time * dim) + t * dim + d;
-                
-                sum += src_data[idx];
-                dst_data[idx] = sum;
-            }
+        const int64_t offset = i2 * ne1 * ne0 + i0;
+        
+        // Kahan 求和 (double 精度)
+        double sum = 0.0;
+        double compensation = 0.0;
+        
+        for (int64_t i1 = 0; i1 < ne1; i1++) {
+            const int64_t idx = offset + i1 * ne0;
+            
+            const double input = static_cast<double>(src[idx]);
+            const double y = input - compensation;
+            const double t = sum + y;
+            compensation = (t - sum) - y;
+            sum = t;
+            
+            dst_ptr[idx] = static_cast<float>(sum);
         }
     }
+}
 
 static void custom_op_threshold_uv(
     struct ggml_tensor * dst,       
@@ -2046,50 +2112,79 @@ static void custom_op_randn(
     struct ggml_tensor * dst,       
     const struct ggml_tensor * a,   // 这里的 a 只是为了提供 shape (randn_like)
     int ith, int nth, void * userdata)                
-    {
-        const int ne = ggml_nelements(dst);
-        const int dr = (ne + nth - 1) / nth; 
-        const int ie0 = dr * ith; 
-        const int ie1 = std::min(ie0 + dr, ne);
+{
+    const int ne = ggml_nelements(dst);
+    const int dr = (ne + nth - 1) / nth; 
+    const int ie0 = dr * ith; 
+    const int ie1 = std::min(ie0 + dr, ne);
 
-        float * dst_data = (float *) dst->data;
+    float * dst_data = (float *) dst->data;
 
-        // 线程局部 RNG
-        std::mt19937 g_rng(1234);
-        std::mt19937 local_rng(g_rng() + ith);
-        // 使用 std::normal_distribution 生成高斯噪声
-        std::normal_distribution<float> dist(0.0f, 1.0f);
+    // 线程局部 RNG
+    std::mt19937 g_rng(1234);
+    std::mt19937 local_rng(g_rng() + ith);
+    // 使用 std::normal_distribution 生成高斯噪声
+    std::normal_distribution<float> dist(0.0f, 1.0f);
 
-        for (int i = ie0; i < ie1; i++) {
-            dst_data[i] = dist(local_rng);
-        }
+    for (int i = ie0; i < ie1; i++) {
+        dst_data[i] = dist(local_rng);
     }
+}
+
+static void custom_op_randn_broadcast_mul(
+    struct ggml_tensor * dst,
+    const struct ggml_tensor * sines,     // [9, time, batch] - 只用于获取 shape
+    const struct ggml_tensor * noise_amp, // [1, time, batch] - 广播源
+    int ith, int nth, void * userdata)
+{
+    const int64_t ne0 = sines->ne[0];  // 9
+    const int64_t ne1 = sines->ne[1];  // time
+    const int64_t ne2 = sines->ne[2];  // batch
+
+    const int64_t total = ne0 * ne1 * ne2;
+    const int64_t dr = (total + nth - 1) / nth;
+    const int64_t ie0 = dr * ith;
+    const int64_t ie1 = std::min(ie0 + dr, total);
+
+    const float * amp = (const float *) noise_amp->data;
+    float * out = (float *) dst->data;
+
+    thread_local std::mt19937 rng(std::random_device{}());
+    std::normal_distribution<float> dist(0.0f, 1.0f);
+
+    for (int64_t i = ie0; i < ie1; i++) {
+        // noise_amp 广播: 忽略 dim 维度
+        int64_t i1 = (i / ne0) % ne1;  // time index
+        int64_t i2 = i / (ne0 * ne1);  // batch index
+        
+        out[i] = dist(rng) * amp[i1 + i2 * ne1];
+    }
+}
 
 ggml_tensor * llm_graph_context::build_m_source(
         ggml_tensor * cur,
         ggml_tensor * mw,
         ggml_tensor * mb) const {
     
-    ggml_tensor * cur_dup = ggml_dup(ctx0, cur);
-    ggml_tensor * arrange_tensor = ggml_arange(ctx0, 1.0, 10.0, 1.0);
-    ggml_tensor * target_shape = ggml_new_tensor_3d(ctx0, cur_dup->type, 9, cur_dup->ne[1], cur_dup->ne[2]);
-    arrange_tensor = ggml_repeat(ctx0, arrange_tensor, target_shape);
-    ggml_tensor * cur_dup_repeat = ggml_repeat(ctx0, cur_dup, target_shape);
-    
-    cur_dup_repeat = ggml_mul(ctx0, cur_dup_repeat, arrange_tensor);
-    
-    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&& cur_dup_repeat shape is: {%d, %d, %d, %d}\n", cur_dup_repeat->ne[0], cur_dup_repeat->ne[1], cur_dup_repeat->ne[2], cur_dup_repeat->ne[3]);
+    ggml_tensor * cur_dup = cur;
+    ggml_set_name(cur_dup, "m_source_cur_dup");
+    ggml_tensor * arrange_tensor = ggml_arange(ctx0, 1.0f, 10.0f, 1.0f);
+    arrange_tensor = ggml_reshape_2d(ctx0, arrange_tensor, 1, 9);
+    ggml_tensor * cur_2d = ggml_reshape_2d(ctx0, cur_dup, 1, cur_dup->ne[1]);
+    ggml_tensor * fn_res = ggml_mul_mat(ctx0, arrange_tensor, cur_2d);
+    fn_res = ggml_reshape_3d(ctx0, fn_res, 9, cur_dup->ne[1], 1);
+    ggml_set_name(fn_res, "m_source_fn");
     //_f02sine函数
-    ggml_tensor * rad_values = ggml_scale(ctx0, cur_dup_repeat, 1/ 24000);
+    ggml_tensor * rad_values = ggml_scale(ctx0, fn_res, 1.0f / 24000.0f);
     rad_values = ggml_map_custom1(ctx0, rad_values, custom_op_mod_1, 1, NULL);
-    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&& rad_values shape is: {%d, %d, %d, %d}\n", rad_values->ne[0], rad_values->ne[1], rad_values->ne[2], rad_values->ne[3]);
+    ggml_set_name(rad_values, "m_source_rad_values");
     const int dim = rad_values->ne[0];
     const int time = rad_values->ne[1];
     const int batch = rad_values->ne[2];
 
     struct ggml_tensor * rand_ini = ggml_new_tensor_3d(ctx0, GGML_TYPE_F32, dim, 1, batch);
     rand_ini = ggml_map_custom1(ctx0, rand_ini, custom_op_rand_masked, 1, NULL);
-    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&& rand_ini shape is: {%d, %d, %d, %d}\n", rand_ini->ne[0], rand_ini->ne[1], rand_ini->ne[2], rand_ini->ne[3]);
+    ggml_set_name(rand_ini, "m_source_rand_ini");
     if (time > 1) {
         struct ggml_tensor * zeros = ggml_new_tensor_3d(ctx0, GGML_TYPE_F32, dim, time - 1, batch);
         struct ggml_tensor * zero_const = ggml_scale(ctx0, zeros, 0.0f);
@@ -2098,46 +2193,41 @@ ggml_tensor * llm_graph_context::build_m_source(
     } else{
         rad_values = ggml_add(ctx0, rad_values, rand_ini);
     }
-
-    ggml_tensor * rad_values_dup = ggml_dup(ctx0, ggml_cont(ctx0, rad_values));
-    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&& rad_values_dup shape is: {%d, %d, %d, %d}\n", rad_values_dup->ne[0], rad_values_dup->ne[1], rad_values_dup->ne[2], rad_values_dup->ne[3]);
+    ggml_set_name(rad_values, "m_source_rad_values_rand_ini");
+    ggml_tensor * rad_values_dup = rad_values;
     ggml_tensor * rad_values_downsampled = ggml_interpolate(ctx0, rad_values_dup, dim, time / 480, batch, 1, 1);
-    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&& rad_values_downsampled shape is: {%d, %d, %d, %d}\n", rad_values_downsampled->ne[0], rad_values_downsampled->ne[1], rad_values_downsampled->ne[2], rad_values_downsampled->ne[3]);
     struct ggml_tensor * phase = ggml_new_tensor_3d(ctx0, GGML_TYPE_F32, rad_values_downsampled->ne[0], rad_values_downsampled->ne[1], rad_values_downsampled->ne[2]);
     phase = ggml_map_custom1(ctx0, rad_values_downsampled, custom_op_cumsum_ne1, GGML_N_TASKS_MAX, NULL);
-    phase = ggml_scale(ctx0, phase, 2 * 3.14159265358979323846f * 480);
-    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&& phase shape is: {%d, %d, %d, %d}\n", phase->ne[0], phase->ne[1], phase->ne[2], phase->ne[3]);
+    phase = ggml_scale(ctx0, phase, 2.0f * M_PI * 480);
     ggml_tensor * phase_scaled = ggml_interpolate(ctx0, ggml_cont(ctx0, phase), phase->ne[0], phase->ne[1] * 480, phase->ne[2], 1, 1);
-    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&& phase_scaled shape is: {%d, %d, %d, %d}\n", phase_scaled->ne[0], phase_scaled->ne[1], phase_scaled->ne[2], phase_scaled->ne[3]);
+    ggml_set_name(phase_scaled, "m_source_phase_scaled");
     ggml_tensor * sines = ggml_sin(ctx0, phase_scaled);
-    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&& sines shape is: {%d, %d, %d, %d}\n", sines->ne[0], sines->ne[1], sines->ne[2], sines->ne[3]);
+    ggml_set_name(sines, "m_source_sines");
+    sines = ggml_scale(ctx0, sines, 0.1f);
     //_f02uv
     float threshold_val = 10.0f;
     ggml_tensor * uv = ggml_map_custom1(ctx0, cur_dup, custom_op_threshold_uv, GGML_N_TASKS_MAX, &threshold_val);
-    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&& uv shape is: {%d, %d, %d, %d}\n", uv->ne[0], uv->ne[1], uv->ne[2], uv->ne[3]);
+    ggml_set_name(uv, "m_source_uv");
     ggml_tensor * zeros = ggml_scale(ctx0, uv, 0.0f);
     ggml_tensor * ones = ggml_exp(ctx0, zeros);
 
     ggml_tensor * term1 = ggml_scale(ctx0, uv, 0.03f);
     ggml_tensor * term2 = ggml_sub(ctx0, ones, uv);
-    term2 = ggml_scale(ctx0, term2, 0.1 / 3);
+    term2 = ggml_scale(ctx0, term2, 0.1f / 3.0f);
     ggml_tensor * noise_amp = ggml_add(ctx0, term1, term2);
-    noise_amp = ggml_repeat(ctx0, noise_amp, sines);
-    ggml_tensor * noise = ggml_new_tensor(ctx0, sines->type, ggml_n_dims(sines), sines->ne);
-    noise = ggml_map_custom1(ctx0, sines, custom_op_randn, GGML_N_TASKS_MAX, NULL);
-    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&& noise shape is: {%d, %d, %d, %d}\n", noise->ne[0], noise->ne[1], noise->ne[2], noise->ne[3]);
-    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&& noise_amp shape is: {%d, %d, %d, %d}\n", noise_amp->ne[0], noise_amp->ne[1], noise_amp->ne[2], noise_amp->ne[3]);
-    noise = ggml_mul(ctx0, noise_amp, noise);
-    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&& sines shape is: {%d, %d, %d, %d}\n", sines->ne[0], sines->ne[1], sines->ne[2], sines->ne[3]);
-    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&& uv shape is: {%d, %d, %d, %d}\n", uv->ne[0], uv->ne[1], uv->ne[2], uv->ne[3]);
+    ggml_set_name(noise_amp, "m_source_noise_amp");
+
+    ggml_tensor * noise = ggml_map_custom2(ctx0, sines, noise_amp,
+                                        custom_op_randn_broadcast_mul, GGML_N_TASKS_MAX, NULL);
+    ggml_set_name(noise, "m_source_noise");
+
     ggml_tensor * sine_waves = ggml_mul(ctx0, sines, uv);
     sine_waves = ggml_add(ctx0, sine_waves, noise);
-    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&& sine_waves shape is: {%d, %d, %d, %d}\n", sine_waves->ne[0], sine_waves->ne[1], sine_waves->ne[2], sine_waves->ne[3]);
+    ggml_set_name(sine_waves, "m_source_sine_waves");
     ggml_tensor * sine_wavs = ggml_mul_mat(ctx0, mw, sine_waves);
     sine_wavs = ggml_add(ctx0, sine_wavs, mb);
 
     ggml_tensor * sine_merge = ggml_tanh(ctx0, sine_wavs);
-    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&& sine_merge shape is: {%d, %d, %d, %d}\n", sine_merge->ne[0], sine_merge->ne[1], sine_merge->ne[2], sine_merge->ne[3]);
     ggml_set_name(sine_merge, "sine_merge");
     return sine_merge;
 }
@@ -2149,36 +2239,36 @@ ggml_tensor * llm_graph_context::build_res_blk(
       int32_t idx,
       const llama_model & model) const {
     
-    ggml_tensor * res_cur = ggml_dup(ctx0, ggml_cont(ctx0, cur));
-    // ggml_tensor * si_res_blk = NULL;
+    ggml_tensor * res_cur = cur;
     int64_t expected_len = res_cur->ne[0];
     for(int j = 0; j < 3; j++) {
         ggml_tensor * convs1_mw = model.resblk_sub_layer[idx * 3 + j].resblock_conv1_w;
         ggml_tensor * convs1_mb = model.resblk_sub_layer[idx * 3 + j].resblock_conv1_b;
         ggml_tensor * convs2_mw = model.resblk_sub_layer[idx * 3 + j].resblock_conv2_w;
-        ggml_tensor * convs2_mb = model.resblk_sub_layer[idx * 3 + j].resblock_conv1_b;
+        ggml_tensor * convs2_mb = model.resblk_sub_layer[idx * 3 + j].resblock_conv2_b;
         ggml_tensor * act1 = model.resblk_sub_layer[idx * 3 + j].resblock_act1;
         ggml_tensor * act2 = model.resblk_sub_layer[idx * 3 + j].resblock_act2;
         int dilation = (j == 0) ? 1 : ((j == 1) ? 3 : 5);
         int padding = (dilation * (kernel_size - 1)) / 2;       // Dilated Conv 的 Padding
         int padding_plain = (1 * (kernel_size - 1)) / 2;
         //-------act1------
-        ggml_tensor * alpha = ggml_reshape_3d(ctx0, act1, 1, act1->ne[0], 1);
-        ggml_tensor * alpha_zeros = ggml_scale(ctx0, alpha, 0.0f);
-        ggml_tensor * alpha_ones = ggml_exp(ctx0, alpha_zeros);
-        ggml_tensor * no_div_by_zero = ggml_scale(ctx0, alpha_ones, 0.000000001f);
-        ggml_tensor * alpha_by_zero = ggml_add(ctx0, alpha, no_div_by_zero);
-        ggml_tensor * alpha_div = ggml_div(ctx0, alpha_ones, alpha_by_zero);
-        // LLAMA_LOG_INFO("&&&&&&&&&&&&&&& %s, alpha shape is: {%d, %d, %d, %d}\n", __func__, alpha->ne[0], alpha->ne[1], alpha->ne[2], alpha->ne[3]);
-        ggml_tensor * alpha_sin = ggml_mul(ctx0, res_cur, alpha);
-        alpha_sin = ggml_sin(ctx0, alpha_sin);
-        alpha_sin = ggml_sqr(ctx0, alpha_sin);
-        // LLAMA_LOG_INFO("&&&&&&&&&&&&&&& %s, alpha_sin shape is: {%d, %d, %d, %d}\n", __func__, alpha_sin->ne[0], alpha_sin->ne[1], alpha_sin->ne[2], alpha_sin->ne[3]);
-        // LLAMA_LOG_INFO("&&&&&&&&&&&&&&& %s, alpha_div shape is: {%d, %d, %d, %d}\n", __func__, alpha_div->ne[0], alpha_div->ne[1], alpha_div->ne[2], alpha_div->ne[3]);
-        ggml_tensor * alpha_mul = ggml_mul(ctx0, alpha_sin, alpha_div);
-        // LLAMA_LOG_INFO("&&&&&&&&&&&&&&& %s, res_cur shape is: {%d, %d, %d, %d}\n", __func__, res_cur->ne[0], res_cur->ne[1], res_cur->ne[2], res_cur->ne[3]);
-        // LLAMA_LOG_INFO("&&&&&&&&&&&&&&& %s, alpha_mul shape is: {%d, %d, %d, %d}\n", __func__, alpha_mul->ne[0], alpha_mul->ne[1], alpha_mul->ne[2], alpha_mul->ne[3]);
-        ggml_tensor * act1_res = ggml_add(ctx0, res_cur, alpha_mul);
+        // ggml_tensor * alpha = ggml_reshape_3d(ctx0, act1, 1, act1->ne[0], 1);
+        // ggml_tensor * alpha_zeros = ggml_scale(ctx0, alpha, 0.0f);
+        // ggml_tensor * alpha_ones = ggml_exp(ctx0, alpha_zeros);
+        // ggml_tensor * no_div_by_zero = ggml_scale(ctx0, alpha_ones, 0.000000001f);
+        // ggml_tensor * alpha_by_zero = ggml_add(ctx0, alpha, no_div_by_zero);
+        // ggml_tensor * alpha_div = ggml_div(ctx0, alpha_ones, alpha_by_zero);
+        // // LLAMA_LOG_INFO("&&&&&&&&&&&&&&& %s, alpha shape is: {%d, %d, %d, %d}\n", __func__, alpha->ne[0], alpha->ne[1], alpha->ne[2], alpha->ne[3]);
+        // ggml_tensor * alpha_sin = ggml_mul(ctx0, res_cur, alpha);
+        // alpha_sin = ggml_sin(ctx0, alpha_sin);
+        // alpha_sin = ggml_sqr(ctx0, alpha_sin);
+        // // LLAMA_LOG_INFO("&&&&&&&&&&&&&&& %s, alpha_sin shape is: {%d, %d, %d, %d}\n", __func__, alpha_sin->ne[0], alpha_sin->ne[1], alpha_sin->ne[2], alpha_sin->ne[3]);
+        // // LLAMA_LOG_INFO("&&&&&&&&&&&&&&& %s, alpha_div shape is: {%d, %d, %d, %d}\n", __func__, alpha_div->ne[0], alpha_div->ne[1], alpha_div->ne[2], alpha_div->ne[3]);
+        // ggml_tensor * alpha_mul = ggml_mul(ctx0, alpha_sin, alpha_div);
+        // // LLAMA_LOG_INFO("&&&&&&&&&&&&&&& %s, res_cur shape is: {%d, %d, %d, %d}\n", __func__, res_cur->ne[0], res_cur->ne[1], res_cur->ne[2], res_cur->ne[3]);
+        // // LLAMA_LOG_INFO("&&&&&&&&&&&&&&& %s, alpha_mul shape is: {%d, %d, %d, %d}\n", __func__, alpha_mul->ne[0], alpha_mul->ne[1], alpha_mul->ne[2], alpha_mul->ne[3]);
+        // ggml_tensor * act1_res = ggml_add(ctx0, res_cur, alpha_mul);
+        ggml_tensor * act1_res = build_snake(res_cur, act1);
         // LLAMA_LOG_INFO("&&&&&&&&&&&&&&& %s, act1_res shape is: {%d, %d, %d, %d}\n", __func__, act1_res->ne[0], act1_res->ne[1], act1_res->ne[2], act1_res->ne[3]);
         //-----convs1------
         ggml_tensor * si_res_convs1 = ggml_conv_1d(ctx0, convs1_mw, act1_res, 1, padding, dilation);
@@ -2201,20 +2291,21 @@ ggml_tensor * llm_graph_context::build_res_blk(
         si_res_convs1 = ggml_add(ctx0, si_res_convs1, b1_reshaped);
 
         //------act2-------
-        ggml_tensor * alpha2 = ggml_reshape_3d(ctx0, act2, 1, act2->ne[0], 1);
-        ggml_tensor * alpha2_zeros = ggml_scale(ctx0, alpha2, 0.0f);
-        ggml_tensor * alpha2_ones = ggml_exp(ctx0, alpha2_zeros);
-        ggml_tensor * no_div_by_zero2 = ggml_scale(ctx0, alpha2_ones, 0.000000001f);
-        ggml_tensor * alpha2_by_zero = ggml_add(ctx0, alpha2, no_div_by_zero2);
-        ggml_tensor * alpha2_div = ggml_div(ctx0, alpha2_ones, alpha2_by_zero);
-        ggml_tensor * alpha2_sin = ggml_mul(ctx0, si_res_convs1, alpha2);
-        alpha2_sin = ggml_sin(ctx0, alpha2_sin);
-        alpha2_sin = ggml_sqr(ctx0, alpha2_sin);
-        ggml_tensor * alpha2_mul = ggml_mul(ctx0, alpha2_sin, alpha2_div);
-        // LLAMA_LOG_INFO("&&&&&&&&&&&&&&& %s, si_res_convs1 shape is: {%d, %d, %d, %d}\n",__func__, si_res_convs1->ne[0], si_res_convs1->ne[1], si_res_convs1->ne[2], si_res_convs1->ne[3]);
-        // LLAMA_LOG_INFO("&&&&&&&&&&&&&&& %s, alpha2_mul shape is: {%d, %d, %d, %d}\n",__func__, alpha2_mul->ne[0], alpha2_mul->ne[1], alpha2_mul->ne[2], alpha2_mul->ne[3]);
-        ggml_tensor * act2_res = ggml_add(ctx0, si_res_convs1, alpha2_mul);
+        // ggml_tensor * alpha2 = ggml_reshape_3d(ctx0, act2, 1, act2->ne[0], 1);
+        // ggml_tensor * alpha2_zeros = ggml_scale(ctx0, alpha2, 0.0f);
+        // ggml_tensor * alpha2_ones = ggml_exp(ctx0, alpha2_zeros);
+        // ggml_tensor * no_div_by_zero2 = ggml_scale(ctx0, alpha2_ones, 0.000000001f);
+        // ggml_tensor * alpha2_by_zero = ggml_add(ctx0, alpha2, no_div_by_zero2);
+        // ggml_tensor * alpha2_div = ggml_div(ctx0, alpha2_ones, alpha2_by_zero);
+        // ggml_tensor * alpha2_sin = ggml_mul(ctx0, si_res_convs1, alpha2);
+        // alpha2_sin = ggml_sin(ctx0, alpha2_sin);
+        // alpha2_sin = ggml_sqr(ctx0, alpha2_sin);
+        // ggml_tensor * alpha2_mul = ggml_mul(ctx0, alpha2_sin, alpha2_div);
+        // // LLAMA_LOG_INFO("&&&&&&&&&&&&&&& %s, si_res_convs1 shape is: {%d, %d, %d, %d}\n",__func__, si_res_convs1->ne[0], si_res_convs1->ne[1], si_res_convs1->ne[2], si_res_convs1->ne[3]);
+        // // LLAMA_LOG_INFO("&&&&&&&&&&&&&&& %s, alpha2_mul shape is: {%d, %d, %d, %d}\n",__func__, alpha2_mul->ne[0], alpha2_mul->ne[1], alpha2_mul->ne[2], alpha2_mul->ne[3]);
+        // ggml_tensor * act2_res = ggml_add(ctx0, si_res_convs1, alpha2_mul);
 
+        ggml_tensor * act2_res = build_snake(si_res_convs1, act2);
         //-----convs2-----
         ggml_tensor * si_res_convs2 = ggml_conv_1d(ctx0, convs2_mw, act2_res, 1, padding_plain, 1);
         if (si_res_convs2->ne[0] > expected_len) {
