@@ -2225,26 +2225,7 @@ static bool ggml_cuda_compute_forward(ggml_backend_cuda_context & ctx, struct gg
     if (dst->src[0] != nullptr && ggml_backend_buft_is_cuda_split(dst->src[0]->buffer->buft)) {
         ggml_cuda_set_peer_access(dst->src[1]->ne[1], ctx.device);
     }
-    // GGML_LOG_INFO("&&&&&&& dst->op = %d\n", dst->op);
-    // if (dst->op == GGML_OP_RMS_NORM)
-    // {
-    //     // std::string res = std::to_string(host_src0[0]) + " " + std::to_string(host_src0[1]) + " " + std::to_string(host_src0[2]) + " " + std::to_string(host_src0[3]);
-    //     // GGML_LOG_INFO("last_dim is: %d, res is: %s\n", last_dim, res.c_str());
-    //     GGML_LOG_INFO("&&&&&&& dst->op = %d\n", dst->op);
-    // }
-
-    // if (dst->op == GGML_OP_MUL)
-    // {   std::string res = "";
-    //     // for(int i = 0; i < 4; i++) {
-    //     //     res += std::to_string(host_src0[i]) + " ";
-    //     // }
-    //     for(int i = 0; i < 896; i++) {
-    //         res += std::to_string(*(host_dst + i)) + " ";
-    //     }
-    //     GGML_LOG_INFO("res is: %s\n", res.c_str());
-    // }
-    // get_k();
-    // GGML_LOG_INFO("&&&&&&&&&&&&&& dst->op is: %d\n", dst->op);
+    // GGML_LOG_INFO("&&&&&&&&&&&&&& dst name is: %s\n", dst->name);
     switch (dst->op) {
         case GGML_OP_ARGMAX:
             ggml_cuda_argmax(ctx, dst);
@@ -2397,15 +2378,7 @@ static bool ggml_cuda_compute_forward(ggml_backend_cuda_context & ctx, struct gg
         case GGML_OP_RMS_NORM:
         {
             ggml_cuda_op_rms_norm(ctx, dst);
-            // float * data = (float *)malloc(sizeof(float) * 896);
-            // ggml_backend_cuda_context * cuda_ctx = &ctx;
-            // ggml_backend_buffer_t buf = dst->view_src ? dst->view_src->buffer : dst->buffer;
-            // GGML_ASSERT(buf->buft == ggml_backend_cuda_buffer_type(cuda_ctx->device) && "unsupported buffer type");
-            // CUDA_CHECK(cudaMemcpyAsync(data, (const char *)dst->data, 896 * sizeof(float), cudaMemcpyDeviceToHost, cuda_ctx->stream()));
-            // for(int i = 0; i < 896; i++) 
-            // {
-            //     GGML_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&&&& pos is: %d, res is: %f\n", i, data[i]);
-            // }
+
         }
             break;
         case GGML_OP_RMS_NORM_BACK:
