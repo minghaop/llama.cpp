@@ -543,8 +543,6 @@ float * llama_context::get_logits_ith(int32_t i) {
 }
 
 float * llama_context::get_embeddings() {
-    LLAMA_LOG_INFO("llama_context::get_embeddings called\n");
-    LLAMA_LOG_INFO("embd ptr: %p\n", this->embd);
     return embd;
 }
 
@@ -803,7 +801,7 @@ int llama_context::encode(const llama_batch & batch_inp, int dot_debug) {
 
     ggml_status status;
     const auto res = process_ubatch(ubatch, LLM_GRAPH_TYPE_ENCODER, nullptr, status, dot_debug);
-    LLAMA_LOG_INFO("&&&&&&&&&&&&&&&& res is nullptr: %d\n", res == nullptr);
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&& res is nullptr: %d\n", res == nullptr);
     cparams.causal_attn = causal_attn_org;
 
     if (!res) {
@@ -819,7 +817,7 @@ int llama_context::encode(const llama_batch & batch_inp, int dot_debug) {
     auto * t_embd = res->get_embd_pooled() ? res->get_embd_pooled() : res->get_embd();
     // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&& res->get_embd_pooled is: %d\n", res->get_embd_pooled() == nullptr);
     // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&& res->get_embd is: %d\n", res->get_embd() == nullptr);
-    LLAMA_LOG_INFO("&&&&&&&&&&&&&&&& embd is %d, t_embd is: %d\n", embd == nullptr, t_embd == nullptr);
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&& embd is %d, t_embd is: %d\n", embd == nullptr, t_embd == nullptr);
     // extract logits
    if (logits && t_logits) {
         ggml_backend_t backend_res = ggml_backend_sched_get_tensor_backend(sched.get(), t_logits);
@@ -849,10 +847,13 @@ int llama_context::encode(const llama_batch & batch_inp, int dot_debug) {
                     // extract token embeddings
                     GGML_ASSERT(embd != nullptr);
                     // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&& n_tokens is: %d, n_embd is: %d, embd_size is: %d\n", n_tokens, n_embd, embd_size);
-                    if (!batch_inp.flow_feat) {
+                    if (!hparams.use_hift && ! hparams.use_flow) {
                         GGML_ASSERT(n_tokens*n_embd <= (int64_t) embd_size);
                         ggml_backend_tensor_get_async(backend_embd, t_embd, embd, 0, n_tokens*n_embd*sizeof(float));
-                    }else {
+                    } else if (hparams.use_hift) {
+                        int32_t out_dim = (int32_t)((n_tokens * 80 * 6 / 4 + 1) * 18 + (n_tokens * 80 * 6));
+                        ggml_backend_tensor_get_async(backend_embd, t_embd, embd, 0, out_dim*sizeof(float));
+                    } else {
                         int32_t out_dim = (int32_t)((batch_inp.prompt_token_len + batch_inp.token_len) * 2 - batch_inp.prompt_feat_len / 80);
                         ggml_backend_tensor_get_async(backend_embd, t_embd, embd, 0, out_dim*sizeof(float));
                         // ggml_backend_sched_synchronize(sched.get());
