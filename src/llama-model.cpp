@@ -17199,41 +17199,42 @@ struct llm_build_hift : public llm_graph_context {
         xx = ggml_add(ctx0, xx, conv_post_b);
         ggml_set_name(xx, "conv_post_res");
         
-        const int cutoff = n_fft / 2 + 1; // 9
-        const int n_channels = xx->ne[1];
-        const int remaining = n_channels - cutoff;
-        ggml_tensor * x_slice_mag = ggml_view_3d(
-              ctx0, xx, 
-              xx->ne[0], cutoff, xx->ne[2],
-              xx->nb[1], xx->nb[2], 0);
-        ggml_set_name(x_slice_mag, "x_slice_mag");
+        // const int cutoff = n_fft / 2 + 1; // 9
+        // const int n_channels = xx->ne[1];
+        // const int remaining = n_channels - cutoff;
+        // ggml_tensor * x_slice_mag = ggml_view_3d(
+        //       ctx0, xx, 
+        //       xx->ne[0], cutoff, xx->ne[2],
+        //       xx->nb[1], xx->nb[2], 0);
+        // ggml_set_name(x_slice_mag, "x_slice_mag");
 
-        ggml_tensor * magnitude = ggml_exp(ctx0, x_slice_mag);
-        ggml_set_name(magnitude, "magnitude_res");
+        // ggml_tensor * magnitude = ggml_exp(ctx0, x_slice_mag);
+        // ggml_set_name(magnitude, "magnitude_res");
 
-        // 后面的通道 (从第9个开始) -> phase
-        size_t offset = cutoff * xx->nb[1];
-        ggml_tensor * x_slice_phase = ggml_view_3d(
-            ctx0, xx, 
-            xx->ne[0], remaining, xx->ne[2],
-            xx->nb[1], xx->nb[2], offset);
-        ggml_set_name(x_slice_phase, "x_slice_phase");
+        // // 后面的通道 (从第9个开始) -> phase
+        // size_t offset = cutoff * xx->nb[1];
+        // ggml_tensor * x_slice_phase = ggml_view_3d(
+        //     ctx0, xx, 
+        //     xx->ne[0], remaining, xx->ne[2],
+        //     xx->nb[1], xx->nb[2], offset);
+        // ggml_set_name(x_slice_phase, "x_slice_phase");
 
-        ggml_tensor * phase = ggml_sin(ctx0, x_slice_phase);  // ✅ 使用后半部分
-        ggml_set_name(phase, "phase_res");
-        
-        magnitude = ggml_clamp(ctx0, magnitude, -1e38f, 1e12f);
-        ggml_tensor * phase_cos = ggml_cos(ctx0, phase);
-        ggml_tensor * phase_sin = ggml_sin(ctx0, phase);
-        ggml_tensor * real = ggml_mul(ctx0, magnitude, phase_cos);
-        ggml_tensor * img = ggml_mul(ctx0, magnitude, phase_sin);
-        ggml_tensor * spec = ggml_concat(ctx0, real, img, 1);
-        ggml_tensor * flat_a = ggml_reshape_1d(ctx0, spec, ggml_nelements(spec));
+        // ggml_tensor * phase = ggml_sin(ctx0, x_slice_phase);  // ✅ 使用后半部分
+        // ggml_set_name(phase, "phase_res");
+
+        // magnitude = ggml_clamp(ctx0, magnitude, -1e38f, 1e12f);
+        // ggml_tensor * phase_cos = ggml_cos(ctx0, phase);
+        // ggml_tensor * phase_sin = ggml_sin(ctx0, phase);
+        // ggml_tensor * real = ggml_mul(ctx0, magnitude, phase_cos);
+        // ggml_tensor * img = ggml_mul(ctx0, magnitude, phase_sin);
+        // ggml_tensor * spec = ggml_concat(ctx0, real, img, 1);
+        ggml_tensor * flat_a = ggml_reshape_1d(ctx0, xx, ggml_nelements(xx));
         ggml_tensor * flat_b = ggml_reshape_1d(ctx0, s_source, ggml_nelements(s_source));
         ggml_tensor * total_output = ggml_concat(ctx0, flat_a, flat_b, 0);
-        cb(total_output, "total_output", -1);
+        ggml_set_name(total_output, "total_output");
+        
         res->t_embd = total_output;
-        LLAMA_LOG_INFO("res->t_embd ptr: %p\n", res->t_embd);
+        // LLAMA_LOG_INFO("res->t_embd ptr: %p\n", res->t_embd);
         ggml_build_forward_expand(gf, total_output);
     }
 
