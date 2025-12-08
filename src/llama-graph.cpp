@@ -1917,12 +1917,11 @@ ggml_tensor * llm_graph_context::bulid_f0_predictor(
             ggml_tensor * mw,
             ggml_tensor * mb) const {
 
-    ggml_tensor * cur_dup = ggml_dup(ctx0, cur);
-    cur_dup = ggml_conv_1d(ctx0, mw, cur_dup, 1, 1, 1);
+    ggml_tensor * result = ggml_conv_1d(ctx0, mw, cur, 1, 1, 1);
     mb = ggml_reshape_3d(ctx0, mb, 1, mb->ne[0], 1);
-    cur_dup = ggml_add(ctx0, cur_dup, mb);
-    cur_dup = ggml_elu(ctx0, cur_dup);
-    return cur_dup;
+    result = ggml_add(ctx0, result, mb);
+    result = ggml_elu(ctx0, result);
+    return result;
 }
 
 
@@ -2089,23 +2088,23 @@ static void custom_op_threshold_uv(
     struct ggml_tensor * dst,       
     const struct ggml_tensor * a,   
     int ith, int nth, void * userdata)                
-    {
-        // 从 userdata 获取阈值 (float*)
-        const float threshold = *(const float *)userdata;
+{
+    // 从 userdata 获取阈值 (float*)
+    const float threshold = *(const float *)userdata;
 
-        const int ne = ggml_nelements(dst);
-        const int dr = (ne + nth - 1) / nth; 
-        const int ie0 = dr * ith; 
-        const int ie1 = std::min(ie0 + dr, ne);
+    const int ne = ggml_nelements(dst);
+    const int dr = (ne + nth - 1) / nth; 
+    const int ie0 = dr * ith; 
+    const int ie1 = std::min(ie0 + dr, ne);
 
-        const float * src_data = (const float *) a->data;
-        float * dst_data = (float *) dst->data;
+    const float * src_data = (const float *) a->data;
+    float * dst_data = (float *) dst->data;
 
-        for (int i = ie0; i < ie1; i++) {
-            // 核心逻辑: f0 > threshold -> 1.0, else -> 0.0
-            dst_data[i] = (src_data[i] > threshold) ? 1.0f : 0.0f;
-        }
+    for (int i = ie0; i < ie1; i++) {
+        // 核心逻辑: f0 > threshold -> 1.0, else -> 0.0
+        dst_data[i] = (src_data[i] > threshold) ? 1.0f : 0.0f;
     }
+}
 
 // 自定义算子：标准正态分布 (Mean=0, Std=1)
 static void custom_op_randn(
@@ -2209,39 +2208,26 @@ ggml_tensor * llm_graph_context::build_m_source(
         ggml_tensor * mw,
         ggml_tensor * mb) const {
     
-    ggml_tensor * cur_dup = cur;
-    ggml_set_name(cur_dup, "m_source_cur_dup");
     ggml_tensor * arrange_tensor = ggml_arange(ctx0, 1.0f, 10.0f, 1.0f);
     arrange_tensor = ggml_reshape_2d(ctx0, arrange_tensor, 1, 9);
-    ggml_tensor * cur_2d = ggml_reshape_2d(ctx0, cur_dup, 1, cur_dup->ne[1]);
+    ggml_tensor * cur_2d = ggml_reshape_2d(ctx0, cur, 1, cur->ne[1]);
     ggml_tensor * fn_res = ggml_mul_mat(ctx0, arrange_tensor, cur_2d);
-    fn_res = ggml_reshape_3d(ctx0, fn_res, 9, cur_dup->ne[1], 1);
+    fn_res = ggml_reshape_3d(ctx0, fn_res, 9, cur->ne[1], 1);
     ggml_set_name(fn_res, "m_source_fn");
     //_f02sine函数
     ggml_tensor * rad_values = ggml_scale(ctx0, fn_res, 1.0f / 24000.0f);
     rad_values = ggml_map_custom1(ctx0, rad_values, custom_op_mod_1, 1, NULL);
     ggml_set_name(rad_values, "m_source_rad_values");
+    
     const int dim = rad_values->ne[0];
     const int time = rad_values->ne[1];
     const int batch = rad_values->ne[2];
 
-    // struct ggml_tensor * rand_ini = ggml_new_tensor_3d(ctx0, GGML_TYPE_F32, dim, 1, batch);
-    // rand_ini = ggml_map_custom1(ctx0, rand_ini, custom_op_rand_masked, 1, NULL);
-    // ggml_set_name(rand_ini, "m_source_rand_ini");
-    // if (time > 1) {
-    //     struct ggml_tensor * zeros = ggml_new_tensor_3d(ctx0, GGML_TYPE_F32, dim, time - 1, batch);
-    //     struct ggml_tensor * zero_const = ggml_scale(ctx0, zeros, 0.0f);
-    //     LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&& zero_const shape is: {%d, %d, %d, %d}\n", zero_const->ne[0], zero_const->ne[1], zero_const->ne[2], zero_const->ne[3]);
-    //     LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&& rand_ini shape is: {%d, %d, %d, %d}\n", rand_ini->ne[0], rand_ini->ne[1], rand_ini->ne[2], rand_ini->ne[3]);
-    //     struct ggml_tensor * noise_full = ggml_concat(ctx0, rand_ini, zero_const, 1);
-    //     rad_values = ggml_add(ctx0, rad_values, noise_full);
-    // } else{
-    //     rad_values = ggml_add(ctx0, rad_values, rand_ini);
-    // }
     rad_values = ggml_map_custom1(ctx0, rad_values, custom_op_add_rand_first_time, 1, NULL);
     ggml_set_name(rad_values, "m_source_rad_values_rand_ini");
-    ggml_tensor * rad_values_dup = rad_values;
-    ggml_tensor * rad_values_downsampled = ggml_interpolate(ctx0, rad_values_dup, dim, time / 480, batch, 1, 1);
+
+
+    ggml_tensor * rad_values_downsampled = ggml_interpolate(ctx0, rad_values, dim, time / 480, batch, 1, 1);
     struct ggml_tensor * phase = ggml_new_tensor_3d(ctx0, GGML_TYPE_F32, rad_values_downsampled->ne[0], rad_values_downsampled->ne[1], rad_values_downsampled->ne[2]);
     phase = ggml_map_custom1(ctx0, rad_values_downsampled, custom_op_cumsum_ne1, GGML_N_TASKS_MAX, NULL);
     phase = ggml_scale(ctx0, phase, 2.0f * M_PI * 480);
@@ -2250,9 +2236,10 @@ ggml_tensor * llm_graph_context::build_m_source(
     ggml_tensor * sines = ggml_sin(ctx0, phase_scaled);
     ggml_set_name(sines, "m_source_sines");
     sines = ggml_scale(ctx0, sines, 0.1f);
+    
     //_f02uv
     float threshold_val = 10.0f;
-    ggml_tensor * uv = ggml_map_custom1(ctx0, cur_dup, custom_op_threshold_uv, GGML_N_TASKS_MAX, &threshold_val);
+    ggml_tensor * uv = ggml_map_custom1(ctx0, cur, custom_op_threshold_uv, GGML_N_TASKS_MAX, &threshold_val);
     ggml_set_name(uv, "m_source_uv");
     ggml_tensor * zeros = ggml_scale(ctx0, uv, 0.0f);
     ggml_tensor * ones = ggml_exp(ctx0, zeros);
