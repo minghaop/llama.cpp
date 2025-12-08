@@ -749,6 +749,7 @@ llama_ubatch llama_batch_allocr::ubatch_add(const std::vector<int32_t> & idxs, u
             ubatch.pos[j*n_tokens + i] = batch.pos[j*batch.n_tokens + idxs[i]];
         }
         // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&& %s, check here3\n", __func__);
+        LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&& i is: %d, idxs[i] is: %d, batch.n_seq_id[idxs[i]] is: %d\n", i, idxs[i], batch.n_seq_id[idxs[i]]);
         ubatch.n_seq_id[i] = batch.n_seq_id[idxs[i]];
         ubatch.seq_id[i]   = batch.seq_id[idxs[i]];
         for (int s = 0; s < ubatch.n_seq_id[i]; ++s) {

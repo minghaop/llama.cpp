@@ -1412,7 +1412,8 @@ static enum ggml_status ggml_backend_sched_compute_splits(ggml_backend_sched_t s
             }
         }
         if (!sched->callback_eval) {
-            ggml_graph_print(&split->graph);
+            // GGML_LOG_INFO("------------ %s, check graph_print\n", __func__);
+            // ggml_graph_print(&split->graph);
             
             enum ggml_status ec = ggml_backend_graph_compute_async(split_backend, &split->graph);
             if (ec != GGML_STATUS_SUCCESS) {
