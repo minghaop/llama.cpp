@@ -688,6 +688,7 @@ llama_ubatch llama_batch_allocr::ubatch_add(const std::vector<int32_t> & idxs, u
     const int32_t n_pos_cur = batch.embd ? n_pos_per_embd : 1;
     // LLAMA_LOG_INFO("********************************************************************** batch.embd is: %d, n_pos_cur is: %d\n", batch.embd ? 1 : 0, n_pos_cur);
     const int64_t n_embd_all = batch.embd ? (int64_t) n_tokens*n_embd : 0;
+//    LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&& n_tokens is: %d, n_embd is: %d\n", n_tokens, n_embd);
     // LLAMA_LOG_INFO("********************************************************************** n_embd_all is: %d\n", n_embd_all);
     const int64_t n_pos_all  =              (int64_t) n_tokens*n_pos_cur;
     
@@ -698,6 +699,7 @@ llama_ubatch llama_batch_allocr::ubatch_add(const std::vector<int32_t> & idxs, u
     
     int32_t hift_total_len = n_embd_all * 6;
     if (batch.flow_token  == nullptr && batch.embd) {
+//         LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&& %s, check here\n", __func__);
         ubatch.token     .resize(n_tokens);
         ubatch.embd      .resize(n_embd_all);
         ubatch.pos       .resize(n_pos_all);
@@ -748,8 +750,7 @@ llama_ubatch llama_batch_allocr::ubatch_add(const std::vector<int32_t> & idxs, u
         for (int j = 0; j < n_pos_cur; ++j) {
             ubatch.pos[j*n_tokens + i] = batch.pos[j*batch.n_tokens + idxs[i]];
         }
-        // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&& %s, check here3\n", __func__);
-        // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&& i is: %d, idxs[i] is: %d, batch.n_seq_id[idxs[i]] is: %d\n", i, idxs[i], batch.n_seq_id[idxs[i]]);
+//        LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&& i is: %d, idxs[i] is: %d, batch.n_seq_id[idxs[i]] is: %d\n", i, idxs[i], batch.n_seq_id[idxs[i]]);
         ubatch.n_seq_id[i] = batch.n_seq_id[idxs[i]];
         ubatch.seq_id[i]   = batch.seq_id[idxs[i]];
         for (int s = 0; s < ubatch.n_seq_id[i]; ++s) {
