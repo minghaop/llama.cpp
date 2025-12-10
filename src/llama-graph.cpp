@@ -35,7 +35,7 @@ void llm_graph_input_embd::set_input(const llama_ubatch * ubatch) {
             ggml_backend_tensor_set(embd, ubatch->embd, 0, n_embd*ggml_element_size(embd));
         } else{
             const int64_t n_embd   = embd->ne[0] * embd->ne[1];
-            LLAMA_LOG_INFO("-------------------------------------- %s:  n_embd is: %d\n", __func__, n_embd);
+            // LLAMA_LOG_INFO("-------------------------------------- %s:  n_embd is: %d\n", __func__, n_embd);
             ggml_backend_tensor_set(embd, ubatch->embd, 0, n_embd*ggml_element_size(embd));
         }
     }
