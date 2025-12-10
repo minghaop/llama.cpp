@@ -17077,8 +17077,8 @@ struct llm_build_hift : public llm_graph_context {
         ggml_tensor * s_stft_imag = ggml_view_3d(
             ctx0, stft_out, stft_out->ne[0], n_freq, stft_out->ne[2], stft_out->nb[1], stft_out->nb[2], n_freq * stft_out->nb[1]);
         ggml_set_name(s_stft_imag, "s_stft_imag");
-        LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&& s_stft_real shape is: {%d, %d, %d, %d}\n", s_stft_real->ne[0], s_stft_real->ne[1], s_stft_real->ne[2], s_stft_real->ne[3]);
-        LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&& s_stft_imag shape is: {%d, %d, %d, %d}\n", s_stft_imag->ne[0], s_stft_imag->ne[1], s_stft_imag->ne[2], s_stft_imag->ne[3]);
+        // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&& s_stft_real shape is: {%d, %d, %d, %d}\n", s_stft_real->ne[0], s_stft_real->ne[1], s_stft_real->ne[2], s_stft_real->ne[3]);
+        // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&& s_stft_imag shape is: {%d, %d, %d, %d}\n", s_stft_imag->ne[0], s_stft_imag->ne[1], s_stft_imag->ne[2], s_stft_imag->ne[3]);
         ggml_tensor * s_stft = ggml_concat(ctx0, s_stft_real, s_stft_imag, 1);
         ggml_set_name(s_stft, "s_stft");
         //--------stft---------
@@ -17170,16 +17170,16 @@ struct llm_build_hift : public llm_graph_context {
         ggml_set_name(xx, "conv_post_res");
         
         
-        ggml_tensor * flat_a = ggml_reshape_1d(ctx0, xx, ggml_nelements(xx));
-        ggml_tensor * flat_b = ggml_reshape_1d(ctx0, s_source, ggml_nelements(s_source));
-        LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&& flat_a shape is: {%d, %d, %d, %d}\n", flat_a->ne[0], flat_a->ne[1], flat_a->ne[2], flat_a->ne[3]);
-        LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&& flat_b shape is: {%d, %d, %d, %d}\n", flat_b->ne[0], flat_b->ne[1], flat_b->ne[2], flat_b->ne[3]);
-        ggml_tensor * total_output = ggml_concat(ctx0, flat_a, flat_b, 0);
-        ggml_set_name(total_output, "total_output");
+        // ggml_tensor * flat_a = ggml_reshape_1d(ctx0, xx, ggml_nelements(xx));
+        // ggml_tensor * flat_b = ggml_reshape_1d(ctx0, s_source, ggml_nelements(s_source));
+        // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&& flat_a shape is: {%d, %d, %d, %d}\n", flat_a->ne[0], flat_a->ne[1], flat_a->ne[2], flat_a->ne[3]);
+        // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&& flat_b shape is: {%d, %d, %d, %d}\n", flat_b->ne[0], flat_b->ne[1], flat_b->ne[2], flat_b->ne[3]);
+        // ggml_tensor * total_output = ggml_concat(ctx0, flat_a, flat_b, 0);
+        // ggml_set_name(total_output, "total_output");
 
-        res->t_embd = total_output;
+        res->t_embd = xx;
         // LLAMA_LOG_INFO("res->t_embd ptr: %p\n", res->t_embd);
-        ggml_build_forward_expand(gf, total_output);
+        ggml_build_forward_expand(gf, xx);
     }
 
     // 硬编码的 Hann Window (16点)

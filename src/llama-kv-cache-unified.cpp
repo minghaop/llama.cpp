@@ -146,7 +146,7 @@ llama_kv_cache_unified::llama_kv_cache_unified(
         auto * ctx  = it.second;
 
         ggml_backend_buffer_t buf = ggml_backend_alloc_ctx_tensors_from_buft(ctx, buft);
-        LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&& buf is nullptr : %d\n", buf == nullptr);
+        // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&& buf is nullptr : %d\n", buf == nullptr);
         // LLAMA_LOG_INFO("%s: KV buffer requested = %.2f MiB\n", __func__, ggml_backend_buffer_get_size(buf)/1024.0/1024.0);
         if (!buf) {
             // throw std::runtime_error("failed to allocate buffer for kv cache");
