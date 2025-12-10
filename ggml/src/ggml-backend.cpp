@@ -881,6 +881,7 @@ static void ggml_backend_sched_split_graph(ggml_backend_sched_t sched, struct gg
         /* .mem_buffer = */ sched->context_buffer,
         /* .no_alloc =   */ true
     };
+    printf("  > Size (MB)    : %.4f MB\n", params.mem_size / (1024.0 * 1024.0));
 
     ggml_free(sched->ctx);
 
@@ -1586,6 +1587,13 @@ bool ggml_backend_sched_alloc_graph(ggml_backend_sched_t sched, struct ggml_cgra
     if (!ggml_backend_sched_alloc_splits(sched)) {
         return false;
     }
+    // printf("3. Scheduler Splits    : %d\n", sched->n_splits);
+
+    // printf("=== Graph Diagnostics (from ggml-backend.c) ===\n");
+    // printf("1. Total Nodes (Ops) : %d\n", graph->n_nodes); // 这里 graph->n_nodes 是可见的
+    // printf("2. Total Leafs (Weights): %d\n", graph->n_leafs);
+    // printf("3. Scheduler Splits    : %d\n", sched->n_splits);
+    // printf("=============================================\n");
 
     sched->is_alloc = true;
 

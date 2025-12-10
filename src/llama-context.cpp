@@ -200,6 +200,7 @@ llama_context::llama_context(
         };
         // LLAMA_LOG_INFO("&&&&&&&&&&&&& create_memory !!!!!!!!!!!!!!!!\n");
         memory.reset(model.create_memory(params_mem, cparams));
+        // LLAMA_LOG_INFO("&&&&&&&&&&&&& create_memory !!!!!!!!!!!!!!!!\n");
     }
 
     // init backends
@@ -710,6 +711,7 @@ llm_graph_result_ptr llama_context::process_ubatch(const llama_ubatch & ubatch, 
         ggml_graph_dump_dot(gf, NULL, "debug_hift.dot");
     }
 
+
     if (!ggml_backend_sched_alloc_graph(sched.get(), gf)) {
         LLAMA_LOG_ERROR("%s: failed to allocate graph\n", __func__);
         ret = GGML_STATUS_ALLOC_FAILED;
@@ -851,7 +853,7 @@ int llama_context::encode(const llama_batch & batch_inp, int dot_debug) {
                         GGML_ASSERT(n_tokens*n_embd <= (int64_t) embd_size);
                         ggml_backend_tensor_get_async(backend_embd, t_embd, embd, 0, n_tokens*n_embd*sizeof(float));
                     } else if (hparams.use_hift) {
-                        int32_t out_dim = (int32_t)((n_tokens * 80 * 6 / 4 + 1) * 18 + (n_tokens * 80 * 6));
+                        int32_t out_dim = (int32_t)((n_tokens * 80 * 6 / 4 + 1) * 18);
                         ggml_backend_tensor_get_async(backend_embd, t_embd, embd, 0, out_dim*sizeof(float));
                     } else {
                         int32_t out_dim = (int32_t)((batch_inp.prompt_token_len + batch_inp.token_len) * 2 - batch_inp.prompt_feat_len / 80);
@@ -1299,7 +1301,7 @@ uint32_t llama_context::output_reserve(int32_t n_outputs) {
     const auto & hparams = model.hparams;
     const auto & vocab   = model.vocab;
 
-    LLAMA_LOG_INFO("&&&&&&&&&&&&&& n_outputs is: %d, n_seq_max is: %d\n", n_outputs, n_seq_max());
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&& n_outputs is: %d, n_seq_max is: %d\n", n_outputs, n_seq_max());
     const int64_t n_outputs_max = std::max<int64_t>(n_outputs, n_seq_max());
 
     const auto n_batch = cparams.n_batch;
@@ -1331,7 +1333,7 @@ uint32_t llama_context::output_reserve(int32_t n_outputs) {
 
     logits_size = has_logits ? n_vocab*n_outputs_max : 0;
     embd_size   = has_embd   ?  n_embd*n_outputs_max : 0;
-    LLAMA_LOG_INFO("&&&&&&&&&&&&&&&& n_outputs_max is: %d, embd_size is: %d, n_embd is: %d\n", n_outputs_max, embd_size, n_embd);    
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&& n_outputs_max is: %d, embd_size is: %d, n_embd is: %d\n", n_outputs_max, embd_size, n_embd);    
     if (output_ids.empty()) {
         // init, never resized afterwards
         output_ids.resize(n_batch);
@@ -1340,7 +1342,7 @@ uint32_t llama_context::output_reserve(int32_t n_outputs) {
     const size_t prev_size = buf_output ? ggml_backend_buffer_get_size(buf_output.get()) : 0;
     const size_t new_size  = (logits_size + embd_size) * sizeof(float);
     // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&& logits size is: %d, embd_size is: %d, new_size is: %d\n", logits_size, embd_size, new_size);
-    LLAMA_LOG_INFO("&&&&&&&&&&&&&&&& prev_size is: %d, new_size is: %d\n", prev_size, new_size);
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&& prev_size is: %d, new_size is: %d\n", prev_size, new_size);
     // alloc only when more than the current capacity is required
     // TODO: also consider shrinking the buffer
     if (!buf_output || prev_size < new_size) {
@@ -1370,10 +1372,10 @@ uint32_t llama_context::output_reserve(int32_t n_outputs) {
     }
 
     float * output_base = (float *) ggml_backend_buffer_get_base(buf_output.get());
-    LLAMA_LOG_INFO("&&&&&&&&&&&&&&&& output_base is: %d\n", output_base == nullptr);
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&& output_base is: %d\n", output_base == nullptr);
     logits = has_logits ? output_base               : nullptr;
     embd   = has_embd   ? output_base + logits_size : nullptr;
-    LLAMA_LOG_INFO("&&&&&&&&&&&&&&&& embd is: %p\n", embd);
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&& embd is: %p\n", embd);
     // set all ids as invalid (negative)
     std::fill(output_ids.begin(), output_ids.end(), -1);
 
@@ -1387,7 +1389,7 @@ uint32_t llama_context::output_reserve(int32_t n_outputs) {
 //
 
 int32_t llama_context::graph_max_nodes() const {
-    return std::max<int32_t>(65536, 5*model.n_tensors());
+    return std::max<int32_t>(4096, 5*model.n_tensors());
 }
 
 ggml_cgraph * llama_context::graph_init() {

@@ -762,7 +762,15 @@ bool ggml_gallocr_reserve_n(ggml_gallocr_t galloc, struct ggml_cgraph * graph, c
 
         size_t cur_size = galloc->buffers[i] ? ggml_backend_buffer_get_size(galloc->buffers[i]) : 0;
         size_t new_size = ggml_dyn_tallocr_max_size(galloc->buf_tallocs[i]);
-
+        //  // ================= [插入开始] =================
+        // printf("\n[Memory Alloc] Backend Buffer #%d Analysis:\n", i);
+        // printf("  > Buffer Name : %s\n", ggml_backend_buft_name(galloc->bufts[i]));
+        // printf("  > Needed Size : %.2f MB\n", new_size / (1024.0 * 1024.0));
+        
+        // if (new_size > 100 * 1024 * 1024) { // 如果大于 100MB
+        //      printf("  > ⚠️ WARNING: Large allocation detected! This is likely your 500MB bottleneck.\n");
+        // }
+        // // ================= [插入结束] =================
         // even if there are no tensors allocated in this buffer, we still need to allocate it to initialize views
         if (new_size > cur_size || galloc->buffers[i] == NULL) {
 #ifndef NDEBUG
