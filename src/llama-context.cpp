@@ -1309,7 +1309,7 @@ uint32_t llama_context::output_reserve(int32_t n_outputs) {
         n_embd = 1000;
     } else if (model.arch == LLM_ARCH_COSYVOICEHIFT) {  // 添加 HIFT
         n_vocab = 0;
-        n_embd = n_outputs * 80 * 50;  // 或动态计算 
+        n_embd = 80 * 50;  // 或动态计算 
     } else {
         n_vocab = vocab.n_tokens();
         n_embd  = hparams.n_embd;
@@ -1324,11 +1324,14 @@ uint32_t llama_context::output_reserve(int32_t n_outputs) {
     } else if (model.arch == LLM_ARCH_COSYVOICEFLOW) {
         has_logits = false;
         has_embd   = true;
+    } else if (model.arch == LLM_ARCH_COSYVOICEHIFT) {
+        has_logits = false;
+        has_embd   = true;
     }
 
     logits_size = has_logits ? n_vocab*n_outputs_max : 0;
     embd_size   = has_embd   ?  n_embd*n_outputs_max : 0;
-    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&& n_embd is: %d\n", n_embd);
+    LLAMA_LOG_INFO("&&&&&&&&&&&&&&&& n_outputs_max is: %d, embd_size is: %d, n_embd is: %d\n", n_outputs_max, embd_size, n_embd);    
     if (output_ids.empty()) {
         // init, never resized afterwards
         output_ids.resize(n_batch);
@@ -1337,7 +1340,7 @@ uint32_t llama_context::output_reserve(int32_t n_outputs) {
     const size_t prev_size = buf_output ? ggml_backend_buffer_get_size(buf_output.get()) : 0;
     const size_t new_size  = (logits_size + embd_size) * sizeof(float);
     // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&& logits size is: %d, embd_size is: %d, new_size is: %d\n", logits_size, embd_size, new_size);
-    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&& prev_size is: %d, new_size is: %d\n", prev_size, new_size);
+    LLAMA_LOG_INFO("&&&&&&&&&&&&&&&& prev_size is: %d, new_size is: %d\n", prev_size, new_size);
     // alloc only when more than the current capacity is required
     // TODO: also consider shrinking the buffer
     if (!buf_output || prev_size < new_size) {
@@ -1367,10 +1370,10 @@ uint32_t llama_context::output_reserve(int32_t n_outputs) {
     }
 
     float * output_base = (float *) ggml_backend_buffer_get_base(buf_output.get());
-    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&& output_base is: %d\n", output_base == nullptr);
+    LLAMA_LOG_INFO("&&&&&&&&&&&&&&&& output_base is: %d\n", output_base == nullptr);
     logits = has_logits ? output_base               : nullptr;
     embd   = has_embd   ? output_base + logits_size : nullptr;
-    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&& logits_size is: %d\n", logits_size);
+    LLAMA_LOG_INFO("&&&&&&&&&&&&&&&& embd is: %p\n", embd);
     // set all ids as invalid (negative)
     std::fill(output_ids.begin(), output_ids.end(), -1);
 
