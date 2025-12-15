@@ -462,7 +462,7 @@ void llama_model::load_hparams(llama_model_loader & ml) {
     if (hparams.vocab_only) {
         return;
     }
-    if (hparams.use_flow) {
+    if (ml.get_arch() == LLM_ARCH_COSYVOICEFLOW) {
         hparams.n_embd = 512;
         // ml.get_key(LLM_KV_INPUT_SIZE, hparams.n_embd);
         // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&& check here !!!!!!!!!!\n");
@@ -514,7 +514,7 @@ void llama_model::load_hparams(llama_model_loader & ml) {
         // std::fill(hparams.decoder_channels.begin(), hparams.decoder_channels.end(), 256);
         // std::fill(hparams.swa_layers.begin(), hparams.swa_layers.end(), 0);
         
-    } else if (hparams.use_hift) {
+    } else if (ml.get_arch() == LLM_ARCH_COSYVOICEHIFT) {
         hparams.n_embd = 512;
     } else {
         ml.get_key(LLM_KV_CONTEXT_LENGTH,    hparams.n_ctx_train);
@@ -17693,7 +17693,7 @@ llama_model_params llama_model_default_params() {
         /*.use_mlock                   =*/ false,
         /*.check_tensors               =*/ false,
         /*.is_flow                     =*/ false,
-        /*.is_hift                     =*/ true,
+        /*.is_hift                     =*/ false,
     };
 
 #ifdef GGML_USE_METAL
