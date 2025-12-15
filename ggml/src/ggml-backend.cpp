@@ -881,7 +881,7 @@ static void ggml_backend_sched_split_graph(ggml_backend_sched_t sched, struct gg
         /* .mem_buffer = */ sched->context_buffer,
         /* .no_alloc =   */ true
     };
-    printf("  > Size (MB)    : %.4f MB\n", params.mem_size / (1024.0 * 1024.0));
+    // printf("  > Size (MB)    : %.4f MB\n", params.mem_size / (1024.0 * 1024.0));
 
     ggml_free(sched->ctx);
 
