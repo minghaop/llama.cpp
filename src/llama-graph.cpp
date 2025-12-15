@@ -2357,10 +2357,10 @@ ggml_tensor * llm_graph_context::build_inp_embd(ggml_tensor * tok_embd) const {
             cur = ggml_add(ctx0, cur, inpL_delta);
         }
     } else {
-        if(hparams.use_flow) {
+        if(arch == LLM_ARCH_COSYVOICEFLOW) {
             inp->embd = ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, hparams.spk_embed_dim, 1);
         } 
-        else if (hparams.use_hift){
+        else if (arch == LLM_ARCH_COSYVOICEHIFT){
             inp->embd = ggml_new_tensor_3d(ctx0, GGML_TYPE_F32, ubatch.n_tokens, 80, 1);
         } else {
             inp->embd = ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, n_embd, ubatch.n_tokens);

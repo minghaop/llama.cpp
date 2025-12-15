@@ -156,7 +156,7 @@ struct llama_hparams {
 
     //CosyVoiceFlow
     bool use_flow                              = false;
-    bool use_hift                              = true;
+    bool use_hift                              = false;
     char decoder_act_fn[5]                     = "gelu";
     uint32_t decoder_attention_head_dim        = 64;
     std::array<uint32_t, 1>   decoder_channels;
