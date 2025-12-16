@@ -101,9 +101,8 @@ static int llama_model_load(const std::string & fname, std::vector<std::string> 
         } catch(const std::exception & e) {
             throw std::runtime_error("error loading model architecture: " + std::string(e.what()));
         }
-        // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&& check is_flow is: %d, is_hift is: %d\n", params.is_flow, params.is_hift);
         if (!(ml.get_arch() == LLM_ARCH_COSYVOICEFLOW)  && !(ml.get_arch() == LLM_ARCH_COSYVOICEHIFT)) {
-            
+            LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&& ml.get_arch() is: %d\n", ml.get_arch());
             model.hparams.vocab_only = params.vocab_only;
             try {
                 model.load_hparams(ml);
@@ -139,7 +138,7 @@ static struct llama_model * llama_model_load_from_file_impl(
         std::vector<std::string> & splits,
         struct llama_model_params params) {
     ggml_time_init();
-    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&& check here1111 !!!!!!!!!!!!!!!!!!!!!\n");
+    LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&& params.is_flow = %d, params.is_hift = %d\n", params.is_flow, params.is_hift);
     if (!params.vocab_only && ggml_backend_reg_count() == 0) {
         LLAMA_LOG_ERROR("%s: no backends are loaded. hint: use ggml_backend_load() or ggml_backend_load_all() to load a backend before calling this function\n", __func__);
         return nullptr;
@@ -163,7 +162,11 @@ static struct llama_model * llama_model_load_from_file_impl(
     }
     
     llama_model * model = new llama_model(params);
-
+    //-----------设置 hparams 中use_flow and use_hift 变量-----------
+    if(params.is_flow || params.is_hift) {
+        model->hparams.use_flow = params.is_flow;
+        model->hparams.use_hift = params.is_hift;
+    }
     // create list of devices to use with this model
     if (params.devices) {
         for (ggml_backend_dev_t * dev = params.devices; *dev; ++dev) {

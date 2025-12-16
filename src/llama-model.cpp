@@ -5615,7 +5615,8 @@ void llama_model::print_info() const {
     // hparams
     LLAMA_LOG_INFO("%s: arch             = %s\n",     __func__, arch_name().c_str());
     LLAMA_LOG_INFO("%s: vocab_only       = %d\n",     __func__, hparams.vocab_only);
-
+    LLAMA_LOG_INFO("%s: use_flow         = %d\n",     __func__, hparams.use_flow);
+    LLAMA_LOG_INFO("%s: use_hift         = %d\n",     __func__, hparams.use_hift);
     if (!hparams.vocab_only && !hparams.use_flow && !hparams.use_hift) {
         LLAMA_LOG_INFO("%s: n_ctx_train      = %u\n",     __func__, hparams.n_ctx_train);
         LLAMA_LOG_INFO("%s: n_embd           = %u\n",     __func__, hparams.n_embd);
@@ -16997,38 +16998,42 @@ struct llm_build_flow : public llm_graph_context {
         x = ggml_mul_mat(ctx0, model.encoder_proj_w, x);
         x = ggml_add(ctx0, x, model.encoder_proj_b);
         ggml_set_name(x, "after encoder_proj");
+        res->t_embd = x;
+        ggml_build_forward_expand(gf, x);
         //build decoder
-        int32_t mel_len1 = prompt_feat->ne[1];
-        int32_t mel_len2 = x->ne[1] - mel_len1;
+        // int32_t mel_len1 = prompt_feat->ne[1];
+        // int32_t mel_len2 = x->ne[1] - mel_len1;
 
-        ggml_tensor * conds = ggml_new_tensor_3d(ctx0, x->type, prompt_feat->ne[0], mel_len1 + mel_len2, B);
-        conds = ggml_scale(ctx0, conds, 0.0f);
-        ggml_tensor * dest_view = ggml_view_3d(ctx0, conds, prompt_feat->ne[0], mel_len1, prompt_feat->ne[2], conds->nb[1], conds->ne[2], 0);
-        // ggml_cpy(ctx0, prompt_feat, dest_view);
-        ggml_tensor * cpy = ggml_cpy(ctx0, prompt_feat, dest_view);
-        ggml_set_name(cpy, "get_dest_view");
-        ggml_build_forward_expand(gf, cpy);
-        conds = ggml_cont(ctx0, ggml_transpose(ctx0, conds));
-        ggml_set_name(conds, "conds");
+        // ggml_tensor * conds = ggml_new_tensor_3d(ctx0, x->type, prompt_feat->ne[0], mel_len1 + mel_len2, B);
+        // conds = ggml_scale(ctx0, conds, 0.0f);
+        // ggml_tensor * dest_view = ggml_view_3d(ctx0, conds, prompt_feat->ne[0], mel_len1, prompt_feat->ne[2], conds->nb[1], conds->ne[2], 0);
+        // // ggml_cpy(ctx0, prompt_feat, dest_view);
+        // ggml_tensor * cpy = ggml_cpy(ctx0, prompt_feat, dest_view);
+        // ggml_set_name(cpy, "get_dest_view");
+        // ggml_build_forward_expand(gf, cpy);
+        // conds = ggml_cont(ctx0, ggml_transpose(ctx0, conds));
+        // ggml_set_name(conds, "conds");
 
-        mask = build_pad_mask(mel_len1 + mel_len2, 0, 3);
-        mask = ggml_cont(ctx0, mask);
-        ggml_tensor * spks = ggml_dup(ctx0, spk_add);
-        ggml_tensor * cond = ggml_dup(ctx0, conds);
-        int64_t n_timesteps = 10;
-        ggml_tensor * mu = ggml_cont(ctx0, ggml_transpose(ctx0, x));
-        ggml_set_name(mu, "mu");
-        mask = ggml_reshape_3d(ctx0, mask, mask->ne[0], 1, mask->ne[1]);
-        ggml_tensor * rand_noise = build_inp_rand_noise();
-        ggml_tensor * z = ggml_view_3d(ctx0, rand_noise, mu->ne[0], rand_noise->ne[1], rand_noise->ne[2], rand_noise->nb[1], rand_noise->nb[2], 0);
-        z = ggml_cont(ctx0, z);
-        ggml_set_name(z, "z");
-        ggml_tensor * feat = build_solve_euler(gf, z, mu, mask, spks, cond, model);
-        // ggml_tensor * sliced = ggml_view_3d(ctx0, feat, feat->ne[0] - mel_len1, feat->ne[1], feat->ne[2], feat->nb[0], feat->nb[1], mel_len1 * feat->nb[0]);
-        // LLAMA_LOG_INFO("&&&&&&&&&&&&&&& feat shape is: {%d, %d, %d, %d}\n", feat->ne[0], feat->ne[1], feat->ne[2], feat->ne[3]);
-        cb(feat, "result_norm", -1);
-        res->t_embd = feat;
-        ggml_build_forward_expand(gf, feat);
+        // mask = build_pad_mask(mel_len1 + mel_len2, 0, 3);
+        // mask = ggml_cont(ctx0, mask);
+        // ggml_tensor * spks = ggml_dup(ctx0, spk_add);
+        // ggml_tensor * cond = ggml_dup(ctx0, conds);
+        // int64_t n_timesteps = 10;
+        // ggml_tensor * mu = ggml_cont(ctx0, ggml_transpose(ctx0, x));
+        // ggml_set_name(mu, "mu");
+        // mask = ggml_reshape_3d(ctx0, mask, mask->ne[0], 1, mask->ne[1]);
+        // ggml_tensor * rand_noise = build_inp_rand_noise();
+        // ggml_tensor * z = ggml_view_3d(ctx0, rand_noise, mu->ne[0], rand_noise->ne[1], rand_noise->ne[2], rand_noise->nb[1], rand_noise->nb[2], 0);
+        // z = ggml_cont(ctx0, z);
+        // ggml_set_name(z, "z");
+        // ggml_tensor * feat = build_solve_euler(gf, z, mu, mask, spks, cond, model);
+        // // ggml_tensor * sliced = ggml_view_3d(ctx0, feat, feat->ne[0] - mel_len1, feat->ne[1], feat->ne[2], feat->nb[0], feat->nb[1], mel_len1 * feat->nb[0]);
+        // // LLAMA_LOG_INFO("&&&&&&&&&&&&&&& feat shape is: {%d, %d, %d, %d}\n", feat->ne[0], feat->ne[1], feat->ne[2], feat->ne[3]);
+        // cb(feat, "result_norm", -1);
+        // res->t_embd = feat;
+        // ggml_build_forward_expand(gf, feat);
+        // ggml_graph_dump_dot(gf, NULL, "debug.dot");
+    
         // ggml_graph_dump_dot(gf, NULL, "debug.dot");
     }
 };
@@ -17254,6 +17259,8 @@ llama_memory_i * llama_model::create_memory(const llama_memory_params & params, 
         case LLM_ARCH_NOMIC_BERT_MOE:
         case LLM_ARCH_NEO_BERT:
         case LLM_ARCH_WAVTOKENIZER_DEC:
+        case LLM_ARCH_COSYVOICEFLOW:
+        case LLM_ARCH_COSYVOICEHIFT:
             {
                 res = nullptr;
             } break;
@@ -17341,7 +17348,7 @@ llm_graph_result_ptr llama_model::build_graph(
                    ggml_cgraph * gf,
                 llm_graph_type   type) const {
     std::unique_ptr<llm_graph_context> llm;
-
+    // LLAMA_LOG_INFO("Building graph for architecture: %s\n", llm_arch_name(arch));
     switch (arch) {
         case LLM_ARCH_LLAMA:
             {
