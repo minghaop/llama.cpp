@@ -740,13 +740,13 @@ int llama_context::encode(const llama_batch & batch_inp, int dot_debug) {
         LLAMA_LOG_ERROR("%s: n_tokens == 0\n", __func__);
         return -1;
     }
-    
+    // LLAMA_LOG_INFO("%s, &&&&&&&&&&&&&&&& check here1 !\n", __func__);
     const auto & hparams = model.hparams;
     int64_t n_embd, n_vocab;
-    if (model.arch_name() == "Flow") {
+    if (hparams.use_flow) {
         n_embd = 512;
         n_vocab = 1;
-    } else if (model.arch_name() == "Hift") {
+    } else if (hparams.use_hift) {
         n_embd = 80;
         n_vocab = 1;
     } 
@@ -754,19 +754,20 @@ int llama_context::encode(const llama_batch & batch_inp, int dot_debug) {
         n_embd = hparams.n_embd;
         n_vocab = model.vocab.n_tokens();
     }
-
+    // LLAMA_LOG_INFO("%s, &&&&&&&&&&&&&&&& check here2 !\n", __func__);
     // const int64_t n_embd  = hparams.n_embd;
     // const int32_t n_vocab = model.vocab.n_tokens();
-    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&& model.vocab is: %d, n_embd is: %d\n", model.vocab, n_embd);
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&& n_embd is: %d\n", n_embd);
     // note: during encode, we always pass the full sequence starting from pos = 0
     if (!balloc->init(batch_inp, model.vocab, nullptr, n_embd, true)) {
         LLAMA_LOG_ERROR("%s: failed to initialize batch\n", __func__);
         return -1;
     }
-
+    // LLAMA_LOG_INFO("%s, &&&&&&&&&&&&&&&& check here3 !\n", __func__);
     const uint32_t n_tokens = balloc->get_n_tokens();
-
+    // LLAMA_LOG_INFO("%s, &&&&&&&&&&&&&&&& check here4 !\n", __func__);
     const llama_ubatch ubatch = balloc->split_simple(n_tokens);
+    // LLAMA_LOG_INFO("%s, &&&&&&&&&&&&&&&& check here5 !\n", __func__);
     // micro-batching is not possible for non-causal encoding, so we process the batch in a single shot
     GGML_ASSERT(cparams.n_ubatch >= n_tokens && "encoder requires n_ubatch >= n_tokens");
 
@@ -778,7 +779,7 @@ int llama_context::encode(const llama_batch & batch_inp, int dot_debug) {
     embd_seq.clear();
 
     n_queued_tokens += n_tokens;
-    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&& check here3 !\n");
+    // LLAMA_LOG_INFO("%s, &&&&&&&&&&&&&&&& check here6 !\n", __func__);
     // reserve output buffer
     if (output_reserve(n_tokens) < n_tokens) {
         LLAMA_LOG_ERROR("%s: could not reserve space for batch with %u outputs\n", __func__, n_tokens);
@@ -790,10 +791,10 @@ int llama_context::encode(const llama_batch & batch_inp, int dot_debug) {
     }
 
     n_outputs = n_tokens;
-    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&& check here4 !\n");
+    // LLAMA_LOG_INFO("%s, &&&&&&&&&&&&&&&& check here7 !\n", __func__);
     ggml_backend_sched_reset(sched.get());
     ggml_backend_sched_set_eval_callback(sched.get(), cparams.cb_eval, cparams.cb_eval_user_data);
-    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&& check here5 !\n");
+    // LLAMA_LOG_INFO("%s, &&&&&&&&&&&&&&&& check here8 !\n", __func__);
     const auto causal_attn_org = cparams.causal_attn;
 
     // always use non-causal attention for encoder graphs
@@ -803,7 +804,7 @@ int llama_context::encode(const llama_batch & batch_inp, int dot_debug) {
 
     ggml_status status;
     const auto res = process_ubatch(ubatch, LLM_GRAPH_TYPE_ENCODER, nullptr, status, dot_debug);
-    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&& res is nullptr: %d\n", res == nullptr);
+    // LLAMA_LOG_INFO("%s, &&&&&&&&&&&&&&&& check here9 !\n", __func__);
     cparams.causal_attn = causal_attn_org;
 
     if (!res) {
@@ -848,8 +849,8 @@ int llama_context::encode(const llama_batch & batch_inp, int dot_debug) {
                 {
                     // extract token embeddings
                     GGML_ASSERT(embd != nullptr);
-                    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&& n_tokens is: %d, n_embd is: %d, embd_size is: %d\n", n_tokens, n_embd, embd_size);
-                    if (!(model.arch_name() == "Flow")t && ! (model.arch_name() == "Hift")) {
+                    // LLAMA_LOG_INFO("%s, &&&&&&&&&&&&&&&& check here10 !\n", __func__);
+                    if (!(model.arch_name() == "Flow") && ! (model.arch_name() == "Hift")) {
                         GGML_ASSERT(n_tokens*n_embd <= (int64_t) embd_size);
                         ggml_backend_tensor_get_async(backend_embd, t_embd, embd, 0, n_tokens*n_embd*sizeof(float));
                     } else if (model.arch_name() == "Hift") {
@@ -1370,7 +1371,13 @@ uint32_t llama_context::output_reserve(int32_t n_outputs) {
 //
 
 int32_t llama_context::graph_max_nodes() const {
-    return std::max<int32_t>(4096, 5*model.n_tensors());
+    const auto & hparams = model.hparams;
+    if (hparams.use_flow) {
+        return std::max<int32_t>(65536, 5*model.n_tensors());
+    }else {
+        return std::max<int32_t>(4096, 3*model.n_tensors());
+    }
+    
 }
 
 ggml_cgraph * llama_context::graph_init() {

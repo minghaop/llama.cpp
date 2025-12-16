@@ -635,9 +635,7 @@ ggml_tensor * llm_graph_context::build_pad_mask(int32_t total_len, int32_t max_l
         max_len = total_len;
     }
     ggml_tensor * mask = ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, max_len, 1);
-    ggml_tensor * zero = ggml_scale(ctx0, mask, 0.0f);
-    ggml_tensor * one = ggml_exp(ctx0, zero);
-    mask = ggml_sub(ctx0, one, zero);
+    mask = ggml_scale(ctx0, ggml_exp(ctx0, ggml_scale(ctx0, mask, 0.0f)), 1.0f);
     ggml_set_name(mask, ("non_pad_mask_" + std::to_string(il)).c_str());
     cb(mask, ("non_pad_mask_" + std::to_string(il)).c_str(), il);
     
@@ -664,74 +662,6 @@ ggml_tensor * llm_graph_context::build_linear_no_subsampling(
 
 }
 
-ggml_tensor * llm_graph_context::build_pe(ggml_cgraph * gf, int64_t max_len) const{
-        
-    const int32_t d_model = 512;
-    const int64_t seq_len = max_len;
-    const int64_t half = d_model / 2;
-    const int64_t total_pe_len = 2 * seq_len - 1;
-
-    ggml_tensor * position = ggml_arange(ctx0, 0, seq_len, 1);
-    position = ggml_reshape_2d(ctx0, position, 1, seq_len);   // [seq_len, 1]
-    
-
-    ggml_tensor * div_term = ggml_arange(ctx0, 0, d_model, 2);
-    float inv_den = -logf(10000.0f) / d_model;
-    div_term = ggml_scale(ctx0, div_term, inv_den);
-    div_term = ggml_exp(ctx0, div_term);                      // [half]
-    div_term = ggml_reshape_2d(ctx0, div_term, 1, half);      // [1, half]
-    
-    ggml_tensor * angle = ggml_mul_mat(ctx0, position, div_term);
-
-    angle = ggml_cont(ctx0, ggml_transpose(ctx0, angle));    // [half, seq_len]
-    ggml_set_name(angle, "angle");
-
-    ggml_tensor * pe_sin = ggml_sin(ctx0, angle);
-    ggml_tensor * pe_cos = ggml_cos(ctx0, angle);
-    ggml_tensor * sin_3d = ggml_reshape_3d(ctx0, pe_sin, half, seq_len, 1);
-    ggml_tensor * cos_3d = ggml_reshape_3d(ctx0, pe_cos, half, seq_len, 1);
-    ggml_tensor * stacked = ggml_concat(ctx0, sin_3d, cos_3d, 2);
-    ggml_tensor * permuted = ggml_permute(ctx0, stacked, 1, 0, 2, 3);
-    ggml_tensor * pe_positive = ggml_reshape_2d(ctx0, ggml_cont(ctx0, permuted), d_model, seq_len);      
-    ggml_set_name(pe_positive, "pe_positive");
-
-    // 负位置编码使用角度取反
-    ggml_tensor * neg_angle = ggml_scale(ctx0, angle, -1.0f);
-    ggml_tensor * pe_neg_sin = ggml_sin(ctx0, neg_angle);
-    ggml_tensor * pe_neg_cos = ggml_cos(ctx0, neg_angle);
-    ggml_tensor * neg_sin_3d = ggml_reshape_3d(ctx0, pe_neg_sin, half, seq_len, 1);
-    ggml_tensor * neg_cos_3d = ggml_reshape_3d(ctx0, pe_neg_cos, half, seq_len, 1);
-    ggml_tensor * neg_stacked = ggml_concat(ctx0, neg_sin_3d, neg_cos_3d, 2);
-    ggml_tensor * neg_permuted = ggml_permute(ctx0, neg_stacked, 1, 0, 2, 3);
-    ggml_tensor * pe_negative = ggml_reshape_2d(ctx0, ggml_cont(ctx0, neg_permuted), d_model, seq_len);
-    ggml_set_name(pe_negative, "pe_negative");                                       // 输出形状: [seq_len, d_model]
-
-    ggml_tensor * pe_positive_flipped = ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, pe_positive->ne[0], pe_positive->ne[1]);
-    pe_positive_flipped->flags = GGML_TENSOR_FLAG_PARAM;
-    for (int64_t i = 0; i < seq_len; ++i) {
-        int64_t src_row = seq_len - 1 - i;
-        ggml_tensor * src = ggml_view_1d(ctx0, pe_positive, d_model, src_row * pe_positive->nb[1]);
-        ggml_tensor * dst = ggml_view_1d(ctx0, pe_positive_flipped, d_model, i * pe_positive_flipped->nb[1]);
-        ggml_build_forward_expand(gf, ggml_cpy(ctx0, src, dst));
-    }
-
-    ggml_tensor * pe_positive_final = ggml_reshape_3d(ctx0, pe_positive_flipped, d_model, seq_len, 1);
-    ggml_set_name(pe_positive_final, "pe_positive_final");
-
-    ggml_tensor * pe_negative_sliced = ggml_view_2d(ctx0, pe_negative, d_model, seq_len - 1, pe_negative->nb[1],0);
-    ggml_set_name(pe_negative_sliced, "pe_negative_sliced");
-    
-    ggml_tensor * pe_negative_final = ggml_reshape_3d(ctx0, pe_negative_sliced, d_model, seq_len - 1, 1);
-    ggml_set_name(pe_negative_final, "pe_negative_final");
-    LLAMA_LOG_INFO("&&&&&&&&&&&&&&& pe_negative_final type is: %d\n", pe_negative_final->type);
-
-    // 8. 转置回 [d_model, total_pe_len] 格式
-    ggml_tensor * pe_cat =  ggml_concat(ctx0, pe_positive_final, pe_negative_final, 1);
-    ggml_set_name(pe_cat, "espnet_rel_pos_encode");
-    cb(pe_cat, "espnet_rel_pos_encode", -1);
-
-    return pe_cat;
-}
 
 ggml_tensor * llm_graph_context::build_pos_encoding(
          ggml_tensor * cur,
@@ -897,7 +827,7 @@ ggml_tensor * llm_graph_context::build_attn_scores(
 
     if (mask && mask->ne[2] > 0) {
         // ggml_tensor * mask_ext = ggml_reshape_4d(ctx0, mask, mask->ne[0], 1, 1, 1);
-        ggml_tensor * mask_ext = ggml_scale(ctx0, mask, 0.0f);
+        ggml_tensor * mask_ext = ggml_scale(ctx0, ggml_cont(ctx0, mask), 0.0f);
     }
     ggml_tensor * attn = ggml_soft_max(ctx0, scores);
     cb(attn, ("soft_max_attn_" + attn_type).c_str(), il);
