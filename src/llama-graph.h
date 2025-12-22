@@ -732,22 +732,23 @@ struct llm_graph_context {
     ggml_tensor * prepare_attention_mask(ggml_tensor * mask, int target_len, int batch_size) const;
 
     ggml_tensor * scaled_dot_product_attention(ggml_tensor * q, ggml_tensor * k, ggml_tensor * v,
-                                            ggml_tensor * mask, float scale = 0.0f) const;
+                                            ggml_tensor * mask, float scale = 0.0f, std::string blk_name = "") const;
     
-    ggml_tensor * build_basic_attn(ggml_tensor * x, ggml_tensor * attn_mask, const AttnWeights & w) const;
-
+    ggml_tensor * build_basic_attn(ggml_tensor * x, ggml_tensor * attn_mask, const AttnWeights & w, std::string blk_name) const;
+    
+    // ggml_tensor * causal_conv1d_split_batch(ggml_tensor * x, ggml_tensor * w, ggml_tensor * b, int pad) const;
     ggml_tensor * causal_conv1d(ggml_tensor * x, ggml_tensor * w, ggml_tensor * b, int pad = 2) const;
 
     ggml_tensor * causal_block1d(ggml_tensor * x, ggml_tensor * mask,
                                 ggml_tensor * conv_w, ggml_tensor * conv_b,
-                                ggml_tensor * norm_w, ggml_tensor * norm_b) const;
-    ggml_tensor * causal_resnet_block1d(ggml_tensor * x, ggml_tensor * mask, ggml_tensor * t_emb,
-                                        const BlockWeights & w) const;
+                                ggml_tensor * norm_w, ggml_tensor * norm_b, std::string blk_name) const;
+    ggml_tensor * causal_resnet_block1d(ggml_cgraph * gf, ggml_tensor * x, ggml_tensor * mask, ggml_tensor * t_emb,
+                                        const BlockWeights & w, std::string blk_name) const;
 
     ggml_tensor * transformer_block(ggml_tensor * x, ggml_tensor * attn_mask,
-                                    const TransformerBlockWeights & w) const;
+                                    const TransformerBlockWeights & w, std::string blk_name) const;
     
-    ggml_tensor * build_causal_cond_decoder(ggml_tensor * x, ggml_tensor * mask, ggml_tensor * mu,
+    ggml_tensor * build_causal_cond_decoder(ggml_cgraph * gf, ggml_tensor * x, ggml_tensor * mask, ggml_tensor * mu,
                                     ggml_tensor * t, ggml_tensor * spks, ggml_tensor * cond, ggml_tensor * spks_t,
                                     const llama_model & model, int32_t step) const;
     
