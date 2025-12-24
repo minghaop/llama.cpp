@@ -947,8 +947,6 @@ ggml_tensor * llm_graph_context::build_upsample_1d(
     ggml_tensor * pad = ggml_concat(ctx0, zeros, up, 1);
     cb(pad, "upsample_pad", -1);
     pad = ggml_cont(ctx0, ggml_permute(ctx0, pad, 1, 0, 2, 3));
-    LLAMA_LOG_INFO("&&&&&&&&&&&&&&& upsample_1d pad shape is: {%d, %d, %d, %d}\n", pad->ne[0], pad->ne[1], pad->ne[2], pad->ne[3]);
-    LLAMA_LOG_INFO("&&&&&&&&&&&&&&& upsample_1d mw shape is: {%d, %d, %d, %d}\n", mw->ne[0], mw->ne[1], mw->ne[2], mw->ne[3]);
     ggml_tensor * out = ggml_conv_1d(ctx0, mw, pad, 1, 0, 1);
     mb = ggml_reshape_3d(ctx0, ggml_cont(ctx0, mb), 1, cur->ne[0], 1);
     out = ggml_add(ctx0, out, mb);
@@ -1049,7 +1047,7 @@ static void custom_t_span_init(struct ggml_tensor * dst, const struct ggml_tenso
 
 ggml_tensor * llm_graph_context::linear(ggml_tensor * x, ggml_tensor * w, ggml_tensor * b) const {
         ggml_tensor * out = ggml_mul_mat(ctx0, w, x);
-        return b ? ggml_add(ctx0, out, b) : out;
+        return ggml_add(ctx0, out, b);
     }
 
 // 统一的 MLP: silu(W1x + b1) @ W2 + b2
@@ -1061,9 +1059,14 @@ ggml_tensor * llm_graph_context::mlp_silu(ggml_tensor * x, ggml_tensor * w1, ggm
 
 // 统一的 FFN: gelu(W0x + b0) @ W2 + b2
 ggml_tensor * llm_graph_context::ffn_gelu(ggml_tensor * x, ggml_tensor * w0, ggml_tensor * b0,
-                        ggml_tensor * w2, ggml_tensor * b2) const {
-    x = ggml_gelu(ctx0, linear(x, w0, b0));
-    return linear(x, w2, b2);
+                        ggml_tensor * w2, ggml_tensor * b2, std::string blk_name) const {
+    x = linear(x, w0, b0);
+    ggml_set_name(x, ("ffn_linear_"+ blk_name).c_str());
+    x = ggml_gelu_erf(ctx0, x);
+    ggml_set_name(x, ("ffn_gule_"+ blk_name).c_str());
+    x = linear(x, w2, b2);
+    ggml_set_name(x, ("ffn_gule_linear_"+ blk_name).c_str());
+    return x;
 }
 
 // Mish 激活
@@ -1235,7 +1238,7 @@ ggml_tensor * llm_graph_context::causal_conv1d(ggml_tensor * x, ggml_tensor * w,
 ggml_tensor * llm_graph_context::causal_block1d(ggml_tensor * x, ggml_tensor * mask,
                                 ggml_tensor * conv_w, ggml_tensor * conv_b,
                                 ggml_tensor * norm_w, ggml_tensor * norm_b, std::string blk_name) const {
-    ggml_set_name(x, "block1d_input");
+    ggml_set_name(x, ("block1d_input_" + blk_name + "_1").c_str());
     ggml_set_name(mask, "block1d_mask");
     x = ggml_mul(ctx0, x, mask);
     ggml_set_name(x, "block1d_after_mask");
@@ -1253,12 +1256,6 @@ ggml_tensor * llm_graph_context::causal_block1d(ggml_tensor * x, ggml_tensor * m
     ggml_set_name(x, "block1d_after_permute2");
     
     // Mish + mask
-    // ggml_tensor * exp_x = ggml_exp(ctx0, x);
-    // ggml_tensor * one = ggml_exp(ctx0, ggml_scale(ctx0, x, 0.0f));
-    // ggml_tensor * one_plus_exp = ggml_add(ctx0, exp_x, one);
-    // ggml_tensor * sp = ggml_log(ctx0, one_plus_exp);
-    // ggml_tensor * tanh_sp = ggml_tanh(ctx0, sp);
-    // x = ggml_mul(ctx0, x, tanh_sp);
     x = mish(x);
     ggml_set_name(x, ("block1d_after_mish_" + blk_name).c_str());
     // x = ggml_mul(ctx0, x, mask);
@@ -1279,16 +1276,26 @@ ggml_tensor * llm_graph_context::causal_resnet_block1d(ggml_cgraph * gf, ggml_te
     // 时间嵌入
     ggml_tensor * t = mish(t_emb);
     ggml_build_forward_expand(gf, t);
-    // ggml_graph_compute_with_ctx(ctx0, gf, 4);
-    // printf("执行后: t[0]=%.6f ← 应为-0.007427\n", ((float*)t->data)[0]);
     ggml_set_name(t, ("resnet_t_after_mish_"+ blk_name + "_1").c_str());
     
     ggml_tensor * t_linear = linear(t, w.mlp_w, w.mlp_b);
     ggml_build_forward_expand(gf, t_linear);
     ggml_set_name(t_linear, ("resnet_t_after_linear_"+ blk_name + "_1").c_str());
-    t_linear = ggml_reshape_3d(ctx0, ggml_cont(ctx0, t_linear), 1, t_linear->ne[0], t_linear->ne[1]);
-    x_casual = ggml_add(ctx0, x_casual, t_linear);
-    ggml_set_name(x, ("resnet_after_add_t_"+ blk_name + "_1").c_str());
+    ggml_tensor * x_permuted = ggml_cont(ctx0, ggml_permute(ctx0, x_casual, 1, 0, 2, 3));
+    ggml_tensor * x_p2 = ggml_cont(ctx0, ggml_permute(ctx0, x_permuted, 0, 2, 1, 3));
+    ggml_tensor * t_ready = ggml_reshape_4d(ctx0, t_linear, t_linear->ne[0], t_linear->ne[1], 1, 1);
+    ggml_tensor * x_added_permuted = ggml_add(ctx0, x_p2, t_ready);
+    ggml_tensor * x_rev1 = ggml_permute(ctx0, x_added_permuted, 0, 2, 1, 3);
+    x_casual = ggml_cont(ctx0, ggml_permute(ctx0, x_rev1, 1, 0, 2, 3));
+    ggml_build_forward_expand(gf, x_casual);
+    printf("迭代 %s: %.1f%% used\n", blk_name.c_str(), 100.0 * ggml_used_mem(ctx0) / ggml_get_mem_size(ctx0));
+    
+    //     ggml_tensor * x_permuted = ggml_cont(ctx0, ggml_permute(ctx0, x_casual, 1, 0, 2, 3));
+    //     ggml_tensor * t_ready = ggml_reshape_4d(ctx0, ggml_cont(ctx0, t_linear), t_linear->ne[0], 1, t_linear->ne[1], 1);
+    //     ggml_tensor * x_added_permuted = ggml_add(ctx0, x_permuted, t_ready);
+    //     x_casual = ggml_cont(ctx0, ggml_permute(ctx0, x_added_permuted, 1, 0, 2, 3));
+    
+    ggml_set_name(x_casual, ("resnet_after_add_t_"+ blk_name + "_1").c_str());
     // 第二个 block
     x_casual = causal_block1d(x_casual, mask, w.conv2_w, w.conv2_b, w.norm2_w, w.norm2_b, blk_name + "_2");
     ggml_set_name(x_casual, ("resnet_after_block2_"+ blk_name + "_1").c_str());
@@ -1312,7 +1319,7 @@ ggml_tensor * llm_graph_context::transformer_block(ggml_tensor * x, ggml_tensor 
     // Self-attention with residual
     ggml_tensor * tr_x = x;
     ggml_set_name(tr_x, ("trans_input_"+ blk_name).c_str());
-    ggml_tensor * h = build_layer_norm(x, w.norm1_w, w.norm1_b, 1e-5f, "attn", 0);
+    ggml_tensor * h = build_layer_norm(x, w.norm1_w, w.norm1_b, 1e-5f, blk_name, 0);
     ggml_set_name(h, ("trans_after_norm1_"+ blk_name).c_str());
     ggml_tensor * attn = build_basic_attn(h, attn_mask, w.attn, blk_name);
     ggml_set_name(attn, ("trans_after_attn_"+ blk_name).c_str());
@@ -1321,7 +1328,7 @@ ggml_tensor * llm_graph_context::transformer_block(ggml_tensor * x, ggml_tensor 
     // FFN with residual
     h = build_layer_norm(tr_x, w.norm3_w, w.norm3_b, 1e-5f, "ffn", 0);
     ggml_set_name(h, ("trans_after_norm3_"+ blk_name).c_str());
-    ggml_tensor * ffn_out = ffn_gelu(h, w.ffn_w0, w.ffn_b0, w.ffn_w2, w.ffn_b2);
+    ggml_tensor * ffn_out = ffn_gelu(h, w.ffn_w0, w.ffn_b0, w.ffn_w2, w.ffn_b2, blk_name);
     ggml_set_name(ffn_out, ("trans_after_ffn_"+ blk_name).c_str());
     ffn_out = ggml_cont(ctx0, ggml_add(ctx0, ffn_out, tr_x));
     ggml_set_name(ffn_out, ("trans_after_ffn_add_"+ blk_name).c_str());
@@ -1397,9 +1404,8 @@ ggml_tensor * llm_graph_context::build_causal_cond_decoder(ggml_cgraph * gf,
         mask->ne[0] / 2, mask->ne[1], mask->ne[2],
         2 * ggml_type_size(mask->type), mask->nb[2], 0);
     mask_mid = ggml_cont(ctx0, mask_mid);
-    // Mid attention mask（只计算一次）
+
     // ===== Mid Blocks =====
-    
     for (int i = 0; i < 12; ++i) {
         blk_name = "mid_block_step_" + std::to_string(step) + "_layer_" + std::to_string(i);
         auto & L = model.layers[280 + i];
@@ -1410,7 +1416,7 @@ ggml_tensor * llm_graph_context::build_causal_cond_decoder(ggml_cgraph * gf,
             L.mid_block_res_w, L.mid_block_res_b,
             L.mid_block2_w, L.mid_block2_b,
             L.mid_block2_norm_w, L.mid_block2_norm_b}, blk_name);
-
+        ggml_set_name(x, ("causal_mid_block_resnet_" + std::to_string(step) + "_layer_" + std::to_string(i)).c_str());
         int64_t mid_seq_len = x->ne[1];
         ggml_tensor * mid_attn_mask = mask_to_bias(build_repeat(mask_mid, 1, mid_seq_len, 1), neg_big, x->type);
         for (int j = 0; j < 4; ++j) {
@@ -1422,8 +1428,8 @@ ggml_tensor * llm_graph_context::build_causal_cond_decoder(ggml_cgraph * gf,
                 S.mid_block1_norm3_w, S.mid_block1_norm3_b,
                 S.mid_block1_ffn_w0, S.mid_block1_ffn_b0,
                 S.mid_block1_ffn_w2, S.mid_block1_ffn_b2}, blk_name);
+            ggml_set_name(x, ("causal_mid_block_trans_" + std::to_string(step) + "_layer_" + std::to_string(i) + "_sub_layer_" + std::to_string(j)).c_str());
         }
-        
         x = ggml_cont(ctx0, ggml_permute(ctx0, x, 1, 0, 2, 3));
     }
     ggml_set_name(x, ("causal_x_after_mid_block_" + std::to_string(step)).c_str());
@@ -1458,14 +1464,30 @@ ggml_tensor * llm_graph_context::build_causal_cond_decoder(ggml_cgraph * gf,
     x = causal_block1d(x, mask, 
         model.f_blk_conv_w, model.f_blk_conv_b,
         model.f_blk_norm_w, model.f_blk_norm_b, blk_name);
-    
+    ggml_set_name(x, ("causal_x_after_final_block_" + std::to_string(step)).c_str());
     // 最终投影（合并操作）
-    x = ggml_conv_1d(ctx0, model.f_proj_w, ggml_mul(ctx0, x, mask), 1, 0, 0);
-    x = ggml_permute(ctx0, x, 1, 0, 2, 3);
-    x = ggml_add(ctx0, ggml_cont(ctx0, x), model.f_proj_b);
-    x = ggml_permute(ctx0, x, 1, 0, 2, 3);
+    ggml_tensor * weight_t  = ggml_cont(ctx0, model.f_proj_w);
+    ggml_tensor * weight_2d = ggml_reshape_2d(ctx0, weight_t, weight_t->ne[1], weight_t->ne[2]);
+    ggml_tensor * res_perm = ggml_cont(ctx0, ggml_permute(ctx0, ggml_cont(ctx0, x), 1, 0, 2, 3));
+    ggml_tensor * x_2d = ggml_reshape_2d(ctx0, res_perm, res_perm->ne[0], res_perm->ne[1] * res_perm->ne[2]);
+    ggml_tensor * res_mask = ggml_mul_mat(ctx0, weight_2d, x_2d);
+    res_mask = ggml_cont(ctx0, ggml_add(ctx0, res_mask, model.f_proj_b));
+    res_mask = ggml_reshape_4d(ctx0, res_mask, weight_2d->ne[1], res_perm->ne[1], res_perm->ne[2], 1);
+    x = ggml_cont(ctx0, ggml_permute(ctx0, res_mask, 1, 0, 2, 3));
+    // x = ggml_conv_1d(ctx0, model.f_proj_w, ggml_cont(ctx0, x), 1, 0, 1);
+    // ggml_tensor * x_p1 = ggml_cont(ctx0, ggml_permute(ctx0, x, 1, 0, 2, 3));
+    // ggml_tensor * x_p2 = ggml_cont(ctx0, ggml_permute(ctx0, x_p1, 0, 2, 1, 3));
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&& x_p2 shape is: {%d, %d, %d, %d}\n", x_p2->ne[0], x_p2->ne[1], x_p2->ne[2], x_p2->ne[3]);
+    // ggml_tensor * b_clean = ggml_cont(ctx0, model.f_proj_b);
+    // ggml_tensor * b_ready = ggml_reshape_4d(ctx0, b_clean, b_clean->ne[0], 1, 1, 1);
+    // ggml_tensor * x_added = ggml_add(ctx0, x_p2, b_ready);
+    // ggml_tensor * x_rev1 = ggml_permute(ctx0, x_added, 0, 2, 1, 3);
+    // x = ggml_cont(ctx0, ggml_permute(ctx0, x_rev1, 1, 0, 2, 3));
+    ggml_build_forward_expand(gf, x);
     
-    return ggml_mul(ctx0, ggml_cont(ctx0, x), mask);
+    ggml_set_name(x, ("causal_x_after_final_proj_" + std::to_string(step)).c_str());
+    x = ggml_mul(ctx0, x, mask);
+    return x;
 }
 
 // ==================== Euler 求解器 ====================

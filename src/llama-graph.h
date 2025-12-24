@@ -721,7 +721,7 @@ struct llm_graph_context {
                         ggml_tensor * w2, ggml_tensor * b2) const;
     
     ggml_tensor * ffn_gelu(ggml_tensor * x, ggml_tensor * w0, ggml_tensor * b0,
-        ggml_tensor * w2, ggml_tensor * b2) const;
+        ggml_tensor * w2, ggml_tensor * b2, std::string blk_name) const;
 
     ggml_tensor * mish(ggml_tensor * x) const;
     

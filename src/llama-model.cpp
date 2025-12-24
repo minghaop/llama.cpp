@@ -5319,8 +5319,8 @@ bool llama_model::load_tensors(llama_model_loader & ml) {
                     f_blk_conv_b = create_tensor(tn(LLM_TENSOR_FINAL_BLOCK_0_BIAS, "bias", 1114), {256}, 0);
                     f_blk_norm_b = create_tensor(tn(LLM_TENSOR_FINAL_BLOCK_2_BIAS, "bias", 1115), {256}, 0);
 
-                    f_proj_w = create_tensor(tn(LLM_TENSOR_FINAL_PROJ_WEIGHT, "weight"), {1, 256, 80}, 0);
-                    f_proj_b = create_tensor(tn(LLM_TENSOR_FINAL_PROJ_BIAS, "bias"), {80}, 0);
+                    f_proj_w = create_tensor(tn(LLM_TENSOR_FINAL_PROJ_WEIGHT, "weight", 1116), {1, 256, 80}, 0);
+                    f_proj_b = create_tensor(tn(LLM_TENSOR_FINAL_PROJ_BIAS, "bias", 1117), {80}, 0);
                 } break;
             case LLM_ARCH_COSYVOICEHIFT:
                 {
@@ -16840,6 +16840,7 @@ struct llm_build_qwen2 : public llm_graph_context {
 struct llm_build_flow : public llm_graph_context {
     const llama_model & model;
     llm_build_flow(const llama_model & model, const llm_graph_params & params, ggml_cgraph * gf) : llm_graph_context(params), model(model) {
+        size_t mem_before = ggml_used_mem(ctx0);
 
         auto expand = [&](ggml_tensor * t) { ggml_build_forward_expand(gf, t); return t; };
         ggml_tensor * embedding = expand(build_F_normalize(build_inp_embd(model.inp_embed_w), 1e-12f));
@@ -17100,9 +17101,13 @@ struct llm_build_flow : public llm_graph_context {
         z = ggml_cont(ctx0, z);
         ggml_set_name(z, "z");
         ggml_tensor * feat = build_solve_euler(gf, z, mu, mask, spks, cond, model);
+        printf("迭代 %s: %.1f%% used\n", "decoder_feat", 100.0 * ggml_used_mem(ctx0) / ggml_get_mem_size(ctx0));
         ggml_set_name(feat, "decoder_feat");
         res->t_embd = feat;
         ggml_build_forward_expand(gf, feat);
+        size_t mem_after_build = ggml_used_mem(ctx0);
+        LLAMA_LOG_INFO("Memory used by build_graph: %.2f MB\n", 
+               (mem_after_build - mem_before) / 1024.0 / 1024.0);
         // // ggml_tensor * sliced = ggml_view_3d(ctx0, feat, feat->ne[0] - mel_len1, feat->ne[1], feat->ne[2], feat->nb[0], feat->nb[1], mel_len1 * feat->nb[0]);
         // // LLAMA_LOG_INFO("&&&&&&&&&&&&&&& feat shape is: {%d, %d, %d, %d}\n", feat->ne[0], feat->ne[1], feat->ne[2], feat->ne[3]);
         // cb(feat, "result_norm", -1);
