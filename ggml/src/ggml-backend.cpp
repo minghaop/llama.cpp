@@ -886,6 +886,7 @@ static void ggml_backend_sched_split_graph(ggml_backend_sched_t sched, struct gg
     ggml_free(sched->ctx);
 
     sched->ctx = ggml_init(params);
+    size_t mem_before_compute = ggml_used_mem(sched->ctx);
     if (sched->ctx == NULL) {
         GGML_ABORT("%s: failed to initialize context\n", __func__);
     }
@@ -1327,9 +1328,13 @@ static void ggml_backend_sched_split_graph(ggml_backend_sched_t sched, struct gg
         assert(graph_copy->size > graph_copy->n_leafs);
         graph_copy->leafs[graph_copy->n_leafs++] = leaf;
     }
+    size_t mem_after_compute = ggml_used_mem(sched->ctx);
+    GGML_LOG_INFO("Memory used by graph_compute: %.2f MB\n",
+               (mem_after_compute - mem_before_compute) / 1024.0 / 1024.0);
 }
 
 static bool ggml_backend_sched_alloc_splits(ggml_backend_sched_t sched) {
+    size_t mem_before_compute = ggml_used_mem(sched->ctx);
     bool backend_ids_changed = false;
     for (int i = 0; i < sched->graph.n_nodes; i++) {
         if (sched->node_backend_ids[i] != sched->prev_node_backend_ids[i] &&
@@ -1364,11 +1369,14 @@ static bool ggml_backend_sched_alloc_splits(ggml_backend_sched_t sched) {
             return false;
         }
     }
-
+    size_t mem_after_compute = ggml_used_mem(sched->ctx);
+    GGML_LOG_INFO("Memory used by graph_compute splits: %.2f MB\n",
+               (mem_after_compute - mem_before_compute) / 1024.0 / 1024.0);
     return true;
 }
 
 static enum ggml_status ggml_backend_sched_compute_splits(ggml_backend_sched_t sched) {
+    // size_t mem_before_compute = ggml_used_mem(sched->ctx);
     struct ggml_backend_sched_split * splits = sched->splits;
 
     // GGML_LOG_INFO("&&&&&&&&&&&&&&&&&&&&& split is: %d\n", sched->n_splits);
@@ -1463,7 +1471,9 @@ static enum ggml_status ggml_backend_sched_compute_splits(ggml_backend_sched_t s
     }
 
     sched->cur_copy = (sched->cur_copy + 1) % sched->n_copies;
-
+    // size_t mem_after_compute = ggml_used_mem(sched->ctx);
+    // GGML_LOG_INFO("Memory used by graph_compute splits: %.2f MB\n",
+    //            (mem_after_compute - mem_before_compute) / 1024.0 / 1024.0);
     return GGML_STATUS_SUCCESS;
 }
 

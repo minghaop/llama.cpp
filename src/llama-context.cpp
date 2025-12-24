@@ -718,16 +718,14 @@ llm_graph_result_ptr llama_context::process_ubatch(const llama_ubatch & ubatch, 
         return nullptr;
     }
     res->set_inputs(&ubatch);
+    
     const auto status = graph_compute(gf, ubatch.n_tokens > 1);
+    
     if (status != GGML_STATUS_SUCCESS) {
         LLAMA_LOG_ERROR("%s: failed to compute graph, compute status: %d\n", __func__, status);
         ret = status;
         return nullptr;
     }
-
-    
-    
-
     ret = GGML_STATUS_SUCCESS;
     
     return res;
