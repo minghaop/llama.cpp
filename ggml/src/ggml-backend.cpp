@@ -1421,7 +1421,6 @@ static enum ggml_status ggml_backend_sched_compute_splits(ggml_backend_sched_t s
             }
         }
         if (!sched->callback_eval) {
-            // GGML_LOG_INFO("------------ %s, check graph_print\n", __func__);
             // ggml_graph_print(&split->graph);
             
             enum ggml_status ec = ggml_backend_graph_compute_async(split_backend, &split->graph);
@@ -1597,13 +1596,13 @@ bool ggml_backend_sched_alloc_graph(ggml_backend_sched_t sched, struct ggml_cgra
     if (!ggml_backend_sched_alloc_splits(sched)) {
         return false;
     }
-    // printf("3. Scheduler Splits    : %d\n", sched->n_splits);
+    printf("3. Scheduler Splits    : %d\n", sched->n_splits);
 
-    // printf("=== Graph Diagnostics (from ggml-backend.c) ===\n");
-    // printf("1. Total Nodes (Ops) : %d\n", graph->n_nodes); // 这里 graph->n_nodes 是可见的
-    // printf("2. Total Leafs (Weights): %d\n", graph->n_leafs);
-    // printf("3. Scheduler Splits    : %d\n", sched->n_splits);
-    // printf("=============================================\n");
+    printf("=== Graph Diagnostics (from ggml-backend.c) ===\n");
+    printf("1. Total Nodes (Ops) : %d\n", graph->n_nodes); // 这里 graph->n_nodes 是可见的
+    printf("2. Total Leafs (Weights): %d\n", graph->n_leafs);
+    printf("3. Scheduler Splits    : %d\n", sched->n_splits);
+    printf("=============================================\n");
 
     sched->is_alloc = true;
 
