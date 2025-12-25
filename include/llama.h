@@ -233,9 +233,9 @@ extern "C" {
         // bool            use_inputs_embeds; // if true, use inputs_embeds instead of embd 
         llama_token  *  flow_token;
         float        *  flow_feat;
-        int32_t         token_len;
-        int32_t         prompt_token_len;
-        int32_t         prompt_feat_len;
+        uint32_t         token_len;
+        uint32_t         prompt_token_len;
+        uint32_t         prompt_feat_len;
         float        *  rand_noise;
         float        *  extend_pe;
     } llama_batch;
