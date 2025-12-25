@@ -1023,6 +1023,7 @@ static void custom_sinusoidal_pos_emb(struct ggml_tensor * dst, const struct ggm
     
     for (int64_t t = ith; t < n_tokens; t += nth) {
         float scaled_t = t_data[t] * scale;
+        // printf("&&&&&&&&&& custom_sinusoidal_pos_emb val is: %f\n", t_data[t]);
         for (int i = 0; i < half_dim; i++) {
             float freq = expf(-i * emb_div);
             float val = scaled_t * freq;
@@ -1093,13 +1094,13 @@ ggml_tensor * llm_graph_context::mish(ggml_tensor * x) const {
 
 // ==================== 位置编码 ====================
     
-ggml_tensor * llm_graph_context::build_sinusoidal_pos_emb(ggml_tensor * t, int dim, int scale) const {
-    // static sinusoidal_params sin_params;
-    // sin_params.dim = dim;
-    // sin_params.scale = scale;
-    ggml_tensor * out = ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, dim, t->ne[0]);
-    return ggml_map_custom1(ctx0, out, custom_sinusoidal_pos_emb, GGML_N_TASKS_MAX, nullptr);
-}
+// ggml_tensor * llm_graph_context::build_sinusoidal_pos_emb(ggml_tensor * t, int dim, int scale) const {
+//     // static sinusoidal_params sin_params;
+//     // sin_params.dim = dim;
+//     // sin_params.scale = scale;
+//     ggml_tensor * out = ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, dim, t->ne[0]);
+//     return ggml_map_custom1(ctx0, out, custom_sinusoidal_pos_emb, GGML_N_TASKS_MAX, nullptr);
+// }
 
 ggml_tensor * llm_graph_context::build_timestep_embedding(ggml_tensor * t, ggml_tensor * w1, ggml_tensor * b1,
                                         ggml_tensor * w2, ggml_tensor * b2) const {
@@ -1288,7 +1289,7 @@ ggml_tensor * llm_graph_context::causal_resnet_block1d(ggml_cgraph * gf, ggml_te
     ggml_tensor * x_rev1 = ggml_permute(ctx0, x_added_permuted, 0, 2, 1, 3);
     x_casual = ggml_cont(ctx0, ggml_permute(ctx0, x_rev1, 1, 0, 2, 3));
     ggml_build_forward_expand(gf, x_casual);
-    printf("迭代 %s: %.1f%% used\n", blk_name.c_str(), 100.0 * ggml_used_mem(ctx0) / ggml_get_mem_size(ctx0));
+    // printf("迭代 %s: %.1f%% used\n", blk_name.c_str(), 100.0 * ggml_used_mem(ctx0) / ggml_get_mem_size(ctx0));
     
     //     ggml_tensor * x_permuted = ggml_cont(ctx0, ggml_permute(ctx0, x_casual, 1, 0, 2, 3));
     //     ggml_tensor * t_ready = ggml_reshape_4d(ctx0, ggml_cont(ctx0, t_linear), t_linear->ne[0], 1, t_linear->ne[1], 1);
@@ -1341,18 +1342,21 @@ ggml_tensor * llm_graph_context::build_causal_cond_decoder(ggml_cgraph * gf,
     const llama_model & model, int32_t step) const {
     
     const float neg_big = -1.0e10f;
-
+    
+    ggml_build_forward_expand(gf, t);
     ggml_set_name(t, ("causal_t_input_" + std::to_string(step)).c_str());
+
     // ===== 时间嵌入 =====
 
     ggml_tensor * t_sin = build_sinusoidal_pos_emb(t, 320, 1000);
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&& t_sin shape is: {%d, %d, %d, %d}\n", t_sin->ne[0], t_sin->ne[1], t_sin->ne[2], t_sin->ne[3]);
     ggml_set_name(t_sin, ("causal_t_sinusoidal_" + std::to_string(step)).c_str());
     t = build_timestep_embedding(
         t_sin,
         model.time_mlp_1_w, model.time_mlp_1_b,
         model.time_mlp_2_w, model.time_mlp_2_b);
     ggml_set_name(t, ("causal_t_after_mlp_" + std::to_string(step)).c_str());
-    
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&& t shape is: {%d, %d, %d, %d}\n", t->ne[0], t->ne[1], t->ne[2], t->ne[3]);
     // ===== 拼接输入 =====
     x = ggml_concat(ctx0, x, mu, 1);
     ggml_set_name(x, ("causal_x_concat_mu_" + std::to_string(step)).c_str());
@@ -1474,15 +1478,6 @@ ggml_tensor * llm_graph_context::build_causal_cond_decoder(ggml_cgraph * gf,
     res_mask = ggml_cont(ctx0, ggml_add(ctx0, res_mask, model.f_proj_b));
     res_mask = ggml_reshape_4d(ctx0, res_mask, weight_2d->ne[1], res_perm->ne[1], res_perm->ne[2], 1);
     x = ggml_cont(ctx0, ggml_permute(ctx0, res_mask, 1, 0, 2, 3));
-    // x = ggml_conv_1d(ctx0, model.f_proj_w, ggml_cont(ctx0, x), 1, 0, 1);
-    // ggml_tensor * x_p1 = ggml_cont(ctx0, ggml_permute(ctx0, x, 1, 0, 2, 3));
-    // ggml_tensor * x_p2 = ggml_cont(ctx0, ggml_permute(ctx0, x_p1, 0, 2, 1, 3));
-    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&& x_p2 shape is: {%d, %d, %d, %d}\n", x_p2->ne[0], x_p2->ne[1], x_p2->ne[2], x_p2->ne[3]);
-    // ggml_tensor * b_clean = ggml_cont(ctx0, model.f_proj_b);
-    // ggml_tensor * b_ready = ggml_reshape_4d(ctx0, b_clean, b_clean->ne[0], 1, 1, 1);
-    // ggml_tensor * x_added = ggml_add(ctx0, x_p2, b_ready);
-    // ggml_tensor * x_rev1 = ggml_permute(ctx0, x_added, 0, 2, 1, 3);
-    // x = ggml_cont(ctx0, ggml_permute(ctx0, x_rev1, 1, 0, 2, 3));
     ggml_build_forward_expand(gf, x);
     
     ggml_set_name(x, ("causal_x_after_final_proj_" + std::to_string(step)).c_str());
@@ -1490,98 +1485,7 @@ ggml_tensor * llm_graph_context::build_causal_cond_decoder(ggml_cgraph * gf,
     return x;
 }
 
-// ==================== Euler 求解器 ====================
 
-// ggml_tensor * llm_graph_context::build_solve_euler(ggml_cgraph * gf, ggml_tensor * z, ggml_tensor * mu,
-//         ggml_tensor * mask, ggml_tensor * spks, ggml_tensor * cond,
-//         const llama_model & model) const {
-    
-//     const int64_t B = z->ne[2], C = z->ne[1], T = z->ne[0];
-//     const float PI = 3.14159265358979323846f;
-//     const int N_STEPS = 10;
-    
-//     // 预计算 t_span
-//     std::vector<float> t_span(N_STEPS + 1);
-//     for (int i = 0; i <= N_STEPS; ++i) {
-//         t_span[i] = 1.0f - cosf((float)i / N_STEPS * 0.5f * PI);
-//     }
-    
-//     // 初始化辅助张量
-//     ggml_tensor * one = ggml_new_tensor_1d(ctx0, GGML_TYPE_F32, 1);
-//     one = ggml_exp(ctx0, ggml_scale(ctx0, one, 0.0f));
-    
-//     ggml_tensor * t = ggml_scale(ctx0, one, t_span[0]);
-//     ggml_tensor * mu_zero = ggml_sub(ctx0, mu, mu);     // mu - mu = 0
-//     ggml_tensor * spk_zero = ggml_sub(ctx0, spks, spks); // spks - spks = 0  
-//     ggml_tensor * cond_zero = ggml_sub(ctx0, cond, cond); // cond - cond = 0
-//     ggml_tensor * mask_in = ggml_concat(ctx0, mask, mask, 2);      // 不变
-//     ggml_set_name(mask_in, ("decoder_mask_in_" + std::to_string(1)).c_str());
-//     ggml_tensor * mu_in = ggml_concat(ctx0, mu, mu_zero, 2);       // 不变
-//     ggml_set_name(mu_in, ("decoder_mu_in_" + std::to_string(1)).c_str());
-//     ggml_tensor * spks_in = spks ? ggml_concat(ctx0, spks, spk_zero, 1) : nullptr;
-//     ggml_tensor * cond_in = cond ? ggml_concat(ctx0, cond, cond_zero, 2) : nullptr;
-//     if (spks_in) ggml_set_name(spks_in, ("decoder_spks_in_" + std::to_string(1)).c_str());
-//     if (cond_in) ggml_set_name(cond_in, ("decoder_cond_in_" + std::to_string(1)).c_str());
-
-//     // Speaker 扩展
-//     ggml_tensor * spks_t = nullptr;
-//     if (spks_in) {
-//         spks_t = ggml_reshape_3d(ctx0, ggml_cont(ctx0, spks_in), 1, 80, 2);
-//         spks_t = build_repeat(spks_t, 1, T, 0);
-//     }
-//     LLAMA_LOG_INFO("Solver spks_t shape: {%d, %d, %d, %d}\n", spks_t->ne[0], spks_t->ne[1], spks_t->ne[2], spks_t->ne[3]);
-//     float t_val = t_span[0];
-//     float dt = t_span[1] - t_span[0];
-
-//     // ODE 积分
-//     ggml_tensor * z_current = z;
-//     for (int step = 1; step <= N_STEPS; ++step) {
-//         // float dt = t_span[step] - t_span[step - 1];
-//         printf("\n===== GGML Step %d =====\n", step);
-//         printf("t_val=%.8f, dt=%.8f\n", t_val, dt);
-//         // 准备 CFG 输入 (条件和无条件批次拼接)
-//         ggml_tensor * t_scalar = ggml_scale(ctx0, one, t_val);
-//         ggml_tensor * z_in = ggml_concat(ctx0, z, z, 2);
-//         ggml_set_name(z_in, ("decoder_z_in_" + std::to_string(step)).c_str());
-//         ggml_tensor * t_in = ggml_concat(ctx0, t_scalar, t_scalar, 0);
-//         ggml_set_name(t_in, ("decoder_t_in_" + std::to_string(step)).c_str());
-        
-       
-//         // 计算速度场
-//         ggml_tensor * dphi_dt = build_causal_cond_decoder(z_in, mask_in, mu_in, t_in,
-//             spks_in, cond_in, spks_t, model, step);
-//         ggml_set_name(dphi_dt, ("dphi_dt_" + std::to_string(step)).c_str());
-        
-//         // CFG 合并: (1 + w) * cond - w * uncond, w = 0.7
-//         ggml_tensor * dphi_cond = ggml_view_3d(ctx0, dphi_dt, T, C, B,
-//             dphi_dt->nb[1], dphi_dt->nb[2], 0);
-//         ggml_tensor * dphi_uncond = ggml_view_3d(ctx0, dphi_dt, T, C, B,
-//             dphi_dt->nb[1], dphi_dt->nb[2], B * dphi_dt->nb[2]);
-//         ggml_set_name(dphi_cond, ("dphi_cond_" + std::to_string(step)).c_str());
-//         ggml_set_name(dphi_uncond, ("dphi_uncond_" + std::to_string(step)).c_str());
-//         ggml_tensor * dphi = ggml_sub(ctx0, 
-//             ggml_scale(ctx0, dphi_cond, 1.7f),
-//             ggml_scale(ctx0, dphi_uncond, 0.7f));
-//         ggml_set_name(dphi, ("dphi_" + std::to_string(step)).c_str());
-        
-//         // Euler 步进
-//         ggml_tensor * z_new = ggml_add(ctx0, z, ggml_scale(ctx0, dphi, dt));
-//         ggml_build_forward_expand(gf, z_new);
-//         ggml_set_name(z_new, ("dphi_z_" + std::to_string(step)).c_str());
-//         z = z_new;
-//         t_val = t_val + dt;
-//         // t = ggml_add(ctx0, t, ggml_scale(ctx0, one, dt));
-//         // ggml_set_name(t, ("dphi_t_" + std::to_string(step)).c_str());
-//         if (step < N_STEPS) {
-//             dt = t_span[step + 1] - t_val;
-//             printf("next dt=%.8f\n", dt);
-//         }
-        
-//         LLAMA_LOG_INFO("Euler step %d/%d\n", step, N_STEPS);
-//     }
-    
-//     return z;
-// }
 ggml_tensor * llm_graph_context::build_solve_euler(
     ggml_cgraph * gf, ggml_tensor * z, ggml_tensor * mu,
     ggml_tensor * mask, ggml_tensor * spks, ggml_tensor * cond,
@@ -1593,10 +1497,13 @@ ggml_tensor * llm_graph_context::build_solve_euler(
     
     // 预计算 t_span
     std::vector<float> t_span(N_STEPS + 1);
+    std::string t_span_str = "";
     for (int i = 0; i <= N_STEPS; ++i) {
         t_span[i] = 1.0f - cosf((float)i / N_STEPS * 0.5f * PI);
+        t_span_str += std::to_string(t_span[i]);
+        t_span_str += " ";
     }
-    
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&& t_span is: %s\n", t_span_str.c_str());
     ggml_tensor * one = ggml_new_tensor_1d(ctx0, GGML_TYPE_F32, 1);
     one = ggml_exp(ctx0, ggml_scale(ctx0, one, 0.0f));
 
@@ -1628,6 +1535,7 @@ ggml_tensor * llm_graph_context::build_solve_euler(
     
     for (int step = 1; step <= N_STEPS; ++step) {
         // 创建当前步的 t（关键！）
+        // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&& step is: %d, t_val is: %f\n", step , t_val);
         ggml_tensor * t_current = ggml_scale(ctx0, one, t_val);
         ggml_tensor * t_in = ggml_concat(ctx0, t_current, ggml_dup(ctx0, t_current), 0);
         ggml_set_name(t_in, ("t_in_" + std::to_string(step)).c_str());
@@ -1640,10 +1548,12 @@ ggml_tensor * llm_graph_context::build_solve_euler(
         ggml_tensor * dphi_dt = build_causal_cond_decoder(gf,
             z_in, mask_in, mu_in, t_in, spks_in, cond_in, spks_t, model, step);
         ggml_set_name(dphi_dt, ("dphi_dt_" + std::to_string(step)).c_str());
+        
+        ggml_tensor * dphi_dt_clean = ggml_cont(ctx0, dphi_dt);
         // CFG 合并
-        ggml_tensor * dphi_cond = ggml_view_3d(ctx0, dphi_dt, T, C, B,
+        ggml_tensor * dphi_cond = ggml_view_3d(ctx0, dphi_dt_clean, T, C, B,
             dphi_dt->nb[1], dphi_dt->nb[2], 0);
-        ggml_tensor * dphi_uncond = ggml_view_3d(ctx0, dphi_dt, T, C, B,
+        ggml_tensor * dphi_uncond = ggml_view_3d(ctx0, dphi_dt_clean, T, C, B,
             dphi_dt->nb[1], dphi_dt->nb[2], B * dphi_dt->nb[2]);
         
         ggml_tensor * dphi = ggml_sub(ctx0, 
@@ -1651,10 +1561,16 @@ ggml_tensor * llm_graph_context::build_solve_euler(
             ggml_scale(ctx0, dphi_uncond, 0.7f));
         ggml_set_name(dphi, ("dphi_" + std::to_string(step)).c_str());
         
+        ggml_set_name(z_current, ("z_current_" + std::to_string(step)).c_str());
         // Euler 更新
-        ggml_tensor * z_new = ggml_add(ctx0, z_current, ggml_scale(ctx0, dphi, dt));
-        ggml_set_name(z_new, ("z_" + std::to_string(step)).c_str());
-        
+        // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&& step is: %d, dt is: %f, t_val is: %f\n", step, dt, t_val);
+        ggml_tensor * dphi_scaled = ggml_scale(ctx0, ggml_cont(ctx0, dphi), dt);
+        ggml_set_name(dphi_scaled, ("dphi_scaled_" + std::to_string(step)).c_str());
+        ggml_tensor * z_new = ggml_add(ctx0, ggml_cont(ctx0, z_current), dphi_scaled);
+        // ggml_set_name(z_new, ("z_" + std::to_string(step)).c_str());
+        // printf("Shape: %ld x %ld\n", z_new->ne[0], z_new->ne[1]);
+        // printf("Stride 0 (elem): %ld bytes\n", z_new->nb[0]);
+        // printf("Stride 1 (row):  %ld bytes\n", z_new->nb[1]);
         // 更新循环变量（关键！）
         z_current = z_new;
         t_val = t_val + dt;
@@ -1667,7 +1583,6 @@ ggml_tensor * llm_graph_context::build_solve_euler(
 }
 
 // ==================== 辅助函数 ====================
-
 ggml_tensor * llm_graph_context::build_repeat(ggml_tensor * cur, int32_t current_len, int32_t target_len, int32_t dim) const {
     while (current_len * 2 <= target_len) {
         cur = ggml_concat(ctx0, cur, cur, dim);
@@ -1729,32 +1644,31 @@ ggml_tensor * llm_graph_context::build_repeat(ggml_tensor * cur, int32_t current
 //     return t_span;
 // }
 
-// ggml_tensor * llm_graph_context::build_sinusoidal_pos_emb(
-//          ggml_tensor * cur,
-//          int dim,
-//          int scale) const{
+ggml_tensor * llm_graph_context::build_sinusoidal_pos_emb(
+         ggml_tensor * cur,
+         int dim,
+         int scale) const{
         
-//     const int64_t n_token = cur->ne[1];
-//     const int half_dim = dim / 2;
+    const int64_t n_t = cur->ne[0];
+    const int half_dim = dim / 2;
 
-//     float emb_div = std::log(10000.0f) / (half_dim - 1);
-//     ggml_tensor * idx = ggml_arange(ctx0, 0, half_dim, 1);
-//     idx = ggml_cast(ctx0, idx, GGML_TYPE_F32);
-//     ggml_tensor * emb = ggml_scale(ctx0, idx, -emb_div);
-//     emb = ggml_exp(ctx0, emb);
+    float emb_div = std::log(10000.0f) / (half_dim - 1);
+    ggml_tensor * idx = ggml_arange(ctx0, 0, half_dim, 1);
+    idx = ggml_cast(ctx0, idx, GGML_TYPE_F32);
+    ggml_tensor * emb = ggml_scale(ctx0, idx, -emb_div);
+    emb = ggml_exp(ctx0, emb);
+    emb = ggml_reshape_2d(ctx0, emb, 1, half_dim);
+    ggml_tensor * x_row = ggml_reshape_2d(ctx0, cur, 1, n_t);
+    x_row = ggml_scale(ctx0, x_row, (float)scale);  
+    ggml_tensor * out = ggml_mul_mat(ctx0, emb, x_row);
 
-//     ggml_tensor * x_col = ggml_reshape_2d(ctx0, ggml_cont(ctx0, cur), cur->ne[1], cur->ne[0]);
-//     ggml_tensor * emb_row = ggml_reshape_2d(ctx0, ggml_cont(ctx0, emb), 1, half_dim);
-//     ggml_tensor * xx = ggml_scale(ctx0, x_col, scale);
-//     ggml_tensor * out = ggml_mul_mat(ctx0, xx, emb_row);       
-
-//     ggml_tensor * sin_t = ggml_sin(ctx0, out);
-//     ggml_tensor * cos_t = ggml_cos(ctx0, out);
-//     ggml_tensor * emb_final = ggml_concat(ctx0, sin_t, cos_t, 1);
+    ggml_tensor * sin_t = ggml_sin(ctx0, out);
+    ggml_tensor * cos_t = ggml_cos(ctx0, out);
+    ggml_tensor * emb_final = ggml_concat(ctx0, sin_t, cos_t, 0);
 
 
-//     return emb_final;
-// }
+    return emb_final;
+}
 
 // ggml_tensor * llm_graph_context::build_timestep_embedding(
 //          ggml_tensor * cur,
