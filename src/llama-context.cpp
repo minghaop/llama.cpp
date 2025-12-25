@@ -818,7 +818,7 @@ int llama_context::encode(const llama_batch & batch_inp, int dot_debug) {
     auto * t_embd = res->get_embd_pooled() ? res->get_embd_pooled() : res->get_embd();
     // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&& res->get_embd_pooled is: %d\n", res->get_embd_pooled() == nullptr);
     // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&& res->get_embd is: %d\n", res->get_embd() == nullptr);
-    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&& embd is %d, t_embd is: %d\n", embd == nullptr, t_embd == nullptr);
+    LLAMA_LOG_INFO("&&&&&&&&&&&&&&&& embd is %d, t_embd is: %d\n", embd == nullptr, t_embd == nullptr);
     // extract logits
    if (logits && t_logits) {
         ggml_backend_t backend_res = ggml_backend_sched_get_tensor_backend(sched.get(), t_logits);
@@ -847,15 +847,16 @@ int llama_context::encode(const llama_batch & batch_inp, int dot_debug) {
                 {
                     // extract token embeddings
                     GGML_ASSERT(embd != nullptr);
-                    // LLAMA_LOG_INFO("%s, &&&&&&&&&&&&&&&& check here10 !\n", __func__);
-                    if (!(model.arch_name() == "Flow") && ! (model.arch_name() == "Hift")) {
+                    LLAMA_LOG_INFO("%s, &&&&&&&&&&&&&&&& model.arch_name() is: %s\n", __func__, model.arch_name().c_str());
+                    if (!(model.arch == LLM_ARCH_COSYVOICEFLOW) && ! (model.arch == LLM_ARCH_COSYVOICEHIFT)) {
                         GGML_ASSERT(n_tokens*n_embd <= (int64_t) embd_size);
                         ggml_backend_tensor_get_async(backend_embd, t_embd, embd, 0, n_tokens*n_embd*sizeof(float));
-                    } else if (model.arch_name() == "Hift") {
+                    } else if (model.arch == LLM_ARCH_COSYVOICEHIFT) {
                         int32_t out_dim = (int32_t)((n_tokens * 80 * 6 / 4 + 1) * 18);
                         ggml_backend_tensor_get_async(backend_embd, t_embd, embd, 0, out_dim*sizeof(float));
                     } else {
-                        int32_t out_dim = (int32_t)((batch_inp.prompt_token_len + batch_inp.token_len) * 2 - batch_inp.prompt_feat_len / 80);
+                        int32_t out_dim = (int32_t)((batch_inp.prompt_token_len + batch_inp.token_len) * 2) * 80;
+                        LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&& out_dim is: %d\n", out_dim);
                         ggml_backend_tensor_get_async(backend_embd, t_embd, embd, 0, out_dim*sizeof(float));
                         // ggml_backend_sched_synchronize(sched.get());
                         // std::string embd_str = "";
@@ -1321,7 +1322,7 @@ uint32_t llama_context::output_reserve(int32_t n_outputs) {
 
     const size_t prev_size = buf_output ? ggml_backend_buffer_get_size(buf_output.get()) : 0;
     const size_t new_size  = (logits_size + embd_size) * sizeof(float);
-    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&& logits size is: %d, embd_size is: %d, new_size is: %d\n", logits_size, embd_size, new_size);
+    LLAMA_LOG_INFO("&&&&&&&&&&&&&&&& prev_size is: %d, logits size is: %d, embd_size is: %d, new_size is: %d\n", prev_size, logits_size, embd_size, new_size);
     // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&& prev_size is: %d, new_size is: %d\n", prev_size, new_size);
     // alloc only when more than the current capacity is required
     // TODO: also consider shrinking the buffer
@@ -1363,11 +1364,9 @@ uint32_t llama_context::output_reserve(int32_t n_outputs) {
 
     return n_outputs_max;
 }
-
 //
 // graph
 //
-
 int32_t llama_context::graph_max_nodes() const {
     const auto & hparams = model.hparams;
     if (hparams.use_flow) {
