@@ -847,7 +847,7 @@ int llama_context::encode(const llama_batch & batch_inp, int dot_debug) {
                 {
                     // extract token embeddings
                     GGML_ASSERT(embd != nullptr);
-                    LLAMA_LOG_INFO("%s, &&&&&&&&&&&&&&&& model.arch_name() is: %s\n", __func__, model.arch_name().c_str());
+                    // LLAMA_LOG_INFO("%s, &&&&&&&&&&&&&&&& model.arch_name() is: %s\n", __func__, model.arch_name().c_str());
                     if (!(model.arch == LLM_ARCH_COSYVOICEFLOW) && ! (model.arch == LLM_ARCH_COSYVOICEHIFT)) {
                         GGML_ASSERT(n_tokens*n_embd <= (int64_t) embd_size);
                         ggml_backend_tensor_get_async(backend_embd, t_embd, embd, 0, n_tokens*n_embd*sizeof(float));
@@ -856,7 +856,7 @@ int llama_context::encode(const llama_batch & batch_inp, int dot_debug) {
                         ggml_backend_tensor_get_async(backend_embd, t_embd, embd, 0, out_dim*sizeof(float));
                     } else {
                         int32_t out_dim = (int32_t)((batch_inp.prompt_token_len + batch_inp.token_len) * 2) * 80;
-                        LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&& out_dim is: %d\n", out_dim);
+                        // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&& out_dim is: %d\n", out_dim);
                         ggml_backend_tensor_get_async(backend_embd, t_embd, embd, 0, out_dim*sizeof(float));
                         // ggml_backend_sched_synchronize(sched.get());
                         // std::string embd_str = "";
