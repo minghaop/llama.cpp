@@ -748,7 +748,7 @@ struct llm_graph_context {
     ggml_tensor * transformer_block(ggml_tensor * x, ggml_tensor * attn_mask,
                                     const TransformerBlockWeights & w, std::string blk_name) const;
     
-    ggml_tensor * build_causal_cond_decoder(ggml_cgraph * gf, ggml_tensor * x, ggml_tensor * mask, ggml_tensor * mu,
+    ggml_tensor * build_causal_cond_decoder(ggml_cgraph * gf, ggml_tensor * x, ggml_tensor * mask, ggml_tensor * attn_mask, ggml_tensor * mu,
                                     ggml_tensor * t, ggml_tensor * spks, ggml_tensor * cond, ggml_tensor * spks_t,
                                     const llama_model & model, int32_t step) const;
     

@@ -145,7 +145,7 @@ llama_context::llama_context(
             }
             backends.emplace_back(backend);
         }
-        LLAMA_LOG_INFO("\n\n%s: 🛑 after metal alloc is: %zu\n\n",  __func__, backends.size());
+        // LLAMA_LOG_INFO("\n\n%s: 🛑 after metal alloc is: %zu\n\n",  __func__, backends.size());
         // add ACCEL backends (such as BLAS)
         for (size_t i = 0; i < ggml_backend_dev_count(); ++i) {
             ggml_backend_dev_t dev = ggml_backend_dev_get(i);
@@ -157,7 +157,7 @@ llama_context::llama_context(
                 backends.emplace_back(backend);
             }
         }
-        LLAMA_LOG_INFO("\n\n%s: 🛑 after accel alloc is: %zu\n\n",  __func__, backends.size());
+        // LLAMA_LOG_INFO("\n\n%s: 🛑 after accel alloc is: %zu\n\n",  __func__, backends.size());
 
         // add CPU backend
         backend_cpu = ggml_backend_init_by_type(GGML_BACKEND_DEVICE_TYPE_CPU, nullptr);
@@ -165,7 +165,7 @@ llama_context::llama_context(
             throw std::runtime_error("failed to initialize CPU backend");
         }
         backends.emplace_back(backend_cpu);
-        LLAMA_LOG_INFO("\n\n%s: 🛑 after cpu alloc is: %zu\n\n",  __func__, backends.size());
+        // LLAMA_LOG_INFO("\n\n%s: 🛑 after cpu alloc is: %zu\n\n",  __func__, backends.size());
         
 
         // create a list of the set_n_threads functions in the backends
