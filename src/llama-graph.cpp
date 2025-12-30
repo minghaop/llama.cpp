@@ -1082,11 +1082,11 @@ ggml_tensor * llm_graph_context::build_basic_attn(ggml_tensor * x, ggml_tensor *
     ggml_set_name(thr, ("basic_attn_input_"+ blk_name).c_str());
     // QKV 投影
     ggml_tensor * q = ggml_mul_mat(ctx0, w.wq, x);
-    ggml_set_name(q, ("basic_attn_q_"+ blk_name).c_str());
+    // ggml_set_name(q, ("basic_attn_q_"+ blk_name).c_str());
     ggml_tensor * k = ggml_mul_mat(ctx0, w.wk, x);
-    ggml_set_name(k, ("basic_attn_k_"+ blk_name).c_str());
+    // ggml_set_name(k, ("basic_attn_k_"+ blk_name).c_str());
     ggml_tensor * v = ggml_mul_mat(ctx0, w.wv, x);
-    ggml_set_name(v, ("basic_attn_v_"+ blk_name).c_str());
+    // ggml_set_name(v, ("basic_attn_v_"+ blk_name).c_str());
     
     int64_t d_k = q->ne[0] / n_heads;
     auto reshape_heads = [&](ggml_tensor * t) {
@@ -1097,24 +1097,39 @@ ggml_tensor * llm_graph_context::build_basic_attn(ggml_tensor * x, ggml_tensor *
     };
     
     q = reshape_heads(q);
-    ggml_set_name(q, ("basic_attn_reshape_q_"+ blk_name).c_str());
+    // ggml_set_name(q, ("basic_attn_reshape_q_"+ blk_name).c_str());
     k = reshape_heads(k);
-    ggml_set_name(k, ("basic_attn_reshape_k_"+ blk_name).c_str());
+    // ggml_set_name(k, ("basic_attn_reshape_k_"+ blk_name).c_str());
     v = reshape_heads(v);
-    ggml_set_name(v, ("basic_attn_reshape_v_"+ blk_name).c_str());
-    attn_mask = prepare_attention_mask(attn_mask, seq_len, batch_size);
-    attn_mask = ggml_reshape_4d(ctx0, ggml_cont(ctx0, attn_mask), attn_mask->ne[0], attn_mask->ne[1], n_heads, batch_size);
-    ggml_set_name(attn_mask, ("basic_attn_attn_mask_"+ blk_name).c_str());
+    // ggml_set_name(v, ("basic_attn_reshape_v_"+ blk_name).c_str());
+    // attn_mask = prepare_attention_mask(attn_mask, seq_len, batch_size);
+    // attn_mask = ggml_reshape_4d(ctx0, ggml_cont(ctx0, attn_mask), attn_mask->ne[0], attn_mask->ne[1], n_heads, batch_size);
+    // LLAMA_LOG_INFO("&&&&&&&& attn attn_mask shape is: {%d, %d, %d, %d}\n", attn_mask->ne[0], attn_mask->ne[1], attn_mask->ne[2], attn_mask->ne[3]);
+    #ifndef GGML_KQ_MASK_PAD
+    #define GGML_KQ_MASK_PAD 32
+    #endif
+    
+    if (attn_mask->ne[1] % GGML_KQ_MASK_PAD != 0) {
+        int64_t target_h = GGML_PAD(attn_mask->ne[1], GGML_KQ_MASK_PAD);
+        int64_t pad_h = target_h - attn_mask->ne[1];
+        ggml_tensor * zeros = ggml_new_tensor_4d(ctx0, attn_mask->type, attn_mask->ne[0], pad_h, attn_mask->ne[2], attn_mask->ne[3]);
+        zeros = ggml_scale(ctx0, zeros, 0.0f);
+        attn_mask = ggml_concat(ctx0, attn_mask, zeros, 1);
+    }
+    // ggml_set_name(attn_mask, ("basic_attn_attn_mask_"+ blk_name).c_str());
+    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&& attn_mask shape is: {%d, %d, %d, %d}\n", attn_mask->ne[0], attn_mask->ne[1], attn_mask->ne[2], attn_mask->ne[3]);
     // 注意力计算
-    ggml_tensor * attn_out = scaled_dot_product_attention(q, k, v, attn_mask, 0.0f, blk_name);
-    ggml_set_name(attn_out, ("basic_attn_attn_out_sdpa_"+ blk_name).c_str());
-    ggml_tensor * attn_perm = ggml_cont(ctx0, ggml_permute(ctx0, attn_out, 0, 2, 1, 3));
-    ggml_tensor * attn_flat = ggml_reshape_3d(ctx0, attn_perm,
-                                attn_perm->ne[0] * attn_perm->ne[1], attn_perm->ne[2], attn_perm->ne[3]);
+    // ggml_tensor * attn_out = scaled_dot_product_attention(q, k, v, attn_mask, 0.0f, blk_name);
+    float scale = 1.0f / sqrtf((float)d_k);
+    ggml_tensor * attn_out = ggml_flash_attn_ext(ctx0, q, k, v, attn_mask, scale, 0.0f, 0.0f);
+    // ggml_set_name(attn_out, ("basic_attn_attn_out_sdpa_"+ blk_name).c_str());
+    // ggml_tensor * attn_perm = ggml_cont(ctx0, ggml_permute(ctx0, attn_out, 0, 2, 1, 3));
+    ggml_tensor * attn_flat = ggml_reshape_3d(ctx0, attn_out,
+                                attn_out->ne[0] * attn_out->ne[1], attn_out->ne[2], attn_out->ne[3]);
     ggml_set_name(attn_flat, ("basic_attn_attn_out_"+ blk_name).c_str());
 
     // 输出投影
-    ggml_tensor * to_out = ggml_add(ctx0, ggml_mul_mat(ctx0, w.wo, attn_flat), w.bo);
+    ggml_tensor * to_out = ggml_add_inplace(ctx0, ggml_mul_mat(ctx0, w.wo, attn_flat), w.bo);
     ggml_set_name(to_out, ("basic_attn_to_out_"+ blk_name).c_str());
     return to_out;
 }
@@ -1126,7 +1141,7 @@ ggml_tensor * llm_graph_context::causal_conv1d(ggml_tensor * x, ggml_tensor * w,
     ggml_tensor * zeros = ggml_scale(ctx0, 
         ggml_new_tensor_3d(ctx0, GGML_TYPE_F32, pad, x->ne[1], x->ne[2]), 0.0f);
     ggml_set_name(zeros, "conv1d_zeros");
-    ggml_tensor * x_padded = ggml_concat(ctx0, zeros, ggml_cont(ctx0, x), 0);
+    ggml_tensor * x_padded = ggml_concat(ctx0, zeros, x, 0);
     ggml_set_name(x_padded, "conv1d_after_pad");
     ggml_tensor * y = nullptr;
     if (x_padded->ne[2] == 2) {
@@ -1147,7 +1162,7 @@ ggml_tensor * llm_graph_context::causal_conv1d(ggml_tensor * x, ggml_tensor * w,
     }
     
     ggml_tensor * b_reshaped = ggml_reshape_3d(ctx0, b, 1, b->ne[0], 1);
-    y = ggml_add(ctx0, y, b_reshaped);
+    y = ggml_add_inplace(ctx0, y, b_reshaped);
     
     
     return y;
@@ -1160,8 +1175,8 @@ ggml_tensor * llm_graph_context::causal_block1d(ggml_tensor * x, ggml_tensor * m
                                 ggml_tensor * norm_w, ggml_tensor * norm_b, std::string blk_name) const {
     ggml_set_name(x, ("block1d_input_" + blk_name + "_1").c_str());
     ggml_set_name(mask, "block1d_mask");
-    x = ggml_mul(ctx0, x, mask);
-    ggml_set_name(x, "block1d_after_mask");
+    // x = ggml_mul(ctx0, x, mask);
+    // ggml_set_name(x, "block1d_after_mask");
 
     ggml_set_name(conv_w, "conv1d_weight");
     x = causal_conv1d(x, conv_w, conv_b);
@@ -1185,7 +1200,7 @@ ggml_tensor * llm_graph_context::causal_block1d(ggml_tensor * x, ggml_tensor * m
 
 ggml_tensor * llm_graph_context::causal_resnet_block1d(ggml_cgraph * gf, ggml_tensor * x, ggml_tensor * mask, ggml_tensor * t_emb,
                                         const BlockWeights & w, std::string blk_name) const {
-    ggml_tensor * residual = ggml_dup(ctx0, x);
+    ggml_tensor * residual = x;
     ggml_set_name(residual, ("resnet_input_" + blk_name + "_1").c_str());
     
     // 第一个 block
@@ -1200,8 +1215,8 @@ ggml_tensor * llm_graph_context::causal_resnet_block1d(ggml_cgraph * gf, ggml_te
     
     ggml_tensor * t_linear = linear(t, w.mlp_w, w.mlp_b);
     ggml_build_forward_expand(gf, t_linear);
-    ggml_set_name(t_linear, ("resnet_t_after_linear_"+ blk_name + "_1").c_str());
-    ggml_tensor * x_permuted = ggml_cont(ctx0, ggml_permute(ctx0, x_casual, 1, 0, 2, 3));
+    // ggml_set_name(t_linear, ("resnet_t_after_linear_"+ blk_name + "_1").c_str());
+    ggml_tensor * x_permuted = ggml_permute(ctx0, x_casual, 1, 0, 2, 3);
     ggml_tensor * x_p2 = ggml_cont(ctx0, ggml_permute(ctx0, x_permuted, 0, 2, 1, 3));
     ggml_tensor * t_ready = ggml_reshape_4d(ctx0, t_linear, t_linear->ne[0], t_linear->ne[1], 1, 1);
     ggml_tensor * x_added_permuted = ggml_add(ctx0, x_p2, t_ready);
@@ -1216,11 +1231,11 @@ ggml_tensor * llm_graph_context::causal_resnet_block1d(ggml_cgraph * gf, ggml_te
     x_casual = causal_block1d(x_casual, mask, w.conv2_w, w.conv2_b, w.norm2_w, w.norm2_b, blk_name + "_2");
     ggml_set_name(x_casual, ("resnet_after_block2_"+ blk_name + "_1").c_str());
     // 残差连接
-    ggml_tensor * weight_t  = ggml_cont(ctx0, w.res_w);  
+    ggml_tensor * weight_t  = w.res_w;  
     ggml_tensor * weight_2d = ggml_reshape_2d(ctx0, weight_t, weight_t->ne[1], weight_t->ne[2]);
     ggml_tensor * res_perm = ggml_cont(ctx0, ggml_permute(ctx0, residual, 1, 0, 2, 3));
     ggml_tensor * res_mask = ggml_mul_mat(ctx0, weight_2d, res_perm);
-    res_mask = ggml_cont(ctx0, ggml_add(ctx0, res_mask, w.res_b));
+    res_mask = ggml_add_inplace(ctx0, res_mask, w.res_b);
     res_mask = ggml_cont(ctx0, ggml_permute(ctx0, res_mask, 1, 0, 2, 3));
     ggml_set_name(res_mask, ("resnet_res_conv_"+ blk_name + "_1").c_str());
     ggml_tensor * result = ggml_add(ctx0, x_casual, res_mask);
@@ -1234,55 +1249,45 @@ ggml_tensor * llm_graph_context::transformer_block(ggml_tensor * x, ggml_tensor 
                                     const TransformerBlockWeights & w, std::string blk_name) const {
     // Self-attention with residual
     ggml_tensor * tr_x = x;
-    ggml_set_name(tr_x, ("trans_input_"+ blk_name).c_str());
+    // ggml_set_name(tr_x, ("trans_input_"+ blk_name).c_str());
     ggml_tensor * h = build_layer_norm(x, w.norm1_w, w.norm1_b, 1e-5f, blk_name, 0);
-    ggml_set_name(h, ("trans_after_norm1_"+ blk_name).c_str());
+    // ggml_set_name(h, ("trans_after_norm1_"+ blk_name).c_str());
     ggml_tensor * attn = build_basic_attn(h, attn_mask, w.attn, blk_name);
-    ggml_set_name(attn, ("trans_after_attn_"+ blk_name).c_str());
-    tr_x = ggml_add(ctx0, attn, tr_x);
-    ggml_set_name(tr_x, ("trans_after_res_connect_"+ blk_name).c_str());
+    // ggml_set_name(attn, ("trans_after_attn_"+ blk_name).c_str());
+    tr_x = ggml_add_inplace(ctx0, attn, tr_x);
+    // ggml_set_name(tr_x, ("trans_after_res_connect_"+ blk_name).c_str());
     // FFN with residual
     h = build_layer_norm(tr_x, w.norm3_w, w.norm3_b, 1e-5f, "ffn", 0);
-    ggml_set_name(h, ("trans_after_norm3_"+ blk_name).c_str());
+    // ggml_set_name(h, ("trans_after_norm3_"+ blk_name).c_str());
     ggml_tensor * ffn_out = ffn_gelu(h, w.ffn_w0, w.ffn_b0, w.ffn_w2, w.ffn_b2, blk_name);
-    ggml_set_name(ffn_out, ("trans_after_ffn_"+ blk_name).c_str());
-    ffn_out = ggml_cont(ctx0, ggml_add(ctx0, ffn_out, tr_x));
-    ggml_set_name(ffn_out, ("trans_after_ffn_add_"+ blk_name).c_str());
+    // ggml_set_name(ffn_out, ("trans_after_ffn_"+ blk_name).c_str());
+    ffn_out = ggml_add_inplace(ctx0, ffn_out, tr_x);
+    // ggml_set_name(ffn_out, ("trans_after_ffn_add_"+ blk_name).c_str());
     return ffn_out;
 }
 
 ggml_tensor * llm_graph_context::build_causal_cond_decoder(ggml_cgraph * gf,
-    ggml_tensor * x, ggml_tensor * mask, ggml_tensor * mu,
+    ggml_tensor * x, ggml_tensor * mask, ggml_tensor * attn_mask, ggml_tensor * mu,
     ggml_tensor * t, ggml_tensor * spks, ggml_tensor * cond, ggml_tensor * spks_t,
     const llama_model & model, int32_t step) const {
     
     const float neg_big = -1.0e10f;
     
     ggml_build_forward_expand(gf, t);
-    ggml_set_name(t, ("causal_t_input_" + std::to_string(step)).c_str());
-
     // ===== 时间嵌入 =====
 
     ggml_tensor * t_sin = build_sinusoidal_pos_emb(t, 320, 1000);
-    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&& t_sin shape is: {%d, %d, %d, %d}\n", t_sin->ne[0], t_sin->ne[1], t_sin->ne[2], t_sin->ne[3]);
-    ggml_set_name(t_sin, ("causal_t_sinusoidal_" + std::to_string(step)).c_str());
     t = build_timestep_embedding(
         t_sin,
         model.time_mlp_1_w, model.time_mlp_1_b,
         model.time_mlp_2_w, model.time_mlp_2_b);
-    ggml_set_name(t, ("causal_t_after_mlp_" + std::to_string(step)).c_str());
-    // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&& t shape is: {%d, %d, %d, %d}\n", t->ne[0], t->ne[1], t->ne[2], t->ne[3]);
     // ===== 拼接输入 =====
     x = ggml_concat(ctx0, x, mu, 1);
-    ggml_set_name(x, ("causal_x_concat_mu_" + std::to_string(step)).c_str());
     if (spks && spks_t) {
         x = ggml_concat(ctx0, x, spks_t, 1);
-        ggml_set_name(x, ("causal_x_concat_spks_" + std::to_string(step)).c_str());
     }
     if (cond) {
         x = ggml_concat(ctx0, x, cond, 1);
-        ggml_tensor * cond_x = ggml_dup_tensor(ctx0, x);
-        ggml_set_name(cond_x, ("causal_x_concat_cond_" + std::to_string(step)).c_str());
     }
     std::string blk_name = "down_block_step_" + std::to_string(step);
     // ===== Down Block =====
@@ -1293,11 +1298,8 @@ ggml_tensor * llm_graph_context::build_causal_cond_decoder(ggml_cgraph * gf,
         model.down_blk_res_w, model.down_blk_res_b,
         model.down_blk2_conv_w, model.down_blk2_conv_b,
         model.down_blk2_norm_w, model.down_blk2_norm_b}, blk_name);
-    ggml_set_name(x, ("causal_x_after_resnet1_" + std::to_string(step)).c_str());
     // 预计算 attention mask（复用）
     const int64_t seq_len = x->ne[1];
-    ggml_tensor * attn_mask = mask_to_bias(build_repeat(mask, 1, seq_len, 1), neg_big, x->type);
-    ggml_set_name(attn_mask, ("causal_x_down_attn_mask_" + std::to_string(step)).c_str());
     // Down transformer blocks
     for (int i = 0; i < 4; ++i) {
         auto & L = model.layers[226 + i];
@@ -1310,38 +1312,40 @@ ggml_tensor * llm_graph_context::build_causal_cond_decoder(ggml_cgraph * gf,
             L.down_block1_ffn_w2, L.down_block1_ffn_b2}, blk_name);
         
     }
-    ggml_set_name(x, ("causal_x_after_transformer_" + std::to_string(step)).c_str());
+    // ggml_set_name(x, ("causal_x_after_transformer_" + std::to_string(step)).c_str());
     x = ggml_cont(ctx0, ggml_permute(ctx0, x, 1, 0, 2, 3));
     // 保存 skip connection
     ggml_tensor * hidden = x;
     
     // Downsample（合并 permute + mul + conv）
     x = causal_conv1d(x, model.down_blk_conv_w, model.down_blk_conv_b);
-    ggml_set_name(x, ("causal_x_after_downsample_" + std::to_string(step)).c_str());
+    // ggml_set_name(x, ("causal_x_after_downsample_" + std::to_string(step)).c_str());
     // 下采样 mask（只计算一次）
-    ggml_tensor * mask_mid = ggml_view_3d(ctx0, mask,
-        mask->ne[0] / 2, mask->ne[1], mask->ne[2],
-        2 * ggml_type_size(mask->type), mask->nb[2], 0);
-    mask_mid = ggml_cont(ctx0, mask_mid);
-
+    // ggml_tensor * mask_mid = ggml_view_3d(ctx0, mask,
+    //     mask->ne[0] / 2, mask->ne[1], mask->ne[2],
+    //     2 * ggml_type_size(mask->type), mask->nb[2], 0);
+    // mask_mid = ggml_cont(ctx0, mask_mid);
+    // LLAMA_LOG_INFO("&&&&&&&& mask shape is: {%d, %d, %d, %d}\n", mask->ne[0], mask->ne[1], mask->ne[2], mask->ne[3]);
+    
     // ===== Mid Blocks =====
     for (int i = 0; i < 12; ++i) {
         blk_name = "mid_block_step_" + std::to_string(step) + "_layer_" + std::to_string(i);
         auto & L = model.layers[280 + i];
-        x = causal_resnet_block1d(gf, x, mask_mid, t, {
+        x = causal_resnet_block1d(gf, x, mask, t, {
             L.mid_block1_w, L.mid_block1_b,
             L.mid_block1_norm_w, L.mid_block1_norm_b,
             L.mid_block_mlp_w, L.mid_block_mlp_b,
             L.mid_block_res_w, L.mid_block_res_b,
             L.mid_block2_w, L.mid_block2_b,
             L.mid_block2_norm_w, L.mid_block2_norm_b}, blk_name);
-        ggml_set_name(x, ("causal_mid_block_resnet_" + std::to_string(step) + "_layer_" + std::to_string(i)).c_str());
+        // ggml_set_name(x, ("causal_mid_block_resnet_" + std::to_string(step) + "_layer_" + std::to_string(i)).c_str());
         int64_t mid_seq_len = x->ne[1];
-        ggml_tensor * mid_attn_mask = mask_to_bias(build_repeat(mask_mid, 1, mid_seq_len, 1), neg_big, x->type);
+        // ggml_tensor * mid_attn_mask = mask_to_bias(build_repeat(mask_mid, 1, mid_seq_len, 1), neg_big, x->type);
+        // LLAMA_LOG_INFO("&&&&&&&& mid_attn_mask shape is: {%d, %d, %d, %d}\n", mid_attn_mask->ne[0], mid_attn_mask->ne[1], mid_attn_mask->ne[2], mid_attn_mask->ne[3]);
         for (int j = 0; j < 4; ++j) {
             auto & S = model.mid_block_sub_layers[i * 4 + j];
             blk_name = "mid_block_step_" + std::to_string(step) + "_layer_" + std::to_string(i) + "_sub_layer_" + std::to_string(j);
-            x = transformer_block(x, mid_attn_mask, {
+            x = transformer_block(x, attn_mask, {
                 S.mid_block1_norm1_w, S.mid_block1_norm1_b,
                 {S.mid_block1_wq, S.mid_block1_wk, S.mid_block1_wv, S.mid_block1_wo, S.mid_block1_bo},
                 S.mid_block1_norm3_w, S.mid_block1_norm3_b,
@@ -1379,24 +1383,24 @@ ggml_tensor * llm_graph_context::build_causal_cond_decoder(ggml_cgraph * gf,
     // ===== Final Block =====
     blk_name = "final_block_step_" + std::to_string(step);
     x = ggml_cont(ctx0, ggml_permute(ctx0, x, 1, 0, 2, 3));
-    x = causal_conv1d(ggml_mul(ctx0, x, mask), model.up_blk_conv_w, model.up_blk_conv_b);
+    x = causal_conv1d(x, model.up_blk_conv_w, model.up_blk_conv_b);
     x = causal_block1d(x, mask, 
         model.f_blk_conv_w, model.f_blk_conv_b,
         model.f_blk_norm_w, model.f_blk_norm_b, blk_name);
     ggml_set_name(x, ("causal_x_after_final_block_" + std::to_string(step)).c_str());
     // 最终投影（合并操作）
-    ggml_tensor * weight_t  = ggml_cont(ctx0, model.f_proj_w);
+    ggml_tensor * weight_t  = model.f_proj_w;
     ggml_tensor * weight_2d = ggml_reshape_2d(ctx0, weight_t, weight_t->ne[1], weight_t->ne[2]);
-    ggml_tensor * res_perm = ggml_cont(ctx0, ggml_permute(ctx0, ggml_cont(ctx0, x), 1, 0, 2, 3));
+    ggml_tensor * res_perm = ggml_cont(ctx0, ggml_permute(ctx0, x, 1, 0, 2, 3));
     ggml_tensor * x_2d = ggml_reshape_2d(ctx0, res_perm, res_perm->ne[0], res_perm->ne[1] * res_perm->ne[2]);
     ggml_tensor * res_mask = ggml_mul_mat(ctx0, weight_2d, x_2d);
-    res_mask = ggml_cont(ctx0, ggml_add(ctx0, res_mask, model.f_proj_b));
+    res_mask = ggml_add(ctx0, res_mask, model.f_proj_b);
     res_mask = ggml_reshape_4d(ctx0, res_mask, weight_2d->ne[1], res_perm->ne[1], res_perm->ne[2], 1);
     x = ggml_cont(ctx0, ggml_permute(ctx0, res_mask, 1, 0, 2, 3));
     ggml_build_forward_expand(gf, x);
     
     ggml_set_name(x, ("causal_x_after_final_proj_" + std::to_string(step)).c_str());
-    x = ggml_mul(ctx0, x, mask);
+    // x = ggml_mul(ctx0, x, mask);
     return x;
 }
 
@@ -1447,43 +1451,39 @@ ggml_tensor * llm_graph_context::build_solve_euler(
     ggml_tensor * z_current = z;
     float t_val = t_span[0];
     float dt = t_span[1] - t_span[0];
-    
+    ggml_tensor * attn_mask = ggml_new_tensor_4d(ctx0, GGML_TYPE_F32, mask->ne[0], mask->ne[0], 8, 2);
+    attn_mask = ggml_scale(ctx0, attn_mask, -0.0f);
+    LLAMA_LOG_INFO("&&&&&&&& mask shape is: {%d, %d, %d, %d}\n", mask->ne[0], mask->ne[1], mask->ne[2], mask->ne[3]);
     for (int step = 1; step <= N_STEPS; ++step) {
         // 创建当前步的 t（关键！）
         // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&& step is: %d, t_val is: %f\n", step , t_val);
         ggml_tensor * t_current = ggml_scale(ctx0, one, t_val);
-        ggml_tensor * t_in = ggml_concat(ctx0, t_current, ggml_dup(ctx0, t_current), 0);
-        ggml_set_name(t_in, ("t_in_" + std::to_string(step)).c_str());
+        ggml_tensor * t_in = ggml_concat(ctx0, t_current, t_current, 0);
+        //ggml_set_name(t_in, ("t_in_" + std::to_string(step)).c_str());
         
         // 使用当前的 z（关键！）
-        ggml_tensor * z_in = ggml_concat(ctx0, z_current, ggml_dup(ctx0, z_current), 2);
-        ggml_set_name(z_in, ("z_in_" + std::to_string(step)).c_str());
+        ggml_tensor * z_in = ggml_concat(ctx0, z_current, z_current, 2);
+        //ggml_set_name(z_in, ("z_in_" + std::to_string(step)).c_str());
         
         // 计算速度场
         ggml_tensor * dphi_dt = build_causal_cond_decoder(gf,
-            z_in, mask_in, mu_in, t_in, spks_in, cond_in, spks_t, model, step);
-        ggml_set_name(dphi_dt, ("dphi_dt_" + std::to_string(step)).c_str());
+            z_in, mask_in, attn_mask, mu_in, t_in, spks_in, cond_in, spks_t, model, step);
+        //ggml_set_name(dphi_dt, ("dphi_dt_" + std::to_string(step)).c_str());
         
-        ggml_tensor * dphi_dt_clean = ggml_cont(ctx0, dphi_dt);
         // CFG 合并
-        ggml_tensor * dphi_cond = ggml_view_3d(ctx0, dphi_dt_clean, T, C, B,
+        ggml_tensor * dphi_cond = ggml_view_3d(ctx0, dphi_dt, T, C, B,
             dphi_dt->nb[1], dphi_dt->nb[2], 0);
-        ggml_tensor * dphi_uncond = ggml_view_3d(ctx0, dphi_dt_clean, T, C, B,
+        ggml_tensor * dphi_uncond = ggml_view_3d(ctx0, dphi_dt, T, C, B,
             dphi_dt->nb[1], dphi_dt->nb[2], B * dphi_dt->nb[2]);
         
         ggml_tensor * dphi = ggml_sub(ctx0, 
             ggml_scale(ctx0, dphi_cond, 1.7f),
             ggml_scale(ctx0, dphi_uncond, 0.7f));
-        ggml_set_name(dphi, ("dphi_" + std::to_string(step)).c_str());
-        
-        ggml_set_name(z_current, ("z_current_" + std::to_string(step)).c_str());
         // Euler 更新
-        // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&& step is: %d, dt is: %f, t_val is: %f\n", step, dt, t_val);
-        ggml_tensor * dphi_scaled = ggml_scale(ctx0, ggml_cont(ctx0, dphi), dt);
-        ggml_set_name(dphi_scaled, ("dphi_scaled_" + std::to_string(step)).c_str());
-        ggml_tensor * z_new = ggml_add(ctx0, ggml_cont(ctx0, z_current), dphi_scaled);
+        ggml_tensor * dphi_scaled = ggml_scale(ctx0, dphi, dt);
+        z_current = ggml_add_inplace(ctx0, z_current, dphi_scaled);
         // 更新循环变量（关键！）
-        z_current = z_new;
+        // z_current = z_new;
         t_val = t_val + dt;
         if (step < N_STEPS) {
             dt = t_span[step + 1] - t_val;

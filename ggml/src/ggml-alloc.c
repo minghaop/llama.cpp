@@ -703,6 +703,11 @@ bool ggml_gallocr_reserve_n(ggml_gallocr_t galloc, struct ggml_cgraph * graph, c
         GGML_ASSERT(galloc->node_allocs != NULL);
     }
     galloc->n_nodes = graph->n_nodes;
+
+    // =========================================================
+    // 定义一个阈值，比如 50MB，只打印大于这个大小的 Tensor
+    const size_t MEM_DEBUG_THRESHOLD = 100 * 1024 * 1024; 
+    // =========================================================
     for (int i = 0; i < graph->n_nodes; i++) {
         struct ggml_tensor * node = graph->nodes[i];
         struct node_alloc * node_alloc = &galloc->node_allocs[i];
@@ -715,6 +720,28 @@ bool ggml_gallocr_reserve_n(ggml_gallocr_t galloc, struct ggml_cgraph * graph, c
             node_alloc->dst.buffer_id = hn->buffer_id;
             node_alloc->dst.offset    = hn->offset;
             node_alloc->dst.size_max  = ggml_backend_buft_get_alloc_size(galloc->bufts[hn->buffer_id], node);
+
+            // 获取当前节点所需的内存大小
+            // size_t node_size = ggml_backend_buft_get_alloc_size(galloc->bufts[hn->buffer_id], node);
+            // // node_alloc->dst.size_max  = node_size;
+
+            // // ================= [DEBUG INSERT START] =================
+            // // 插入这段代码来检测大内存占用
+            // if (node_size > MEM_DEBUG_THRESHOLD) {
+            //     printf("\n[Huge Tensor Detected] Node Index: %d\n", i);
+            //     printf("  > Name      : %s\n", node->name);
+            //     printf("  > Op Name   : %s\n", ggml_op_name(node->op)); // 需要包含 ggml.h
+            //     printf("  > Size      : %.2f MB\n", node_size / (1024.0 * 1024.0));
+            //     printf("  > Shape     : [%ld, %ld, %ld, %ld]\n", 
+            //             node->ne[0], node->ne[1], node->ne[2], node->ne[3]);
+            //     printf("  > Data Type : %s\n", ggml_type_name(node->type));
+                
+            //     // 简单的形状分析建议
+            //     if (node->ne[2] > 1) {
+            //         printf("  > ⚠️ Hint: Batch size is %ld, maybe too large?\n", node->ne[2]);
+            //     }
+            // }
+            // ================= [DEBUG INSERT END] =================
         }
         for (int j = 0; j < GGML_MAX_SRC; j++) {
             struct ggml_tensor * src = node->src[j];
