@@ -16905,6 +16905,7 @@ struct llm_build_flow : public llm_graph_context {
         x = ggml_mul_mat(ctx0, model.encoder_proj_w, x);
         x = ggml_add(ctx0, x, model.encoder_proj_b);
         ggml_set_name(x, "after_encoder_proj");
+        
 
         //------------------ decoder -------------
         
