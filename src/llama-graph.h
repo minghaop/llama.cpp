@@ -738,7 +738,12 @@ struct llm_graph_context {
     
     // ggml_tensor * causal_conv1d_split_batch(ggml_tensor * x, ggml_tensor * w, ggml_tensor * b, int pad) const;
     ggml_tensor * causal_conv1d(ggml_tensor * x, ggml_tensor * w, ggml_tensor * b, int pad = 2) const;
-
+    ggml_tensor * build_decoder_layer_norm(ggml_tensor * cur,
+         ggml_tensor * mw,
+         ggml_tensor * mb,
+         float eps,
+         std::string blk_type,
+         int32_t il) const;
     ggml_tensor * causal_block1d(ggml_tensor * x, ggml_tensor * mask,
                                 ggml_tensor * conv_w, ggml_tensor * conv_b,
                                 ggml_tensor * norm_w, ggml_tensor * norm_b, std::string blk_name) const;
