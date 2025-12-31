@@ -1603,6 +1603,19 @@ bool ggml_backend_sched_alloc_graph(ggml_backend_sched_t sched, struct ggml_cgra
     printf("2. Total Leafs (Weights): %d\n", graph->n_leafs);
     printf("3. Scheduler Splits    : %d\n", sched->n_splits);
     printf("=============================================\n");
+    // for (int i = 0; i < graph->n_nodes; i++) {
+    //     struct ggml_tensor * node = graph->nodes[i];
+    //     if (!ggml_backend_supports_op(sched->backends[0], node)) {
+    //         const char * backend_name = ggml_backend_name(sched->backends[0]);
+    //         const char * node_name = node->name ? node->name : "?";
+            
+    //         GGML_LOG_INFO("[UNSUPPORTED] #%d op=%s name=%s backend=%s\n", 
+    //             i, 
+    //             ggml_op_name(node->op), 
+    //             node_name,
+    //             backend_name);
+    //     }
+    // }
 
     sched->is_alloc = true;
 
