@@ -11,10 +11,10 @@ LLAMA_BUILD_EXAMPLES=OFF
 LLAMA_BUILD_TOOLS=OFF
 LLAMA_BUILD_TESTS=OFF
 LLAMA_BUILD_SERVER=OFF
-GGML_METAL=OFF
-GGML_METAL_EMBED_LIBRARY=OFF
+GGML_METAL=ON
+GGML_METAL_EMBED_LIBRARY=ON
 GGML_BLAS_DEFAULT=ON
-GGML_METAL_USE_BF16=OFF
+GGML_METAL_USE_BF16=ON
 GGML_OPENMP=OFF
 
 COMMON_C_FLAGS="-Wno-macro-redefined -Wno-shorten-64-to-32 -Wno-unused-command-line-argument -g"
@@ -120,6 +120,7 @@ setup_framework_structure() {
     cp ggml/include/ggml-opt.h     ${header_path}
     cp ggml/include/ggml-alloc.h   ${header_path}
     cp ggml/include/ggml-backend.h ${header_path}
+    cp ggml/include/ggml-metal.h   ${header_path}
     cp ggml/include/ggml-cpu.h     ${header_path}
     cp ggml/include/ggml-blas.h    ${header_path}
     cp ggml/include/gguf.h         ${header_path}
@@ -131,12 +132,14 @@ framework module llama {
     header "ggml.h"
     header "ggml-alloc.h"
     header "ggml-backend.h"
+    header "ggml-metal.h"
     header "ggml-cpu.h"
     header "ggml-blas.h"
     header "gguf.h"
 
     link "c++"
     link framework "Accelerate"
+    link framework "Metal"
     link framework "Foundation"
 
     export *
@@ -247,6 +250,7 @@ combine_static_libraries() {
         "${base_dir}/${build_dir}/ggml/src/${release_dir}/libggml.a"
         "${base_dir}/${build_dir}/ggml/src/${release_dir}/libggml-base.a"
         "${base_dir}/${build_dir}/ggml/src/${release_dir}/libggml-cpu.a"
+        "${base_dir}/${build_dir}/ggml/src/ggml-metal/${release_dir}/libggml-metal.a"
         "${base_dir}/${build_dir}/ggml/src/ggml-blas/${release_dir}/libggml-blas.a"
     )
 
@@ -323,7 +327,7 @@ combine_static_libraries() {
         $arch_flags \
         $min_version_flag \
         -Wl,-force_load,"${temp_dir}/combined.a" \
-        -framework Foundation  -framework Accelerate \
+        -framework Foundation -framework Metal -framework Accelerate \
         -install_name "$install_name" \
         -o "${base_dir}/${output_lib}"
 
@@ -479,6 +483,7 @@ cmake -B build-tvos-sim -G Xcode \
     -DCMAKE_SYSTEM_NAME=tvOS \
     -DCMAKE_OSX_SYSROOT=appletvsimulator \
     -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" \
+    -DGGML_METAL=ON \
     -DCMAKE_XCODE_ATTRIBUTE_SUPPORTED_PLATFORMS=appletvsimulator \
     -DCMAKE_C_FLAGS="${COMMON_C_FLAGS}" \
     -DCMAKE_CXX_FLAGS="${COMMON_CXX_FLAGS}" \
@@ -493,6 +498,7 @@ cmake -B build-tvos-device -G Xcode \
     -DCMAKE_SYSTEM_NAME=tvOS \
     -DCMAKE_OSX_SYSROOT=appletvos \
     -DCMAKE_OSX_ARCHITECTURES="arm64" \
+    -DGGML_METAL=ON \
     -DCMAKE_XCODE_ATTRIBUTE_SUPPORTED_PLATFORMS=appletvos \
     -DCMAKE_C_FLAGS="${COMMON_C_FLAGS}" \
     -DCMAKE_CXX_FLAGS="${COMMON_CXX_FLAGS}" \

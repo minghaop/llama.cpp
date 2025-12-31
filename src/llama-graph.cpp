@@ -20,6 +20,9 @@
 #include <cstdio>
 #include <stdio.h>
 #include <algorithm>
+#define LOG_TENSOR_SHAPE(prefix, tensor) \
+    LLAMA_LOG_INFO("&&&&&&&&&&&&&&&& [%s] %s shape is: {%lld, %lld, %lld, %lld}\n", \
+        prefix, #tensor, (tensor)->ne[0], (tensor)->ne[1], (tensor)->ne[2], (tensor)->ne[3])
 
 void llm_graph_input_embd::set_input(const llama_ubatch * ubatch) {
     if (ubatch->token) {
@@ -1038,9 +1041,17 @@ ggml_tensor * llm_graph_context::ffn_gelu(ggml_tensor * x, ggml_tensor * w0, ggm
 // Mish 激活
 ggml_tensor * llm_graph_context::mish(ggml_tensor * x) const {
     // ggml_tensor * out = ggml_new_tensor_3d(ctx0, x->type, x->ne[0], x->ne[1], x->ne[2]);
-    x = ggml_cont(ctx0, x);
-    GGML_ASSERT(ggml_is_contiguous(x));
-    return ggml_map_custom1(ctx0, x, custom_mish_final, GGML_N_TASKS_MAX, nullptr);
+    // x = ggml_cont(ctx0, x);
+    // GGML_ASSERT(ggml_is_contiguous(x));
+    // return ggml_map_custom1(ctx0, x, custom_mish_final, GGML_N_TASKS_MAX, nullptr);
+    ggml_tensor * exp_x = ggml_exp(ctx0, x);
+    ggml_tensor * zeros = ggml_sub(ctx0, x, x);
+    ggml_tensor * ones = ggml_exp(ctx0, zeros);
+    ggml_tensor * sum = ggml_add(ctx0, exp_x, ones);
+    ggml_tensor * sp = ggml_log(ctx0, sum);
+    ggml_tensor * tanh_sp = ggml_tanh(ctx0, sp);
+    return ggml_mul(ctx0, x, tanh_sp);
+
 }
 
 ggml_tensor * llm_graph_context::build_timestep_embedding(ggml_tensor * t, ggml_tensor * w1, ggml_tensor * b1,
@@ -1058,9 +1069,9 @@ ggml_tensor * llm_graph_context::scaled_dot_product_attention(ggml_tensor * q, g
     
     ggml_tensor * attn = ggml_scale(ctx0, ggml_mul_mat(ctx0, k, q), scale);
 
-    if (mask) {
-        attn = ggml_add(ctx0, attn, mask);
-    }
+    // if (mask) {
+    //     attn = ggml_add(ctx0, attn, mask);
+    // }
     // ggml_set_name(attn, ("sdpa_attn_res_permute_add_"+ blk_name).c_str());
     ggml_tensor * probs = ggml_soft_max(ctx0, attn);
     // ggml_set_name(probs, ("sdpa_attn_res_permute_add_probs_"+ blk_name).c_str());
@@ -1090,7 +1101,7 @@ ggml_tensor * llm_graph_context::build_basic_attn(ggml_tensor * x, ggml_tensor *
     
     int64_t d_k = q->ne[0] / n_heads;
     auto reshape_heads = [&](ggml_tensor * t) {
-        ggml_tensor * t_4d = ggml_reshape_4d(ctx0, ggml_cont(ctx0, t), d_k, n_heads, seq_len, batch_size);
+        ggml_tensor * t_4d = ggml_reshape_4d(ctx0, t, d_k, n_heads, seq_len, batch_size);
         ggml_tensor * t_perm = ggml_cont(ctx0, ggml_permute(ctx0, t_4d, 0, 2, 1, 3));
         // ggml_reshape_4d(ctx0, ggml_cont(ctx0, t), d_k, seq_len, n_heads, batch_size);
         return t_perm;
@@ -1105,27 +1116,27 @@ ggml_tensor * llm_graph_context::build_basic_attn(ggml_tensor * x, ggml_tensor *
     // attn_mask = prepare_attention_mask(attn_mask, seq_len, batch_size);
     // attn_mask = ggml_reshape_4d(ctx0, ggml_cont(ctx0, attn_mask), attn_mask->ne[0], attn_mask->ne[1], n_heads, batch_size);
     // LLAMA_LOG_INFO("&&&&&&&& attn attn_mask shape is: {%d, %d, %d, %d}\n", attn_mask->ne[0], attn_mask->ne[1], attn_mask->ne[2], attn_mask->ne[3]);
-    #ifndef GGML_KQ_MASK_PAD
-    #define GGML_KQ_MASK_PAD 32
-    #endif
+    // #ifndef GGML_KQ_MASK_PAD
+    // #define GGML_KQ_MASK_PAD 32
+    // #endif
     
-    if (attn_mask->ne[1] % GGML_KQ_MASK_PAD != 0) {
-        int64_t target_h = GGML_PAD(attn_mask->ne[1], GGML_KQ_MASK_PAD);
-        int64_t pad_h = target_h - attn_mask->ne[1];
-        ggml_tensor * zeros = ggml_new_tensor_4d(ctx0, attn_mask->type, attn_mask->ne[0], pad_h, attn_mask->ne[2], attn_mask->ne[3]);
-        zeros = ggml_scale(ctx0, zeros, 0.0f);
-        attn_mask = ggml_concat(ctx0, attn_mask, zeros, 1);
-    }
+    // if (attn_mask->ne[1] % GGML_KQ_MASK_PAD != 0) {
+    //     int64_t target_h = GGML_PAD(attn_mask->ne[1], GGML_KQ_MASK_PAD);
+    //     int64_t pad_h = target_h - attn_mask->ne[1];
+    //     ggml_tensor * zeros = ggml_new_tensor_4d(ctx0, attn_mask->type, attn_mask->ne[0], pad_h, attn_mask->ne[2], attn_mask->ne[3]);
+    //     zeros = ggml_scale(ctx0, zeros, 0.0f);
+    //     attn_mask = ggml_concat(ctx0, attn_mask, zeros, 1);
+    // }
     // ggml_set_name(attn_mask, ("basic_attn_attn_mask_"+ blk_name).c_str());
     // LLAMA_LOG_INFO("&&&&&&&&&&&&&&& attn_mask shape is: {%d, %d, %d, %d}\n", attn_mask->ne[0], attn_mask->ne[1], attn_mask->ne[2], attn_mask->ne[3]);
     // 注意力计算
-    // ggml_tensor * attn_out = scaled_dot_product_attention(q, k, v, attn_mask, 0.0f, blk_name);
-    float scale = 1.0f / sqrtf((float)d_k);
-    ggml_tensor * attn_out = ggml_flash_attn_ext(ctx0, q, k, v, attn_mask, scale, 0.0f, 0.0f);
+    ggml_tensor * attn_out = scaled_dot_product_attention(q, k, v, attn_mask, 0.0f, blk_name);
+    // float scale = 1.0f / sqrtf((float)d_k);
+    // ggml_tensor * attn_out = ggml_flash_attn_ext(ctx0, q, k, v, attn_mask, scale, 0.0f, 0.0f);
     // ggml_set_name(attn_out, ("basic_attn_attn_out_sdpa_"+ blk_name).c_str());
-    // ggml_tensor * attn_perm = ggml_cont(ctx0, ggml_permute(ctx0, attn_out, 0, 2, 1, 3));
-    ggml_tensor * attn_flat = ggml_reshape_3d(ctx0, attn_out,
-                                attn_out->ne[0] * attn_out->ne[1], attn_out->ne[2], attn_out->ne[3]);
+    ggml_tensor * attn_perm = ggml_cont(ctx0, ggml_permute(ctx0, attn_out, 0, 2, 1, 3));
+    ggml_tensor * attn_flat = ggml_reshape_3d(ctx0, attn_perm,
+                                attn_perm->ne[0] * attn_perm->ne[1], attn_perm->ne[2], attn_perm->ne[3]);
     ggml_set_name(attn_flat, ("basic_attn_attn_out_"+ blk_name).c_str());
 
     // 输出投影
