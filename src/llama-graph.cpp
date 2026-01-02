@@ -24,6 +24,10 @@
     LLAMA_LOG_INFO("&&&&&&&&&&&&&&&& [%s] %s shape is: {%lld, %lld, %lld, %lld}\n", \
         prefix, #tensor, (tensor)->ne[0], (tensor)->ne[1], (tensor)->ne[2], (tensor)->ne[3])
 
+#define LOG_TENSOR_SHAPE(prefix, tensor) \
+    LLAMA_LOG_INFO("&&&&&&&&&&&&&&&& [%s] %s shape is: {%lld, %lld, %lld, %lld}\n", \
+        prefix, #tensor, (tensor)->ne[0], (tensor)->ne[1], (tensor)->ne[2], (tensor)->ne[3])
+
 void llm_graph_input_embd::set_input(const llama_ubatch * ubatch) {
     if (ubatch->token) {
         const int64_t n_tokens = ubatch->n_tokens;
@@ -1051,7 +1055,6 @@ ggml_tensor * llm_graph_context::mish(ggml_tensor * x) const {
     ggml_tensor * sp = ggml_log(ctx0, sum);
     ggml_tensor * tanh_sp = ggml_tanh(ctx0, sp);
     return ggml_mul(ctx0, x, tanh_sp);
-
 }
 
 ggml_tensor * llm_graph_context::build_timestep_embedding(ggml_tensor * t, ggml_tensor * w1, ggml_tensor * b1,
@@ -1116,23 +1119,53 @@ ggml_tensor * llm_graph_context::build_basic_attn(ggml_tensor * x, ggml_tensor *
     // attn_mask = prepare_attention_mask(attn_mask, seq_len, batch_size);
     // attn_mask = ggml_reshape_4d(ctx0, ggml_cont(ctx0, attn_mask), attn_mask->ne[0], attn_mask->ne[1], n_heads, batch_size);
     // LLAMA_LOG_INFO("&&&&&&&& attn attn_mask shape is: {%d, %d, %d, %d}\n", attn_mask->ne[0], attn_mask->ne[1], attn_mask->ne[2], attn_mask->ne[3]);
-    // #ifndef GGML_KQ_MASK_PAD
-    // #define GGML_KQ_MASK_PAD 32
-    // #endif
+
     
-    // if (attn_mask->ne[1] % GGML_KQ_MASK_PAD != 0) {
-    //     int64_t target_h = GGML_PAD(attn_mask->ne[1], GGML_KQ_MASK_PAD);
-    //     int64_t pad_h = target_h - attn_mask->ne[1];
-    //     ggml_tensor * zeros = ggml_new_tensor_4d(ctx0, attn_mask->type, attn_mask->ne[0], pad_h, attn_mask->ne[2], attn_mask->ne[3]);
-    //     zeros = ggml_scale(ctx0, zeros, 0.0f);
-    //     attn_mask = ggml_concat(ctx0, attn_mask, zeros, 1);
-    // }
     // ggml_set_name(attn_mask, ("basic_attn_attn_mask_"+ blk_name).c_str());
     // LLAMA_LOG_INFO("&&&&&&&&&&&&&&& attn_mask shape is: {%d, %d, %d, %d}\n", attn_mask->ne[0], attn_mask->ne[1], attn_mask->ne[2], attn_mask->ne[3]);
     // 注意力计算
-    ggml_tensor * attn_out = scaled_dot_product_attention(q, k, v, attn_mask, 0.0f, blk_name);
-    // float scale = 1.0f / sqrtf((float)d_k);
-    // ggml_tensor * attn_out = ggml_flash_attn_ext(ctx0, q, k, v, attn_mask, scale, 0.0f, 0.0f);
+    // ggml_tensor * attn_out = scaled_dot_product_attention(q, k, v, attn_mask, 0.0f, blk_name);
+    q = ggml_cast(ctx0, q, GGML_TYPE_F32);
+    k = ggml_cast(ctx0, k, GGML_TYPE_F16);
+    v = ggml_cast(ctx0, v, GGML_TYPE_F16);
+    const int64_t seq_pad = GGML_PAD(seq_len, 32);
+    if (seq_pad != seq_len) {
+        // 最简单的 pad 方式：沿 ne[1] concat 额外 token（值为 0
+        int64_t pad = seq_pad - seq_len;
+        ggml_tensor * zeros = ggml_new_tensor_4d(ctx0, k->type, 
+                                                        q->ne[0], pad, q->ne[2], q->ne[3]);
+        zeros = ggml_scale(ctx0, zeros, 0.0f);
+        // ggml_tensor * pad_q = ggml_new_tensor_4d(ctx0, GGML_TYPE_F32, d_k, seq_pad - seq_len, n_heads, batch_size);
+        // ggml_tensor * pad_k = ggml_new_tensor_4d(ctx0, GGML_TYPE_F16, d_k, seq_pad - seq_len, n_heads, batch_size);
+        // ggml_tensor * pad_v = ggml_new_tensor_4d(ctx0, GGML_TYPE_F16, d_k, seq_pad - seq_len, n_heads, batch_size);
+
+        // // 关键：pad 张量要真正是“0”，不要用未初始化内存 * 0 的方式
+        // // 用 repeat(0) 会更安全（具体 API 以你 ggml 版本为准；如果没有 repeat，就需要你在 host 侧 memset）
+        // // pad_q = ggml_repeat(ctx0, ggml_new_f32(ctx0, 0.0f), pad_q);
+        // pad_k = ggml_cast(ctx0, ggml_repeat(ctx0, ggml_new_f32(ctx0, 0.0f), pad_k), GGML_TYPE_F16);
+        // pad_v = ggml_cast(ctx0, ggml_repeat(ctx0, ggml_new_f32(ctx0, 0.0f), pad_v), GGML_TYPE_F16);
+
+        // q = ggml_concat(ctx0, q, pad_q, 1);
+        k = ggml_concat(ctx0, k, zeros, 1);
+        v = ggml_concat(ctx0, v, zeros, 1);
+    }
+    LOG_TENSOR_SHAPE("fattn q shape is: ", q);
+    LOG_TENSOR_SHAPE("fattn k shape is: ", k);
+    LOG_TENSOR_SHAPE("fattn v shape is: ", v);
+    LOG_TENSOR_SHAPE("fattn mask shape is: ", attn_mask);
+    float scale = 1.0f / sqrtf((float)d_k);
+    ggml_tensor * attn_out = ggml_flash_attn_ext(ctx0, q, k, v, attn_mask, scale, 0.0f, 0.0f);
+    ggml_flash_attn_ext_set_prec(attn_out, GGML_PREC_F32);
+    if(seq_pad > seq_len) {
+        size_t nb1 = attn_out->nb[1]; // stride of seq dim
+        size_t nb2 = attn_out->nb[2];
+        size_t nb3 = attn_out->nb[3];
+        attn_out = ggml_view_4d(ctx0, attn_out, 
+                                attn_out->ne[0], attn_out->ne[1], seq_len, attn_out->ne[3], // 新维度
+                                nb1, nb2, nb3, // 原 stride
+                                0);
+    }
+
     // ggml_set_name(attn_out, ("basic_attn_attn_out_sdpa_"+ blk_name).c_str());
     ggml_tensor * attn_perm = ggml_cont(ctx0, ggml_permute(ctx0, attn_out, 0, 2, 1, 3));
     ggml_tensor * attn_flat = ggml_reshape_3d(ctx0, attn_perm,
@@ -1464,7 +1497,16 @@ ggml_tensor * llm_graph_context::build_solve_euler(
     float dt = t_span[1] - t_span[0];
     ggml_tensor * attn_mask = ggml_new_tensor_4d(ctx0, GGML_TYPE_F32, mask->ne[0], mask->ne[0], 8, 2);
     attn_mask = ggml_scale(ctx0, attn_mask, -0.0f);
-    LLAMA_LOG_INFO("&&&&&&&& mask shape is: {%d, %d, %d, %d}\n", mask->ne[0], mask->ne[1], mask->ne[2], mask->ne[3]);
+    if (attn_mask->ne[1] % 32 != 0) {
+        int64_t target_h = GGML_PAD(attn_mask->ne[1], 32);
+        int64_t pad_h = target_h - attn_mask->ne[1];
+        ggml_tensor * zeros = ggml_new_tensor_4d(ctx0, attn_mask->type, attn_mask->ne[0], pad_h, attn_mask->ne[2], attn_mask->ne[3]);
+        zeros = ggml_scale(ctx0, zeros, 0.0f);
+        zeros = ggml_scale(ctx0, ggml_exp(ctx0, zeros), -65504.0f);
+        attn_mask = ggml_concat(ctx0, attn_mask, zeros, 1);
+    }
+    attn_mask = ggml_cast(ctx0, attn_mask, GGML_TYPE_F16);
+    LLAMA_LOG_INFO("&&&&&&&& attn_mask shape is: {%d, %d, %d, %d}\n", attn_mask->ne[0], attn_mask->ne[1], attn_mask->ne[2], attn_mask->ne[3]);
     for (int step = 1; step <= N_STEPS; ++step) {
         // 创建当前步的 t（关键！）
         // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&& step is: %d, t_val is: %f\n", step , t_val);
