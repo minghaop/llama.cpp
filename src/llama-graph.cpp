@@ -580,62 +580,10 @@ ggml_tensor * llm_graph_context::build_norm(
     return cur;
 }
 
-static void sinusoidal_emb_op(struct ggml_tensor * dst, const struct ggml_tensor * src,
-                              int ith, int nth, void * userdata) {
-    auto * p = (sinusoidal_params *)userdata;
-    const int half_dim = p->dim / 2;
-    const float emb_div = std::log(10000.0f) / (half_dim - 1);
-    
-    const float * x = (const float *)src->data;
-    float * out = (float *)dst->data;
-    const int64_t n = src->ne[0];
-    
-    for (int64_t i = ith; i < n; i += nth) {
-        for (int j = 0; j < half_dim; j++) {
-            float emb = std::exp(-emb_div * j);
-            float val = x[i] * p->scale * emb;
-            out[i * p->dim + j] = std::sin(val);
-            out[i * p->dim + j + half_dim] = std::cos(val);
-        }
-    }
-}
+
     
 
 // =========================== flow part ========================
-ggml_tensor * llm_graph_context::build_norm(
-         ggml_tensor * cur,
-         ggml_tensor * mw,
-         ggml_tensor * mb,
-       llm_norm_type   type,
-                 int   il) const {
-    switch (type) {
-        case LLM_NORM:       cur = ggml_norm    (ctx0, cur, hparams.f_norm_eps);     break;
-        case LLM_NORM_RMS:   cur = ggml_rms_norm(ctx0, cur, hparams.f_norm_rms_eps); break;
-        case LLM_NORM_GROUP:
-            {
-                cur = ggml_reshape_3d(ctx0, cur, cur->ne[0], 1, cur->ne[1]);
-                cur = ggml_group_norm(ctx0, cur, hparams.n_norm_groups, hparams.f_norm_group_eps);
-                cur = ggml_reshape_2d(ctx0, cur, cur->ne[0],    cur->ne[2]);
-            } break;
-    }
-
-    if (mw || mb) {
-        cb(cur, "norm", il);
-    }
-
-    if (mw) {
-        cur = ggml_mul(ctx0, cur, mw);
-        if (mb) {
-            cb(cur, "norm_w", il);
-        }
-    }
-
-    if (mb) {
-        cur = ggml_add(ctx0, cur, mb);
-    }
-
-    return cur;
-}
 
 ggml_tensor * llm_graph_context::build_layer_norm(
          ggml_tensor * cur,
