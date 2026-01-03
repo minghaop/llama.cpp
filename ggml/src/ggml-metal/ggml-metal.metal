@@ -1192,6 +1192,13 @@ kernel void kernel_cos(
     dst[tpig] = cos(src0[tpig]);
 }
 
+kernel void kernel_log(
+    device const float * src0,
+    device       float * dst,
+    uint tgpig [[thread_position_in_grid]]) {
+    dst[i] = log(src0[tpig]);
+}
+
 kernel void kernel_neg(
         device const float * src0,
         device       float * dst,
