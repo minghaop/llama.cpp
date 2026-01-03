@@ -616,6 +616,8 @@ struct llm_graph_context {
            llm_norm_type   type,
                      int   il) const;
     
+
+// ================= flow part =======================
     ggml_tensor * build_layer_norm(
          ggml_tensor * cur,
          ggml_tensor * mw,
@@ -692,20 +694,7 @@ struct llm_graph_context {
              ggml_tensor * mb_1,
              ggml_tensor * mw_2,
              ggml_tensor * mb_2) const;
-
-    ggml_tensor * build_encoder_layer(
-        ggml_cgraph * gf,
-        ggml_tensor * x,
-        ggml_tensor * pos_emb,
-        ggml_tensor * mask,
-        const enc_layer_weights & W,
-        int il) const;
     
-    ggml_tensor * build_qkv_proj(
-        ggml_tensor * x,
-        ggml_tensor * w,
-        ggml_tensor * b) const;
-
     ggml_tensor * build_upsample_1d(
          ggml_cgraph * gf,
          ggml_tensor * cur,
@@ -716,153 +705,101 @@ struct llm_graph_context {
          ggml_tensor * cur,
          float tempture) const;
     
-    ggml_tensor * linear(ggml_tensor * x, ggml_tensor * w, ggml_tensor * b) const;
-    ggml_tensor * mlp_silu(ggml_tensor * x, ggml_tensor * w1, ggml_tensor * b1, 
-                        ggml_tensor * w2, ggml_tensor * b2) const;
+    ggml_tensor * build_causal_cond_cfm(
+         ggml_cgraph * gf,
+         int64_t n_timesteps) const;
     
-    ggml_tensor * ffn_gelu(ggml_tensor * x, ggml_tensor * w0, ggml_tensor * b0,
-        ggml_tensor * w2, ggml_tensor * b2, std::string blk_name) const;
+    ggml_tensor * build_sinusoidal_pos_emb(
+         ggml_tensor * cur,
+         int dim = 320,
+         int scale = 1000.0f) const;
+    
+    ggml_tensor * build_timestep_embedding(
+         ggml_tensor * cur,
+         ggml_tensor * mw_1,
+         ggml_tensor * mb_1,
+         ggml_tensor * mw_2,
+         ggml_tensor * mb_2) const;
+    
+    ggml_tensor * prepare_attention_mask(
+         ggml_tensor * mask,
+         ggml_tensor * mask_tmpl,
+         int target_len,
+         int batch_size) const;
+    
+    ggml_tensor * ggml_spda(
+         ggml_tensor * q, 
+         ggml_tensor * k, 
+         ggml_tensor * v, 
+         ggml_tensor * mask,
+         float dropout_p, 
+         bool is_causal, 
+         float scale, 
+         bool enable_gqa) const;
+    
+    ggml_tensor * build_basic_attn(
+         ggml_tensor * x, 
+         ggml_tensor * attn_mask,
+         int64_t layer_id, 
+         std::string mode,
+         const llama_model & model) const;
+    
+    ggml_tensor * causal_conv1d_forward(
+        ggml_tensor * x,
+        std::string mode,
+        int32_t layer_id,
+        int32_t blk_id,
+        const llama_model & model,
+        int32_t step) const;
+    
+    ggml_tensor * causal_block1d_forward(
+        ggml_tensor * x,
+        ggml_tensor * mask,
+        std::string mode,
+        int32_t layer_id,
+        int32_t blk_id,
+        const llama_model & model,
+        int32_t step) const;
+    
+    ggml_tensor * causal_resnet_block1d_forward(
+        ggml_tensor * x,
+        ggml_tensor * mask,
+        ggml_tensor * t_emb,
+        int32_t step,
+        int32_t layer_id,
+        std::string mode,
+        const llama_model & model) const;
+    
+    ggml_tensor * mask_to_bias(
+        ggml_tensor * mask,
+        ggml_tensor * one,
+        ggml_tensor * neg_big,
+        ggml_type   dtype) const;
+    
+    ggml_tensor * build_causal_cond_decoder(
+         ggml_tensor * x,
+         ggml_tensor * mask,
+         ggml_tensor * mu,
+         ggml_tensor * t,
+         ggml_tensor * spks,
+         ggml_tensor * cond,
+         ggml_tensor * spk_t,
+         ggml_tensor * attn_mask,
+         const llama_model & model,
+         int32_t step) const;
+    
+    ggml_tensor * build_repeat(ggml_tensor * cur, int32_t current_length, int32_t target_length, int32_t dim) const;
+    
+    ggml_tensor * build_solve_euler(
+         ggml_cgraph * gf,
+         ggml_tensor * z,
+         ggml_tensor * mu,
+         ggml_tensor * mask,
+         ggml_tensor * spks,
+         ggml_tensor * cond,
+         const llama_model & model) const;
 
-    ggml_tensor * mish(ggml_tensor * x) const;
-    
-    ggml_tensor * mask_to_bias(ggml_tensor * mask, float neg_val, ggml_type dtype) const;
-    ggml_tensor * build_sinusoidal_pos_emb(ggml_tensor * t, int dim, int scale) const;
-    ggml_tensor * build_timestep_embedding(ggml_tensor * t, ggml_tensor * w1, ggml_tensor * b1,
-                                        ggml_tensor * w2, ggml_tensor * b2) const;
-    ggml_tensor * prepare_attention_mask(ggml_tensor * mask, int target_len, int batch_size) const;
-
-    ggml_tensor * scaled_dot_product_attention(ggml_tensor * q, ggml_tensor * k, ggml_tensor * v,
-                                            ggml_tensor * mask, float scale = 0.0f, std::string blk_name = "") const;
-    
-    ggml_tensor * build_basic_attn(ggml_tensor * x, ggml_tensor * attn_mask, const AttnWeights & w, std::string blk_name) const;
-    
-    // ggml_tensor * causal_conv1d_split_batch(ggml_tensor * x, ggml_tensor * w, ggml_tensor * b, int pad) const;
-    ggml_tensor * causal_conv1d(ggml_tensor * x, ggml_tensor * w, ggml_tensor * b, int pad = 2) const;
-
-    ggml_tensor * causal_block1d(ggml_tensor * x, ggml_tensor * mask,
-                                ggml_tensor * conv_w, ggml_tensor * conv_b,
-                                ggml_tensor * norm_w, ggml_tensor * norm_b, std::string blk_name) const;
-    ggml_tensor * causal_resnet_block1d(ggml_cgraph * gf, ggml_tensor * x, ggml_tensor * mask, ggml_tensor * t_emb,
-                                        const BlockWeights & w, std::string blk_name) const;
-
-    ggml_tensor * transformer_block(ggml_tensor * x, ggml_tensor * attn_mask,
-                                    const TransformerBlockWeights & w, std::string blk_name) const;
-    
-    ggml_tensor * build_causal_cond_decoder(ggml_cgraph * gf, ggml_tensor * x, ggml_tensor * mask, ggml_tensor * attn_mask, ggml_tensor * mu,
-                                    ggml_tensor * t, ggml_tensor * spks, ggml_tensor * cond, ggml_tensor * spks_t,
-                                    const llama_model & model, int32_t step) const;
-    
-    ggml_tensor * build_solve_euler(ggml_cgraph * gf, ggml_tensor * z, ggml_tensor * mu,
-                                    ggml_tensor * mask, ggml_tensor * spks, ggml_tensor * cond,
-                                    const llama_model & model) const;
-    
-    ggml_tensor * build_repeat(ggml_tensor * cur, int32_t current_len, int32_t target_len, int32_t dim) const;
-
-
-    // ggml_tensor * build_causal_cond_cfm(
-    //      ggml_cgraph * gf,
-    //      int64_t n_timesteps) const;
-    
-    // ggml_tensor * build_sinusoidal_pos_emb(
-    //      ggml_tensor * cur,
-    //      int dim = 320,
-    //      int scale = 1000.0f) const;
-    
-    // ggml_tensor * build_timestep_embedding(
-    //      ggml_tensor * cur,
-    //      ggml_tensor * mw_1,
-    //      ggml_tensor * mb_1,
-    //      ggml_tensor * mw_2,
-    //      ggml_tensor * mb_2) const;
-    
-    // ggml_tensor * prepare_attention_mask(
-    //      ggml_tensor * mask,
-    //      ggml_tensor * mask_tmpl,
-    //      int target_len,
-    //      int batch_size) const;
-    
-    // ggml_tensor * ggml_spda(
-    //      ggml_tensor * q, 
-    //      ggml_tensor * k, 
-    //      ggml_tensor * v, 
-    //      ggml_tensor * mask,
-    //      ggml_tensor * attn_bias,
-    //      float dropout_p, 
-    //      bool is_causal, 
-    //      float scale, 
-    //      bool enable_gqa) const;
-    
-    // ggml_tensor * build_basic_attn(
-    //      ggml_tensor * x, 
-    //      ggml_tensor * attn_mask,
-    //      ggml_tensor * attn_bias,
-    //      ggml_tensor * mask_tmpl,
-    //      int64_t layer_id, 
-    //      std::string mode,
-    //      const llama_model & model) const;
-    
-    // ggml_tensor * causal_conv1d_forward(
-    //     ggml_tensor * x,
-    //     std::string mode,
-    //     int32_t layer_id,
-    //     int32_t blk_id,
-    //     std::vector<ggml_tensor *> & pad_list,
-    //     const llama_model & model,
-    //     int32_t step) const;
-    
-    // ggml_tensor * causal_block1d_forward(
-    //     ggml_tensor * x,
-    //     ggml_tensor * mask,
-    //     std::string mode,
-    //     int32_t layer_id,
-    //     int32_t blk_id,
-    //     std::vector<ggml_tensor *> & pad_list,
-    //     const llama_model & model,
-    //     int32_t step) const;
-    
-    // ggml_tensor * causal_resnet_block1d_forward(
-    //     ggml_tensor * x,
-    //     ggml_tensor * mask,
-    //     ggml_tensor * t_emb,
-    //     int32_t step,
-    //     int32_t layer_id,
-    //     std::string mode,
-    //     std::vector<ggml_tensor *> & pad_list,
-    //     const llama_model & model) const;
-    
-    // ggml_tensor * mask_to_bias(
-    //     ggml_tensor * mask,
-    //     ggml_tensor * one,
-    //     ggml_tensor * neg_big,
-    //     ggml_type   dtype) const;
-    
-    // ggml_tensor * build_causal_cond_decoder(
-    //      ggml_tensor * x,
-    //      ggml_tensor * mask,
-    //      ggml_tensor * mu,
-    //      ggml_tensor * t,
-    //      ggml_tensor * spks,
-    //      ggml_tensor * cond,
-    //      ggml_tensor * spk_t,
-    //      ggml_tensor * attn_mask_t,
-    //      ggml_tensor * mask_tmpl,
-    //      ggml_tensor * mask_to_bias_one,
-    //      ggml_tensor * mask_to_bias_neg,
-    //      ggml_tensor * attn_bias,
-    //      std::vector<ggml_tensor *> & pad_list,
-    //      const llama_model & model,
-    //      int32_t step) const;
-    
-    // ggml_tensor * build_repeat(ggml_tensor * cur, int32_t current_length, int32_t target_length, int32_t dim) const;
-    
-    // ggml_tensor * build_solve_euler(
-    //      ggml_cgraph * gf,
-    //      ggml_tensor * z,
-    //      ggml_tensor * mu,
-    //      ggml_tensor * mask,
-    //      ggml_tensor * spks,
-    //      ggml_tensor * cond,
-    //      const llama_model & model) const;
+// ================= flow part end =======================
 
     ggml_tensor * build_ffn(
              ggml_tensor * cur,
