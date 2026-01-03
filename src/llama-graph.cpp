@@ -782,6 +782,67 @@ ggml_tensor * llm_graph_context::flip_weight(ggml_cgraph * gf, ggml_tensor * con
     }
 }
 
+static ggml_tensor * conv1d_s1_p0_d1_mul_mat(ggml_context * ctx, ggml_tensor * w_in, ggml_tensor * x_in) {
+    // ---- 1) 归一化输入 x 为 2D: (T, Cin)
+    ggml_tensor * x2 = x_in;
+    if (ggml_n_dims(x2) == 4) {
+        GGML_ASSERT(x2->ne[2] == 1 && x2->ne[3] == 1);
+        x2 = ggml_reshape_2d(ctx, x2, x2->ne[0], x2->ne[1]);
+    } else {
+        GGML_ASSERT(ggml_n_dims(x2) == 2);
+    }
+
+    const int64_t T   = x2->ne[0];
+    const int64_t Cin = x2->ne[1];
+
+    // ---- 2) 归一化权重 w 为 3D: (K, Cin, Cout)
+    ggml_tensor * w3 = w_in;
+    if (ggml_n_dims(w3) == 4) {
+        GGML_ASSERT(w3->ne[3] == 1);
+        w3 = ggml_reshape_3d(ctx, w3, w3->ne[0], w3->ne[1], w3->ne[2]);
+    } else {
+        GGML_ASSERT(ggml_n_dims(w3) == 3);
+    }
+
+    const int64_t K    = w3->ne[0];
+    const int64_t CinW = w3->ne[1];
+    const int64_t Cout = w3->ne[2];
+
+    GGML_ASSERT(CinW == Cin);
+
+    const int64_t Tout = T - K + 1;
+    GGML_ASSERT(Tout > 0);
+
+    // ---- 3) xt: (Cin, T)，方便按时间取 view
+    ggml_tensor * xt = ggml_cont(ctx, ggml_transpose(ctx, x2));
+
+    // ---- 4) 构造 X_cols: (Cin*K, Tout)
+    // 每个 xk 是 (Cin, Tout)，从 xt 的 time 维偏移 k
+    const size_t st = xt->nb[1];  // time 维步长(bytes)
+    ggml_tensor * x_cols = nullptr;
+
+    for (int64_t k = 0; k < K; ++k) {
+        ggml_tensor * xk = ggml_view_2d(ctx, xt, Cin, Tout, st, (size_t)k * st);
+        x_cols = (x_cols == nullptr) ? xk : ggml_concat(ctx, x_cols, xk, 0); // 在 dim0 拼接
+    }
+    x_cols = ggml_cont(ctx, x_cols);
+
+    // ---- 5) 构造 W2D: (Cin*K, Cout)
+    // w3: (K, Cin, Cout) -> (Cin, K, Cout) 再 reshape，展开顺序与 x_cols 对齐
+    ggml_tensor * w2d = ggml_reshape_2d(
+        ctx,
+        ggml_cont(ctx, ggml_permute(ctx, w3, 1, 0, 2, 3)), // (Cin, K, Cout)
+        Cin * K, Cout
+    );
+
+    // ---- 6) GEMM: (Cout, Tout)
+    ggml_tensor * y_ct = ggml_mul_mat(ctx, w2d, x_cols);
+
+    // ---- 7) 转回 time-first 并 reshape 成 4D：{Tout, Cout, 1, 1}
+    ggml_tensor * y = ggml_cont(ctx, ggml_transpose(ctx, y_ct)); // (Tout, Cout)
+    return ggml_reshape_4d(ctx, y, Tout, Cout, 1, 1);
+}
+
 ggml_tensor * llm_graph_context::build_pre_lookahead_layer(
          ggml_tensor * cur,
          ggml_tensor * conv1_mw,
@@ -794,7 +855,8 @@ ggml_tensor * llm_graph_context::build_pre_lookahead_layer(
     x = ggml_reshape_4d(ctx0, x, x->ne[0], x->ne[1], 1, 1);
     x = ggml_pad(ctx0, x, lookahead, 0, 0, 0);
     ggml_set_name(x, "x_pad");
-    ggml_tensor * outputs = ggml_conv_1d(ctx0, conv1_mw, x, 1, 0, 1);
+    // ggml_tensor * outputs = ggml_conv_1d(ctx0, conv1_mw, x, 1, 0, 1);
+    ggml_tensor * outputs = conv1d_s1_p0_d1_mul_mat(ctx0, conv1_mw, x);
     conv1_mb = ggml_reshape_4d(ctx0, ggml_cont(ctx0, conv1_mb), 1, 512, 1, 1);
     outputs = ggml_add(ctx0, outputs, conv1_mb);
     ggml_set_name(outputs, "x_conv_1d");
@@ -805,7 +867,8 @@ ggml_tensor * llm_graph_context::build_pre_lookahead_layer(
     outputs = ggml_concat(ctx0, zeros, outputs, 0);
     outputs = ggml_cont(ctx0, outputs);
     ggml_set_name(outputs, "x_pad_2");
-    outputs = ggml_conv_1d(ctx0, conv2_mw, outputs, 1, 0, 1);
+    // outputs = ggml_conv_1d(ctx0, conv2_mw, outputs, 1, 0, 1);
+    outputs = conv1d_s1_p0_d1_mul_mat(ctx0, conv2_mw, outputs);
     conv2_mb = ggml_reshape_4d(ctx0, ggml_cont(ctx0, conv2_mb), 1, 512, 1, 1);
     outputs  = ggml_add(ctx0, outputs, conv2_mb);
     ggml_set_name(outputs, "x_conv_1d_2");
@@ -942,7 +1005,8 @@ ggml_tensor * llm_graph_context::build_upsample_1d(
     ggml_tensor * pad = ggml_concat(ctx0, zeros, up, 1);
     cb(pad, "upsample_pad", -1);
     pad = ggml_cont(ctx0, ggml_permute(ctx0, pad, 1, 0, 2, 3));
-    ggml_tensor * out = ggml_conv_1d(ctx0, mw, pad, 1, 0, 1);
+    // ggml_tensor * out = ggml_conv_1d(ctx0, mw, pad, 1, 0, 1);
+    ggml_tensor * out = conv1d_s1_p0_d1_mul_mat(ctx0, mw, pad);
     mb = ggml_reshape_3d(ctx0, ggml_cont(ctx0, mb), 1, cur->ne[0], 1);
     out = ggml_add(ctx0, out, mb);
     cb(out, "upsample_conv_1d", -1);
@@ -1148,6 +1212,79 @@ ggml_tensor * llm_graph_context::build_basic_attn(
     return attn_flat;
 }
 
+static ggml_tensor * conv1d_s1_p0_d1_mul_mat_batched(
+    ggml_context * ctx,
+    ggml_tensor  * w_in,   // (K, Cin, Cout, 1) 或 (K, Cin, Cout)
+    ggml_tensor  * x_in    // (T, Cin, B, 1) 或 (T, Cin, 1, 1)
+) {
+    // ---- normalize x to 4D: (T, Cin, B, 1)
+    ggml_tensor * x = x_in;
+    if (ggml_n_dims(x) == 2) {
+        x = ggml_reshape_4d(ctx, x, x->ne[0], x->ne[1], 1, 1);
+    }
+    // GGML_ASSERT(ggml_n_dims(x) == 4);
+    GGML_ASSERT(x->ne[3] == 1);
+
+    const int64_t T   = x->ne[0];
+    const int64_t Cin = x->ne[1];
+    const int64_t B   = x->ne[2];
+
+    // ---- normalize w to 4D: (K, Cin, Cout, 1)
+    ggml_tensor * w = w_in;
+    if (ggml_n_dims(w) == 3) {
+        w = ggml_reshape_4d(ctx, w, w->ne[0], w->ne[1], w->ne[2], 1);
+    }
+    // GGML_ASSERT(ggml_n_dims(w) == 3);
+    GGML_ASSERT(w->ne[3] == 1);
+
+    const int64_t K    = w->ne[0];
+    const int64_t CinW = w->ne[1];
+    const int64_t Cout = w->ne[2];
+
+    GGML_ASSERT(CinW == Cin);
+    const int64_t Tout = T - K + 1;
+    GGML_ASSERT(Tout > 0);
+
+    // ---- xt: (Cin, T, B, 1)
+    // x is (T, Cin, B, 1) -> permute to (Cin, T, B, 1)
+    ggml_tensor * xt = ggml_cont(ctx, ggml_permute(ctx, x, 1, 0, 2, 3));
+
+    // ---- X_cols: (Cin*K, Tout, B, 1)
+    // take K windows along time dimension (ne1), each view is (Cin, Tout, B)
+    const size_t st = xt->nb[1]; // time stride in bytes
+    ggml_tensor * x_cols = nullptr;
+
+    for (int64_t k = 0; k < K; ++k) {
+        const size_t off = (size_t) k * st;
+
+        ggml_tensor * xk = ggml_view_3d(
+            ctx,
+            xt,
+            Cin, Tout, B,
+            xt->nb[1], xt->nb[2],
+            off
+        );
+
+        x_cols = (x_cols == nullptr) ? xk : ggml_concat(ctx, x_cols, xk, 0);
+    }
+    x_cols = ggml_cont(ctx, x_cols); // (Cin*K, Tout, B)
+
+    // ---- W2D: (Cin*K, Cout)
+    // w: (K, Cin, Cout, 1) -> (Cin, K, Cout, 1) -> reshape to (Cin*K, Cout)
+    ggml_tensor * w2d = ggml_reshape_2d(
+        ctx,
+        ggml_cont(ctx, ggml_permute(ctx, w, 1, 0, 2, 3)), // (Cin, K, Cout, 1)
+        Cin * K, Cout
+    );
+
+    // ---- y_ct: (Cout, Tout, B)
+    ggml_tensor * y_ct = ggml_mul_mat(ctx, w2d, x_cols); // (Cout, Tout, B)
+
+    // ---- y: (Tout, Cout, B, 1)
+    ggml_tensor * y = ggml_cont(ctx, ggml_permute(ctx, y_ct, 1, 0, 2, 3));
+    return ggml_reshape_4d(ctx, y, Tout, Cout, B, 1);
+}
+
 ggml_tensor * llm_graph_context::causal_conv1d_forward(
         ggml_tensor * x,
         std::string mode,
@@ -1217,9 +1354,10 @@ ggml_tensor * llm_graph_context::causal_conv1d_forward(
             x_pad->ne[0], x_pad->ne[1], 1,  // [1536, 320, 1]
             x_pad->nb[1], x_pad->nb[2],
             x_pad->nb[2]);
-        ggml_tensor * y0 = ggml_conv_1d(ctx0, model_weight, x_batch0, 1, 0, 1);
-        ggml_tensor * y1 = ggml_conv_1d(ctx0, model_weight, x_batch1, 1, 0, 1);
-        y = ggml_concat(ctx0, y0, y1, 2);
+        // ggml_tensor * y0 = ggml_conv_1d(ctx0, model_weight, x_batch0, 1, 0, 1);
+        // ggml_tensor * y1 = ggml_conv_1d(ctx0, model_weight, x_batch1, 1, 0, 1);
+        // y = ggml_concat(ctx0, y0, y1, 2);
+        y = conv1d_s1_p0_d1_mul_mat_batched(ctx0, model_weight, x_pad);
     } else {
         y = ggml_conv_1d(ctx0, model_weight, x_pad, 1, 0, 1);
     }
