@@ -198,8 +198,6 @@ class GGUFReader:
         itemsize = int(np.empty([], dtype = dtype).itemsize)
         end_offs = offset + itemsize * count
         arr = self.data[offset:end_offs].view(dtype=dtype)[:count]
-        # import pdb
-        # pdb.set_trace()
         return arr.view(arr.dtype.newbyteorder(self.byte_order if override_order is None else override_order))
 
     def _push_field(self, field: ReaderField, skip_sum: bool = False) -> int:
@@ -291,8 +289,6 @@ class GGUFReader:
             kv_klen, kv_kdata = self._get_str(offs)
             offs += int(kv_klen.nbytes + kv_kdata.nbytes)
             raw_kv_type = self._get(offs, np.uint32)
-            # import pdb
-            # pdb.set_trace()
             offs += int(raw_kv_type.nbytes)
             parts: list[npt.NDArray[Any]] = [kv_klen, kv_kdata, raw_kv_type]
             idxs_offs = len(parts)

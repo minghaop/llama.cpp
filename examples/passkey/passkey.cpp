@@ -122,7 +122,7 @@ int main(int argc, char ** argv) {
     LOG_INF("prompt tokens: %d\n", n_tokens_all);
     //LOG_INF("prompt: %s\n", params.prompt.c_str());
 
-    llama_batch batch = llama_batch_init(params.n_batch, 0, 1);
+    llama_batch batch = llama_batch_init(params.n_batch, 0, 1, 0);
 
     int n_past = 0;
 
