@@ -9,7 +9,8 @@ Adding a model requires few steps:
 After following these steps, you can open PR.
 
 Also, it is important to check that the examples and main ggml backends (CUDA, METAL, CPU) are working with the new architecture, especially:
-- [main](/tools/main/)
+- [cli](/tools/cli/)
+- [completion](/tools/completion/)
 - [imatrix](/tools/imatrix/)
 - [quantize](/tools/quantize/)
 - [server](/tools/server/)
@@ -23,11 +24,19 @@ The convert script reads the model configuration, tokenizer, tensor names+data a
 
 The required steps to implement for an HF model are:
 
-1. Define the model `Model.register` annotation in a new `Model` subclass, example:
+1. Define the model `ModelBase.register` annotation in a new `TextModel` or `MmprojModel` subclass, example:
 
 ```python
-@Model.register("MyModelForCausalLM")
-class MyModel(Model):
+@ModelBase.register("MyModelForCausalLM")
+class MyModel(TextModel):
+    model_arch = gguf.MODEL_ARCH.MYMODEL
+```
+
+or
+
+```python
+@ModelBase.register("MyModelForConditionalGeneration")
+class MyModel(MmprojModel):
     model_arch = gguf.MODEL_ARCH.MYMODEL
 ```
 
@@ -75,9 +84,10 @@ block_mappings_cfg: dict[MODEL_TENSOR, tuple[str, ...]] = {
 `transformer.blocks.{bid}.norm_1` will be mapped to `blk.{bid}.attn_norm` in GGUF.
 
 Depending on the model configuration, tokenizer, code and tensors layout, you will have to override:
-- `Model#set_gguf_parameters`
-- `Model#set_vocab`
-- `Model#write_tensors`
+- `TextModel#set_gguf_parameters`
+- `MmprojModel#set_gguf_parameters`
+- `ModelBase#set_vocab`
+- `ModelBase#modify_tensors`
 
 NOTE: Tensor names must end with `.weight` or `.bias` suffixes, that is the convention and several tools like `quantize` expect this to proceed the weights.
 
@@ -87,7 +97,7 @@ The model params and tensors layout must be defined in `llama.cpp` source files:
 1. Define a new `llm_arch` enum value in `src/llama-arch.h`.
 2. In `src/llama-arch.cpp`:
     - Add the architecture name to the `LLM_ARCH_NAMES` map.
-    - Add the tensor mappings to the `LLM_TENSOR_NAMES` map.
+    - Add the list of model tensors to `llm_get_tensor_names` (you may also need to update `LLM_TENSOR_NAMES`)
 3. Add any non-standard metadata loading in the `llama_model_loader` constructor in `src/llama-model-loader.cpp`.
 4. If the model has a RoPE operation, add a case for the architecture in `llama_model_rope_type` function in `src/llama-model.cpp`.
 

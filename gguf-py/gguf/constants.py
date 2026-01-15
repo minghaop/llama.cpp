@@ -25,6 +25,20 @@ class Keys:
         ALIGNMENT                  = "general.alignment"
         FILE_TYPE                  = "general.file_type"
 
+        # Recommended Sampler Parameters
+        SAMPLING_SEQUENCE           = "general.sampling.sequence"
+        SAMPLING_TOP_K              = "general.sampling.top_k"
+        SAMPLING_TOP_P              = "general.sampling.top_p"
+        SAMPLING_MIN_P              = "general.sampling.min_p"
+        SAMPLING_XTC_PROBABILITY    = "general.sampling.xtc_probability"
+        SAMPLING_XTC_THRESHOLD      = "general.sampling.xtc_threshold"
+        SAMPLING_TEMP               = "general.sampling.temp"
+        SAMPLING_PENALTY_LAST_N     = "general.sampling.penalty_last_n"
+        SAMPLING_PENALTY_REPEAT     = "general.sampling.penalty_repeat"
+        SAMPLING_MIROSTAT           = "general.sampling.mirostat"
+        SAMPLING_MIROSTAT_TAU       = "general.sampling.mirostat_tau"
+        SAMPLING_MIROSTAT_ETA       = "general.sampling.mirostat_eta"
+
         # Authorship Metadata
         NAME                       = "general.name"
         AUTHOR                     = "general.author"
@@ -96,19 +110,28 @@ class Keys:
         FEED_FORWARD_LENGTH               = "{arch}.feed_forward_length"
         EXPERT_FEED_FORWARD_LENGTH        = "{arch}.expert_feed_forward_length"
         EXPERT_SHARED_FEED_FORWARD_LENGTH = "{arch}.expert_shared_feed_forward_length"
+        EXPERT_CHUNK_FEED_FORWARD_LENGTH  = "{arch}.expert_chunk_feed_forward_length"
         USE_PARALLEL_RESIDUAL             = "{arch}.use_parallel_residual"
         TENSOR_DATA_LAYOUT                = "{arch}.tensor_data_layout"
         EXPERT_COUNT                      = "{arch}.expert_count"
         EXPERT_USED_COUNT                 = "{arch}.expert_used_count"
         EXPERT_SHARED_COUNT               = "{arch}.expert_shared_count"
+        EXPERT_GROUP_COUNT                = "{arch}.expert_group_count"
+        EXPERT_GROUP_USED_COUNT           = "{arch}.expert_group_used_count"
         EXPERT_WEIGHTS_SCALE              = "{arch}.expert_weights_scale"
         EXPERT_WEIGHTS_NORM               = "{arch}.expert_weights_norm"
         EXPERT_GATING_FUNC                = "{arch}.expert_gating_func"
+        EXPERT_GROUP_SCALE                = "{arch}.expert_group_scale"
+        EXPERTS_PER_GROUP                 = "{arch}.experts_per_group"
         MOE_EVERY_N_LAYERS                = "{arch}.moe_every_n_layers"
+        NEXTN_PREDICT_LAYERS              = "{arch}.nextn_predict_layers"
+        NUM_DEEPSTACK_LAYERS              = "{arch}.n_deepstack_layers"
         POOLING_TYPE                      = "{arch}.pooling_type"
         LOGIT_SCALE                       = "{arch}.logit_scale"
         DECODER_START_TOKEN_ID            = "{arch}.decoder_start_token_id"
+        DECODER_BLOCK_COUNT               = "{arch}.decoder_block_count"
         ATTN_LOGIT_SOFTCAPPING            = "{arch}.attn_logit_softcapping"
+        ROUTER_LOGIT_SOFTCAPPING          = "{arch}.router_logit_softcapping"
         FINAL_LOGIT_SOFTCAPPING           = "{arch}.final_logit_softcapping"
         SWIN_NORM                         = "{arch}.swin_norm"
         RESCALE_EVERY_N_LAYERS            = "{arch}.rescale_every_n_layers"
@@ -118,6 +141,12 @@ class Keys:
         EMBEDDING_SCALE                   = "{arch}.embedding_scale"
         TOKEN_SHIFT_COUNT                 = "{arch}.token_shift_count"
         INTERLEAVE_MOE_LAYER_STEP         = "{arch}.interleave_moe_layer_step"
+        ACTIVATION_SPARSITY_SCALE         = "{arch}.activation_sparsity_scale"
+        ALTUP_ACTIVE_IDX                  = "{arch}.altup.active_idx"
+        ALTUP_NUM_INPUTS                  = "{arch}.altup.num_inputs"
+        EMBD_LENGTH_PER_LAYER_INP         = "{arch}.embedding_length_per_layer_input"
+        DENSE_FEAT_IN_SIZE                = "{arch}.{dense}_feat_in"
+        DENSE_FEAT_OUT_SIZE               = "{arch}.{dense}_feat_out"
 
     class Attention:
         HEAD_COUNT                   = "{arch}.attention.head_count"
@@ -140,19 +169,29 @@ class Keys:
         REL_BUCKETS_COUNT            = "{arch}.attention.relative_buckets_count"
         SLIDING_WINDOW               = "{arch}.attention.sliding_window"
         SCALE                        = "{arch}.attention.scale"
+        OUTPUT_SCALE                 = "{arch}.attention.output_scale"
+        TEMPERATURE_LENGTH           = "{arch}.attention.temperature_length"
         KEY_LENGTH_MLA               = "{arch}.attention.key_length_mla"
         VALUE_LENGTH_MLA             = "{arch}.attention.value_length_mla"
+        SHARED_KV_LAYERS             = "{arch}.attention.shared_kv_layers"
+        SLIDING_WINDOW_PATTERN       = "{arch}.attention.sliding_window_pattern"
+        TEMPERATURE_SCALE            = "{arch}.attention.temperature_scale"
 
     class Rope:
-        DIMENSION_COUNT         = "{arch}.rope.dimension_count"
-        DIMENSION_SECTIONS      = "{arch}.rope.dimension_sections"
-        FREQ_BASE               = "{arch}.rope.freq_base"
-        SCALING_TYPE            = "{arch}.rope.scaling.type"
-        SCALING_FACTOR          = "{arch}.rope.scaling.factor"
-        SCALING_ATTN_FACTOR     = "{arch}.rope.scaling.attn_factor"
-        SCALING_ORIG_CTX_LEN    = "{arch}.rope.scaling.original_context_length"
-        SCALING_FINETUNED       = "{arch}.rope.scaling.finetuned"
-        SCALING_YARN_LOG_MUL    = "{arch}.rope.scaling.yarn_log_multiplier"
+        DIMENSION_COUNT          = "{arch}.rope.dimension_count"
+        DIMENSION_SECTIONS       = "{arch}.rope.dimension_sections"
+        FREQ_BASE                = "{arch}.rope.freq_base"
+        FREQ_BASE_SWA            = "{arch}.rope.freq_base_swa"
+        SCALING_TYPE             = "{arch}.rope.scaling.type"
+        SCALING_FACTOR           = "{arch}.rope.scaling.factor"
+        SCALING_ATTN_FACTOR      = "{arch}.rope.scaling.attn_factor"
+        SCALING_ORIG_CTX_LEN     = "{arch}.rope.scaling.original_context_length"
+        SCALING_FINETUNED        = "{arch}.rope.scaling.finetuned"
+        SCALING_YARN_LOG_MUL     = "{arch}.rope.scaling.yarn_log_multiplier"
+        SCALING_YARN_EXT_FACTOR  = "{arch}.rope.scaling.yarn_ext_factor"
+        SCALING_YARN_ATTN_FACTOR = "{arch}.rope.scaling.yarn_attn_factor"
+        SCALING_YARN_BETA_FAST   = "{arch}.rope.scaling.yarn_beta_fast"
+        SCALING_YARN_BETA_SLOW   = "{arch}.rope.scaling.yarn_beta_slow"
 
     class Split:
         LLM_KV_SPLIT_NO            = "split.no"
@@ -164,6 +203,7 @@ class Keys:
         INNER_SIZE     = "{arch}.ssm.inner_size"
         STATE_SIZE     = "{arch}.ssm.state_size"
         TIME_STEP_RANK = "{arch}.ssm.time_step_rank"
+        GROUP_COUNT    = "{arch}.ssm.group_count"
         DT_B_C_RMS     = "{arch}.ssm.dt_b_c_rms"
 
     class WKV:
@@ -179,6 +219,9 @@ class Keys:
 
     class Classifier:
         OUTPUT_LABELS = "{arch}.classifier.output_labels"
+
+    class ShortConv:
+        L_CACHE = "{arch}.shortconv.l_cache"
 
     class Tokenizer:
         MODEL                = "tokenizer.ggml.model"
@@ -198,6 +241,7 @@ class Keys:
         MASK_ID              = "tokenizer.ggml.mask_token_id"
         ADD_BOS              = "tokenizer.ggml.add_bos_token"
         ADD_EOS              = "tokenizer.ggml.add_eos_token"
+        ADD_SEP              = "tokenizer.ggml.add_sep_token"
         ADD_PREFIX           = "tokenizer.ggml.add_space_prefix"
         REMOVE_EXTRA_WS      = "tokenizer.ggml.remove_extra_whitespaces"
         PRECOMPILED_CHARSMAP = "tokenizer.ggml.precompiled_charsmap"
@@ -219,8 +263,16 @@ class Keys:
         MIDDLE_ID            = "tokenizer.ggml.middle_token_id"
 
     class Adapter:
-        TYPE       = "adapter.type"
-        LORA_ALPHA = "adapter.lora.alpha"
+        TYPE                    = "adapter.type"
+        LORA_ALPHA              = "adapter.lora.alpha"
+        LORA_TASK_NAME          = "adapter.lora.task_name"
+        LORA_PROMPT_PREFIX      = "adapter.lora.prompt_prefix"
+        ALORA_INVOCATION_TOKENS = "adapter.alora.invocation_tokens"
+
+    class IMatrix:
+        CHUNK_COUNT = "imatrix.chunk_count"
+        CHUNK_SIZE  = "imatrix.chunk_size"
+        DATASETS    = "imatrix.datasets"
 
     class Clip:
         PROJECTOR_TYPE      = "clip.projector_type"
@@ -230,6 +282,7 @@ class Keys:
 
     class ClipVision:
         IMAGE_SIZE          = "clip.vision.image_size"
+        PREPROC_IMAGE_SIZE  = "clip.vision.preproc_image_size"
         PATCH_SIZE          = "clip.vision.patch_size"
         EMBEDDING_LENGTH    = "clip.vision.embedding_length"
         FEED_FORWARD_LENGTH = "clip.vision.feed_forward_length"
@@ -241,6 +294,9 @@ class Keys:
         USE_GELU            = "clip.use_gelu"
         USE_SILU            = "clip.use_silu"
         N_WA_PATTERN        = "clip.vision.n_wa_pattern" # used by qwen2.5vl
+        WA_LAYER_INDEXES    = "clip.vision.wa_layer_indexes" # used by youtuvl
+        IS_DEEPSTACK_LAYERS = "clip.vision.is_deepstack_layers"
+        WINDOW_SIZE         = "clip.vision.window_size"
 
         class Attention:
             HEAD_COUNT      = "clip.vision.attention.head_count"
@@ -263,89 +319,16 @@ class Keys:
         class Projector:
             STACK_FACTOR    = "clip.audio.projector.stack_factor"
 
-    class CosyVoiceFlow:
-        VOCAB_SIZE          = "cosyvoiceflow.vocab_size"
-        INPUT_SIZE          = "cosyvoiceflow.input_size"
-        OUTPUT_SIZE         = "cosyvoiceflow.output_size"
-        OUT_TYPE            = "cosyvoiceflow.out_type"
-        PRE_LOOKAHEAD_LEN   = "cosyvoiceflow.pre_lookahead_len"
-        SPK_EMBED_DIM       = "cosyvoiceflow.spk_embed_dim"
-        TOKEN_MEL_RATIO     = "cosyvoiceflow.token_mel_ratio"
-        ONLY_MASK_LOSS      = "cosyvoiceflow.only_mask_loss"
-        INPUT_FRAME_RATE    = "cosyvoiceflow.input_frame_rate"
-        MODEL_TYPE          = "cosyvoiceflow.file_type"
-        TYPE                =  "cosyvoiceflow.torch_dtype"
-        EMBEDDING_LENGTH    = "cosyvoiceflow.vocab_size"
+    class Diffusion:
+        SHIFT_LOGITS        = "diffusion.shift_logits"
 
-        class encoder:
-            ATTN_HEADS          = "cosyvoiceflow.encoder_attention_heads"
-            ATTN_DROPOUT_RATE   = "cosyvoiceflow.encoder_attention_dropout_rate"
-            DROPOUT_RATE        = "cosyvoiceflow.encoder_dropout_rate"
-            INPUT_LAYER         = "cosyvoiceflow.encoder_input_layer"
-            INPUT_SIZE          = "cosyvoiceflow.encoder_input_size"
-            LINEAR_UNITS        = "cosyvoiceflow.encoder_linear_units"
-            MACARON_STYLE       = "cosyvoiceflow.encoder_macaron_style"
-            NORMALIZE_BEFORE    = "cosyvoiceflow.encoder_normalize_before"
-            BLOCKS_COUNT        = "cosyvoiceflow.encoder_num_blocks"
-            OUTPUT_SIZE         = "cosyvoiceflow.encoder_output_size"
-            POS_ENC_LAYER_TYPE  = "cosyvoiceflow.encoder_pos_enc_layer_type"
-            POS_DROPOUT_RATE    = "cosyvoiceflow.encoder_pos_dropout_rate"
-            SELF_ATTENTION_TYPE = "cosyvoiceflow.encoder_selfattention_layer_type"
-            STATIC_CHUNK_SIZE   = "cosyvoiceflow.encoder_static_chunk_size"
-            USE_CNN_MODULE      = "cosyvoiceflow.encoder_use_cnn_module"
+    class xIELU:
+        ALPHA_P             = "xielu.alpha_p"
+        ALPHA_N             = "xielu.alpha_n"
+        BETA                = "xielu.beta"
+        EPS                 = "xielu.eps"
 
-        class decoder:
-            IN_CHANNELS          = "cosyvoiceflow.decoder_in_channels"
-            ACT_FN               = "cosyvoiceflow.decoder_act_fn"
-            ATTENTION_HEAND_DIM  = "cosyvoiceflow.decoder_attention_head_dim"
-            CHANNELS             = "cosyvoiceflow.decoder_channels"
-            DROPOUT_RATE         = "cosyvoiceflow.decoder_dropout"
-            ESTIMATOR_INPUT_CHANNELS = "cosyvoiceflow.decoder_estimator_input_channels"
-            INFER_CFG_RATE       = "cosyvoiceflow.decoder_infer_cfg_rate"
-            N_BLOCKS             = "cosyvoiceflow.decoder_n_blocks"
-            N_SPKS               = "cosyvoiceflow.decoder_n_spks"
-            DECODING_LEFT_CHUNCK = "cosyvoiceflow.decoder_decoding_left_chunks"
-            NUM_HEADS            = "cosyvoiceflow.decoder_num_heads"
-            NUM_MID_BLOCKS       = "cosyvoiceflow.decoder_num_mid_blocks"
-            OUTPUT_CHANNELS      = "cosyvoiceflow.decoder_output_channels"
-            REG_LOSS_TYPE        = "cosyvoiceflow.decoder_reg_loss_type"
-            SIGMA_MIN            = "cosyvoiceflow.decoder_sigma_min"
-            SLOVER               = "cosyvoiceflow.decoder_solver"
-            SPK_EMB_DIM          = "cosyvoiceflow.decoder_spk_emb_dim"
-            STATIC_CHUNCK_SIZE   = "cosyvoiceflow.decoder_static_chunk_size"
-            T_SCHEDULER          = "cosyvoiceflow.decoder_t_scheduler"
-            TRAIN_CFG_RATE       = "cosyvoiceflow.decoder_train_cfg_rate"
 
-    class CosyVoiceHiFT:
-        # General Parameters
-        IN_CHANNELS          = "cosyvoicehift.in_channels"
-        BASE_CHANNELS        = "cosyvoicehift.base_channels"
-        NB_HARMONICS         = "cosyvoicehift.nb_harmonics"
-        SAMPLING_RATE        = "cosyvoicehift.sampling_rate"
-        NSF_ALPHA            = "cosyvoicehift.nsf_alpha"
-        NSF_SIGMA            = "cosyvoicehift.nsf_sigma"
-        NSF_VOICED_THRESHOLD = "cosyvoicehift.nsf_voiced_threshold"
-        LRELU_SLOPE          = "cosyvoicehift.lrelu_slope"
-        AUDIO_LIMIT          = "cosyvoicehift.audio_limit"
-
-        # Upsampling & STFT
-        UPSAMPLE_RATES        = "cosyvoicehift.upsample_rates"
-        UPSAMPLE_KERNEL_SIZES = "cosyvoicehift.upsample_kernel_sizes"
-        ISTFT_N_FFT           = "cosyvoicehift.istft_n_fft"
-        ISTFT_HOP_LEN         = "cosyvoicehift.istft_hop_len"
-
-        # Main ResBlocks
-        RESBLOCK_KERNEL_SIZES   = "cosyvoicehift.resblock_kernel_sizes"
-        RESBLOCK_DILATION_SIZES = "cosyvoicehift.resblock_dilation_sizes"
-
-        # Source ResBlocks
-        SOURCE_RESBLOCK_KERNEL_SIZES   = "cosyvoicehift.source_resblock_kernel_sizes"
-        SOURCE_RESBLOCK_DILATION_SIZES = "cosyvoicehift.source_resblock_dilation_sizes"
-
-        class f0_predictor:
-            NUM_CLASS     = "cosyvoicehift.f0_predictor_num_class"
-            IN_CHANNELS   = "cosyvoicehift.f0_predictor_in_channels"
-            COND_CHANNELS = "cosyvoicehift.f0_predictor_cond_channels"
 #
 # recommended mapping of model tensor names for storage in gguf
 #
@@ -354,6 +337,7 @@ class Keys:
 class GGUFType:
     MODEL   = "model"
     ADAPTER = "adapter"
+    IMATRIX = "imatrix"
     MMPROJ  = "mmproj" # dummy, unused for now
 
 
@@ -363,6 +347,7 @@ class MODEL_ARCH(IntEnum):
     LLAMA4           = auto()
     DECI             = auto()
     FALCON           = auto()
+    FALCON_H1        = auto()
     BAICHUAN         = auto()
     GROK             = auto()
     GPT2             = auto()
@@ -372,10 +357,12 @@ class MODEL_ARCH(IntEnum):
     STARCODER        = auto()
     REFACT           = auto()
     BERT             = auto()
+    MODERN_BERT      = auto()
     NOMIC_BERT       = auto()
     NOMIC_BERT_MOE   = auto()
     NEO_BERT         = auto()
     JINA_BERT_V2     = auto()
+    JINA_BERT_V3     = auto()
     BLOOM            = auto()
     STABLELM         = auto()
     QWEN             = auto()
@@ -384,11 +371,15 @@ class MODEL_ARCH(IntEnum):
     QWEN2VL          = auto()
     QWEN3            = auto()
     QWEN3MOE         = auto()
+    QWEN3NEXT        = auto()
+    QWEN3VL          = auto()
+    QWEN3VLMOE       = auto()
     PHI2             = auto()
     PHI3             = auto()
     PHIMOE           = auto()
     PLAMO            = auto()
     PLAMO2           = auto()
+    PLAMO3           = auto()
     CODESHELL        = auto()
     ORION            = auto()
     INTERNLM2        = auto()
@@ -397,12 +388,16 @@ class MODEL_ARCH(IntEnum):
     GEMMA            = auto()
     GEMMA2           = auto()
     GEMMA3           = auto()
+    GEMMA3N          = auto()
+    GEMMA_EMBEDDING  = auto()
     STARCODER2       = auto()
     RWKV6            = auto()
     RWKV6QWEN2       = auto()
     RWKV7            = auto()
     ARWKV7           = auto()
     MAMBA            = auto()
+    MAMBA2           = auto()
+    JAMBA            = auto()
     XVERSE           = auto()
     COMMAND_R        = auto()
     COHERE2          = auto()
@@ -416,31 +411,51 @@ class MODEL_ARCH(IntEnum):
     DEEPSEEK2        = auto()
     CHATGLM          = auto()
     GLM4             = auto()
+    GLM4_MOE         = auto()
     BITNET           = auto()
     T5               = auto()
     T5ENCODER        = auto()
     JAIS             = auto()
     NEMOTRON         = auto()
+    NEMOTRON_H       = auto()
+    NEMOTRON_H_MOE   = auto()
     EXAONE           = auto()
+    EXAONE4          = auto()
     GRANITE          = auto()
     GRANITE_MOE      = auto()
+    GRANITE_HYBRID   = auto()
     CHAMELEON        = auto()
     WAVTOKENIZER_DEC = auto()
     PLM              = auto()
     BAILINGMOE       = auto()
+    BAILINGMOE2      = auto()
     DOTS1            = auto()
     ARCEE            = auto()
-    COSYVOICEFLOW    = auto()  # CosyVoiceFlow is a custom model architecture, not a standard one
-    COSYVOICEHIFT    = auto()
+    AFMOE            = auto()
     ERNIE4_5         = auto()
-    GEMMA3N          = auto()
-    MAMBA2           = auto()
-    JAMBA            = auto()
-    GRANITE_HYBRID   = auto()
-    SMOLLM3          = auto()
-    LFM2             = auto()
-    FALCON_H1        = auto()
+    ERNIE4_5_MOE     = auto()
     HUNYUAN_MOE      = auto()
+    HUNYUAN_DENSE    = auto()
+    SMOLLM3          = auto()
+    GPT_OSS          = auto()
+    LFM2             = auto()
+    LFM2MOE          = auto()
+    DREAM            = auto()
+    SMALLTHINKER     = auto()
+    LLADA            = auto()
+    LLADA_MOE        = auto()
+    SEED_OSS         = auto()
+    GROVEMOE         = auto()
+    APERTUS          = auto()
+    COGVLM           = auto()
+    MINIMAXM2        = auto()
+    RND1             = auto()
+    PANGU_EMBED      = auto()
+    MISTRAL3         = auto()
+    MIMO2            = auto()
+    LLAMA_EMBED      = auto()
+    MAINCODER        = auto()
+
 
 class VISION_PROJECTOR_TYPE(IntEnum):
     MLP       = auto()
@@ -450,6 +465,8 @@ class VISION_PROJECTOR_TYPE(IntEnum):
     GLM_EDGE  = auto()
     MERGER    = auto()
     GEMMA3    = auto()
+    QWEN3VL   = auto()
+    COGVLM    = auto()
 
 
 class MODEL_TENSOR(IntEnum):
@@ -458,6 +475,8 @@ class MODEL_TENSOR(IntEnum):
     TOKEN_TYPES          = auto()
     POS_EMBD             = auto()
     OUTPUT               = auto()
+    DENSE_2_OUT          = auto() # embeddinggemma 2_Dense
+    DENSE_3_OUT          = auto() # embeddinggemma 3_Dense
     OUTPUT_NORM          = auto()
     ROPE_FREQS           = auto()
     ROPE_FACTORS_LONG    = auto()
@@ -472,6 +491,8 @@ class MODEL_TENSOR(IntEnum):
     ATTN_OUT_NORM        = auto()
     ATTN_POST_NORM       = auto()
     ATTN_ROT_EMBD        = auto()
+    ATTN_SINKS           = auto()
+    ATTN_GATE            = auto()
     FFN_GATE_INP         = auto()
     FFN_GATE_INP_SHEXP   = auto()
     FFN_NORM             = auto()
@@ -488,17 +509,41 @@ class MODEL_TENSOR(IntEnum):
     FFN_GATE_SHEXP       = auto()
     FFN_DOWN_SHEXP       = auto()
     FFN_UP_SHEXP         = auto()
+    FFN_GATE_CHEXP       = auto()
+    FFN_DOWN_CHEXP       = auto()
+    FFN_UP_CHEXP         = auto()
     FFN_EXP_PROBS_B      = auto()
     ATTN_Q_NORM          = auto()
     ATTN_K_NORM          = auto()
     LAYER_OUT_NORM       = auto()
+    PER_LAYER_TOKEN_EMBD = auto() # gemma3n
+    PER_LAYER_MODEL_PROJ = auto() # gemma3n
+    PER_LAYER_INP_GATE   = auto() # gemma3n
+    PER_LAYER_PROJ       = auto() # gemma3n
+    PER_LAYER_PROJ_NORM  = auto() # gemma3n
+    PER_LAYER_POST_NORM  = auto() # gemma3n
+    ALTUP_PROJ           = auto() # gemma3n
+    ALTUP_UNEMBD_PROJ    = auto() # gemma3n
+    ALTUP_CORRECT_COEF   = auto() # gemma3n
+    ALTUP_CORRECT_SCALE  = auto() # gemma3n
+    ALTUP_PREDICT_COEF   = auto() # gemma3n
+    ALTUP_ROUTER         = auto() # gemma3n
+    ALTUP_ROUTER_NORM    = auto() # gemma3n
+    LAUREL_L             = auto() # gemma3n
+    LAUREL_R             = auto() # gemma3n
+    LAUREL_POST_NORM     = auto() # gemma3n
     SSM_IN               = auto()
     SSM_CONV1D           = auto()
     SSM_X                = auto()
     SSM_DT               = auto()
+    SSM_DT_NORM          = auto()
     SSM_A                = auto()
+    SSM_B_NORM           = auto()
+    SSM_C_NORM           = auto()
     SSM_D                = auto()
+    SSM_NORM             = auto()
     SSM_OUT              = auto()
+    SSM_BETA_ALPHA       = auto() # qwen3next
     TIME_MIX_W0          = auto()
     TIME_MIX_W1          = auto()
     TIME_MIX_W2          = auto()
@@ -591,6 +636,14 @@ class MODEL_TENSOR(IntEnum):
     POSNET_ATTN_K        = auto()
     POSNET_ATTN_V        = auto()
     POSNET_ATTN_OUT      = auto()
+    SHORTCONV_CONV       = auto()
+    SHORTCONV_INPROJ     = auto()
+    SHORTCONV_OUTPROJ    = auto()
+    VISEXP_ATTN_QKV      = auto()
+    VISEXP_ATTN_OUT      = auto()
+    VISEXP_GATE          = auto()
+    VISEXP_DOWN          = auto()
+    VISEXP_UP            = auto()
     # vision
     V_MMPROJ             = auto()
     V_MMPROJ_FC          = auto()
@@ -598,8 +651,10 @@ class MODEL_TENSOR(IntEnum):
     V_MMPROJ_PEG         = auto()
     V_ENC_EMBD_CLS       = auto()
     V_ENC_EMBD_PATCH     = auto()
+    V_ENC_EMBD_NORM      = auto()
     V_ENC_EMBD_POS       = auto()
     V_ENC_INPUT_NORM     = auto()
+    V_ENC_ATTN_QKV       = auto()
     V_ENC_ATTN_Q         = auto()
     V_ENC_ATTN_Q_NORM    = auto()
     V_ENC_ATTN_K         = auto()
@@ -615,6 +670,7 @@ class MODEL_TENSOR(IntEnum):
     V_LAYER_SCALE_2      = auto()
     V_PRE_NORM           = auto()
     V_POST_NORM          = auto()
+    V_MM_POST_NORM       = auto()
     V_MM_INP_NORM        = auto()
     V_MM_INP_PROJ        = auto() # gemma3
     V_MM_SOFT_EMB_NORM   = auto() # gemma3
@@ -631,8 +687,19 @@ class MODEL_TENSOR(IntEnum):
     V_RESMPL_QUERY       = auto() # minicpmv
     V_TOK_EMBD_IMG_BREAK = auto() # pixtral
     V_MM_PATCH_MERGER    = auto() # mistral small 3.1
+    V_DS_NORM            = auto() # qwen3vl
+    V_DS_FC1             = auto() # qwen3vl
+    V_DS_FC2             = auto() # qwen3vl
+    V_MM_POST_FC_NORM    = auto() # cogvlm
+    V_MM_UP              = auto() # cogvlm
+    V_MM_DOWN            = auto() # cogvlm
+    V_MM_GATE            = auto() # cogvlm
+    V_TOK_BOI            = auto() # cogvlm
+    V_TOK_EOI            = auto() # cogvlm
     # audio (mtmd)
     A_ENC_EMBD_POS       = auto()
+    A_ENC_EMBD_NORM      = auto()
+    A_ENC_EMBD_TO_LOGITS = auto()
     A_ENC_CONV1D         = auto()
     A_PRE_NORM           = auto()
     A_POST_NORM          = auto()
@@ -643,1472 +710,34 @@ class MODEL_TENSOR(IntEnum):
     A_ENC_OUTPUT         = auto()
     A_ENC_OUTPUT_NORM    = auto()
     A_ENC_FFN_UP         = auto()
+    A_ENC_FFN_NORM       = auto()
     A_ENC_FFN_GATE       = auto()
     A_ENC_FFN_DOWN       = auto()
+    A_ENC_FFN_UP_1       = auto()
+    A_ENC_FFN_NORM_1     = auto()
+    A_ENC_FFN_GATE_1     = auto()
+    A_ENC_FFN_DOWN_1     = auto()
     A_MMPROJ             = auto()
     A_MMPROJ_FC          = auto()
     A_MM_NORM_PRE        = auto()
     A_MM_NORM_MID        = auto()
-    PER_LAYER_TOKEN_EMBD = auto()
-    PER_LAYER_MODEL_PROJ = auto()
-    PER_LAYER_PROJ_NORM  = auto()
-    ALTUP_PROJ           = auto()
-    ALTUP_UNEMBD_PROJ    = auto()
-    PER_LAYER_INP_GATE   = auto()
-    PER_LAYER_PROJ       = auto()
-    PER_LAYER_POST_NORM  = auto()
-    ALTUP_CORRECT_COEF   = auto()
-    ALTUP_CORRECT_SCALE  = auto()
-    ALTUP_PREDICT_COEF   = auto()
-    ALTUP_ROUTER         = auto()
-    ALTUP_ROUTER_NORM    = auto()
-    LAUREL_L             = auto()
-    LAUREL_R             = auto()
-    LAUREL_POST_NORM     = auto()
-    SSM_DT_NORM          = auto()
-    SSM_B_NORM           = auto()
-    SSM_C_NORM           = auto()
-    SSM_NORM             = auto()
-    SHORTCONV_CONV       = auto()
-    SHORTCONV_INPROJ     = auto()
-    SHORTCONV_OUTPROJ    = auto()
-    
-    # ----- CosyVoiceFlow 新增 -----
-    DECODER_ESTIMATOR_DOWN_BLOCKS_0_0_BLOCK1_BLOCK_0_BIAS = auto()
-    DECODER_ESTIMATOR_DOWN_BLOCKS_0_0_BLOCK1_BLOCK_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_DOWN_BLOCKS_0_0_BLOCK1_BLOCK_2_BIAS = auto()
-    DECODER_ESTIMATOR_DOWN_BLOCKS_0_0_BLOCK1_BLOCK_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_DOWN_BLOCKS_0_0_BLOCK2_BLOCK_0_BIAS = auto()
-    DECODER_ESTIMATOR_DOWN_BLOCKS_0_0_BLOCK2_BLOCK_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_DOWN_BLOCKS_0_0_BLOCK2_BLOCK_2_BIAS = auto()
-    DECODER_ESTIMATOR_DOWN_BLOCKS_0_0_BLOCK2_BLOCK_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_DOWN_BLOCKS_0_0_MLP_1_BIAS = auto()
-    DECODER_ESTIMATOR_DOWN_BLOCKS_0_0_MLP_1_WEIGHT = auto()
-    DECODER_ESTIMATOR_DOWN_BLOCKS_0_0_RES_CONV_BIAS = auto()
-    DECODER_ESTIMATOR_DOWN_BLOCKS_0_0_RES_CONV_WEIGHT = auto()
-    DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_0_ATTN1_TO_K_WEIGHT = auto()
-    DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_0_ATTN1_TO_OUT_0_BIAS = auto()
-    DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_0_ATTN1_TO_OUT_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_0_ATTN1_TO_Q_WEIGHT = auto()
-    DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_0_ATTN1_TO_V_WEIGHT = auto()
-    DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_0_FF_NET_0_PROJ_BIAS = auto()
-    DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_0_FF_NET_0_PROJ_WEIGHT = auto()
-    DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_0_FF_NET_2_BIAS = auto()
-    DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_0_FF_NET_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_0_NORM1_BIAS = auto()
-    DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_0_NORM1_WEIGHT = auto()
-    DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_0_NORM3_BIAS = auto()
-    DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_0_NORM3_WEIGHT = auto()
-    DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_1_ATTN1_TO_K_WEIGHT = auto()
-    DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_1_ATTN1_TO_OUT_0_BIAS = auto()
-    DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_1_ATTN1_TO_OUT_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_1_ATTN1_TO_Q_WEIGHT = auto()
-    DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_1_ATTN1_TO_V_WEIGHT = auto()
-    DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_1_FF_NET_0_PROJ_BIAS = auto()
-    DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_1_FF_NET_0_PROJ_WEIGHT = auto()
-    DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_1_FF_NET_2_BIAS = auto()
-    DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_1_FF_NET_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_1_NORM1_BIAS = auto()
-    DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_1_NORM1_WEIGHT = auto()
-    DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_1_NORM3_BIAS = auto()
-    DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_1_NORM3_WEIGHT = auto()
-    DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_ATTN1_TO_K_WEIGHT = auto()
-    DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_ATTN1_TO_OUT_0_BIAS = auto()
-    DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_ATTN1_TO_OUT_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_ATTN1_TO_Q_WEIGHT = auto()
-    DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_ATTN1_TO_V_WEIGHT = auto()
-    DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_FF_NET_0_PROJ_BIAS = auto()
-    DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_FF_NET_0_PROJ_WEIGHT = auto()
-    DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_FF_NET_2_BIAS = auto()
-    DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_FF_NET_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_NORM1_BIAS = auto()
-    DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_NORM1_WEIGHT = auto()
-    DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_NORM3_BIAS = auto()
-    DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_NORM3_WEIGHT = auto()
-    DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_ATTN1_TO_K_WEIGHT = auto()
-    DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_ATTN1_TO_OUT_0_BIAS = auto()
-    DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_ATTN1_TO_OUT_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_ATTN1_TO_Q_WEIGHT = auto()
-    DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_ATTN1_TO_V_WEIGHT = auto()
-    DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_FF_NET_0_PROJ_BIAS = auto()
-    DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_FF_NET_0_PROJ_WEIGHT = auto()
-    DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_FF_NET_2_BIAS = auto()
-    DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_FF_NET_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_NORM1_BIAS = auto()
-    DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_NORM1_WEIGHT = auto()
-    DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_NORM3_BIAS = auto()
-    DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_NORM3_WEIGHT = auto()
-    DECODER_ESTIMATOR_DOWN_BLOCKS_0_2_BIAS = auto()
-    DECODER_ESTIMATOR_DOWN_BLOCKS_0_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_FINAL_BLOCK_BLOCK_0_BIAS = auto()
-    DECODER_ESTIMATOR_FINAL_BLOCK_BLOCK_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_FINAL_BLOCK_BLOCK_2_BIAS = auto()
-    DECODER_ESTIMATOR_FINAL_BLOCK_BLOCK_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_FINAL_PROJ_BIAS = auto()
-    DECODER_ESTIMATOR_FINAL_PROJ_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_0_0_BLOCK1_BLOCK_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_0_0_BLOCK1_BLOCK_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_0_0_BLOCK1_BLOCK_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_0_0_BLOCK1_BLOCK_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_0_0_BLOCK2_BLOCK_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_0_0_BLOCK2_BLOCK_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_0_0_BLOCK2_BLOCK_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_0_0_BLOCK2_BLOCK_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_0_0_MLP_1_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_0_0_MLP_1_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_0_0_RES_CONV_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_0_0_RES_CONV_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_ATTN1_TO_K_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_ATTN1_TO_OUT_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_ATTN1_TO_OUT_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_ATTN1_TO_Q_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_ATTN1_TO_V_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_FF_NET_0_PROJ_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_FF_NET_0_PROJ_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_FF_NET_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_FF_NET_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_NORM1_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_NORM1_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_NORM3_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_NORM3_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_0_1_1_ATTN1_TO_K_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_0_1_1_ATTN1_TO_OUT_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_0_1_1_ATTN1_TO_OUT_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_0_1_1_ATTN1_TO_Q_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_0_1_1_ATTN1_TO_V_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_0_1_1_FF_NET_0_PROJ_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_0_1_1_FF_NET_0_PROJ_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_0_1_1_FF_NET_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_0_1_1_FF_NET_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_0_1_1_NORM1_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_0_1_1_NORM1_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_0_1_1_NORM3_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_0_1_1_NORM3_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_0_1_2_ATTN1_TO_K_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_0_1_2_ATTN1_TO_OUT_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_0_1_2_ATTN1_TO_OUT_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_0_1_2_ATTN1_TO_Q_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_0_1_2_ATTN1_TO_V_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_0_1_2_FF_NET_0_PROJ_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_0_1_2_FF_NET_0_PROJ_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_0_1_2_FF_NET_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_0_1_2_FF_NET_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_0_1_2_NORM1_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_0_1_2_NORM1_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_0_1_2_NORM3_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_0_1_2_NORM3_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_0_1_3_ATTN1_TO_K_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_0_1_3_ATTN1_TO_OUT_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_0_1_3_ATTN1_TO_OUT_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_0_1_3_ATTN1_TO_Q_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_0_1_3_ATTN1_TO_V_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_0_1_3_FF_NET_0_PROJ_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_0_1_3_FF_NET_0_PROJ_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_0_1_3_FF_NET_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_0_1_3_FF_NET_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_0_1_3_NORM1_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_0_1_3_NORM1_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_0_1_3_NORM3_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_0_1_3_NORM3_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_1_0_BLOCK1_BLOCK_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_1_0_BLOCK1_BLOCK_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_1_0_BLOCK1_BLOCK_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_1_0_BLOCK1_BLOCK_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_1_0_BLOCK2_BLOCK_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_1_0_BLOCK2_BLOCK_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_1_0_BLOCK2_BLOCK_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_1_0_BLOCK2_BLOCK_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_1_0_MLP_1_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_1_0_MLP_1_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_1_0_RES_CONV_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_1_0_RES_CONV_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_1_1_0_ATTN1_TO_K_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_1_1_0_ATTN1_TO_OUT_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_1_1_0_ATTN1_TO_OUT_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_1_1_0_ATTN1_TO_Q_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_1_1_0_ATTN1_TO_V_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_1_1_0_FF_NET_0_PROJ_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_1_1_0_FF_NET_0_PROJ_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_1_1_0_FF_NET_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_1_1_0_FF_NET_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_1_1_0_NORM1_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_1_1_0_NORM1_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_1_1_0_NORM3_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_1_1_0_NORM3_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_1_1_1_ATTN1_TO_K_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_1_1_1_ATTN1_TO_OUT_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_1_1_1_ATTN1_TO_OUT_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_1_1_1_ATTN1_TO_Q_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_1_1_1_ATTN1_TO_V_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_1_1_1_FF_NET_0_PROJ_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_1_1_1_FF_NET_0_PROJ_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_1_1_1_FF_NET_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_1_1_1_FF_NET_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_1_1_1_NORM1_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_1_1_1_NORM1_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_1_1_1_NORM3_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_1_1_1_NORM3_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_1_1_2_ATTN1_TO_K_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_1_1_2_ATTN1_TO_OUT_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_1_1_2_ATTN1_TO_OUT_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_1_1_2_ATTN1_TO_Q_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_1_1_2_ATTN1_TO_V_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_1_1_2_FF_NET_0_PROJ_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_1_1_2_FF_NET_0_PROJ_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_1_1_2_FF_NET_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_1_1_2_FF_NET_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_1_1_2_NORM1_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_1_1_2_NORM1_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_1_1_2_NORM3_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_1_1_2_NORM3_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_1_1_3_ATTN1_TO_K_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_1_1_3_ATTN1_TO_OUT_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_1_1_3_ATTN1_TO_OUT_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_1_1_3_ATTN1_TO_Q_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_1_1_3_ATTN1_TO_V_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_1_1_3_FF_NET_0_PROJ_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_1_1_3_FF_NET_0_PROJ_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_1_1_3_FF_NET_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_1_1_3_FF_NET_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_1_1_3_NORM1_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_1_1_3_NORM1_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_1_1_3_NORM3_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_1_1_3_NORM3_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_10_0_BLOCK1_BLOCK_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_10_0_BLOCK1_BLOCK_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_10_0_BLOCK1_BLOCK_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_10_0_BLOCK1_BLOCK_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_10_0_BLOCK2_BLOCK_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_10_0_BLOCK2_BLOCK_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_10_0_BLOCK2_BLOCK_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_10_0_BLOCK2_BLOCK_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_10_0_MLP_1_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_10_0_MLP_1_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_10_0_RES_CONV_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_10_0_RES_CONV_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_10_1_0_ATTN1_TO_K_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_10_1_0_ATTN1_TO_OUT_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_10_1_0_ATTN1_TO_OUT_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_10_1_0_ATTN1_TO_Q_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_10_1_0_ATTN1_TO_V_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_10_1_0_FF_NET_0_PROJ_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_10_1_0_FF_NET_0_PROJ_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_10_1_0_FF_NET_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_10_1_0_FF_NET_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_10_1_0_NORM1_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_10_1_0_NORM1_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_10_1_0_NORM3_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_10_1_0_NORM3_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_10_1_1_ATTN1_TO_K_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_10_1_1_ATTN1_TO_OUT_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_10_1_1_ATTN1_TO_OUT_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_10_1_1_ATTN1_TO_Q_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_10_1_1_ATTN1_TO_V_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_10_1_1_FF_NET_0_PROJ_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_10_1_1_FF_NET_0_PROJ_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_10_1_1_FF_NET_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_10_1_1_FF_NET_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_10_1_1_NORM1_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_10_1_1_NORM1_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_10_1_1_NORM3_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_10_1_1_NORM3_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_10_1_2_ATTN1_TO_K_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_10_1_2_ATTN1_TO_OUT_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_10_1_2_ATTN1_TO_OUT_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_10_1_2_ATTN1_TO_Q_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_10_1_2_ATTN1_TO_V_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_10_1_2_FF_NET_0_PROJ_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_10_1_2_FF_NET_0_PROJ_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_10_1_2_FF_NET_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_10_1_2_FF_NET_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_10_1_2_NORM1_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_10_1_2_NORM1_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_10_1_2_NORM3_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_10_1_2_NORM3_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_10_1_3_ATTN1_TO_K_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_10_1_3_ATTN1_TO_OUT_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_10_1_3_ATTN1_TO_OUT_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_10_1_3_ATTN1_TO_Q_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_10_1_3_ATTN1_TO_V_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_10_1_3_FF_NET_0_PROJ_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_10_1_3_FF_NET_0_PROJ_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_10_1_3_FF_NET_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_10_1_3_FF_NET_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_10_1_3_NORM1_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_10_1_3_NORM1_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_10_1_3_NORM3_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_10_1_3_NORM3_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_11_0_BLOCK1_BLOCK_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_11_0_BLOCK1_BLOCK_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_11_0_BLOCK1_BLOCK_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_11_0_BLOCK1_BLOCK_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_11_0_BLOCK2_BLOCK_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_11_0_BLOCK2_BLOCK_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_11_0_BLOCK2_BLOCK_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_11_0_BLOCK2_BLOCK_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_11_0_MLP_1_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_11_0_MLP_1_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_11_0_RES_CONV_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_11_0_RES_CONV_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_11_1_0_ATTN1_TO_K_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_11_1_0_ATTN1_TO_OUT_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_11_1_0_ATTN1_TO_OUT_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_11_1_0_ATTN1_TO_Q_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_11_1_0_ATTN1_TO_V_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_11_1_0_FF_NET_0_PROJ_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_11_1_0_FF_NET_0_PROJ_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_11_1_0_FF_NET_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_11_1_0_FF_NET_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_11_1_0_NORM1_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_11_1_0_NORM1_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_11_1_0_NORM3_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_11_1_0_NORM3_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_11_1_1_ATTN1_TO_K_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_11_1_1_ATTN1_TO_OUT_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_11_1_1_ATTN1_TO_OUT_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_11_1_1_ATTN1_TO_Q_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_11_1_1_ATTN1_TO_V_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_11_1_1_FF_NET_0_PROJ_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_11_1_1_FF_NET_0_PROJ_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_11_1_1_FF_NET_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_11_1_1_FF_NET_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_11_1_1_NORM1_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_11_1_1_NORM1_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_11_1_1_NORM3_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_11_1_1_NORM3_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_11_1_2_ATTN1_TO_K_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_11_1_2_ATTN1_TO_OUT_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_11_1_2_ATTN1_TO_OUT_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_11_1_2_ATTN1_TO_Q_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_11_1_2_ATTN1_TO_V_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_11_1_2_FF_NET_0_PROJ_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_11_1_2_FF_NET_0_PROJ_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_11_1_2_FF_NET_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_11_1_2_FF_NET_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_11_1_2_NORM1_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_11_1_2_NORM1_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_11_1_2_NORM3_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_11_1_2_NORM3_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_11_1_3_ATTN1_TO_K_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_11_1_3_ATTN1_TO_OUT_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_11_1_3_ATTN1_TO_OUT_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_11_1_3_ATTN1_TO_Q_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_11_1_3_ATTN1_TO_V_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_11_1_3_FF_NET_0_PROJ_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_11_1_3_FF_NET_0_PROJ_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_11_1_3_FF_NET_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_11_1_3_FF_NET_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_11_1_3_NORM1_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_11_1_3_NORM1_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_11_1_3_NORM3_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_11_1_3_NORM3_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_2_0_BLOCK1_BLOCK_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_2_0_BLOCK1_BLOCK_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_2_0_BLOCK1_BLOCK_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_2_0_BLOCK1_BLOCK_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_2_0_BLOCK2_BLOCK_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_2_0_BLOCK2_BLOCK_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_2_0_BLOCK2_BLOCK_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_2_0_BLOCK2_BLOCK_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_2_0_MLP_1_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_2_0_MLP_1_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_2_0_RES_CONV_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_2_0_RES_CONV_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_2_1_0_ATTN1_TO_K_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_2_1_0_ATTN1_TO_OUT_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_2_1_0_ATTN1_TO_OUT_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_2_1_0_ATTN1_TO_Q_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_2_1_0_ATTN1_TO_V_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_2_1_0_FF_NET_0_PROJ_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_2_1_0_FF_NET_0_PROJ_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_2_1_0_FF_NET_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_2_1_0_FF_NET_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_2_1_0_NORM1_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_2_1_0_NORM1_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_2_1_0_NORM3_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_2_1_0_NORM3_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_2_1_1_ATTN1_TO_K_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_2_1_1_ATTN1_TO_OUT_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_2_1_1_ATTN1_TO_OUT_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_2_1_1_ATTN1_TO_Q_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_2_1_1_ATTN1_TO_V_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_2_1_1_FF_NET_0_PROJ_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_2_1_1_FF_NET_0_PROJ_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_2_1_1_FF_NET_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_2_1_1_FF_NET_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_2_1_1_NORM1_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_2_1_1_NORM1_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_2_1_1_NORM3_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_2_1_1_NORM3_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_2_1_2_ATTN1_TO_K_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_2_1_2_ATTN1_TO_OUT_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_2_1_2_ATTN1_TO_OUT_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_2_1_2_ATTN1_TO_Q_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_2_1_2_ATTN1_TO_V_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_2_1_2_FF_NET_0_PROJ_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_2_1_2_FF_NET_0_PROJ_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_2_1_2_FF_NET_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_2_1_2_FF_NET_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_2_1_2_NORM1_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_2_1_2_NORM1_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_2_1_2_NORM3_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_2_1_2_NORM3_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_2_1_3_ATTN1_TO_K_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_2_1_3_ATTN1_TO_OUT_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_2_1_3_ATTN1_TO_OUT_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_2_1_3_ATTN1_TO_Q_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_2_1_3_ATTN1_TO_V_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_2_1_3_FF_NET_0_PROJ_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_2_1_3_FF_NET_0_PROJ_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_2_1_3_FF_NET_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_2_1_3_FF_NET_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_2_1_3_NORM1_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_2_1_3_NORM1_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_2_1_3_NORM3_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_2_1_3_NORM3_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_3_0_BLOCK1_BLOCK_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_3_0_BLOCK1_BLOCK_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_3_0_BLOCK1_BLOCK_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_3_0_BLOCK1_BLOCK_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_3_0_BLOCK2_BLOCK_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_3_0_BLOCK2_BLOCK_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_3_0_BLOCK2_BLOCK_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_3_0_BLOCK2_BLOCK_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_3_0_MLP_1_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_3_0_MLP_1_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_3_0_RES_CONV_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_3_0_RES_CONV_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_3_1_0_ATTN1_TO_K_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_3_1_0_ATTN1_TO_OUT_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_3_1_0_ATTN1_TO_OUT_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_3_1_0_ATTN1_TO_Q_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_3_1_0_ATTN1_TO_V_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_3_1_0_FF_NET_0_PROJ_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_3_1_0_FF_NET_0_PROJ_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_3_1_0_FF_NET_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_3_1_0_FF_NET_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_3_1_0_NORM1_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_3_1_0_NORM1_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_3_1_0_NORM3_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_3_1_0_NORM3_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_3_1_1_ATTN1_TO_K_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_3_1_1_ATTN1_TO_OUT_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_3_1_1_ATTN1_TO_OUT_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_3_1_1_ATTN1_TO_Q_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_3_1_1_ATTN1_TO_V_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_3_1_1_FF_NET_0_PROJ_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_3_1_1_FF_NET_0_PROJ_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_3_1_1_FF_NET_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_3_1_1_FF_NET_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_3_1_1_NORM1_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_3_1_1_NORM1_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_3_1_1_NORM3_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_3_1_1_NORM3_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_3_1_2_ATTN1_TO_K_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_3_1_2_ATTN1_TO_OUT_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_3_1_2_ATTN1_TO_OUT_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_3_1_2_ATTN1_TO_Q_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_3_1_2_ATTN1_TO_V_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_3_1_2_FF_NET_0_PROJ_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_3_1_2_FF_NET_0_PROJ_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_3_1_2_FF_NET_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_3_1_2_FF_NET_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_3_1_2_NORM1_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_3_1_2_NORM1_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_3_1_2_NORM3_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_3_1_2_NORM3_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_3_1_3_ATTN1_TO_K_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_3_1_3_ATTN1_TO_OUT_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_3_1_3_ATTN1_TO_OUT_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_3_1_3_ATTN1_TO_Q_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_3_1_3_ATTN1_TO_V_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_3_1_3_FF_NET_0_PROJ_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_3_1_3_FF_NET_0_PROJ_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_3_1_3_FF_NET_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_3_1_3_FF_NET_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_3_1_3_NORM1_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_3_1_3_NORM1_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_3_1_3_NORM3_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_3_1_3_NORM3_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_4_0_BLOCK1_BLOCK_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_4_0_BLOCK1_BLOCK_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_4_0_BLOCK1_BLOCK_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_4_0_BLOCK1_BLOCK_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_4_0_BLOCK2_BLOCK_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_4_0_BLOCK2_BLOCK_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_4_0_BLOCK2_BLOCK_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_4_0_BLOCK2_BLOCK_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_4_0_MLP_1_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_4_0_MLP_1_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_4_0_RES_CONV_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_4_0_RES_CONV_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_4_1_0_ATTN1_TO_K_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_4_1_0_ATTN1_TO_OUT_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_4_1_0_ATTN1_TO_OUT_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_4_1_0_ATTN1_TO_Q_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_4_1_0_ATTN1_TO_V_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_4_1_0_FF_NET_0_PROJ_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_4_1_0_FF_NET_0_PROJ_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_4_1_0_FF_NET_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_4_1_0_FF_NET_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_4_1_0_NORM1_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_4_1_0_NORM1_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_4_1_0_NORM3_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_4_1_0_NORM3_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_4_1_1_ATTN1_TO_K_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_4_1_1_ATTN1_TO_OUT_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_4_1_1_ATTN1_TO_OUT_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_4_1_1_ATTN1_TO_Q_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_4_1_1_ATTN1_TO_V_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_4_1_1_FF_NET_0_PROJ_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_4_1_1_FF_NET_0_PROJ_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_4_1_1_FF_NET_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_4_1_1_FF_NET_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_4_1_1_NORM1_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_4_1_1_NORM1_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_4_1_1_NORM3_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_4_1_1_NORM3_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_4_1_2_ATTN1_TO_K_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_4_1_2_ATTN1_TO_OUT_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_4_1_2_ATTN1_TO_OUT_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_4_1_2_ATTN1_TO_Q_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_4_1_2_ATTN1_TO_V_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_4_1_2_FF_NET_0_PROJ_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_4_1_2_FF_NET_0_PROJ_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_4_1_2_FF_NET_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_4_1_2_FF_NET_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_4_1_2_NORM1_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_4_1_2_NORM1_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_4_1_2_NORM3_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_4_1_2_NORM3_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_4_1_3_ATTN1_TO_K_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_4_1_3_ATTN1_TO_OUT_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_4_1_3_ATTN1_TO_OUT_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_4_1_3_ATTN1_TO_Q_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_4_1_3_ATTN1_TO_V_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_4_1_3_FF_NET_0_PROJ_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_4_1_3_FF_NET_0_PROJ_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_4_1_3_FF_NET_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_4_1_3_FF_NET_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_4_1_3_NORM1_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_4_1_3_NORM1_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_4_1_3_NORM3_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_4_1_3_NORM3_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_5_0_BLOCK1_BLOCK_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_5_0_BLOCK1_BLOCK_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_5_0_BLOCK1_BLOCK_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_5_0_BLOCK1_BLOCK_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_5_0_BLOCK2_BLOCK_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_5_0_BLOCK2_BLOCK_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_5_0_BLOCK2_BLOCK_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_5_0_BLOCK2_BLOCK_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_5_0_MLP_1_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_5_0_MLP_1_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_5_0_RES_CONV_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_5_0_RES_CONV_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_5_1_0_ATTN1_TO_K_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_5_1_0_ATTN1_TO_OUT_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_5_1_0_ATTN1_TO_OUT_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_5_1_0_ATTN1_TO_Q_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_5_1_0_ATTN1_TO_V_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_5_1_0_FF_NET_0_PROJ_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_5_1_0_FF_NET_0_PROJ_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_5_1_0_FF_NET_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_5_1_0_FF_NET_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_5_1_0_NORM1_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_5_1_0_NORM1_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_5_1_0_NORM3_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_5_1_0_NORM3_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_5_1_1_ATTN1_TO_K_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_5_1_1_ATTN1_TO_OUT_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_5_1_1_ATTN1_TO_OUT_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_5_1_1_ATTN1_TO_Q_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_5_1_1_ATTN1_TO_V_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_5_1_1_FF_NET_0_PROJ_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_5_1_1_FF_NET_0_PROJ_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_5_1_1_FF_NET_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_5_1_1_FF_NET_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_5_1_1_NORM1_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_5_1_1_NORM1_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_5_1_1_NORM3_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_5_1_1_NORM3_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_5_1_2_ATTN1_TO_K_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_5_1_2_ATTN1_TO_OUT_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_5_1_2_ATTN1_TO_OUT_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_5_1_2_ATTN1_TO_Q_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_5_1_2_ATTN1_TO_V_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_5_1_2_FF_NET_0_PROJ_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_5_1_2_FF_NET_0_PROJ_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_5_1_2_FF_NET_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_5_1_2_FF_NET_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_5_1_2_NORM1_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_5_1_2_NORM1_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_5_1_2_NORM3_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_5_1_2_NORM3_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_5_1_3_ATTN1_TO_K_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_5_1_3_ATTN1_TO_OUT_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_5_1_3_ATTN1_TO_OUT_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_5_1_3_ATTN1_TO_Q_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_5_1_3_ATTN1_TO_V_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_5_1_3_FF_NET_0_PROJ_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_5_1_3_FF_NET_0_PROJ_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_5_1_3_FF_NET_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_5_1_3_FF_NET_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_5_1_3_NORM1_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_5_1_3_NORM1_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_5_1_3_NORM3_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_5_1_3_NORM3_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_6_0_BLOCK1_BLOCK_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_6_0_BLOCK1_BLOCK_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_6_0_BLOCK1_BLOCK_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_6_0_BLOCK1_BLOCK_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_6_0_BLOCK2_BLOCK_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_6_0_BLOCK2_BLOCK_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_6_0_BLOCK2_BLOCK_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_6_0_BLOCK2_BLOCK_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_6_0_MLP_1_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_6_0_MLP_1_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_6_0_RES_CONV_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_6_0_RES_CONV_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_6_1_0_ATTN1_TO_K_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_6_1_0_ATTN1_TO_OUT_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_6_1_0_ATTN1_TO_OUT_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_6_1_0_ATTN1_TO_Q_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_6_1_0_ATTN1_TO_V_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_6_1_0_FF_NET_0_PROJ_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_6_1_0_FF_NET_0_PROJ_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_6_1_0_FF_NET_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_6_1_0_FF_NET_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_6_1_0_NORM1_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_6_1_0_NORM1_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_6_1_0_NORM3_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_6_1_0_NORM3_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_6_1_1_ATTN1_TO_K_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_6_1_1_ATTN1_TO_OUT_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_6_1_1_ATTN1_TO_OUT_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_6_1_1_ATTN1_TO_Q_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_6_1_1_ATTN1_TO_V_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_6_1_1_FF_NET_0_PROJ_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_6_1_1_FF_NET_0_PROJ_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_6_1_1_FF_NET_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_6_1_1_FF_NET_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_6_1_1_NORM1_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_6_1_1_NORM1_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_6_1_1_NORM3_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_6_1_1_NORM3_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_6_1_2_ATTN1_TO_K_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_6_1_2_ATTN1_TO_OUT_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_6_1_2_ATTN1_TO_OUT_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_6_1_2_ATTN1_TO_Q_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_6_1_2_ATTN1_TO_V_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_6_1_2_FF_NET_0_PROJ_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_6_1_2_FF_NET_0_PROJ_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_6_1_2_FF_NET_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_6_1_2_FF_NET_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_6_1_2_NORM1_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_6_1_2_NORM1_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_6_1_2_NORM3_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_6_1_2_NORM3_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_6_1_3_ATTN1_TO_K_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_6_1_3_ATTN1_TO_OUT_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_6_1_3_ATTN1_TO_OUT_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_6_1_3_ATTN1_TO_Q_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_6_1_3_ATTN1_TO_V_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_6_1_3_FF_NET_0_PROJ_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_6_1_3_FF_NET_0_PROJ_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_6_1_3_FF_NET_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_6_1_3_FF_NET_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_6_1_3_NORM1_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_6_1_3_NORM1_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_6_1_3_NORM3_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_6_1_3_NORM3_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_7_0_BLOCK1_BLOCK_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_7_0_BLOCK1_BLOCK_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_7_0_BLOCK1_BLOCK_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_7_0_BLOCK1_BLOCK_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_7_0_BLOCK2_BLOCK_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_7_0_BLOCK2_BLOCK_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_7_0_BLOCK2_BLOCK_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_7_0_BLOCK2_BLOCK_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_7_0_MLP_1_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_7_0_MLP_1_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_7_0_RES_CONV_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_7_0_RES_CONV_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_7_1_0_ATTN1_TO_K_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_7_1_0_ATTN1_TO_OUT_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_7_1_0_ATTN1_TO_OUT_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_7_1_0_ATTN1_TO_Q_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_7_1_0_ATTN1_TO_V_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_7_1_0_FF_NET_0_PROJ_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_7_1_0_FF_NET_0_PROJ_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_7_1_0_FF_NET_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_7_1_0_FF_NET_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_7_1_0_NORM1_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_7_1_0_NORM1_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_7_1_0_NORM3_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_7_1_0_NORM3_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_7_1_1_ATTN1_TO_K_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_7_1_1_ATTN1_TO_OUT_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_7_1_1_ATTN1_TO_OUT_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_7_1_1_ATTN1_TO_Q_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_7_1_1_ATTN1_TO_V_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_7_1_1_FF_NET_0_PROJ_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_7_1_1_FF_NET_0_PROJ_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_7_1_1_FF_NET_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_7_1_1_FF_NET_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_7_1_1_NORM1_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_7_1_1_NORM1_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_7_1_1_NORM3_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_7_1_1_NORM3_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_7_1_2_ATTN1_TO_K_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_7_1_2_ATTN1_TO_OUT_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_7_1_2_ATTN1_TO_OUT_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_7_1_2_ATTN1_TO_Q_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_7_1_2_ATTN1_TO_V_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_7_1_2_FF_NET_0_PROJ_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_7_1_2_FF_NET_0_PROJ_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_7_1_2_FF_NET_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_7_1_2_FF_NET_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_7_1_2_NORM1_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_7_1_2_NORM1_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_7_1_2_NORM3_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_7_1_2_NORM3_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_7_1_3_ATTN1_TO_K_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_7_1_3_ATTN1_TO_OUT_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_7_1_3_ATTN1_TO_OUT_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_7_1_3_ATTN1_TO_Q_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_7_1_3_ATTN1_TO_V_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_7_1_3_FF_NET_0_PROJ_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_7_1_3_FF_NET_0_PROJ_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_7_1_3_FF_NET_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_7_1_3_FF_NET_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_7_1_3_NORM1_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_7_1_3_NORM1_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_7_1_3_NORM3_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_7_1_3_NORM3_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_8_0_BLOCK1_BLOCK_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_8_0_BLOCK1_BLOCK_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_8_0_BLOCK1_BLOCK_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_8_0_BLOCK1_BLOCK_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_8_0_BLOCK2_BLOCK_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_8_0_BLOCK2_BLOCK_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_8_0_BLOCK2_BLOCK_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_8_0_BLOCK2_BLOCK_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_8_0_MLP_1_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_8_0_MLP_1_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_8_0_RES_CONV_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_8_0_RES_CONV_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_8_1_0_ATTN1_TO_K_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_8_1_0_ATTN1_TO_OUT_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_8_1_0_ATTN1_TO_OUT_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_8_1_0_ATTN1_TO_Q_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_8_1_0_ATTN1_TO_V_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_8_1_0_FF_NET_0_PROJ_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_8_1_0_FF_NET_0_PROJ_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_8_1_0_FF_NET_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_8_1_0_FF_NET_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_8_1_0_NORM1_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_8_1_0_NORM1_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_8_1_0_NORM3_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_8_1_0_NORM3_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_8_1_1_ATTN1_TO_K_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_8_1_1_ATTN1_TO_OUT_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_8_1_1_ATTN1_TO_OUT_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_8_1_1_ATTN1_TO_Q_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_8_1_1_ATTN1_TO_V_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_8_1_1_FF_NET_0_PROJ_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_8_1_1_FF_NET_0_PROJ_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_8_1_1_FF_NET_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_8_1_1_FF_NET_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_8_1_1_NORM1_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_8_1_1_NORM1_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_8_1_1_NORM3_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_8_1_1_NORM3_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_8_1_2_ATTN1_TO_K_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_8_1_2_ATTN1_TO_OUT_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_8_1_2_ATTN1_TO_OUT_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_8_1_2_ATTN1_TO_Q_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_8_1_2_ATTN1_TO_V_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_8_1_2_FF_NET_0_PROJ_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_8_1_2_FF_NET_0_PROJ_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_8_1_2_FF_NET_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_8_1_2_FF_NET_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_8_1_2_NORM1_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_8_1_2_NORM1_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_8_1_2_NORM3_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_8_1_2_NORM3_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_8_1_3_ATTN1_TO_K_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_8_1_3_ATTN1_TO_OUT_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_8_1_3_ATTN1_TO_OUT_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_8_1_3_ATTN1_TO_Q_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_8_1_3_ATTN1_TO_V_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_8_1_3_FF_NET_0_PROJ_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_8_1_3_FF_NET_0_PROJ_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_8_1_3_FF_NET_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_8_1_3_FF_NET_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_8_1_3_NORM1_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_8_1_3_NORM1_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_8_1_3_NORM3_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_8_1_3_NORM3_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_9_0_BLOCK1_BLOCK_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_9_0_BLOCK1_BLOCK_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_9_0_BLOCK1_BLOCK_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_9_0_BLOCK1_BLOCK_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_9_0_BLOCK2_BLOCK_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_9_0_BLOCK2_BLOCK_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_9_0_BLOCK2_BLOCK_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_9_0_BLOCK2_BLOCK_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_9_0_MLP_1_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_9_0_MLP_1_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_9_0_RES_CONV_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_9_0_RES_CONV_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_9_1_0_ATTN1_TO_K_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_9_1_0_ATTN1_TO_OUT_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_9_1_0_ATTN1_TO_OUT_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_9_1_0_ATTN1_TO_Q_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_9_1_0_ATTN1_TO_V_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_9_1_0_FF_NET_0_PROJ_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_9_1_0_FF_NET_0_PROJ_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_9_1_0_FF_NET_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_9_1_0_FF_NET_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_9_1_0_NORM1_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_9_1_0_NORM1_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_9_1_0_NORM3_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_9_1_0_NORM3_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_9_1_1_ATTN1_TO_K_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_9_1_1_ATTN1_TO_OUT_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_9_1_1_ATTN1_TO_OUT_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_9_1_1_ATTN1_TO_Q_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_9_1_1_ATTN1_TO_V_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_9_1_1_FF_NET_0_PROJ_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_9_1_1_FF_NET_0_PROJ_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_9_1_1_FF_NET_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_9_1_1_FF_NET_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_9_1_1_NORM1_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_9_1_1_NORM1_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_9_1_1_NORM3_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_9_1_1_NORM3_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_9_1_2_ATTN1_TO_K_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_9_1_2_ATTN1_TO_OUT_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_9_1_2_ATTN1_TO_OUT_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_9_1_2_ATTN1_TO_Q_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_9_1_2_ATTN1_TO_V_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_9_1_2_FF_NET_0_PROJ_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_9_1_2_FF_NET_0_PROJ_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_9_1_2_FF_NET_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_9_1_2_FF_NET_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_9_1_2_NORM1_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_9_1_2_NORM1_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_9_1_2_NORM3_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_9_1_2_NORM3_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_9_1_3_ATTN1_TO_K_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_9_1_3_ATTN1_TO_OUT_0_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_9_1_3_ATTN1_TO_OUT_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_9_1_3_ATTN1_TO_Q_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_9_1_3_ATTN1_TO_V_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_9_1_3_FF_NET_0_PROJ_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_9_1_3_FF_NET_0_PROJ_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_9_1_3_FF_NET_2_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_9_1_3_FF_NET_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_9_1_3_NORM1_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_9_1_3_NORM1_WEIGHT = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_9_1_3_NORM3_BIAS = auto()
-    DECODER_ESTIMATOR_MID_BLOCKS_9_1_3_NORM3_WEIGHT = auto()
-    DECODER_ESTIMATOR_TIME_MLP_LINEAR_1_BIAS = auto()
-    DECODER_ESTIMATOR_TIME_MLP_LINEAR_1_WEIGHT = auto()
-    DECODER_ESTIMATOR_TIME_MLP_LINEAR_2_BIAS = auto()
-    DECODER_ESTIMATOR_TIME_MLP_LINEAR_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_UP_BLOCKS_0_0_BLOCK1_BLOCK_0_BIAS = auto()
-    DECODER_ESTIMATOR_UP_BLOCKS_0_0_BLOCK1_BLOCK_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_UP_BLOCKS_0_0_BLOCK1_BLOCK_2_BIAS = auto()
-    DECODER_ESTIMATOR_UP_BLOCKS_0_0_BLOCK1_BLOCK_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_UP_BLOCKS_0_0_BLOCK2_BLOCK_0_BIAS = auto()
-    DECODER_ESTIMATOR_UP_BLOCKS_0_0_BLOCK2_BLOCK_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_UP_BLOCKS_0_0_BLOCK2_BLOCK_2_BIAS = auto()
-    DECODER_ESTIMATOR_UP_BLOCKS_0_0_BLOCK2_BLOCK_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_UP_BLOCKS_0_0_MLP_1_BIAS = auto()
-    DECODER_ESTIMATOR_UP_BLOCKS_0_0_MLP_1_WEIGHT = auto()
-    DECODER_ESTIMATOR_UP_BLOCKS_0_0_RES_CONV_BIAS = auto()
-    DECODER_ESTIMATOR_UP_BLOCKS_0_0_RES_CONV_WEIGHT = auto()
-    DECODER_ESTIMATOR_UP_BLOCKS_0_1_0_ATTN1_TO_K_WEIGHT = auto()
-    DECODER_ESTIMATOR_UP_BLOCKS_0_1_0_ATTN1_TO_OUT_0_BIAS = auto()
-    DECODER_ESTIMATOR_UP_BLOCKS_0_1_0_ATTN1_TO_OUT_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_UP_BLOCKS_0_1_0_ATTN1_TO_Q_WEIGHT = auto()
-    DECODER_ESTIMATOR_UP_BLOCKS_0_1_0_ATTN1_TO_V_WEIGHT = auto()
-    DECODER_ESTIMATOR_UP_BLOCKS_0_1_0_FF_NET_0_PROJ_BIAS = auto()
-    DECODER_ESTIMATOR_UP_BLOCKS_0_1_0_FF_NET_0_PROJ_WEIGHT = auto()
-    DECODER_ESTIMATOR_UP_BLOCKS_0_1_0_FF_NET_2_BIAS = auto()
-    DECODER_ESTIMATOR_UP_BLOCKS_0_1_0_FF_NET_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_UP_BLOCKS_0_1_0_NORM1_BIAS = auto()
-    DECODER_ESTIMATOR_UP_BLOCKS_0_1_0_NORM1_WEIGHT = auto()
-    DECODER_ESTIMATOR_UP_BLOCKS_0_1_0_NORM3_BIAS = auto()
-    DECODER_ESTIMATOR_UP_BLOCKS_0_1_0_NORM3_WEIGHT = auto()
-    DECODER_ESTIMATOR_UP_BLOCKS_0_1_1_ATTN1_TO_K_WEIGHT = auto()
-    DECODER_ESTIMATOR_UP_BLOCKS_0_1_1_ATTN1_TO_OUT_0_BIAS = auto()
-    DECODER_ESTIMATOR_UP_BLOCKS_0_1_1_ATTN1_TO_OUT_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_UP_BLOCKS_0_1_1_ATTN1_TO_Q_WEIGHT = auto()
-    DECODER_ESTIMATOR_UP_BLOCKS_0_1_1_ATTN1_TO_V_WEIGHT = auto()
-    DECODER_ESTIMATOR_UP_BLOCKS_0_1_1_FF_NET_0_PROJ_BIAS = auto()
-    DECODER_ESTIMATOR_UP_BLOCKS_0_1_1_FF_NET_0_PROJ_WEIGHT = auto()
-    DECODER_ESTIMATOR_UP_BLOCKS_0_1_1_FF_NET_2_BIAS = auto()
-    DECODER_ESTIMATOR_UP_BLOCKS_0_1_1_FF_NET_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_UP_BLOCKS_0_1_1_NORM1_BIAS = auto()
-    DECODER_ESTIMATOR_UP_BLOCKS_0_1_1_NORM1_WEIGHT = auto()
-    DECODER_ESTIMATOR_UP_BLOCKS_0_1_1_NORM3_BIAS = auto()
-    DECODER_ESTIMATOR_UP_BLOCKS_0_1_1_NORM3_WEIGHT = auto()
-    DECODER_ESTIMATOR_UP_BLOCKS_0_1_2_ATTN1_TO_K_WEIGHT = auto()
-    DECODER_ESTIMATOR_UP_BLOCKS_0_1_2_ATTN1_TO_OUT_0_BIAS = auto()
-    DECODER_ESTIMATOR_UP_BLOCKS_0_1_2_ATTN1_TO_OUT_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_UP_BLOCKS_0_1_2_ATTN1_TO_Q_WEIGHT = auto()
-    DECODER_ESTIMATOR_UP_BLOCKS_0_1_2_ATTN1_TO_V_WEIGHT = auto()
-    DECODER_ESTIMATOR_UP_BLOCKS_0_1_2_FF_NET_0_PROJ_BIAS = auto()
-    DECODER_ESTIMATOR_UP_BLOCKS_0_1_2_FF_NET_0_PROJ_WEIGHT = auto()
-    DECODER_ESTIMATOR_UP_BLOCKS_0_1_2_FF_NET_2_BIAS = auto()
-    DECODER_ESTIMATOR_UP_BLOCKS_0_1_2_FF_NET_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_UP_BLOCKS_0_1_2_NORM1_BIAS = auto()
-    DECODER_ESTIMATOR_UP_BLOCKS_0_1_2_NORM1_WEIGHT = auto()
-    DECODER_ESTIMATOR_UP_BLOCKS_0_1_2_NORM3_BIAS = auto()
-    DECODER_ESTIMATOR_UP_BLOCKS_0_1_2_NORM3_WEIGHT = auto()
-    DECODER_ESTIMATOR_UP_BLOCKS_0_1_3_ATTN1_TO_K_WEIGHT = auto()
-    DECODER_ESTIMATOR_UP_BLOCKS_0_1_3_ATTN1_TO_OUT_0_BIAS = auto()
-    DECODER_ESTIMATOR_UP_BLOCKS_0_1_3_ATTN1_TO_OUT_0_WEIGHT = auto()
-    DECODER_ESTIMATOR_UP_BLOCKS_0_1_3_ATTN1_TO_Q_WEIGHT = auto()
-    DECODER_ESTIMATOR_UP_BLOCKS_0_1_3_ATTN1_TO_V_WEIGHT = auto()
-    DECODER_ESTIMATOR_UP_BLOCKS_0_1_3_FF_NET_0_PROJ_BIAS = auto()
-    DECODER_ESTIMATOR_UP_BLOCKS_0_1_3_FF_NET_0_PROJ_WEIGHT = auto()
-    DECODER_ESTIMATOR_UP_BLOCKS_0_1_3_FF_NET_2_BIAS = auto()
-    DECODER_ESTIMATOR_UP_BLOCKS_0_1_3_FF_NET_2_WEIGHT = auto()
-    DECODER_ESTIMATOR_UP_BLOCKS_0_1_3_NORM1_BIAS = auto()
-    DECODER_ESTIMATOR_UP_BLOCKS_0_1_3_NORM1_WEIGHT = auto()
-    DECODER_ESTIMATOR_UP_BLOCKS_0_1_3_NORM3_BIAS = auto()
-    DECODER_ESTIMATOR_UP_BLOCKS_0_1_3_NORM3_WEIGHT = auto()
-    DECODER_ESTIMATOR_UP_BLOCKS_0_2_BIAS = auto()
-    DECODER_ESTIMATOR_UP_BLOCKS_0_2_WEIGHT = auto()
-    ENCODER_AFTER_NORM_BIAS = auto()
-    ENCODER_AFTER_NORM_WEIGHT = auto()
-    ENCODER_EMBED_OUT_0_BIAS = auto()
-    ENCODER_EMBED_OUT_0_WEIGHT = auto()
-    ENCODER_EMBED_OUT_1_BIAS = auto()
-    ENCODER_EMBED_OUT_1_WEIGHT = auto()
-    ENCODER_ENCODERS_0_FEED_FORWARD_W_1_BIAS = auto()
-    ENCODER_ENCODERS_0_FEED_FORWARD_W_1_WEIGHT = auto()
-    ENCODER_ENCODERS_0_FEED_FORWARD_W_2_BIAS = auto()
-    ENCODER_ENCODERS_0_FEED_FORWARD_W_2_WEIGHT = auto()
-    ENCODER_ENCODERS_0_NORM_FF_BIAS = auto()
-    ENCODER_ENCODERS_0_NORM_FF_WEIGHT = auto()
-    ENCODER_ENCODERS_0_NORM_MHA_BIAS = auto()
-    ENCODER_ENCODERS_0_NORM_MHA_WEIGHT = auto()
-    ENCODER_ENCODERS_0_SELF_ATTN_LINEAR_K_BIAS = auto()
-    ENCODER_ENCODERS_0_SELF_ATTN_LINEAR_K_WEIGHT = auto()
-    ENCODER_ENCODERS_0_SELF_ATTN_LINEAR_OUT_BIAS = auto()
-    ENCODER_ENCODERS_0_SELF_ATTN_LINEAR_OUT_WEIGHT = auto()
-    ENCODER_ENCODERS_0_SELF_ATTN_LINEAR_POS_WEIGHT = auto()
-    ENCODER_ENCODERS_0_SELF_ATTN_LINEAR_Q_BIAS = auto()
-    ENCODER_ENCODERS_0_SELF_ATTN_LINEAR_Q_WEIGHT = auto()
-    ENCODER_ENCODERS_0_SELF_ATTN_LINEAR_V_BIAS = auto()
-    ENCODER_ENCODERS_0_SELF_ATTN_LINEAR_V_WEIGHT = auto()
-    ENCODER_ENCODERS_0_SELF_ATTN_POS_BIAS_U = auto()
-    ENCODER_ENCODERS_0_SELF_ATTN_POS_BIAS_V = auto()
-    ENCODER_ENCODERS_1_FEED_FORWARD_W_1_BIAS = auto()
-    ENCODER_ENCODERS_1_FEED_FORWARD_W_1_WEIGHT = auto()
-    ENCODER_ENCODERS_1_FEED_FORWARD_W_2_BIAS = auto()
-    ENCODER_ENCODERS_1_FEED_FORWARD_W_2_WEIGHT = auto()
-    ENCODER_ENCODERS_1_NORM_FF_BIAS = auto()
-    ENCODER_ENCODERS_1_NORM_FF_WEIGHT = auto()
-    ENCODER_ENCODERS_1_NORM_MHA_BIAS = auto()
-    ENCODER_ENCODERS_1_NORM_MHA_WEIGHT = auto()
-    ENCODER_ENCODERS_1_SELF_ATTN_LINEAR_K_BIAS = auto()
-    ENCODER_ENCODERS_1_SELF_ATTN_LINEAR_K_WEIGHT = auto()
-    ENCODER_ENCODERS_1_SELF_ATTN_LINEAR_OUT_BIAS = auto()
-    ENCODER_ENCODERS_1_SELF_ATTN_LINEAR_OUT_WEIGHT = auto()
-    ENCODER_ENCODERS_1_SELF_ATTN_LINEAR_POS_WEIGHT = auto()
-    ENCODER_ENCODERS_1_SELF_ATTN_LINEAR_Q_BIAS = auto()
-    ENCODER_ENCODERS_1_SELF_ATTN_LINEAR_Q_WEIGHT = auto()
-    ENCODER_ENCODERS_1_SELF_ATTN_LINEAR_V_BIAS = auto()
-    ENCODER_ENCODERS_1_SELF_ATTN_LINEAR_V_WEIGHT = auto()
-    ENCODER_ENCODERS_1_SELF_ATTN_POS_BIAS_U = auto()
-    ENCODER_ENCODERS_1_SELF_ATTN_POS_BIAS_V = auto()
-    ENCODER_ENCODERS_2_FEED_FORWARD_W_1_BIAS = auto()
-    ENCODER_ENCODERS_2_FEED_FORWARD_W_1_WEIGHT = auto()
-    ENCODER_ENCODERS_2_FEED_FORWARD_W_2_BIAS = auto()
-    ENCODER_ENCODERS_2_FEED_FORWARD_W_2_WEIGHT = auto()
-    ENCODER_ENCODERS_2_NORM_FF_BIAS = auto()
-    ENCODER_ENCODERS_2_NORM_FF_WEIGHT = auto()
-    ENCODER_ENCODERS_2_NORM_MHA_BIAS = auto()
-    ENCODER_ENCODERS_2_NORM_MHA_WEIGHT = auto()
-    ENCODER_ENCODERS_2_SELF_ATTN_LINEAR_K_BIAS = auto()
-    ENCODER_ENCODERS_2_SELF_ATTN_LINEAR_K_WEIGHT = auto()
-    ENCODER_ENCODERS_2_SELF_ATTN_LINEAR_OUT_BIAS = auto()
-    ENCODER_ENCODERS_2_SELF_ATTN_LINEAR_OUT_WEIGHT = auto()
-    ENCODER_ENCODERS_2_SELF_ATTN_LINEAR_POS_WEIGHT = auto()
-    ENCODER_ENCODERS_2_SELF_ATTN_LINEAR_Q_BIAS = auto()
-    ENCODER_ENCODERS_2_SELF_ATTN_LINEAR_Q_WEIGHT = auto()
-    ENCODER_ENCODERS_2_SELF_ATTN_LINEAR_V_BIAS = auto()
-    ENCODER_ENCODERS_2_SELF_ATTN_LINEAR_V_WEIGHT = auto()
-    ENCODER_ENCODERS_2_SELF_ATTN_POS_BIAS_U = auto()
-    ENCODER_ENCODERS_2_SELF_ATTN_POS_BIAS_V = auto()
-    ENCODER_ENCODERS_3_FEED_FORWARD_W_1_BIAS = auto()
-    ENCODER_ENCODERS_3_FEED_FORWARD_W_1_WEIGHT = auto()
-    ENCODER_ENCODERS_3_FEED_FORWARD_W_2_BIAS = auto()
-    ENCODER_ENCODERS_3_FEED_FORWARD_W_2_WEIGHT = auto()
-    ENCODER_ENCODERS_3_NORM_FF_BIAS = auto()
-    ENCODER_ENCODERS_3_NORM_FF_WEIGHT = auto()
-    ENCODER_ENCODERS_3_NORM_MHA_BIAS = auto()
-    ENCODER_ENCODERS_3_NORM_MHA_WEIGHT = auto()
-    ENCODER_ENCODERS_3_SELF_ATTN_LINEAR_K_BIAS = auto()
-    ENCODER_ENCODERS_3_SELF_ATTN_LINEAR_K_WEIGHT = auto()
-    ENCODER_ENCODERS_3_SELF_ATTN_LINEAR_OUT_BIAS = auto()
-    ENCODER_ENCODERS_3_SELF_ATTN_LINEAR_OUT_WEIGHT = auto()
-    ENCODER_ENCODERS_3_SELF_ATTN_LINEAR_POS_WEIGHT = auto()
-    ENCODER_ENCODERS_3_SELF_ATTN_LINEAR_Q_BIAS = auto()
-    ENCODER_ENCODERS_3_SELF_ATTN_LINEAR_Q_WEIGHT = auto()
-    ENCODER_ENCODERS_3_SELF_ATTN_LINEAR_V_BIAS = auto()
-    ENCODER_ENCODERS_3_SELF_ATTN_LINEAR_V_WEIGHT = auto()
-    ENCODER_ENCODERS_3_SELF_ATTN_POS_BIAS_U = auto()
-    ENCODER_ENCODERS_3_SELF_ATTN_POS_BIAS_V = auto()
-    ENCODER_ENCODERS_4_FEED_FORWARD_W_1_BIAS = auto()
-    ENCODER_ENCODERS_4_FEED_FORWARD_W_1_WEIGHT = auto()
-    ENCODER_ENCODERS_4_FEED_FORWARD_W_2_BIAS = auto()
-    ENCODER_ENCODERS_4_FEED_FORWARD_W_2_WEIGHT = auto()
-    ENCODER_ENCODERS_4_NORM_FF_BIAS = auto()
-    ENCODER_ENCODERS_4_NORM_FF_WEIGHT = auto()
-    ENCODER_ENCODERS_4_NORM_MHA_BIAS = auto()
-    ENCODER_ENCODERS_4_NORM_MHA_WEIGHT = auto()
-    ENCODER_ENCODERS_4_SELF_ATTN_LINEAR_K_BIAS = auto()
-    ENCODER_ENCODERS_4_SELF_ATTN_LINEAR_K_WEIGHT = auto()
-    ENCODER_ENCODERS_4_SELF_ATTN_LINEAR_OUT_BIAS = auto()
-    ENCODER_ENCODERS_4_SELF_ATTN_LINEAR_OUT_WEIGHT = auto()
-    ENCODER_ENCODERS_4_SELF_ATTN_LINEAR_POS_WEIGHT = auto()
-    ENCODER_ENCODERS_4_SELF_ATTN_LINEAR_Q_BIAS = auto()
-    ENCODER_ENCODERS_4_SELF_ATTN_LINEAR_Q_WEIGHT = auto()
-    ENCODER_ENCODERS_4_SELF_ATTN_LINEAR_V_BIAS = auto()
-    ENCODER_ENCODERS_4_SELF_ATTN_LINEAR_V_WEIGHT = auto()
-    ENCODER_ENCODERS_4_SELF_ATTN_POS_BIAS_U = auto()
-    ENCODER_ENCODERS_4_SELF_ATTN_POS_BIAS_V = auto()
-    ENCODER_ENCODERS_5_FEED_FORWARD_W_1_BIAS = auto()
-    ENCODER_ENCODERS_5_FEED_FORWARD_W_1_WEIGHT = auto()
-    ENCODER_ENCODERS_5_FEED_FORWARD_W_2_BIAS = auto()
-    ENCODER_ENCODERS_5_FEED_FORWARD_W_2_WEIGHT = auto()
-    ENCODER_ENCODERS_5_NORM_FF_BIAS = auto()
-    ENCODER_ENCODERS_5_NORM_FF_WEIGHT = auto()
-    ENCODER_ENCODERS_5_NORM_MHA_BIAS = auto()
-    ENCODER_ENCODERS_5_NORM_MHA_WEIGHT = auto()
-    ENCODER_ENCODERS_5_SELF_ATTN_LINEAR_K_BIAS = auto()
-    ENCODER_ENCODERS_5_SELF_ATTN_LINEAR_K_WEIGHT = auto()
-    ENCODER_ENCODERS_5_SELF_ATTN_LINEAR_OUT_BIAS = auto()
-    ENCODER_ENCODERS_5_SELF_ATTN_LINEAR_OUT_WEIGHT = auto()
-    ENCODER_ENCODERS_5_SELF_ATTN_LINEAR_POS_WEIGHT = auto()
-    ENCODER_ENCODERS_5_SELF_ATTN_LINEAR_Q_BIAS = auto()
-    ENCODER_ENCODERS_5_SELF_ATTN_LINEAR_Q_WEIGHT = auto()
-    ENCODER_ENCODERS_5_SELF_ATTN_LINEAR_V_BIAS = auto()
-    ENCODER_ENCODERS_5_SELF_ATTN_LINEAR_V_WEIGHT = auto()
-    ENCODER_ENCODERS_5_SELF_ATTN_POS_BIAS_U = auto()
-    ENCODER_ENCODERS_5_SELF_ATTN_POS_BIAS_V = auto()
-    ENCODER_PRE_LOOKAHEAD_LAYER_CONV1_BIAS = auto()
-    ENCODER_PRE_LOOKAHEAD_LAYER_CONV1_WEIGHT = auto()
-    ENCODER_PRE_LOOKAHEAD_LAYER_CONV2_BIAS = auto()
-    ENCODER_PRE_LOOKAHEAD_LAYER_CONV2_WEIGHT = auto()
-    ENCODER_UP_EMBED_OUT_0_BIAS = auto()
-    ENCODER_UP_EMBED_OUT_0_WEIGHT = auto()
-    ENCODER_UP_EMBED_OUT_1_BIAS = auto()
-    ENCODER_UP_EMBED_OUT_1_WEIGHT = auto()
-    ENCODER_UP_ENCODERS_0_FEED_FORWARD_W_1_BIAS = auto()
-    ENCODER_UP_ENCODERS_0_FEED_FORWARD_W_1_WEIGHT = auto()
-    ENCODER_UP_ENCODERS_0_FEED_FORWARD_W_2_BIAS = auto()
-    ENCODER_UP_ENCODERS_0_FEED_FORWARD_W_2_WEIGHT = auto()
-    ENCODER_UP_ENCODERS_0_NORM_FF_BIAS = auto()
-    ENCODER_UP_ENCODERS_0_NORM_FF_WEIGHT = auto()
-    ENCODER_UP_ENCODERS_0_NORM_MHA_BIAS = auto()
-    ENCODER_UP_ENCODERS_0_NORM_MHA_WEIGHT = auto()
-    ENCODER_UP_ENCODERS_0_SELF_ATTN_LINEAR_K_BIAS = auto()
-    ENCODER_UP_ENCODERS_0_SELF_ATTN_LINEAR_K_WEIGHT = auto()
-    ENCODER_UP_ENCODERS_0_SELF_ATTN_LINEAR_OUT_BIAS = auto()
-    ENCODER_UP_ENCODERS_0_SELF_ATTN_LINEAR_OUT_WEIGHT = auto()
-    ENCODER_UP_ENCODERS_0_SELF_ATTN_LINEAR_POS_WEIGHT = auto()
-    ENCODER_UP_ENCODERS_0_SELF_ATTN_LINEAR_Q_BIAS = auto()
-    ENCODER_UP_ENCODERS_0_SELF_ATTN_LINEAR_Q_WEIGHT = auto()
-    ENCODER_UP_ENCODERS_0_SELF_ATTN_LINEAR_V_BIAS = auto()
-    ENCODER_UP_ENCODERS_0_SELF_ATTN_LINEAR_V_WEIGHT = auto()
-    ENCODER_UP_ENCODERS_0_SELF_ATTN_POS_BIAS_U = auto()
-    ENCODER_UP_ENCODERS_0_SELF_ATTN_POS_BIAS_V = auto()
-    ENCODER_UP_ENCODERS_1_FEED_FORWARD_W_1_BIAS = auto()
-    ENCODER_UP_ENCODERS_1_FEED_FORWARD_W_1_WEIGHT = auto()
-    ENCODER_UP_ENCODERS_1_FEED_FORWARD_W_2_BIAS = auto()
-    ENCODER_UP_ENCODERS_1_FEED_FORWARD_W_2_WEIGHT = auto()
-    ENCODER_UP_ENCODERS_1_NORM_FF_BIAS = auto()
-    ENCODER_UP_ENCODERS_1_NORM_FF_WEIGHT = auto()
-    ENCODER_UP_ENCODERS_1_NORM_MHA_BIAS = auto()
-    ENCODER_UP_ENCODERS_1_NORM_MHA_WEIGHT = auto()
-    ENCODER_UP_ENCODERS_1_SELF_ATTN_LINEAR_K_BIAS = auto()
-    ENCODER_UP_ENCODERS_1_SELF_ATTN_LINEAR_K_WEIGHT = auto()
-    ENCODER_UP_ENCODERS_1_SELF_ATTN_LINEAR_OUT_BIAS = auto()
-    ENCODER_UP_ENCODERS_1_SELF_ATTN_LINEAR_OUT_WEIGHT = auto()
-    ENCODER_UP_ENCODERS_1_SELF_ATTN_LINEAR_POS_WEIGHT = auto()
-    ENCODER_UP_ENCODERS_1_SELF_ATTN_LINEAR_Q_BIAS = auto()
-    ENCODER_UP_ENCODERS_1_SELF_ATTN_LINEAR_Q_WEIGHT = auto()
-    ENCODER_UP_ENCODERS_1_SELF_ATTN_LINEAR_V_BIAS = auto()
-    ENCODER_UP_ENCODERS_1_SELF_ATTN_LINEAR_V_WEIGHT = auto()
-    ENCODER_UP_ENCODERS_1_SELF_ATTN_POS_BIAS_U = auto()
-    ENCODER_UP_ENCODERS_1_SELF_ATTN_POS_BIAS_V = auto()
-    ENCODER_UP_ENCODERS_2_FEED_FORWARD_W_1_BIAS = auto()
-    ENCODER_UP_ENCODERS_2_FEED_FORWARD_W_1_WEIGHT = auto()
-    ENCODER_UP_ENCODERS_2_FEED_FORWARD_W_2_BIAS = auto()
-    ENCODER_UP_ENCODERS_2_FEED_FORWARD_W_2_WEIGHT = auto()
-    ENCODER_UP_ENCODERS_2_NORM_FF_BIAS = auto()
-    ENCODER_UP_ENCODERS_2_NORM_FF_WEIGHT = auto()
-    ENCODER_UP_ENCODERS_2_NORM_MHA_BIAS = auto()
-    ENCODER_UP_ENCODERS_2_NORM_MHA_WEIGHT = auto()
-    ENCODER_UP_ENCODERS_2_SELF_ATTN_LINEAR_K_BIAS = auto()
-    ENCODER_UP_ENCODERS_2_SELF_ATTN_LINEAR_K_WEIGHT = auto()
-    ENCODER_UP_ENCODERS_2_SELF_ATTN_LINEAR_OUT_BIAS = auto()
-    ENCODER_UP_ENCODERS_2_SELF_ATTN_LINEAR_OUT_WEIGHT = auto()
-    ENCODER_UP_ENCODERS_2_SELF_ATTN_LINEAR_POS_WEIGHT = auto()
-    ENCODER_UP_ENCODERS_2_SELF_ATTN_LINEAR_Q_BIAS = auto()
-    ENCODER_UP_ENCODERS_2_SELF_ATTN_LINEAR_Q_WEIGHT = auto()
-    ENCODER_UP_ENCODERS_2_SELF_ATTN_LINEAR_V_BIAS = auto()
-    ENCODER_UP_ENCODERS_2_SELF_ATTN_LINEAR_V_WEIGHT = auto()
-    ENCODER_UP_ENCODERS_2_SELF_ATTN_POS_BIAS_U = auto()
-    ENCODER_UP_ENCODERS_2_SELF_ATTN_POS_BIAS_V = auto()
-    ENCODER_UP_ENCODERS_3_FEED_FORWARD_W_1_BIAS = auto()
-    ENCODER_UP_ENCODERS_3_FEED_FORWARD_W_1_WEIGHT = auto()
-    ENCODER_UP_ENCODERS_3_FEED_FORWARD_W_2_BIAS = auto()
-    ENCODER_UP_ENCODERS_3_FEED_FORWARD_W_2_WEIGHT = auto()
-    ENCODER_UP_ENCODERS_3_NORM_FF_BIAS = auto()
-    ENCODER_UP_ENCODERS_3_NORM_FF_WEIGHT = auto()
-    ENCODER_UP_ENCODERS_3_NORM_MHA_BIAS = auto()
-    ENCODER_UP_ENCODERS_3_NORM_MHA_WEIGHT = auto()
-    ENCODER_UP_ENCODERS_3_SELF_ATTN_LINEAR_K_BIAS = auto()
-    ENCODER_UP_ENCODERS_3_SELF_ATTN_LINEAR_K_WEIGHT = auto()
-    ENCODER_UP_ENCODERS_3_SELF_ATTN_LINEAR_OUT_BIAS = auto()
-    ENCODER_UP_ENCODERS_3_SELF_ATTN_LINEAR_OUT_WEIGHT = auto()
-    ENCODER_UP_ENCODERS_3_SELF_ATTN_LINEAR_POS_WEIGHT = auto()
-    ENCODER_UP_ENCODERS_3_SELF_ATTN_LINEAR_Q_BIAS = auto()
-    ENCODER_UP_ENCODERS_3_SELF_ATTN_LINEAR_Q_WEIGHT = auto()
-    ENCODER_UP_ENCODERS_3_SELF_ATTN_LINEAR_V_BIAS = auto()
-    ENCODER_UP_ENCODERS_3_SELF_ATTN_LINEAR_V_WEIGHT = auto()
-    ENCODER_UP_ENCODERS_3_SELF_ATTN_POS_BIAS_U = auto()
-    ENCODER_UP_ENCODERS_3_SELF_ATTN_POS_BIAS_V = auto()
-    ENCODER_UP_LAYER_CONV_BIAS = auto()
-    ENCODER_UP_LAYER_CONV_WEIGHT = auto()
-    ENCODER_PROJ_BIAS = auto()
-    ENCODER_PROJ_WEIGHT = auto()
-    INPUT_EMBEDDING_WEIGHT = auto()
-    SPK_EMBED_AFFINE_LAYER_BIAS = auto()
-    SPK_EMBED_AFFINE_LAYER_WEIGHT = auto()
-
-    # ----- CosyVoiceHift 新增 -----
-    CONV_POST_BIAS = auto()
-    CONV_POST_WEIGHT = auto()
-
-    # Conv Pre
-    CONV_PRE_BIAS = auto()
-    CONV_PRE_WEIGHT = auto()
-
-    F0_PREDICTOR_CLASSIFIER_BIAS = auto()
-    F0_PREDICTOR_CLASSIFIER_WEIGHT = auto()
-    
-    # Layer 0
-    F0_PREDICTOR_CONDNET_0_BIAS = auto()
-    F0_PREDICTOR_CONDNET_0_WEIGHT = auto()
-
-    # Layer 2
-    F0_PREDICTOR_CONDNET_2_BIAS = auto()
-    F0_PREDICTOR_CONDNET_2_WEIGHT = auto()
-
-    # Layer 4
-    F0_PREDICTOR_CONDNET_4_BIAS = auto()
-    F0_PREDICTOR_CONDNET_4_WEIGHT = auto()
-
-    # Layer 6
-    F0_PREDICTOR_CONDNET_6_BIAS = auto()
-    F0_PREDICTOR_CONDNET_6_WEIGHT = auto()
-
-    # Layer 8
-    F0_PREDICTOR_CONDNET_8_BIAS = auto()
-    F0_PREDICTOR_CONDNET_8_WEIGHT = auto()
-
-    M_SOURCE_L_LINEAR_BIAS = auto()
-    M_SOURCE_L_LINEAR_WEIGHT = auto()
-    RESBLOCKS_0_ACTIVATIONS1_0_ALPHA = auto()
-    RESBLOCKS_0_ACTIVATIONS1_1_ALPHA = auto()
-    RESBLOCKS_0_ACTIVATIONS1_2_ALPHA = auto()
-    RESBLOCKS_0_ACTIVATIONS2_0_ALPHA = auto()
-    RESBLOCKS_0_ACTIVATIONS2_1_ALPHA = auto()
-    RESBLOCKS_0_ACTIVATIONS2_2_ALPHA = auto()
-        # ==========================================
-    # Main ResBlocks (0-8)
-    # ==========================================
-    
-    # ResBlock 0
-    RESBLOCKS_0_CONVS1_0_BIAS = auto()
-    RESBLOCKS_0_CONVS1_0_WEIGHT = auto()
-    RESBLOCKS_0_CONVS1_1_BIAS = auto()
-    RESBLOCKS_0_CONVS1_1_WEIGHT = auto()
-    RESBLOCKS_0_CONVS1_2_BIAS = auto()
-    RESBLOCKS_0_CONVS1_2_WEIGHT = auto()
-    RESBLOCKS_0_CONVS2_0_BIAS = auto()
-    RESBLOCKS_0_CONVS2_0_WEIGHT = auto()
-    RESBLOCKS_0_CONVS2_1_BIAS = auto()
-    RESBLOCKS_0_CONVS2_1_WEIGHT = auto()
-    RESBLOCKS_0_CONVS2_2_BIAS = auto()
-    RESBLOCKS_0_CONVS2_2_WEIGHT = auto()
-    
-    # ResBlock 1 (保留 Activations)
-    RESBLOCKS_1_ACTIVATIONS1_0_ALPHA = auto()
-    RESBLOCKS_1_ACTIVATIONS1_1_ALPHA = auto()
-    RESBLOCKS_1_ACTIVATIONS1_2_ALPHA = auto()
-    RESBLOCKS_1_ACTIVATIONS2_0_ALPHA = auto()
-    RESBLOCKS_1_ACTIVATIONS2_1_ALPHA = auto()
-    RESBLOCKS_1_ACTIVATIONS2_2_ALPHA = auto()
-    
-    RESBLOCKS_1_CONVS1_0_BIAS = auto()
-    RESBLOCKS_1_CONVS1_0_WEIGHT = auto()
-    RESBLOCKS_1_CONVS1_1_BIAS = auto()
-    RESBLOCKS_1_CONVS1_1_WEIGHT = auto()
-    RESBLOCKS_1_CONVS1_2_BIAS = auto()
-    RESBLOCKS_1_CONVS1_2_WEIGHT = auto()
-    RESBLOCKS_1_CONVS2_0_BIAS = auto()
-    RESBLOCKS_1_CONVS2_0_WEIGHT = auto()
-    RESBLOCKS_1_CONVS2_1_BIAS = auto()
-    RESBLOCKS_1_CONVS2_1_WEIGHT = auto()
-    RESBLOCKS_1_CONVS2_2_BIAS = auto()
-    RESBLOCKS_1_CONVS2_2_WEIGHT = auto()
-
-    # ResBlock 2
-    RESBLOCKS_2_ACTIVATIONS1_0_ALPHA = auto()
-    RESBLOCKS_2_ACTIVATIONS1_1_ALPHA = auto()
-    RESBLOCKS_2_ACTIVATIONS1_2_ALPHA = auto()
-    RESBLOCKS_2_ACTIVATIONS2_0_ALPHA = auto()
-    RESBLOCKS_2_ACTIVATIONS2_1_ALPHA = auto()
-    RESBLOCKS_2_ACTIVATIONS2_2_ALPHA = auto()
-    
-    RESBLOCKS_2_CONVS1_0_BIAS = auto()
-    RESBLOCKS_2_CONVS1_0_WEIGHT = auto()
-    RESBLOCKS_2_CONVS1_1_BIAS = auto()
-    RESBLOCKS_2_CONVS1_1_WEIGHT = auto()
-    RESBLOCKS_2_CONVS1_2_BIAS = auto()
-    RESBLOCKS_2_CONVS1_2_WEIGHT = auto()
-    RESBLOCKS_2_CONVS2_0_BIAS = auto()
-    RESBLOCKS_2_CONVS2_0_WEIGHT = auto()
-    RESBLOCKS_2_CONVS2_1_BIAS = auto()
-    RESBLOCKS_2_CONVS2_1_WEIGHT = auto()
-    RESBLOCKS_2_CONVS2_2_BIAS = auto()
-    RESBLOCKS_2_CONVS2_2_WEIGHT = auto()
-
-    # ResBlock 3
-    RESBLOCKS_3_ACTIVATIONS1_0_ALPHA = auto()
-    RESBLOCKS_3_ACTIVATIONS1_1_ALPHA = auto()
-    RESBLOCKS_3_ACTIVATIONS1_2_ALPHA = auto()
-    RESBLOCKS_3_ACTIVATIONS2_0_ALPHA = auto()
-    RESBLOCKS_3_ACTIVATIONS2_1_ALPHA = auto()
-    RESBLOCKS_3_ACTIVATIONS2_2_ALPHA = auto()
-    
-    RESBLOCKS_3_CONVS1_0_BIAS = auto()
-    RESBLOCKS_3_CONVS1_0_WEIGHT = auto()
-    RESBLOCKS_3_CONVS1_1_BIAS = auto()
-    RESBLOCKS_3_CONVS1_1_WEIGHT = auto()
-    RESBLOCKS_3_CONVS1_2_BIAS = auto()
-    RESBLOCKS_3_CONVS1_2_WEIGHT = auto()
-    RESBLOCKS_3_CONVS2_0_BIAS = auto()
-    RESBLOCKS_3_CONVS2_0_WEIGHT = auto()
-    RESBLOCKS_3_CONVS2_1_BIAS = auto()
-    RESBLOCKS_3_CONVS2_1_WEIGHT = auto()
-    RESBLOCKS_3_CONVS2_2_BIAS = auto()
-    RESBLOCKS_3_CONVS2_2_WEIGHT = auto()
-
-    # ResBlock 4
-    RESBLOCKS_4_ACTIVATIONS1_0_ALPHA = auto()
-    RESBLOCKS_4_ACTIVATIONS1_1_ALPHA = auto()
-    RESBLOCKS_4_ACTIVATIONS1_2_ALPHA = auto()
-    RESBLOCKS_4_ACTIVATIONS2_0_ALPHA = auto()
-    RESBLOCKS_4_ACTIVATIONS2_1_ALPHA = auto()
-    RESBLOCKS_4_ACTIVATIONS2_2_ALPHA = auto()
-    
-    RESBLOCKS_4_CONVS1_0_BIAS = auto()
-    RESBLOCKS_4_CONVS1_0_WEIGHT = auto()
-    RESBLOCKS_4_CONVS1_1_BIAS = auto()
-    RESBLOCKS_4_CONVS1_1_WEIGHT = auto()
-    RESBLOCKS_4_CONVS1_2_BIAS = auto()
-    RESBLOCKS_4_CONVS1_2_WEIGHT = auto()
-    RESBLOCKS_4_CONVS2_0_BIAS = auto()
-    RESBLOCKS_4_CONVS2_0_WEIGHT = auto()
-    RESBLOCKS_4_CONVS2_1_BIAS = auto()
-    RESBLOCKS_4_CONVS2_1_WEIGHT = auto()
-    RESBLOCKS_4_CONVS2_2_BIAS = auto()
-    RESBLOCKS_4_CONVS2_2_WEIGHT = auto()
-
-    # ResBlock 5
-    RESBLOCKS_5_ACTIVATIONS1_0_ALPHA = auto()
-    RESBLOCKS_5_ACTIVATIONS1_1_ALPHA = auto()
-    RESBLOCKS_5_ACTIVATIONS1_2_ALPHA = auto()
-    RESBLOCKS_5_ACTIVATIONS2_0_ALPHA = auto()
-    RESBLOCKS_5_ACTIVATIONS2_1_ALPHA = auto()
-    RESBLOCKS_5_ACTIVATIONS2_2_ALPHA = auto()
-    
-    RESBLOCKS_5_CONVS1_0_BIAS = auto()
-    RESBLOCKS_5_CONVS1_0_WEIGHT = auto()
-    RESBLOCKS_5_CONVS1_1_BIAS = auto()
-    RESBLOCKS_5_CONVS1_1_WEIGHT = auto()
-    RESBLOCKS_5_CONVS1_2_BIAS = auto()
-    RESBLOCKS_5_CONVS1_2_WEIGHT = auto()
-    RESBLOCKS_5_CONVS2_0_BIAS = auto()
-    RESBLOCKS_5_CONVS2_0_WEIGHT = auto()
-    RESBLOCKS_5_CONVS2_1_BIAS = auto()
-    RESBLOCKS_5_CONVS2_1_WEIGHT = auto()
-    RESBLOCKS_5_CONVS2_2_BIAS = auto()
-    RESBLOCKS_5_CONVS2_2_WEIGHT = auto()
-
-    # ResBlock 6
-    RESBLOCKS_6_ACTIVATIONS1_0_ALPHA = auto()
-    RESBLOCKS_6_ACTIVATIONS1_1_ALPHA = auto()
-    RESBLOCKS_6_ACTIVATIONS1_2_ALPHA = auto()
-    RESBLOCKS_6_ACTIVATIONS2_0_ALPHA = auto()
-    RESBLOCKS_6_ACTIVATIONS2_1_ALPHA = auto()
-    RESBLOCKS_6_ACTIVATIONS2_2_ALPHA = auto()
-    
-    RESBLOCKS_6_CONVS1_0_BIAS = auto()
-    RESBLOCKS_6_CONVS1_0_WEIGHT = auto()
-    RESBLOCKS_6_CONVS1_1_BIAS = auto()
-    RESBLOCKS_6_CONVS1_1_WEIGHT = auto()
-    RESBLOCKS_6_CONVS1_2_BIAS = auto()
-    RESBLOCKS_6_CONVS1_2_WEIGHT = auto()
-    RESBLOCKS_6_CONVS2_0_BIAS = auto()
-    RESBLOCKS_6_CONVS2_0_WEIGHT = auto()
-    RESBLOCKS_6_CONVS2_1_BIAS = auto()
-    RESBLOCKS_6_CONVS2_1_WEIGHT = auto()
-    RESBLOCKS_6_CONVS2_2_BIAS = auto()
-    RESBLOCKS_6_CONVS2_2_WEIGHT = auto()
-
-    # ResBlock 7
-    RESBLOCKS_7_ACTIVATIONS1_0_ALPHA = auto()
-    RESBLOCKS_7_ACTIVATIONS1_1_ALPHA = auto()
-    RESBLOCKS_7_ACTIVATIONS1_2_ALPHA = auto()
-    RESBLOCKS_7_ACTIVATIONS2_0_ALPHA = auto()
-    RESBLOCKS_7_ACTIVATIONS2_1_ALPHA = auto()
-    RESBLOCKS_7_ACTIVATIONS2_2_ALPHA = auto()
-    
-    RESBLOCKS_7_CONVS1_0_BIAS = auto()
-    RESBLOCKS_7_CONVS1_0_WEIGHT = auto()
-    RESBLOCKS_7_CONVS1_1_BIAS = auto()
-    RESBLOCKS_7_CONVS1_1_WEIGHT = auto()
-    RESBLOCKS_7_CONVS1_2_BIAS = auto()
-    RESBLOCKS_7_CONVS1_2_WEIGHT = auto()
-    RESBLOCKS_7_CONVS2_0_BIAS = auto()
-    RESBLOCKS_7_CONVS2_0_WEIGHT = auto()
-    RESBLOCKS_7_CONVS2_1_BIAS = auto()
-    RESBLOCKS_7_CONVS2_1_WEIGHT = auto()
-    RESBLOCKS_7_CONVS2_2_BIAS = auto()
-    RESBLOCKS_7_CONVS2_2_WEIGHT = auto()
-
-    # ResBlock 8
-    RESBLOCKS_8_ACTIVATIONS1_0_ALPHA = auto()
-    RESBLOCKS_8_ACTIVATIONS1_1_ALPHA = auto()
-    RESBLOCKS_8_ACTIVATIONS1_2_ALPHA = auto()
-    RESBLOCKS_8_ACTIVATIONS2_0_ALPHA = auto()
-    RESBLOCKS_8_ACTIVATIONS2_1_ALPHA = auto()
-    RESBLOCKS_8_ACTIVATIONS2_2_ALPHA = auto()
-    
-    RESBLOCKS_8_CONVS1_0_BIAS = auto()
-    RESBLOCKS_8_CONVS1_0_WEIGHT = auto()
-    RESBLOCKS_8_CONVS1_1_BIAS = auto()
-    RESBLOCKS_8_CONVS1_1_WEIGHT = auto()
-    RESBLOCKS_8_CONVS1_2_BIAS = auto()
-    RESBLOCKS_8_CONVS1_2_WEIGHT = auto()
-    RESBLOCKS_8_CONVS2_0_BIAS = auto()
-    RESBLOCKS_8_CONVS2_0_WEIGHT = auto()
-    RESBLOCKS_8_CONVS2_1_BIAS = auto()
-    RESBLOCKS_8_CONVS2_1_WEIGHT = auto()
-    RESBLOCKS_8_CONVS2_2_BIAS = auto()
-    RESBLOCKS_8_CONVS2_2_WEIGHT = auto()
-
-    # ==========================================
-    # Source Downs (already weight/bias)
-    # ==========================================
-    SOURCE_DOWNS_0_WEIGHT = auto()
-    SOURCE_DOWNS_0_BIAS  = auto()
-    SOURCE_DOWNS_1_WEIGHT = auto()
-    SOURCE_DOWNS_1_BIAS  = auto()
-    SOURCE_DOWNS_2_WEIGHT = auto()
-    SOURCE_DOWNS_2_BIAS = auto()
-    # ==========================================
-    # Source ResBlocks (0-2)
-    # ==========================================
-
-    # Source ResBlock 0
-    SOURCE_RESBLOCKS_0_ACTIVATIONS1_0_ALPHA = auto()
-    SOURCE_RESBLOCKS_0_ACTIVATIONS1_1_ALPHA = auto()
-    SOURCE_RESBLOCKS_0_ACTIVATIONS1_2_ALPHA = auto()
-    SOURCE_RESBLOCKS_0_ACTIVATIONS2_0_ALPHA = auto()
-    SOURCE_RESBLOCKS_0_ACTIVATIONS2_1_ALPHA = auto()
-    SOURCE_RESBLOCKS_0_ACTIVATIONS2_2_ALPHA = auto()
-    
-    SOURCE_RESBLOCKS_0_CONVS1_0_BIAS = auto()
-    SOURCE_RESBLOCKS_0_CONVS1_0_WEIGHT = auto()
-    SOURCE_RESBLOCKS_0_CONVS1_1_BIAS = auto()
-    SOURCE_RESBLOCKS_0_CONVS1_1_WEIGHT = auto()
-    SOURCE_RESBLOCKS_0_CONVS1_2_BIAS = auto()
-    SOURCE_RESBLOCKS_0_CONVS1_2_WEIGHT = auto()
-    SOURCE_RESBLOCKS_0_CONVS2_0_BIAS = auto()
-    SOURCE_RESBLOCKS_0_CONVS2_0_WEIGHT = auto()
-    SOURCE_RESBLOCKS_0_CONVS2_1_BIAS = auto()
-    SOURCE_RESBLOCKS_0_CONVS2_1_WEIGHT = auto()
-    SOURCE_RESBLOCKS_0_CONVS2_2_BIAS = auto()
-    SOURCE_RESBLOCKS_0_CONVS2_2_WEIGHT = auto()
-
-    # Source ResBlock 1
-    SOURCE_RESBLOCKS_1_ACTIVATIONS1_0_ALPHA = auto()
-    SOURCE_RESBLOCKS_1_ACTIVATIONS1_1_ALPHA = auto()
-    SOURCE_RESBLOCKS_1_ACTIVATIONS1_2_ALPHA = auto()
-    SOURCE_RESBLOCKS_1_ACTIVATIONS2_0_ALPHA = auto()
-    SOURCE_RESBLOCKS_1_ACTIVATIONS2_1_ALPHA = auto()
-    SOURCE_RESBLOCKS_1_ACTIVATIONS2_2_ALPHA = auto()
-    
-    SOURCE_RESBLOCKS_1_CONVS1_0_BIAS = auto()
-    SOURCE_RESBLOCKS_1_CONVS1_0_WEIGHT = auto()
-    SOURCE_RESBLOCKS_1_CONVS1_1_BIAS = auto()
-    SOURCE_RESBLOCKS_1_CONVS1_1_WEIGHT = auto()
-    SOURCE_RESBLOCKS_1_CONVS1_2_BIAS = auto()
-    SOURCE_RESBLOCKS_1_CONVS1_2_WEIGHT = auto()
-    SOURCE_RESBLOCKS_1_CONVS2_0_BIAS = auto()
-    SOURCE_RESBLOCKS_1_CONVS2_0_WEIGHT = auto()
-    SOURCE_RESBLOCKS_1_CONVS2_1_BIAS = auto()
-    SOURCE_RESBLOCKS_1_CONVS2_1_WEIGHT = auto()
-    SOURCE_RESBLOCKS_1_CONVS2_2_BIAS = auto()
-    SOURCE_RESBLOCKS_1_CONVS2_2_WEIGHT = auto()
-
-    # Source ResBlock 2
-    SOURCE_RESBLOCKS_2_ACTIVATIONS1_0_ALPHA = auto()
-    SOURCE_RESBLOCKS_2_ACTIVATIONS1_1_ALPHA = auto()
-    SOURCE_RESBLOCKS_2_ACTIVATIONS1_2_ALPHA = auto()
-    SOURCE_RESBLOCKS_2_ACTIVATIONS2_0_ALPHA = auto()
-    SOURCE_RESBLOCKS_2_ACTIVATIONS2_1_ALPHA = auto()
-    SOURCE_RESBLOCKS_2_ACTIVATIONS2_2_ALPHA = auto()
-    
-    SOURCE_RESBLOCKS_2_CONVS1_0_BIAS = auto()
-    SOURCE_RESBLOCKS_2_CONVS1_0_WEIGHT = auto()
-    SOURCE_RESBLOCKS_2_CONVS1_1_BIAS = auto()
-    SOURCE_RESBLOCKS_2_CONVS1_1_WEIGHT = auto()
-    SOURCE_RESBLOCKS_2_CONVS1_2_BIAS = auto()
-    SOURCE_RESBLOCKS_2_CONVS1_2_WEIGHT = auto()
-    SOURCE_RESBLOCKS_2_CONVS2_0_BIAS = auto()
-    SOURCE_RESBLOCKS_2_CONVS2_0_WEIGHT = auto()
-    SOURCE_RESBLOCKS_2_CONVS2_1_BIAS = auto()
-    SOURCE_RESBLOCKS_2_CONVS2_1_WEIGHT = auto()
-    SOURCE_RESBLOCKS_2_CONVS2_2_BIAS = auto()
-    SOURCE_RESBLOCKS_2_CONVS2_2_WEIGHT = auto()
-
-    # ==========================================
-    # Upsample Layers (0-2)
-    # ==========================================
-    UPS_0_BIAS = auto()
-    UPS_0_WEIGHT = auto()
-    
-    UPS_1_BIAS = auto()
-    UPS_1_WEIGHT = auto()
-
-    UPS_2_BIAS = auto()
-    UPS_2_WEIGHT = auto()
-
+    # nextn/mtp
+    NEXTN_EH_PROJ        = auto()
+    NEXTN_EMBED_TOKENS   = auto()
+    NEXTN_ENORM          = auto()
+    NEXTN_HNORM          = auto()
+    NEXTN_SHARED_HEAD_HEAD = auto()
+    NEXTN_SHARED_HEAD_NORM = auto()
+    # lfm2 audio
+    A_ENC_NORM_CONV        = auto()
+    A_ENC_LINEAR_POS       = auto()
+    A_ENC_POS_BIAS_U       = auto()
+    A_ENC_POS_BIAS_V       = auto()
+    A_ENC_OUT              = auto()
+    A_ENC_CONV_DW          = auto() # SSM conv
+    A_ENC_CONV_NORM        = auto() # SSM conv
+    A_ENC_CONV_PW1         = auto()
+    A_ENC_CONV_PW2         = auto()
 
 
 MODEL_ARCH_NAMES: dict[MODEL_ARCH, str] = {
@@ -2126,10 +755,12 @@ MODEL_ARCH_NAMES: dict[MODEL_ARCH, str] = {
     MODEL_ARCH.STARCODER:        "starcoder",
     MODEL_ARCH.REFACT:           "refact",
     MODEL_ARCH.BERT:             "bert",
+    MODEL_ARCH.MODERN_BERT:      "modern-bert",
     MODEL_ARCH.NOMIC_BERT:       "nomic-bert",
     MODEL_ARCH.NOMIC_BERT_MOE:   "nomic-bert-moe",
     MODEL_ARCH.NEO_BERT:         "neo-bert",
     MODEL_ARCH.JINA_BERT_V2:     "jina-bert-v2",
+    MODEL_ARCH.JINA_BERT_V3:     "jina-bert-v3",
     MODEL_ARCH.BLOOM:            "bloom",
     MODEL_ARCH.STABLELM:         "stablelm",
     MODEL_ARCH.QWEN:             "qwen",
@@ -2138,10 +769,15 @@ MODEL_ARCH_NAMES: dict[MODEL_ARCH, str] = {
     MODEL_ARCH.QWEN2VL:          "qwen2vl",
     MODEL_ARCH.QWEN3:            "qwen3",
     MODEL_ARCH.QWEN3MOE:         "qwen3moe",
+    MODEL_ARCH.QWEN3NEXT:        "qwen3next",
+    MODEL_ARCH.QWEN3VL:          "qwen3vl",
+    MODEL_ARCH.QWEN3VLMOE:       "qwen3vlmoe",
     MODEL_ARCH.PHI2:             "phi2",
     MODEL_ARCH.PHI3:             "phi3",
     MODEL_ARCH.PHIMOE:           "phimoe",
     MODEL_ARCH.PLAMO:            "plamo",
+    MODEL_ARCH.PLAMO2:           "plamo2",
+    MODEL_ARCH.PLAMO3:           "plamo3",
     MODEL_ARCH.CODESHELL:        "codeshell",
     MODEL_ARCH.ORION:            "orion",
     MODEL_ARCH.INTERNLM2:        "internlm2",
@@ -2150,12 +786,16 @@ MODEL_ARCH_NAMES: dict[MODEL_ARCH, str] = {
     MODEL_ARCH.GEMMA:            "gemma",
     MODEL_ARCH.GEMMA2:           "gemma2",
     MODEL_ARCH.GEMMA3:           "gemma3",
+    MODEL_ARCH.GEMMA3N:          "gemma3n",
+    MODEL_ARCH.GEMMA_EMBEDDING:  "gemma-embedding",
     MODEL_ARCH.STARCODER2:       "starcoder2",
     MODEL_ARCH.RWKV6:            "rwkv6",
     MODEL_ARCH.RWKV6QWEN2:       "rwkv6qwen2",
     MODEL_ARCH.RWKV7:            "rwkv7",
     MODEL_ARCH.ARWKV7:           "arwkv7",
     MODEL_ARCH.MAMBA:            "mamba",
+    MODEL_ARCH.MAMBA2:           "mamba2",
+    MODEL_ARCH.JAMBA:            "jamba",
     MODEL_ARCH.XVERSE:           "xverse",
     MODEL_ARCH.COMMAND_R:        "command-r",
     MODEL_ARCH.COHERE2:          "cohere2",
@@ -2169,22 +809,51 @@ MODEL_ARCH_NAMES: dict[MODEL_ARCH, str] = {
     MODEL_ARCH.DEEPSEEK2:        "deepseek2",
     MODEL_ARCH.CHATGLM:          "chatglm",
     MODEL_ARCH.GLM4:             "glm4",
+    MODEL_ARCH.GLM4_MOE:         "glm4moe",
     MODEL_ARCH.BITNET:           "bitnet",
     MODEL_ARCH.T5:               "t5",
     MODEL_ARCH.T5ENCODER:        "t5encoder",
     MODEL_ARCH.JAIS:             "jais",
     MODEL_ARCH.NEMOTRON:         "nemotron",
+    MODEL_ARCH.NEMOTRON_H:       "nemotron_h",
+    MODEL_ARCH.NEMOTRON_H_MOE:   "nemotron_h_moe",
     MODEL_ARCH.EXAONE:           "exaone",
+    MODEL_ARCH.EXAONE4:          "exaone4",
     MODEL_ARCH.GRANITE:          "granite",
     MODEL_ARCH.GRANITE_MOE:      "granitemoe",
+    MODEL_ARCH.GRANITE_HYBRID:   "granitehybrid",
     MODEL_ARCH.CHAMELEON:        "chameleon",
     MODEL_ARCH.WAVTOKENIZER_DEC: "wavtokenizer-dec",
     MODEL_ARCH.PLM:              "plm",
     MODEL_ARCH.BAILINGMOE:       "bailingmoe",
+    MODEL_ARCH.BAILINGMOE2:      "bailingmoe2",
     MODEL_ARCH.DOTS1:            "dots1",
     MODEL_ARCH.ARCEE:            "arcee",
-    MODEL_ARCH.COSYVOICEFLOW:    "CosyVoiceFlow",
-    MODEL_ARCH.COSYVOICEHIFT:    "CosyVoiceHift",
+    MODEL_ARCH.AFMOE:            "afmoe",
+    MODEL_ARCH.ERNIE4_5:         "ernie4_5",
+    MODEL_ARCH.ERNIE4_5_MOE:     "ernie4_5-moe",
+    MODEL_ARCH.FALCON_H1:        "falcon-h1",
+    MODEL_ARCH.HUNYUAN_MOE:      "hunyuan-moe",
+    MODEL_ARCH.HUNYUAN_DENSE:    "hunyuan-dense",
+    MODEL_ARCH.SMOLLM3:          "smollm3",
+    MODEL_ARCH.GPT_OSS:          "gpt-oss",
+    MODEL_ARCH.LFM2:             "lfm2",
+    MODEL_ARCH.LFM2MOE:          "lfm2moe",
+    MODEL_ARCH.DREAM:            "dream",
+    MODEL_ARCH.SMALLTHINKER:     "smallthinker",
+    MODEL_ARCH.LLADA:            "llada",
+    MODEL_ARCH.LLADA_MOE:        "llada-moe",
+    MODEL_ARCH.SEED_OSS:         "seed_oss",
+    MODEL_ARCH.GROVEMOE:         "grovemoe",
+    MODEL_ARCH.APERTUS:          "apertus",
+    MODEL_ARCH.MINIMAXM2:        "minimax-m2",
+    MODEL_ARCH.COGVLM:           "cogvlm",
+    MODEL_ARCH.RND1:             "rnd1",
+    MODEL_ARCH.PANGU_EMBED:      "pangu-embedded",
+    MODEL_ARCH.MISTRAL3:         "mistral3",
+    MODEL_ARCH.MIMO2:            "mimo2",
+    MODEL_ARCH.LLAMA_EMBED:      "llama-embed",
+    MODEL_ARCH.MAINCODER:        "maincoder",
 }
 
 VISION_PROJECTOR_TYPE_NAMES: dict[VISION_PROJECTOR_TYPE, str] = {
@@ -2204,6 +873,8 @@ TENSOR_NAMES: dict[MODEL_TENSOR, str] = {
     MODEL_TENSOR.POS_EMBD:                  "position_embd",
     MODEL_TENSOR.OUTPUT_NORM:               "output_norm",
     MODEL_TENSOR.OUTPUT:                    "output",
+    MODEL_TENSOR.DENSE_2_OUT:                "dense_2", # embeddinggemma 2_Dense
+    MODEL_TENSOR.DENSE_3_OUT:                "dense_3", # embeddinggemma 2_Dense
     MODEL_TENSOR.ROPE_FREQS:                "rope_freqs",
     MODEL_TENSOR.ROPE_FACTORS_LONG:         "rope_factors_long",
     MODEL_TENSOR.ROPE_FACTORS_SHORT:        "rope_factors_short",
@@ -2215,6 +886,8 @@ TENSOR_NAMES: dict[MODEL_TENSOR, str] = {
     MODEL_TENSOR.ATTN_V:                    "blk.{bid}.attn_v",
     MODEL_TENSOR.ATTN_OUT:                  "blk.{bid}.attn_output",
     MODEL_TENSOR.ATTN_ROT_EMBD:             "blk.{bid}.attn_rot_embd",
+    MODEL_TENSOR.ATTN_SINKS:                "blk.{bid}.attn_sinks",
+    MODEL_TENSOR.ATTN_GATE:                 "blk.{bid}.attn_gate",
     MODEL_TENSOR.ATTN_Q_NORM:               "blk.{bid}.attn_q_norm",
     MODEL_TENSOR.ATTN_K_NORM:               "blk.{bid}.attn_k_norm",
     MODEL_TENSOR.ATTN_OUT_NORM:             "blk.{bid}.attn_output_norm",
@@ -2230,6 +903,9 @@ TENSOR_NAMES: dict[MODEL_TENSOR, str] = {
     MODEL_TENSOR.FFN_GATE_SHEXP:            "blk.{bid}.ffn_gate_shexp",
     MODEL_TENSOR.FFN_DOWN_SHEXP:            "blk.{bid}.ffn_down_shexp",
     MODEL_TENSOR.FFN_UP_SHEXP:              "blk.{bid}.ffn_up_shexp",
+    MODEL_TENSOR.FFN_GATE_CHEXP:            "blk.{bid}.ffn_gate_chexps",
+    MODEL_TENSOR.FFN_DOWN_CHEXP:            "blk.{bid}.ffn_down_chexps",
+    MODEL_TENSOR.FFN_UP_CHEXP:              "blk.{bid}.ffn_up_chexps",
     MODEL_TENSOR.FFN_ACT:                   "blk.{bid}.ffn",
     MODEL_TENSOR.FFN_NORM_EXP:              "blk.{bid}.ffn_norm_exps",
     MODEL_TENSOR.FFN_GATE_EXP:              "blk.{bid}.ffn_gate_exps",
@@ -2237,13 +913,34 @@ TENSOR_NAMES: dict[MODEL_TENSOR, str] = {
     MODEL_TENSOR.FFN_UP_EXP:                "blk.{bid}.ffn_up_exps",
     MODEL_TENSOR.FFN_EXP_PROBS_B:           "blk.{bid}.exp_probs_b",
     MODEL_TENSOR.LAYER_OUT_NORM:            "blk.{bid}.layer_output_norm",
+    MODEL_TENSOR.PER_LAYER_TOKEN_EMBD:      "per_layer_token_embd",           # gemma3n
+    MODEL_TENSOR.PER_LAYER_MODEL_PROJ:      "per_layer_model_proj",           # gemma3n
+    MODEL_TENSOR.PER_LAYER_PROJ_NORM:       "per_layer_proj_norm",            # gemma3n
+    MODEL_TENSOR.ALTUP_UNEMBD_PROJ:         "altup_unembd_proj",              # gemma3n
+    MODEL_TENSOR.ALTUP_PROJ:                "altup_proj",                     # gemma3n
+    MODEL_TENSOR.PER_LAYER_INP_GATE:        "blk.{bid}.inp_gate",             # gemma3n
+    MODEL_TENSOR.PER_LAYER_PROJ:            "blk.{bid}.proj",                 # gemma3n
+    MODEL_TENSOR.PER_LAYER_POST_NORM:       "blk.{bid}.post_norm",            # gemma3n
+    MODEL_TENSOR.ALTUP_CORRECT_COEF:        "blk.{bid}.altup_correct_coef",   # gemma3n
+    MODEL_TENSOR.ALTUP_CORRECT_SCALE:       "blk.{bid}.altup_correct_scale",  # gemma3n
+    MODEL_TENSOR.ALTUP_PREDICT_COEF:        "blk.{bid}.altup_predict_coef",   # gemma3n
+    MODEL_TENSOR.ALTUP_ROUTER:              "blk.{bid}.altup_router",         # gemma3n
+    MODEL_TENSOR.ALTUP_ROUTER_NORM:         "blk.{bid}.altup_router_norm",    # gemma3n
+    MODEL_TENSOR.LAUREL_L:                  "blk.{bid}.laurel_l",             # gemma3n
+    MODEL_TENSOR.LAUREL_R:                  "blk.{bid}.laurel_r",             # gemma3n
+    MODEL_TENSOR.LAUREL_POST_NORM:          "blk.{bid}.laurel_post_norm",     # gemma3n
     MODEL_TENSOR.SSM_IN:                    "blk.{bid}.ssm_in",
     MODEL_TENSOR.SSM_CONV1D:                "blk.{bid}.ssm_conv1d",
     MODEL_TENSOR.SSM_X:                     "blk.{bid}.ssm_x",
     MODEL_TENSOR.SSM_DT:                    "blk.{bid}.ssm_dt",
+    MODEL_TENSOR.SSM_DT_NORM:               "blk.{bid}.ssm_dt_norm",
     MODEL_TENSOR.SSM_A:                     "blk.{bid}.ssm_a",
+    MODEL_TENSOR.SSM_B_NORM:                "blk.{bid}.ssm_b_norm",
+    MODEL_TENSOR.SSM_C_NORM:                "blk.{bid}.ssm_c_norm",
     MODEL_TENSOR.SSM_D:                     "blk.{bid}.ssm_d",
+    MODEL_TENSOR.SSM_NORM:                  "blk.{bid}.ssm_norm",
     MODEL_TENSOR.SSM_OUT:                   "blk.{bid}.ssm_out",
+    MODEL_TENSOR.SSM_BETA_ALPHA:            "blk.{bid}.ssm_ba",
     MODEL_TENSOR.TIME_MIX_W0:               "blk.{bid}.time_mix_w0",
     MODEL_TENSOR.TIME_MIX_W1:               "blk.{bid}.time_mix_w1",
     MODEL_TENSOR.TIME_MIX_W2:               "blk.{bid}.time_mix_w2",
@@ -2336,6 +1033,14 @@ TENSOR_NAMES: dict[MODEL_TENSOR, str] = {
     MODEL_TENSOR.POSNET_ATTN_K:             "posnet.{bid}.attn_k",
     MODEL_TENSOR.POSNET_ATTN_V:             "posnet.{bid}.attn_v",
     MODEL_TENSOR.POSNET_ATTN_OUT:           "posnet.{bid}.attn_output",
+    MODEL_TENSOR.SHORTCONV_CONV:            "blk.{bid}.shortconv.conv",
+    MODEL_TENSOR.SHORTCONV_INPROJ:          "blk.{bid}.shortconv.in_proj",
+    MODEL_TENSOR.SHORTCONV_OUTPROJ:         "blk.{bid}.shortconv.out_proj",
+    MODEL_TENSOR.VISEXP_ATTN_QKV:           "blk.{bid}.vis_attn_qkv",
+    MODEL_TENSOR.VISEXP_ATTN_OUT:           "blk.{bid}.vis_attn_output",
+    MODEL_TENSOR.VISEXP_GATE:               "blk.{bid}.vis_gate",
+    MODEL_TENSOR.VISEXP_DOWN:               "blk.{bid}.vis_down",
+    MODEL_TENSOR.VISEXP_UP:                 "blk.{bid}.vis_up",
     # vision
     MODEL_TENSOR.V_MMPROJ:                  "mm.{bid}",
     MODEL_TENSOR.V_MMPROJ_FC:               "mm.model.fc",
@@ -2343,7 +1048,9 @@ TENSOR_NAMES: dict[MODEL_TENSOR, str] = {
     MODEL_TENSOR.V_MMPROJ_PEG:              "mm.model.peg.{bid}",
     MODEL_TENSOR.V_ENC_EMBD_CLS:            "v.class_embd",
     MODEL_TENSOR.V_ENC_EMBD_PATCH:          "v.patch_embd",
+    MODEL_TENSOR.V_ENC_EMBD_NORM:           "v.norm_embd",
     MODEL_TENSOR.V_ENC_EMBD_POS:            "v.position_embd",
+    MODEL_TENSOR.V_ENC_ATTN_QKV:            "v.blk.{bid}.attn_qkv",
     MODEL_TENSOR.V_ENC_ATTN_Q:              "v.blk.{bid}.attn_q",
     MODEL_TENSOR.V_ENC_ATTN_Q_NORM:         "v.blk.{bid}.attn_q_norm",
     MODEL_TENSOR.V_ENC_ATTN_K:              "v.blk.{bid}.attn_k",
@@ -2360,6 +1067,7 @@ TENSOR_NAMES: dict[MODEL_TENSOR, str] = {
     MODEL_TENSOR.V_LAYER_SCALE_2:           "v.blk.{bid}.ls2",
     MODEL_TENSOR.V_PRE_NORM:                "v.pre_ln",
     MODEL_TENSOR.V_POST_NORM:               "v.post_ln",
+    MODEL_TENSOR.V_MM_POST_NORM:            "mm.post_norm",
     MODEL_TENSOR.V_MM_INP_PROJ:             "mm.input_projection",
     MODEL_TENSOR.V_MM_INP_NORM:             "mm.input_norm",
     MODEL_TENSOR.V_MM_SOFT_EMB_NORM:        "mm.soft_emb_norm",
@@ -2376,8 +1084,20 @@ TENSOR_NAMES: dict[MODEL_TENSOR, str] = {
     MODEL_TENSOR.V_RESMPL_QUERY:            "resampler.query",
     MODEL_TENSOR.V_TOK_EMBD_IMG_BREAK:      "v.token_embd.img_break", # pixtral
     MODEL_TENSOR.V_MM_PATCH_MERGER:         "mm.patch_merger", # mistral small 3.1
+    MODEL_TENSOR.V_DS_NORM:                 "v.deepstack.{bid}.norm",
+    MODEL_TENSOR.V_DS_FC1:                  "v.deepstack.{bid}.fc1",
+    MODEL_TENSOR.V_DS_FC2:                  "v.deepstack.{bid}.fc2",
+    MODEL_TENSOR.V_MM_POST_FC_NORM:         "mm.post_fc_norm", # cogvlm
+    MODEL_TENSOR.V_MM_UP:                   "mm.up",
+    MODEL_TENSOR.V_MM_DOWN:                 "mm.down",
+    MODEL_TENSOR.V_MM_GATE:                 "mm.gate",
+    MODEL_TENSOR.V_TOK_BOI:                 "v.boi",
+    MODEL_TENSOR.V_TOK_EOI:                 "v.eoi",
     # audio (mtmd)
+    # note: all audio tensor names must use prefix "a." or "mm.a."
     MODEL_TENSOR.A_ENC_EMBD_POS:            "a.position_embd",
+    MODEL_TENSOR.A_ENC_EMBD_NORM:           "a.position_embd_norm",
+    MODEL_TENSOR.A_ENC_EMBD_TO_LOGITS:      "a.embd_to_logits",
     MODEL_TENSOR.A_ENC_CONV1D:              "a.conv1d.{bid}",
     MODEL_TENSOR.A_PRE_NORM:                "a.pre_ln",
     MODEL_TENSOR.A_POST_NORM:               "a.post_ln",
@@ -2387,1413 +1107,35 @@ TENSOR_NAMES: dict[MODEL_TENSOR, str] = {
     MODEL_TENSOR.A_ENC_INPUT_NORM:          "a.blk.{bid}.ln1",
     MODEL_TENSOR.A_ENC_OUTPUT:              "a.blk.{bid}.attn_out",
     MODEL_TENSOR.A_ENC_OUTPUT_NORM:         "a.blk.{bid}.ln2",
+    MODEL_TENSOR.A_ENC_FFN_NORM:            "a.blk.{bid}.ffn_norm",
     MODEL_TENSOR.A_ENC_FFN_UP:              "a.blk.{bid}.ffn_up",
     MODEL_TENSOR.A_ENC_FFN_GATE:            "a.blk.{bid}.ffn_gate",
     MODEL_TENSOR.A_ENC_FFN_DOWN:            "a.blk.{bid}.ffn_down",
+    MODEL_TENSOR.A_ENC_FFN_NORM_1:          "a.blk.{bid}.ffn_norm_1",
+    MODEL_TENSOR.A_ENC_FFN_UP_1:            "a.blk.{bid}.ffn_up_1",
+    MODEL_TENSOR.A_ENC_FFN_GATE_1:          "a.blk.{bid}.ffn_gate_1",
+    MODEL_TENSOR.A_ENC_FFN_DOWN_1:          "a.blk.{bid}.ffn_down_1",
     MODEL_TENSOR.A_MMPROJ:                  "mm.a.mlp.{bid}",
     MODEL_TENSOR.A_MMPROJ_FC:               "mm.a.fc",
     MODEL_TENSOR.A_MM_NORM_PRE:             "mm.a.norm_pre",
     MODEL_TENSOR.A_MM_NORM_MID:             "mm.a.norm_mid",
-
-    # CosyVoiceFlow
-    MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_0_BLOCK1_BLOCK_0_BIAS : "decoder.estimator.down_blocks.0.0.block1.block.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_0_BLOCK1_BLOCK_0_WEIGHT : "decoder.estimator.down_blocks.0.0.block1.block.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_0_BLOCK1_BLOCK_2_BIAS : "decoder.estimator.down_blocks.0.0.block1.block.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_0_BLOCK1_BLOCK_2_WEIGHT : "decoder.estimator.down_blocks.0.0.block1.block.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_0_BLOCK2_BLOCK_0_BIAS : "decoder.estimator.down_blocks.0.0.block2.block.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_0_BLOCK2_BLOCK_0_WEIGHT : "decoder.estimator.down_blocks.0.0.block2.block.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_0_BLOCK2_BLOCK_2_BIAS : "decoder.estimator.down_blocks.0.0.block2.block.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_0_BLOCK2_BLOCK_2_WEIGHT : "decoder.estimator.down_blocks.0.0.block2.block.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_0_MLP_1_BIAS : "decoder.estimator.down_blocks.0.0.mlp.1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_0_MLP_1_WEIGHT : "decoder.estimator.down_blocks.0.0.mlp.1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_0_RES_CONV_BIAS : "decoder.estimator.down_blocks.0.0.res_conv.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_0_RES_CONV_WEIGHT : "decoder.estimator.down_blocks.0.0.res_conv.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_0_ATTN1_TO_K_WEIGHT : "decoder.estimator.down_blocks.0.1.0.attn1.to_k.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_0_ATTN1_TO_OUT_0_BIAS : "decoder.estimator.down_blocks.0.1.0.attn1.to_out.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_0_ATTN1_TO_OUT_0_WEIGHT : "decoder.estimator.down_blocks.0.1.0.attn1.to_out.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_0_ATTN1_TO_Q_WEIGHT : "decoder.estimator.down_blocks.0.1.0.attn1.to_q.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_0_ATTN1_TO_V_WEIGHT : "decoder.estimator.down_blocks.0.1.0.attn1.to_v.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_0_FF_NET_0_PROJ_BIAS : "decoder.estimator.down_blocks.0.1.0.ff.net.0.proj.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_0_FF_NET_0_PROJ_WEIGHT : "decoder.estimator.down_blocks.0.1.0.ff.net.0.proj.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_0_FF_NET_2_BIAS : "decoder.estimator.down_blocks.0.1.0.ff.net.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_0_FF_NET_2_WEIGHT : "decoder.estimator.down_blocks.0.1.0.ff.net.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_0_NORM1_BIAS : "decoder.estimator.down_blocks.0.1.0.norm1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_0_NORM1_WEIGHT : "decoder.estimator.down_blocks.0.1.0.norm1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_0_NORM3_BIAS : "decoder.estimator.down_blocks.0.1.0.norm3.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_0_NORM3_WEIGHT : "decoder.estimator.down_blocks.0.1.0.norm3.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_1_ATTN1_TO_K_WEIGHT : "decoder.estimator.down_blocks.0.1.1.attn1.to_k.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_1_ATTN1_TO_OUT_0_BIAS : "decoder.estimator.down_blocks.0.1.1.attn1.to_out.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_1_ATTN1_TO_OUT_0_WEIGHT : "decoder.estimator.down_blocks.0.1.1.attn1.to_out.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_1_ATTN1_TO_Q_WEIGHT : "decoder.estimator.down_blocks.0.1.1.attn1.to_q.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_1_ATTN1_TO_V_WEIGHT : "decoder.estimator.down_blocks.0.1.1.attn1.to_v.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_1_FF_NET_0_PROJ_BIAS : "decoder.estimator.down_blocks.0.1.1.ff.net.0.proj.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_1_FF_NET_0_PROJ_WEIGHT : "decoder.estimator.down_blocks.0.1.1.ff.net.0.proj.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_1_FF_NET_2_BIAS : "decoder.estimator.down_blocks.0.1.1.ff.net.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_1_FF_NET_2_WEIGHT : "decoder.estimator.down_blocks.0.1.1.ff.net.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_1_NORM1_BIAS : "decoder.estimator.down_blocks.0.1.1.norm1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_1_NORM1_WEIGHT : "decoder.estimator.down_blocks.0.1.1.norm1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_1_NORM3_BIAS : "decoder.estimator.down_blocks.0.1.1.norm3.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_1_NORM3_WEIGHT : "decoder.estimator.down_blocks.0.1.1.norm3.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_ATTN1_TO_K_WEIGHT : "decoder.estimator.down_blocks.0.1.2.attn1.to_k.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_ATTN1_TO_OUT_0_BIAS : "decoder.estimator.down_blocks.0.1.2.attn1.to_out.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_ATTN1_TO_OUT_0_WEIGHT : "decoder.estimator.down_blocks.0.1.2.attn1.to_out.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_ATTN1_TO_Q_WEIGHT : "decoder.estimator.down_blocks.0.1.2.attn1.to_q.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_ATTN1_TO_V_WEIGHT : "decoder.estimator.down_blocks.0.1.2.attn1.to_v.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_FF_NET_0_PROJ_BIAS : "decoder.estimator.down_blocks.0.1.2.ff.net.0.proj.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_FF_NET_0_PROJ_WEIGHT : "decoder.estimator.down_blocks.0.1.2.ff.net.0.proj.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_FF_NET_2_BIAS : "decoder.estimator.down_blocks.0.1.2.ff.net.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_FF_NET_2_WEIGHT : "decoder.estimator.down_blocks.0.1.2.ff.net.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_NORM1_BIAS : "decoder.estimator.down_blocks.0.1.2.norm1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_NORM1_WEIGHT : "decoder.estimator.down_blocks.0.1.2.norm1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_NORM3_BIAS : "decoder.estimator.down_blocks.0.1.2.norm3.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_NORM3_WEIGHT : "decoder.estimator.down_blocks.0.1.2.norm3.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_ATTN1_TO_K_WEIGHT : "decoder.estimator.down_blocks.0.1.3.attn1.to_k.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_ATTN1_TO_OUT_0_BIAS : "decoder.estimator.down_blocks.0.1.3.attn1.to_out.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_ATTN1_TO_OUT_0_WEIGHT : "decoder.estimator.down_blocks.0.1.3.attn1.to_out.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_ATTN1_TO_Q_WEIGHT : "decoder.estimator.down_blocks.0.1.3.attn1.to_q.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_ATTN1_TO_V_WEIGHT : "decoder.estimator.down_blocks.0.1.3.attn1.to_v.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_FF_NET_0_PROJ_BIAS : "decoder.estimator.down_blocks.0.1.3.ff.net.0.proj.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_FF_NET_0_PROJ_WEIGHT : "decoder.estimator.down_blocks.0.1.3.ff.net.0.proj.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_FF_NET_2_BIAS : "decoder.estimator.down_blocks.0.1.3.ff.net.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_FF_NET_2_WEIGHT : "decoder.estimator.down_blocks.0.1.3.ff.net.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_NORM1_BIAS : "decoder.estimator.down_blocks.0.1.3.norm1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_NORM1_WEIGHT : "decoder.estimator.down_blocks.0.1.3.norm1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_NORM3_BIAS : "decoder.estimator.down_blocks.0.1.3.norm3.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_NORM3_WEIGHT : "decoder.estimator.down_blocks.0.1.3.norm3.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_2_BIAS : "decoder.estimator.down_blocks.0.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_2_WEIGHT : "decoder.estimator.down_blocks.0.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_FINAL_BLOCK_BLOCK_0_BIAS : "decoder.estimator.final_block.block.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_FINAL_BLOCK_BLOCK_0_WEIGHT : "decoder.estimator.final_block.block.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_FINAL_BLOCK_BLOCK_2_BIAS : "decoder.estimator.final_block.block.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_FINAL_BLOCK_BLOCK_2_WEIGHT : "decoder.estimator.final_block.block.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_FINAL_PROJ_BIAS : "decoder.estimator.final_proj.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_FINAL_PROJ_WEIGHT : "decoder.estimator.final_proj.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_0_BLOCK1_BLOCK_0_BIAS : "decoder.estimator.mid_blocks.0.0.block1.block.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_0_BLOCK1_BLOCK_0_WEIGHT : "decoder.estimator.mid_blocks.0.0.block1.block.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_0_BLOCK1_BLOCK_2_BIAS : "decoder.estimator.mid_blocks.0.0.block1.block.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_0_BLOCK1_BLOCK_2_WEIGHT : "decoder.estimator.mid_blocks.0.0.block1.block.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_0_BLOCK2_BLOCK_0_BIAS : "decoder.estimator.mid_blocks.0.0.block2.block.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_0_BLOCK2_BLOCK_0_WEIGHT : "decoder.estimator.mid_blocks.0.0.block2.block.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_0_BLOCK2_BLOCK_2_BIAS : "decoder.estimator.mid_blocks.0.0.block2.block.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_0_BLOCK2_BLOCK_2_WEIGHT : "decoder.estimator.mid_blocks.0.0.block2.block.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_0_MLP_1_BIAS : "decoder.estimator.mid_blocks.0.0.mlp.1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_0_MLP_1_WEIGHT : "decoder.estimator.mid_blocks.0.0.mlp.1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_0_RES_CONV_BIAS : "decoder.estimator.mid_blocks.0.0.res_conv.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_0_RES_CONV_WEIGHT : "decoder.estimator.mid_blocks.0.0.res_conv.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_ATTN1_TO_K_WEIGHT : "decoder.estimator.mid_blocks.0.1.0.attn1.to_k.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_ATTN1_TO_OUT_0_BIAS : "decoder.estimator.mid_blocks.0.1.0.attn1.to_out.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_ATTN1_TO_OUT_0_WEIGHT : "decoder.estimator.mid_blocks.0.1.0.attn1.to_out.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_ATTN1_TO_Q_WEIGHT : "decoder.estimator.mid_blocks.0.1.0.attn1.to_q.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_ATTN1_TO_V_WEIGHT : "decoder.estimator.mid_blocks.0.1.0.attn1.to_v.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_FF_NET_0_PROJ_BIAS : "decoder.estimator.mid_blocks.0.1.0.ff.net.0.proj.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_FF_NET_0_PROJ_WEIGHT : "decoder.estimator.mid_blocks.0.1.0.ff.net.0.proj.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_FF_NET_2_BIAS : "decoder.estimator.mid_blocks.0.1.0.ff.net.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_FF_NET_2_WEIGHT : "decoder.estimator.mid_blocks.0.1.0.ff.net.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_NORM1_BIAS : "decoder.estimator.mid_blocks.0.1.0.norm1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_NORM1_WEIGHT : "decoder.estimator.mid_blocks.0.1.0.norm1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_NORM3_BIAS : "decoder.estimator.mid_blocks.0.1.0.norm3.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_NORM3_WEIGHT : "decoder.estimator.mid_blocks.0.1.0.norm3.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_1_ATTN1_TO_K_WEIGHT : "decoder.estimator.mid_blocks.0.1.1.attn1.to_k.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_1_ATTN1_TO_OUT_0_BIAS : "decoder.estimator.mid_blocks.0.1.1.attn1.to_out.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_1_ATTN1_TO_OUT_0_WEIGHT : "decoder.estimator.mid_blocks.0.1.1.attn1.to_out.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_1_ATTN1_TO_Q_WEIGHT : "decoder.estimator.mid_blocks.0.1.1.attn1.to_q.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_1_ATTN1_TO_V_WEIGHT : "decoder.estimator.mid_blocks.0.1.1.attn1.to_v.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_1_FF_NET_0_PROJ_BIAS : "decoder.estimator.mid_blocks.0.1.1.ff.net.0.proj.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_1_FF_NET_0_PROJ_WEIGHT : "decoder.estimator.mid_blocks.0.1.1.ff.net.0.proj.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_1_FF_NET_2_BIAS : "decoder.estimator.mid_blocks.0.1.1.ff.net.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_1_FF_NET_2_WEIGHT : "decoder.estimator.mid_blocks.0.1.1.ff.net.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_1_NORM1_BIAS : "decoder.estimator.mid_blocks.0.1.1.norm1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_1_NORM1_WEIGHT : "decoder.estimator.mid_blocks.0.1.1.norm1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_1_NORM3_BIAS : "decoder.estimator.mid_blocks.0.1.1.norm3.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_1_NORM3_WEIGHT : "decoder.estimator.mid_blocks.0.1.1.norm3.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_2_ATTN1_TO_K_WEIGHT : "decoder.estimator.mid_blocks.0.1.2.attn1.to_k.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_2_ATTN1_TO_OUT_0_BIAS : "decoder.estimator.mid_blocks.0.1.2.attn1.to_out.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_2_ATTN1_TO_OUT_0_WEIGHT : "decoder.estimator.mid_blocks.0.1.2.attn1.to_out.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_2_ATTN1_TO_Q_WEIGHT : "decoder.estimator.mid_blocks.0.1.2.attn1.to_q.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_2_ATTN1_TO_V_WEIGHT : "decoder.estimator.mid_blocks.0.1.2.attn1.to_v.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_2_FF_NET_0_PROJ_BIAS : "decoder.estimator.mid_blocks.0.1.2.ff.net.0.proj.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_2_FF_NET_0_PROJ_WEIGHT : "decoder.estimator.mid_blocks.0.1.2.ff.net.0.proj.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_2_FF_NET_2_BIAS : "decoder.estimator.mid_blocks.0.1.2.ff.net.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_2_FF_NET_2_WEIGHT : "decoder.estimator.mid_blocks.0.1.2.ff.net.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_2_NORM1_BIAS : "decoder.estimator.mid_blocks.0.1.2.norm1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_2_NORM1_WEIGHT : "decoder.estimator.mid_blocks.0.1.2.norm1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_2_NORM3_BIAS : "decoder.estimator.mid_blocks.0.1.2.norm3.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_2_NORM3_WEIGHT : "decoder.estimator.mid_blocks.0.1.2.norm3.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_3_ATTN1_TO_K_WEIGHT : "decoder.estimator.mid_blocks.0.1.3.attn1.to_k.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_3_ATTN1_TO_OUT_0_BIAS : "decoder.estimator.mid_blocks.0.1.3.attn1.to_out.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_3_ATTN1_TO_OUT_0_WEIGHT : "decoder.estimator.mid_blocks.0.1.3.attn1.to_out.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_3_ATTN1_TO_Q_WEIGHT : "decoder.estimator.mid_blocks.0.1.3.attn1.to_q.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_3_ATTN1_TO_V_WEIGHT : "decoder.estimator.mid_blocks.0.1.3.attn1.to_v.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_3_FF_NET_0_PROJ_BIAS : "decoder.estimator.mid_blocks.0.1.3.ff.net.0.proj.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_3_FF_NET_0_PROJ_WEIGHT : "decoder.estimator.mid_blocks.0.1.3.ff.net.0.proj.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_3_FF_NET_2_BIAS : "decoder.estimator.mid_blocks.0.1.3.ff.net.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_3_FF_NET_2_WEIGHT : "decoder.estimator.mid_blocks.0.1.3.ff.net.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_3_NORM1_BIAS : "decoder.estimator.mid_blocks.0.1.3.norm1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_3_NORM1_WEIGHT : "decoder.estimator.mid_blocks.0.1.3.norm1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_3_NORM3_BIAS : "decoder.estimator.mid_blocks.0.1.3.norm3.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_3_NORM3_WEIGHT : "decoder.estimator.mid_blocks.0.1.3.norm3.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_0_BLOCK1_BLOCK_0_BIAS : "decoder.estimator.mid_blocks.1.0.block1.block.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_0_BLOCK1_BLOCK_0_WEIGHT : "decoder.estimator.mid_blocks.1.0.block1.block.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_0_BLOCK1_BLOCK_2_BIAS : "decoder.estimator.mid_blocks.1.0.block1.block.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_0_BLOCK1_BLOCK_2_WEIGHT : "decoder.estimator.mid_blocks.1.0.block1.block.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_0_BLOCK2_BLOCK_0_BIAS : "decoder.estimator.mid_blocks.1.0.block2.block.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_0_BLOCK2_BLOCK_0_WEIGHT : "decoder.estimator.mid_blocks.1.0.block2.block.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_0_BLOCK2_BLOCK_2_BIAS : "decoder.estimator.mid_blocks.1.0.block2.block.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_0_BLOCK2_BLOCK_2_WEIGHT : "decoder.estimator.mid_blocks.1.0.block2.block.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_0_MLP_1_BIAS : "decoder.estimator.mid_blocks.1.0.mlp.1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_0_MLP_1_WEIGHT : "decoder.estimator.mid_blocks.1.0.mlp.1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_0_RES_CONV_BIAS : "decoder.estimator.mid_blocks.1.0.res_conv.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_0_RES_CONV_WEIGHT : "decoder.estimator.mid_blocks.1.0.res_conv.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_0_ATTN1_TO_K_WEIGHT : "decoder.estimator.mid_blocks.1.1.0.attn1.to_k.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_0_ATTN1_TO_OUT_0_BIAS : "decoder.estimator.mid_blocks.1.1.0.attn1.to_out.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_0_ATTN1_TO_OUT_0_WEIGHT : "decoder.estimator.mid_blocks.1.1.0.attn1.to_out.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_0_ATTN1_TO_Q_WEIGHT : "decoder.estimator.mid_blocks.1.1.0.attn1.to_q.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_0_ATTN1_TO_V_WEIGHT : "decoder.estimator.mid_blocks.1.1.0.attn1.to_v.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_0_FF_NET_0_PROJ_BIAS : "decoder.estimator.mid_blocks.1.1.0.ff.net.0.proj.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_0_FF_NET_0_PROJ_WEIGHT : "decoder.estimator.mid_blocks.1.1.0.ff.net.0.proj.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_0_FF_NET_2_BIAS : "decoder.estimator.mid_blocks.1.1.0.ff.net.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_0_FF_NET_2_WEIGHT : "decoder.estimator.mid_blocks.1.1.0.ff.net.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_0_NORM1_BIAS : "decoder.estimator.mid_blocks.1.1.0.norm1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_0_NORM1_WEIGHT : "decoder.estimator.mid_blocks.1.1.0.norm1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_0_NORM3_BIAS : "decoder.estimator.mid_blocks.1.1.0.norm3.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_0_NORM3_WEIGHT : "decoder.estimator.mid_blocks.1.1.0.norm3.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_1_ATTN1_TO_K_WEIGHT : "decoder.estimator.mid_blocks.1.1.1.attn1.to_k.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_1_ATTN1_TO_OUT_0_BIAS : "decoder.estimator.mid_blocks.1.1.1.attn1.to_out.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_1_ATTN1_TO_OUT_0_WEIGHT : "decoder.estimator.mid_blocks.1.1.1.attn1.to_out.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_1_ATTN1_TO_Q_WEIGHT : "decoder.estimator.mid_blocks.1.1.1.attn1.to_q.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_1_ATTN1_TO_V_WEIGHT : "decoder.estimator.mid_blocks.1.1.1.attn1.to_v.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_1_FF_NET_0_PROJ_BIAS : "decoder.estimator.mid_blocks.1.1.1.ff.net.0.proj.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_1_FF_NET_0_PROJ_WEIGHT : "decoder.estimator.mid_blocks.1.1.1.ff.net.0.proj.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_1_FF_NET_2_BIAS : "decoder.estimator.mid_blocks.1.1.1.ff.net.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_1_FF_NET_2_WEIGHT : "decoder.estimator.mid_blocks.1.1.1.ff.net.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_1_NORM1_BIAS : "decoder.estimator.mid_blocks.1.1.1.norm1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_1_NORM1_WEIGHT : "decoder.estimator.mid_blocks.1.1.1.norm1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_1_NORM3_BIAS : "decoder.estimator.mid_blocks.1.1.1.norm3.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_1_NORM3_WEIGHT : "decoder.estimator.mid_blocks.1.1.1.norm3.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_2_ATTN1_TO_K_WEIGHT : "decoder.estimator.mid_blocks.1.1.2.attn1.to_k.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_2_ATTN1_TO_OUT_0_BIAS : "decoder.estimator.mid_blocks.1.1.2.attn1.to_out.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_2_ATTN1_TO_OUT_0_WEIGHT : "decoder.estimator.mid_blocks.1.1.2.attn1.to_out.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_2_ATTN1_TO_Q_WEIGHT : "decoder.estimator.mid_blocks.1.1.2.attn1.to_q.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_2_ATTN1_TO_V_WEIGHT : "decoder.estimator.mid_blocks.1.1.2.attn1.to_v.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_2_FF_NET_0_PROJ_BIAS : "decoder.estimator.mid_blocks.1.1.2.ff.net.0.proj.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_2_FF_NET_0_PROJ_WEIGHT : "decoder.estimator.mid_blocks.1.1.2.ff.net.0.proj.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_2_FF_NET_2_BIAS : "decoder.estimator.mid_blocks.1.1.2.ff.net.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_2_FF_NET_2_WEIGHT : "decoder.estimator.mid_blocks.1.1.2.ff.net.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_2_NORM1_BIAS : "decoder.estimator.mid_blocks.1.1.2.norm1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_2_NORM1_WEIGHT : "decoder.estimator.mid_blocks.1.1.2.norm1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_2_NORM3_BIAS : "decoder.estimator.mid_blocks.1.1.2.norm3.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_2_NORM3_WEIGHT : "decoder.estimator.mid_blocks.1.1.2.norm3.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_3_ATTN1_TO_K_WEIGHT : "decoder.estimator.mid_blocks.1.1.3.attn1.to_k.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_3_ATTN1_TO_OUT_0_BIAS : "decoder.estimator.mid_blocks.1.1.3.attn1.to_out.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_3_ATTN1_TO_OUT_0_WEIGHT : "decoder.estimator.mid_blocks.1.1.3.attn1.to_out.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_3_ATTN1_TO_Q_WEIGHT : "decoder.estimator.mid_blocks.1.1.3.attn1.to_q.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_3_ATTN1_TO_V_WEIGHT : "decoder.estimator.mid_blocks.1.1.3.attn1.to_v.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_3_FF_NET_0_PROJ_BIAS : "decoder.estimator.mid_blocks.1.1.3.ff.net.0.proj.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_3_FF_NET_0_PROJ_WEIGHT : "decoder.estimator.mid_blocks.1.1.3.ff.net.0.proj.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_3_FF_NET_2_BIAS : "decoder.estimator.mid_blocks.1.1.3.ff.net.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_3_FF_NET_2_WEIGHT : "decoder.estimator.mid_blocks.1.1.3.ff.net.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_3_NORM1_BIAS : "decoder.estimator.mid_blocks.1.1.3.norm1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_3_NORM1_WEIGHT : "decoder.estimator.mid_blocks.1.1.3.norm1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_3_NORM3_BIAS : "decoder.estimator.mid_blocks.1.1.3.norm3.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_3_NORM3_WEIGHT : "decoder.estimator.mid_blocks.1.1.3.norm3.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_0_BLOCK1_BLOCK_0_BIAS : "decoder.estimator.mid_blocks.10.0.block1.block.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_0_BLOCK1_BLOCK_0_WEIGHT : "decoder.estimator.mid_blocks.10.0.block1.block.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_0_BLOCK1_BLOCK_2_BIAS : "decoder.estimator.mid_blocks.10.0.block1.block.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_0_BLOCK1_BLOCK_2_WEIGHT : "decoder.estimator.mid_blocks.10.0.block1.block.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_0_BLOCK2_BLOCK_0_BIAS : "decoder.estimator.mid_blocks.10.0.block2.block.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_0_BLOCK2_BLOCK_0_WEIGHT : "decoder.estimator.mid_blocks.10.0.block2.block.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_0_BLOCK2_BLOCK_2_BIAS : "decoder.estimator.mid_blocks.10.0.block2.block.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_0_BLOCK2_BLOCK_2_WEIGHT : "decoder.estimator.mid_blocks.10.0.block2.block.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_0_MLP_1_BIAS : "decoder.estimator.mid_blocks.10.0.mlp.1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_0_MLP_1_WEIGHT : "decoder.estimator.mid_blocks.10.0.mlp.1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_0_RES_CONV_BIAS : "decoder.estimator.mid_blocks.10.0.res_conv.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_0_RES_CONV_WEIGHT : "decoder.estimator.mid_blocks.10.0.res_conv.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_0_ATTN1_TO_K_WEIGHT : "decoder.estimator.mid_blocks.10.1.0.attn1.to_k.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_0_ATTN1_TO_OUT_0_BIAS : "decoder.estimator.mid_blocks.10.1.0.attn1.to_out.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_0_ATTN1_TO_OUT_0_WEIGHT : "decoder.estimator.mid_blocks.10.1.0.attn1.to_out.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_0_ATTN1_TO_Q_WEIGHT : "decoder.estimator.mid_blocks.10.1.0.attn1.to_q.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_0_ATTN1_TO_V_WEIGHT : "decoder.estimator.mid_blocks.10.1.0.attn1.to_v.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_0_FF_NET_0_PROJ_BIAS : "decoder.estimator.mid_blocks.10.1.0.ff.net.0.proj.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_0_FF_NET_0_PROJ_WEIGHT : "decoder.estimator.mid_blocks.10.1.0.ff.net.0.proj.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_0_FF_NET_2_BIAS : "decoder.estimator.mid_blocks.10.1.0.ff.net.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_0_FF_NET_2_WEIGHT : "decoder.estimator.mid_blocks.10.1.0.ff.net.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_0_NORM1_BIAS : "decoder.estimator.mid_blocks.10.1.0.norm1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_0_NORM1_WEIGHT : "decoder.estimator.mid_blocks.10.1.0.norm1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_0_NORM3_BIAS : "decoder.estimator.mid_blocks.10.1.0.norm3.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_0_NORM3_WEIGHT : "decoder.estimator.mid_blocks.10.1.0.norm3.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_1_ATTN1_TO_K_WEIGHT : "decoder.estimator.mid_blocks.10.1.1.attn1.to_k.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_1_ATTN1_TO_OUT_0_BIAS : "decoder.estimator.mid_blocks.10.1.1.attn1.to_out.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_1_ATTN1_TO_OUT_0_WEIGHT : "decoder.estimator.mid_blocks.10.1.1.attn1.to_out.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_1_ATTN1_TO_Q_WEIGHT : "decoder.estimator.mid_blocks.10.1.1.attn1.to_q.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_1_ATTN1_TO_V_WEIGHT : "decoder.estimator.mid_blocks.10.1.1.attn1.to_v.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_1_FF_NET_0_PROJ_BIAS : "decoder.estimator.mid_blocks.10.1.1.ff.net.0.proj.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_1_FF_NET_0_PROJ_WEIGHT : "decoder.estimator.mid_blocks.10.1.1.ff.net.0.proj.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_1_FF_NET_2_BIAS : "decoder.estimator.mid_blocks.10.1.1.ff.net.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_1_FF_NET_2_WEIGHT : "decoder.estimator.mid_blocks.10.1.1.ff.net.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_1_NORM1_BIAS : "decoder.estimator.mid_blocks.10.1.1.norm1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_1_NORM1_WEIGHT : "decoder.estimator.mid_blocks.10.1.1.norm1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_1_NORM3_BIAS : "decoder.estimator.mid_blocks.10.1.1.norm3.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_1_NORM3_WEIGHT : "decoder.estimator.mid_blocks.10.1.1.norm3.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_2_ATTN1_TO_K_WEIGHT : "decoder.estimator.mid_blocks.10.1.2.attn1.to_k.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_2_ATTN1_TO_OUT_0_BIAS : "decoder.estimator.mid_blocks.10.1.2.attn1.to_out.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_2_ATTN1_TO_OUT_0_WEIGHT : "decoder.estimator.mid_blocks.10.1.2.attn1.to_out.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_2_ATTN1_TO_Q_WEIGHT : "decoder.estimator.mid_blocks.10.1.2.attn1.to_q.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_2_ATTN1_TO_V_WEIGHT : "decoder.estimator.mid_blocks.10.1.2.attn1.to_v.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_2_FF_NET_0_PROJ_BIAS : "decoder.estimator.mid_blocks.10.1.2.ff.net.0.proj.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_2_FF_NET_0_PROJ_WEIGHT : "decoder.estimator.mid_blocks.10.1.2.ff.net.0.proj.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_2_FF_NET_2_BIAS : "decoder.estimator.mid_blocks.10.1.2.ff.net.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_2_FF_NET_2_WEIGHT : "decoder.estimator.mid_blocks.10.1.2.ff.net.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_2_NORM1_BIAS : "decoder.estimator.mid_blocks.10.1.2.norm1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_2_NORM1_WEIGHT : "decoder.estimator.mid_blocks.10.1.2.norm1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_2_NORM3_BIAS : "decoder.estimator.mid_blocks.10.1.2.norm3.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_2_NORM3_WEIGHT : "decoder.estimator.mid_blocks.10.1.2.norm3.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_3_ATTN1_TO_K_WEIGHT : "decoder.estimator.mid_blocks.10.1.3.attn1.to_k.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_3_ATTN1_TO_OUT_0_BIAS : "decoder.estimator.mid_blocks.10.1.3.attn1.to_out.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_3_ATTN1_TO_OUT_0_WEIGHT : "decoder.estimator.mid_blocks.10.1.3.attn1.to_out.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_3_ATTN1_TO_Q_WEIGHT : "decoder.estimator.mid_blocks.10.1.3.attn1.to_q.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_3_ATTN1_TO_V_WEIGHT : "decoder.estimator.mid_blocks.10.1.3.attn1.to_v.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_3_FF_NET_0_PROJ_BIAS : "decoder.estimator.mid_blocks.10.1.3.ff.net.0.proj.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_3_FF_NET_0_PROJ_WEIGHT : "decoder.estimator.mid_blocks.10.1.3.ff.net.0.proj.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_3_FF_NET_2_BIAS : "decoder.estimator.mid_blocks.10.1.3.ff.net.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_3_FF_NET_2_WEIGHT : "decoder.estimator.mid_blocks.10.1.3.ff.net.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_3_NORM1_BIAS : "decoder.estimator.mid_blocks.10.1.3.norm1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_3_NORM1_WEIGHT : "decoder.estimator.mid_blocks.10.1.3.norm1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_3_NORM3_BIAS : "decoder.estimator.mid_blocks.10.1.3.norm3.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_3_NORM3_WEIGHT : "decoder.estimator.mid_blocks.10.1.3.norm3.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_0_BLOCK1_BLOCK_0_BIAS : "decoder.estimator.mid_blocks.11.0.block1.block.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_0_BLOCK1_BLOCK_0_WEIGHT : "decoder.estimator.mid_blocks.11.0.block1.block.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_0_BLOCK1_BLOCK_2_BIAS : "decoder.estimator.mid_blocks.11.0.block1.block.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_0_BLOCK1_BLOCK_2_WEIGHT : "decoder.estimator.mid_blocks.11.0.block1.block.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_0_BLOCK2_BLOCK_0_BIAS : "decoder.estimator.mid_blocks.11.0.block2.block.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_0_BLOCK2_BLOCK_0_WEIGHT : "decoder.estimator.mid_blocks.11.0.block2.block.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_0_BLOCK2_BLOCK_2_BIAS : "decoder.estimator.mid_blocks.11.0.block2.block.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_0_BLOCK2_BLOCK_2_WEIGHT : "decoder.estimator.mid_blocks.11.0.block2.block.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_0_MLP_1_BIAS : "decoder.estimator.mid_blocks.11.0.mlp.1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_0_MLP_1_WEIGHT : "decoder.estimator.mid_blocks.11.0.mlp.1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_0_RES_CONV_BIAS : "decoder.estimator.mid_blocks.11.0.res_conv.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_0_RES_CONV_WEIGHT : "decoder.estimator.mid_blocks.11.0.res_conv.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_0_ATTN1_TO_K_WEIGHT : "decoder.estimator.mid_blocks.11.1.0.attn1.to_k.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_0_ATTN1_TO_OUT_0_BIAS : "decoder.estimator.mid_blocks.11.1.0.attn1.to_out.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_0_ATTN1_TO_OUT_0_WEIGHT : "decoder.estimator.mid_blocks.11.1.0.attn1.to_out.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_0_ATTN1_TO_Q_WEIGHT : "decoder.estimator.mid_blocks.11.1.0.attn1.to_q.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_0_ATTN1_TO_V_WEIGHT : "decoder.estimator.mid_blocks.11.1.0.attn1.to_v.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_0_FF_NET_0_PROJ_BIAS : "decoder.estimator.mid_blocks.11.1.0.ff.net.0.proj.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_0_FF_NET_0_PROJ_WEIGHT : "decoder.estimator.mid_blocks.11.1.0.ff.net.0.proj.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_0_FF_NET_2_BIAS : "decoder.estimator.mid_blocks.11.1.0.ff.net.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_0_FF_NET_2_WEIGHT : "decoder.estimator.mid_blocks.11.1.0.ff.net.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_0_NORM1_BIAS : "decoder.estimator.mid_blocks.11.1.0.norm1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_0_NORM1_WEIGHT : "decoder.estimator.mid_blocks.11.1.0.norm1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_0_NORM3_BIAS : "decoder.estimator.mid_blocks.11.1.0.norm3.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_0_NORM3_WEIGHT : "decoder.estimator.mid_blocks.11.1.0.norm3.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_1_ATTN1_TO_K_WEIGHT : "decoder.estimator.mid_blocks.11.1.1.attn1.to_k.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_1_ATTN1_TO_OUT_0_BIAS : "decoder.estimator.mid_blocks.11.1.1.attn1.to_out.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_1_ATTN1_TO_OUT_0_WEIGHT : "decoder.estimator.mid_blocks.11.1.1.attn1.to_out.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_1_ATTN1_TO_Q_WEIGHT : "decoder.estimator.mid_blocks.11.1.1.attn1.to_q.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_1_ATTN1_TO_V_WEIGHT : "decoder.estimator.mid_blocks.11.1.1.attn1.to_v.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_1_FF_NET_0_PROJ_BIAS : "decoder.estimator.mid_blocks.11.1.1.ff.net.0.proj.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_1_FF_NET_0_PROJ_WEIGHT : "decoder.estimator.mid_blocks.11.1.1.ff.net.0.proj.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_1_FF_NET_2_BIAS : "decoder.estimator.mid_blocks.11.1.1.ff.net.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_1_FF_NET_2_WEIGHT : "decoder.estimator.mid_blocks.11.1.1.ff.net.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_1_NORM1_BIAS : "decoder.estimator.mid_blocks.11.1.1.norm1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_1_NORM1_WEIGHT : "decoder.estimator.mid_blocks.11.1.1.norm1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_1_NORM3_BIAS : "decoder.estimator.mid_blocks.11.1.1.norm3.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_1_NORM3_WEIGHT : "decoder.estimator.mid_blocks.11.1.1.norm3.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_2_ATTN1_TO_K_WEIGHT : "decoder.estimator.mid_blocks.11.1.2.attn1.to_k.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_2_ATTN1_TO_OUT_0_BIAS : "decoder.estimator.mid_blocks.11.1.2.attn1.to_out.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_2_ATTN1_TO_OUT_0_WEIGHT : "decoder.estimator.mid_blocks.11.1.2.attn1.to_out.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_2_ATTN1_TO_Q_WEIGHT : "decoder.estimator.mid_blocks.11.1.2.attn1.to_q.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_2_ATTN1_TO_V_WEIGHT : "decoder.estimator.mid_blocks.11.1.2.attn1.to_v.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_2_FF_NET_0_PROJ_BIAS : "decoder.estimator.mid_blocks.11.1.2.ff.net.0.proj.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_2_FF_NET_0_PROJ_WEIGHT : "decoder.estimator.mid_blocks.11.1.2.ff.net.0.proj.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_2_FF_NET_2_BIAS : "decoder.estimator.mid_blocks.11.1.2.ff.net.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_2_FF_NET_2_WEIGHT : "decoder.estimator.mid_blocks.11.1.2.ff.net.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_2_NORM1_BIAS : "decoder.estimator.mid_blocks.11.1.2.norm1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_2_NORM1_WEIGHT : "decoder.estimator.mid_blocks.11.1.2.norm1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_2_NORM3_BIAS : "decoder.estimator.mid_blocks.11.1.2.norm3.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_2_NORM3_WEIGHT : "decoder.estimator.mid_blocks.11.1.2.norm3.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_3_ATTN1_TO_K_WEIGHT : "decoder.estimator.mid_blocks.11.1.3.attn1.to_k.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_3_ATTN1_TO_OUT_0_BIAS : "decoder.estimator.mid_blocks.11.1.3.attn1.to_out.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_3_ATTN1_TO_OUT_0_WEIGHT : "decoder.estimator.mid_blocks.11.1.3.attn1.to_out.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_3_ATTN1_TO_Q_WEIGHT : "decoder.estimator.mid_blocks.11.1.3.attn1.to_q.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_3_ATTN1_TO_V_WEIGHT : "decoder.estimator.mid_blocks.11.1.3.attn1.to_v.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_3_FF_NET_0_PROJ_BIAS : "decoder.estimator.mid_blocks.11.1.3.ff.net.0.proj.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_3_FF_NET_0_PROJ_WEIGHT : "decoder.estimator.mid_blocks.11.1.3.ff.net.0.proj.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_3_FF_NET_2_BIAS : "decoder.estimator.mid_blocks.11.1.3.ff.net.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_3_FF_NET_2_WEIGHT : "decoder.estimator.mid_blocks.11.1.3.ff.net.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_3_NORM1_BIAS : "decoder.estimator.mid_blocks.11.1.3.norm1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_3_NORM1_WEIGHT : "decoder.estimator.mid_blocks.11.1.3.norm1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_3_NORM3_BIAS : "decoder.estimator.mid_blocks.11.1.3.norm3.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_3_NORM3_WEIGHT : "decoder.estimator.mid_blocks.11.1.3.norm3.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_0_BLOCK1_BLOCK_0_BIAS : "decoder.estimator.mid_blocks.2.0.block1.block.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_0_BLOCK1_BLOCK_0_WEIGHT : "decoder.estimator.mid_blocks.2.0.block1.block.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_0_BLOCK1_BLOCK_2_BIAS : "decoder.estimator.mid_blocks.2.0.block1.block.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_0_BLOCK1_BLOCK_2_WEIGHT : "decoder.estimator.mid_blocks.2.0.block1.block.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_0_BLOCK2_BLOCK_0_BIAS : "decoder.estimator.mid_blocks.2.0.block2.block.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_0_BLOCK2_BLOCK_0_WEIGHT : "decoder.estimator.mid_blocks.2.0.block2.block.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_0_BLOCK2_BLOCK_2_BIAS : "decoder.estimator.mid_blocks.2.0.block2.block.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_0_BLOCK2_BLOCK_2_WEIGHT : "decoder.estimator.mid_blocks.2.0.block2.block.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_0_MLP_1_BIAS : "decoder.estimator.mid_blocks.2.0.mlp.1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_0_MLP_1_WEIGHT : "decoder.estimator.mid_blocks.2.0.mlp.1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_0_RES_CONV_BIAS : "decoder.estimator.mid_blocks.2.0.res_conv.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_0_RES_CONV_WEIGHT : "decoder.estimator.mid_blocks.2.0.res_conv.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_0_ATTN1_TO_K_WEIGHT : "decoder.estimator.mid_blocks.2.1.0.attn1.to_k.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_0_ATTN1_TO_OUT_0_BIAS : "decoder.estimator.mid_blocks.2.1.0.attn1.to_out.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_0_ATTN1_TO_OUT_0_WEIGHT : "decoder.estimator.mid_blocks.2.1.0.attn1.to_out.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_0_ATTN1_TO_Q_WEIGHT : "decoder.estimator.mid_blocks.2.1.0.attn1.to_q.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_0_ATTN1_TO_V_WEIGHT : "decoder.estimator.mid_blocks.2.1.0.attn1.to_v.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_0_FF_NET_0_PROJ_BIAS : "decoder.estimator.mid_blocks.2.1.0.ff.net.0.proj.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_0_FF_NET_0_PROJ_WEIGHT : "decoder.estimator.mid_blocks.2.1.0.ff.net.0.proj.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_0_FF_NET_2_BIAS : "decoder.estimator.mid_blocks.2.1.0.ff.net.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_0_FF_NET_2_WEIGHT : "decoder.estimator.mid_blocks.2.1.0.ff.net.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_0_NORM1_BIAS : "decoder.estimator.mid_blocks.2.1.0.norm1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_0_NORM1_WEIGHT : "decoder.estimator.mid_blocks.2.1.0.norm1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_0_NORM3_BIAS : "decoder.estimator.mid_blocks.2.1.0.norm3.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_0_NORM3_WEIGHT : "decoder.estimator.mid_blocks.2.1.0.norm3.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_1_ATTN1_TO_K_WEIGHT : "decoder.estimator.mid_blocks.2.1.1.attn1.to_k.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_1_ATTN1_TO_OUT_0_BIAS : "decoder.estimator.mid_blocks.2.1.1.attn1.to_out.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_1_ATTN1_TO_OUT_0_WEIGHT : "decoder.estimator.mid_blocks.2.1.1.attn1.to_out.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_1_ATTN1_TO_Q_WEIGHT : "decoder.estimator.mid_blocks.2.1.1.attn1.to_q.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_1_ATTN1_TO_V_WEIGHT : "decoder.estimator.mid_blocks.2.1.1.attn1.to_v.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_1_FF_NET_0_PROJ_BIAS : "decoder.estimator.mid_blocks.2.1.1.ff.net.0.proj.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_1_FF_NET_0_PROJ_WEIGHT : "decoder.estimator.mid_blocks.2.1.1.ff.net.0.proj.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_1_FF_NET_2_BIAS : "decoder.estimator.mid_blocks.2.1.1.ff.net.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_1_FF_NET_2_WEIGHT : "decoder.estimator.mid_blocks.2.1.1.ff.net.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_1_NORM1_BIAS : "decoder.estimator.mid_blocks.2.1.1.norm1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_1_NORM1_WEIGHT : "decoder.estimator.mid_blocks.2.1.1.norm1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_1_NORM3_BIAS : "decoder.estimator.mid_blocks.2.1.1.norm3.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_1_NORM3_WEIGHT : "decoder.estimator.mid_blocks.2.1.1.norm3.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_2_ATTN1_TO_K_WEIGHT : "decoder.estimator.mid_blocks.2.1.2.attn1.to_k.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_2_ATTN1_TO_OUT_0_BIAS : "decoder.estimator.mid_blocks.2.1.2.attn1.to_out.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_2_ATTN1_TO_OUT_0_WEIGHT : "decoder.estimator.mid_blocks.2.1.2.attn1.to_out.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_2_ATTN1_TO_Q_WEIGHT : "decoder.estimator.mid_blocks.2.1.2.attn1.to_q.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_2_ATTN1_TO_V_WEIGHT : "decoder.estimator.mid_blocks.2.1.2.attn1.to_v.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_2_FF_NET_0_PROJ_BIAS : "decoder.estimator.mid_blocks.2.1.2.ff.net.0.proj.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_2_FF_NET_0_PROJ_WEIGHT : "decoder.estimator.mid_blocks.2.1.2.ff.net.0.proj.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_2_FF_NET_2_BIAS : "decoder.estimator.mid_blocks.2.1.2.ff.net.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_2_FF_NET_2_WEIGHT : "decoder.estimator.mid_blocks.2.1.2.ff.net.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_2_NORM1_BIAS : "decoder.estimator.mid_blocks.2.1.2.norm1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_2_NORM1_WEIGHT : "decoder.estimator.mid_blocks.2.1.2.norm1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_2_NORM3_BIAS : "decoder.estimator.mid_blocks.2.1.2.norm3.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_2_NORM3_WEIGHT : "decoder.estimator.mid_blocks.2.1.2.norm3.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_3_ATTN1_TO_K_WEIGHT : "decoder.estimator.mid_blocks.2.1.3.attn1.to_k.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_3_ATTN1_TO_OUT_0_BIAS : "decoder.estimator.mid_blocks.2.1.3.attn1.to_out.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_3_ATTN1_TO_OUT_0_WEIGHT : "decoder.estimator.mid_blocks.2.1.3.attn1.to_out.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_3_ATTN1_TO_Q_WEIGHT : "decoder.estimator.mid_blocks.2.1.3.attn1.to_q.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_3_ATTN1_TO_V_WEIGHT : "decoder.estimator.mid_blocks.2.1.3.attn1.to_v.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_3_FF_NET_0_PROJ_BIAS : "decoder.estimator.mid_blocks.2.1.3.ff.net.0.proj.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_3_FF_NET_0_PROJ_WEIGHT : "decoder.estimator.mid_blocks.2.1.3.ff.net.0.proj.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_3_FF_NET_2_BIAS : "decoder.estimator.mid_blocks.2.1.3.ff.net.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_3_FF_NET_2_WEIGHT : "decoder.estimator.mid_blocks.2.1.3.ff.net.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_3_NORM1_BIAS : "decoder.estimator.mid_blocks.2.1.3.norm1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_3_NORM1_WEIGHT : "decoder.estimator.mid_blocks.2.1.3.norm1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_3_NORM3_BIAS : "decoder.estimator.mid_blocks.2.1.3.norm3.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_3_NORM3_WEIGHT : "decoder.estimator.mid_blocks.2.1.3.norm3.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_0_BLOCK1_BLOCK_0_BIAS : "decoder.estimator.mid_blocks.3.0.block1.block.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_0_BLOCK1_BLOCK_0_WEIGHT : "decoder.estimator.mid_blocks.3.0.block1.block.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_0_BLOCK1_BLOCK_2_BIAS : "decoder.estimator.mid_blocks.3.0.block1.block.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_0_BLOCK1_BLOCK_2_WEIGHT : "decoder.estimator.mid_blocks.3.0.block1.block.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_0_BLOCK2_BLOCK_0_BIAS : "decoder.estimator.mid_blocks.3.0.block2.block.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_0_BLOCK2_BLOCK_0_WEIGHT : "decoder.estimator.mid_blocks.3.0.block2.block.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_0_BLOCK2_BLOCK_2_BIAS : "decoder.estimator.mid_blocks.3.0.block2.block.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_0_BLOCK2_BLOCK_2_WEIGHT : "decoder.estimator.mid_blocks.3.0.block2.block.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_0_MLP_1_BIAS : "decoder.estimator.mid_blocks.3.0.mlp.1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_0_MLP_1_WEIGHT : "decoder.estimator.mid_blocks.3.0.mlp.1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_0_RES_CONV_BIAS : "decoder.estimator.mid_blocks.3.0.res_conv.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_0_RES_CONV_WEIGHT : "decoder.estimator.mid_blocks.3.0.res_conv.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_0_ATTN1_TO_K_WEIGHT : "decoder.estimator.mid_blocks.3.1.0.attn1.to_k.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_0_ATTN1_TO_OUT_0_BIAS : "decoder.estimator.mid_blocks.3.1.0.attn1.to_out.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_0_ATTN1_TO_OUT_0_WEIGHT : "decoder.estimator.mid_blocks.3.1.0.attn1.to_out.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_0_ATTN1_TO_Q_WEIGHT : "decoder.estimator.mid_blocks.3.1.0.attn1.to_q.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_0_ATTN1_TO_V_WEIGHT : "decoder.estimator.mid_blocks.3.1.0.attn1.to_v.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_0_FF_NET_0_PROJ_BIAS : "decoder.estimator.mid_blocks.3.1.0.ff.net.0.proj.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_0_FF_NET_0_PROJ_WEIGHT : "decoder.estimator.mid_blocks.3.1.0.ff.net.0.proj.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_0_FF_NET_2_BIAS : "decoder.estimator.mid_blocks.3.1.0.ff.net.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_0_FF_NET_2_WEIGHT : "decoder.estimator.mid_blocks.3.1.0.ff.net.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_0_NORM1_BIAS : "decoder.estimator.mid_blocks.3.1.0.norm1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_0_NORM1_WEIGHT : "decoder.estimator.mid_blocks.3.1.0.norm1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_0_NORM3_BIAS : "decoder.estimator.mid_blocks.3.1.0.norm3.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_0_NORM3_WEIGHT : "decoder.estimator.mid_blocks.3.1.0.norm3.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_1_ATTN1_TO_K_WEIGHT : "decoder.estimator.mid_blocks.3.1.1.attn1.to_k.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_1_ATTN1_TO_OUT_0_BIAS : "decoder.estimator.mid_blocks.3.1.1.attn1.to_out.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_1_ATTN1_TO_OUT_0_WEIGHT : "decoder.estimator.mid_blocks.3.1.1.attn1.to_out.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_1_ATTN1_TO_Q_WEIGHT : "decoder.estimator.mid_blocks.3.1.1.attn1.to_q.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_1_ATTN1_TO_V_WEIGHT : "decoder.estimator.mid_blocks.3.1.1.attn1.to_v.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_1_FF_NET_0_PROJ_BIAS : "decoder.estimator.mid_blocks.3.1.1.ff.net.0.proj.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_1_FF_NET_0_PROJ_WEIGHT : "decoder.estimator.mid_blocks.3.1.1.ff.net.0.proj.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_1_FF_NET_2_BIAS : "decoder.estimator.mid_blocks.3.1.1.ff.net.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_1_FF_NET_2_WEIGHT : "decoder.estimator.mid_blocks.3.1.1.ff.net.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_1_NORM1_BIAS : "decoder.estimator.mid_blocks.3.1.1.norm1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_1_NORM1_WEIGHT : "decoder.estimator.mid_blocks.3.1.1.norm1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_1_NORM3_BIAS : "decoder.estimator.mid_blocks.3.1.1.norm3.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_1_NORM3_WEIGHT : "decoder.estimator.mid_blocks.3.1.1.norm3.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_2_ATTN1_TO_K_WEIGHT : "decoder.estimator.mid_blocks.3.1.2.attn1.to_k.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_2_ATTN1_TO_OUT_0_BIAS : "decoder.estimator.mid_blocks.3.1.2.attn1.to_out.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_2_ATTN1_TO_OUT_0_WEIGHT : "decoder.estimator.mid_blocks.3.1.2.attn1.to_out.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_2_ATTN1_TO_Q_WEIGHT : "decoder.estimator.mid_blocks.3.1.2.attn1.to_q.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_2_ATTN1_TO_V_WEIGHT : "decoder.estimator.mid_blocks.3.1.2.attn1.to_v.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_2_FF_NET_0_PROJ_BIAS : "decoder.estimator.mid_blocks.3.1.2.ff.net.0.proj.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_2_FF_NET_0_PROJ_WEIGHT : "decoder.estimator.mid_blocks.3.1.2.ff.net.0.proj.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_2_FF_NET_2_BIAS : "decoder.estimator.mid_blocks.3.1.2.ff.net.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_2_FF_NET_2_WEIGHT : "decoder.estimator.mid_blocks.3.1.2.ff.net.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_2_NORM1_BIAS : "decoder.estimator.mid_blocks.3.1.2.norm1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_2_NORM1_WEIGHT : "decoder.estimator.mid_blocks.3.1.2.norm1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_2_NORM3_BIAS : "decoder.estimator.mid_blocks.3.1.2.norm3.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_2_NORM3_WEIGHT : "decoder.estimator.mid_blocks.3.1.2.norm3.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_3_ATTN1_TO_K_WEIGHT : "decoder.estimator.mid_blocks.3.1.3.attn1.to_k.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_3_ATTN1_TO_OUT_0_BIAS : "decoder.estimator.mid_blocks.3.1.3.attn1.to_out.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_3_ATTN1_TO_OUT_0_WEIGHT : "decoder.estimator.mid_blocks.3.1.3.attn1.to_out.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_3_ATTN1_TO_Q_WEIGHT : "decoder.estimator.mid_blocks.3.1.3.attn1.to_q.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_3_ATTN1_TO_V_WEIGHT : "decoder.estimator.mid_blocks.3.1.3.attn1.to_v.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_3_FF_NET_0_PROJ_BIAS : "decoder.estimator.mid_blocks.3.1.3.ff.net.0.proj.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_3_FF_NET_0_PROJ_WEIGHT : "decoder.estimator.mid_blocks.3.1.3.ff.net.0.proj.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_3_FF_NET_2_BIAS : "decoder.estimator.mid_blocks.3.1.3.ff.net.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_3_FF_NET_2_WEIGHT : "decoder.estimator.mid_blocks.3.1.3.ff.net.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_3_NORM1_BIAS : "decoder.estimator.mid_blocks.3.1.3.norm1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_3_NORM1_WEIGHT : "decoder.estimator.mid_blocks.3.1.3.norm1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_3_NORM3_BIAS : "decoder.estimator.mid_blocks.3.1.3.norm3.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_3_NORM3_WEIGHT : "decoder.estimator.mid_blocks.3.1.3.norm3.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_0_BLOCK1_BLOCK_0_BIAS : "decoder.estimator.mid_blocks.4.0.block1.block.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_0_BLOCK1_BLOCK_0_WEIGHT : "decoder.estimator.mid_blocks.4.0.block1.block.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_0_BLOCK1_BLOCK_2_BIAS : "decoder.estimator.mid_blocks.4.0.block1.block.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_0_BLOCK1_BLOCK_2_WEIGHT : "decoder.estimator.mid_blocks.4.0.block1.block.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_0_BLOCK2_BLOCK_0_BIAS : "decoder.estimator.mid_blocks.4.0.block2.block.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_0_BLOCK2_BLOCK_0_WEIGHT : "decoder.estimator.mid_blocks.4.0.block2.block.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_0_BLOCK2_BLOCK_2_BIAS : "decoder.estimator.mid_blocks.4.0.block2.block.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_0_BLOCK2_BLOCK_2_WEIGHT : "decoder.estimator.mid_blocks.4.0.block2.block.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_0_MLP_1_BIAS : "decoder.estimator.mid_blocks.4.0.mlp.1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_0_MLP_1_WEIGHT : "decoder.estimator.mid_blocks.4.0.mlp.1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_0_RES_CONV_BIAS : "decoder.estimator.mid_blocks.4.0.res_conv.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_0_RES_CONV_WEIGHT : "decoder.estimator.mid_blocks.4.0.res_conv.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_0_ATTN1_TO_K_WEIGHT : "decoder.estimator.mid_blocks.4.1.0.attn1.to_k.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_0_ATTN1_TO_OUT_0_BIAS : "decoder.estimator.mid_blocks.4.1.0.attn1.to_out.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_0_ATTN1_TO_OUT_0_WEIGHT : "decoder.estimator.mid_blocks.4.1.0.attn1.to_out.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_0_ATTN1_TO_Q_WEIGHT : "decoder.estimator.mid_blocks.4.1.0.attn1.to_q.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_0_ATTN1_TO_V_WEIGHT : "decoder.estimator.mid_blocks.4.1.0.attn1.to_v.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_0_FF_NET_0_PROJ_BIAS : "decoder.estimator.mid_blocks.4.1.0.ff.net.0.proj.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_0_FF_NET_0_PROJ_WEIGHT : "decoder.estimator.mid_blocks.4.1.0.ff.net.0.proj.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_0_FF_NET_2_BIAS : "decoder.estimator.mid_blocks.4.1.0.ff.net.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_0_FF_NET_2_WEIGHT : "decoder.estimator.mid_blocks.4.1.0.ff.net.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_0_NORM1_BIAS : "decoder.estimator.mid_blocks.4.1.0.norm1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_0_NORM1_WEIGHT : "decoder.estimator.mid_blocks.4.1.0.norm1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_0_NORM3_BIAS : "decoder.estimator.mid_blocks.4.1.0.norm3.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_0_NORM3_WEIGHT : "decoder.estimator.mid_blocks.4.1.0.norm3.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_1_ATTN1_TO_K_WEIGHT : "decoder.estimator.mid_blocks.4.1.1.attn1.to_k.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_1_ATTN1_TO_OUT_0_BIAS : "decoder.estimator.mid_blocks.4.1.1.attn1.to_out.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_1_ATTN1_TO_OUT_0_WEIGHT : "decoder.estimator.mid_blocks.4.1.1.attn1.to_out.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_1_ATTN1_TO_Q_WEIGHT : "decoder.estimator.mid_blocks.4.1.1.attn1.to_q.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_1_ATTN1_TO_V_WEIGHT : "decoder.estimator.mid_blocks.4.1.1.attn1.to_v.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_1_FF_NET_0_PROJ_BIAS : "decoder.estimator.mid_blocks.4.1.1.ff.net.0.proj.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_1_FF_NET_0_PROJ_WEIGHT : "decoder.estimator.mid_blocks.4.1.1.ff.net.0.proj.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_1_FF_NET_2_BIAS : "decoder.estimator.mid_blocks.4.1.1.ff.net.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_1_FF_NET_2_WEIGHT : "decoder.estimator.mid_blocks.4.1.1.ff.net.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_1_NORM1_BIAS : "decoder.estimator.mid_blocks.4.1.1.norm1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_1_NORM1_WEIGHT : "decoder.estimator.mid_blocks.4.1.1.norm1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_1_NORM3_BIAS : "decoder.estimator.mid_blocks.4.1.1.norm3.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_1_NORM3_WEIGHT : "decoder.estimator.mid_blocks.4.1.1.norm3.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_2_ATTN1_TO_K_WEIGHT : "decoder.estimator.mid_blocks.4.1.2.attn1.to_k.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_2_ATTN1_TO_OUT_0_BIAS : "decoder.estimator.mid_blocks.4.1.2.attn1.to_out.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_2_ATTN1_TO_OUT_0_WEIGHT : "decoder.estimator.mid_blocks.4.1.2.attn1.to_out.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_2_ATTN1_TO_Q_WEIGHT : "decoder.estimator.mid_blocks.4.1.2.attn1.to_q.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_2_ATTN1_TO_V_WEIGHT : "decoder.estimator.mid_blocks.4.1.2.attn1.to_v.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_2_FF_NET_0_PROJ_BIAS : "decoder.estimator.mid_blocks.4.1.2.ff.net.0.proj.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_2_FF_NET_0_PROJ_WEIGHT : "decoder.estimator.mid_blocks.4.1.2.ff.net.0.proj.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_2_FF_NET_2_BIAS : "decoder.estimator.mid_blocks.4.1.2.ff.net.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_2_FF_NET_2_WEIGHT : "decoder.estimator.mid_blocks.4.1.2.ff.net.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_2_NORM1_BIAS : "decoder.estimator.mid_blocks.4.1.2.norm1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_2_NORM1_WEIGHT : "decoder.estimator.mid_blocks.4.1.2.norm1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_2_NORM3_BIAS : "decoder.estimator.mid_blocks.4.1.2.norm3.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_2_NORM3_WEIGHT : "decoder.estimator.mid_blocks.4.1.2.norm3.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_3_ATTN1_TO_K_WEIGHT : "decoder.estimator.mid_blocks.4.1.3.attn1.to_k.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_3_ATTN1_TO_OUT_0_BIAS : "decoder.estimator.mid_blocks.4.1.3.attn1.to_out.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_3_ATTN1_TO_OUT_0_WEIGHT : "decoder.estimator.mid_blocks.4.1.3.attn1.to_out.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_3_ATTN1_TO_Q_WEIGHT : "decoder.estimator.mid_blocks.4.1.3.attn1.to_q.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_3_ATTN1_TO_V_WEIGHT : "decoder.estimator.mid_blocks.4.1.3.attn1.to_v.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_3_FF_NET_0_PROJ_BIAS : "decoder.estimator.mid_blocks.4.1.3.ff.net.0.proj.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_3_FF_NET_0_PROJ_WEIGHT : "decoder.estimator.mid_blocks.4.1.3.ff.net.0.proj.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_3_FF_NET_2_BIAS : "decoder.estimator.mid_blocks.4.1.3.ff.net.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_3_FF_NET_2_WEIGHT : "decoder.estimator.mid_blocks.4.1.3.ff.net.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_3_NORM1_BIAS : "decoder.estimator.mid_blocks.4.1.3.norm1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_3_NORM1_WEIGHT : "decoder.estimator.mid_blocks.4.1.3.norm1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_3_NORM3_BIAS : "decoder.estimator.mid_blocks.4.1.3.norm3.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_3_NORM3_WEIGHT : "decoder.estimator.mid_blocks.4.1.3.norm3.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_0_BLOCK1_BLOCK_0_BIAS : "decoder.estimator.mid_blocks.5.0.block1.block.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_0_BLOCK1_BLOCK_0_WEIGHT : "decoder.estimator.mid_blocks.5.0.block1.block.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_0_BLOCK1_BLOCK_2_BIAS : "decoder.estimator.mid_blocks.5.0.block1.block.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_0_BLOCK1_BLOCK_2_WEIGHT : "decoder.estimator.mid_blocks.5.0.block1.block.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_0_BLOCK2_BLOCK_0_BIAS : "decoder.estimator.mid_blocks.5.0.block2.block.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_0_BLOCK2_BLOCK_0_WEIGHT : "decoder.estimator.mid_blocks.5.0.block2.block.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_0_BLOCK2_BLOCK_2_BIAS : "decoder.estimator.mid_blocks.5.0.block2.block.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_0_BLOCK2_BLOCK_2_WEIGHT : "decoder.estimator.mid_blocks.5.0.block2.block.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_0_MLP_1_BIAS : "decoder.estimator.mid_blocks.5.0.mlp.1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_0_MLP_1_WEIGHT : "decoder.estimator.mid_blocks.5.0.mlp.1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_0_RES_CONV_BIAS : "decoder.estimator.mid_blocks.5.0.res_conv.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_0_RES_CONV_WEIGHT : "decoder.estimator.mid_blocks.5.0.res_conv.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_0_ATTN1_TO_K_WEIGHT : "decoder.estimator.mid_blocks.5.1.0.attn1.to_k.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_0_ATTN1_TO_OUT_0_BIAS : "decoder.estimator.mid_blocks.5.1.0.attn1.to_out.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_0_ATTN1_TO_OUT_0_WEIGHT : "decoder.estimator.mid_blocks.5.1.0.attn1.to_out.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_0_ATTN1_TO_Q_WEIGHT : "decoder.estimator.mid_blocks.5.1.0.attn1.to_q.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_0_ATTN1_TO_V_WEIGHT : "decoder.estimator.mid_blocks.5.1.0.attn1.to_v.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_0_FF_NET_0_PROJ_BIAS : "decoder.estimator.mid_blocks.5.1.0.ff.net.0.proj.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_0_FF_NET_0_PROJ_WEIGHT : "decoder.estimator.mid_blocks.5.1.0.ff.net.0.proj.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_0_FF_NET_2_BIAS : "decoder.estimator.mid_blocks.5.1.0.ff.net.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_0_FF_NET_2_WEIGHT : "decoder.estimator.mid_blocks.5.1.0.ff.net.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_0_NORM1_BIAS : "decoder.estimator.mid_blocks.5.1.0.norm1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_0_NORM1_WEIGHT : "decoder.estimator.mid_blocks.5.1.0.norm1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_0_NORM3_BIAS : "decoder.estimator.mid_blocks.5.1.0.norm3.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_0_NORM3_WEIGHT : "decoder.estimator.mid_blocks.5.1.0.norm3.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_1_ATTN1_TO_K_WEIGHT : "decoder.estimator.mid_blocks.5.1.1.attn1.to_k.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_1_ATTN1_TO_OUT_0_BIAS : "decoder.estimator.mid_blocks.5.1.1.attn1.to_out.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_1_ATTN1_TO_OUT_0_WEIGHT : "decoder.estimator.mid_blocks.5.1.1.attn1.to_out.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_1_ATTN1_TO_Q_WEIGHT : "decoder.estimator.mid_blocks.5.1.1.attn1.to_q.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_1_ATTN1_TO_V_WEIGHT : "decoder.estimator.mid_blocks.5.1.1.attn1.to_v.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_1_FF_NET_0_PROJ_BIAS : "decoder.estimator.mid_blocks.5.1.1.ff.net.0.proj.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_1_FF_NET_0_PROJ_WEIGHT : "decoder.estimator.mid_blocks.5.1.1.ff.net.0.proj.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_1_FF_NET_2_BIAS : "decoder.estimator.mid_blocks.5.1.1.ff.net.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_1_FF_NET_2_WEIGHT : "decoder.estimator.mid_blocks.5.1.1.ff.net.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_1_NORM1_BIAS : "decoder.estimator.mid_blocks.5.1.1.norm1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_1_NORM1_WEIGHT : "decoder.estimator.mid_blocks.5.1.1.norm1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_1_NORM3_BIAS : "decoder.estimator.mid_blocks.5.1.1.norm3.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_1_NORM3_WEIGHT : "decoder.estimator.mid_blocks.5.1.1.norm3.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_2_ATTN1_TO_K_WEIGHT : "decoder.estimator.mid_blocks.5.1.2.attn1.to_k.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_2_ATTN1_TO_OUT_0_BIAS : "decoder.estimator.mid_blocks.5.1.2.attn1.to_out.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_2_ATTN1_TO_OUT_0_WEIGHT : "decoder.estimator.mid_blocks.5.1.2.attn1.to_out.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_2_ATTN1_TO_Q_WEIGHT : "decoder.estimator.mid_blocks.5.1.2.attn1.to_q.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_2_ATTN1_TO_V_WEIGHT : "decoder.estimator.mid_blocks.5.1.2.attn1.to_v.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_2_FF_NET_0_PROJ_BIAS : "decoder.estimator.mid_blocks.5.1.2.ff.net.0.proj.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_2_FF_NET_0_PROJ_WEIGHT : "decoder.estimator.mid_blocks.5.1.2.ff.net.0.proj.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_2_FF_NET_2_BIAS : "decoder.estimator.mid_blocks.5.1.2.ff.net.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_2_FF_NET_2_WEIGHT : "decoder.estimator.mid_blocks.5.1.2.ff.net.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_2_NORM1_BIAS : "decoder.estimator.mid_blocks.5.1.2.norm1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_2_NORM1_WEIGHT : "decoder.estimator.mid_blocks.5.1.2.norm1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_2_NORM3_BIAS : "decoder.estimator.mid_blocks.5.1.2.norm3.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_2_NORM3_WEIGHT : "decoder.estimator.mid_blocks.5.1.2.norm3.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_3_ATTN1_TO_K_WEIGHT : "decoder.estimator.mid_blocks.5.1.3.attn1.to_k.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_3_ATTN1_TO_OUT_0_BIAS : "decoder.estimator.mid_blocks.5.1.3.attn1.to_out.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_3_ATTN1_TO_OUT_0_WEIGHT : "decoder.estimator.mid_blocks.5.1.3.attn1.to_out.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_3_ATTN1_TO_Q_WEIGHT : "decoder.estimator.mid_blocks.5.1.3.attn1.to_q.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_3_ATTN1_TO_V_WEIGHT : "decoder.estimator.mid_blocks.5.1.3.attn1.to_v.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_3_FF_NET_0_PROJ_BIAS : "decoder.estimator.mid_blocks.5.1.3.ff.net.0.proj.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_3_FF_NET_0_PROJ_WEIGHT : "decoder.estimator.mid_blocks.5.1.3.ff.net.0.proj.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_3_FF_NET_2_BIAS : "decoder.estimator.mid_blocks.5.1.3.ff.net.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_3_FF_NET_2_WEIGHT : "decoder.estimator.mid_blocks.5.1.3.ff.net.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_3_NORM1_BIAS : "decoder.estimator.mid_blocks.5.1.3.norm1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_3_NORM1_WEIGHT : "decoder.estimator.mid_blocks.5.1.3.norm1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_3_NORM3_BIAS : "decoder.estimator.mid_blocks.5.1.3.norm3.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_3_NORM3_WEIGHT : "decoder.estimator.mid_blocks.5.1.3.norm3.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_0_BLOCK1_BLOCK_0_BIAS : "decoder.estimator.mid_blocks.6.0.block1.block.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_0_BLOCK1_BLOCK_0_WEIGHT : "decoder.estimator.mid_blocks.6.0.block1.block.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_0_BLOCK1_BLOCK_2_BIAS : "decoder.estimator.mid_blocks.6.0.block1.block.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_0_BLOCK1_BLOCK_2_WEIGHT : "decoder.estimator.mid_blocks.6.0.block1.block.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_0_BLOCK2_BLOCK_0_BIAS : "decoder.estimator.mid_blocks.6.0.block2.block.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_0_BLOCK2_BLOCK_0_WEIGHT : "decoder.estimator.mid_blocks.6.0.block2.block.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_0_BLOCK2_BLOCK_2_BIAS : "decoder.estimator.mid_blocks.6.0.block2.block.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_0_BLOCK2_BLOCK_2_WEIGHT : "decoder.estimator.mid_blocks.6.0.block2.block.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_0_MLP_1_BIAS : "decoder.estimator.mid_blocks.6.0.mlp.1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_0_MLP_1_WEIGHT : "decoder.estimator.mid_blocks.6.0.mlp.1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_0_RES_CONV_BIAS : "decoder.estimator.mid_blocks.6.0.res_conv.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_0_RES_CONV_WEIGHT : "decoder.estimator.mid_blocks.6.0.res_conv.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_0_ATTN1_TO_K_WEIGHT : "decoder.estimator.mid_blocks.6.1.0.attn1.to_k.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_0_ATTN1_TO_OUT_0_BIAS : "decoder.estimator.mid_blocks.6.1.0.attn1.to_out.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_0_ATTN1_TO_OUT_0_WEIGHT : "decoder.estimator.mid_blocks.6.1.0.attn1.to_out.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_0_ATTN1_TO_Q_WEIGHT : "decoder.estimator.mid_blocks.6.1.0.attn1.to_q.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_0_ATTN1_TO_V_WEIGHT : "decoder.estimator.mid_blocks.6.1.0.attn1.to_v.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_0_FF_NET_0_PROJ_BIAS : "decoder.estimator.mid_blocks.6.1.0.ff.net.0.proj.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_0_FF_NET_0_PROJ_WEIGHT : "decoder.estimator.mid_blocks.6.1.0.ff.net.0.proj.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_0_FF_NET_2_BIAS : "decoder.estimator.mid_blocks.6.1.0.ff.net.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_0_FF_NET_2_WEIGHT : "decoder.estimator.mid_blocks.6.1.0.ff.net.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_0_NORM1_BIAS : "decoder.estimator.mid_blocks.6.1.0.norm1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_0_NORM1_WEIGHT : "decoder.estimator.mid_blocks.6.1.0.norm1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_0_NORM3_BIAS : "decoder.estimator.mid_blocks.6.1.0.norm3.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_0_NORM3_WEIGHT : "decoder.estimator.mid_blocks.6.1.0.norm3.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_1_ATTN1_TO_K_WEIGHT : "decoder.estimator.mid_blocks.6.1.1.attn1.to_k.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_1_ATTN1_TO_OUT_0_BIAS : "decoder.estimator.mid_blocks.6.1.1.attn1.to_out.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_1_ATTN1_TO_OUT_0_WEIGHT : "decoder.estimator.mid_blocks.6.1.1.attn1.to_out.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_1_ATTN1_TO_Q_WEIGHT : "decoder.estimator.mid_blocks.6.1.1.attn1.to_q.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_1_ATTN1_TO_V_WEIGHT : "decoder.estimator.mid_blocks.6.1.1.attn1.to_v.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_1_FF_NET_0_PROJ_BIAS : "decoder.estimator.mid_blocks.6.1.1.ff.net.0.proj.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_1_FF_NET_0_PROJ_WEIGHT : "decoder.estimator.mid_blocks.6.1.1.ff.net.0.proj.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_1_FF_NET_2_BIAS : "decoder.estimator.mid_blocks.6.1.1.ff.net.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_1_FF_NET_2_WEIGHT : "decoder.estimator.mid_blocks.6.1.1.ff.net.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_1_NORM1_BIAS : "decoder.estimator.mid_blocks.6.1.1.norm1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_1_NORM1_WEIGHT : "decoder.estimator.mid_blocks.6.1.1.norm1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_1_NORM3_BIAS : "decoder.estimator.mid_blocks.6.1.1.norm3.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_1_NORM3_WEIGHT : "decoder.estimator.mid_blocks.6.1.1.norm3.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_2_ATTN1_TO_K_WEIGHT : "decoder.estimator.mid_blocks.6.1.2.attn1.to_k.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_2_ATTN1_TO_OUT_0_BIAS : "decoder.estimator.mid_blocks.6.1.2.attn1.to_out.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_2_ATTN1_TO_OUT_0_WEIGHT : "decoder.estimator.mid_blocks.6.1.2.attn1.to_out.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_2_ATTN1_TO_Q_WEIGHT : "decoder.estimator.mid_blocks.6.1.2.attn1.to_q.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_2_ATTN1_TO_V_WEIGHT : "decoder.estimator.mid_blocks.6.1.2.attn1.to_v.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_2_FF_NET_0_PROJ_BIAS : "decoder.estimator.mid_blocks.6.1.2.ff.net.0.proj.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_2_FF_NET_0_PROJ_WEIGHT : "decoder.estimator.mid_blocks.6.1.2.ff.net.0.proj.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_2_FF_NET_2_BIAS : "decoder.estimator.mid_blocks.6.1.2.ff.net.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_2_FF_NET_2_WEIGHT : "decoder.estimator.mid_blocks.6.1.2.ff.net.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_2_NORM1_BIAS : "decoder.estimator.mid_blocks.6.1.2.norm1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_2_NORM1_WEIGHT : "decoder.estimator.mid_blocks.6.1.2.norm1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_2_NORM3_BIAS : "decoder.estimator.mid_blocks.6.1.2.norm3.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_2_NORM3_WEIGHT : "decoder.estimator.mid_blocks.6.1.2.norm3.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_3_ATTN1_TO_K_WEIGHT : "decoder.estimator.mid_blocks.6.1.3.attn1.to_k.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_3_ATTN1_TO_OUT_0_BIAS : "decoder.estimator.mid_blocks.6.1.3.attn1.to_out.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_3_ATTN1_TO_OUT_0_WEIGHT : "decoder.estimator.mid_blocks.6.1.3.attn1.to_out.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_3_ATTN1_TO_Q_WEIGHT : "decoder.estimator.mid_blocks.6.1.3.attn1.to_q.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_3_ATTN1_TO_V_WEIGHT : "decoder.estimator.mid_blocks.6.1.3.attn1.to_v.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_3_FF_NET_0_PROJ_BIAS : "decoder.estimator.mid_blocks.6.1.3.ff.net.0.proj.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_3_FF_NET_0_PROJ_WEIGHT : "decoder.estimator.mid_blocks.6.1.3.ff.net.0.proj.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_3_FF_NET_2_BIAS : "decoder.estimator.mid_blocks.6.1.3.ff.net.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_3_FF_NET_2_WEIGHT : "decoder.estimator.mid_blocks.6.1.3.ff.net.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_3_NORM1_BIAS : "decoder.estimator.mid_blocks.6.1.3.norm1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_3_NORM1_WEIGHT : "decoder.estimator.mid_blocks.6.1.3.norm1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_3_NORM3_BIAS : "decoder.estimator.mid_blocks.6.1.3.norm3.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_3_NORM3_WEIGHT : "decoder.estimator.mid_blocks.6.1.3.norm3.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_0_BLOCK1_BLOCK_0_BIAS : "decoder.estimator.mid_blocks.7.0.block1.block.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_0_BLOCK1_BLOCK_0_WEIGHT : "decoder.estimator.mid_blocks.7.0.block1.block.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_0_BLOCK1_BLOCK_2_BIAS : "decoder.estimator.mid_blocks.7.0.block1.block.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_0_BLOCK1_BLOCK_2_WEIGHT : "decoder.estimator.mid_blocks.7.0.block1.block.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_0_BLOCK2_BLOCK_0_BIAS : "decoder.estimator.mid_blocks.7.0.block2.block.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_0_BLOCK2_BLOCK_0_WEIGHT : "decoder.estimator.mid_blocks.7.0.block2.block.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_0_BLOCK2_BLOCK_2_BIAS : "decoder.estimator.mid_blocks.7.0.block2.block.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_0_BLOCK2_BLOCK_2_WEIGHT : "decoder.estimator.mid_blocks.7.0.block2.block.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_0_MLP_1_BIAS : "decoder.estimator.mid_blocks.7.0.mlp.1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_0_MLP_1_WEIGHT : "decoder.estimator.mid_blocks.7.0.mlp.1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_0_RES_CONV_BIAS : "decoder.estimator.mid_blocks.7.0.res_conv.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_0_RES_CONV_WEIGHT : "decoder.estimator.mid_blocks.7.0.res_conv.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_0_ATTN1_TO_K_WEIGHT : "decoder.estimator.mid_blocks.7.1.0.attn1.to_k.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_0_ATTN1_TO_OUT_0_BIAS : "decoder.estimator.mid_blocks.7.1.0.attn1.to_out.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_0_ATTN1_TO_OUT_0_WEIGHT : "decoder.estimator.mid_blocks.7.1.0.attn1.to_out.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_0_ATTN1_TO_Q_WEIGHT : "decoder.estimator.mid_blocks.7.1.0.attn1.to_q.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_0_ATTN1_TO_V_WEIGHT : "decoder.estimator.mid_blocks.7.1.0.attn1.to_v.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_0_FF_NET_0_PROJ_BIAS : "decoder.estimator.mid_blocks.7.1.0.ff.net.0.proj.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_0_FF_NET_0_PROJ_WEIGHT : "decoder.estimator.mid_blocks.7.1.0.ff.net.0.proj.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_0_FF_NET_2_BIAS : "decoder.estimator.mid_blocks.7.1.0.ff.net.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_0_FF_NET_2_WEIGHT : "decoder.estimator.mid_blocks.7.1.0.ff.net.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_0_NORM1_BIAS : "decoder.estimator.mid_blocks.7.1.0.norm1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_0_NORM1_WEIGHT : "decoder.estimator.mid_blocks.7.1.0.norm1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_0_NORM3_BIAS : "decoder.estimator.mid_blocks.7.1.0.norm3.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_0_NORM3_WEIGHT : "decoder.estimator.mid_blocks.7.1.0.norm3.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_1_ATTN1_TO_K_WEIGHT : "decoder.estimator.mid_blocks.7.1.1.attn1.to_k.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_1_ATTN1_TO_OUT_0_BIAS : "decoder.estimator.mid_blocks.7.1.1.attn1.to_out.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_1_ATTN1_TO_OUT_0_WEIGHT : "decoder.estimator.mid_blocks.7.1.1.attn1.to_out.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_1_ATTN1_TO_Q_WEIGHT : "decoder.estimator.mid_blocks.7.1.1.attn1.to_q.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_1_ATTN1_TO_V_WEIGHT : "decoder.estimator.mid_blocks.7.1.1.attn1.to_v.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_1_FF_NET_0_PROJ_BIAS : "decoder.estimator.mid_blocks.7.1.1.ff.net.0.proj.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_1_FF_NET_0_PROJ_WEIGHT : "decoder.estimator.mid_blocks.7.1.1.ff.net.0.proj.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_1_FF_NET_2_BIAS : "decoder.estimator.mid_blocks.7.1.1.ff.net.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_1_FF_NET_2_WEIGHT : "decoder.estimator.mid_blocks.7.1.1.ff.net.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_1_NORM1_BIAS : "decoder.estimator.mid_blocks.7.1.1.norm1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_1_NORM1_WEIGHT : "decoder.estimator.mid_blocks.7.1.1.norm1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_1_NORM3_BIAS : "decoder.estimator.mid_blocks.7.1.1.norm3.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_1_NORM3_WEIGHT : "decoder.estimator.mid_blocks.7.1.1.norm3.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_2_ATTN1_TO_K_WEIGHT : "decoder.estimator.mid_blocks.7.1.2.attn1.to_k.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_2_ATTN1_TO_OUT_0_BIAS : "decoder.estimator.mid_blocks.7.1.2.attn1.to_out.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_2_ATTN1_TO_OUT_0_WEIGHT : "decoder.estimator.mid_blocks.7.1.2.attn1.to_out.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_2_ATTN1_TO_Q_WEIGHT : "decoder.estimator.mid_blocks.7.1.2.attn1.to_q.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_2_ATTN1_TO_V_WEIGHT : "decoder.estimator.mid_blocks.7.1.2.attn1.to_v.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_2_FF_NET_0_PROJ_BIAS : "decoder.estimator.mid_blocks.7.1.2.ff.net.0.proj.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_2_FF_NET_0_PROJ_WEIGHT : "decoder.estimator.mid_blocks.7.1.2.ff.net.0.proj.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_2_FF_NET_2_BIAS : "decoder.estimator.mid_blocks.7.1.2.ff.net.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_2_FF_NET_2_WEIGHT : "decoder.estimator.mid_blocks.7.1.2.ff.net.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_2_NORM1_BIAS : "decoder.estimator.mid_blocks.7.1.2.norm1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_2_NORM1_WEIGHT : "decoder.estimator.mid_blocks.7.1.2.norm1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_2_NORM3_BIAS : "decoder.estimator.mid_blocks.7.1.2.norm3.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_2_NORM3_WEIGHT : "decoder.estimator.mid_blocks.7.1.2.norm3.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_3_ATTN1_TO_K_WEIGHT : "decoder.estimator.mid_blocks.7.1.3.attn1.to_k.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_3_ATTN1_TO_OUT_0_BIAS : "decoder.estimator.mid_blocks.7.1.3.attn1.to_out.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_3_ATTN1_TO_OUT_0_WEIGHT : "decoder.estimator.mid_blocks.7.1.3.attn1.to_out.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_3_ATTN1_TO_Q_WEIGHT : "decoder.estimator.mid_blocks.7.1.3.attn1.to_q.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_3_ATTN1_TO_V_WEIGHT : "decoder.estimator.mid_blocks.7.1.3.attn1.to_v.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_3_FF_NET_0_PROJ_BIAS : "decoder.estimator.mid_blocks.7.1.3.ff.net.0.proj.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_3_FF_NET_0_PROJ_WEIGHT : "decoder.estimator.mid_blocks.7.1.3.ff.net.0.proj.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_3_FF_NET_2_BIAS : "decoder.estimator.mid_blocks.7.1.3.ff.net.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_3_FF_NET_2_WEIGHT : "decoder.estimator.mid_blocks.7.1.3.ff.net.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_3_NORM1_BIAS : "decoder.estimator.mid_blocks.7.1.3.norm1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_3_NORM1_WEIGHT : "decoder.estimator.mid_blocks.7.1.3.norm1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_3_NORM3_BIAS : "decoder.estimator.mid_blocks.7.1.3.norm3.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_3_NORM3_WEIGHT : "decoder.estimator.mid_blocks.7.1.3.norm3.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_0_BLOCK1_BLOCK_0_BIAS : "decoder.estimator.mid_blocks.8.0.block1.block.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_0_BLOCK1_BLOCK_0_WEIGHT : "decoder.estimator.mid_blocks.8.0.block1.block.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_0_BLOCK1_BLOCK_2_BIAS : "decoder.estimator.mid_blocks.8.0.block1.block.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_0_BLOCK1_BLOCK_2_WEIGHT : "decoder.estimator.mid_blocks.8.0.block1.block.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_0_BLOCK2_BLOCK_0_BIAS : "decoder.estimator.mid_blocks.8.0.block2.block.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_0_BLOCK2_BLOCK_0_WEIGHT : "decoder.estimator.mid_blocks.8.0.block2.block.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_0_BLOCK2_BLOCK_2_BIAS : "decoder.estimator.mid_blocks.8.0.block2.block.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_0_BLOCK2_BLOCK_2_WEIGHT : "decoder.estimator.mid_blocks.8.0.block2.block.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_0_MLP_1_BIAS : "decoder.estimator.mid_blocks.8.0.mlp.1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_0_MLP_1_WEIGHT : "decoder.estimator.mid_blocks.8.0.mlp.1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_0_RES_CONV_BIAS : "decoder.estimator.mid_blocks.8.0.res_conv.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_0_RES_CONV_WEIGHT : "decoder.estimator.mid_blocks.8.0.res_conv.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_0_ATTN1_TO_K_WEIGHT : "decoder.estimator.mid_blocks.8.1.0.attn1.to_k.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_0_ATTN1_TO_OUT_0_BIAS : "decoder.estimator.mid_blocks.8.1.0.attn1.to_out.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_0_ATTN1_TO_OUT_0_WEIGHT : "decoder.estimator.mid_blocks.8.1.0.attn1.to_out.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_0_ATTN1_TO_Q_WEIGHT : "decoder.estimator.mid_blocks.8.1.0.attn1.to_q.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_0_ATTN1_TO_V_WEIGHT : "decoder.estimator.mid_blocks.8.1.0.attn1.to_v.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_0_FF_NET_0_PROJ_BIAS : "decoder.estimator.mid_blocks.8.1.0.ff.net.0.proj.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_0_FF_NET_0_PROJ_WEIGHT : "decoder.estimator.mid_blocks.8.1.0.ff.net.0.proj.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_0_FF_NET_2_BIAS : "decoder.estimator.mid_blocks.8.1.0.ff.net.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_0_FF_NET_2_WEIGHT : "decoder.estimator.mid_blocks.8.1.0.ff.net.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_0_NORM1_BIAS : "decoder.estimator.mid_blocks.8.1.0.norm1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_0_NORM1_WEIGHT : "decoder.estimator.mid_blocks.8.1.0.norm1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_0_NORM3_BIAS : "decoder.estimator.mid_blocks.8.1.0.norm3.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_0_NORM3_WEIGHT : "decoder.estimator.mid_blocks.8.1.0.norm3.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_1_ATTN1_TO_K_WEIGHT : "decoder.estimator.mid_blocks.8.1.1.attn1.to_k.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_1_ATTN1_TO_OUT_0_BIAS : "decoder.estimator.mid_blocks.8.1.1.attn1.to_out.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_1_ATTN1_TO_OUT_0_WEIGHT : "decoder.estimator.mid_blocks.8.1.1.attn1.to_out.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_1_ATTN1_TO_Q_WEIGHT : "decoder.estimator.mid_blocks.8.1.1.attn1.to_q.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_1_ATTN1_TO_V_WEIGHT : "decoder.estimator.mid_blocks.8.1.1.attn1.to_v.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_1_FF_NET_0_PROJ_BIAS : "decoder.estimator.mid_blocks.8.1.1.ff.net.0.proj.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_1_FF_NET_0_PROJ_WEIGHT : "decoder.estimator.mid_blocks.8.1.1.ff.net.0.proj.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_1_FF_NET_2_BIAS : "decoder.estimator.mid_blocks.8.1.1.ff.net.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_1_FF_NET_2_WEIGHT : "decoder.estimator.mid_blocks.8.1.1.ff.net.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_1_NORM1_BIAS : "decoder.estimator.mid_blocks.8.1.1.norm1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_1_NORM1_WEIGHT : "decoder.estimator.mid_blocks.8.1.1.norm1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_1_NORM3_BIAS : "decoder.estimator.mid_blocks.8.1.1.norm3.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_1_NORM3_WEIGHT : "decoder.estimator.mid_blocks.8.1.1.norm3.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_2_ATTN1_TO_K_WEIGHT : "decoder.estimator.mid_blocks.8.1.2.attn1.to_k.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_2_ATTN1_TO_OUT_0_BIAS : "decoder.estimator.mid_blocks.8.1.2.attn1.to_out.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_2_ATTN1_TO_OUT_0_WEIGHT : "decoder.estimator.mid_blocks.8.1.2.attn1.to_out.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_2_ATTN1_TO_Q_WEIGHT : "decoder.estimator.mid_blocks.8.1.2.attn1.to_q.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_2_ATTN1_TO_V_WEIGHT : "decoder.estimator.mid_blocks.8.1.2.attn1.to_v.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_2_FF_NET_0_PROJ_BIAS : "decoder.estimator.mid_blocks.8.1.2.ff.net.0.proj.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_2_FF_NET_0_PROJ_WEIGHT : "decoder.estimator.mid_blocks.8.1.2.ff.net.0.proj.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_2_FF_NET_2_BIAS : "decoder.estimator.mid_blocks.8.1.2.ff.net.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_2_FF_NET_2_WEIGHT : "decoder.estimator.mid_blocks.8.1.2.ff.net.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_2_NORM1_BIAS : "decoder.estimator.mid_blocks.8.1.2.norm1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_2_NORM1_WEIGHT : "decoder.estimator.mid_blocks.8.1.2.norm1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_2_NORM3_BIAS : "decoder.estimator.mid_blocks.8.1.2.norm3.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_2_NORM3_WEIGHT : "decoder.estimator.mid_blocks.8.1.2.norm3.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_3_ATTN1_TO_K_WEIGHT : "decoder.estimator.mid_blocks.8.1.3.attn1.to_k.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_3_ATTN1_TO_OUT_0_BIAS : "decoder.estimator.mid_blocks.8.1.3.attn1.to_out.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_3_ATTN1_TO_OUT_0_WEIGHT : "decoder.estimator.mid_blocks.8.1.3.attn1.to_out.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_3_ATTN1_TO_Q_WEIGHT : "decoder.estimator.mid_blocks.8.1.3.attn1.to_q.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_3_ATTN1_TO_V_WEIGHT : "decoder.estimator.mid_blocks.8.1.3.attn1.to_v.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_3_FF_NET_0_PROJ_BIAS : "decoder.estimator.mid_blocks.8.1.3.ff.net.0.proj.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_3_FF_NET_0_PROJ_WEIGHT : "decoder.estimator.mid_blocks.8.1.3.ff.net.0.proj.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_3_FF_NET_2_BIAS : "decoder.estimator.mid_blocks.8.1.3.ff.net.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_3_FF_NET_2_WEIGHT : "decoder.estimator.mid_blocks.8.1.3.ff.net.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_3_NORM1_BIAS : "decoder.estimator.mid_blocks.8.1.3.norm1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_3_NORM1_WEIGHT : "decoder.estimator.mid_blocks.8.1.3.norm1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_3_NORM3_BIAS : "decoder.estimator.mid_blocks.8.1.3.norm3.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_3_NORM3_WEIGHT : "decoder.estimator.mid_blocks.8.1.3.norm3.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_0_BLOCK1_BLOCK_0_BIAS : "decoder.estimator.mid_blocks.9.0.block1.block.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_0_BLOCK1_BLOCK_0_WEIGHT : "decoder.estimator.mid_blocks.9.0.block1.block.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_0_BLOCK1_BLOCK_2_BIAS : "decoder.estimator.mid_blocks.9.0.block1.block.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_0_BLOCK1_BLOCK_2_WEIGHT : "decoder.estimator.mid_blocks.9.0.block1.block.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_0_BLOCK2_BLOCK_0_BIAS : "decoder.estimator.mid_blocks.9.0.block2.block.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_0_BLOCK2_BLOCK_0_WEIGHT : "decoder.estimator.mid_blocks.9.0.block2.block.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_0_BLOCK2_BLOCK_2_BIAS : "decoder.estimator.mid_blocks.9.0.block2.block.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_0_BLOCK2_BLOCK_2_WEIGHT : "decoder.estimator.mid_blocks.9.0.block2.block.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_0_MLP_1_BIAS : "decoder.estimator.mid_blocks.9.0.mlp.1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_0_MLP_1_WEIGHT : "decoder.estimator.mid_blocks.9.0.mlp.1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_0_RES_CONV_BIAS : "decoder.estimator.mid_blocks.9.0.res_conv.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_0_RES_CONV_WEIGHT : "decoder.estimator.mid_blocks.9.0.res_conv.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_0_ATTN1_TO_K_WEIGHT : "decoder.estimator.mid_blocks.9.1.0.attn1.to_k.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_0_ATTN1_TO_OUT_0_BIAS : "decoder.estimator.mid_blocks.9.1.0.attn1.to_out.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_0_ATTN1_TO_OUT_0_WEIGHT : "decoder.estimator.mid_blocks.9.1.0.attn1.to_out.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_0_ATTN1_TO_Q_WEIGHT : "decoder.estimator.mid_blocks.9.1.0.attn1.to_q.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_0_ATTN1_TO_V_WEIGHT : "decoder.estimator.mid_blocks.9.1.0.attn1.to_v.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_0_FF_NET_0_PROJ_BIAS : "decoder.estimator.mid_blocks.9.1.0.ff.net.0.proj.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_0_FF_NET_0_PROJ_WEIGHT : "decoder.estimator.mid_blocks.9.1.0.ff.net.0.proj.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_0_FF_NET_2_BIAS : "decoder.estimator.mid_blocks.9.1.0.ff.net.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_0_FF_NET_2_WEIGHT : "decoder.estimator.mid_blocks.9.1.0.ff.net.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_0_NORM1_BIAS : "decoder.estimator.mid_blocks.9.1.0.norm1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_0_NORM1_WEIGHT : "decoder.estimator.mid_blocks.9.1.0.norm1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_0_NORM3_BIAS : "decoder.estimator.mid_blocks.9.1.0.norm3.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_0_NORM3_WEIGHT : "decoder.estimator.mid_blocks.9.1.0.norm3.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_1_ATTN1_TO_K_WEIGHT : "decoder.estimator.mid_blocks.9.1.1.attn1.to_k.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_1_ATTN1_TO_OUT_0_BIAS : "decoder.estimator.mid_blocks.9.1.1.attn1.to_out.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_1_ATTN1_TO_OUT_0_WEIGHT : "decoder.estimator.mid_blocks.9.1.1.attn1.to_out.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_1_ATTN1_TO_Q_WEIGHT : "decoder.estimator.mid_blocks.9.1.1.attn1.to_q.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_1_ATTN1_TO_V_WEIGHT : "decoder.estimator.mid_blocks.9.1.1.attn1.to_v.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_1_FF_NET_0_PROJ_BIAS : "decoder.estimator.mid_blocks.9.1.1.ff.net.0.proj.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_1_FF_NET_0_PROJ_WEIGHT : "decoder.estimator.mid_blocks.9.1.1.ff.net.0.proj.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_1_FF_NET_2_BIAS : "decoder.estimator.mid_blocks.9.1.1.ff.net.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_1_FF_NET_2_WEIGHT : "decoder.estimator.mid_blocks.9.1.1.ff.net.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_1_NORM1_BIAS : "decoder.estimator.mid_blocks.9.1.1.norm1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_1_NORM1_WEIGHT : "decoder.estimator.mid_blocks.9.1.1.norm1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_1_NORM3_BIAS : "decoder.estimator.mid_blocks.9.1.1.norm3.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_1_NORM3_WEIGHT : "decoder.estimator.mid_blocks.9.1.1.norm3.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_2_ATTN1_TO_K_WEIGHT : "decoder.estimator.mid_blocks.9.1.2.attn1.to_k.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_2_ATTN1_TO_OUT_0_BIAS : "decoder.estimator.mid_blocks.9.1.2.attn1.to_out.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_2_ATTN1_TO_OUT_0_WEIGHT : "decoder.estimator.mid_blocks.9.1.2.attn1.to_out.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_2_ATTN1_TO_Q_WEIGHT : "decoder.estimator.mid_blocks.9.1.2.attn1.to_q.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_2_ATTN1_TO_V_WEIGHT : "decoder.estimator.mid_blocks.9.1.2.attn1.to_v.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_2_FF_NET_0_PROJ_BIAS : "decoder.estimator.mid_blocks.9.1.2.ff.net.0.proj.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_2_FF_NET_0_PROJ_WEIGHT : "decoder.estimator.mid_blocks.9.1.2.ff.net.0.proj.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_2_FF_NET_2_BIAS : "decoder.estimator.mid_blocks.9.1.2.ff.net.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_2_FF_NET_2_WEIGHT : "decoder.estimator.mid_blocks.9.1.2.ff.net.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_2_NORM1_BIAS : "decoder.estimator.mid_blocks.9.1.2.norm1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_2_NORM1_WEIGHT : "decoder.estimator.mid_blocks.9.1.2.norm1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_2_NORM3_BIAS : "decoder.estimator.mid_blocks.9.1.2.norm3.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_2_NORM3_WEIGHT : "decoder.estimator.mid_blocks.9.1.2.norm3.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_3_ATTN1_TO_K_WEIGHT : "decoder.estimator.mid_blocks.9.1.3.attn1.to_k.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_3_ATTN1_TO_OUT_0_BIAS : "decoder.estimator.mid_blocks.9.1.3.attn1.to_out.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_3_ATTN1_TO_OUT_0_WEIGHT : "decoder.estimator.mid_blocks.9.1.3.attn1.to_out.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_3_ATTN1_TO_Q_WEIGHT : "decoder.estimator.mid_blocks.9.1.3.attn1.to_q.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_3_ATTN1_TO_V_WEIGHT : "decoder.estimator.mid_blocks.9.1.3.attn1.to_v.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_3_FF_NET_0_PROJ_BIAS : "decoder.estimator.mid_blocks.9.1.3.ff.net.0.proj.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_3_FF_NET_0_PROJ_WEIGHT : "decoder.estimator.mid_blocks.9.1.3.ff.net.0.proj.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_3_FF_NET_2_BIAS : "decoder.estimator.mid_blocks.9.1.3.ff.net.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_3_FF_NET_2_WEIGHT : "decoder.estimator.mid_blocks.9.1.3.ff.net.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_3_NORM1_BIAS : "decoder.estimator.mid_blocks.9.1.3.norm1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_3_NORM1_WEIGHT : "decoder.estimator.mid_blocks.9.1.3.norm1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_3_NORM3_BIAS : "decoder.estimator.mid_blocks.9.1.3.norm3.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_3_NORM3_WEIGHT : "decoder.estimator.mid_blocks.9.1.3.norm3.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_TIME_MLP_LINEAR_1_BIAS : "decoder.estimator.time_mlp.linear_1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_TIME_MLP_LINEAR_1_WEIGHT : "decoder.estimator.time_mlp.linear_1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_TIME_MLP_LINEAR_2_BIAS : "decoder.estimator.time_mlp.linear_2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_TIME_MLP_LINEAR_2_WEIGHT : "decoder.estimator.time_mlp.linear_2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_0_BLOCK1_BLOCK_0_BIAS : "decoder.estimator.up_blocks.0.0.block1.block.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_0_BLOCK1_BLOCK_0_WEIGHT : "decoder.estimator.up_blocks.0.0.block1.block.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_0_BLOCK1_BLOCK_2_BIAS : "decoder.estimator.up_blocks.0.0.block1.block.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_0_BLOCK1_BLOCK_2_WEIGHT : "decoder.estimator.up_blocks.0.0.block1.block.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_0_BLOCK2_BLOCK_0_BIAS : "decoder.estimator.up_blocks.0.0.block2.block.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_0_BLOCK2_BLOCK_0_WEIGHT : "decoder.estimator.up_blocks.0.0.block2.block.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_0_BLOCK2_BLOCK_2_BIAS : "decoder.estimator.up_blocks.0.0.block2.block.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_0_BLOCK2_BLOCK_2_WEIGHT : "decoder.estimator.up_blocks.0.0.block2.block.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_0_MLP_1_BIAS : "decoder.estimator.up_blocks.0.0.mlp.1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_0_MLP_1_WEIGHT : "decoder.estimator.up_blocks.0.0.mlp.1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_0_RES_CONV_BIAS : "decoder.estimator.up_blocks.0.0.res_conv.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_0_RES_CONV_WEIGHT : "decoder.estimator.up_blocks.0.0.res_conv.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_0_ATTN1_TO_K_WEIGHT : "decoder.estimator.up_blocks.0.1.0.attn1.to_k.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_0_ATTN1_TO_OUT_0_BIAS : "decoder.estimator.up_blocks.0.1.0.attn1.to_out.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_0_ATTN1_TO_OUT_0_WEIGHT : "decoder.estimator.up_blocks.0.1.0.attn1.to_out.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_0_ATTN1_TO_Q_WEIGHT : "decoder.estimator.up_blocks.0.1.0.attn1.to_q.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_0_ATTN1_TO_V_WEIGHT : "decoder.estimator.up_blocks.0.1.0.attn1.to_v.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_0_FF_NET_0_PROJ_BIAS : "decoder.estimator.up_blocks.0.1.0.ff.net.0.proj.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_0_FF_NET_0_PROJ_WEIGHT : "decoder.estimator.up_blocks.0.1.0.ff.net.0.proj.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_0_FF_NET_2_BIAS : "decoder.estimator.up_blocks.0.1.0.ff.net.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_0_FF_NET_2_WEIGHT : "decoder.estimator.up_blocks.0.1.0.ff.net.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_0_NORM1_BIAS : "decoder.estimator.up_blocks.0.1.0.norm1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_0_NORM1_WEIGHT : "decoder.estimator.up_blocks.0.1.0.norm1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_0_NORM3_BIAS : "decoder.estimator.up_blocks.0.1.0.norm3.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_0_NORM3_WEIGHT : "decoder.estimator.up_blocks.0.1.0.norm3.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_1_ATTN1_TO_K_WEIGHT : "decoder.estimator.up_blocks.0.1.1.attn1.to_k.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_1_ATTN1_TO_OUT_0_BIAS : "decoder.estimator.up_blocks.0.1.1.attn1.to_out.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_1_ATTN1_TO_OUT_0_WEIGHT : "decoder.estimator.up_blocks.0.1.1.attn1.to_out.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_1_ATTN1_TO_Q_WEIGHT : "decoder.estimator.up_blocks.0.1.1.attn1.to_q.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_1_ATTN1_TO_V_WEIGHT : "decoder.estimator.up_blocks.0.1.1.attn1.to_v.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_1_FF_NET_0_PROJ_BIAS : "decoder.estimator.up_blocks.0.1.1.ff.net.0.proj.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_1_FF_NET_0_PROJ_WEIGHT : "decoder.estimator.up_blocks.0.1.1.ff.net.0.proj.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_1_FF_NET_2_BIAS : "decoder.estimator.up_blocks.0.1.1.ff.net.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_1_FF_NET_2_WEIGHT : "decoder.estimator.up_blocks.0.1.1.ff.net.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_1_NORM1_BIAS : "decoder.estimator.up_blocks.0.1.1.norm1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_1_NORM1_WEIGHT : "decoder.estimator.up_blocks.0.1.1.norm1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_1_NORM3_BIAS : "decoder.estimator.up_blocks.0.1.1.norm3.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_1_NORM3_WEIGHT : "decoder.estimator.up_blocks.0.1.1.norm3.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_2_ATTN1_TO_K_WEIGHT : "decoder.estimator.up_blocks.0.1.2.attn1.to_k.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_2_ATTN1_TO_OUT_0_BIAS : "decoder.estimator.up_blocks.0.1.2.attn1.to_out.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_2_ATTN1_TO_OUT_0_WEIGHT : "decoder.estimator.up_blocks.0.1.2.attn1.to_out.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_2_ATTN1_TO_Q_WEIGHT : "decoder.estimator.up_blocks.0.1.2.attn1.to_q.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_2_ATTN1_TO_V_WEIGHT : "decoder.estimator.up_blocks.0.1.2.attn1.to_v.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_2_FF_NET_0_PROJ_BIAS : "decoder.estimator.up_blocks.0.1.2.ff.net.0.proj.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_2_FF_NET_0_PROJ_WEIGHT : "decoder.estimator.up_blocks.0.1.2.ff.net.0.proj.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_2_FF_NET_2_BIAS : "decoder.estimator.up_blocks.0.1.2.ff.net.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_2_FF_NET_2_WEIGHT : "decoder.estimator.up_blocks.0.1.2.ff.net.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_2_NORM1_BIAS : "decoder.estimator.up_blocks.0.1.2.norm1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_2_NORM1_WEIGHT : "decoder.estimator.up_blocks.0.1.2.norm1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_2_NORM3_BIAS : "decoder.estimator.up_blocks.0.1.2.norm3.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_2_NORM3_WEIGHT : "decoder.estimator.up_blocks.0.1.2.norm3.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_3_ATTN1_TO_K_WEIGHT : "decoder.estimator.up_blocks.0.1.3.attn1.to_k.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_3_ATTN1_TO_OUT_0_BIAS : "decoder.estimator.up_blocks.0.1.3.attn1.to_out.0.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_3_ATTN1_TO_OUT_0_WEIGHT : "decoder.estimator.up_blocks.0.1.3.attn1.to_out.0.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_3_ATTN1_TO_Q_WEIGHT : "decoder.estimator.up_blocks.0.1.3.attn1.to_q.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_3_ATTN1_TO_V_WEIGHT : "decoder.estimator.up_blocks.0.1.3.attn1.to_v.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_3_FF_NET_0_PROJ_BIAS : "decoder.estimator.up_blocks.0.1.3.ff.net.0.proj.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_3_FF_NET_0_PROJ_WEIGHT : "decoder.estimator.up_blocks.0.1.3.ff.net.0.proj.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_3_FF_NET_2_BIAS : "decoder.estimator.up_blocks.0.1.3.ff.net.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_3_FF_NET_2_WEIGHT : "decoder.estimator.up_blocks.0.1.3.ff.net.2.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_3_NORM1_BIAS : "decoder.estimator.up_blocks.0.1.3.norm1.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_3_NORM1_WEIGHT : "decoder.estimator.up_blocks.0.1.3.norm1.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_3_NORM3_BIAS : "decoder.estimator.up_blocks.0.1.3.norm3.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_3_NORM3_WEIGHT : "decoder.estimator.up_blocks.0.1.3.norm3.weight",
-    MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_2_BIAS : "decoder.estimator.up_blocks.0.2.bias",
-    MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_2_WEIGHT : "decoder.estimator.up_blocks.0.2.weight",
-    MODEL_TENSOR.ENCODER_AFTER_NORM_BIAS : "encoder.after_norm.bias",
-    MODEL_TENSOR.ENCODER_AFTER_NORM_WEIGHT : "encoder.after_norm.weight",
-    MODEL_TENSOR.ENCODER_EMBED_OUT_0_BIAS : "encoder.embed.out.0.bias",
-    MODEL_TENSOR.ENCODER_EMBED_OUT_0_WEIGHT : "encoder.embed.out.0.weight",
-    MODEL_TENSOR.ENCODER_EMBED_OUT_1_BIAS : "encoder.embed.out.1.bias",
-    MODEL_TENSOR.ENCODER_EMBED_OUT_1_WEIGHT : "encoder.embed.out.1.weight",
-    MODEL_TENSOR.ENCODER_ENCODERS_0_FEED_FORWARD_W_1_BIAS : "encoder.encoders.0.feed_forward.w_1.bias",
-    MODEL_TENSOR.ENCODER_ENCODERS_0_FEED_FORWARD_W_1_WEIGHT : "encoder.encoders.0.feed_forward.w_1.weight",
-    MODEL_TENSOR.ENCODER_ENCODERS_0_FEED_FORWARD_W_2_BIAS : "encoder.encoders.0.feed_forward.w_2.bias",
-    MODEL_TENSOR.ENCODER_ENCODERS_0_FEED_FORWARD_W_2_WEIGHT : "encoder.encoders.0.feed_forward.w_2.weight",
-    MODEL_TENSOR.ENCODER_ENCODERS_0_NORM_FF_BIAS : "encoder.encoders.0.norm_ff.bias",
-    MODEL_TENSOR.ENCODER_ENCODERS_0_NORM_FF_WEIGHT : "encoder.encoders.0.norm_ff.weight",
-    MODEL_TENSOR.ENCODER_ENCODERS_0_NORM_MHA_BIAS : "encoder.encoders.0.norm_mha.bias",
-    MODEL_TENSOR.ENCODER_ENCODERS_0_NORM_MHA_WEIGHT : "encoder.encoders.0.norm_mha.weight",
-    MODEL_TENSOR.ENCODER_ENCODERS_0_SELF_ATTN_LINEAR_K_BIAS : "encoder.encoders.0.self_attn.linear_k.bias",
-    MODEL_TENSOR.ENCODER_ENCODERS_0_SELF_ATTN_LINEAR_K_WEIGHT : "encoder.encoders.0.self_attn.linear_k.weight",
-    MODEL_TENSOR.ENCODER_ENCODERS_0_SELF_ATTN_LINEAR_OUT_BIAS : "encoder.encoders.0.self_attn.linear_out.bias",
-    MODEL_TENSOR.ENCODER_ENCODERS_0_SELF_ATTN_LINEAR_OUT_WEIGHT : "encoder.encoders.0.self_attn.linear_out.weight",
-    MODEL_TENSOR.ENCODER_ENCODERS_0_SELF_ATTN_LINEAR_POS_WEIGHT : "encoder.encoders.0.self_attn.linear_pos.weight",
-    MODEL_TENSOR.ENCODER_ENCODERS_0_SELF_ATTN_LINEAR_Q_BIAS : "encoder.encoders.0.self_attn.linear_q.bias",
-    MODEL_TENSOR.ENCODER_ENCODERS_0_SELF_ATTN_LINEAR_Q_WEIGHT : "encoder.encoders.0.self_attn.linear_q.weight",
-    MODEL_TENSOR.ENCODER_ENCODERS_0_SELF_ATTN_LINEAR_V_BIAS : "encoder.encoders.0.self_attn.linear_v.bias",
-    MODEL_TENSOR.ENCODER_ENCODERS_0_SELF_ATTN_LINEAR_V_WEIGHT : "encoder.encoders.0.self_attn.linear_v.weight",
-    MODEL_TENSOR.ENCODER_ENCODERS_0_SELF_ATTN_POS_BIAS_U : "encoder.encoders.0.self_attn.pos_bias_u",
-    MODEL_TENSOR.ENCODER_ENCODERS_0_SELF_ATTN_POS_BIAS_V : "encoder.encoders.0.self_attn.pos_bias_v",
-    MODEL_TENSOR.ENCODER_ENCODERS_1_FEED_FORWARD_W_1_BIAS : "encoder.encoders.1.feed_forward.w_1.bias",
-    MODEL_TENSOR.ENCODER_ENCODERS_1_FEED_FORWARD_W_1_WEIGHT : "encoder.encoders.1.feed_forward.w_1.weight",
-    MODEL_TENSOR.ENCODER_ENCODERS_1_FEED_FORWARD_W_2_BIAS : "encoder.encoders.1.feed_forward.w_2.bias",
-    MODEL_TENSOR.ENCODER_ENCODERS_1_FEED_FORWARD_W_2_WEIGHT : "encoder.encoders.1.feed_forward.w_2.weight",
-    MODEL_TENSOR.ENCODER_ENCODERS_1_NORM_FF_BIAS : "encoder.encoders.1.norm_ff.bias",
-    MODEL_TENSOR.ENCODER_ENCODERS_1_NORM_FF_WEIGHT : "encoder.encoders.1.norm_ff.weight",
-    MODEL_TENSOR.ENCODER_ENCODERS_1_NORM_MHA_BIAS : "encoder.encoders.1.norm_mha.bias",
-    MODEL_TENSOR.ENCODER_ENCODERS_1_NORM_MHA_WEIGHT : "encoder.encoders.1.norm_mha.weight",
-    MODEL_TENSOR.ENCODER_ENCODERS_1_SELF_ATTN_LINEAR_K_BIAS : "encoder.encoders.1.self_attn.linear_k.bias",
-    MODEL_TENSOR.ENCODER_ENCODERS_1_SELF_ATTN_LINEAR_K_WEIGHT : "encoder.encoders.1.self_attn.linear_k.weight",
-    MODEL_TENSOR.ENCODER_ENCODERS_1_SELF_ATTN_LINEAR_OUT_BIAS : "encoder.encoders.1.self_attn.linear_out.bias",
-    MODEL_TENSOR.ENCODER_ENCODERS_1_SELF_ATTN_LINEAR_OUT_WEIGHT : "encoder.encoders.1.self_attn.linear_out.weight",
-    MODEL_TENSOR.ENCODER_ENCODERS_1_SELF_ATTN_LINEAR_POS_WEIGHT : "encoder.encoders.1.self_attn.linear_pos.weight",
-    MODEL_TENSOR.ENCODER_ENCODERS_1_SELF_ATTN_LINEAR_Q_BIAS : "encoder.encoders.1.self_attn.linear_q.bias",
-    MODEL_TENSOR.ENCODER_ENCODERS_1_SELF_ATTN_LINEAR_Q_WEIGHT : "encoder.encoders.1.self_attn.linear_q.weight",
-    MODEL_TENSOR.ENCODER_ENCODERS_1_SELF_ATTN_LINEAR_V_BIAS : "encoder.encoders.1.self_attn.linear_v.bias",
-    MODEL_TENSOR.ENCODER_ENCODERS_1_SELF_ATTN_LINEAR_V_WEIGHT : "encoder.encoders.1.self_attn.linear_v.weight",
-    MODEL_TENSOR.ENCODER_ENCODERS_1_SELF_ATTN_POS_BIAS_U : "encoder.encoders.1.self_attn.pos_bias_u",
-    MODEL_TENSOR.ENCODER_ENCODERS_1_SELF_ATTN_POS_BIAS_V : "encoder.encoders.1.self_attn.pos_bias_v",
-    MODEL_TENSOR.ENCODER_ENCODERS_2_FEED_FORWARD_W_1_BIAS : "encoder.encoders.2.feed_forward.w_1.bias",
-    MODEL_TENSOR.ENCODER_ENCODERS_2_FEED_FORWARD_W_1_WEIGHT : "encoder.encoders.2.feed_forward.w_1.weight",
-    MODEL_TENSOR.ENCODER_ENCODERS_2_FEED_FORWARD_W_2_BIAS : "encoder.encoders.2.feed_forward.w_2.bias",
-    MODEL_TENSOR.ENCODER_ENCODERS_2_FEED_FORWARD_W_2_WEIGHT : "encoder.encoders.2.feed_forward.w_2.weight",
-    MODEL_TENSOR.ENCODER_ENCODERS_2_NORM_FF_BIAS : "encoder.encoders.2.norm_ff.bias",
-    MODEL_TENSOR.ENCODER_ENCODERS_2_NORM_FF_WEIGHT : "encoder.encoders.2.norm_ff.weight",
-    MODEL_TENSOR.ENCODER_ENCODERS_2_NORM_MHA_BIAS : "encoder.encoders.2.norm_mha.bias",
-    MODEL_TENSOR.ENCODER_ENCODERS_2_NORM_MHA_WEIGHT : "encoder.encoders.2.norm_mha.weight",
-    MODEL_TENSOR.ENCODER_ENCODERS_2_SELF_ATTN_LINEAR_K_BIAS : "encoder.encoders.2.self_attn.linear_k.bias",
-    MODEL_TENSOR.ENCODER_ENCODERS_2_SELF_ATTN_LINEAR_K_WEIGHT : "encoder.encoders.2.self_attn.linear_k.weight",
-    MODEL_TENSOR.ENCODER_ENCODERS_2_SELF_ATTN_LINEAR_OUT_BIAS : "encoder.encoders.2.self_attn.linear_out.bias",
-    MODEL_TENSOR.ENCODER_ENCODERS_2_SELF_ATTN_LINEAR_OUT_WEIGHT : "encoder.encoders.2.self_attn.linear_out.weight",
-    MODEL_TENSOR.ENCODER_ENCODERS_2_SELF_ATTN_LINEAR_POS_WEIGHT : "encoder.encoders.2.self_attn.linear_pos.weight",
-    MODEL_TENSOR.ENCODER_ENCODERS_2_SELF_ATTN_LINEAR_Q_BIAS : "encoder.encoders.2.self_attn.linear_q.bias",
-    MODEL_TENSOR.ENCODER_ENCODERS_2_SELF_ATTN_LINEAR_Q_WEIGHT : "encoder.encoders.2.self_attn.linear_q.weight",
-    MODEL_TENSOR.ENCODER_ENCODERS_2_SELF_ATTN_LINEAR_V_BIAS : "encoder.encoders.2.self_attn.linear_v.bias",
-    MODEL_TENSOR.ENCODER_ENCODERS_2_SELF_ATTN_LINEAR_V_WEIGHT : "encoder.encoders.2.self_attn.linear_v.weight",
-    MODEL_TENSOR.ENCODER_ENCODERS_2_SELF_ATTN_POS_BIAS_U : "encoder.encoders.2.self_attn.pos_bias_u",
-    MODEL_TENSOR.ENCODER_ENCODERS_2_SELF_ATTN_POS_BIAS_V : "encoder.encoders.2.self_attn.pos_bias_v",
-    MODEL_TENSOR.ENCODER_ENCODERS_3_FEED_FORWARD_W_1_BIAS : "encoder.encoders.3.feed_forward.w_1.bias",
-    MODEL_TENSOR.ENCODER_ENCODERS_3_FEED_FORWARD_W_1_WEIGHT : "encoder.encoders.3.feed_forward.w_1.weight",
-    MODEL_TENSOR.ENCODER_ENCODERS_3_FEED_FORWARD_W_2_BIAS : "encoder.encoders.3.feed_forward.w_2.bias",
-    MODEL_TENSOR.ENCODER_ENCODERS_3_FEED_FORWARD_W_2_WEIGHT : "encoder.encoders.3.feed_forward.w_2.weight",
-    MODEL_TENSOR.ENCODER_ENCODERS_3_NORM_FF_BIAS : "encoder.encoders.3.norm_ff.bias",
-    MODEL_TENSOR.ENCODER_ENCODERS_3_NORM_FF_WEIGHT : "encoder.encoders.3.norm_ff.weight",
-    MODEL_TENSOR.ENCODER_ENCODERS_3_NORM_MHA_BIAS : "encoder.encoders.3.norm_mha.bias",
-    MODEL_TENSOR.ENCODER_ENCODERS_3_NORM_MHA_WEIGHT : "encoder.encoders.3.norm_mha.weight",
-    MODEL_TENSOR.ENCODER_ENCODERS_3_SELF_ATTN_LINEAR_K_BIAS : "encoder.encoders.3.self_attn.linear_k.bias",
-    MODEL_TENSOR.ENCODER_ENCODERS_3_SELF_ATTN_LINEAR_K_WEIGHT : "encoder.encoders.3.self_attn.linear_k.weight",
-    MODEL_TENSOR.ENCODER_ENCODERS_3_SELF_ATTN_LINEAR_OUT_BIAS : "encoder.encoders.3.self_attn.linear_out.bias",
-    MODEL_TENSOR.ENCODER_ENCODERS_3_SELF_ATTN_LINEAR_OUT_WEIGHT : "encoder.encoders.3.self_attn.linear_out.weight",
-    MODEL_TENSOR.ENCODER_ENCODERS_3_SELF_ATTN_LINEAR_POS_WEIGHT : "encoder.encoders.3.self_attn.linear_pos.weight",
-    MODEL_TENSOR.ENCODER_ENCODERS_3_SELF_ATTN_LINEAR_Q_BIAS : "encoder.encoders.3.self_attn.linear_q.bias",
-    MODEL_TENSOR.ENCODER_ENCODERS_3_SELF_ATTN_LINEAR_Q_WEIGHT : "encoder.encoders.3.self_attn.linear_q.weight",
-    MODEL_TENSOR.ENCODER_ENCODERS_3_SELF_ATTN_LINEAR_V_BIAS : "encoder.encoders.3.self_attn.linear_v.bias",
-    MODEL_TENSOR.ENCODER_ENCODERS_3_SELF_ATTN_LINEAR_V_WEIGHT : "encoder.encoders.3.self_attn.linear_v.weight",
-    MODEL_TENSOR.ENCODER_ENCODERS_3_SELF_ATTN_POS_BIAS_U : "encoder.encoders.3.self_attn.pos_bias_u",
-    MODEL_TENSOR.ENCODER_ENCODERS_3_SELF_ATTN_POS_BIAS_V : "encoder.encoders.3.self_attn.pos_bias_v",
-    MODEL_TENSOR.ENCODER_ENCODERS_4_FEED_FORWARD_W_1_BIAS : "encoder.encoders.4.feed_forward.w_1.bias",
-    MODEL_TENSOR.ENCODER_ENCODERS_4_FEED_FORWARD_W_1_WEIGHT : "encoder.encoders.4.feed_forward.w_1.weight",
-    MODEL_TENSOR.ENCODER_ENCODERS_4_FEED_FORWARD_W_2_BIAS : "encoder.encoders.4.feed_forward.w_2.bias",
-    MODEL_TENSOR.ENCODER_ENCODERS_4_FEED_FORWARD_W_2_WEIGHT : "encoder.encoders.4.feed_forward.w_2.weight",
-    MODEL_TENSOR.ENCODER_ENCODERS_4_NORM_FF_BIAS : "encoder.encoders.4.norm_ff.bias",
-    MODEL_TENSOR.ENCODER_ENCODERS_4_NORM_FF_WEIGHT : "encoder.encoders.4.norm_ff.weight",
-    MODEL_TENSOR.ENCODER_ENCODERS_4_NORM_MHA_BIAS : "encoder.encoders.4.norm_mha.bias",
-    MODEL_TENSOR.ENCODER_ENCODERS_4_NORM_MHA_WEIGHT : "encoder.encoders.4.norm_mha.weight",
-    MODEL_TENSOR.ENCODER_ENCODERS_4_SELF_ATTN_LINEAR_K_BIAS : "encoder.encoders.4.self_attn.linear_k.bias",
-    MODEL_TENSOR.ENCODER_ENCODERS_4_SELF_ATTN_LINEAR_K_WEIGHT : "encoder.encoders.4.self_attn.linear_k.weight",
-    MODEL_TENSOR.ENCODER_ENCODERS_4_SELF_ATTN_LINEAR_OUT_BIAS : "encoder.encoders.4.self_attn.linear_out.bias",
-    MODEL_TENSOR.ENCODER_ENCODERS_4_SELF_ATTN_LINEAR_OUT_WEIGHT : "encoder.encoders.4.self_attn.linear_out.weight",
-    MODEL_TENSOR.ENCODER_ENCODERS_4_SELF_ATTN_LINEAR_POS_WEIGHT : "encoder.encoders.4.self_attn.linear_pos.weight",
-    MODEL_TENSOR.ENCODER_ENCODERS_4_SELF_ATTN_LINEAR_Q_BIAS : "encoder.encoders.4.self_attn.linear_q.bias",
-    MODEL_TENSOR.ENCODER_ENCODERS_4_SELF_ATTN_LINEAR_Q_WEIGHT : "encoder.encoders.4.self_attn.linear_q.weight",
-    MODEL_TENSOR.ENCODER_ENCODERS_4_SELF_ATTN_LINEAR_V_BIAS : "encoder.encoders.4.self_attn.linear_v.bias",
-    MODEL_TENSOR.ENCODER_ENCODERS_4_SELF_ATTN_LINEAR_V_WEIGHT : "encoder.encoders.4.self_attn.linear_v.weight",
-    MODEL_TENSOR.ENCODER_ENCODERS_4_SELF_ATTN_POS_BIAS_U : "encoder.encoders.4.self_attn.pos_bias_u",
-    MODEL_TENSOR.ENCODER_ENCODERS_4_SELF_ATTN_POS_BIAS_V : "encoder.encoders.4.self_attn.pos_bias_v",
-    MODEL_TENSOR.ENCODER_ENCODERS_5_FEED_FORWARD_W_1_BIAS : "encoder.encoders.5.feed_forward.w_1.bias",
-    MODEL_TENSOR.ENCODER_ENCODERS_5_FEED_FORWARD_W_1_WEIGHT : "encoder.encoders.5.feed_forward.w_1.weight",
-    MODEL_TENSOR.ENCODER_ENCODERS_5_FEED_FORWARD_W_2_BIAS : "encoder.encoders.5.feed_forward.w_2.bias",
-    MODEL_TENSOR.ENCODER_ENCODERS_5_FEED_FORWARD_W_2_WEIGHT : "encoder.encoders.5.feed_forward.w_2.weight",
-    MODEL_TENSOR.ENCODER_ENCODERS_5_NORM_FF_BIAS : "encoder.encoders.5.norm_ff.bias",
-    MODEL_TENSOR.ENCODER_ENCODERS_5_NORM_FF_WEIGHT : "encoder.encoders.5.norm_ff.weight",
-    MODEL_TENSOR.ENCODER_ENCODERS_5_NORM_MHA_BIAS : "encoder.encoders.5.norm_mha.bias",
-    MODEL_TENSOR.ENCODER_ENCODERS_5_NORM_MHA_WEIGHT : "encoder.encoders.5.norm_mha.weight",
-    MODEL_TENSOR.ENCODER_ENCODERS_5_SELF_ATTN_LINEAR_K_BIAS : "encoder.encoders.5.self_attn.linear_k.bias",
-    MODEL_TENSOR.ENCODER_ENCODERS_5_SELF_ATTN_LINEAR_K_WEIGHT : "encoder.encoders.5.self_attn.linear_k.weight",
-    MODEL_TENSOR.ENCODER_ENCODERS_5_SELF_ATTN_LINEAR_OUT_BIAS : "encoder.encoders.5.self_attn.linear_out.bias",
-    MODEL_TENSOR.ENCODER_ENCODERS_5_SELF_ATTN_LINEAR_OUT_WEIGHT : "encoder.encoders.5.self_attn.linear_out.weight",
-    MODEL_TENSOR.ENCODER_ENCODERS_5_SELF_ATTN_LINEAR_POS_WEIGHT : "encoder.encoders.5.self_attn.linear_pos.weight",
-    MODEL_TENSOR.ENCODER_ENCODERS_5_SELF_ATTN_LINEAR_Q_BIAS : "encoder.encoders.5.self_attn.linear_q.bias",
-    MODEL_TENSOR.ENCODER_ENCODERS_5_SELF_ATTN_LINEAR_Q_WEIGHT : "encoder.encoders.5.self_attn.linear_q.weight",
-    MODEL_TENSOR.ENCODER_ENCODERS_5_SELF_ATTN_LINEAR_V_BIAS : "encoder.encoders.5.self_attn.linear_v.bias",
-    MODEL_TENSOR.ENCODER_ENCODERS_5_SELF_ATTN_LINEAR_V_WEIGHT : "encoder.encoders.5.self_attn.linear_v.weight",
-    MODEL_TENSOR.ENCODER_ENCODERS_5_SELF_ATTN_POS_BIAS_U : "encoder.encoders.5.self_attn.pos_bias_u",
-    MODEL_TENSOR.ENCODER_ENCODERS_5_SELF_ATTN_POS_BIAS_V : "encoder.encoders.5.self_attn.pos_bias_v",
-    MODEL_TENSOR.ENCODER_PRE_LOOKAHEAD_LAYER_CONV1_BIAS : "encoder.pre_lookahead_layer.conv1.bias",
-    MODEL_TENSOR.ENCODER_PRE_LOOKAHEAD_LAYER_CONV1_WEIGHT : "encoder.pre_lookahead_layer.conv1.weight",
-    MODEL_TENSOR.ENCODER_PRE_LOOKAHEAD_LAYER_CONV2_BIAS : "encoder.pre_lookahead_layer.conv2.bias",
-    MODEL_TENSOR.ENCODER_PRE_LOOKAHEAD_LAYER_CONV2_WEIGHT : "encoder.pre_lookahead_layer.conv2.weight",
-    MODEL_TENSOR.ENCODER_UP_EMBED_OUT_0_BIAS : "encoder.up_embed.out.0.bias",
-    MODEL_TENSOR.ENCODER_UP_EMBED_OUT_0_WEIGHT : "encoder.up_embed.out.0.weight",
-    MODEL_TENSOR.ENCODER_UP_EMBED_OUT_1_BIAS : "encoder.up_embed.out.1.bias",
-    MODEL_TENSOR.ENCODER_UP_EMBED_OUT_1_WEIGHT : "encoder.up_embed.out.1.weight",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_0_FEED_FORWARD_W_1_BIAS : "encoder.up_encoders.0.feed_forward.w_1.bias",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_0_FEED_FORWARD_W_1_WEIGHT : "encoder.up_encoders.0.feed_forward.w_1.weight",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_0_FEED_FORWARD_W_2_BIAS : "encoder.up_encoders.0.feed_forward.w_2.bias",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_0_FEED_FORWARD_W_2_WEIGHT : "encoder.up_encoders.0.feed_forward.w_2.weight",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_0_NORM_FF_BIAS : "encoder.up_encoders.0.norm_ff.bias",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_0_NORM_FF_WEIGHT : "encoder.up_encoders.0.norm_ff.weight",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_0_NORM_MHA_BIAS : "encoder.up_encoders.0.norm_mha.bias",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_0_NORM_MHA_WEIGHT : "encoder.up_encoders.0.norm_mha.weight",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_0_SELF_ATTN_LINEAR_K_BIAS : "encoder.up_encoders.0.self_attn.linear_k.bias",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_0_SELF_ATTN_LINEAR_K_WEIGHT : "encoder.up_encoders.0.self_attn.linear_k.weight",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_0_SELF_ATTN_LINEAR_OUT_BIAS : "encoder.up_encoders.0.self_attn.linear_out.bias",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_0_SELF_ATTN_LINEAR_OUT_WEIGHT : "encoder.up_encoders.0.self_attn.linear_out.weight",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_0_SELF_ATTN_LINEAR_POS_WEIGHT : "encoder.up_encoders.0.self_attn.linear_pos.weight",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_0_SELF_ATTN_LINEAR_Q_BIAS : "encoder.up_encoders.0.self_attn.linear_q.bias",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_0_SELF_ATTN_LINEAR_Q_WEIGHT : "encoder.up_encoders.0.self_attn.linear_q.weight",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_0_SELF_ATTN_LINEAR_V_BIAS : "encoder.up_encoders.0.self_attn.linear_v.bias",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_0_SELF_ATTN_LINEAR_V_WEIGHT : "encoder.up_encoders.0.self_attn.linear_v.weight",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_0_SELF_ATTN_POS_BIAS_U : "encoder.up_encoders.0.self_attn.pos_bias_u",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_0_SELF_ATTN_POS_BIAS_V : "encoder.up_encoders.0.self_attn.pos_bias_v",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_1_FEED_FORWARD_W_1_BIAS : "encoder.up_encoders.1.feed_forward.w_1.bias",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_1_FEED_FORWARD_W_1_WEIGHT : "encoder.up_encoders.1.feed_forward.w_1.weight",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_1_FEED_FORWARD_W_2_BIAS : "encoder.up_encoders.1.feed_forward.w_2.bias",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_1_FEED_FORWARD_W_2_WEIGHT : "encoder.up_encoders.1.feed_forward.w_2.weight",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_1_NORM_FF_BIAS : "encoder.up_encoders.1.norm_ff.bias",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_1_NORM_FF_WEIGHT : "encoder.up_encoders.1.norm_ff.weight",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_1_NORM_MHA_BIAS : "encoder.up_encoders.1.norm_mha.bias",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_1_NORM_MHA_WEIGHT : "encoder.up_encoders.1.norm_mha.weight",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_1_SELF_ATTN_LINEAR_K_BIAS : "encoder.up_encoders.1.self_attn.linear_k.bias",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_1_SELF_ATTN_LINEAR_K_WEIGHT : "encoder.up_encoders.1.self_attn.linear_k.weight",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_1_SELF_ATTN_LINEAR_OUT_BIAS : "encoder.up_encoders.1.self_attn.linear_out.bias",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_1_SELF_ATTN_LINEAR_OUT_WEIGHT : "encoder.up_encoders.1.self_attn.linear_out.weight",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_1_SELF_ATTN_LINEAR_POS_WEIGHT : "encoder.up_encoders.1.self_attn.linear_pos.weight",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_1_SELF_ATTN_LINEAR_Q_BIAS : "encoder.up_encoders.1.self_attn.linear_q.bias",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_1_SELF_ATTN_LINEAR_Q_WEIGHT : "encoder.up_encoders.1.self_attn.linear_q.weight",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_1_SELF_ATTN_LINEAR_V_BIAS : "encoder.up_encoders.1.self_attn.linear_v.bias",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_1_SELF_ATTN_LINEAR_V_WEIGHT : "encoder.up_encoders.1.self_attn.linear_v.weight",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_1_SELF_ATTN_POS_BIAS_U : "encoder.up_encoders.1.self_attn.pos_bias_u",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_1_SELF_ATTN_POS_BIAS_V : "encoder.up_encoders.1.self_attn.pos_bias_v",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_2_FEED_FORWARD_W_1_BIAS : "encoder.up_encoders.2.feed_forward.w_1.bias",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_2_FEED_FORWARD_W_1_WEIGHT : "encoder.up_encoders.2.feed_forward.w_1.weight",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_2_FEED_FORWARD_W_2_BIAS : "encoder.up_encoders.2.feed_forward.w_2.bias",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_2_FEED_FORWARD_W_2_WEIGHT : "encoder.up_encoders.2.feed_forward.w_2.weight",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_2_NORM_FF_BIAS : "encoder.up_encoders.2.norm_ff.bias",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_2_NORM_FF_WEIGHT : "encoder.up_encoders.2.norm_ff.weight",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_2_NORM_MHA_BIAS : "encoder.up_encoders.2.norm_mha.bias",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_2_NORM_MHA_WEIGHT : "encoder.up_encoders.2.norm_mha.weight",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_2_SELF_ATTN_LINEAR_K_BIAS : "encoder.up_encoders.2.self_attn.linear_k.bias",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_2_SELF_ATTN_LINEAR_K_WEIGHT : "encoder.up_encoders.2.self_attn.linear_k.weight",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_2_SELF_ATTN_LINEAR_OUT_BIAS : "encoder.up_encoders.2.self_attn.linear_out.bias",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_2_SELF_ATTN_LINEAR_OUT_WEIGHT : "encoder.up_encoders.2.self_attn.linear_out.weight",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_2_SELF_ATTN_LINEAR_POS_WEIGHT : "encoder.up_encoders.2.self_attn.linear_pos.weight",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_2_SELF_ATTN_LINEAR_Q_BIAS : "encoder.up_encoders.2.self_attn.linear_q.bias",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_2_SELF_ATTN_LINEAR_Q_WEIGHT : "encoder.up_encoders.2.self_attn.linear_q.weight",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_2_SELF_ATTN_LINEAR_V_BIAS : "encoder.up_encoders.2.self_attn.linear_v.bias",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_2_SELF_ATTN_LINEAR_V_WEIGHT : "encoder.up_encoders.2.self_attn.linear_v.weight",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_2_SELF_ATTN_POS_BIAS_U : "encoder.up_encoders.2.self_attn.pos_bias_u",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_2_SELF_ATTN_POS_BIAS_V : "encoder.up_encoders.2.self_attn.pos_bias_v",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_3_FEED_FORWARD_W_1_BIAS : "encoder.up_encoders.3.feed_forward.w_1.bias",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_3_FEED_FORWARD_W_1_WEIGHT : "encoder.up_encoders.3.feed_forward.w_1.weight",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_3_FEED_FORWARD_W_2_BIAS : "encoder.up_encoders.3.feed_forward.w_2.bias",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_3_FEED_FORWARD_W_2_WEIGHT : "encoder.up_encoders.3.feed_forward.w_2.weight",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_3_NORM_FF_BIAS : "encoder.up_encoders.3.norm_ff.bias",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_3_NORM_FF_WEIGHT : "encoder.up_encoders.3.norm_ff.weight",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_3_NORM_MHA_BIAS : "encoder.up_encoders.3.norm_mha.bias",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_3_NORM_MHA_WEIGHT : "encoder.up_encoders.3.norm_mha.weight",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_3_SELF_ATTN_LINEAR_K_BIAS : "encoder.up_encoders.3.self_attn.linear_k.bias",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_3_SELF_ATTN_LINEAR_K_WEIGHT : "encoder.up_encoders.3.self_attn.linear_k.weight",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_3_SELF_ATTN_LINEAR_OUT_BIAS : "encoder.up_encoders.3.self_attn.linear_out.bias",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_3_SELF_ATTN_LINEAR_OUT_WEIGHT : "encoder.up_encoders.3.self_attn.linear_out.weight",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_3_SELF_ATTN_LINEAR_POS_WEIGHT : "encoder.up_encoders.3.self_attn.linear_pos.weight",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_3_SELF_ATTN_LINEAR_Q_BIAS : "encoder.up_encoders.3.self_attn.linear_q.bias",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_3_SELF_ATTN_LINEAR_Q_WEIGHT : "encoder.up_encoders.3.self_attn.linear_q.weight",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_3_SELF_ATTN_LINEAR_V_BIAS : "encoder.up_encoders.3.self_attn.linear_v.bias",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_3_SELF_ATTN_LINEAR_V_WEIGHT : "encoder.up_encoders.3.self_attn.linear_v.weight",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_3_SELF_ATTN_POS_BIAS_U : "encoder.up_encoders.3.self_attn.pos_bias_u",
-    MODEL_TENSOR.ENCODER_UP_ENCODERS_3_SELF_ATTN_POS_BIAS_V : "encoder.up_encoders.3.self_attn.pos_bias_v",
-    MODEL_TENSOR.ENCODER_UP_LAYER_CONV_BIAS : "encoder.up_layer.conv.bias",
-    MODEL_TENSOR.ENCODER_UP_LAYER_CONV_WEIGHT : "encoder.up_layer.conv.weight",
-    MODEL_TENSOR.ENCODER_PROJ_BIAS : "encoder_proj.bias",
-    MODEL_TENSOR.ENCODER_PROJ_WEIGHT : "encoder_proj.weight",
-    MODEL_TENSOR.INPUT_EMBEDDING_WEIGHT : "input_embedding.weight",
-    MODEL_TENSOR.SPK_EMBED_AFFINE_LAYER_BIAS : "spk_embed_affine_layer.bias",
-    MODEL_TENSOR.SPK_EMBED_AFFINE_LAYER_WEIGHT : "spk_embed_affine_layer.weight",
-
-
-    #--------------------------Hift--------------------
-    MODEL_TENSOR.CONV_POST_BIAS : "conv_post.bias",
-    MODEL_TENSOR.CONV_POST_WEIGHT : "conv_post.weight",
-    MODEL_TENSOR.CONV_PRE_BIAS : "conv_pre.bias",
-    MODEL_TENSOR.CONV_PRE_WEIGHT : "conv_pre.weight",
-    
-    MODEL_TENSOR.F0_PREDICTOR_CLASSIFIER_BIAS : "f0_predictor.classifier.bias",
-    MODEL_TENSOR.F0_PREDICTOR_CLASSIFIER_WEIGHT : "f0_predictor.classifier.weight",
-    MODEL_TENSOR.F0_PREDICTOR_CONDNET_0_BIAS : "f0_predictor.condnet.0.bias",
-    MODEL_TENSOR.F0_PREDICTOR_CONDNET_0_WEIGHT : "f0_predictor.condnet.0.weight",
-    MODEL_TENSOR.F0_PREDICTOR_CONDNET_2_BIAS : "f0_predictor.condnet.2.bias",
-    MODEL_TENSOR.F0_PREDICTOR_CONDNET_2_WEIGHT : "f0_predictor.condnet.2.weight",
-    MODEL_TENSOR.F0_PREDICTOR_CONDNET_4_BIAS : "f0_predictor.condnet.4.bias",
-    MODEL_TENSOR.F0_PREDICTOR_CONDNET_4_WEIGHT : "f0_predictor.condnet.4.weight",
-    MODEL_TENSOR.F0_PREDICTOR_CONDNET_6_BIAS : "f0_predictor.condnet.6.bias",
-    MODEL_TENSOR.F0_PREDICTOR_CONDNET_6_WEIGHT : "f0_predictor.condnet.6.weight",
-    MODEL_TENSOR.F0_PREDICTOR_CONDNET_8_BIAS : "f0_predictor.condnet.8.bias",
-    MODEL_TENSOR.F0_PREDICTOR_CONDNET_8_WEIGHT : "f0_predictor.condnet.8.weight",
-    
-    MODEL_TENSOR.M_SOURCE_L_LINEAR_BIAS : "m_source.l_linear.bias",
-    MODEL_TENSOR.M_SOURCE_L_LINEAR_WEIGHT : "m_source.l_linear.weight",
-    
-    # ResBlock 0
-    MODEL_TENSOR.RESBLOCKS_0_ACTIVATIONS1_0_ALPHA : "resblocks.0.activations1.0.alpha",
-    MODEL_TENSOR.RESBLOCKS_0_ACTIVATIONS1_1_ALPHA : "resblocks.0.activations1.1.alpha",
-    MODEL_TENSOR.RESBLOCKS_0_ACTIVATIONS1_2_ALPHA : "resblocks.0.activations1.2.alpha",
-    MODEL_TENSOR.RESBLOCKS_0_ACTIVATIONS2_0_ALPHA : "resblocks.0.activations2.0.alpha",
-    MODEL_TENSOR.RESBLOCKS_0_ACTIVATIONS2_1_ALPHA : "resblocks.0.activations2.1.alpha",
-    MODEL_TENSOR.RESBLOCKS_0_ACTIVATIONS2_2_ALPHA : "resblocks.0.activations2.2.alpha",
-    MODEL_TENSOR.RESBLOCKS_0_CONVS1_0_BIAS : "resblocks.0.convs1.0.bias",
-    MODEL_TENSOR.RESBLOCKS_0_CONVS1_0_WEIGHT : "resblocks.0.convs1.0.weight",
-    MODEL_TENSOR.RESBLOCKS_0_CONVS1_1_BIAS : "resblocks.0.convs1.1.bias",
-    MODEL_TENSOR.RESBLOCKS_0_CONVS1_1_WEIGHT : "resblocks.0.convs1.1.weight",
-    MODEL_TENSOR.RESBLOCKS_0_CONVS1_2_BIAS : "resblocks.0.convs1.2.bias",
-    MODEL_TENSOR.RESBLOCKS_0_CONVS1_2_WEIGHT : "resblocks.0.convs1.2.weight",
-    MODEL_TENSOR.RESBLOCKS_0_CONVS2_0_BIAS : "resblocks.0.convs2.0.bias",
-    MODEL_TENSOR.RESBLOCKS_0_CONVS2_0_WEIGHT : "resblocks.0.convs2.0.weight",
-    MODEL_TENSOR.RESBLOCKS_0_CONVS2_1_BIAS : "resblocks.0.convs2.1.bias",
-    MODEL_TENSOR.RESBLOCKS_0_CONVS2_1_WEIGHT : "resblocks.0.convs2.1.weight",
-    MODEL_TENSOR.RESBLOCKS_0_CONVS2_2_BIAS : "resblocks.0.convs2.2.bias",
-    MODEL_TENSOR.RESBLOCKS_0_CONVS2_2_WEIGHT : "resblocks.0.convs2.2.weight",
-
-    # ResBlock 1
-    MODEL_TENSOR.RESBLOCKS_1_ACTIVATIONS1_0_ALPHA : "resblocks.1.activations1.0.alpha",
-    MODEL_TENSOR.RESBLOCKS_1_ACTIVATIONS1_1_ALPHA : "resblocks.1.activations1.1.alpha",
-    MODEL_TENSOR.RESBLOCKS_1_ACTIVATIONS1_2_ALPHA : "resblocks.1.activations1.2.alpha",
-    MODEL_TENSOR.RESBLOCKS_1_ACTIVATIONS2_0_ALPHA : "resblocks.1.activations2.0.alpha",
-    MODEL_TENSOR.RESBLOCKS_1_ACTIVATIONS2_1_ALPHA : "resblocks.1.activations2.1.alpha",
-    MODEL_TENSOR.RESBLOCKS_1_ACTIVATIONS2_2_ALPHA : "resblocks.1.activations2.2.alpha",
-    MODEL_TENSOR.RESBLOCKS_1_CONVS1_0_BIAS : "resblocks.1.convs1.0.bias",
-    MODEL_TENSOR.RESBLOCKS_1_CONVS1_0_WEIGHT : "resblocks.1.convs1.0.weight",
-    MODEL_TENSOR.RESBLOCKS_1_CONVS1_1_BIAS : "resblocks.1.convs1.1.bias",
-    MODEL_TENSOR.RESBLOCKS_1_CONVS1_1_WEIGHT : "resblocks.1.convs1.1.weight",
-    MODEL_TENSOR.RESBLOCKS_1_CONVS1_2_BIAS : "resblocks.1.convs1.2.bias",
-    MODEL_TENSOR.RESBLOCKS_1_CONVS1_2_WEIGHT : "resblocks.1.convs1.2.weight",
-    MODEL_TENSOR.RESBLOCKS_1_CONVS2_0_BIAS : "resblocks.1.convs2.0.bias",
-    MODEL_TENSOR.RESBLOCKS_1_CONVS2_0_WEIGHT : "resblocks.1.convs2.0.weight",
-    MODEL_TENSOR.RESBLOCKS_1_CONVS2_1_BIAS : "resblocks.1.convs2.1.bias",
-    MODEL_TENSOR.RESBLOCKS_1_CONVS2_1_WEIGHT : "resblocks.1.convs2.1.weight",
-    MODEL_TENSOR.RESBLOCKS_1_CONVS2_2_BIAS : "resblocks.1.convs2.2.bias",
-    MODEL_TENSOR.RESBLOCKS_1_CONVS2_2_WEIGHT : "resblocks.1.convs2.2.weight",
-
-    # ResBlock 2
-    MODEL_TENSOR.RESBLOCKS_2_ACTIVATIONS1_0_ALPHA : "resblocks.2.activations1.0.alpha",
-    MODEL_TENSOR.RESBLOCKS_2_ACTIVATIONS1_1_ALPHA : "resblocks.2.activations1.1.alpha",
-    MODEL_TENSOR.RESBLOCKS_2_ACTIVATIONS1_2_ALPHA : "resblocks.2.activations1.2.alpha",
-    MODEL_TENSOR.RESBLOCKS_2_ACTIVATIONS2_0_ALPHA : "resblocks.2.activations2.0.alpha",
-    MODEL_TENSOR.RESBLOCKS_2_ACTIVATIONS2_1_ALPHA : "resblocks.2.activations2.1.alpha",
-    MODEL_TENSOR.RESBLOCKS_2_ACTIVATIONS2_2_ALPHA : "resblocks.2.activations2.2.alpha",
-    MODEL_TENSOR.RESBLOCKS_2_CONVS1_0_BIAS : "resblocks.2.convs1.0.bias",
-    MODEL_TENSOR.RESBLOCKS_2_CONVS1_0_WEIGHT : "resblocks.2.convs1.0.weight",
-    MODEL_TENSOR.RESBLOCKS_2_CONVS1_1_BIAS : "resblocks.2.convs1.1.bias",
-    MODEL_TENSOR.RESBLOCKS_2_CONVS1_1_WEIGHT : "resblocks.2.convs1.1.weight",
-    MODEL_TENSOR.RESBLOCKS_2_CONVS1_2_BIAS : "resblocks.2.convs1.2.bias",
-    MODEL_TENSOR.RESBLOCKS_2_CONVS1_2_WEIGHT : "resblocks.2.convs1.2.weight",
-    MODEL_TENSOR.RESBLOCKS_2_CONVS2_0_BIAS : "resblocks.2.convs2.0.bias",
-    MODEL_TENSOR.RESBLOCKS_2_CONVS2_0_WEIGHT : "resblocks.2.convs2.0.weight",
-    MODEL_TENSOR.RESBLOCKS_2_CONVS2_1_BIAS : "resblocks.2.convs2.1.bias",
-    MODEL_TENSOR.RESBLOCKS_2_CONVS2_1_WEIGHT : "resblocks.2.convs2.1.weight",
-    MODEL_TENSOR.RESBLOCKS_2_CONVS2_2_BIAS : "resblocks.2.convs2.2.bias",
-    MODEL_TENSOR.RESBLOCKS_2_CONVS2_2_WEIGHT : "resblocks.2.convs2.2.weight",
-
-    # ResBlock 3
-    MODEL_TENSOR.RESBLOCKS_3_ACTIVATIONS1_0_ALPHA : "resblocks.3.activations1.0.alpha",
-    MODEL_TENSOR.RESBLOCKS_3_ACTIVATIONS1_1_ALPHA : "resblocks.3.activations1.1.alpha",
-    MODEL_TENSOR.RESBLOCKS_3_ACTIVATIONS1_2_ALPHA : "resblocks.3.activations1.2.alpha",
-    MODEL_TENSOR.RESBLOCKS_3_ACTIVATIONS2_0_ALPHA : "resblocks.3.activations2.0.alpha",
-    MODEL_TENSOR.RESBLOCKS_3_ACTIVATIONS2_1_ALPHA : "resblocks.3.activations2.1.alpha",
-    MODEL_TENSOR.RESBLOCKS_3_ACTIVATIONS2_2_ALPHA : "resblocks.3.activations2.2.alpha",
-    MODEL_TENSOR.RESBLOCKS_3_CONVS1_0_BIAS : "resblocks.3.convs1.0.bias",
-    MODEL_TENSOR.RESBLOCKS_3_CONVS1_0_WEIGHT : "resblocks.3.convs1.0.weight",
-    MODEL_TENSOR.RESBLOCKS_3_CONVS1_1_BIAS : "resblocks.3.convs1.1.bias",
-    MODEL_TENSOR.RESBLOCKS_3_CONVS1_1_WEIGHT : "resblocks.3.convs1.1.weight",
-    MODEL_TENSOR.RESBLOCKS_3_CONVS1_2_BIAS : "resblocks.3.convs1.2.bias",
-    MODEL_TENSOR.RESBLOCKS_3_CONVS1_2_WEIGHT : "resblocks.3.convs1.2.weight",
-    MODEL_TENSOR.RESBLOCKS_3_CONVS2_0_BIAS : "resblocks.3.convs2.0.bias",
-    MODEL_TENSOR.RESBLOCKS_3_CONVS2_0_WEIGHT : "resblocks.3.convs2.0.weight",
-    MODEL_TENSOR.RESBLOCKS_3_CONVS2_1_BIAS : "resblocks.3.convs2.1.bias",
-    MODEL_TENSOR.RESBLOCKS_3_CONVS2_1_WEIGHT : "resblocks.3.convs2.1.weight",
-    MODEL_TENSOR.RESBLOCKS_3_CONVS2_2_BIAS : "resblocks.3.convs2.2.bias",
-    MODEL_TENSOR.RESBLOCKS_3_CONVS2_2_WEIGHT : "resblocks.3.convs2.2.weight",
-
-    # ResBlock 4
-    MODEL_TENSOR.RESBLOCKS_4_ACTIVATIONS1_0_ALPHA : "resblocks.4.activations1.0.alpha",
-    MODEL_TENSOR.RESBLOCKS_4_ACTIVATIONS1_1_ALPHA : "resblocks.4.activations1.1.alpha",
-    MODEL_TENSOR.RESBLOCKS_4_ACTIVATIONS1_2_ALPHA : "resblocks.4.activations1.2.alpha",
-    MODEL_TENSOR.RESBLOCKS_4_ACTIVATIONS2_0_ALPHA : "resblocks.4.activations2.0.alpha",
-    MODEL_TENSOR.RESBLOCKS_4_ACTIVATIONS2_1_ALPHA : "resblocks.4.activations2.1.alpha",
-    MODEL_TENSOR.RESBLOCKS_4_ACTIVATIONS2_2_ALPHA : "resblocks.4.activations2.2.alpha",
-    MODEL_TENSOR.RESBLOCKS_4_CONVS1_0_BIAS : "resblocks.4.convs1.0.bias",
-    MODEL_TENSOR.RESBLOCKS_4_CONVS1_0_WEIGHT : "resblocks.4.convs1.0.weight",
-    MODEL_TENSOR.RESBLOCKS_4_CONVS1_1_BIAS : "resblocks.4.convs1.1.bias",
-    MODEL_TENSOR.RESBLOCKS_4_CONVS1_1_WEIGHT : "resblocks.4.convs1.1.weight",
-    MODEL_TENSOR.RESBLOCKS_4_CONVS1_2_BIAS : "resblocks.4.convs1.2.bias",
-    MODEL_TENSOR.RESBLOCKS_4_CONVS1_2_WEIGHT : "resblocks.4.convs1.2.weight",
-    MODEL_TENSOR.RESBLOCKS_4_CONVS2_0_BIAS : "resblocks.4.convs2.0.bias",
-    MODEL_TENSOR.RESBLOCKS_4_CONVS2_0_WEIGHT : "resblocks.4.convs2.0.weight",
-    MODEL_TENSOR.RESBLOCKS_4_CONVS2_1_BIAS : "resblocks.4.convs2.1.bias",
-    MODEL_TENSOR.RESBLOCKS_4_CONVS2_1_WEIGHT : "resblocks.4.convs2.1.weight",
-    MODEL_TENSOR.RESBLOCKS_4_CONVS2_2_BIAS : "resblocks.4.convs2.2.bias",
-    MODEL_TENSOR.RESBLOCKS_4_CONVS2_2_WEIGHT : "resblocks.4.convs2.2.weight",
-
-    # ResBlock 5
-    MODEL_TENSOR.RESBLOCKS_5_ACTIVATIONS1_0_ALPHA : "resblocks.5.activations1.0.alpha",
-    MODEL_TENSOR.RESBLOCKS_5_ACTIVATIONS1_1_ALPHA : "resblocks.5.activations1.1.alpha",
-    MODEL_TENSOR.RESBLOCKS_5_ACTIVATIONS1_2_ALPHA : "resblocks.5.activations1.2.alpha",
-    MODEL_TENSOR.RESBLOCKS_5_ACTIVATIONS2_0_ALPHA : "resblocks.5.activations2.0.alpha",
-    MODEL_TENSOR.RESBLOCKS_5_ACTIVATIONS2_1_ALPHA : "resblocks.5.activations2.1.alpha",
-    MODEL_TENSOR.RESBLOCKS_5_ACTIVATIONS2_2_ALPHA : "resblocks.5.activations2.2.alpha",
-    MODEL_TENSOR.RESBLOCKS_5_CONVS1_0_BIAS : "resblocks.5.convs1.0.bias",
-    MODEL_TENSOR.RESBLOCKS_5_CONVS1_0_WEIGHT : "resblocks.5.convs1.0.weight",
-    MODEL_TENSOR.RESBLOCKS_5_CONVS1_1_BIAS : "resblocks.5.convs1.1.bias",
-    MODEL_TENSOR.RESBLOCKS_5_CONVS1_1_WEIGHT : "resblocks.5.convs1.1.weight",
-    MODEL_TENSOR.RESBLOCKS_5_CONVS1_2_BIAS : "resblocks.5.convs1.2.bias",
-    MODEL_TENSOR.RESBLOCKS_5_CONVS1_2_WEIGHT : "resblocks.5.convs1.2.weight",
-    MODEL_TENSOR.RESBLOCKS_5_CONVS2_0_BIAS : "resblocks.5.convs2.0.bias",
-    MODEL_TENSOR.RESBLOCKS_5_CONVS2_0_WEIGHT : "resblocks.5.convs2.0.weight",
-    MODEL_TENSOR.RESBLOCKS_5_CONVS2_1_BIAS : "resblocks.5.convs2.1.bias",
-    MODEL_TENSOR.RESBLOCKS_5_CONVS2_1_WEIGHT : "resblocks.5.convs2.1.weight",
-    MODEL_TENSOR.RESBLOCKS_5_CONVS2_2_BIAS : "resblocks.5.convs2.2.bias",
-    MODEL_TENSOR.RESBLOCKS_5_CONVS2_2_WEIGHT : "resblocks.5.convs2.2.weight",
-
-    # ResBlock 6
-    MODEL_TENSOR.RESBLOCKS_6_ACTIVATIONS1_0_ALPHA : "resblocks.6.activations1.0.alpha",
-    MODEL_TENSOR.RESBLOCKS_6_ACTIVATIONS1_1_ALPHA : "resblocks.6.activations1.1.alpha",
-    MODEL_TENSOR.RESBLOCKS_6_ACTIVATIONS1_2_ALPHA : "resblocks.6.activations1.2.alpha",
-    MODEL_TENSOR.RESBLOCKS_6_ACTIVATIONS2_0_ALPHA : "resblocks.6.activations2.0.alpha",
-    MODEL_TENSOR.RESBLOCKS_6_ACTIVATIONS2_1_ALPHA : "resblocks.6.activations2.1.alpha",
-    MODEL_TENSOR.RESBLOCKS_6_ACTIVATIONS2_2_ALPHA : "resblocks.6.activations2.2.alpha",
-    MODEL_TENSOR.RESBLOCKS_6_CONVS1_0_BIAS : "resblocks.6.convs1.0.bias",
-    MODEL_TENSOR.RESBLOCKS_6_CONVS1_0_WEIGHT : "resblocks.6.convs1.0.weight",
-    MODEL_TENSOR.RESBLOCKS_6_CONVS1_1_BIAS : "resblocks.6.convs1.1.bias",
-    MODEL_TENSOR.RESBLOCKS_6_CONVS1_1_WEIGHT : "resblocks.6.convs1.1.weight",
-    MODEL_TENSOR.RESBLOCKS_6_CONVS1_2_BIAS : "resblocks.6.convs1.2.bias",
-    MODEL_TENSOR.RESBLOCKS_6_CONVS1_2_WEIGHT : "resblocks.6.convs1.2.weight",
-    MODEL_TENSOR.RESBLOCKS_6_CONVS2_0_BIAS : "resblocks.6.convs2.0.bias",
-    MODEL_TENSOR.RESBLOCKS_6_CONVS2_0_WEIGHT : "resblocks.6.convs2.0.weight",
-    MODEL_TENSOR.RESBLOCKS_6_CONVS2_1_BIAS : "resblocks.6.convs2.1.bias",
-    MODEL_TENSOR.RESBLOCKS_6_CONVS2_1_WEIGHT : "resblocks.6.convs2.1.weight",
-    MODEL_TENSOR.RESBLOCKS_6_CONVS2_2_BIAS : "resblocks.6.convs2.2.bias",
-    MODEL_TENSOR.RESBLOCKS_6_CONVS2_2_WEIGHT : "resblocks.6.convs2.2.weight",
-
-    # ResBlock 7
-    MODEL_TENSOR.RESBLOCKS_7_ACTIVATIONS1_0_ALPHA : "resblocks.7.activations1.0.alpha",
-    MODEL_TENSOR.RESBLOCKS_7_ACTIVATIONS1_1_ALPHA : "resblocks.7.activations1.1.alpha",
-    MODEL_TENSOR.RESBLOCKS_7_ACTIVATIONS1_2_ALPHA : "resblocks.7.activations1.2.alpha",
-    MODEL_TENSOR.RESBLOCKS_7_ACTIVATIONS2_0_ALPHA : "resblocks.7.activations2.0.alpha",
-    MODEL_TENSOR.RESBLOCKS_7_ACTIVATIONS2_1_ALPHA : "resblocks.7.activations2.1.alpha",
-    MODEL_TENSOR.RESBLOCKS_7_ACTIVATIONS2_2_ALPHA : "resblocks.7.activations2.2.alpha",
-    MODEL_TENSOR.RESBLOCKS_7_CONVS1_0_BIAS : "resblocks.7.convs1.0.bias",
-    MODEL_TENSOR.RESBLOCKS_7_CONVS1_0_WEIGHT : "resblocks.7.convs1.0.weight",
-    MODEL_TENSOR.RESBLOCKS_7_CONVS1_1_BIAS : "resblocks.7.convs1.1.bias",
-    MODEL_TENSOR.RESBLOCKS_7_CONVS1_1_WEIGHT : "resblocks.7.convs1.1.weight",
-    MODEL_TENSOR.RESBLOCKS_7_CONVS1_2_BIAS : "resblocks.7.convs1.2.bias",
-    MODEL_TENSOR.RESBLOCKS_7_CONVS1_2_WEIGHT : "resblocks.7.convs1.2.weight",
-    MODEL_TENSOR.RESBLOCKS_7_CONVS2_0_BIAS : "resblocks.7.convs2.0.bias",
-    MODEL_TENSOR.RESBLOCKS_7_CONVS2_0_WEIGHT : "resblocks.7.convs2.0.weight",
-    MODEL_TENSOR.RESBLOCKS_7_CONVS2_1_BIAS : "resblocks.7.convs2.1.bias",
-    MODEL_TENSOR.RESBLOCKS_7_CONVS2_1_WEIGHT : "resblocks.7.convs2.1.weight",
-    MODEL_TENSOR.RESBLOCKS_7_CONVS2_2_BIAS : "resblocks.7.convs2.2.bias",
-    MODEL_TENSOR.RESBLOCKS_7_CONVS2_2_WEIGHT : "resblocks.7.convs2.2.weight",
-
-    # ResBlock 8
-    MODEL_TENSOR.RESBLOCKS_8_ACTIVATIONS1_0_ALPHA : "resblocks.8.activations1.0.alpha",
-    MODEL_TENSOR.RESBLOCKS_8_ACTIVATIONS1_1_ALPHA : "resblocks.8.activations1.1.alpha",
-    MODEL_TENSOR.RESBLOCKS_8_ACTIVATIONS1_2_ALPHA : "resblocks.8.activations1.2.alpha",
-    MODEL_TENSOR.RESBLOCKS_8_ACTIVATIONS2_0_ALPHA : "resblocks.8.activations2.0.alpha",
-    MODEL_TENSOR.RESBLOCKS_8_ACTIVATIONS2_1_ALPHA : "resblocks.8.activations2.1.alpha",
-    MODEL_TENSOR.RESBLOCKS_8_ACTIVATIONS2_2_ALPHA : "resblocks.8.activations2.2.alpha",
-    MODEL_TENSOR.RESBLOCKS_8_CONVS1_0_BIAS : "resblocks.8.convs1.0.bias",
-    MODEL_TENSOR.RESBLOCKS_8_CONVS1_0_WEIGHT : "resblocks.8.convs1.0.weight",
-    MODEL_TENSOR.RESBLOCKS_8_CONVS1_1_BIAS : "resblocks.8.convs1.1.bias",
-    MODEL_TENSOR.RESBLOCKS_8_CONVS1_1_WEIGHT : "resblocks.8.convs1.1.weight",
-    MODEL_TENSOR.RESBLOCKS_8_CONVS1_2_BIAS : "resblocks.8.convs1.2.bias",
-    MODEL_TENSOR.RESBLOCKS_8_CONVS1_2_WEIGHT : "resblocks.8.convs1.2.weight",
-    MODEL_TENSOR.RESBLOCKS_8_CONVS2_0_BIAS : "resblocks.8.convs2.0.bias",
-    MODEL_TENSOR.RESBLOCKS_8_CONVS2_0_WEIGHT : "resblocks.8.convs2.0.weight",
-    MODEL_TENSOR.RESBLOCKS_8_CONVS2_1_BIAS : "resblocks.8.convs2.1.bias",
-    MODEL_TENSOR.RESBLOCKS_8_CONVS2_1_WEIGHT : "resblocks.8.convs2.1.weight",
-    MODEL_TENSOR.RESBLOCKS_8_CONVS2_2_BIAS : "resblocks.8.convs2.2.bias",
-    MODEL_TENSOR.RESBLOCKS_8_CONVS2_2_WEIGHT : "resblocks.8.convs2.2.weight",
-
-    MODEL_TENSOR.SOURCE_DOWNS_0_BIAS : "source_downs.0.bias",
-    MODEL_TENSOR.SOURCE_DOWNS_0_WEIGHT : "source_downs.0.weight",
-    MODEL_TENSOR.SOURCE_DOWNS_1_BIAS : "source_downs.1.bias",
-    MODEL_TENSOR.SOURCE_DOWNS_1_WEIGHT : "source_downs.1.weight",
-    MODEL_TENSOR.SOURCE_DOWNS_2_BIAS : "source_downs.2.bias",
-    MODEL_TENSOR.SOURCE_DOWNS_2_WEIGHT : "source_downs.2.weight",
-    
-    # Source ResBlock 0
-    MODEL_TENSOR.SOURCE_RESBLOCKS_0_ACTIVATIONS1_0_ALPHA : "source_resblocks.0.activations1.0.alpha",
-    MODEL_TENSOR.SOURCE_RESBLOCKS_0_ACTIVATIONS1_1_ALPHA : "source_resblocks.0.activations1.1.alpha",
-    MODEL_TENSOR.SOURCE_RESBLOCKS_0_ACTIVATIONS1_2_ALPHA : "source_resblocks.0.activations1.2.alpha",
-    MODEL_TENSOR.SOURCE_RESBLOCKS_0_ACTIVATIONS2_0_ALPHA : "source_resblocks.0.activations2.0.alpha",
-    MODEL_TENSOR.SOURCE_RESBLOCKS_0_ACTIVATIONS2_1_ALPHA : "source_resblocks.0.activations2.1.alpha",
-    MODEL_TENSOR.SOURCE_RESBLOCKS_0_ACTIVATIONS2_2_ALPHA : "source_resblocks.0.activations2.2.alpha",
-    MODEL_TENSOR.SOURCE_RESBLOCKS_0_CONVS1_0_BIAS : "source_resblocks.0.convs1.0.bias",
-    MODEL_TENSOR.SOURCE_RESBLOCKS_0_CONVS1_0_WEIGHT : "source_resblocks.0.convs1.0.weight",
-    MODEL_TENSOR.SOURCE_RESBLOCKS_0_CONVS1_1_BIAS : "source_resblocks.0.convs1.1.bias",
-    MODEL_TENSOR.SOURCE_RESBLOCKS_0_CONVS1_1_WEIGHT : "source_resblocks.0.convs1.1.weight",
-    MODEL_TENSOR.SOURCE_RESBLOCKS_0_CONVS1_2_BIAS : "source_resblocks.0.convs1.2.bias",
-    MODEL_TENSOR.SOURCE_RESBLOCKS_0_CONVS1_2_WEIGHT : "source_resblocks.0.convs1.2.weight",
-    MODEL_TENSOR.SOURCE_RESBLOCKS_0_CONVS2_0_BIAS : "source_resblocks.0.convs2.0.bias",
-    MODEL_TENSOR.SOURCE_RESBLOCKS_0_CONVS2_0_WEIGHT : "source_resblocks.0.convs2.0.weight",
-    MODEL_TENSOR.SOURCE_RESBLOCKS_0_CONVS2_1_BIAS : "source_resblocks.0.convs2.1.bias",
-    MODEL_TENSOR.SOURCE_RESBLOCKS_0_CONVS2_1_WEIGHT : "source_resblocks.0.convs2.1.weight",
-    MODEL_TENSOR.SOURCE_RESBLOCKS_0_CONVS2_2_BIAS : "source_resblocks.0.convs2.2.bias",
-    MODEL_TENSOR.SOURCE_RESBLOCKS_0_CONVS2_2_WEIGHT : "source_resblocks.0.convs2.2.weight",
-
-    # Source ResBlock 1
-    MODEL_TENSOR.SOURCE_RESBLOCKS_1_ACTIVATIONS1_0_ALPHA : "source_resblocks.1.activations1.0.alpha",
-    MODEL_TENSOR.SOURCE_RESBLOCKS_1_ACTIVATIONS1_1_ALPHA : "source_resblocks.1.activations1.1.alpha",
-    MODEL_TENSOR.SOURCE_RESBLOCKS_1_ACTIVATIONS1_2_ALPHA : "source_resblocks.1.activations1.2.alpha",
-    MODEL_TENSOR.SOURCE_RESBLOCKS_1_ACTIVATIONS2_0_ALPHA : "source_resblocks.1.activations2.0.alpha",
-    MODEL_TENSOR.SOURCE_RESBLOCKS_1_ACTIVATIONS2_1_ALPHA : "source_resblocks.1.activations2.1.alpha",
-    MODEL_TENSOR.SOURCE_RESBLOCKS_1_ACTIVATIONS2_2_ALPHA : "source_resblocks.1.activations2.2.alpha",
-    MODEL_TENSOR.SOURCE_RESBLOCKS_1_CONVS1_0_BIAS : "source_resblocks.1.convs1.0.bias",
-    MODEL_TENSOR.SOURCE_RESBLOCKS_1_CONVS1_0_WEIGHT : "source_resblocks.1.convs1.0.weight",
-    MODEL_TENSOR.SOURCE_RESBLOCKS_1_CONVS1_1_BIAS : "source_resblocks.1.convs1.1.bias",
-    MODEL_TENSOR.SOURCE_RESBLOCKS_1_CONVS1_1_WEIGHT : "source_resblocks.1.convs1.1.weight",
-    MODEL_TENSOR.SOURCE_RESBLOCKS_1_CONVS1_2_BIAS : "source_resblocks.1.convs1.2.bias",
-    MODEL_TENSOR.SOURCE_RESBLOCKS_1_CONVS1_2_WEIGHT : "source_resblocks.1.convs1.2.weight",
-    MODEL_TENSOR.SOURCE_RESBLOCKS_1_CONVS2_0_BIAS : "source_resblocks.1.convs2.0.bias",
-    MODEL_TENSOR.SOURCE_RESBLOCKS_1_CONVS2_0_WEIGHT : "source_resblocks.1.convs2.0.weight",
-    MODEL_TENSOR.SOURCE_RESBLOCKS_1_CONVS2_1_BIAS : "source_resblocks.1.convs2.1.bias",
-    MODEL_TENSOR.SOURCE_RESBLOCKS_1_CONVS2_1_WEIGHT : "source_resblocks.1.convs2.1.weight",
-    MODEL_TENSOR.SOURCE_RESBLOCKS_1_CONVS2_2_BIAS : "source_resblocks.1.convs2.2.bias",
-    MODEL_TENSOR.SOURCE_RESBLOCKS_1_CONVS2_2_WEIGHT : "source_resblocks.1.convs2.2.weight",
-
-    # Source ResBlock 2
-    MODEL_TENSOR.SOURCE_RESBLOCKS_2_ACTIVATIONS1_0_ALPHA : "source_resblocks.2.activations1.0.alpha",
-    MODEL_TENSOR.SOURCE_RESBLOCKS_2_ACTIVATIONS1_1_ALPHA : "source_resblocks.2.activations1.1.alpha",
-    MODEL_TENSOR.SOURCE_RESBLOCKS_2_ACTIVATIONS1_2_ALPHA : "source_resblocks.2.activations1.2.alpha",
-    MODEL_TENSOR.SOURCE_RESBLOCKS_2_ACTIVATIONS2_0_ALPHA : "source_resblocks.2.activations2.0.alpha",
-    MODEL_TENSOR.SOURCE_RESBLOCKS_2_ACTIVATIONS2_1_ALPHA : "source_resblocks.2.activations2.1.alpha",
-    MODEL_TENSOR.SOURCE_RESBLOCKS_2_ACTIVATIONS2_2_ALPHA : "source_resblocks.2.activations2.2.alpha",
-    MODEL_TENSOR.SOURCE_RESBLOCKS_2_CONVS1_0_BIAS : "source_resblocks.2.convs1.0.bias",
-    MODEL_TENSOR.SOURCE_RESBLOCKS_2_CONVS1_0_WEIGHT : "source_resblocks.2.convs1.0.weight",
-    MODEL_TENSOR.SOURCE_RESBLOCKS_2_CONVS1_1_BIAS : "source_resblocks.2.convs1.1.bias",
-    MODEL_TENSOR.SOURCE_RESBLOCKS_2_CONVS1_1_WEIGHT : "source_resblocks.2.convs1.1.weight",
-    MODEL_TENSOR.SOURCE_RESBLOCKS_2_CONVS1_2_BIAS : "source_resblocks.2.convs1.2.bias",
-    MODEL_TENSOR.SOURCE_RESBLOCKS_2_CONVS1_2_WEIGHT : "source_resblocks.2.convs1.2.weight",
-    MODEL_TENSOR.SOURCE_RESBLOCKS_2_CONVS2_0_BIAS : "source_resblocks.2.convs2.0.bias",
-    MODEL_TENSOR.SOURCE_RESBLOCKS_2_CONVS2_0_WEIGHT : "source_resblocks.2.convs2.0.weight",
-    MODEL_TENSOR.SOURCE_RESBLOCKS_2_CONVS2_1_BIAS : "source_resblocks.2.convs2.1.bias",
-    MODEL_TENSOR.SOURCE_RESBLOCKS_2_CONVS2_1_WEIGHT : "source_resblocks.2.convs2.1.weight",
-    MODEL_TENSOR.SOURCE_RESBLOCKS_2_CONVS2_2_BIAS : "source_resblocks.2.convs2.2.bias",
-    MODEL_TENSOR.SOURCE_RESBLOCKS_2_CONVS2_2_WEIGHT : "source_resblocks.2.convs2.2.weight",
-
-    MODEL_TENSOR.UPS_0_BIAS : "ups.0.bias",
-    MODEL_TENSOR.UPS_0_WEIGHT : "ups.0.weight",
-    MODEL_TENSOR.UPS_1_BIAS : "ups.1.bias",
-    MODEL_TENSOR.UPS_1_WEIGHT : "ups.1.weight",
-    MODEL_TENSOR.UPS_2_BIAS : "ups.2.bias",
-    MODEL_TENSOR.UPS_2_WEIGHT : "ups.2.weight",
+    # lfm2 audio
+    MODEL_TENSOR.A_ENC_NORM_CONV:           "a.blk.{bid}.norm_conv",
+    MODEL_TENSOR.A_ENC_LINEAR_POS:          "a.blk.{bid}.linear_pos",
+    MODEL_TENSOR.A_ENC_POS_BIAS_U:          "a.blk.{bid}.pos_bias_u",
+    MODEL_TENSOR.A_ENC_POS_BIAS_V:          "a.blk.{bid}.pos_bias_v",
+    MODEL_TENSOR.A_ENC_OUT:                 "a.pre_encode.out",
+    MODEL_TENSOR.A_ENC_CONV_DW:             "a.blk.{bid}.conv_dw",
+    MODEL_TENSOR.A_ENC_CONV_NORM:           "a.blk.{bid}.conv_norm",
+    MODEL_TENSOR.A_ENC_CONV_PW1:            "a.blk.{bid}.conv_pw1",
+    MODEL_TENSOR.A_ENC_CONV_PW2:            "a.blk.{bid}.conv_pw2",
+    # NextN/MTP
+    MODEL_TENSOR.NEXTN_EH_PROJ:             "blk.{bid}.nextn.eh_proj",
+    MODEL_TENSOR.NEXTN_EMBED_TOKENS:        "blk.{bid}.nextn.embed_tokens",
+    MODEL_TENSOR.NEXTN_ENORM:               "blk.{bid}.nextn.enorm",
+    MODEL_TENSOR.NEXTN_HNORM:               "blk.{bid}.nextn.hnorm",
+    MODEL_TENSOR.NEXTN_SHARED_HEAD_HEAD:    "blk.{bid}.nextn.shared_head_head",
+    MODEL_TENSOR.NEXTN_SHARED_HEAD_NORM:    "blk.{bid}.nextn.shared_head_norm",
 }
 
 MODEL_TENSORS: dict[MODEL_ARCH, list[MODEL_TENSOR]] = {
@@ -3804,8 +1146,10 @@ MODEL_TENSORS: dict[MODEL_ARCH, list[MODEL_TENSOR]] = {
         MODEL_TENSOR.V_MMPROJ_PEG,
         MODEL_TENSOR.V_ENC_EMBD_CLS,
         MODEL_TENSOR.V_ENC_EMBD_PATCH,
+        MODEL_TENSOR.V_ENC_EMBD_NORM,
         MODEL_TENSOR.V_ENC_EMBD_POS,
         MODEL_TENSOR.V_ENC_INPUT_NORM,
+        MODEL_TENSOR.V_ENC_ATTN_QKV,
         MODEL_TENSOR.V_ENC_ATTN_Q,
         MODEL_TENSOR.V_ENC_ATTN_Q_NORM,
         MODEL_TENSOR.V_ENC_ATTN_K,
@@ -3821,6 +1165,7 @@ MODEL_TENSORS: dict[MODEL_ARCH, list[MODEL_TENSOR]] = {
         MODEL_TENSOR.V_LAYER_SCALE_2,
         MODEL_TENSOR.V_PRE_NORM,
         MODEL_TENSOR.V_POST_NORM,
+        MODEL_TENSOR.V_MM_POST_NORM,
         MODEL_TENSOR.V_MM_INP_PROJ,
         MODEL_TENSOR.V_MM_INP_NORM,
         MODEL_TENSOR.V_MM_SOFT_EMB_NORM,
@@ -3837,8 +1182,19 @@ MODEL_TENSORS: dict[MODEL_ARCH, list[MODEL_TENSOR]] = {
         MODEL_TENSOR.V_RESMPL_QUERY,
         MODEL_TENSOR.V_TOK_EMBD_IMG_BREAK,
         MODEL_TENSOR.V_MM_PATCH_MERGER,
+        MODEL_TENSOR.V_DS_NORM,
+        MODEL_TENSOR.V_DS_FC1,
+        MODEL_TENSOR.V_DS_FC2,
+        MODEL_TENSOR.V_MM_POST_FC_NORM,
+        MODEL_TENSOR.V_MM_UP,
+        MODEL_TENSOR.V_MM_DOWN,
+        MODEL_TENSOR.V_MM_GATE,
+        MODEL_TENSOR.V_TOK_BOI,
+        MODEL_TENSOR.V_TOK_EOI,
         # audio
         MODEL_TENSOR.A_ENC_EMBD_POS,
+        MODEL_TENSOR.A_ENC_EMBD_NORM,
+        MODEL_TENSOR.A_ENC_EMBD_TO_LOGITS,
         MODEL_TENSOR.A_ENC_CONV1D,
         MODEL_TENSOR.A_PRE_NORM,
         MODEL_TENSOR.A_POST_NORM,
@@ -3848,13 +1204,27 @@ MODEL_TENSORS: dict[MODEL_ARCH, list[MODEL_TENSOR]] = {
         MODEL_TENSOR.A_ENC_INPUT_NORM,
         MODEL_TENSOR.A_ENC_OUTPUT,
         MODEL_TENSOR.A_ENC_OUTPUT_NORM,
+        MODEL_TENSOR.A_ENC_FFN_NORM,
         MODEL_TENSOR.A_ENC_FFN_UP,
         MODEL_TENSOR.A_ENC_FFN_GATE,
         MODEL_TENSOR.A_ENC_FFN_DOWN,
+        MODEL_TENSOR.A_ENC_FFN_NORM_1,
+        MODEL_TENSOR.A_ENC_FFN_UP_1,
+        MODEL_TENSOR.A_ENC_FFN_GATE_1,
+        MODEL_TENSOR.A_ENC_FFN_DOWN_1,
         MODEL_TENSOR.A_MMPROJ,
         MODEL_TENSOR.A_MMPROJ_FC,
         MODEL_TENSOR.A_MM_NORM_PRE,
         MODEL_TENSOR.A_MM_NORM_MID,
+        MODEL_TENSOR.A_ENC_NORM_CONV,
+        MODEL_TENSOR.A_ENC_LINEAR_POS,
+        MODEL_TENSOR.A_ENC_POS_BIAS_U,
+        MODEL_TENSOR.A_ENC_POS_BIAS_V,
+        MODEL_TENSOR.A_ENC_OUT,
+        MODEL_TENSOR.A_ENC_CONV_DW,
+        MODEL_TENSOR.A_ENC_CONV_NORM,
+        MODEL_TENSOR.A_ENC_CONV_PW1,
+        MODEL_TENSOR.A_ENC_CONV_PW2,
     ],
     MODEL_ARCH.LLAMA: [
         MODEL_TENSOR.TOKEN_EMBD,
@@ -3939,6 +1309,7 @@ MODEL_TENSORS: dict[MODEL_ARCH, list[MODEL_TENSOR]] = {
         MODEL_TENSOR.FFN_GATE_EXP,
         MODEL_TENSOR.FFN_DOWN_EXP,
         MODEL_TENSOR.FFN_UP_EXP,
+        MODEL_TENSOR.FFN_POST_NORM,
         MODEL_TENSOR.LAYER_OUT_NORM,
     ],
     MODEL_ARCH.GPTNEOX: [
@@ -4009,6 +1380,19 @@ MODEL_TENSORS: dict[MODEL_ARCH, list[MODEL_TENSOR]] = {
         MODEL_TENSOR.CLS,
         MODEL_TENSOR.CLS_OUT,
     ],
+    MODEL_ARCH.MODERN_BERT: [
+        MODEL_TENSOR.TOKEN_EMBD,
+        MODEL_TENSOR.TOKEN_EMBD_NORM,
+        MODEL_TENSOR.OUTPUT_NORM,
+        MODEL_TENSOR.ATTN_NORM,
+        MODEL_TENSOR.ATTN_OUT,
+        MODEL_TENSOR.ATTN_QKV,
+        MODEL_TENSOR.FFN_UP,
+        MODEL_TENSOR.FFN_DOWN,
+        MODEL_TENSOR.FFN_NORM,
+        MODEL_TENSOR.CLS,
+        MODEL_TENSOR.CLS_OUT,
+    ],
     MODEL_ARCH.NOMIC_BERT: [
         MODEL_TENSOR.TOKEN_EMBD,
         MODEL_TENSOR.TOKEN_EMBD_NORM,
@@ -4068,6 +1452,18 @@ MODEL_TENSORS: dict[MODEL_ARCH, list[MODEL_TENSOR]] = {
         MODEL_TENSOR.FFN_DOWN,
         MODEL_TENSOR.LAYER_OUT_NORM,
         MODEL_TENSOR.CLS,
+    ],
+    MODEL_ARCH.JINA_BERT_V3: [
+        MODEL_TENSOR.TOKEN_EMBD,
+        MODEL_TENSOR.TOKEN_EMBD_NORM,
+        MODEL_TENSOR.TOKEN_TYPES,
+        MODEL_TENSOR.OUTPUT_NORM,
+        MODEL_TENSOR.ATTN_OUT_NORM,
+        MODEL_TENSOR.ATTN_QKV,
+        MODEL_TENSOR.ATTN_OUT,
+        MODEL_TENSOR.FFN_DOWN,
+        MODEL_TENSOR.FFN_UP,
+        MODEL_TENSOR.LAYER_OUT_NORM,
     ],
     MODEL_ARCH.MPT: [
         MODEL_TENSOR.TOKEN_EMBD,
@@ -4168,6 +1564,36 @@ MODEL_TENSORS: dict[MODEL_ARCH, list[MODEL_TENSOR]] = {
         MODEL_TENSOR.FFN_DOWN,
         MODEL_TENSOR.FFN_UP,
     ],
+    MODEL_ARCH.DREAM: [
+        MODEL_TENSOR.TOKEN_EMBD,
+        MODEL_TENSOR.OUTPUT_NORM,
+        MODEL_TENSOR.OUTPUT,
+        MODEL_TENSOR.ROPE_FREQS,
+        MODEL_TENSOR.ATTN_NORM,
+        MODEL_TENSOR.ATTN_Q,
+        MODEL_TENSOR.ATTN_K,
+        MODEL_TENSOR.ATTN_V,
+        MODEL_TENSOR.ATTN_OUT,
+        MODEL_TENSOR.FFN_NORM,
+        MODEL_TENSOR.FFN_GATE,
+        MODEL_TENSOR.FFN_DOWN,
+        MODEL_TENSOR.FFN_UP,
+    ],
+    MODEL_ARCH.LLADA: [
+        MODEL_TENSOR.TOKEN_EMBD,
+        MODEL_TENSOR.OUTPUT_NORM,
+        MODEL_TENSOR.OUTPUT,
+        MODEL_TENSOR.ROPE_FREQS,
+        MODEL_TENSOR.ATTN_NORM,
+        MODEL_TENSOR.ATTN_Q,
+        MODEL_TENSOR.ATTN_K,
+        MODEL_TENSOR.ATTN_V,
+        MODEL_TENSOR.ATTN_OUT,
+        MODEL_TENSOR.FFN_NORM,
+        MODEL_TENSOR.FFN_GATE,
+        MODEL_TENSOR.FFN_DOWN,
+        MODEL_TENSOR.FFN_UP,
+    ],
     MODEL_ARCH.QWEN2VL: [
         MODEL_TENSOR.TOKEN_EMBD,
         MODEL_TENSOR.OUTPUT_NORM,
@@ -4235,6 +1661,69 @@ MODEL_TENSORS: dict[MODEL_ARCH, list[MODEL_TENSOR]] = {
         MODEL_TENSOR.FFN_DOWN_EXP,
         MODEL_TENSOR.FFN_UP_EXP,
     ],
+    MODEL_ARCH.QWEN3NEXT: [
+        MODEL_TENSOR.TOKEN_EMBD,
+        MODEL_TENSOR.OUTPUT_NORM,
+        MODEL_TENSOR.OUTPUT,
+        MODEL_TENSOR.ATTN_NORM,
+        MODEL_TENSOR.ATTN_Q,
+        MODEL_TENSOR.ATTN_Q_NORM,
+        MODEL_TENSOR.ATTN_K,
+        MODEL_TENSOR.ATTN_K_NORM,
+        MODEL_TENSOR.ATTN_V,
+        MODEL_TENSOR.ATTN_OUT,
+        MODEL_TENSOR.ATTN_POST_NORM,
+        MODEL_TENSOR.ATTN_GATE,
+        MODEL_TENSOR.FFN_GATE_INP,
+        MODEL_TENSOR.FFN_GATE_INP_SHEXP,
+        MODEL_TENSOR.FFN_UP_SHEXP,
+        MODEL_TENSOR.FFN_DOWN_SHEXP,
+        MODEL_TENSOR.FFN_GATE_SHEXP,
+        MODEL_TENSOR.FFN_DOWN_EXP,
+        MODEL_TENSOR.FFN_UP_EXP,
+        MODEL_TENSOR.FFN_GATE_EXP,
+        MODEL_TENSOR.SSM_A,
+        MODEL_TENSOR.SSM_CONV1D,
+        MODEL_TENSOR.SSM_DT,
+        MODEL_TENSOR.SSM_NORM,
+        MODEL_TENSOR.SSM_IN,
+        MODEL_TENSOR.SSM_BETA_ALPHA,
+        MODEL_TENSOR.SSM_OUT
+    ],
+    MODEL_ARCH.QWEN3VL: [
+        MODEL_TENSOR.TOKEN_EMBD,
+        MODEL_TENSOR.OUTPUT_NORM,
+        MODEL_TENSOR.OUTPUT,
+        MODEL_TENSOR.ROPE_FREQS,
+        MODEL_TENSOR.ATTN_NORM,
+        MODEL_TENSOR.ATTN_Q,
+        MODEL_TENSOR.ATTN_Q_NORM,
+        MODEL_TENSOR.ATTN_K,
+        MODEL_TENSOR.ATTN_K_NORM,
+        MODEL_TENSOR.ATTN_V,
+        MODEL_TENSOR.ATTN_OUT,
+        MODEL_TENSOR.FFN_NORM,
+        MODEL_TENSOR.FFN_GATE,
+        MODEL_TENSOR.FFN_DOWN,
+        MODEL_TENSOR.FFN_UP,
+    ],
+    MODEL_ARCH.QWEN3VLMOE: [
+        MODEL_TENSOR.TOKEN_EMBD,
+        MODEL_TENSOR.OUTPUT_NORM,
+        MODEL_TENSOR.OUTPUT,
+        MODEL_TENSOR.ATTN_NORM,
+        MODEL_TENSOR.ATTN_Q,
+        MODEL_TENSOR.ATTN_Q_NORM,
+        MODEL_TENSOR.ATTN_K,
+        MODEL_TENSOR.ATTN_K_NORM,
+        MODEL_TENSOR.ATTN_V,
+        MODEL_TENSOR.ATTN_OUT,
+        MODEL_TENSOR.FFN_NORM,
+        MODEL_TENSOR.FFN_GATE_INP,
+        MODEL_TENSOR.FFN_GATE_EXP,
+        MODEL_TENSOR.FFN_DOWN_EXP,
+        MODEL_TENSOR.FFN_UP_EXP,
+    ],
     MODEL_ARCH.PLAMO: [
         MODEL_TENSOR.TOKEN_EMBD,
         MODEL_TENSOR.OUTPUT_NORM,
@@ -4249,6 +1738,51 @@ MODEL_TENSORS: dict[MODEL_ARCH, list[MODEL_TENSOR]] = {
         MODEL_TENSOR.FFN_GATE,
         MODEL_TENSOR.FFN_DOWN,
         MODEL_TENSOR.FFN_UP,
+    ],
+    MODEL_ARCH.PLAMO2: [
+        MODEL_TENSOR.TOKEN_EMBD,
+        MODEL_TENSOR.OUTPUT_NORM,
+        MODEL_TENSOR.OUTPUT,
+        MODEL_TENSOR.ROPE_FREQS,
+        MODEL_TENSOR.ATTN_NORM,
+        MODEL_TENSOR.ATTN_QKV,
+        MODEL_TENSOR.ATTN_Q,
+        MODEL_TENSOR.ATTN_K,
+        MODEL_TENSOR.ATTN_OUT,
+        MODEL_TENSOR.ATTN_ROT_EMBD,
+        MODEL_TENSOR.ATTN_Q_NORM,
+        MODEL_TENSOR.ATTN_K_NORM,
+        MODEL_TENSOR.ATTN_POST_NORM,
+        MODEL_TENSOR.FFN_NORM,
+        MODEL_TENSOR.FFN_GATE,
+        MODEL_TENSOR.FFN_DOWN,
+        MODEL_TENSOR.FFN_UP,
+        MODEL_TENSOR.FFN_POST_NORM,
+        MODEL_TENSOR.SSM_IN,
+        MODEL_TENSOR.SSM_CONV1D,
+        MODEL_TENSOR.SSM_X,
+        MODEL_TENSOR.SSM_DT,
+        MODEL_TENSOR.SSM_A,
+        MODEL_TENSOR.SSM_D,
+        MODEL_TENSOR.SSM_OUT,
+        MODEL_TENSOR.SSM_DT_NORM,
+        MODEL_TENSOR.SSM_B_NORM,
+        MODEL_TENSOR.SSM_C_NORM,
+    ],
+    MODEL_ARCH.PLAMO3: [
+        MODEL_TENSOR.TOKEN_EMBD,
+        MODEL_TENSOR.OUTPUT_NORM,
+        MODEL_TENSOR.OUTPUT,
+        MODEL_TENSOR.ATTN_NORM,
+        MODEL_TENSOR.ATTN_QKV,
+        MODEL_TENSOR.ATTN_Q_NORM,
+        MODEL_TENSOR.ATTN_K_NORM,
+        MODEL_TENSOR.ATTN_OUT,
+        MODEL_TENSOR.ATTN_POST_NORM,
+        MODEL_TENSOR.FFN_NORM,
+        MODEL_TENSOR.FFN_DOWN,
+        MODEL_TENSOR.FFN_UP,
+        MODEL_TENSOR.FFN_POST_NORM,
     ],
     MODEL_ARCH.GPT2: [
         MODEL_TENSOR.TOKEN_EMBD,
@@ -4441,6 +1975,61 @@ MODEL_TENSORS: dict[MODEL_ARCH, list[MODEL_TENSOR]] = {
         MODEL_TENSOR.FFN_PRE_NORM,
         MODEL_TENSOR.FFN_POST_NORM,
     ],
+    MODEL_ARCH.GEMMA3N: [
+        MODEL_TENSOR.TOKEN_EMBD,
+        MODEL_TENSOR.OUTPUT,
+        MODEL_TENSOR.OUTPUT_NORM,
+        MODEL_TENSOR.ATTN_Q,
+        MODEL_TENSOR.ATTN_Q_NORM,
+        MODEL_TENSOR.ATTN_K,
+        MODEL_TENSOR.ATTN_K_NORM,
+        MODEL_TENSOR.ATTN_V,
+        MODEL_TENSOR.ATTN_OUT,
+        MODEL_TENSOR.FFN_GATE,
+        MODEL_TENSOR.FFN_DOWN,
+        MODEL_TENSOR.FFN_UP,
+        MODEL_TENSOR.ATTN_NORM,
+        MODEL_TENSOR.ATTN_POST_NORM,
+        MODEL_TENSOR.FFN_PRE_NORM,
+        MODEL_TENSOR.FFN_POST_NORM,
+        # altup / laurel
+        MODEL_TENSOR.PER_LAYER_TOKEN_EMBD,
+        MODEL_TENSOR.PER_LAYER_MODEL_PROJ,
+        MODEL_TENSOR.PER_LAYER_INP_GATE,
+        MODEL_TENSOR.PER_LAYER_PROJ,
+        MODEL_TENSOR.PER_LAYER_PROJ_NORM,
+        MODEL_TENSOR.PER_LAYER_POST_NORM,
+        MODEL_TENSOR.ALTUP_PROJ,
+        MODEL_TENSOR.ALTUP_UNEMBD_PROJ,
+        MODEL_TENSOR.ALTUP_CORRECT_COEF,
+        MODEL_TENSOR.ALTUP_CORRECT_SCALE,
+        MODEL_TENSOR.ALTUP_PREDICT_COEF,
+        MODEL_TENSOR.ALTUP_ROUTER,
+        MODEL_TENSOR.ALTUP_ROUTER_NORM,
+        MODEL_TENSOR.LAUREL_L,
+        MODEL_TENSOR.LAUREL_R,
+        MODEL_TENSOR.LAUREL_POST_NORM,
+    ],
+    MODEL_ARCH.GEMMA_EMBEDDING: [
+        MODEL_TENSOR.TOKEN_EMBD,
+        MODEL_TENSOR.OUTPUT,
+        MODEL_TENSOR.DENSE_2_OUT,
+        MODEL_TENSOR.DENSE_3_OUT,
+        MODEL_TENSOR.OUTPUT_NORM,
+        MODEL_TENSOR.ATTN_Q,
+        MODEL_TENSOR.ATTN_Q_NORM,
+        MODEL_TENSOR.ATTN_K,
+        MODEL_TENSOR.ATTN_K_NORM,
+        MODEL_TENSOR.ATTN_V,
+        MODEL_TENSOR.ATTN_OUT,
+        MODEL_TENSOR.FFN_GATE,
+        MODEL_TENSOR.FFN_DOWN,
+        MODEL_TENSOR.FFN_UP,
+        MODEL_TENSOR.ATTN_NORM,
+        MODEL_TENSOR.ATTN_POST_NORM,
+        MODEL_TENSOR.FFN_PRE_NORM,
+        MODEL_TENSOR.FFN_POST_NORM,
+    ],
     MODEL_ARCH.STARCODER2: [
         MODEL_TENSOR.TOKEN_EMBD,
         MODEL_TENSOR.OUTPUT_NORM,
@@ -4592,6 +2181,47 @@ MODEL_TENSORS: dict[MODEL_ARCH, list[MODEL_TENSOR]] = {
         MODEL_TENSOR.SSM_D,
         MODEL_TENSOR.SSM_OUT,
     ],
+    MODEL_ARCH.MAMBA2: [
+        MODEL_TENSOR.TOKEN_EMBD,
+        MODEL_TENSOR.OUTPUT_NORM,
+        MODEL_TENSOR.OUTPUT,
+        MODEL_TENSOR.ATTN_NORM,
+        MODEL_TENSOR.SSM_IN,
+        MODEL_TENSOR.SSM_CONV1D,
+        MODEL_TENSOR.SSM_DT,
+        MODEL_TENSOR.SSM_A,
+        MODEL_TENSOR.SSM_D,
+        MODEL_TENSOR.SSM_NORM,
+        MODEL_TENSOR.SSM_OUT,
+    ],
+    MODEL_ARCH.JAMBA: [
+        MODEL_TENSOR.TOKEN_EMBD,
+        MODEL_TENSOR.OUTPUT_NORM,
+        MODEL_TENSOR.OUTPUT,
+        MODEL_TENSOR.ATTN_NORM,
+        MODEL_TENSOR.ATTN_Q,
+        MODEL_TENSOR.ATTN_K,
+        MODEL_TENSOR.ATTN_V,
+        MODEL_TENSOR.ATTN_OUT,
+        MODEL_TENSOR.SSM_IN,
+        MODEL_TENSOR.SSM_CONV1D,
+        MODEL_TENSOR.SSM_X,
+        MODEL_TENSOR.SSM_DT,
+        MODEL_TENSOR.SSM_DT_NORM,
+        MODEL_TENSOR.SSM_A,
+        MODEL_TENSOR.SSM_B_NORM,
+        MODEL_TENSOR.SSM_C_NORM,
+        MODEL_TENSOR.SSM_D,
+        MODEL_TENSOR.SSM_OUT,
+        MODEL_TENSOR.FFN_GATE_INP,
+        MODEL_TENSOR.FFN_NORM,
+        MODEL_TENSOR.FFN_GATE,
+        MODEL_TENSOR.FFN_DOWN,
+        MODEL_TENSOR.FFN_UP,
+        MODEL_TENSOR.FFN_GATE_EXP,
+        MODEL_TENSOR.FFN_DOWN_EXP,
+        MODEL_TENSOR.FFN_UP_EXP,
+    ],
     MODEL_ARCH.XVERSE: [
         MODEL_TENSOR.TOKEN_EMBD,
         MODEL_TENSOR.OUTPUT_NORM,
@@ -4673,6 +2303,20 @@ MODEL_TENSORS: dict[MODEL_ARCH, list[MODEL_TENSOR]] = {
         MODEL_TENSOR.FFN_GATE,
         MODEL_TENSOR.FFN_DOWN,
         MODEL_TENSOR.FFN_UP,
+    ],
+    MODEL_ARCH.SEED_OSS: [
+        MODEL_TENSOR.TOKEN_EMBD,
+        MODEL_TENSOR.ATTN_NORM,
+        MODEL_TENSOR.ATTN_Q,
+        MODEL_TENSOR.ATTN_K,
+        MODEL_TENSOR.ATTN_V,
+        MODEL_TENSOR.ATTN_OUT,
+        MODEL_TENSOR.ATTN_POST_NORM,
+        MODEL_TENSOR.FFN_GATE,
+        MODEL_TENSOR.FFN_DOWN,
+        MODEL_TENSOR.FFN_UP,
+        MODEL_TENSOR.OUTPUT_NORM,
+        MODEL_TENSOR.OUTPUT,
     ],
     MODEL_ARCH.OLMOE: [
         MODEL_TENSOR.TOKEN_EMBD,
@@ -4778,6 +2422,28 @@ MODEL_TENSORS: dict[MODEL_ARCH, list[MODEL_TENSOR]] = {
         MODEL_TENSOR.FFN_UP_SHEXP,
         MODEL_TENSOR.FFN_EXP_PROBS_B,
     ],
+    MODEL_ARCH.ERNIE4_5_MOE: [
+        MODEL_TENSOR.TOKEN_EMBD,
+        MODEL_TENSOR.OUTPUT_NORM,
+        MODEL_TENSOR.OUTPUT,
+        MODEL_TENSOR.ATTN_NORM,
+        MODEL_TENSOR.ATTN_Q,
+        MODEL_TENSOR.ATTN_K,
+        MODEL_TENSOR.ATTN_V,
+        MODEL_TENSOR.ATTN_OUT,
+        MODEL_TENSOR.FFN_NORM,
+        MODEL_TENSOR.FFN_GATE,
+        MODEL_TENSOR.FFN_DOWN,
+        MODEL_TENSOR.FFN_UP,
+        MODEL_TENSOR.FFN_GATE_INP,
+        MODEL_TENSOR.FFN_GATE_EXP,
+        MODEL_TENSOR.FFN_DOWN_EXP,
+        MODEL_TENSOR.FFN_UP_EXP,
+        MODEL_TENSOR.FFN_GATE_SHEXP,
+        MODEL_TENSOR.FFN_DOWN_SHEXP,
+        MODEL_TENSOR.FFN_UP_SHEXP,
+        MODEL_TENSOR.FFN_EXP_PROBS_B,
+    ],
     MODEL_ARCH.PLM: [
         MODEL_TENSOR.TOKEN_EMBD,
         MODEL_TENSOR.OUTPUT,
@@ -4823,6 +2489,37 @@ MODEL_TENSORS: dict[MODEL_ARCH, list[MODEL_TENSOR]] = {
         MODEL_TENSOR.FFN_UP,
         MODEL_TENSOR.ATTN_POST_NORM,
         MODEL_TENSOR.FFN_POST_NORM,
+    ],
+    MODEL_ARCH.GLM4_MOE: [
+        MODEL_TENSOR.TOKEN_EMBD,
+        MODEL_TENSOR.OUTPUT_NORM,
+        MODEL_TENSOR.OUTPUT,
+        MODEL_TENSOR.ATTN_NORM,
+        MODEL_TENSOR.ATTN_POST_NORM,
+        MODEL_TENSOR.ATTN_Q,
+        MODEL_TENSOR.ATTN_K,
+        MODEL_TENSOR.ATTN_V,
+        MODEL_TENSOR.ATTN_OUT,
+        MODEL_TENSOR.ATTN_Q_NORM,
+        MODEL_TENSOR.ATTN_K_NORM,
+        MODEL_TENSOR.FFN_GATE,
+        MODEL_TENSOR.FFN_DOWN,
+        MODEL_TENSOR.FFN_UP,
+        MODEL_TENSOR.FFN_GATE_INP,
+        MODEL_TENSOR.FFN_GATE_EXP,
+        MODEL_TENSOR.FFN_DOWN_EXP,
+        MODEL_TENSOR.FFN_UP_EXP,
+        MODEL_TENSOR.FFN_GATE_SHEXP,
+        MODEL_TENSOR.FFN_DOWN_SHEXP,
+        MODEL_TENSOR.FFN_UP_SHEXP,
+        MODEL_TENSOR.FFN_EXP_PROBS_B,
+        # NextN/MTP tensors - preserved but unused
+        MODEL_TENSOR.NEXTN_EH_PROJ,
+        MODEL_TENSOR.NEXTN_EMBED_TOKENS,
+        MODEL_TENSOR.NEXTN_ENORM,
+        MODEL_TENSOR.NEXTN_HNORM,
+        MODEL_TENSOR.NEXTN_SHARED_HEAD_HEAD,
+        MODEL_TENSOR.NEXTN_SHARED_HEAD_NORM,
     ],
     MODEL_ARCH.BITNET: [
         MODEL_TENSOR.ATTN_Q,
@@ -4913,6 +2610,52 @@ MODEL_TENSORS: dict[MODEL_ARCH, list[MODEL_TENSOR]] = {
         MODEL_TENSOR.FFN_DOWN,
         MODEL_TENSOR.FFN_UP,
     ],
+    MODEL_ARCH.NEMOTRON_H: [
+        MODEL_TENSOR.TOKEN_EMBD,
+        MODEL_TENSOR.OUTPUT_NORM,
+        MODEL_TENSOR.OUTPUT,
+        MODEL_TENSOR.ATTN_NORM,
+        MODEL_TENSOR.SSM_IN,
+        MODEL_TENSOR.SSM_CONV1D,
+        MODEL_TENSOR.SSM_DT,
+        MODEL_TENSOR.SSM_A,
+        MODEL_TENSOR.SSM_D,
+        MODEL_TENSOR.SSM_NORM,
+        MODEL_TENSOR.SSM_OUT,
+        MODEL_TENSOR.ATTN_Q,
+        MODEL_TENSOR.ATTN_K,
+        MODEL_TENSOR.ATTN_V,
+        MODEL_TENSOR.ATTN_OUT,
+        MODEL_TENSOR.FFN_DOWN,
+        MODEL_TENSOR.FFN_UP,
+    ],
+    MODEL_ARCH.NEMOTRON_H_MOE: [
+        MODEL_TENSOR.TOKEN_EMBD,
+        MODEL_TENSOR.OUTPUT_NORM,
+        MODEL_TENSOR.OUTPUT,
+        MODEL_TENSOR.ATTN_NORM,
+        MODEL_TENSOR.SSM_IN,
+        MODEL_TENSOR.SSM_CONV1D,
+        MODEL_TENSOR.SSM_DT,
+        MODEL_TENSOR.SSM_A,
+        MODEL_TENSOR.SSM_D,
+        MODEL_TENSOR.SSM_NORM,
+        MODEL_TENSOR.SSM_OUT,
+        MODEL_TENSOR.ATTN_Q,
+        MODEL_TENSOR.ATTN_K,
+        MODEL_TENSOR.ATTN_V,
+        MODEL_TENSOR.ATTN_OUT,
+        MODEL_TENSOR.FFN_DOWN,
+        MODEL_TENSOR.FFN_UP,
+        # experts
+        MODEL_TENSOR.FFN_GATE_INP,
+        MODEL_TENSOR.FFN_UP_EXP,
+        MODEL_TENSOR.FFN_DOWN_EXP,
+        # shared expert
+        MODEL_TENSOR.FFN_DOWN_SHEXP,
+        MODEL_TENSOR.FFN_UP_SHEXP,
+        MODEL_TENSOR.FFN_EXP_PROBS_B,
+    ],
     MODEL_ARCH.EXAONE: [
         MODEL_TENSOR.TOKEN_EMBD,
         MODEL_TENSOR.OUTPUT_NORM,
@@ -4928,6 +2671,23 @@ MODEL_TENSORS: dict[MODEL_ARCH, list[MODEL_TENSOR]] = {
         MODEL_TENSOR.FFN_GATE,
         MODEL_TENSOR.FFN_DOWN,
         MODEL_TENSOR.FFN_UP,
+    ],
+    MODEL_ARCH.EXAONE4: [
+        MODEL_TENSOR.TOKEN_EMBD,
+        MODEL_TENSOR.OUTPUT_NORM,
+        MODEL_TENSOR.OUTPUT,
+        MODEL_TENSOR.ROPE_FREQS,
+        MODEL_TENSOR.ATTN_Q,
+        MODEL_TENSOR.ATTN_Q_NORM,
+        MODEL_TENSOR.ATTN_K,
+        MODEL_TENSOR.ATTN_K_NORM,
+        MODEL_TENSOR.ATTN_V,
+        MODEL_TENSOR.ATTN_OUT,
+        MODEL_TENSOR.ATTN_POST_NORM,
+        MODEL_TENSOR.FFN_GATE,
+        MODEL_TENSOR.FFN_DOWN,
+        MODEL_TENSOR.FFN_UP,
+        MODEL_TENSOR.FFN_POST_NORM,
     ],
     MODEL_ARCH.GRANITE: [
         MODEL_TENSOR.TOKEN_EMBD,
@@ -4960,6 +2720,36 @@ MODEL_TENSORS: dict[MODEL_ARCH, list[MODEL_TENSOR]] = {
         MODEL_TENSOR.FFN_GATE_SHEXP,
         MODEL_TENSOR.FFN_UP_SHEXP,
         MODEL_TENSOR.FFN_DOWN_SHEXP,
+    ],
+    MODEL_ARCH.GRANITE_HYBRID: [
+        MODEL_TENSOR.TOKEN_EMBD,
+        MODEL_TENSOR.OUTPUT_NORM,
+        MODEL_TENSOR.OUTPUT,
+        MODEL_TENSOR.ATTN_NORM,
+        MODEL_TENSOR.SSM_IN,
+        MODEL_TENSOR.SSM_CONV1D,
+        MODEL_TENSOR.SSM_DT,
+        MODEL_TENSOR.SSM_A,
+        MODEL_TENSOR.SSM_D,
+        MODEL_TENSOR.SSM_NORM,
+        MODEL_TENSOR.SSM_OUT,
+        MODEL_TENSOR.ATTN_Q,
+        MODEL_TENSOR.ATTN_K,
+        MODEL_TENSOR.ATTN_V,
+        MODEL_TENSOR.ATTN_OUT,
+        MODEL_TENSOR.FFN_NORM,
+        # MoE
+        MODEL_TENSOR.FFN_GATE_INP,
+        MODEL_TENSOR.FFN_GATE_EXP,
+        MODEL_TENSOR.FFN_DOWN_EXP,
+        MODEL_TENSOR.FFN_UP_EXP,
+        MODEL_TENSOR.FFN_GATE_SHEXP,
+        MODEL_TENSOR.FFN_UP_SHEXP,
+        MODEL_TENSOR.FFN_DOWN_SHEXP,
+        # Dense
+        MODEL_TENSOR.FFN_GATE,
+        MODEL_TENSOR.FFN_DOWN,
+        MODEL_TENSOR.FFN_UP,
     ],
     MODEL_ARCH.CHAMELEON: [
         MODEL_TENSOR.TOKEN_EMBD,
@@ -5018,6 +2808,35 @@ MODEL_TENSORS: dict[MODEL_ARCH, list[MODEL_TENSOR]] = {
         MODEL_TENSOR.FFN_DOWN_SHEXP,
         MODEL_TENSOR.FFN_UP_SHEXP,
     ],
+    MODEL_ARCH.BAILINGMOE2: [
+        MODEL_TENSOR.TOKEN_EMBD,
+        MODEL_TENSOR.OUTPUT_NORM,
+        MODEL_TENSOR.OUTPUT,
+        MODEL_TENSOR.ATTN_NORM,
+        MODEL_TENSOR.ATTN_Q_NORM,
+        MODEL_TENSOR.ATTN_K_NORM,
+        MODEL_TENSOR.ATTN_QKV,
+        MODEL_TENSOR.ATTN_OUT,
+        MODEL_TENSOR.FFN_GATE_INP,
+        MODEL_TENSOR.FFN_EXP_PROBS_B,
+        MODEL_TENSOR.FFN_NORM,
+        MODEL_TENSOR.FFN_GATE,
+        MODEL_TENSOR.FFN_DOWN,
+        MODEL_TENSOR.FFN_UP,
+        MODEL_TENSOR.FFN_GATE_EXP,
+        MODEL_TENSOR.FFN_DOWN_EXP,
+        MODEL_TENSOR.FFN_UP_EXP,
+        MODEL_TENSOR.FFN_GATE_SHEXP,
+        MODEL_TENSOR.FFN_DOWN_SHEXP,
+        MODEL_TENSOR.FFN_UP_SHEXP,
+        MODEL_TENSOR.NEXTN_EH_PROJ,
+        MODEL_TENSOR.NEXTN_EMBED_TOKENS,
+        MODEL_TENSOR.NEXTN_ENORM,
+        MODEL_TENSOR.NEXTN_HNORM,
+        MODEL_TENSOR.NEXTN_SHARED_HEAD_HEAD,
+        MODEL_TENSOR.NEXTN_SHARED_HEAD_NORM,
+        MODEL_TENSOR.LAYER_OUT_NORM,
+    ],
     MODEL_ARCH.DOTS1: [
         MODEL_TENSOR.TOKEN_EMBD,
         MODEL_TENSOR.OUTPUT_NORM,
@@ -5057,1407 +2876,408 @@ MODEL_TENSORS: dict[MODEL_ARCH, list[MODEL_TENSOR]] = {
         MODEL_TENSOR.FFN_DOWN,
         MODEL_TENSOR.FFN_UP,
     ],
+    MODEL_ARCH.AFMOE: [
+        MODEL_TENSOR.TOKEN_EMBD,
+        MODEL_TENSOR.OUTPUT_NORM,
+        MODEL_TENSOR.OUTPUT,
+        MODEL_TENSOR.ATTN_NORM,
+        MODEL_TENSOR.ATTN_POST_NORM,
+        MODEL_TENSOR.ATTN_Q,
+        MODEL_TENSOR.ATTN_K,
+        MODEL_TENSOR.ATTN_V,
+        MODEL_TENSOR.ATTN_OUT,
+        MODEL_TENSOR.ATTN_Q_NORM,
+        MODEL_TENSOR.ATTN_K_NORM,
+        MODEL_TENSOR.ATTN_GATE,
+        MODEL_TENSOR.FFN_GATE,
+        MODEL_TENSOR.FFN_DOWN,
+        MODEL_TENSOR.FFN_UP,
+        MODEL_TENSOR.FFN_GATE_INP,
+        MODEL_TENSOR.FFN_GATE_EXP,
+        MODEL_TENSOR.FFN_DOWN_EXP,
+        MODEL_TENSOR.FFN_UP_EXP,
+        MODEL_TENSOR.FFN_GATE_SHEXP,
+        MODEL_TENSOR.FFN_UP_SHEXP,
+        MODEL_TENSOR.FFN_DOWN_SHEXP,
+        MODEL_TENSOR.FFN_PRE_NORM,
+        MODEL_TENSOR.FFN_POST_NORM,
+        MODEL_TENSOR.FFN_EXP_PROBS_B,
+    ],
+    MODEL_ARCH.ERNIE4_5: [
+        MODEL_TENSOR.TOKEN_EMBD,
+        MODEL_TENSOR.OUTPUT_NORM,
+        MODEL_TENSOR.OUTPUT,
+        MODEL_TENSOR.ATTN_NORM,
+        MODEL_TENSOR.ATTN_Q,
+        MODEL_TENSOR.ATTN_K,
+        MODEL_TENSOR.ATTN_V,
+        MODEL_TENSOR.ATTN_OUT,
+        MODEL_TENSOR.FFN_NORM,
+        MODEL_TENSOR.FFN_GATE,
+        MODEL_TENSOR.FFN_DOWN,
+        MODEL_TENSOR.FFN_UP,
+    ],
+    MODEL_ARCH.FALCON_H1: [
+        # Token embedding
+        MODEL_TENSOR.TOKEN_EMBD,
+
+        # Input layernorm
+        MODEL_TENSOR.ATTN_NORM,
+
+        # Attention components
+        MODEL_TENSOR.ATTN_Q,         # Query projection
+        MODEL_TENSOR.ATTN_K,         # Key projection
+        MODEL_TENSOR.ATTN_V,         # Value projection
+        MODEL_TENSOR.ATTN_OUT,       # Output projection
+
+        # SSM components (Mamba2 specific)
+        MODEL_TENSOR.SSM_IN,         # Input projection for SSM
+        MODEL_TENSOR.SSM_CONV1D,     # Convolution layer
+        MODEL_TENSOR.SSM_DT,         # Delta time projection
+        MODEL_TENSOR.SSM_A,          # A parameter (log form)
+        MODEL_TENSOR.SSM_D,          # D parameter
+        MODEL_TENSOR.SSM_NORM,       # Normalization in SSM
+        MODEL_TENSOR.SSM_OUT,        # Output projection
+
+        # Pre-feedforward layernorm
+        MODEL_TENSOR.FFN_PRE_NORM,
+
+        # Feed-forward network components
+        MODEL_TENSOR.FFN_GATE,       # Gate projection (SwiGLU)
+        MODEL_TENSOR.FFN_DOWN,       # Down projection
+        MODEL_TENSOR.FFN_UP,         # Up projection
+
+        # Post-feedforward layernorm
+        MODEL_TENSOR.OUTPUT_NORM,    # Final layer norm
+        MODEL_TENSOR.OUTPUT,         # Output projection (lm_head)
+    ],
+    MODEL_ARCH.HUNYUAN_MOE: [
+        MODEL_TENSOR.TOKEN_EMBD,
+        MODEL_TENSOR.OUTPUT_NORM,
+        MODEL_TENSOR.OUTPUT,
+        MODEL_TENSOR.ROPE_FREQS,
+        MODEL_TENSOR.ATTN_NORM,
+        MODEL_TENSOR.ATTN_Q,
+        MODEL_TENSOR.ATTN_Q_NORM,
+        MODEL_TENSOR.ATTN_K,
+        MODEL_TENSOR.ATTN_K_NORM,
+        MODEL_TENSOR.ATTN_V,
+        MODEL_TENSOR.ATTN_OUT,
+        MODEL_TENSOR.FFN_GATE_INP,
+        MODEL_TENSOR.FFN_NORM,
+        MODEL_TENSOR.FFN_GATE_EXP,
+        MODEL_TENSOR.FFN_DOWN_EXP,
+        MODEL_TENSOR.FFN_UP_EXP,
+        MODEL_TENSOR.FFN_GATE_SHEXP,
+        MODEL_TENSOR.FFN_DOWN_SHEXP,
+        MODEL_TENSOR.FFN_UP_SHEXP,
+    ],
+    MODEL_ARCH.HUNYUAN_DENSE: [
+        MODEL_TENSOR.TOKEN_EMBD,
+        MODEL_TENSOR.OUTPUT_NORM,
+        MODEL_TENSOR.OUTPUT,
+        MODEL_TENSOR.ATTN_NORM,
+        MODEL_TENSOR.ATTN_Q,
+        MODEL_TENSOR.ATTN_Q_NORM,
+        MODEL_TENSOR.ATTN_K,
+        MODEL_TENSOR.ATTN_K_NORM,
+        MODEL_TENSOR.ATTN_V,
+        MODEL_TENSOR.ATTN_OUT,
+        MODEL_TENSOR.FFN_NORM,
+        MODEL_TENSOR.FFN_GATE,
+        MODEL_TENSOR.FFN_DOWN,
+        MODEL_TENSOR.FFN_UP,
+    ],
+    MODEL_ARCH.SMOLLM3: [
+        MODEL_TENSOR.TOKEN_EMBD,
+        MODEL_TENSOR.OUTPUT_NORM,
+        MODEL_TENSOR.OUTPUT,
+        MODEL_TENSOR.ROPE_FREQS,
+        MODEL_TENSOR.ATTN_NORM,
+        MODEL_TENSOR.ATTN_Q,
+        MODEL_TENSOR.ATTN_K,
+        MODEL_TENSOR.ATTN_V,
+        MODEL_TENSOR.ATTN_OUT,
+        MODEL_TENSOR.ATTN_ROT_EMBD,
+        MODEL_TENSOR.FFN_NORM,
+        MODEL_TENSOR.FFN_GATE,
+        MODEL_TENSOR.FFN_DOWN,
+        MODEL_TENSOR.FFN_UP,
+    ],
+    MODEL_ARCH.GPT_OSS: [
+        MODEL_TENSOR.TOKEN_EMBD,
+        MODEL_TENSOR.OUTPUT_NORM,
+        MODEL_TENSOR.OUTPUT,
+        MODEL_TENSOR.ATTN_NORM,
+        MODEL_TENSOR.ATTN_POST_NORM,
+        MODEL_TENSOR.ATTN_Q,
+        MODEL_TENSOR.ATTN_K,
+        MODEL_TENSOR.ATTN_V,
+        MODEL_TENSOR.ATTN_OUT,
+        MODEL_TENSOR.ATTN_SINKS,
+        MODEL_TENSOR.FFN_GATE_INP,
+        MODEL_TENSOR.FFN_GATE_EXP,
+        MODEL_TENSOR.FFN_DOWN_EXP,
+        MODEL_TENSOR.FFN_UP_EXP,
+    ],
+    MODEL_ARCH.LFM2: [
+        MODEL_TENSOR.TOKEN_EMBD,
+        MODEL_TENSOR.TOKEN_EMBD_NORM,
+        MODEL_TENSOR.SHORTCONV_CONV,
+        MODEL_TENSOR.SHORTCONV_INPROJ,
+        MODEL_TENSOR.SHORTCONV_OUTPROJ,
+        MODEL_TENSOR.FFN_GATE,
+        MODEL_TENSOR.FFN_DOWN,
+        MODEL_TENSOR.FFN_UP,
+        MODEL_TENSOR.FFN_NORM,
+        MODEL_TENSOR.ATTN_NORM, # operator_norm
+        MODEL_TENSOR.ATTN_Q_NORM,
+        MODEL_TENSOR.ATTN_K_NORM,
+        MODEL_TENSOR.ATTN_Q,
+        MODEL_TENSOR.ATTN_K,
+        MODEL_TENSOR.ATTN_V,
+        MODEL_TENSOR.ATTN_OUT,
+        MODEL_TENSOR.OUTPUT,
+    ],
+    MODEL_ARCH.LFM2MOE: [
+        MODEL_TENSOR.TOKEN_EMBD,
+        MODEL_TENSOR.TOKEN_EMBD_NORM,
+        MODEL_TENSOR.SHORTCONV_CONV,
+        MODEL_TENSOR.SHORTCONV_INPROJ,
+        MODEL_TENSOR.SHORTCONV_OUTPROJ,
+        MODEL_TENSOR.FFN_GATE,
+        MODEL_TENSOR.FFN_DOWN,
+        MODEL_TENSOR.FFN_UP,
+        MODEL_TENSOR.FFN_NORM,
+        MODEL_TENSOR.ATTN_NORM, # operator_norm
+        MODEL_TENSOR.ATTN_Q_NORM,
+        MODEL_TENSOR.ATTN_K_NORM,
+        MODEL_TENSOR.ATTN_Q,
+        MODEL_TENSOR.ATTN_K,
+        MODEL_TENSOR.ATTN_V,
+        MODEL_TENSOR.ATTN_OUT,
+        MODEL_TENSOR.FFN_GATE_INP,
+        MODEL_TENSOR.FFN_GATE_EXP,
+        MODEL_TENSOR.FFN_DOWN_EXP,
+        MODEL_TENSOR.FFN_UP_EXP,
+        MODEL_TENSOR.FFN_EXP_PROBS_B,
+    ],
+    MODEL_ARCH.SMALLTHINKER: [
+        MODEL_TENSOR.TOKEN_EMBD,
+        MODEL_TENSOR.OUTPUT_NORM,
+        MODEL_TENSOR.OUTPUT,
+        MODEL_TENSOR.ATTN_NORM,
+        MODEL_TENSOR.ATTN_Q,
+        MODEL_TENSOR.ATTN_K,
+        MODEL_TENSOR.ATTN_V,
+        MODEL_TENSOR.ATTN_OUT,
+        MODEL_TENSOR.FFN_NORM,
+        MODEL_TENSOR.FFN_GATE,
+        MODEL_TENSOR.FFN_DOWN,
+        MODEL_TENSOR.FFN_UP,
+        MODEL_TENSOR.FFN_GATE_INP,
+        MODEL_TENSOR.FFN_GATE_EXP,
+        MODEL_TENSOR.FFN_DOWN_EXP,
+        MODEL_TENSOR.FFN_UP_EXP,
+    ],
+    MODEL_ARCH.APERTUS: [
+        MODEL_TENSOR.TOKEN_EMBD,
+        MODEL_TENSOR.OUTPUT_NORM,
+        MODEL_TENSOR.OUTPUT,
+        MODEL_TENSOR.ROPE_FREQS,
+        MODEL_TENSOR.ATTN_NORM,
+        MODEL_TENSOR.ATTN_Q,
+        MODEL_TENSOR.ATTN_K,
+        MODEL_TENSOR.ATTN_V,
+        MODEL_TENSOR.ATTN_OUT,
+        MODEL_TENSOR.ATTN_ROT_EMBD,
+        MODEL_TENSOR.ATTN_Q_NORM,
+        MODEL_TENSOR.ATTN_K_NORM,
+        MODEL_TENSOR.FFN_NORM,
+        MODEL_TENSOR.FFN_GATE,
+        MODEL_TENSOR.FFN_DOWN,
+        MODEL_TENSOR.FFN_UP,
+    ],
+    MODEL_ARCH.LLADA_MOE: [
+        MODEL_TENSOR.TOKEN_EMBD,
+        MODEL_TENSOR.OUTPUT_NORM,
+        MODEL_TENSOR.OUTPUT,
+        MODEL_TENSOR.ATTN_OUT,
+        MODEL_TENSOR.ATTN_Q,
+        MODEL_TENSOR.ATTN_K,
+        MODEL_TENSOR.ATTN_V,
+        MODEL_TENSOR.ATTN_NORM,
+        MODEL_TENSOR.ATTN_Q_NORM,
+        MODEL_TENSOR.ATTN_K_NORM,
+        MODEL_TENSOR.FFN_NORM,
+        MODEL_TENSOR.FFN_GATE_INP,
+        MODEL_TENSOR.FFN_GATE_EXP,
+        MODEL_TENSOR.FFN_UP_EXP,
+        MODEL_TENSOR.FFN_DOWN_EXP,
+    ],
+    MODEL_ARCH.GROVEMOE: [
+        MODEL_TENSOR.TOKEN_EMBD,
+        MODEL_TENSOR.OUTPUT_NORM,
+        MODEL_TENSOR.OUTPUT,
+        MODEL_TENSOR.ATTN_NORM,
+        MODEL_TENSOR.ATTN_Q,
+        MODEL_TENSOR.ATTN_Q_NORM,
+        MODEL_TENSOR.ATTN_K,
+        MODEL_TENSOR.ATTN_K_NORM,
+        MODEL_TENSOR.ATTN_V,
+        MODEL_TENSOR.ATTN_OUT,
+        MODEL_TENSOR.FFN_NORM,
+        MODEL_TENSOR.FFN_GATE_INP,
+        MODEL_TENSOR.FFN_GATE_EXP,
+        MODEL_TENSOR.FFN_DOWN_EXP,
+        MODEL_TENSOR.FFN_UP_EXP,
+        MODEL_TENSOR.FFN_GATE_CHEXP,
+        MODEL_TENSOR.FFN_DOWN_CHEXP,
+        MODEL_TENSOR.FFN_UP_CHEXP,
+    ],
+    MODEL_ARCH.MINIMAXM2: [
+        MODEL_TENSOR.TOKEN_EMBD,
+        MODEL_TENSOR.OUTPUT_NORM,
+        MODEL_TENSOR.OUTPUT,
+        MODEL_TENSOR.ATTN_NORM,
+        MODEL_TENSOR.ATTN_Q,
+        MODEL_TENSOR.ATTN_Q_NORM,
+        MODEL_TENSOR.ATTN_K,
+        MODEL_TENSOR.ATTN_K_NORM,
+        MODEL_TENSOR.ATTN_V,
+        MODEL_TENSOR.ATTN_OUT,
+        MODEL_TENSOR.FFN_NORM,
+        MODEL_TENSOR.FFN_GATE_INP,
+        MODEL_TENSOR.FFN_GATE_EXP,
+        MODEL_TENSOR.FFN_DOWN_EXP,
+        MODEL_TENSOR.FFN_UP_EXP,
+        MODEL_TENSOR.FFN_EXP_PROBS_B,
+    ],
+    MODEL_ARCH.COGVLM: [
+        MODEL_TENSOR.TOKEN_EMBD,
+        MODEL_TENSOR.OUTPUT_NORM,
+        MODEL_TENSOR.OUTPUT,
+        MODEL_TENSOR.ATTN_NORM,
+        MODEL_TENSOR.ATTN_QKV,
+        MODEL_TENSOR.ATTN_OUT,
+        MODEL_TENSOR.FFN_NORM,
+        MODEL_TENSOR.FFN_GATE,
+        MODEL_TENSOR.FFN_DOWN,
+        MODEL_TENSOR.FFN_UP,
+        MODEL_TENSOR.VISEXP_ATTN_QKV,
+        MODEL_TENSOR.VISEXP_ATTN_OUT,
+        MODEL_TENSOR.VISEXP_GATE,
+        MODEL_TENSOR.VISEXP_UP,
+        MODEL_TENSOR.VISEXP_DOWN,
+    ],
+    MODEL_ARCH.RND1: [
+        MODEL_TENSOR.TOKEN_EMBD,
+        MODEL_TENSOR.OUTPUT_NORM,
+        MODEL_TENSOR.OUTPUT,
+        MODEL_TENSOR.ATTN_NORM,
+        MODEL_TENSOR.ATTN_Q,
+        MODEL_TENSOR.ATTN_Q_NORM,
+        MODEL_TENSOR.ATTN_K,
+        MODEL_TENSOR.ATTN_K_NORM,
+        MODEL_TENSOR.ATTN_V,
+        MODEL_TENSOR.ATTN_OUT,
+        MODEL_TENSOR.FFN_NORM,
+        MODEL_TENSOR.FFN_GATE_INP,
+        MODEL_TENSOR.FFN_GATE_EXP,
+        MODEL_TENSOR.FFN_DOWN_EXP,
+        MODEL_TENSOR.FFN_UP_EXP,
+    ],
+    MODEL_ARCH.PANGU_EMBED: [
+        MODEL_TENSOR.TOKEN_EMBD,
+        MODEL_TENSOR.OUTPUT_NORM,
+        MODEL_TENSOR.OUTPUT,
+        MODEL_TENSOR.ATTN_NORM,
+        MODEL_TENSOR.ATTN_Q,
+        MODEL_TENSOR.ATTN_K,
+        MODEL_TENSOR.ATTN_V,
+        MODEL_TENSOR.ATTN_OUT,
+        MODEL_TENSOR.FFN_NORM,
+        MODEL_TENSOR.FFN_GATE,
+        MODEL_TENSOR.FFN_DOWN,
+        MODEL_TENSOR.FFN_UP,
+    ],
+    MODEL_ARCH.MISTRAL3: [
+        MODEL_TENSOR.TOKEN_EMBD,
+        MODEL_TENSOR.OUTPUT_NORM,
+        MODEL_TENSOR.OUTPUT,
+        MODEL_TENSOR.ROPE_FREQS,
+        MODEL_TENSOR.ATTN_NORM,
+        MODEL_TENSOR.ATTN_Q,
+        MODEL_TENSOR.ATTN_K,
+        MODEL_TENSOR.ATTN_V,
+        MODEL_TENSOR.ATTN_OUT,
+        MODEL_TENSOR.ATTN_ROT_EMBD,
+        MODEL_TENSOR.FFN_GATE_INP,
+        MODEL_TENSOR.FFN_NORM,
+        MODEL_TENSOR.FFN_GATE,
+        MODEL_TENSOR.FFN_DOWN,
+        MODEL_TENSOR.FFN_UP,
+        MODEL_TENSOR.FFN_GATE_EXP,
+        MODEL_TENSOR.FFN_DOWN_EXP,
+        MODEL_TENSOR.FFN_UP_EXP,
+    ],
+    MODEL_ARCH.MIMO2: [
+        MODEL_TENSOR.TOKEN_EMBD,
+        MODEL_TENSOR.OUTPUT_NORM,
+        MODEL_TENSOR.OUTPUT,
+        MODEL_TENSOR.ATTN_NORM,
+        MODEL_TENSOR.ATTN_Q,
+        MODEL_TENSOR.ATTN_K,
+        MODEL_TENSOR.ATTN_V,
+        MODEL_TENSOR.ATTN_SINKS,
+        MODEL_TENSOR.ATTN_OUT,
+        MODEL_TENSOR.FFN_NORM,
+        MODEL_TENSOR.FFN_GATE,
+        MODEL_TENSOR.FFN_DOWN,
+        MODEL_TENSOR.FFN_UP,
+        MODEL_TENSOR.FFN_GATE_INP,
+        MODEL_TENSOR.FFN_GATE_EXP,
+        MODEL_TENSOR.FFN_DOWN_EXP,
+        MODEL_TENSOR.FFN_UP_EXP,
+        MODEL_TENSOR.FFN_EXP_PROBS_B,
+    ],
+    MODEL_ARCH.LLAMA_EMBED: [
+        MODEL_TENSOR.TOKEN_EMBD,
+        MODEL_TENSOR.OUTPUT_NORM,
+        MODEL_TENSOR.OUTPUT,
+        MODEL_TENSOR.ROPE_FREQS,
+        MODEL_TENSOR.ATTN_NORM,
+        MODEL_TENSOR.ATTN_Q,
+        MODEL_TENSOR.ATTN_K,
+        MODEL_TENSOR.ATTN_V,
+        MODEL_TENSOR.ATTN_OUT,
+        MODEL_TENSOR.ATTN_ROT_EMBD,
+        MODEL_TENSOR.FFN_GATE_INP,
+        MODEL_TENSOR.FFN_NORM,
+        MODEL_TENSOR.FFN_GATE,
+        MODEL_TENSOR.FFN_DOWN,
+        MODEL_TENSOR.FFN_UP,
+        MODEL_TENSOR.FFN_GATE_EXP,
+        MODEL_TENSOR.FFN_DOWN_EXP,
+        MODEL_TENSOR.FFN_UP_EXP,
+    ],
+    MODEL_ARCH.MAINCODER: [
+        MODEL_TENSOR.TOKEN_EMBD,
+        MODEL_TENSOR.OUTPUT_NORM,
+        MODEL_TENSOR.OUTPUT,
+        MODEL_TENSOR.ATTN_NORM,
+        MODEL_TENSOR.ATTN_Q,
+        MODEL_TENSOR.ATTN_Q_NORM,
+        MODEL_TENSOR.ATTN_K,
+        MODEL_TENSOR.ATTN_K_NORM,
+        MODEL_TENSOR.ATTN_V,
+        MODEL_TENSOR.ATTN_OUT,
+        MODEL_TENSOR.FFN_NORM,
+        MODEL_TENSOR.FFN_GATE,
+        MODEL_TENSOR.FFN_DOWN,
+        MODEL_TENSOR.FFN_UP,
+    ],
     # TODO
-    MODEL_ARCH.COSYVOICEFLOW: [
-        MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_0_BLOCK1_BLOCK_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_0_BLOCK1_BLOCK_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_0_BLOCK1_BLOCK_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_0_BLOCK1_BLOCK_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_0_BLOCK2_BLOCK_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_0_BLOCK2_BLOCK_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_0_BLOCK2_BLOCK_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_0_BLOCK2_BLOCK_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_0_MLP_1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_0_MLP_1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_0_RES_CONV_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_0_RES_CONV_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_0_ATTN1_TO_K_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_0_ATTN1_TO_OUT_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_0_ATTN1_TO_OUT_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_0_ATTN1_TO_Q_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_0_ATTN1_TO_V_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_0_FF_NET_0_PROJ_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_0_FF_NET_0_PROJ_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_0_FF_NET_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_0_FF_NET_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_0_NORM1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_0_NORM1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_0_NORM3_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_0_NORM3_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_1_ATTN1_TO_K_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_1_ATTN1_TO_OUT_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_1_ATTN1_TO_OUT_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_1_ATTN1_TO_Q_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_1_ATTN1_TO_V_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_1_FF_NET_0_PROJ_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_1_FF_NET_0_PROJ_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_1_FF_NET_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_1_FF_NET_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_1_NORM1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_1_NORM1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_1_NORM3_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_1_NORM3_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_ATTN1_TO_K_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_ATTN1_TO_OUT_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_ATTN1_TO_OUT_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_ATTN1_TO_Q_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_ATTN1_TO_V_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_FF_NET_0_PROJ_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_FF_NET_0_PROJ_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_FF_NET_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_FF_NET_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_NORM1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_NORM1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_NORM3_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_2_NORM3_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_ATTN1_TO_K_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_ATTN1_TO_OUT_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_ATTN1_TO_OUT_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_ATTN1_TO_Q_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_ATTN1_TO_V_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_FF_NET_0_PROJ_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_FF_NET_0_PROJ_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_FF_NET_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_FF_NET_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_NORM1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_NORM1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_NORM3_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_1_3_NORM3_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_DOWN_BLOCKS_0_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_FINAL_BLOCK_BLOCK_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_FINAL_BLOCK_BLOCK_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_FINAL_BLOCK_BLOCK_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_FINAL_BLOCK_BLOCK_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_FINAL_PROJ_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_FINAL_PROJ_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_0_BLOCK1_BLOCK_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_0_BLOCK1_BLOCK_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_0_BLOCK1_BLOCK_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_0_BLOCK1_BLOCK_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_0_BLOCK2_BLOCK_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_0_BLOCK2_BLOCK_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_0_BLOCK2_BLOCK_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_0_BLOCK2_BLOCK_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_0_MLP_1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_0_MLP_1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_0_RES_CONV_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_0_RES_CONV_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_ATTN1_TO_K_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_ATTN1_TO_OUT_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_ATTN1_TO_OUT_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_ATTN1_TO_Q_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_ATTN1_TO_V_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_FF_NET_0_PROJ_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_FF_NET_0_PROJ_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_FF_NET_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_FF_NET_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_NORM1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_NORM1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_NORM3_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_0_NORM3_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_1_ATTN1_TO_K_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_1_ATTN1_TO_OUT_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_1_ATTN1_TO_OUT_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_1_ATTN1_TO_Q_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_1_ATTN1_TO_V_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_1_FF_NET_0_PROJ_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_1_FF_NET_0_PROJ_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_1_FF_NET_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_1_FF_NET_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_1_NORM1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_1_NORM1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_1_NORM3_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_1_NORM3_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_2_ATTN1_TO_K_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_2_ATTN1_TO_OUT_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_2_ATTN1_TO_OUT_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_2_ATTN1_TO_Q_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_2_ATTN1_TO_V_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_2_FF_NET_0_PROJ_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_2_FF_NET_0_PROJ_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_2_FF_NET_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_2_FF_NET_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_2_NORM1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_2_NORM1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_2_NORM3_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_2_NORM3_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_3_ATTN1_TO_K_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_3_ATTN1_TO_OUT_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_3_ATTN1_TO_OUT_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_3_ATTN1_TO_Q_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_3_ATTN1_TO_V_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_3_FF_NET_0_PROJ_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_3_FF_NET_0_PROJ_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_3_FF_NET_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_3_FF_NET_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_3_NORM1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_3_NORM1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_3_NORM3_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_0_1_3_NORM3_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_0_BLOCK1_BLOCK_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_0_BLOCK1_BLOCK_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_0_BLOCK1_BLOCK_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_0_BLOCK1_BLOCK_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_0_BLOCK2_BLOCK_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_0_BLOCK2_BLOCK_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_0_BLOCK2_BLOCK_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_0_BLOCK2_BLOCK_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_0_MLP_1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_0_MLP_1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_0_RES_CONV_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_0_RES_CONV_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_0_ATTN1_TO_K_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_0_ATTN1_TO_OUT_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_0_ATTN1_TO_OUT_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_0_ATTN1_TO_Q_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_0_ATTN1_TO_V_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_0_FF_NET_0_PROJ_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_0_FF_NET_0_PROJ_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_0_FF_NET_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_0_FF_NET_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_0_NORM1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_0_NORM1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_0_NORM3_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_0_NORM3_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_1_ATTN1_TO_K_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_1_ATTN1_TO_OUT_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_1_ATTN1_TO_OUT_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_1_ATTN1_TO_Q_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_1_ATTN1_TO_V_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_1_FF_NET_0_PROJ_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_1_FF_NET_0_PROJ_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_1_FF_NET_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_1_FF_NET_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_1_NORM1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_1_NORM1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_1_NORM3_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_1_NORM3_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_2_ATTN1_TO_K_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_2_ATTN1_TO_OUT_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_2_ATTN1_TO_OUT_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_2_ATTN1_TO_Q_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_2_ATTN1_TO_V_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_2_FF_NET_0_PROJ_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_2_FF_NET_0_PROJ_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_2_FF_NET_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_2_FF_NET_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_2_NORM1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_2_NORM1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_2_NORM3_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_2_NORM3_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_3_ATTN1_TO_K_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_3_ATTN1_TO_OUT_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_3_ATTN1_TO_OUT_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_3_ATTN1_TO_Q_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_3_ATTN1_TO_V_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_3_FF_NET_0_PROJ_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_3_FF_NET_0_PROJ_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_3_FF_NET_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_3_FF_NET_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_3_NORM1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_3_NORM1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_3_NORM3_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_1_1_3_NORM3_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_0_BLOCK1_BLOCK_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_0_BLOCK1_BLOCK_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_0_BLOCK1_BLOCK_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_0_BLOCK1_BLOCK_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_0_BLOCK2_BLOCK_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_0_BLOCK2_BLOCK_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_0_BLOCK2_BLOCK_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_0_BLOCK2_BLOCK_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_0_MLP_1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_0_MLP_1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_0_RES_CONV_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_0_RES_CONV_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_0_ATTN1_TO_K_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_0_ATTN1_TO_OUT_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_0_ATTN1_TO_OUT_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_0_ATTN1_TO_Q_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_0_ATTN1_TO_V_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_0_FF_NET_0_PROJ_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_0_FF_NET_0_PROJ_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_0_FF_NET_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_0_FF_NET_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_0_NORM1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_0_NORM1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_0_NORM3_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_0_NORM3_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_1_ATTN1_TO_K_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_1_ATTN1_TO_OUT_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_1_ATTN1_TO_OUT_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_1_ATTN1_TO_Q_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_1_ATTN1_TO_V_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_1_FF_NET_0_PROJ_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_1_FF_NET_0_PROJ_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_1_FF_NET_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_1_FF_NET_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_1_NORM1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_1_NORM1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_1_NORM3_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_1_NORM3_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_2_ATTN1_TO_K_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_2_ATTN1_TO_OUT_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_2_ATTN1_TO_OUT_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_2_ATTN1_TO_Q_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_2_ATTN1_TO_V_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_2_FF_NET_0_PROJ_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_2_FF_NET_0_PROJ_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_2_FF_NET_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_2_FF_NET_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_2_NORM1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_2_NORM1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_2_NORM3_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_2_NORM3_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_3_ATTN1_TO_K_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_3_ATTN1_TO_OUT_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_3_ATTN1_TO_OUT_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_3_ATTN1_TO_Q_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_3_ATTN1_TO_V_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_3_FF_NET_0_PROJ_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_3_FF_NET_0_PROJ_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_3_FF_NET_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_3_FF_NET_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_3_NORM1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_3_NORM1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_3_NORM3_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_10_1_3_NORM3_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_0_BLOCK1_BLOCK_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_0_BLOCK1_BLOCK_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_0_BLOCK1_BLOCK_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_0_BLOCK1_BLOCK_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_0_BLOCK2_BLOCK_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_0_BLOCK2_BLOCK_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_0_BLOCK2_BLOCK_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_0_BLOCK2_BLOCK_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_0_MLP_1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_0_MLP_1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_0_RES_CONV_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_0_RES_CONV_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_0_ATTN1_TO_K_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_0_ATTN1_TO_OUT_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_0_ATTN1_TO_OUT_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_0_ATTN1_TO_Q_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_0_ATTN1_TO_V_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_0_FF_NET_0_PROJ_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_0_FF_NET_0_PROJ_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_0_FF_NET_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_0_FF_NET_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_0_NORM1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_0_NORM1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_0_NORM3_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_0_NORM3_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_1_ATTN1_TO_K_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_1_ATTN1_TO_OUT_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_1_ATTN1_TO_OUT_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_1_ATTN1_TO_Q_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_1_ATTN1_TO_V_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_1_FF_NET_0_PROJ_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_1_FF_NET_0_PROJ_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_1_FF_NET_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_1_FF_NET_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_1_NORM1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_1_NORM1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_1_NORM3_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_1_NORM3_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_2_ATTN1_TO_K_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_2_ATTN1_TO_OUT_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_2_ATTN1_TO_OUT_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_2_ATTN1_TO_Q_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_2_ATTN1_TO_V_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_2_FF_NET_0_PROJ_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_2_FF_NET_0_PROJ_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_2_FF_NET_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_2_FF_NET_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_2_NORM1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_2_NORM1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_2_NORM3_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_2_NORM3_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_3_ATTN1_TO_K_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_3_ATTN1_TO_OUT_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_3_ATTN1_TO_OUT_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_3_ATTN1_TO_Q_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_3_ATTN1_TO_V_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_3_FF_NET_0_PROJ_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_3_FF_NET_0_PROJ_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_3_FF_NET_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_3_FF_NET_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_3_NORM1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_3_NORM1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_3_NORM3_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_11_1_3_NORM3_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_0_BLOCK1_BLOCK_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_0_BLOCK1_BLOCK_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_0_BLOCK1_BLOCK_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_0_BLOCK1_BLOCK_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_0_BLOCK2_BLOCK_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_0_BLOCK2_BLOCK_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_0_BLOCK2_BLOCK_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_0_BLOCK2_BLOCK_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_0_MLP_1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_0_MLP_1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_0_RES_CONV_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_0_RES_CONV_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_0_ATTN1_TO_K_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_0_ATTN1_TO_OUT_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_0_ATTN1_TO_OUT_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_0_ATTN1_TO_Q_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_0_ATTN1_TO_V_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_0_FF_NET_0_PROJ_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_0_FF_NET_0_PROJ_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_0_FF_NET_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_0_FF_NET_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_0_NORM1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_0_NORM1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_0_NORM3_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_0_NORM3_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_1_ATTN1_TO_K_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_1_ATTN1_TO_OUT_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_1_ATTN1_TO_OUT_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_1_ATTN1_TO_Q_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_1_ATTN1_TO_V_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_1_FF_NET_0_PROJ_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_1_FF_NET_0_PROJ_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_1_FF_NET_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_1_FF_NET_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_1_NORM1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_1_NORM1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_1_NORM3_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_1_NORM3_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_2_ATTN1_TO_K_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_2_ATTN1_TO_OUT_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_2_ATTN1_TO_OUT_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_2_ATTN1_TO_Q_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_2_ATTN1_TO_V_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_2_FF_NET_0_PROJ_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_2_FF_NET_0_PROJ_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_2_FF_NET_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_2_FF_NET_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_2_NORM1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_2_NORM1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_2_NORM3_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_2_NORM3_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_3_ATTN1_TO_K_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_3_ATTN1_TO_OUT_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_3_ATTN1_TO_OUT_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_3_ATTN1_TO_Q_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_3_ATTN1_TO_V_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_3_FF_NET_0_PROJ_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_3_FF_NET_0_PROJ_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_3_FF_NET_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_3_FF_NET_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_3_NORM1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_3_NORM1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_3_NORM3_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_2_1_3_NORM3_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_0_BLOCK1_BLOCK_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_0_BLOCK1_BLOCK_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_0_BLOCK1_BLOCK_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_0_BLOCK1_BLOCK_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_0_BLOCK2_BLOCK_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_0_BLOCK2_BLOCK_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_0_BLOCK2_BLOCK_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_0_BLOCK2_BLOCK_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_0_MLP_1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_0_MLP_1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_0_RES_CONV_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_0_RES_CONV_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_0_ATTN1_TO_K_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_0_ATTN1_TO_OUT_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_0_ATTN1_TO_OUT_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_0_ATTN1_TO_Q_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_0_ATTN1_TO_V_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_0_FF_NET_0_PROJ_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_0_FF_NET_0_PROJ_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_0_FF_NET_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_0_FF_NET_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_0_NORM1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_0_NORM1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_0_NORM3_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_0_NORM3_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_1_ATTN1_TO_K_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_1_ATTN1_TO_OUT_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_1_ATTN1_TO_OUT_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_1_ATTN1_TO_Q_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_1_ATTN1_TO_V_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_1_FF_NET_0_PROJ_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_1_FF_NET_0_PROJ_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_1_FF_NET_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_1_FF_NET_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_1_NORM1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_1_NORM1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_1_NORM3_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_1_NORM3_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_2_ATTN1_TO_K_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_2_ATTN1_TO_OUT_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_2_ATTN1_TO_OUT_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_2_ATTN1_TO_Q_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_2_ATTN1_TO_V_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_2_FF_NET_0_PROJ_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_2_FF_NET_0_PROJ_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_2_FF_NET_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_2_FF_NET_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_2_NORM1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_2_NORM1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_2_NORM3_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_2_NORM3_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_3_ATTN1_TO_K_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_3_ATTN1_TO_OUT_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_3_ATTN1_TO_OUT_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_3_ATTN1_TO_Q_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_3_ATTN1_TO_V_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_3_FF_NET_0_PROJ_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_3_FF_NET_0_PROJ_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_3_FF_NET_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_3_FF_NET_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_3_NORM1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_3_NORM1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_3_NORM3_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_3_1_3_NORM3_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_0_BLOCK1_BLOCK_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_0_BLOCK1_BLOCK_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_0_BLOCK1_BLOCK_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_0_BLOCK1_BLOCK_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_0_BLOCK2_BLOCK_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_0_BLOCK2_BLOCK_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_0_BLOCK2_BLOCK_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_0_BLOCK2_BLOCK_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_0_MLP_1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_0_MLP_1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_0_RES_CONV_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_0_RES_CONV_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_0_ATTN1_TO_K_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_0_ATTN1_TO_OUT_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_0_ATTN1_TO_OUT_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_0_ATTN1_TO_Q_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_0_ATTN1_TO_V_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_0_FF_NET_0_PROJ_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_0_FF_NET_0_PROJ_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_0_FF_NET_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_0_FF_NET_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_0_NORM1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_0_NORM1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_0_NORM3_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_0_NORM3_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_1_ATTN1_TO_K_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_1_ATTN1_TO_OUT_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_1_ATTN1_TO_OUT_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_1_ATTN1_TO_Q_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_1_ATTN1_TO_V_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_1_FF_NET_0_PROJ_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_1_FF_NET_0_PROJ_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_1_FF_NET_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_1_FF_NET_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_1_NORM1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_1_NORM1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_1_NORM3_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_1_NORM3_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_2_ATTN1_TO_K_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_2_ATTN1_TO_OUT_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_2_ATTN1_TO_OUT_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_2_ATTN1_TO_Q_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_2_ATTN1_TO_V_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_2_FF_NET_0_PROJ_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_2_FF_NET_0_PROJ_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_2_FF_NET_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_2_FF_NET_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_2_NORM1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_2_NORM1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_2_NORM3_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_2_NORM3_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_3_ATTN1_TO_K_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_3_ATTN1_TO_OUT_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_3_ATTN1_TO_OUT_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_3_ATTN1_TO_Q_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_3_ATTN1_TO_V_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_3_FF_NET_0_PROJ_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_3_FF_NET_0_PROJ_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_3_FF_NET_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_3_FF_NET_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_3_NORM1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_3_NORM1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_3_NORM3_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_4_1_3_NORM3_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_0_BLOCK1_BLOCK_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_0_BLOCK1_BLOCK_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_0_BLOCK1_BLOCK_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_0_BLOCK1_BLOCK_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_0_BLOCK2_BLOCK_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_0_BLOCK2_BLOCK_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_0_BLOCK2_BLOCK_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_0_BLOCK2_BLOCK_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_0_MLP_1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_0_MLP_1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_0_RES_CONV_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_0_RES_CONV_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_0_ATTN1_TO_K_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_0_ATTN1_TO_OUT_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_0_ATTN1_TO_OUT_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_0_ATTN1_TO_Q_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_0_ATTN1_TO_V_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_0_FF_NET_0_PROJ_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_0_FF_NET_0_PROJ_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_0_FF_NET_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_0_FF_NET_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_0_NORM1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_0_NORM1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_0_NORM3_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_0_NORM3_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_1_ATTN1_TO_K_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_1_ATTN1_TO_OUT_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_1_ATTN1_TO_OUT_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_1_ATTN1_TO_Q_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_1_ATTN1_TO_V_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_1_FF_NET_0_PROJ_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_1_FF_NET_0_PROJ_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_1_FF_NET_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_1_FF_NET_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_1_NORM1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_1_NORM1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_1_NORM3_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_1_NORM3_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_2_ATTN1_TO_K_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_2_ATTN1_TO_OUT_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_2_ATTN1_TO_OUT_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_2_ATTN1_TO_Q_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_2_ATTN1_TO_V_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_2_FF_NET_0_PROJ_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_2_FF_NET_0_PROJ_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_2_FF_NET_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_2_FF_NET_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_2_NORM1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_2_NORM1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_2_NORM3_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_2_NORM3_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_3_ATTN1_TO_K_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_3_ATTN1_TO_OUT_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_3_ATTN1_TO_OUT_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_3_ATTN1_TO_Q_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_3_ATTN1_TO_V_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_3_FF_NET_0_PROJ_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_3_FF_NET_0_PROJ_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_3_FF_NET_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_3_FF_NET_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_3_NORM1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_3_NORM1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_3_NORM3_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_5_1_3_NORM3_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_0_BLOCK1_BLOCK_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_0_BLOCK1_BLOCK_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_0_BLOCK1_BLOCK_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_0_BLOCK1_BLOCK_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_0_BLOCK2_BLOCK_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_0_BLOCK2_BLOCK_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_0_BLOCK2_BLOCK_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_0_BLOCK2_BLOCK_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_0_MLP_1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_0_MLP_1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_0_RES_CONV_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_0_RES_CONV_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_0_ATTN1_TO_K_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_0_ATTN1_TO_OUT_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_0_ATTN1_TO_OUT_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_0_ATTN1_TO_Q_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_0_ATTN1_TO_V_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_0_FF_NET_0_PROJ_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_0_FF_NET_0_PROJ_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_0_FF_NET_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_0_FF_NET_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_0_NORM1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_0_NORM1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_0_NORM3_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_0_NORM3_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_1_ATTN1_TO_K_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_1_ATTN1_TO_OUT_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_1_ATTN1_TO_OUT_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_1_ATTN1_TO_Q_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_1_ATTN1_TO_V_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_1_FF_NET_0_PROJ_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_1_FF_NET_0_PROJ_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_1_FF_NET_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_1_FF_NET_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_1_NORM1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_1_NORM1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_1_NORM3_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_1_NORM3_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_2_ATTN1_TO_K_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_2_ATTN1_TO_OUT_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_2_ATTN1_TO_OUT_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_2_ATTN1_TO_Q_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_2_ATTN1_TO_V_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_2_FF_NET_0_PROJ_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_2_FF_NET_0_PROJ_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_2_FF_NET_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_2_FF_NET_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_2_NORM1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_2_NORM1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_2_NORM3_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_2_NORM3_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_3_ATTN1_TO_K_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_3_ATTN1_TO_OUT_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_3_ATTN1_TO_OUT_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_3_ATTN1_TO_Q_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_3_ATTN1_TO_V_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_3_FF_NET_0_PROJ_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_3_FF_NET_0_PROJ_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_3_FF_NET_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_3_FF_NET_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_3_NORM1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_3_NORM1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_3_NORM3_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_6_1_3_NORM3_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_0_BLOCK1_BLOCK_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_0_BLOCK1_BLOCK_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_0_BLOCK1_BLOCK_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_0_BLOCK1_BLOCK_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_0_BLOCK2_BLOCK_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_0_BLOCK2_BLOCK_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_0_BLOCK2_BLOCK_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_0_BLOCK2_BLOCK_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_0_MLP_1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_0_MLP_1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_0_RES_CONV_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_0_RES_CONV_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_0_ATTN1_TO_K_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_0_ATTN1_TO_OUT_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_0_ATTN1_TO_OUT_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_0_ATTN1_TO_Q_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_0_ATTN1_TO_V_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_0_FF_NET_0_PROJ_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_0_FF_NET_0_PROJ_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_0_FF_NET_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_0_FF_NET_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_0_NORM1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_0_NORM1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_0_NORM3_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_0_NORM3_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_1_ATTN1_TO_K_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_1_ATTN1_TO_OUT_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_1_ATTN1_TO_OUT_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_1_ATTN1_TO_Q_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_1_ATTN1_TO_V_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_1_FF_NET_0_PROJ_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_1_FF_NET_0_PROJ_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_1_FF_NET_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_1_FF_NET_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_1_NORM1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_1_NORM1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_1_NORM3_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_1_NORM3_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_2_ATTN1_TO_K_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_2_ATTN1_TO_OUT_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_2_ATTN1_TO_OUT_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_2_ATTN1_TO_Q_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_2_ATTN1_TO_V_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_2_FF_NET_0_PROJ_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_2_FF_NET_0_PROJ_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_2_FF_NET_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_2_FF_NET_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_2_NORM1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_2_NORM1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_2_NORM3_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_2_NORM3_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_3_ATTN1_TO_K_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_3_ATTN1_TO_OUT_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_3_ATTN1_TO_OUT_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_3_ATTN1_TO_Q_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_3_ATTN1_TO_V_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_3_FF_NET_0_PROJ_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_3_FF_NET_0_PROJ_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_3_FF_NET_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_3_FF_NET_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_3_NORM1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_3_NORM1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_3_NORM3_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_7_1_3_NORM3_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_0_BLOCK1_BLOCK_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_0_BLOCK1_BLOCK_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_0_BLOCK1_BLOCK_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_0_BLOCK1_BLOCK_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_0_BLOCK2_BLOCK_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_0_BLOCK2_BLOCK_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_0_BLOCK2_BLOCK_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_0_BLOCK2_BLOCK_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_0_MLP_1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_0_MLP_1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_0_RES_CONV_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_0_RES_CONV_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_0_ATTN1_TO_K_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_0_ATTN1_TO_OUT_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_0_ATTN1_TO_OUT_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_0_ATTN1_TO_Q_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_0_ATTN1_TO_V_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_0_FF_NET_0_PROJ_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_0_FF_NET_0_PROJ_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_0_FF_NET_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_0_FF_NET_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_0_NORM1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_0_NORM1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_0_NORM3_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_0_NORM3_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_1_ATTN1_TO_K_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_1_ATTN1_TO_OUT_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_1_ATTN1_TO_OUT_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_1_ATTN1_TO_Q_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_1_ATTN1_TO_V_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_1_FF_NET_0_PROJ_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_1_FF_NET_0_PROJ_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_1_FF_NET_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_1_FF_NET_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_1_NORM1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_1_NORM1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_1_NORM3_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_1_NORM3_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_2_ATTN1_TO_K_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_2_ATTN1_TO_OUT_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_2_ATTN1_TO_OUT_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_2_ATTN1_TO_Q_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_2_ATTN1_TO_V_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_2_FF_NET_0_PROJ_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_2_FF_NET_0_PROJ_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_2_FF_NET_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_2_FF_NET_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_2_NORM1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_2_NORM1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_2_NORM3_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_2_NORM3_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_3_ATTN1_TO_K_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_3_ATTN1_TO_OUT_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_3_ATTN1_TO_OUT_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_3_ATTN1_TO_Q_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_3_ATTN1_TO_V_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_3_FF_NET_0_PROJ_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_3_FF_NET_0_PROJ_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_3_FF_NET_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_3_FF_NET_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_3_NORM1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_3_NORM1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_3_NORM3_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_8_1_3_NORM3_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_0_BLOCK1_BLOCK_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_0_BLOCK1_BLOCK_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_0_BLOCK1_BLOCK_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_0_BLOCK1_BLOCK_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_0_BLOCK2_BLOCK_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_0_BLOCK2_BLOCK_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_0_BLOCK2_BLOCK_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_0_BLOCK2_BLOCK_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_0_MLP_1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_0_MLP_1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_0_RES_CONV_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_0_RES_CONV_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_0_ATTN1_TO_K_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_0_ATTN1_TO_OUT_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_0_ATTN1_TO_OUT_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_0_ATTN1_TO_Q_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_0_ATTN1_TO_V_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_0_FF_NET_0_PROJ_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_0_FF_NET_0_PROJ_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_0_FF_NET_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_0_FF_NET_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_0_NORM1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_0_NORM1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_0_NORM3_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_0_NORM3_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_1_ATTN1_TO_K_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_1_ATTN1_TO_OUT_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_1_ATTN1_TO_OUT_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_1_ATTN1_TO_Q_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_1_ATTN1_TO_V_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_1_FF_NET_0_PROJ_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_1_FF_NET_0_PROJ_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_1_FF_NET_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_1_FF_NET_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_1_NORM1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_1_NORM1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_1_NORM3_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_1_NORM3_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_2_ATTN1_TO_K_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_2_ATTN1_TO_OUT_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_2_ATTN1_TO_OUT_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_2_ATTN1_TO_Q_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_2_ATTN1_TO_V_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_2_FF_NET_0_PROJ_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_2_FF_NET_0_PROJ_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_2_FF_NET_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_2_FF_NET_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_2_NORM1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_2_NORM1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_2_NORM3_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_2_NORM3_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_3_ATTN1_TO_K_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_3_ATTN1_TO_OUT_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_3_ATTN1_TO_OUT_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_3_ATTN1_TO_Q_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_3_ATTN1_TO_V_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_3_FF_NET_0_PROJ_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_3_FF_NET_0_PROJ_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_3_FF_NET_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_3_FF_NET_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_3_NORM1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_3_NORM1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_3_NORM3_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_MID_BLOCKS_9_1_3_NORM3_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_TIME_MLP_LINEAR_1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_TIME_MLP_LINEAR_1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_TIME_MLP_LINEAR_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_TIME_MLP_LINEAR_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_0_BLOCK1_BLOCK_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_0_BLOCK1_BLOCK_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_0_BLOCK1_BLOCK_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_0_BLOCK1_BLOCK_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_0_BLOCK2_BLOCK_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_0_BLOCK2_BLOCK_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_0_BLOCK2_BLOCK_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_0_BLOCK2_BLOCK_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_0_MLP_1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_0_MLP_1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_0_RES_CONV_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_0_RES_CONV_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_0_ATTN1_TO_K_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_0_ATTN1_TO_OUT_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_0_ATTN1_TO_OUT_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_0_ATTN1_TO_Q_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_0_ATTN1_TO_V_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_0_FF_NET_0_PROJ_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_0_FF_NET_0_PROJ_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_0_FF_NET_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_0_FF_NET_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_0_NORM1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_0_NORM1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_0_NORM3_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_0_NORM3_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_1_ATTN1_TO_K_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_1_ATTN1_TO_OUT_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_1_ATTN1_TO_OUT_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_1_ATTN1_TO_Q_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_1_ATTN1_TO_V_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_1_FF_NET_0_PROJ_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_1_FF_NET_0_PROJ_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_1_FF_NET_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_1_FF_NET_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_1_NORM1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_1_NORM1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_1_NORM3_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_1_NORM3_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_2_ATTN1_TO_K_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_2_ATTN1_TO_OUT_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_2_ATTN1_TO_OUT_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_2_ATTN1_TO_Q_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_2_ATTN1_TO_V_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_2_FF_NET_0_PROJ_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_2_FF_NET_0_PROJ_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_2_FF_NET_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_2_FF_NET_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_2_NORM1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_2_NORM1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_2_NORM3_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_2_NORM3_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_3_ATTN1_TO_K_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_3_ATTN1_TO_OUT_0_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_3_ATTN1_TO_OUT_0_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_3_ATTN1_TO_Q_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_3_ATTN1_TO_V_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_3_FF_NET_0_PROJ_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_3_FF_NET_0_PROJ_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_3_FF_NET_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_3_FF_NET_2_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_3_NORM1_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_3_NORM1_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_3_NORM3_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_1_3_NORM3_WEIGHT,
-        MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_2_BIAS,
-        MODEL_TENSOR.DECODER_ESTIMATOR_UP_BLOCKS_0_2_WEIGHT,
-        MODEL_TENSOR.ENCODER_AFTER_NORM_BIAS,
-        MODEL_TENSOR.ENCODER_AFTER_NORM_WEIGHT,
-        MODEL_TENSOR.ENCODER_EMBED_OUT_0_BIAS,
-        MODEL_TENSOR.ENCODER_EMBED_OUT_0_WEIGHT,
-        MODEL_TENSOR.ENCODER_EMBED_OUT_1_BIAS,
-        MODEL_TENSOR.ENCODER_EMBED_OUT_1_WEIGHT,
-        MODEL_TENSOR.ENCODER_ENCODERS_0_FEED_FORWARD_W_1_BIAS,
-        MODEL_TENSOR.ENCODER_ENCODERS_0_FEED_FORWARD_W_1_WEIGHT,
-        MODEL_TENSOR.ENCODER_ENCODERS_0_FEED_FORWARD_W_2_BIAS,
-        MODEL_TENSOR.ENCODER_ENCODERS_0_FEED_FORWARD_W_2_WEIGHT,
-        MODEL_TENSOR.ENCODER_ENCODERS_0_NORM_FF_BIAS,
-        MODEL_TENSOR.ENCODER_ENCODERS_0_NORM_FF_WEIGHT,
-        MODEL_TENSOR.ENCODER_ENCODERS_0_NORM_MHA_BIAS,
-        MODEL_TENSOR.ENCODER_ENCODERS_0_NORM_MHA_WEIGHT,
-        MODEL_TENSOR.ENCODER_ENCODERS_0_SELF_ATTN_LINEAR_K_BIAS,
-        MODEL_TENSOR.ENCODER_ENCODERS_0_SELF_ATTN_LINEAR_K_WEIGHT,
-        MODEL_TENSOR.ENCODER_ENCODERS_0_SELF_ATTN_LINEAR_OUT_BIAS,
-        MODEL_TENSOR.ENCODER_ENCODERS_0_SELF_ATTN_LINEAR_OUT_WEIGHT,
-        MODEL_TENSOR.ENCODER_ENCODERS_0_SELF_ATTN_LINEAR_POS_WEIGHT,
-        MODEL_TENSOR.ENCODER_ENCODERS_0_SELF_ATTN_LINEAR_Q_BIAS,
-        MODEL_TENSOR.ENCODER_ENCODERS_0_SELF_ATTN_LINEAR_Q_WEIGHT,
-        MODEL_TENSOR.ENCODER_ENCODERS_0_SELF_ATTN_LINEAR_V_BIAS,
-        MODEL_TENSOR.ENCODER_ENCODERS_0_SELF_ATTN_LINEAR_V_WEIGHT,
-        MODEL_TENSOR.ENCODER_ENCODERS_0_SELF_ATTN_POS_BIAS_U,
-        MODEL_TENSOR.ENCODER_ENCODERS_0_SELF_ATTN_POS_BIAS_V,
-        MODEL_TENSOR.ENCODER_ENCODERS_1_FEED_FORWARD_W_1_BIAS,
-        MODEL_TENSOR.ENCODER_ENCODERS_1_FEED_FORWARD_W_1_WEIGHT,
-        MODEL_TENSOR.ENCODER_ENCODERS_1_FEED_FORWARD_W_2_BIAS,
-        MODEL_TENSOR.ENCODER_ENCODERS_1_FEED_FORWARD_W_2_WEIGHT,
-        MODEL_TENSOR.ENCODER_ENCODERS_1_NORM_FF_BIAS,
-        MODEL_TENSOR.ENCODER_ENCODERS_1_NORM_FF_WEIGHT,
-        MODEL_TENSOR.ENCODER_ENCODERS_1_NORM_MHA_BIAS,
-        MODEL_TENSOR.ENCODER_ENCODERS_1_NORM_MHA_WEIGHT,
-        MODEL_TENSOR.ENCODER_ENCODERS_1_SELF_ATTN_LINEAR_K_BIAS,
-        MODEL_TENSOR.ENCODER_ENCODERS_1_SELF_ATTN_LINEAR_K_WEIGHT,
-        MODEL_TENSOR.ENCODER_ENCODERS_1_SELF_ATTN_LINEAR_OUT_BIAS,
-        MODEL_TENSOR.ENCODER_ENCODERS_1_SELF_ATTN_LINEAR_OUT_WEIGHT,
-        MODEL_TENSOR.ENCODER_ENCODERS_1_SELF_ATTN_LINEAR_POS_WEIGHT,
-        MODEL_TENSOR.ENCODER_ENCODERS_1_SELF_ATTN_LINEAR_Q_BIAS,
-        MODEL_TENSOR.ENCODER_ENCODERS_1_SELF_ATTN_LINEAR_Q_WEIGHT,
-        MODEL_TENSOR.ENCODER_ENCODERS_1_SELF_ATTN_LINEAR_V_BIAS,
-        MODEL_TENSOR.ENCODER_ENCODERS_1_SELF_ATTN_LINEAR_V_WEIGHT,
-        MODEL_TENSOR.ENCODER_ENCODERS_1_SELF_ATTN_POS_BIAS_U,
-        MODEL_TENSOR.ENCODER_ENCODERS_1_SELF_ATTN_POS_BIAS_V,
-        MODEL_TENSOR.ENCODER_ENCODERS_2_FEED_FORWARD_W_1_BIAS,
-        MODEL_TENSOR.ENCODER_ENCODERS_2_FEED_FORWARD_W_1_WEIGHT,
-        MODEL_TENSOR.ENCODER_ENCODERS_2_FEED_FORWARD_W_2_BIAS,
-        MODEL_TENSOR.ENCODER_ENCODERS_2_FEED_FORWARD_W_2_WEIGHT,
-        MODEL_TENSOR.ENCODER_ENCODERS_2_NORM_FF_BIAS,
-        MODEL_TENSOR.ENCODER_ENCODERS_2_NORM_FF_WEIGHT,
-        MODEL_TENSOR.ENCODER_ENCODERS_2_NORM_MHA_BIAS,
-        MODEL_TENSOR.ENCODER_ENCODERS_2_NORM_MHA_WEIGHT,
-        MODEL_TENSOR.ENCODER_ENCODERS_2_SELF_ATTN_LINEAR_K_BIAS,
-        MODEL_TENSOR.ENCODER_ENCODERS_2_SELF_ATTN_LINEAR_K_WEIGHT,
-        MODEL_TENSOR.ENCODER_ENCODERS_2_SELF_ATTN_LINEAR_OUT_BIAS,
-        MODEL_TENSOR.ENCODER_ENCODERS_2_SELF_ATTN_LINEAR_OUT_WEIGHT,
-        MODEL_TENSOR.ENCODER_ENCODERS_2_SELF_ATTN_LINEAR_POS_WEIGHT,
-        MODEL_TENSOR.ENCODER_ENCODERS_2_SELF_ATTN_LINEAR_Q_BIAS,
-        MODEL_TENSOR.ENCODER_ENCODERS_2_SELF_ATTN_LINEAR_Q_WEIGHT,
-        MODEL_TENSOR.ENCODER_ENCODERS_2_SELF_ATTN_LINEAR_V_BIAS,
-        MODEL_TENSOR.ENCODER_ENCODERS_2_SELF_ATTN_LINEAR_V_WEIGHT,
-        MODEL_TENSOR.ENCODER_ENCODERS_2_SELF_ATTN_POS_BIAS_U,
-        MODEL_TENSOR.ENCODER_ENCODERS_2_SELF_ATTN_POS_BIAS_V,
-        MODEL_TENSOR.ENCODER_ENCODERS_3_FEED_FORWARD_W_1_BIAS,
-        MODEL_TENSOR.ENCODER_ENCODERS_3_FEED_FORWARD_W_1_WEIGHT,
-        MODEL_TENSOR.ENCODER_ENCODERS_3_FEED_FORWARD_W_2_BIAS,
-        MODEL_TENSOR.ENCODER_ENCODERS_3_FEED_FORWARD_W_2_WEIGHT,
-        MODEL_TENSOR.ENCODER_ENCODERS_3_NORM_FF_BIAS,
-        MODEL_TENSOR.ENCODER_ENCODERS_3_NORM_FF_WEIGHT,
-        MODEL_TENSOR.ENCODER_ENCODERS_3_NORM_MHA_BIAS,
-        MODEL_TENSOR.ENCODER_ENCODERS_3_NORM_MHA_WEIGHT,
-        MODEL_TENSOR.ENCODER_ENCODERS_3_SELF_ATTN_LINEAR_K_BIAS,
-        MODEL_TENSOR.ENCODER_ENCODERS_3_SELF_ATTN_LINEAR_K_WEIGHT,
-        MODEL_TENSOR.ENCODER_ENCODERS_3_SELF_ATTN_LINEAR_OUT_BIAS,
-        MODEL_TENSOR.ENCODER_ENCODERS_3_SELF_ATTN_LINEAR_OUT_WEIGHT,
-        MODEL_TENSOR.ENCODER_ENCODERS_3_SELF_ATTN_LINEAR_POS_WEIGHT,
-        MODEL_TENSOR.ENCODER_ENCODERS_3_SELF_ATTN_LINEAR_Q_BIAS,
-        MODEL_TENSOR.ENCODER_ENCODERS_3_SELF_ATTN_LINEAR_Q_WEIGHT,
-        MODEL_TENSOR.ENCODER_ENCODERS_3_SELF_ATTN_LINEAR_V_BIAS,
-        MODEL_TENSOR.ENCODER_ENCODERS_3_SELF_ATTN_LINEAR_V_WEIGHT,
-        MODEL_TENSOR.ENCODER_ENCODERS_3_SELF_ATTN_POS_BIAS_U,
-        MODEL_TENSOR.ENCODER_ENCODERS_3_SELF_ATTN_POS_BIAS_V,
-        MODEL_TENSOR.ENCODER_ENCODERS_4_FEED_FORWARD_W_1_BIAS,
-        MODEL_TENSOR.ENCODER_ENCODERS_4_FEED_FORWARD_W_1_WEIGHT,
-        MODEL_TENSOR.ENCODER_ENCODERS_4_FEED_FORWARD_W_2_BIAS,
-        MODEL_TENSOR.ENCODER_ENCODERS_4_FEED_FORWARD_W_2_WEIGHT,
-        MODEL_TENSOR.ENCODER_ENCODERS_4_NORM_FF_BIAS,
-        MODEL_TENSOR.ENCODER_ENCODERS_4_NORM_FF_WEIGHT,
-        MODEL_TENSOR.ENCODER_ENCODERS_4_NORM_MHA_BIAS,
-        MODEL_TENSOR.ENCODER_ENCODERS_4_NORM_MHA_WEIGHT,
-        MODEL_TENSOR.ENCODER_ENCODERS_4_SELF_ATTN_LINEAR_K_BIAS,
-        MODEL_TENSOR.ENCODER_ENCODERS_4_SELF_ATTN_LINEAR_K_WEIGHT,
-        MODEL_TENSOR.ENCODER_ENCODERS_4_SELF_ATTN_LINEAR_OUT_BIAS,
-        MODEL_TENSOR.ENCODER_ENCODERS_4_SELF_ATTN_LINEAR_OUT_WEIGHT,
-        MODEL_TENSOR.ENCODER_ENCODERS_4_SELF_ATTN_LINEAR_POS_WEIGHT,
-        MODEL_TENSOR.ENCODER_ENCODERS_4_SELF_ATTN_LINEAR_Q_BIAS,
-        MODEL_TENSOR.ENCODER_ENCODERS_4_SELF_ATTN_LINEAR_Q_WEIGHT,
-        MODEL_TENSOR.ENCODER_ENCODERS_4_SELF_ATTN_LINEAR_V_BIAS,
-        MODEL_TENSOR.ENCODER_ENCODERS_4_SELF_ATTN_LINEAR_V_WEIGHT,
-        MODEL_TENSOR.ENCODER_ENCODERS_4_SELF_ATTN_POS_BIAS_U,
-        MODEL_TENSOR.ENCODER_ENCODERS_4_SELF_ATTN_POS_BIAS_V,
-        MODEL_TENSOR.ENCODER_ENCODERS_5_FEED_FORWARD_W_1_BIAS,
-        MODEL_TENSOR.ENCODER_ENCODERS_5_FEED_FORWARD_W_1_WEIGHT,
-        MODEL_TENSOR.ENCODER_ENCODERS_5_FEED_FORWARD_W_2_BIAS,
-        MODEL_TENSOR.ENCODER_ENCODERS_5_FEED_FORWARD_W_2_WEIGHT,
-        MODEL_TENSOR.ENCODER_ENCODERS_5_NORM_FF_BIAS,
-        MODEL_TENSOR.ENCODER_ENCODERS_5_NORM_FF_WEIGHT,
-        MODEL_TENSOR.ENCODER_ENCODERS_5_NORM_MHA_BIAS,
-        MODEL_TENSOR.ENCODER_ENCODERS_5_NORM_MHA_WEIGHT,
-        MODEL_TENSOR.ENCODER_ENCODERS_5_SELF_ATTN_LINEAR_K_BIAS,
-        MODEL_TENSOR.ENCODER_ENCODERS_5_SELF_ATTN_LINEAR_K_WEIGHT,
-        MODEL_TENSOR.ENCODER_ENCODERS_5_SELF_ATTN_LINEAR_OUT_BIAS,
-        MODEL_TENSOR.ENCODER_ENCODERS_5_SELF_ATTN_LINEAR_OUT_WEIGHT,
-        MODEL_TENSOR.ENCODER_ENCODERS_5_SELF_ATTN_LINEAR_POS_WEIGHT,
-        MODEL_TENSOR.ENCODER_ENCODERS_5_SELF_ATTN_LINEAR_Q_BIAS,
-        MODEL_TENSOR.ENCODER_ENCODERS_5_SELF_ATTN_LINEAR_Q_WEIGHT,
-        MODEL_TENSOR.ENCODER_ENCODERS_5_SELF_ATTN_LINEAR_V_BIAS,
-        MODEL_TENSOR.ENCODER_ENCODERS_5_SELF_ATTN_LINEAR_V_WEIGHT,
-        MODEL_TENSOR.ENCODER_ENCODERS_5_SELF_ATTN_POS_BIAS_U,
-        MODEL_TENSOR.ENCODER_ENCODERS_5_SELF_ATTN_POS_BIAS_V,
-        MODEL_TENSOR.ENCODER_PRE_LOOKAHEAD_LAYER_CONV1_BIAS,
-        MODEL_TENSOR.ENCODER_PRE_LOOKAHEAD_LAYER_CONV1_WEIGHT,
-        MODEL_TENSOR.ENCODER_PRE_LOOKAHEAD_LAYER_CONV2_BIAS,
-        MODEL_TENSOR.ENCODER_PRE_LOOKAHEAD_LAYER_CONV2_WEIGHT,
-        MODEL_TENSOR.ENCODER_UP_EMBED_OUT_0_BIAS,
-        MODEL_TENSOR.ENCODER_UP_EMBED_OUT_0_WEIGHT,
-        MODEL_TENSOR.ENCODER_UP_EMBED_OUT_1_BIAS,
-        MODEL_TENSOR.ENCODER_UP_EMBED_OUT_1_WEIGHT,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_0_FEED_FORWARD_W_1_BIAS,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_0_FEED_FORWARD_W_1_WEIGHT,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_0_FEED_FORWARD_W_2_BIAS,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_0_FEED_FORWARD_W_2_WEIGHT,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_0_NORM_FF_BIAS,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_0_NORM_FF_WEIGHT,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_0_NORM_MHA_BIAS,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_0_NORM_MHA_WEIGHT,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_0_SELF_ATTN_LINEAR_K_BIAS,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_0_SELF_ATTN_LINEAR_K_WEIGHT,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_0_SELF_ATTN_LINEAR_OUT_BIAS,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_0_SELF_ATTN_LINEAR_OUT_WEIGHT,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_0_SELF_ATTN_LINEAR_POS_WEIGHT,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_0_SELF_ATTN_LINEAR_Q_BIAS,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_0_SELF_ATTN_LINEAR_Q_WEIGHT,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_0_SELF_ATTN_LINEAR_V_BIAS,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_0_SELF_ATTN_LINEAR_V_WEIGHT,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_0_SELF_ATTN_POS_BIAS_U,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_0_SELF_ATTN_POS_BIAS_V,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_1_FEED_FORWARD_W_1_BIAS,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_1_FEED_FORWARD_W_1_WEIGHT,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_1_FEED_FORWARD_W_2_BIAS,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_1_FEED_FORWARD_W_2_WEIGHT,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_1_NORM_FF_BIAS,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_1_NORM_FF_WEIGHT,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_1_NORM_MHA_BIAS,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_1_NORM_MHA_WEIGHT,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_1_SELF_ATTN_LINEAR_K_BIAS,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_1_SELF_ATTN_LINEAR_K_WEIGHT,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_1_SELF_ATTN_LINEAR_OUT_BIAS,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_1_SELF_ATTN_LINEAR_OUT_WEIGHT,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_1_SELF_ATTN_LINEAR_POS_WEIGHT,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_1_SELF_ATTN_LINEAR_Q_BIAS,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_1_SELF_ATTN_LINEAR_Q_WEIGHT,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_1_SELF_ATTN_LINEAR_V_BIAS,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_1_SELF_ATTN_LINEAR_V_WEIGHT,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_1_SELF_ATTN_POS_BIAS_U,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_1_SELF_ATTN_POS_BIAS_V,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_2_FEED_FORWARD_W_1_BIAS,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_2_FEED_FORWARD_W_1_WEIGHT,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_2_FEED_FORWARD_W_2_BIAS,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_2_FEED_FORWARD_W_2_WEIGHT,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_2_NORM_FF_BIAS,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_2_NORM_FF_WEIGHT,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_2_NORM_MHA_BIAS,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_2_NORM_MHA_WEIGHT,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_2_SELF_ATTN_LINEAR_K_BIAS,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_2_SELF_ATTN_LINEAR_K_WEIGHT,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_2_SELF_ATTN_LINEAR_OUT_BIAS,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_2_SELF_ATTN_LINEAR_OUT_WEIGHT,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_2_SELF_ATTN_LINEAR_POS_WEIGHT,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_2_SELF_ATTN_LINEAR_Q_BIAS,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_2_SELF_ATTN_LINEAR_Q_WEIGHT,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_2_SELF_ATTN_LINEAR_V_BIAS,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_2_SELF_ATTN_LINEAR_V_WEIGHT,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_2_SELF_ATTN_POS_BIAS_U,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_2_SELF_ATTN_POS_BIAS_V,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_3_FEED_FORWARD_W_1_BIAS,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_3_FEED_FORWARD_W_1_WEIGHT,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_3_FEED_FORWARD_W_2_BIAS,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_3_FEED_FORWARD_W_2_WEIGHT,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_3_NORM_FF_BIAS,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_3_NORM_FF_WEIGHT,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_3_NORM_MHA_BIAS,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_3_NORM_MHA_WEIGHT,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_3_SELF_ATTN_LINEAR_K_BIAS,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_3_SELF_ATTN_LINEAR_K_WEIGHT,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_3_SELF_ATTN_LINEAR_OUT_BIAS,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_3_SELF_ATTN_LINEAR_OUT_WEIGHT,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_3_SELF_ATTN_LINEAR_POS_WEIGHT,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_3_SELF_ATTN_LINEAR_Q_BIAS,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_3_SELF_ATTN_LINEAR_Q_WEIGHT,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_3_SELF_ATTN_LINEAR_V_BIAS,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_3_SELF_ATTN_LINEAR_V_WEIGHT,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_3_SELF_ATTN_POS_BIAS_U,
-        MODEL_TENSOR.ENCODER_UP_ENCODERS_3_SELF_ATTN_POS_BIAS_V,
-        MODEL_TENSOR.ENCODER_UP_LAYER_CONV_BIAS,
-        MODEL_TENSOR.ENCODER_UP_LAYER_CONV_WEIGHT,
-        MODEL_TENSOR.ENCODER_PROJ_BIAS,
-        MODEL_TENSOR.ENCODER_PROJ_WEIGHT,
-        MODEL_TENSOR.INPUT_EMBEDDING_WEIGHT,
-        MODEL_TENSOR.SPK_EMBED_AFFINE_LAYER_BIAS,
-        MODEL_TENSOR.SPK_EMBED_AFFINE_LAYER_WEIGHT,
-
-    ],
-    MODEL_ARCH.COSYVOICEHIFT: [
-        MODEL_TENSOR.CONV_POST_BIAS,
-        MODEL_TENSOR.CONV_POST_WEIGHT,
-        MODEL_TENSOR.CONV_PRE_BIAS,
-        MODEL_TENSOR.CONV_PRE_WEIGHT,
-        
-        MODEL_TENSOR.F0_PREDICTOR_CLASSIFIER_BIAS,
-        MODEL_TENSOR.F0_PREDICTOR_CLASSIFIER_WEIGHT,
-        MODEL_TENSOR.F0_PREDICTOR_CONDNET_0_BIAS,
-        MODEL_TENSOR.F0_PREDICTOR_CONDNET_0_WEIGHT,
-        MODEL_TENSOR.F0_PREDICTOR_CONDNET_2_BIAS,
-        MODEL_TENSOR.F0_PREDICTOR_CONDNET_2_WEIGHT,
-        MODEL_TENSOR.F0_PREDICTOR_CONDNET_4_BIAS,
-        MODEL_TENSOR.F0_PREDICTOR_CONDNET_4_WEIGHT,
-        MODEL_TENSOR.F0_PREDICTOR_CONDNET_6_BIAS,
-        MODEL_TENSOR.F0_PREDICTOR_CONDNET_6_WEIGHT,
-        MODEL_TENSOR.F0_PREDICTOR_CONDNET_8_BIAS,
-        MODEL_TENSOR.F0_PREDICTOR_CONDNET_8_WEIGHT,
-        
-        MODEL_TENSOR.M_SOURCE_L_LINEAR_BIAS,
-        MODEL_TENSOR.M_SOURCE_L_LINEAR_WEIGHT,
-        
-        # ResBlock 0
-        MODEL_TENSOR.RESBLOCKS_0_ACTIVATIONS1_0_ALPHA,
-        MODEL_TENSOR.RESBLOCKS_0_ACTIVATIONS1_1_ALPHA,
-        MODEL_TENSOR.RESBLOCKS_0_ACTIVATIONS1_2_ALPHA,
-        MODEL_TENSOR.RESBLOCKS_0_ACTIVATIONS2_0_ALPHA,
-        MODEL_TENSOR.RESBLOCKS_0_ACTIVATIONS2_1_ALPHA,
-        MODEL_TENSOR.RESBLOCKS_0_ACTIVATIONS2_2_ALPHA,
-        MODEL_TENSOR.RESBLOCKS_0_CONVS1_0_BIAS,
-        MODEL_TENSOR.RESBLOCKS_0_CONVS1_0_WEIGHT,
-        MODEL_TENSOR.RESBLOCKS_0_CONVS1_1_BIAS,
-        MODEL_TENSOR.RESBLOCKS_0_CONVS1_1_WEIGHT,
-        MODEL_TENSOR.RESBLOCKS_0_CONVS1_2_BIAS,
-        MODEL_TENSOR.RESBLOCKS_0_CONVS1_2_WEIGHT,
-        MODEL_TENSOR.RESBLOCKS_0_CONVS2_0_BIAS,
-        MODEL_TENSOR.RESBLOCKS_0_CONVS2_0_WEIGHT,
-        MODEL_TENSOR.RESBLOCKS_0_CONVS2_1_BIAS,
-        MODEL_TENSOR.RESBLOCKS_0_CONVS2_1_WEIGHT,
-        MODEL_TENSOR.RESBLOCKS_0_CONVS2_2_BIAS,
-        MODEL_TENSOR.RESBLOCKS_0_CONVS2_2_WEIGHT,
-
-        # ResBlock 1
-        MODEL_TENSOR.RESBLOCKS_1_ACTIVATIONS1_0_ALPHA,
-        MODEL_TENSOR.RESBLOCKS_1_ACTIVATIONS1_1_ALPHA,
-        MODEL_TENSOR.RESBLOCKS_1_ACTIVATIONS1_2_ALPHA,
-        MODEL_TENSOR.RESBLOCKS_1_ACTIVATIONS2_0_ALPHA,
-        MODEL_TENSOR.RESBLOCKS_1_ACTIVATIONS2_1_ALPHA,
-        MODEL_TENSOR.RESBLOCKS_1_ACTIVATIONS2_2_ALPHA,
-        MODEL_TENSOR.RESBLOCKS_1_CONVS1_0_BIAS,
-        MODEL_TENSOR.RESBLOCKS_1_CONVS1_0_WEIGHT,
-        MODEL_TENSOR.RESBLOCKS_1_CONVS1_1_BIAS,
-        MODEL_TENSOR.RESBLOCKS_1_CONVS1_1_WEIGHT,
-        MODEL_TENSOR.RESBLOCKS_1_CONVS1_2_BIAS,
-        MODEL_TENSOR.RESBLOCKS_1_CONVS1_2_WEIGHT,
-        MODEL_TENSOR.RESBLOCKS_1_CONVS2_0_BIAS,
-        MODEL_TENSOR.RESBLOCKS_1_CONVS2_0_WEIGHT,
-        MODEL_TENSOR.RESBLOCKS_1_CONVS2_1_BIAS,
-        MODEL_TENSOR.RESBLOCKS_1_CONVS2_1_WEIGHT,
-        MODEL_TENSOR.RESBLOCKS_1_CONVS2_2_BIAS,
-        MODEL_TENSOR.RESBLOCKS_1_CONVS2_2_WEIGHT,
-
-        # ResBlock 2
-        MODEL_TENSOR.RESBLOCKS_2_ACTIVATIONS1_0_ALPHA,
-        MODEL_TENSOR.RESBLOCKS_2_ACTIVATIONS1_1_ALPHA,
-        MODEL_TENSOR.RESBLOCKS_2_ACTIVATIONS1_2_ALPHA,
-        MODEL_TENSOR.RESBLOCKS_2_ACTIVATIONS2_0_ALPHA,
-        MODEL_TENSOR.RESBLOCKS_2_ACTIVATIONS2_1_ALPHA,
-        MODEL_TENSOR.RESBLOCKS_2_ACTIVATIONS2_2_ALPHA,
-        MODEL_TENSOR.RESBLOCKS_2_CONVS1_0_BIAS,
-        MODEL_TENSOR.RESBLOCKS_2_CONVS1_0_WEIGHT,
-        MODEL_TENSOR.RESBLOCKS_2_CONVS1_1_BIAS,
-        MODEL_TENSOR.RESBLOCKS_2_CONVS1_1_WEIGHT,
-        MODEL_TENSOR.RESBLOCKS_2_CONVS1_2_BIAS,
-        MODEL_TENSOR.RESBLOCKS_2_CONVS1_2_WEIGHT,
-        MODEL_TENSOR.RESBLOCKS_2_CONVS2_0_BIAS,
-        MODEL_TENSOR.RESBLOCKS_2_CONVS2_0_WEIGHT,
-        MODEL_TENSOR.RESBLOCKS_2_CONVS2_1_BIAS,
-        MODEL_TENSOR.RESBLOCKS_2_CONVS2_1_WEIGHT,
-        MODEL_TENSOR.RESBLOCKS_2_CONVS2_2_BIAS,
-        MODEL_TENSOR.RESBLOCKS_2_CONVS2_2_WEIGHT,
-
-        # ResBlock 3
-        MODEL_TENSOR.RESBLOCKS_3_ACTIVATIONS1_0_ALPHA,
-        MODEL_TENSOR.RESBLOCKS_3_ACTIVATIONS1_1_ALPHA,
-        MODEL_TENSOR.RESBLOCKS_3_ACTIVATIONS1_2_ALPHA,
-        MODEL_TENSOR.RESBLOCKS_3_ACTIVATIONS2_0_ALPHA,
-        MODEL_TENSOR.RESBLOCKS_3_ACTIVATIONS2_1_ALPHA,
-        MODEL_TENSOR.RESBLOCKS_3_ACTIVATIONS2_2_ALPHA,
-        MODEL_TENSOR.RESBLOCKS_3_CONVS1_0_BIAS,
-        MODEL_TENSOR.RESBLOCKS_3_CONVS1_0_WEIGHT,
-        MODEL_TENSOR.RESBLOCKS_3_CONVS1_1_BIAS,
-        MODEL_TENSOR.RESBLOCKS_3_CONVS1_1_WEIGHT,
-        MODEL_TENSOR.RESBLOCKS_3_CONVS1_2_BIAS,
-        MODEL_TENSOR.RESBLOCKS_3_CONVS1_2_WEIGHT,
-        MODEL_TENSOR.RESBLOCKS_3_CONVS2_0_BIAS,
-        MODEL_TENSOR.RESBLOCKS_3_CONVS2_0_WEIGHT,
-        MODEL_TENSOR.RESBLOCKS_3_CONVS2_1_BIAS,
-        MODEL_TENSOR.RESBLOCKS_3_CONVS2_1_WEIGHT,
-        MODEL_TENSOR.RESBLOCKS_3_CONVS2_2_BIAS,
-        MODEL_TENSOR.RESBLOCKS_3_CONVS2_2_WEIGHT,
-
-        # ResBlock 4
-        MODEL_TENSOR.RESBLOCKS_4_ACTIVATIONS1_0_ALPHA,
-        MODEL_TENSOR.RESBLOCKS_4_ACTIVATIONS1_1_ALPHA,
-        MODEL_TENSOR.RESBLOCKS_4_ACTIVATIONS1_2_ALPHA,
-        MODEL_TENSOR.RESBLOCKS_4_ACTIVATIONS2_0_ALPHA,
-        MODEL_TENSOR.RESBLOCKS_4_ACTIVATIONS2_1_ALPHA,
-        MODEL_TENSOR.RESBLOCKS_4_ACTIVATIONS2_2_ALPHA,
-        MODEL_TENSOR.RESBLOCKS_4_CONVS1_0_BIAS,
-        MODEL_TENSOR.RESBLOCKS_4_CONVS1_0_WEIGHT,
-        MODEL_TENSOR.RESBLOCKS_4_CONVS1_1_BIAS,
-        MODEL_TENSOR.RESBLOCKS_4_CONVS1_1_WEIGHT,
-        MODEL_TENSOR.RESBLOCKS_4_CONVS1_2_BIAS,
-        MODEL_TENSOR.RESBLOCKS_4_CONVS1_2_WEIGHT,
-        MODEL_TENSOR.RESBLOCKS_4_CONVS2_0_BIAS,
-        MODEL_TENSOR.RESBLOCKS_4_CONVS2_0_WEIGHT,
-        MODEL_TENSOR.RESBLOCKS_4_CONVS2_1_BIAS,
-        MODEL_TENSOR.RESBLOCKS_4_CONVS2_1_WEIGHT,
-        MODEL_TENSOR.RESBLOCKS_4_CONVS2_2_BIAS,
-        MODEL_TENSOR.RESBLOCKS_4_CONVS2_2_WEIGHT,
-
-        # ResBlock 5
-        MODEL_TENSOR.RESBLOCKS_5_ACTIVATIONS1_0_ALPHA,
-        MODEL_TENSOR.RESBLOCKS_5_ACTIVATIONS1_1_ALPHA,
-        MODEL_TENSOR.RESBLOCKS_5_ACTIVATIONS1_2_ALPHA,
-        MODEL_TENSOR.RESBLOCKS_5_ACTIVATIONS2_0_ALPHA,
-        MODEL_TENSOR.RESBLOCKS_5_ACTIVATIONS2_1_ALPHA,
-        MODEL_TENSOR.RESBLOCKS_5_ACTIVATIONS2_2_ALPHA,
-        MODEL_TENSOR.RESBLOCKS_5_CONVS1_0_BIAS,
-        MODEL_TENSOR.RESBLOCKS_5_CONVS1_0_WEIGHT,
-        MODEL_TENSOR.RESBLOCKS_5_CONVS1_1_BIAS,
-        MODEL_TENSOR.RESBLOCKS_5_CONVS1_1_WEIGHT,
-        MODEL_TENSOR.RESBLOCKS_5_CONVS1_2_BIAS,
-        MODEL_TENSOR.RESBLOCKS_5_CONVS1_2_WEIGHT,
-        MODEL_TENSOR.RESBLOCKS_5_CONVS2_0_BIAS,
-        MODEL_TENSOR.RESBLOCKS_5_CONVS2_0_WEIGHT,
-        MODEL_TENSOR.RESBLOCKS_5_CONVS2_1_BIAS,
-        MODEL_TENSOR.RESBLOCKS_5_CONVS2_1_WEIGHT,
-        MODEL_TENSOR.RESBLOCKS_5_CONVS2_2_BIAS,
-        MODEL_TENSOR.RESBLOCKS_5_CONVS2_2_WEIGHT,
-
-        # ResBlock 6
-        MODEL_TENSOR.RESBLOCKS_6_ACTIVATIONS1_0_ALPHA,
-        MODEL_TENSOR.RESBLOCKS_6_ACTIVATIONS1_1_ALPHA,
-        MODEL_TENSOR.RESBLOCKS_6_ACTIVATIONS1_2_ALPHA,
-        MODEL_TENSOR.RESBLOCKS_6_ACTIVATIONS2_0_ALPHA,
-        MODEL_TENSOR.RESBLOCKS_6_ACTIVATIONS2_1_ALPHA,
-        MODEL_TENSOR.RESBLOCKS_6_ACTIVATIONS2_2_ALPHA,
-        MODEL_TENSOR.RESBLOCKS_6_CONVS1_0_BIAS,
-        MODEL_TENSOR.RESBLOCKS_6_CONVS1_0_WEIGHT,
-        MODEL_TENSOR.RESBLOCKS_6_CONVS1_1_BIAS,
-        MODEL_TENSOR.RESBLOCKS_6_CONVS1_1_WEIGHT,
-        MODEL_TENSOR.RESBLOCKS_6_CONVS1_2_BIAS,
-        MODEL_TENSOR.RESBLOCKS_6_CONVS1_2_WEIGHT,
-        MODEL_TENSOR.RESBLOCKS_6_CONVS2_0_BIAS,
-        MODEL_TENSOR.RESBLOCKS_6_CONVS2_0_WEIGHT,
-        MODEL_TENSOR.RESBLOCKS_6_CONVS2_1_BIAS,
-        MODEL_TENSOR.RESBLOCKS_6_CONVS2_1_WEIGHT,
-        MODEL_TENSOR.RESBLOCKS_6_CONVS2_2_BIAS,
-        MODEL_TENSOR.RESBLOCKS_6_CONVS2_2_WEIGHT,
-
-        # ResBlock 7
-        MODEL_TENSOR.RESBLOCKS_7_ACTIVATIONS1_0_ALPHA,
-        MODEL_TENSOR.RESBLOCKS_7_ACTIVATIONS1_1_ALPHA,
-        MODEL_TENSOR.RESBLOCKS_7_ACTIVATIONS1_2_ALPHA,
-        MODEL_TENSOR.RESBLOCKS_7_ACTIVATIONS2_0_ALPHA,
-        MODEL_TENSOR.RESBLOCKS_7_ACTIVATIONS2_1_ALPHA,
-        MODEL_TENSOR.RESBLOCKS_7_ACTIVATIONS2_2_ALPHA,
-        MODEL_TENSOR.RESBLOCKS_7_CONVS1_0_BIAS,
-        MODEL_TENSOR.RESBLOCKS_7_CONVS1_0_WEIGHT,
-        MODEL_TENSOR.RESBLOCKS_7_CONVS1_1_BIAS,
-        MODEL_TENSOR.RESBLOCKS_7_CONVS1_1_WEIGHT,
-        MODEL_TENSOR.RESBLOCKS_7_CONVS1_2_BIAS,
-        MODEL_TENSOR.RESBLOCKS_7_CONVS1_2_WEIGHT,
-        MODEL_TENSOR.RESBLOCKS_7_CONVS2_0_BIAS,
-        MODEL_TENSOR.RESBLOCKS_7_CONVS2_0_WEIGHT,
-        MODEL_TENSOR.RESBLOCKS_7_CONVS2_1_BIAS,
-        MODEL_TENSOR.RESBLOCKS_7_CONVS2_1_WEIGHT,
-        MODEL_TENSOR.RESBLOCKS_7_CONVS2_2_BIAS,
-        MODEL_TENSOR.RESBLOCKS_7_CONVS2_2_WEIGHT,
-
-        # ResBlock 8
-        MODEL_TENSOR.RESBLOCKS_8_ACTIVATIONS1_0_ALPHA,
-        MODEL_TENSOR.RESBLOCKS_8_ACTIVATIONS1_1_ALPHA,
-        MODEL_TENSOR.RESBLOCKS_8_ACTIVATIONS1_2_ALPHA,
-        MODEL_TENSOR.RESBLOCKS_8_ACTIVATIONS2_0_ALPHA,
-        MODEL_TENSOR.RESBLOCKS_8_ACTIVATIONS2_1_ALPHA,
-        MODEL_TENSOR.RESBLOCKS_8_ACTIVATIONS2_2_ALPHA,
-        MODEL_TENSOR.RESBLOCKS_8_CONVS1_0_BIAS,
-        MODEL_TENSOR.RESBLOCKS_8_CONVS1_0_WEIGHT,
-        MODEL_TENSOR.RESBLOCKS_8_CONVS1_1_BIAS,
-        MODEL_TENSOR.RESBLOCKS_8_CONVS1_1_WEIGHT,
-        MODEL_TENSOR.RESBLOCKS_8_CONVS1_2_BIAS,
-        MODEL_TENSOR.RESBLOCKS_8_CONVS1_2_WEIGHT,
-        MODEL_TENSOR.RESBLOCKS_8_CONVS2_0_BIAS,
-        MODEL_TENSOR.RESBLOCKS_8_CONVS2_0_WEIGHT,
-        MODEL_TENSOR.RESBLOCKS_8_CONVS2_1_BIAS,
-        MODEL_TENSOR.RESBLOCKS_8_CONVS2_1_WEIGHT,
-        MODEL_TENSOR.RESBLOCKS_8_CONVS2_2_BIAS,
-        MODEL_TENSOR.RESBLOCKS_8_CONVS2_2_WEIGHT,
-
-        MODEL_TENSOR.SOURCE_DOWNS_0_BIAS,
-        MODEL_TENSOR.SOURCE_DOWNS_0_WEIGHT,
-        MODEL_TENSOR.SOURCE_DOWNS_1_BIAS,
-        MODEL_TENSOR.SOURCE_DOWNS_1_WEIGHT,
-        MODEL_TENSOR.SOURCE_DOWNS_2_BIAS,
-        MODEL_TENSOR.SOURCE_DOWNS_2_WEIGHT,
-        
-        # Source ResBlock 0
-        MODEL_TENSOR.SOURCE_RESBLOCKS_0_ACTIVATIONS1_0_ALPHA,
-        MODEL_TENSOR.SOURCE_RESBLOCKS_0_ACTIVATIONS1_1_ALPHA,
-        MODEL_TENSOR.SOURCE_RESBLOCKS_0_ACTIVATIONS1_2_ALPHA,
-        MODEL_TENSOR.SOURCE_RESBLOCKS_0_ACTIVATIONS2_0_ALPHA,
-        MODEL_TENSOR.SOURCE_RESBLOCKS_0_ACTIVATIONS2_1_ALPHA,
-        MODEL_TENSOR.SOURCE_RESBLOCKS_0_ACTIVATIONS2_2_ALPHA,
-        MODEL_TENSOR.SOURCE_RESBLOCKS_0_CONVS1_0_BIAS,
-        MODEL_TENSOR.SOURCE_RESBLOCKS_0_CONVS1_0_WEIGHT,
-        MODEL_TENSOR.SOURCE_RESBLOCKS_0_CONVS1_1_BIAS,
-        MODEL_TENSOR.SOURCE_RESBLOCKS_0_CONVS1_1_WEIGHT,
-        MODEL_TENSOR.SOURCE_RESBLOCKS_0_CONVS1_2_BIAS,
-        MODEL_TENSOR.SOURCE_RESBLOCKS_0_CONVS1_2_WEIGHT,
-        MODEL_TENSOR.SOURCE_RESBLOCKS_0_CONVS2_0_BIAS,
-        MODEL_TENSOR.SOURCE_RESBLOCKS_0_CONVS2_0_WEIGHT,
-        MODEL_TENSOR.SOURCE_RESBLOCKS_0_CONVS2_1_BIAS,
-        MODEL_TENSOR.SOURCE_RESBLOCKS_0_CONVS2_1_WEIGHT,
-        MODEL_TENSOR.SOURCE_RESBLOCKS_0_CONVS2_2_BIAS,
-        MODEL_TENSOR.SOURCE_RESBLOCKS_0_CONVS2_2_WEIGHT,
-
-        # Source ResBlock 1
-        MODEL_TENSOR.SOURCE_RESBLOCKS_1_ACTIVATIONS1_0_ALPHA,
-        MODEL_TENSOR.SOURCE_RESBLOCKS_1_ACTIVATIONS1_1_ALPHA,
-        MODEL_TENSOR.SOURCE_RESBLOCKS_1_ACTIVATIONS1_2_ALPHA,
-        MODEL_TENSOR.SOURCE_RESBLOCKS_1_ACTIVATIONS2_0_ALPHA,
-        MODEL_TENSOR.SOURCE_RESBLOCKS_1_ACTIVATIONS2_1_ALPHA,
-        MODEL_TENSOR.SOURCE_RESBLOCKS_1_ACTIVATIONS2_2_ALPHA,
-        MODEL_TENSOR.SOURCE_RESBLOCKS_1_CONVS1_0_BIAS,
-        MODEL_TENSOR.SOURCE_RESBLOCKS_1_CONVS1_0_WEIGHT,
-        MODEL_TENSOR.SOURCE_RESBLOCKS_1_CONVS1_1_BIAS,
-        MODEL_TENSOR.SOURCE_RESBLOCKS_1_CONVS1_1_WEIGHT,
-        MODEL_TENSOR.SOURCE_RESBLOCKS_1_CONVS1_2_BIAS,
-        MODEL_TENSOR.SOURCE_RESBLOCKS_1_CONVS1_2_WEIGHT,
-        MODEL_TENSOR.SOURCE_RESBLOCKS_1_CONVS2_0_BIAS,
-        MODEL_TENSOR.SOURCE_RESBLOCKS_1_CONVS2_0_WEIGHT,
-        MODEL_TENSOR.SOURCE_RESBLOCKS_1_CONVS2_1_BIAS,
-        MODEL_TENSOR.SOURCE_RESBLOCKS_1_CONVS2_1_WEIGHT,
-        MODEL_TENSOR.SOURCE_RESBLOCKS_1_CONVS2_2_BIAS,
-        MODEL_TENSOR.SOURCE_RESBLOCKS_1_CONVS2_2_WEIGHT,
-
-        # Source ResBlock 2
-        MODEL_TENSOR.SOURCE_RESBLOCKS_2_ACTIVATIONS1_0_ALPHA,
-        MODEL_TENSOR.SOURCE_RESBLOCKS_2_ACTIVATIONS1_1_ALPHA,
-        MODEL_TENSOR.SOURCE_RESBLOCKS_2_ACTIVATIONS1_2_ALPHA,
-        MODEL_TENSOR.SOURCE_RESBLOCKS_2_ACTIVATIONS2_0_ALPHA,
-        MODEL_TENSOR.SOURCE_RESBLOCKS_2_ACTIVATIONS2_1_ALPHA,
-        MODEL_TENSOR.SOURCE_RESBLOCKS_2_ACTIVATIONS2_2_ALPHA,
-        MODEL_TENSOR.SOURCE_RESBLOCKS_2_CONVS1_0_BIAS,
-        MODEL_TENSOR.SOURCE_RESBLOCKS_2_CONVS1_0_WEIGHT,
-        MODEL_TENSOR.SOURCE_RESBLOCKS_2_CONVS1_1_BIAS,
-        MODEL_TENSOR.SOURCE_RESBLOCKS_2_CONVS1_1_WEIGHT,
-        MODEL_TENSOR.SOURCE_RESBLOCKS_2_CONVS1_2_BIAS,
-        MODEL_TENSOR.SOURCE_RESBLOCKS_2_CONVS1_2_WEIGHT,
-        MODEL_TENSOR.SOURCE_RESBLOCKS_2_CONVS2_0_BIAS,
-        MODEL_TENSOR.SOURCE_RESBLOCKS_2_CONVS2_0_WEIGHT,
-        MODEL_TENSOR.SOURCE_RESBLOCKS_2_CONVS2_1_BIAS,
-        MODEL_TENSOR.SOURCE_RESBLOCKS_2_CONVS2_1_WEIGHT,
-        MODEL_TENSOR.SOURCE_RESBLOCKS_2_CONVS2_2_BIAS,
-        MODEL_TENSOR.SOURCE_RESBLOCKS_2_CONVS2_2_WEIGHT,
-
-        MODEL_TENSOR.UPS_0_BIAS,
-        MODEL_TENSOR.UPS_0_WEIGHT,
-        MODEL_TENSOR.UPS_1_BIAS,
-        MODEL_TENSOR.UPS_1_WEIGHT,
-        MODEL_TENSOR.UPS_2_BIAS,
-        MODEL_TENSOR.UPS_2_WEIGHT,
-    ],
 }
 
 # tensors that will not be serialized
@@ -6511,6 +3331,10 @@ MODEL_TENSOR_SKIP: dict[MODEL_ARCH, list[MODEL_TENSOR]] = {
     ],
     MODEL_ARCH.BAILINGMOE: [
         MODEL_TENSOR.ROPE_FREQS,
+    ],
+    MODEL_ARCH.PANGU_EMBED: [
+        MODEL_TENSOR.ROPE_FREQS,
+        MODEL_TENSOR.ATTN_ROT_EMBD,
     ],
 }
 
@@ -6575,6 +3399,7 @@ class GGMLQuantizationType(IntEnum):
     BF16    = 30
     TQ1_0   = 34
     TQ2_0   = 35
+    MXFP4   = 39
 
 
 class ExpertGatingFuncType(IntEnum):
@@ -6674,10 +3499,22 @@ class VisionProjectorType:
     LLAMA4 = "llama4"
     QWEN2VL = "qwen2vl_merger"
     QWEN25VL = "qwen2.5vl_merger"
+    QWEN3VL = "qwen3vl_merger"
     ULTRAVOX = "ultravox"
     INTERNVL = "internvl"
     QWEN2A = "qwen2a" # audio
+    GLMA = "glma" # audio
     QWEN25O = "qwen2.5o" # omni
+    VOXTRAL = "voxtral"
+    LFM2 = "lfm2"
+    KIMIVL = "kimivl"
+    LIGHTONOCR = "lightonocr"
+    COGVLM = "cogvlm"
+    JANUS_PRO = "janus_pro"
+    LFM2A = "lfm2a" # audio
+    MUSIC_FLAMINGO = "musicflamingo" # audio
+    GLM4V = "glm4v"
+    YOUTUVL = "youtuvl"
 
 
 # Items here are (block size, type size)
@@ -6714,6 +3551,7 @@ GGML_QUANT_SIZES: dict[GGMLQuantizationType, tuple[int, int]] = {
     GGMLQuantizationType.BF16:    (1, 2),
     GGMLQuantizationType.TQ1_0:   (256, 2 + 4 * 13),
     GGMLQuantizationType.TQ2_0:   (256, 2 + 64),
+    GGMLQuantizationType.MXFP4:   (32, 1 + 16),
 }
 
 
@@ -6761,6 +3599,7 @@ KEY_SSM_CONV_KERNEL    = Keys.SSM.CONV_KERNEL
 KEY_SSM_INNER_SIZE     = Keys.SSM.INNER_SIZE
 KEY_SSM_STATE_SIZE     = Keys.SSM.STATE_SIZE
 KEY_SSM_TIME_STEP_RANK = Keys.SSM.TIME_STEP_RANK
+KEY_SSM_GROUP_COUNT    = Keys.SSM.GROUP_COUNT
 KEY_SSM_DT_B_C_RMS     = Keys.SSM.DT_B_C_RMS
 
 # tokenization

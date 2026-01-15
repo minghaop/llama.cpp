@@ -48,6 +48,8 @@ struct common_sampler * common_sampler_clone (struct common_sampler * gsmpl);
 // arguments can be nullptr to skip printing
 void common_perf_print(const struct llama_context * ctx, const struct common_sampler * gsmpl);
 
+struct llama_sampler * common_sampler_get(const struct common_sampler * gsmpl);
+
 // extended sampling implementation:
 //
 // - set logits
@@ -86,7 +88,9 @@ uint32_t common_sampler_get_seed(const struct common_sampler * gsmpl);
 // helpers
 
 // access the internal list of current candidate tokens
-llama_token_data_array * common_sampler_get_candidates(struct common_sampler * gsmpl);
+// if do_sort == true, the candidates are guaranteed to be sorted afterwards (in descending order of probability)
+// the .sorted flag of the result indicates whether the returned candidates are sorted
+llama_token_data_array * common_sampler_get_candidates(struct common_sampler * gsmpl, bool do_sort);
 
 // get the last accepted token
 llama_token common_sampler_last(const struct common_sampler * gsmpl);
@@ -105,3 +109,9 @@ std::vector<enum common_sampler_type> common_sampler_types_from_chars(const std:
 
 llama_sampler * llama_sampler_init_llg(const llama_vocab * vocab,
                 const char * grammar_kind, const char * grammar_data);
+
+struct common_sampler_deleter {
+    void operator()(common_sampler * s) { common_sampler_free(s); }
+};
+
+typedef std::unique_ptr<common_sampler, common_sampler_deleter> common_sampler_ptr;

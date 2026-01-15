@@ -71,10 +71,10 @@ int main(int argc, char ** argv) {
     llama_context * ctx_dft = NULL;
 
     // load the target model
-    common_init_result llama_init_tgt = common_init_from_params(params);
+    auto llama_init_tgt = common_init_from_params(params);
 
-    model_tgt = llama_init_tgt.model.get();
-    ctx_tgt   = llama_init_tgt.context.get();
+    model_tgt = llama_init_tgt->model();
+    ctx_tgt   = llama_init_tgt->context();
 
     // load the draft model
     params.devices = params.speculative.devices;
@@ -85,10 +85,12 @@ int main(int argc, char ** argv) {
     }
 
     params.cpuparams_batch.n_threads = params.speculative.cpuparams_batch.n_threads;
-    common_init_result llama_init_dft = common_init_from_params(params);
+    params.tensor_buft_overrides     = params.speculative.tensor_buft_overrides;
 
-    model_dft = llama_init_dft.model.get();
-    ctx_dft   = llama_init_dft.context.get();
+    auto llama_init_dft = common_init_from_params(params);
+
+    model_dft = llama_init_dft->model();
+    ctx_dft   = llama_init_dft->context();
 
     const llama_vocab * vocab_tgt = llama_model_get_vocab(model_tgt);
     const llama_vocab * vocab_dft = llama_model_get_vocab(model_dft);
@@ -201,8 +203,8 @@ int main(int argc, char ** argv) {
         drafts[s].smpl = common_sampler_init(model_dft, params.sampling);
     }
 
-    llama_batch batch_dft = llama_batch_init(llama_n_batch(ctx_dft), 0, 1);
-    llama_batch batch_tgt = llama_batch_init(llama_n_batch(ctx_tgt), 0, n_seq_dft);
+    llama_batch batch_dft = llama_batch_init(llama_n_batch(ctx_dft), 0, 1, 0);
+    llama_batch batch_tgt = llama_batch_init(llama_n_batch(ctx_tgt), 0, n_seq_dft, 0);
 
     const auto t_dec_start = ggml_time_us();
 
@@ -242,7 +244,7 @@ int main(int argc, char ** argv) {
                     // stochastic verification
                     common_sampler_sample(smpl, ctx_tgt, drafts[s_keep].i_batch_tgt[i_dft], true);
 
-                    auto & dist_tgt = *common_sampler_get_candidates(smpl);
+                    auto & dist_tgt = *common_sampler_get_candidates(smpl, true);
 
                     float p_tgt = 0.0f;
                     float p_dft = 0.0f;
@@ -491,7 +493,7 @@ int main(int argc, char ** argv) {
 
                 common_sampler_sample(drafts[s].smpl, ctx_dft, drafts[s].i_batch_dft, true);
 
-                const auto * cur_p = common_sampler_get_candidates(drafts[s].smpl);
+                const auto * cur_p = common_sampler_get_candidates(drafts[s].smpl, true);
 
                 for (int k = 0; k < std::min(n_seq_dft + 3, (int) cur_p->size); ++k) {
                     LOG_DBG(" - draft candidate %3d for seq %3d, pos %3d: %6d (%8.3f) '%s'\n",
