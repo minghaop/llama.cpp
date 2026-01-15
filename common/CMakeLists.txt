@@ -50,12 +50,19 @@ add_library(${TARGET} STATIC
     base64.hpp
     chat-parser.cpp
     chat-parser.h
+    chat-parser-xml-toolcall.h
+    chat-parser-xml-toolcall.cpp
+    chat-peg-parser.cpp
+    chat-peg-parser.h
     chat.cpp
     chat.h
     common.cpp
     common.h
     console.cpp
     console.h
+    download.cpp
+    download.h
+    http.h
     json-partial.cpp
     json-partial.h
     json-schema-to-grammar.cpp
@@ -64,22 +71,32 @@ add_library(${TARGET} STATIC
     log.h
     ngram-cache.cpp
     ngram-cache.h
+    peg-parser.cpp
+    peg-parser.h
+    preset.cpp
+    preset.h
     regex-partial.cpp
     regex-partial.h
     sampling.cpp
     sampling.h
     speculative.cpp
     speculative.h
+    unicode.cpp
+    unicode.h
     )
+
+target_include_directories(${TARGET} PUBLIC . ../vendor)
+target_compile_features   (${TARGET} PUBLIC cxx_std_17)
 
 if (BUILD_SHARED_LIBS)
     set_target_properties(${TARGET} PROPERTIES POSITION_INDEPENDENT_CODE ON)
 endif()
 
+# TODO: use list(APPEND LLAMA_COMMON_EXTRA_LIBS ...)
 set(LLAMA_COMMON_EXTRA_LIBS build_info)
 
-# Use curl to download model url
 if (LLAMA_CURL)
+    # Use curl to download model url
     find_package(CURL)
     if (NOT CURL_FOUND)
         message(FATAL_ERROR "Could NOT find CURL. Hint: to disable this feature, set -DLLAMA_CURL=OFF")
@@ -87,7 +104,11 @@ if (LLAMA_CURL)
     target_compile_definitions(${TARGET} PUBLIC LLAMA_USE_CURL)
     include_directories(${CURL_INCLUDE_DIRS})
     set(LLAMA_COMMON_EXTRA_LIBS ${LLAMA_COMMON_EXTRA_LIBS} ${CURL_LIBRARIES})
-endif ()
+elseif (LLAMA_HTTPLIB)
+    # otherwise, use cpp-httplib
+    target_compile_definitions(${TARGET} PUBLIC LLAMA_USE_HTTPLIB)
+    set(LLAMA_COMMON_EXTRA_LIBS ${LLAMA_COMMON_EXTRA_LIBS} cpp-httplib)
+endif()
 
 if (LLAMA_LLGUIDANCE)
     include(ExternalProject)
@@ -133,9 +154,7 @@ if (LLAMA_LLGUIDANCE)
     set(LLAMA_COMMON_EXTRA_LIBS ${LLAMA_COMMON_EXTRA_LIBS} llguidance ${LLGUIDANCE_PLATFORM_LIBS})
 endif ()
 
-target_include_directories(${TARGET} PUBLIC . ../vendor)
-target_compile_features   (${TARGET} PUBLIC cxx_std_17)
-target_link_libraries     (${TARGET} PRIVATE ${LLAMA_COMMON_EXTRA_LIBS} PUBLIC llama Threads::Threads)
+target_link_libraries(${TARGET} PRIVATE ${LLAMA_COMMON_EXTRA_LIBS} PUBLIC llama Threads::Threads)
 
 
 #

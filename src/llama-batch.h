@@ -8,18 +8,34 @@
 #include <vector>
 #include <set>
 #include <bitset>
+#include <memory>
 #include <unordered_map>
 
 // keep this struct lightweight
-// it points to data in `llama_batch_allocr`
 struct llama_ubatch {
-    bool equal_seqs;
+    bool equal_seqs() const {
+        return b_equal_seqs != 0;
+    }
+
+    // typical for M-RoPE cases:
+    //   0 - sequantial position of the tokens/embeddings in the sequence
+    //   1 - y position in the image
+    //   2 - x position in the image
+    //   3 - other
+    bool is_pos_2d() const {
+        // TODO @ngxson : we may need to check for model arch when more models use >1 positions
+        return n_pos >= 3;
+    }
+
+    uint32_t b_equal_seqs; // note: this is a boolean, but we use an int32_t for alignment
+                           //       otherwise address sanitizer complains
     // TODO: whole_seqs for embeddings?
 
     uint32_t n_tokens;     // total tokens (n_seq_tokens * n_seqs)
     uint32_t n_seq_tokens; // tokens per sequence set
     uint32_t n_seqs;       // sequence sets in the ubatch
     uint32_t n_seqs_unq;   // unique sequence ids in the ubatch
+    uint32_t n_pos;        // number of position inputs for each token/embedding
 
     // seq_id_unq: unique sequence ids in the ubatch
     // seq_idx:    indices of the unique sequence ids in the ubatch in [0, n_seqs_unq)
@@ -28,7 +44,7 @@ struct llama_ubatch {
     //                          // size               | idx | val
     llama_token  *  token;      // [n_tokens]         | i   | id, token
     float        *  embd;       // [n_embd, n_tokens] | i   | embd
-    llama_pos    *  pos;        // [n_tokens]         | i   | pos
+    llama_pos    *  pos;        // [n_tokens*n_pos]   | i   | pos
     int32_t      *  n_seq_id;   // [n_tokens]         | i   | -
     llama_seq_id ** seq_id;     // [n_tokens]         | s   | s0, s1, seq_id
     llama_seq_id *  seq_id_unq; // [n_seqs_unq]       | s   | seq_id
@@ -43,6 +59,29 @@ struct llama_ubatch {
     uint32_t        prompt_feat_len;
     float        *  rand_noise;
     float        *  extend_pe;
+
+    struct data_t {
+        std::vector<llama_token>    token;
+        std::vector<float>          embd;
+        std::vector<llama_pos>      pos;
+        std::vector<int32_t>        n_seq_id;
+        std::vector<llama_seq_id *> seq_id;      // these point into the seq_id_data below
+        std::vector<llama_seq_id>   seq_id_unq;
+        std::vector<int32_t>        seq_idx;
+        std::vector<int8_t>         output;
+        std::vector<llama_token>    flow_token;
+        std::vector<float>          flow_feat;
+        uint32_t                    token_len;
+        uint32_t                    prompt_token_len;
+        uint32_t                    prompt_feat_len;
+        std::vector<float>          rand_noise;
+        std::vector<float>          extend_pe;
+
+        std::vector<llama_seq_id> seq_id_data;
+    };
+
+    // the llama_ubatch pointers above point to this data if set. otherwise - point to external non-owning data
+    std::shared_ptr<data_t> data;
 };
 
 // a helper for sanitizing, fulfilling and splitting a batch
@@ -57,6 +96,7 @@ public:
             const llama_vocab & vocab,
             const llama_memory_i * memory,
             uint32_t n_embd,
+            uint32_t n_seq_max,
             bool output_all);
 
     const llama_batch & get_batch() const;
@@ -109,9 +149,10 @@ private:
     const uint32_t n_pos_per_embd;
 
     uint32_t n_embd;
+    uint32_t n_seq_max;
     uint32_t n_outputs;
 
-    std::array<llama_seq_id, 1> seq_id_0 = { 0 }; // default sequence id
+    std::array<llama_seq_id, 1> seq_id_0 = {{ 0 }}; // default sequence id
 
     std::vector<llama_pos>      pos;
     std::vector<int32_t>        n_seq_id;
@@ -124,7 +165,7 @@ private:
     using seq_cpl_t = std::vector<bool>;
 
     // helper flag to quickly determine if there are any coupled sequences in the batch
-    bool has_cpl;
+    bool has_cpl = false;
 
     std::vector<pos_set_t> seq_pos; // seq_pos[s]: the set of positions in sequence s
     std::vector<seq_cpl_t> seq_cpl; // seq_cpl[s0][s1]: if sequence s0 is coupled to sequence s1
@@ -143,28 +184,6 @@ private:
 
     // used[i] indicates if token i has already been used in a previous ubatch
     std::vector<bool> used;
-
-    // llama_ubatch points to this data:
-    struct ubatch {
-        std::vector<llama_token>    token;
-        std::vector<float>          embd;
-        std::vector<llama_pos>      pos;
-        std::vector<int32_t>        n_seq_id;
-        std::vector<llama_seq_id *> seq_id;
-        std::vector<llama_seq_id>   seq_id_unq;
-        std::vector<int32_t>        seq_idx;
-        std::vector<int8_t>         output;
-        std::vector<llama_token>    flow_token;
-        std::vector<float>          flow_feat;
-        uint32_t                    token_len;
-        uint32_t                    prompt_token_len;
-        uint32_t                    prompt_feat_len;
-        std::vector<float>          rand_noise;
-        std::vector<float>          extend_pe;
-    };
-
-    // current splitting state:
-    std::vector<ubatch> ubatches;
 
     int debug;
 };
