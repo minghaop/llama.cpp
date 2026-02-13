@@ -1000,7 +1000,7 @@ ggml_tensor * llm_graph_context::build_pos_encoding(
          size_t size, 
          size_t il) const{
     
-    ggml_tensor * new_cur = ggml_dup(ctx0, cur);
+    ggml_tensor * new_cur = cur;
     int64_t cols = new_cur->ne[0];           
     int64_t rows = new_cur->ne[1];               
     int64_t start = std::max(int64_t(0), rows / 2 - static_cast<int64_t>(size) - static_cast<int64_t>(offset) + 1);
@@ -1027,24 +1027,63 @@ ggml_tensor * llm_graph_context::build_espnet_pos_encode(
         return cur;
 }
 
-ggml_tensor * llm_graph_context::flip_weight(ggml_cgraph * gf, ggml_tensor * conv1_mw) const {
-    ggml_tensor * conv1_mw_new = ggml_new_tensor_3d(ctx0, GGML_TYPE_F32, 4, 512, 512);
-    for (int64_t k = 0; k < 4; k++) {
-        ggml_tensor * src_slice = ggml_view_3d(ctx0, conv1_mw,
-            1, 512, 512,                          // shape: [1, 512, 512]
-            conv1_mw->nb[0],             // stride
-            conv1_mw->nb[1],
-            k * conv1_mw->nb[0]          // offset
-        );
-        ggml_tensor * dst_slice = ggml_view_3d(ctx0, conv1_mw_new,
-            1, 512, 512,
-            conv1_mw_new->nb[0],
-            conv1_mw_new->nb[1],
-            (3 - k) * conv1_mw_new->nb[0]
-        );
-        ggml_build_forward_expand(gf, ggml_cpy(ctx0, src_slice, dst_slice));
-    }
+ggml_tensor * llm_graph_context::build_flash_attn_encoder(
+    ggml_tensor * x,           // [D, T, B]
+    ggml_tensor * wq,
+    ggml_tensor * wk,
+    ggml_tensor * wv,
+    ggml_tensor * wo,
+    ggml_tensor * bo,
+    ggml_tensor * attn_mask,   // 可为 nullptr
+    int32_t n_heads
+) const {
+
+    const int64_t T = x->ne[1];
+    const int64_t B = x->ne[2];
+    const int64_t D = x->ne[0];
+    const int64_t d_k = D / n_heads;
+
+    // ---- QKV
+    ggml_tensor * q = ggml_mul_mat(ctx0, wq, x);
+    ggml_tensor * k = ggml_mul_mat(ctx0, wk, x);
+    ggml_tensor * v = ggml_mul_mat(ctx0, wv, x);
+
+    // ---- reshape to (d_k, T, n_heads, B)
+    auto reshape_heads = [&](ggml_tensor * t) {
+        t = ggml_reshape_4d(ctx0, t, d_k, n_heads, T, B);
+        return ggml_cont(ctx0, ggml_permute(ctx0, t, 0, 2, 1, 3));
+    };
+
+    q = reshape_heads(q);
+    k = reshape_heads(k);
+    v = reshape_heads(v);
+
+    // ---- Flash Attention
+    ggml_tensor * attn_out = ggml_flash_attn_ext(
+        ctx0,
+        q, k, v,
+        attn_mask,
+        1.0f / sqrtf((float)d_k),
+        0.0f,
+        0.0f
+    );
+
+    // ---- merge heads
+    attn_out = ggml_reshape_3d(
+        ctx0,
+        attn_out,
+        d_k * n_heads,
+        T,
+        B
+    );
+
+    // ---- output proj
+    ggml_tensor * out = ggml_mul_mat(ctx0, wo, attn_out);
+    out = ggml_add(ctx0, out, bo);
+
+    return out;
 }
+
 // Metal 可用：用 unfold + mul_mat 等价替换 ggml_conv_1d (s=1,p=0,d=1)
 // x : (T, Cin) 或 (T, Cin, 1, 1)
 // w : (K, Cin, Cout) 或 (K, Cin, Cout, 1)
@@ -1286,25 +1325,6 @@ ggml_tensor * llm_graph_context::build_upsample_1d(
     cb(out, "upsample_conv_1d", -1);
     return out;
 }
-
-ggml_tensor * llm_graph_context::build_rand_noise(
-         ggml_tensor * cur,
-         float tempture) const{
-    // ggml_backend_t backend_cuda = ggml_backend_cuda_init(0);
-    
-    ggml_tensor * out = ggml_new_tensor_3d(ctx0, cur->type, 50*300, 80, 1);
-    ggml_backend_alloc_ctx_tensors(ctx0, backend_cpu);
-    const int64_t n_elm = ggml_nelements(out);
-    std::vector<float> tmp(n_elm);
-    std::mt19937 gen(42);
-    std::normal_distribution<float> dist(0.f, 1.f);
-    for (int64_t i = 0; i < n_elm; ++i) tmp[i] = dist(gen);
-    ggml_backend_tensor_set(out, tmp.data(), 0, tmp.size()*sizeof(float));
-    ggml_tensor * z = ggml_view_3d(ctx0, out, 80, cur->ne[0], cur->ne[2], out->nb[0], out->nb[1], 0);
-    // z = ggml_scale_inplace(ctx0, z, tempture);
-    return z;
-}
-
 
 ggml_tensor * llm_graph_context::build_causal_cond_cfm(
          ggml_cgraph * gf,
@@ -1619,6 +1639,7 @@ ggml_tensor * llm_graph_context::causal_conv1d_forward(
     ggml_set_name(model_weight, ("causal_blk1d_conv_weight_" + mode + "_" + std::to_string(step) + "_" + std::to_string(layer_id) + "_" + std::to_string(blk_id)).c_str());
     
     x_pad = ggml_cont(ctx0, x_pad);
+    
     ggml_tensor * y = nullptr;
     if (x_pad->ne[2] == 2) {
         ggml_tensor * x_batch0 = ggml_view_3d(ctx0, x_pad, 
@@ -1642,6 +1663,7 @@ ggml_tensor * llm_graph_context::causal_conv1d_forward(
     } else {
         y = ggml_conv_1d(ctx0, model_weight, x_pad, 1, 0, 1);
     }
+    
     
     ggml_tensor * b_reshaped = ggml_reshape_3d(ctx0, model_bias, 1, model_bias->ne[0], 1);
     y = ggml_add_inplace(ctx0, y, b_reshaped);
@@ -1719,7 +1741,7 @@ ggml_tensor * llm_graph_context::causal_resnet_block1d_forward(
         ggml_tensor * t_emb_ones,
         ggml_tensor * resnet_mish_ones,
         const llama_model & model) const{
-    ggml_tensor * x_dup = ggml_dup(ctx0, x);
+    ggml_tensor * x_dup = x;
     x = causal_block1d_forward(x, mask, resnet_mish_ones, mode, layer_id, 1, model, step);
     ggml_set_name(x, ("causal_blk1_" + mode + "_" + std::to_string(step) + "_" + std::to_string(layer_id)).c_str());
     // ggml_tensor * zeros = ggml_sub(ctx0, t_emb, t_emb);
@@ -1991,7 +2013,9 @@ ggml_tensor * llm_graph_context::build_solve_euler(
     ggml_tensor * spks_t = nullptr;
     if (spks_in) {
         spks_t = ggml_reshape_3d(ctx0, ggml_cont(ctx0, spks_in), 1, 80, 2);
+        LOG_TENSOR_SHAPE("spks_t before shape is: ", spks_t);
         spks_t = build_repeat(spks_t, 1, T, 0);
+        LOG_TENSOR_SHAPE("spks_t after shape is: ", spks_t);
     }
     if (spks_t) ggml_set_name(spks_t, ("decoder_spks_t_" + std::to_string(1)).c_str());
     ggml_tensor * cond_in = nullptr;

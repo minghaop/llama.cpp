@@ -722,6 +722,17 @@ struct llm_graph_context {
          ggml_tensor * cur, 
          int32_t il) const;
     
+    ggml_tensor * build_flash_attn_encoder(
+        ggml_tensor * x,           // [D, T, B]
+        ggml_tensor * wq,
+        ggml_tensor * wk,
+        ggml_tensor * wv,
+        ggml_tensor * wo,
+        ggml_tensor * bo,
+        ggml_tensor * attn_mask,   // 可为 nullptr
+        int32_t n_heads
+    ) const;
+    
     ggml_tensor * build_pre_lookahead_layer(
          ggml_tensor * cur,
          ggml_tensor * conv1_mw,
