@@ -72,6 +72,22 @@ struct llama_cross {
 
 struct llm_graph_params;
 
+
+struct ConvBias {
+    // down block
+    ggml_tensor * d1 = nullptr;  // blk_id=1
+    ggml_tensor * d2 = nullptr;  // blk_id=2
+    ggml_tensor * d3 = nullptr;  // blk_id=3 (down→mid)
+    // mid block: 12层 × 2
+    ggml_tensor * m1[12] = {};   // blk_id=1
+    ggml_tensor * m2[12] = {};   // blk_id=2
+    // up block
+    ggml_tensor * u1 = nullptr;  // blk_id=1
+    ggml_tensor * u2 = nullptr;  // blk_id=2
+    ggml_tensor * u3 = nullptr;  // blk_id=3 (up→final)
+    // final block
+    ggml_tensor * f1 = nullptr;  // blk_id=3
+};
 //
 // llm_graph_input
 //
@@ -819,6 +835,8 @@ struct llm_graph_context {
     
     ggml_tensor * causal_conv1d_forward(
         ggml_tensor * x,
+        ggml_tensor * pad,
+        const ConvBias & conv_b,
         std::string mode,
         int32_t layer_id,
         int32_t blk_id,
@@ -827,8 +845,10 @@ struct llm_graph_context {
     
     ggml_tensor * causal_block1d_forward(
         ggml_tensor * x,
+        std::vector<ggml_tensor *> pad_list,
         ggml_tensor * mask,
         ggml_tensor * resnet_mish_ones,
+        const ConvBias & conv_b,
         std::string mode,
         int32_t layer_id,
         int32_t blk_id,
@@ -837,6 +857,7 @@ struct llm_graph_context {
     
     ggml_tensor * causal_resnet_block1d_forward(
         ggml_tensor * x,
+        std::vector<ggml_tensor *> pad_list,
         ggml_tensor * mask,
         ggml_tensor * t_emb,
         int32_t step,
@@ -844,6 +865,8 @@ struct llm_graph_context {
         std::string mode,
         ggml_tensor * t_emb_ones,
         ggml_tensor * resnet_mish_ones,
+        std::vector<ggml_tensor *> res_w,
+        const ConvBias & conv_b,
         const llama_model & model) const;
     
     ggml_tensor * mask_to_bias(
@@ -854,6 +877,7 @@ struct llm_graph_context {
     
     ggml_tensor * build_causal_cond_decoder(
          ggml_tensor * x,
+         std::vector<ggml_tensor *> pad_list,
          ggml_tensor * mask,
          ggml_tensor * mu,
          ggml_tensor * t,
@@ -863,6 +887,8 @@ struct llm_graph_context {
          ggml_tensor * attn_mask,
          ggml_tensor * t_emb_ones,
          ggml_tensor * resnet_mish_ones,
+         std::vector<ggml_tensor *> res_w,
+         const ConvBias & conv_b,
          const llama_model & model,
          int32_t step) const;
     
