@@ -1365,11 +1365,8 @@ ggml_tensor * llm_graph_context::causal_conv1d_forward(
         }
     } else if (mode == "final_block"){
         model_weight = model.f_blk_conv_w;
-        model_bias = model.f_blk_conv_b;
-    } else {
-        model_weight = model.f_blk_norm_w;
-        model_bias = model.f_blk_norm_b;
-    }
+        model_bias = conv_b.f1;
+    } 
     ggml_set_name(model_weight, ("causal_blk1d_conv_weight_" + mode + "_" + std::to_string(step) + "_" + std::to_string(layer_id) + "_" + std::to_string(blk_id)).c_str());
     
     // x_pad = ggml_cont(ctx0, x_pad);
@@ -1791,19 +1788,22 @@ ggml_tensor * llm_graph_context::build_solve_euler(
     res_w.push_back(res_w_u_blk);
 
     ConvBias conv_b;
-    conv_b.d1 = ggml_reshape_3d(ctx0, model.down_blk1_conv_b, 1, model.down_blk1_conv_b->ne[0], 1);
-    conv_b.d2 = ggml_reshape_3d(ctx0, model.down_blk2_conv_b, 1, model.down_blk2_conv_b->ne[0], 1);
-    conv_b.d3 = ggml_reshape_3d(ctx0, model.down_blk_conv_b,  1, model.down_blk_conv_b->ne[0],  1);
+    auto make_bias_3d = [&](ggml_tensor * b) -> ggml_tensor * {
+        // int64_t total = ggml_nelements(b);
+        return ggml_reshape_3d(ctx0, b, 
+            1, b->ne[0], 1);
+    };
+    conv_b.d1 = make_bias_3d(model.down_blk1_conv_b); 
+    conv_b.d2 = make_bias_3d(model.down_blk2_conv_b);
+    conv_b.d3 = make_bias_3d(model.down_blk_conv_b);
     for (int i = 0; i < 12; i++) {
-        conv_b.m1[i] = ggml_reshape_3d(ctx0, model.layers[280+i].mid_block1_b, 
-            1, model.layers[280+i].mid_block1_b->ne[0], 1);
-        conv_b.m2[i] = ggml_reshape_3d(ctx0, model.layers[280+i].mid_block2_b, 
-            1, model.layers[280+i].mid_block2_b->ne[0], 1);
+        conv_b.m1[i] = make_bias_3d(model.layers[280+i].mid_block1_b);
+        conv_b.m2[i] = make_bias_3d(model.layers[280+i].mid_block2_b);
     }
-    conv_b.u1 = ggml_reshape_3d(ctx0, model.up_blk1_conv_b, 1, model.up_blk1_conv_b->ne[0], 1);
-    conv_b.u2 = ggml_reshape_3d(ctx0, model.up_blk2_conv_b, 1, model.up_blk2_conv_b->ne[0], 1);
-    conv_b.u3 = ggml_reshape_3d(ctx0, model.up_blk_conv_b,  1, model.up_blk_conv_b->ne[0],  1);
-    conv_b.f1 = ggml_reshape_3d(ctx0, model.f_blk_conv_b, 1, model.f_blk_conv_b->ne[0], 1);
+    conv_b.u1 = make_bias_3d(model.up_blk1_conv_b);
+    conv_b.u2 = make_bias_3d(model.up_blk2_conv_b);
+    conv_b.u3 = make_bias_3d(model.up_blk_conv_b);
+    conv_b.f1 = make_bias_3d(model.f_blk_conv_b); 
 
     for (int64_t step = 1; step < 11; ++step) {
         ggml_tensor * t_current = ggml_scale(ctx0, one, t_val);
