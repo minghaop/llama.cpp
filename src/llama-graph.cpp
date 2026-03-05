@@ -1399,33 +1399,34 @@ ggml_tensor * llm_graph_context::causal_conv1d_forward(
     } 
     ggml_set_name(model_weight, ("causal_blk1d_conv_weight_" + mode + "_" + std::to_string(step) + "_" + std::to_string(layer_id) + "_" + std::to_string(blk_id)).c_str());
     
-    // x_pad = ggml_cont(ctx0, x_pad);
+    x_pad = ggml_cont(ctx0, x_pad);
     
     ggml_tensor * y = nullptr;
-    if (x_pad->ne[2] == 2) {
-        ggml_tensor * x_batch0 = ggml_view_3d(ctx0, x_pad, 
-            x_pad->ne[0], x_pad->ne[1], 1,  // [1536, 320, 1]
-            x_pad->nb[1], x_pad->nb[2], 
-            0);
+    // if (x_pad->ne[2] == 2) {
+    //     ggml_tensor * x_batch0 = ggml_view_3d(ctx0, x_pad, 
+    //         x_pad->ne[0], x_pad->ne[1], 1,  // [1536, 320, 1]
+    //         x_pad->nb[1], x_pad->nb[2], 
+    //         0);
 
-        ggml_tensor * x_batch1 = ggml_view_3d(ctx0, x_pad,
-            x_pad->ne[0], x_pad->ne[1], 1,  // [1536, 320, 1]
-            x_pad->nb[1], x_pad->nb[2],
-            x_pad->nb[2]);
-        // LOG_TENSOR_SHAPE("causal model shape is: ", model_weight);
-        // LOG_TENSOR_SHAPE("causal batch shape is: ", x_batch0);
-        // LOG_TENSOR_SHAPE("causal batch shape is: ", x_batch1);
-        ggml_tensor * y0 = ggml_conv_1d(ctx0, model_weight, x_batch0, 1, 0, 1);
-        ggml_tensor * y1 = ggml_conv_1d(ctx0, model_weight, x_batch1, 1, 0, 1);
-        // LOG_TENSOR_SHAPE("causal y0 shape is: ", y0);
-        // LOG_TENSOR_SHAPE("causal y1 shape is: ", y1);
-        y = ggml_concat(ctx0, y0, y1, 2);
-        // y = conv1d_s1_p0_d1_mul_mat_batched(ctx0, model_weight, x_pad);
-    } else {
-        y = ggml_conv_1d(ctx0, model_weight, x_pad, 1, 0, 1);
-    }
+    //     ggml_tensor * x_batch1 = ggml_view_3d(ctx0, x_pad,
+    //         x_pad->ne[0], x_pad->ne[1], 1,  // [1536, 320, 1]
+    //         x_pad->nb[1], x_pad->nb[2],
+    //         x_pad->nb[2]);
+    //     // LOG_TENSOR_SHAPE("causal model shape is: ", model_weight);
+    //     // LOG_TENSOR_SHAPE("causal batch shape is: ", x_batch0);
+    //     // LOG_TENSOR_SHAPE("causal batch shape is: ", x_batch1);
+    //     // y = ggml_conv_1d(ctx0, model_weight, x_pad, 1, 0, 1);
+    //     ggml_tensor * y0 = ggml_conv_1d(ctx0, model_weight, x_batch0, 1, 0, 1);
+    //     ggml_tensor * y1 = ggml_conv_1d(ctx0, model_weight, x_batch1, 1, 0, 1);
+    //     // LOG_TENSOR_SHAPE("causal y0 shape is: ", y0);
+    //     // LOG_TENSOR_SHAPE("causal y1 shape is: ", y1);
+    //     y = ggml_concat(ctx0, y0, y1, 2);
+    //     // y = conv1d_s1_p0_d1_mul_mat_batched(ctx0, model_weight, x_pad);
+    // } else {
+    //     y = ggml_conv_1d(ctx0, model_weight, x_pad, 1, 0, 1);
+    // }
     
-    
+    y = ggml_conv_1d(ctx0, model_weight, x_pad, 1, 0, 1);
     // ggml_tensor * b_reshaped = ggml_reshape_3d(ctx0, model_bias, 1, model_bias->ne[0], 1);
     y = ggml_add_inplace(ctx0, y, model_bias);
     // LOG_TENSOR_SHAPE("======== y shape is: ", y);
