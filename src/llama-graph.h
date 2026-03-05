@@ -799,6 +799,7 @@ struct llm_graph_context {
     
     ggml_tensor * build_sinusoidal_pos_emb(
          ggml_tensor * cur,
+         ggml_tensor * emb_row,
          int dim = 320,
          int scale = 1000,
          float emb_div = 0.05792666900613952f) const;
@@ -889,6 +890,7 @@ struct llm_graph_context {
          ggml_tensor * resnet_mish_ones,
          std::vector<ggml_tensor *> res_w,
          const ConvBias & conv_b,
+         ggml_tensor * emb_row,
          const llama_model & model,
          int32_t step) const;
     
