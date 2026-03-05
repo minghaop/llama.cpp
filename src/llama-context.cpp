@@ -830,8 +830,12 @@ llm_graph_result * llama_context::process_ubatch(const llama_ubatch & ubatch, ll
         ggml_backend_sched_set_eval_callback(sched.get(), cparams.cb_eval, cparams.cb_eval_user_data);
 
         //const auto t_start_us = ggml_time_us();
-
+        auto t0 = ggml_time_us();
         gf = model.build_graph(gparams);
+        auto t1 = ggml_time_us();
+        LLAMA_LOG_INFO("=================== build: %lld us\n", t1-t0);
+        
+
 
         if (dot_debug) {
             ggml_graph_dump_dot(gf, NULL, "debug_hift.dot");
@@ -860,8 +864,39 @@ llm_graph_result * llama_context::process_ubatch(const llama_ubatch & ubatch, ll
 
         //LLAMA_LOG_INFO("graph set inputs time: %.3f ms\n", (ggml_time_us() - t_start_us)/1000.0);
     }
+    // auto t2 = ggml_time_us();
+    // const auto status = graph_compute(res->get_gf(), ubatch.n_tokens > 1);
+    // auto t3 = ggml_time_us();
+    // LLAMA_LOG_INFO("=================== compute: %lld us\n", t3-t2);
+    const int N_WARMUP = 3;   // 预热次数
+    const int N_MEASURE = 10;
 
-    const auto status = graph_compute(res->get_gf(), ubatch.n_tokens > 1);
+    // 预热
+    for (int i = 0; i < N_WARMUP; i++) {
+        // res->set_inputs(&ubatch);
+        const auto status = graph_compute(res->get_gf(), ubatch.n_tokens > 1);
+    }
+
+    int64_t min_us = INT64_MAX;
+    int64_t max_us = 0;
+    int64_t total_us = 0;
+
+    for (int i = 0; i < N_MEASURE; i++) {
+        // res->set_inputs(&ubatch);
+        auto t_start = ggml_time_us();
+        const auto status = graph_compute(res->get_gf(), ubatch.n_tokens > 1);
+        auto t_end = ggml_time_us();
+        
+        int64_t dur = t_end - t_start;
+        total_us += dur;
+        min_us = std::min(min_us, dur);
+        max_us = std::max(max_us, dur);
+    }
+
+    LLAMA_LOG_INFO("compute: avg=%lld min=%lld max=%lld us (n=%d)\n",
+        total_us / N_MEASURE, min_us, max_us, N_MEASURE);
+    
+    auto status = GGML_STATUS_SUCCESS;
     if (status != GGML_STATUS_SUCCESS) {
         LLAMA_LOG_ERROR("%s: failed to compute graph, compute status: %d\n", __func__, status);
         ret = status;
