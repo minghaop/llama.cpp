@@ -1281,6 +1281,7 @@ ggml_tensor * llm_graph_context::build_basic_attn(
     ggml_tensor * q = ggml_mul_mat(ctx0, wq, x);
     ggml_tensor * k = ggml_mul_mat(ctx0, wk, x);
     ggml_tensor * v = ggml_mul_mat(ctx0, wv, x);
+
     // LOG_TENSOR_SHAPE("======== q shape is: ", q);
     // LOG_TENSOR_SHAPE("======== k shape is: ", k);
     // LOG_TENSOR_SHAPE("======== v shape is: ", v);
@@ -1314,6 +1315,9 @@ ggml_tensor * llm_graph_context::build_basic_attn(
     q = reshape_heads(q);
     k = reshape_heads(k);
     v = reshape_heads(v);
+
+    // k = ggml_cast(ctx0, k, GGML_TYPE_F16);
+    // v = ggml_cast(ctx0, v, GGML_TYPE_F16);
 
     ggml_tensor * attn_out = ggml_flash_attn_ext(ctx0, q, k, v, attn_mask, 0.125f, 0.0f, 0.0f);
     // LOG_TENSOR_SHAPE("====== attn_out shape is: ", attn_out);
@@ -1398,7 +1402,7 @@ ggml_tensor * llm_graph_context::causal_conv1d_forward(
     } 
     ggml_set_name(model_weight, ("causal_blk1d_conv_weight_" + mode + "_" + std::to_string(step) + "_" + std::to_string(layer_id) + "_" + std::to_string(blk_id)).c_str());
     
-    x_pad = ggml_cont(ctx0, x_pad);
+    // x_pad = ggml_cont(ctx0, x_pad);
     
     ggml_tensor * y_corrupt = ggml_conv_1d(ctx0, model_weight, x_pad, 1, 0, 1);
     const int64_t W = y_corrupt->ne[0];
@@ -1468,7 +1472,7 @@ ggml_tensor * llm_graph_context::causal_block1d_forward(
     x = ggml_cont(ctx0, ggml_permute(ctx0, x, 1, 0, 2, 3));
     x = build_layer_norm(x, model_weight, model_bias, 1e-5f, "blk_1d", 100);
     x = ggml_cont(ctx0, ggml_permute(ctx0, x, 1, 0, 2, 3));
-    x = ggml_mul(ctx0, x, ggml_tanh(ctx0, ggml_softplus(ctx0, x)));
+    x = ggml_mul_inplace(ctx0, x, ggml_tanh_inplace(ctx0, ggml_softplus(ctx0, x)));
     return x;
 }
 
@@ -1499,7 +1503,7 @@ ggml_tensor * llm_graph_context::causal_resnet_block1d_forward(
         t_emb = ggml_add_inplace(ctx0, t_emb, model.up_blk_mlp_b);
     }
     t_emb = ggml_reshape_3d(ctx0, t_emb, 1, t_emb->ne[0], t_emb->ne[1]);
-    x = ggml_add(ctx0, x, t_emb);
+    x = ggml_add_inplace(ctx0, x, t_emb);
     ggml_set_name(x, ("causal_add_" + mode + "_" + std::to_string(step) + "_" + std::to_string(layer_id)).c_str());
     x = causal_block1d_forward(x, pad_list, mask, resnet_mish_ones, conv_b, mode, layer_id, 2, model, step);
     ggml_set_name(x, ("causal_blk2_" + mode + "_" + std::to_string(step) + "_" + std::to_string(layer_id)).c_str());
@@ -1570,11 +1574,11 @@ ggml_tensor * llm_graph_context::build_causal_cond_decoder(
 
         h = build_layer_norm(tr_x, model.layers[226 + i].down_block1_norm3_w, model.layers[226 + i].down_block1_norm3_b, 1e-5f, "down_block", 24 + i);
         ggml_tensor * ff_out = ggml_mul_mat(ctx0, model.layers[226 + i].down_block1_ffn_w0, h);
-        ff_out = ggml_add(ctx0, ff_out, model.layers[226 + i].down_block1_ffn_b0);
+        ff_out = ggml_add_inplace(ctx0, ff_out, model.layers[226 + i].down_block1_ffn_b0);
         ff_out = ggml_gelu_erf(ctx0, ff_out);
         ff_out = ggml_mul_mat(ctx0, model.layers[226 + i].down_block1_ffn_w2, ff_out);
         ff_out = ggml_add_inplace(ctx0, ff_out, model.layers[226 + i].down_block1_ffn_b2);
-        x = ggml_add(ctx0, ff_out, tr_x);
+        x = ggml_add_inplace(ctx0, ff_out, tr_x);
         // x = tr_x;
     }
     ggml_set_name(x, ("causal_trans_down_block_" + std::to_string(step)).c_str());
@@ -1603,11 +1607,11 @@ ggml_tensor * llm_graph_context::build_causal_cond_decoder(
             tr_x = ggml_add_inplace(ctx0, attn_out, tr_x);
             h = build_layer_norm(tr_x, model.mid_block_sub_layers[i * 4 + j].mid_block1_norm3_w, model.mid_block_sub_layers[i * 4 + j].mid_block1_norm3_b, 1e-5f, "mid_block", 76 + i +j);
             ggml_tensor * ff_out = ggml_mul_mat(ctx0, model.mid_block_sub_layers[i *4 + j].mid_block1_ffn_w0, h);
-            ff_out = ggml_add(ctx0, ff_out, model.mid_block_sub_layers[i *4 + j].mid_block1_ffn_b0);
+            ff_out = ggml_add_inplace(ctx0, ff_out, model.mid_block_sub_layers[i *4 + j].mid_block1_ffn_b0);
             ff_out = ggml_gelu_erf(ctx0, ff_out);
             ff_out = ggml_mul_mat(ctx0, model.mid_block_sub_layers[i *4 + j].mid_block1_ffn_w2, ff_out);
             ff_out = ggml_add_inplace(ctx0, ff_out, model.mid_block_sub_layers[i *4 + j].mid_block1_ffn_b2);
-            x = ggml_add(ctx0, ff_out, tr_x);
+            x = ggml_add_inplace(ctx0, ff_out, tr_x);
             // x = tr_x;
             ggml_set_name(x, ("causal_trans_mid_block_" + std::to_string(step) + "_layer_" + std::to_string(i) + "_sub_layer_" + std::to_string(j)).c_str());
         }
@@ -1623,11 +1627,11 @@ ggml_tensor * llm_graph_context::build_causal_cond_decoder(
         tr_x = ggml_add_inplace(ctx0, attn_out, tr_x);
         h = build_layer_norm(tr_x, model.layers[1059 + i].up_block1_norm3_w, model.layers[1059 + i].up_block1_norm3_b, 1e-5f, "up_block", 128 + i);
         ggml_tensor * ff_out = ggml_mul_mat(ctx0, model.layers[1059 + i].up_block1_ffn_w0, h);
-        ff_out = ggml_add(ctx0, ff_out, model.layers[1059 + i].up_block1_ffn_b0);
+        ff_out = ggml_add_inplace(ctx0, ff_out, model.layers[1059 + i].up_block1_ffn_b0);
         ff_out = ggml_gelu_erf(ctx0, ff_out);
         ff_out = ggml_mul_mat(ctx0, model.layers[1059 + i].up_block1_ffn_w2, ff_out);
         ff_out = ggml_add_inplace(ctx0, ff_out, model.layers[1059 + i].up_block1_ffn_b2);
-        x = ggml_add(ctx0, ff_out, tr_x);
+        x = ggml_add_inplace(ctx0, ff_out, tr_x);
         // x = tr_x;
     }
     ggml_set_name(x, ("causal_trans_up_block_" + std::to_string(step)).c_str());
@@ -1653,46 +1657,6 @@ ggml_tensor * llm_graph_context::build_causal_cond_decoder(
     return x;
 }
 
-ggml_tensor * llm_graph_context::build_repeat(ggml_tensor * cur, int32_t current_length, int32_t target_length, int32_t dim) const{
-    // int64_t current_length = 1;
-
-    // 使用2的幂次快速接近目标
-    while (current_length * 2 <= target_length) {
-        cur = ggml_concat(ctx0, cur, cur, dim);
-        current_length *= 2;
-        // printf("Current length after concat: %ld\n", current_length);
-    }
-
-    // 添加剩余的部分
-    if (current_length < target_length) {
-        int64_t remaining = target_length - current_length;
-        if (dim == 0) {
-            ggml_tensor * partial = ggml_view_3d(ctx0, cur, 
-                                        remaining, cur->ne[1], cur->ne[2],
-                                        cur->nb[1], 
-                                        cur->nb[2], 0);
-            cur = ggml_concat(ctx0, cur, partial, dim);
-            // printf("Final length: %ld\n", cur->ne[0]);
-        } else if (dim == 1) {
-            ggml_tensor * partial = ggml_view_3d(ctx0, cur, 
-                                        cur->ne[0], remaining, cur->ne[2],
-                                        cur->nb[1], 
-                                        cur->nb[2], 0);
-            cur = ggml_concat(ctx0, cur, partial, dim);
-            // printf("Final length: %ld\n", cur->ne[1]);
-        }else if (dim == 2) {
-            ggml_tensor * partial = ggml_view_3d(ctx0, cur, 
-                                        cur->ne[0], cur->ne[1], remaining,
-                                        cur->nb[1], 
-                                        cur->nb[2], 0);
-            cur = ggml_concat(ctx0, cur, partial, dim);
-            // printf("Final length: %ld\n", cur->ne[2]);
-        }
-        
-    }
-    return cur;
-}
-
 ggml_tensor * llm_graph_context::build_solve_euler(
          ggml_cgraph * gf,
          ggml_tensor * z,
@@ -1705,7 +1669,6 @@ ggml_tensor * llm_graph_context::build_solve_euler(
     const int64_t B   = z->ne[2];
     const int64_t C   = z->ne[1]; 
     const int64_t T   = z->ne[0];
-    LOG_TENSOR_SHAPE("========= z shape is: ", z);
     const float PI = 3.14159265358979323846f;
     const int N_STEPS = 10; 
     const int64_t spk_dim = spks ? spks->ne[0] : 0;
@@ -1818,7 +1781,7 @@ ggml_tensor * llm_graph_context::build_solve_euler(
         ggml_set_name(dphi_dt, ("dphi_dt_" + std::to_string(step)).c_str());
         ggml_tensor * dphi_dt_split   = ggml_view_3d(ctx0, dphi_dt, T, z->ne[1], B, dphi_dt->nb[1], dphi_dt->nb[2], 0);
         ggml_tensor * cfg_dphi_dt  = ggml_view_3d(ctx0, dphi_dt, T, z->ne[1], B, dphi_dt->nb[1], dphi_dt->nb[2], B * dphi_dt->nb[2]);
-        ggml_tensor * dphi  = ggml_sub(ctx0, ggml_scale(ctx0, dphi_dt_split, 1.7f * dt), ggml_scale(ctx0, cfg_dphi_dt, 0.7f * dt));
+        ggml_tensor * dphi  = ggml_sub_inplace(ctx0, ggml_scale(ctx0, dphi_dt_split, 1.7f * dt), ggml_scale(ctx0, cfg_dphi_dt, 0.7f * dt));
         // ggml_tensor * dphi_scaled = ggml_scale(ctx0, dphi, dt);
         z_current = ggml_add_inplace(ctx0, z_current, dphi);
         // 更新循环变量（关键！）
