@@ -1566,14 +1566,15 @@ ggml_tensor * llm_graph_context::build_causal_cond_decoder(
     ggml_tensor * mask_down = masks.back();
     x = causal_resnet_block1d_forward(x, pad_list, mask_down, t_mish, step, 0, "down_block", t_emb_ones, resnet_mish_ones, res_w, conv_b, model);
     ggml_set_name(x, ("causal_resnet_blk1d_" + std::to_string(step)).c_str());
+    ggml_tensor * tr_x, *h, *attn_out, *ff_out;
     for (size_t i = 0; i < 4; ++i) {
-        ggml_tensor * tr_x = x;
-        ggml_tensor * h = build_layer_norm(x, model.layers[226 + i].down_block1_norm1_w, model.layers[226 + i].down_block1_norm1_b, 1e-5f, "down_block", 20 + i);
-        ggml_tensor * attn_out = build_basic_attn(h, attn_mask, 226 + i, "down_block", model);
+        tr_x = x;
+        h = build_layer_norm(x, model.layers[226 + i].down_block1_norm1_w, model.layers[226 + i].down_block1_norm1_b, 1e-5f, "down_block", 20 + i);
+        attn_out = build_basic_attn(h, attn_mask, 226 + i, "down_block", model);
         tr_x = ggml_add_inplace(ctx0, attn_out, tr_x);
 
         h = build_layer_norm(tr_x, model.layers[226 + i].down_block1_norm3_w, model.layers[226 + i].down_block1_norm3_b, 1e-5f, "down_block", 24 + i);
-        ggml_tensor * ff_out = ggml_mul_mat(ctx0, model.layers[226 + i].down_block1_ffn_w0, h);
+        ff_out = ggml_mul_mat(ctx0, model.layers[226 + i].down_block1_ffn_w0, h);
         ff_out = ggml_add_inplace(ctx0, ff_out, model.layers[226 + i].down_block1_ffn_b0);
         ff_out = ggml_gelu_erf(ctx0, ff_out);
         ff_out = ggml_mul_mat(ctx0, model.layers[226 + i].down_block1_ffn_w2, ff_out);
@@ -1599,14 +1600,14 @@ ggml_tensor * llm_graph_context::build_causal_cond_decoder(
         ggml_set_name(x, ("causal_resnet_mid_block_" + std::to_string(step) + "_layer_" + std::to_string(i)).c_str());
         
         for (size_t j = 0; j < 4; ++j) {
-            ggml_tensor * tr_x = x;
-            ggml_tensor * h = build_layer_norm(x, model.mid_block_sub_layers[i * 4 + j].mid_block1_norm1_w, model.mid_block_sub_layers[i * 4 + j].mid_block1_norm1_b, 1e-5f, "mid_block", 28 + i + j);
+            tr_x = x;
+            h = build_layer_norm(x, model.mid_block_sub_layers[i * 4 + j].mid_block1_norm1_w, model.mid_block_sub_layers[i * 4 + j].mid_block1_norm1_b, 1e-5f, "mid_block", 28 + i + j);
             ggml_set_name(h, ("causal_trans_mid_block_norm_1_" + std::to_string(step) + "_layer_" + std::to_string(i) + "_sub_layer_" + std::to_string(j)).c_str());
-            ggml_tensor * attn_out = build_basic_attn(h, attn_mask, i * 4 + j, "mid_block", model);
+            attn_out = build_basic_attn(h, attn_mask, i * 4 + j, "mid_block", model);
             ggml_set_name(attn_out, ("causal_trans_mid_block_attn_" + std::to_string(step) + "_layer_" + std::to_string(i) + "_sub_layer_" + std::to_string(j)).c_str());
             tr_x = ggml_add_inplace(ctx0, attn_out, tr_x);
             h = build_layer_norm(tr_x, model.mid_block_sub_layers[i * 4 + j].mid_block1_norm3_w, model.mid_block_sub_layers[i * 4 + j].mid_block1_norm3_b, 1e-5f, "mid_block", 76 + i +j);
-            ggml_tensor * ff_out = ggml_mul_mat(ctx0, model.mid_block_sub_layers[i *4 + j].mid_block1_ffn_w0, h);
+            ff_out = ggml_mul_mat(ctx0, model.mid_block_sub_layers[i *4 + j].mid_block1_ffn_w0, h);
             ff_out = ggml_add_inplace(ctx0, ff_out, model.mid_block_sub_layers[i *4 + j].mid_block1_ffn_b0);
             ff_out = ggml_gelu_erf(ctx0, ff_out);
             ff_out = ggml_mul_mat(ctx0, model.mid_block_sub_layers[i *4 + j].mid_block1_ffn_w2, ff_out);
@@ -1621,12 +1622,12 @@ ggml_tensor * llm_graph_context::build_causal_cond_decoder(
     x = ggml_concat(ctx0, x, hidden, 1);
     x = causal_resnet_block1d_forward(x, pad_list, mask, t_mish, step, 0, "up_block", t_emb_ones, resnet_mish_ones, res_w, conv_b, model);
     for (size_t i = 0; i < 4; ++i) {
-        ggml_tensor * tr_x = x;
-        ggml_tensor * h = build_layer_norm(x, model.layers[1059 + i].up_block1_norm1_w, model.layers[1059 + i].up_block1_norm1_b, 1e-5f, "up_block", 124 + i);
-        ggml_tensor * attn_out = build_basic_attn(h, attn_mask, 1059 + i, "up_block", model);
+        tr_x = x;
+        h = build_layer_norm(x, model.layers[1059 + i].up_block1_norm1_w, model.layers[1059 + i].up_block1_norm1_b, 1e-5f, "up_block", 124 + i);
+        attn_out = build_basic_attn(h, attn_mask, 1059 + i, "up_block", model);
         tr_x = ggml_add_inplace(ctx0, attn_out, tr_x);
         h = build_layer_norm(tr_x, model.layers[1059 + i].up_block1_norm3_w, model.layers[1059 + i].up_block1_norm3_b, 1e-5f, "up_block", 128 + i);
-        ggml_tensor * ff_out = ggml_mul_mat(ctx0, model.layers[1059 + i].up_block1_ffn_w0, h);
+        ff_out = ggml_mul_mat(ctx0, model.layers[1059 + i].up_block1_ffn_w0, h);
         ff_out = ggml_add_inplace(ctx0, ff_out, model.layers[1059 + i].up_block1_ffn_b0);
         ff_out = ggml_gelu_erf(ctx0, ff_out);
         ff_out = ggml_mul_mat(ctx0, model.layers[1059 + i].up_block1_ffn_w2, ff_out);
