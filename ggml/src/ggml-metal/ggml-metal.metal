@@ -1627,6 +1627,27 @@ kernel void kernel_softplus_f32_4(
     dst[tpig] = select(log(1.0f + exp(x)), x, x > 20.0f);
 }
 
+// 单个 float 处理的 Mish 算子
+kernel void kernel_mish_f32(
+        device const float * src0,
+        device       float * dst,
+        uint tpig[[thread_position_in_grid]]) {
+    
+    device const float & x = src0[tpig];
+    float sp = select(log(1.0f + exp(x)), x, x > 20.0f);
+    dst[tpig] = x * tanh(sp);
+}
+
+kernel void kernel_mish_f32_4(
+        device const float4 * src0,
+        device       float4 * dst,
+        uint tpig[[thread_position_in_grid]]) {
+    
+    device const float4 & x = src0[tpig];
+    float4 sp = select(log(1.0f + exp(x)), x, x > 20.0f);
+    dst[tpig] = x * tanh(sp);
+}
+
 kernel void kernel_expm1_f32(
         device const float * src0,
         device       float * dst,

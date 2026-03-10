@@ -9204,6 +9204,10 @@ void ggml_compute_forward_unary(
             {
                 ggml_compute_forward_softplus(params, dst);
             } break;
+        case GGML_UNARY_OP_MISH:         // 👈 新增 Mish 的纯 C 语言 CPU 实现
+            {
+                 ggml_compute_forward_mish(params, dst);
+            } break;
         default:
             {
                 GGML_ABORT("fatal error");

@@ -587,6 +587,7 @@ extern "C" {
         GGML_UNARY_OP_EXP,
         GGML_UNARY_OP_EXPM1,
         GGML_UNARY_OP_SOFTPLUS,
+        GGML_UNARY_OP_MISH,
         GGML_UNARY_OP_GELU_ERF,
         GGML_UNARY_OP_XIELU,
         GGML_UNARY_OP_FLOOR,
@@ -988,6 +989,14 @@ extern "C" {
             struct ggml_tensor  * a);
 
     GGML_API struct ggml_tensor * ggml_softplus_inplace(
+            struct ggml_context * ctx,
+            struct ggml_tensor  * a);
+
+    GGML_API struct ggml_tensor * ggml_mish(
+            struct ggml_context * ctx,
+            struct ggml_tensor  * a);
+
+    GGML_API struct ggml_tensor * ggml_mish_inplace(
             struct ggml_context * ctx,
             struct ggml_tensor  * a);
 

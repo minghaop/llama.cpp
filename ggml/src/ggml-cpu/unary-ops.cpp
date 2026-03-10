@@ -81,6 +81,11 @@ static inline float op_softplus(float x) {
     return (x > 20.0f) ? x : logf(1.0f + expf(x));
 }
 
+static inline float op_mish(float x) {
+    float sp = x > 20.0f ? x : logf(1.0f + expf(x));
+    return x * tanhf(sp);
+}
+
 static inline float op_floor(float x) {
     return floorf(x);
 }
@@ -304,6 +309,10 @@ void ggml_compute_forward_expm1(const ggml_compute_params * params, ggml_tensor 
 
 void ggml_compute_forward_softplus(const ggml_compute_params * params, ggml_tensor * dst) {
     unary_op<op_softplus>(params, dst);
+}
+
+void ggml_compute_forward_mish(const ggml_compute_params * params, ggml_tensor * dst) {
+    unary_op<op_mish>(params, dst);
 }
 
 void ggml_compute_forward_floor(const ggml_compute_params * params, ggml_tensor * dst) {
