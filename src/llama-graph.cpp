@@ -1505,12 +1505,12 @@ ggml_tensor * llm_graph_context::build_causal_cond_decoder(
          std::vector<ggml_tensor *> res_w,
          const ConvBias & conv_b,
          ggml_tensor * emb_row,
-        //  const std::vector<ggml_tensor *> & down_w0,
-        //  const std::vector<ggml_tensor *> & down_w2,
-        //  const std::vector<ggml_tensor *> & mid_w0,
-        //  const std::vector<ggml_tensor *> & mid_w2,
-        //  const std::vector<ggml_tensor *> & up_w0,
-        //  const std::vector<ggml_tensor *> & up_w2,
+         const std::vector<ggml_tensor *> & down_w0,
+         const std::vector<ggml_tensor *> & down_w2,
+         const std::vector<ggml_tensor *> & mid_w0,
+         const std::vector<ggml_tensor *> & mid_w2,
+         const std::vector<ggml_tensor *> & up_w0,
+         const std::vector<ggml_tensor *> & up_w2,
          const llama_model & model,
          int32_t step) const{
     
@@ -1543,10 +1543,10 @@ ggml_tensor * llm_graph_context::build_causal_cond_decoder(
         tr_x = ggml_add_inplace(ctx0, attn_out, tr_x);
 
         h = build_layer_norm(tr_x, model.layers[226 + i].down_block1_norm3_w, model.layers[226 + i].down_block1_norm3_b, 1e-5f, "down_block", 24 + i);
-        ff_out = ggml_mul_mat(ctx0, model.layers[226 + i].down_block1_ffn_w0, h);
+        ff_out = ggml_mul_mat(ctx0, down_w0[i], h);
         ff_out = ggml_add_inplace(ctx0, ff_out, model.layers[226 + i].down_block1_ffn_b0);
         ff_out = ggml_gelu_erf(ctx0, ff_out);
-        ff_out = ggml_mul_mat(ctx0, model.layers[226 + i].down_block1_ffn_w2, ff_out);
+        ff_out = ggml_mul_mat(ctx0, down_w2[i], ff_out);
         ff_out = ggml_add_inplace(ctx0, ff_out, model.layers[226 + i].down_block1_ffn_b2);
         x = ggml_add_inplace(ctx0, ff_out, tr_x);
         // x = tr_x;
@@ -1576,10 +1576,10 @@ ggml_tensor * llm_graph_context::build_causal_cond_decoder(
             ggml_set_name(attn_out, ("causal_trans_mid_block_attn_" + std::to_string(step) + "_layer_" + std::to_string(i) + "_sub_layer_" + std::to_string(j)).c_str());
             tr_x = ggml_add_inplace(ctx0, attn_out, tr_x);
             h = build_layer_norm(tr_x, model.mid_block_sub_layers[i * 4 + j].mid_block1_norm3_w, model.mid_block_sub_layers[i * 4 + j].mid_block1_norm3_b, 1e-5f, "mid_block", 76 + i +j);
-            ff_out = ggml_mul_mat(ctx0,  model.mid_block_sub_layers[i *4 + j].mid_block1_ffn_w0, h);
+            ff_out = ggml_mul_mat(ctx0,  mid_w0[i * 4 + j], h);
             ff_out = ggml_add_inplace(ctx0, ff_out, model.mid_block_sub_layers[i *4 + j].mid_block1_ffn_b0);
             ff_out = ggml_gelu_erf(ctx0, ff_out);
-            ff_out = ggml_mul_mat(ctx0, model.mid_block_sub_layers[i *4 + j].mid_block1_ffn_w2, ff_out);
+            ff_out = ggml_mul_mat(ctx0, mid_w2[i * 4 + j], ff_out);
             ff_out = ggml_add_inplace(ctx0, ff_out, model.mid_block_sub_layers[i *4 + j].mid_block1_ffn_b2);
             x = ggml_add_inplace(ctx0, ff_out, tr_x);
             // x = tr_x;
@@ -1596,10 +1596,10 @@ ggml_tensor * llm_graph_context::build_causal_cond_decoder(
         attn_out = build_basic_attn(h, attn_mask, 1059 + i, "up_block", model);
         tr_x = ggml_add_inplace(ctx0, attn_out, tr_x);
         h = build_layer_norm(tr_x, model.layers[1059 + i].up_block1_norm3_w, model.layers[1059 + i].up_block1_norm3_b, 1e-5f, "up_block", 128 + i);
-        ff_out = ggml_mul_mat(ctx0, model.layers[1059 + i].up_block1_ffn_w0, h);
+        ff_out = ggml_mul_mat(ctx0, up_w0[i], h);
         ff_out = ggml_add_inplace(ctx0, ff_out, model.layers[1059 + i].up_block1_ffn_b0);
         ff_out = ggml_gelu_erf(ctx0, ff_out);
-        ff_out = ggml_mul_mat(ctx0, model.layers[1059 + i].up_block1_ffn_w2, ff_out);
+        ff_out = ggml_mul_mat(ctx0, up_w2[i], ff_out);
         ff_out = ggml_add_inplace(ctx0, ff_out, model.layers[1059 + i].up_block1_ffn_b2);
         x = ggml_add_inplace(ctx0, ff_out, tr_x);
         // x = tr_x;
@@ -1748,31 +1748,31 @@ ggml_tensor * llm_graph_context::build_solve_euler(
     // =======================================================
 
     // 1. 转换 Down Blocks 的 FFN 权重
-    // std::vector<ggml_tensor *> down_w0_f16(4);
-    // std::vector<ggml_tensor *> down_w2_f16(4);
-    // for (int i = 0; i < 4; ++i) {
-    //     down_w0_f16[i] = ggml_cast(ctx0, model.layers[226 + i].down_block1_ffn_w0, GGML_TYPE_F16);
-    //     down_w2_f16[i] = ggml_cast(ctx0, model.layers[226 + i].down_block1_ffn_w2, GGML_TYPE_F16);
-    // }
+    std::vector<ggml_tensor *> down_w0_f16(4);
+    std::vector<ggml_tensor *> down_w2_f16(4);
+    for (int i = 0; i < 4; ++i) {
+        down_w0_f16[i] = ggml_cast(ctx0, model.layers[226 + i].down_block1_ffn_w0, GGML_TYPE_F16);
+        down_w2_f16[i] = ggml_cast(ctx0, model.layers[226 + i].down_block1_ffn_w2, GGML_TYPE_F16);
+    }
 
-    // // 2. 转换 Mid Blocks 的 FFN 权重 (12 * 4 = 48 个)
-    // std::vector<ggml_tensor *> mid_w0_f16(48);
-    // std::vector<ggml_tensor *> mid_w2_f16(48);
-    // for (int i = 0; i < 12; ++i) {
-    //     for (int j = 0; j < 4; ++j) {
-    //         int idx = i * 4 + j;
-    //         mid_w0_f16[idx] = ggml_cast(ctx0, model.mid_block_sub_layers[idx].mid_block1_ffn_w0, GGML_TYPE_F16);
-    //         mid_w2_f16[idx] = ggml_cast(ctx0, model.mid_block_sub_layers[idx].mid_block1_ffn_w2, GGML_TYPE_F16);
-    //     }
-    // }
+    // 2. 转换 Mid Blocks 的 FFN 权重 (12 * 4 = 48 个)
+    std::vector<ggml_tensor *> mid_w0_f16(48);
+    std::vector<ggml_tensor *> mid_w2_f16(48);
+    for (int i = 0; i < 12; ++i) {
+        for (int j = 0; j < 4; ++j) {
+            int idx = i * 4 + j;
+            mid_w0_f16[idx] = ggml_cast(ctx0, model.mid_block_sub_layers[idx].mid_block1_ffn_w0, GGML_TYPE_F16);
+            mid_w2_f16[idx] = ggml_cast(ctx0, model.mid_block_sub_layers[idx].mid_block1_ffn_w2, GGML_TYPE_F16);
+        }
+    }
 
-    // // 3. 转换 Up Blocks 的 FFN 权重
-    // std::vector<ggml_tensor *> up_w0_f16(4);
-    // std::vector<ggml_tensor *> up_w2_f16(4);
-    // for (int i = 0; i < 4; ++i) {
-    //     up_w0_f16[i] = ggml_cast(ctx0, model.layers[1059 + i].up_block1_ffn_w0, GGML_TYPE_F16);
-    //     up_w2_f16[i] = ggml_cast(ctx0, model.layers[1059 + i].up_block1_ffn_w2, GGML_TYPE_F16);
-    // }
+    // 3. 转换 Up Blocks 的 FFN 权重
+    std::vector<ggml_tensor *> up_w0_f16(4);
+    std::vector<ggml_tensor *> up_w2_f16(4);
+    for (int i = 0; i < 4; ++i) {
+        up_w0_f16[i] = ggml_cast(ctx0, model.layers[1059 + i].up_block1_ffn_w0, GGML_TYPE_F16);
+        up_w2_f16[i] = ggml_cast(ctx0, model.layers[1059 + i].up_block1_ffn_w2, GGML_TYPE_F16);
+    }
 
     // =======================================================
 
@@ -1781,7 +1781,7 @@ ggml_tensor * llm_graph_context::build_solve_euler(
         ggml_tensor * t_in = ggml_concat(ctx0, t_current, t_current, 0);
         ggml_tensor * z_in = ggml_concat(ctx0, z_current, z_current, 2);
         ggml_tensor * dphi_dt = build_causal_cond_decoder(z_in, pad_list, mask_in, mu_in, t_in, spks_in, cond_in, spks_t, \
-                        attn_mask, t_tmb_ones, resnet_mish_ones, res_w, conv_b, emb_row, model, step);
+                        attn_mask, t_tmb_ones, resnet_mish_ones, res_w, conv_b, emb_row, down_w0_f16, down_w2_f16, mid_w0_f16, mid_w2_f16, up_w0_f16, up_w2_f16, model, step);
         ggml_tensor * dphi_dt_split   = ggml_view_3d(ctx0, dphi_dt, T, z->ne[1], B, dphi_dt->nb[1], dphi_dt->nb[2], 0);
         ggml_tensor * cfg_dphi_dt  = ggml_view_3d(ctx0, dphi_dt, T, z->ne[1], B, dphi_dt->nb[1], dphi_dt->nb[2], B * dphi_dt->nb[2]);
         ggml_tensor * dphi  = ggml_sub_inplace(ctx0, ggml_scale(ctx0, dphi_dt_split, 1.7f * dt), ggml_scale(ctx0, cfg_dphi_dt, 0.7f * dt));
