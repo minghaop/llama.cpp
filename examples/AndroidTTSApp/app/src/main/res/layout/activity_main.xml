@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root_scroll"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:clipToPadding="false"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="16dp"
+            android:text="Prompt"
+            android:textColor="#000000"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/prompt_history_button"
+                android:layout_width="0dp"
+                android:layout_height="44dp"
+                android:layout_marginStart="20dp"
+                android:layout_weight="1"
+                android:text="Prompt: Empty"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/prompt_record_button"
+                android:layout_width="110dp"
+                android:layout_height="44dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="20dp"
+                android:backgroundTint="#34C759"
+                android:text="语音输入"
+                android:textColor="#FFFFFF"
+                android:textAllCaps="false" />
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/prompt_text_input"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="10dp"
+            android:gravity="top|start"
+            android:hint="Prompt 文本（语音输入后可编辑）"
+            android:inputType="textMultiLine"
+            android:minLines="3"
+            android:padding="10dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:gravity="center_vertical"
+            android:minHeight="44dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="20dp"
+                android:text="TTS Text"
+                android:textColor="#000000"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/tts_history_button"
+                android:layout_width="0dp"
+                android:layout_height="44dp"
+                android:layout_marginStart="20dp"
+                android:layout_weight="1"
+                android:text="TTS历史：暂无"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/tts_record_button"
+                android:layout_width="110dp"
+                android:layout_height="44dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="20dp"
+                android:backgroundTint="#34C759"
+                android:text="语音输入"
+                android:textColor="#FFFFFF"
+                android:textAllCaps="false" />
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/tts_text_input"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="6dp"
+            android:gravity="top|start"
+            android:hint="输入要合成的文本"
+            android:inputType="textMultiLine"
+            android:minLines="3"
+            android:padding="10dp" />
+
+        <Button
+            android:id="@+id/generate_button"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="4dp"
+            android:text="生成"
+            android:textAllCaps="false" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/generated_history_button"
+                android:layout_width="0dp"
+                android:layout_height="44dp"
+                android:layout_marginStart="20dp"
+                android:layout_weight="1"
+                android:text="合成历史：暂无"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/play_history_button"
+                android:layout_width="110dp"
+                android:layout_height="44dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="20dp"
+                android:backgroundTint="#FF9500"
+                android:text="播放"
+                android:textColor="#FFFFFF"
+                android:textAllCaps="false" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/inference_info_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="10dp"
+            android:minHeight="220dp"
+            android:padding="12dp"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2" />
+    </LinearLayout>
+</ScrollView>
