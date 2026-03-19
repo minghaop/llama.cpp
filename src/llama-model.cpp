@@ -2418,7 +2418,7 @@ bool llama_model::load_tensors(llama_model_loader & ml) {
     const auto & tensor_split = params.tensor_split;
     
     // const int n_layer      = hparams.n_layer;
-    const int n_gpu_layers = this->n_gpu_layers();
+    
     int n_layer = hparams.n_layer;
     if (ml.get_arch() == LLM_ARCH_COSYVOICEFLOW) {
         n_layer = 1127;
@@ -2429,6 +2429,7 @@ bool llama_model::load_tensors(llama_model_loader & ml) {
     } else {
         n_layer = hparams.n_layer;
     }
+    const int n_gpu_layers = this->n_gpu_layers();
 
     const bool use_mmap_buffer = true;
     LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& n_layer is: %d, use_hift is: %d\n", n_layer, hparams.use_hift? 1 : 0);

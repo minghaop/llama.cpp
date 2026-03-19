@@ -50,6 +50,14 @@ constexpr int   HIFT_SEQ_SETUP_SIZE     = 1024;
 constexpr int   FLOW_RAND_NOISE_SIZE    = 80 * 50 * 300;
 constexpr int   FLOW_EXTEND_PE_SIZE     = 9999 * 512;
 
+// Backend offload policy:
+// - main LLM: CPU only
+// - flow: partial GPU offload, remaining layers on CPU
+// - hift: full GPU offload when available
+constexpr int   MAIN_GPU_LAYERS         = 0;
+constexpr int   FLOW_GPU_LAYERS         = 0;
+constexpr int   HIFT_GPU_LAYERS         = -1;
+
 static llama_model                      * g_model;
 static llama_context                    * g_context;
 static llama_batch                        g_batch;
@@ -125,10 +133,9 @@ extern "C"
 JNIEXPORT jint JNICALL
 Java_com_arm_aichat_internal_InferenceEngineImpl_load(JNIEnv *env, jobject, jstring jmodel_path) {
     llama_model_params model_params = llama_model_default_params();
-    // Force CPU-only model loading to avoid unstable GPU/offload backends on mobile.
-    model_params.n_gpu_layers = 0;
-    model_params.split_mode = LLAMA_SPLIT_MODE_NONE;
-    model_params.main_gpu = 0;
+    model_params.n_gpu_layers = MAIN_GPU_LAYERS;
+    // model_params.split_mode = LLAMA_SPLIT_MODE_NONE;
+    // model_params.main_gpu = 0;
     model_params.use_mmap = true;
 
     ggml_backend_dev_t cpu_dev = ggml_backend_dev_by_type(GGML_BACKEND_DEVICE_TYPE_CPU);
@@ -198,9 +205,9 @@ static llama_context *init_context(llama_model *model, const int n_ctx = DEFAULT
     ctx_params.n_threads = n_threads;
     ctx_params.n_threads_batch = n_threads;
     // Force CPU-only decode path; prevents context init from trying unavailable GPU backends.
-    ctx_params.offload_kqv = false;
-    ctx_params.op_offload = false;
-    ctx_params.flash_attn_type = LLAMA_FLASH_ATTN_TYPE_DISABLED;
+    // ctx_params.offload_kqv = false;
+    // ctx_params.op_offload = false;
+    ctx_params.flash_attn_type = LLAMA_FLASH_ATTN_TYPE_ENABLED;
     auto *context = llama_init_from_model(g_model, ctx_params);
     if (context == nullptr) {
         LOGe("%s: llama_new_context_with_model() returned null)", __func__);
@@ -229,9 +236,9 @@ static llama_context * init_context_for_model(
     ctx_params.n_threads = n_threads;
     ctx_params.n_threads_batch = n_threads;
     ctx_params.embeddings = true;
-    ctx_params.offload_kqv = false;
-    ctx_params.op_offload = false;
-    ctx_params.flash_attn_type = LLAMA_FLASH_ATTN_TYPE_DISABLED;
+    // ctx_params.offload_kqv = false;
+    // ctx_params.op_offload = false;
+    ctx_params.flash_attn_type = LLAMA_FLASH_ATTN_TYPE_ENABLED;
 
     auto * context = llama_init_from_model(model, ctx_params);
     if (context == nullptr) {
@@ -324,19 +331,20 @@ static int load_aux_model(
     }
 
     llama_model_params model_params = llama_model_default_params();
-    model_params.n_gpu_layers = 0;
-    model_params.split_mode = LLAMA_SPLIT_MODE_NONE;
-    model_params.main_gpu = 0;
+    model_params.n_gpu_layers = is_flow ? FLOW_GPU_LAYERS : HIFT_GPU_LAYERS;
+    // model_params.split_mode = LLAMA_SPLIT_MODE_NONE;
+    // model_params.main_gpu = 0;
     model_params.use_mmap = true;
     model_params.is_flow = is_flow;
     model_params.is_hift = !is_flow;
+    LOGi("%s: %s n_gpu_layers=%d", __func__, is_flow ? "flow" : "hift", model_params.n_gpu_layers);
 
-    ggml_backend_dev_t cpu_dev = ggml_backend_dev_by_type(GGML_BACKEND_DEVICE_TYPE_CPU);
-    if (cpu_dev != nullptr) {
-        g_model_devices[0] = cpu_dev;
-        g_model_devices[1] = nullptr;
-        model_params.devices = g_model_devices;
-    }
+    // ggml_backend_dev_t cpu_dev = ggml_backend_dev_by_type(GGML_BACKEND_DEVICE_TYPE_CPU);
+    // if (cpu_dev != nullptr) {
+    //     g_model_devices[0] = cpu_dev;
+    //     g_model_devices[1] = nullptr;
+    //     model_params.devices = g_model_devices;
+    // }
 
     {
         std::ifstream model_file(model_path, std::ios::binary);
