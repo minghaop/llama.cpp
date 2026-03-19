@@ -32,6 +32,8 @@ android {
                 arguments += "-DGGML_BACKEND_DL=ON"
                 arguments += "-DGGML_CPU_ALL_VARIANTS=ON"
                 arguments += "-DGGML_LLAMAFILE=OFF"
+                arguments += "-DGGML_OPENCL=ON"
+                arguments += "-DGGML_OPENCL_USE_ADRENO_KERNELS=ON"
             }
         }
         aarMetadata {
