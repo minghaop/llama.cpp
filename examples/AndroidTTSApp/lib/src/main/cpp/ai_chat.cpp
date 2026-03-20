@@ -55,7 +55,7 @@ constexpr int   FLOW_EXTEND_PE_SIZE     = 9999 * 512;
 // - flow: partial GPU offload, remaining layers on CPU
 // - hift: full GPU offload when available
 constexpr int   MAIN_GPU_LAYERS         = 0;
-constexpr int   FLOW_GPU_LAYERS         = 0;
+constexpr int   FLOW_GPU_LAYERS         = -1;
 constexpr int   HIFT_GPU_LAYERS         = -1;
 
 static llama_model                      * g_model;

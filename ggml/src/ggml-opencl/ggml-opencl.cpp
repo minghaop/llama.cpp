@@ -2984,6 +2984,7 @@ static ggml_status ggml_backend_opencl_graph_compute(ggml_backend_t backend, ggm
         }
 
         bool ok = ggml_cl_compute_forward(backend, node);
+        // GGML_LOG_INFO("==================== node name is: %s", node->name);
         if (!ok) {
             GGML_LOG_ERROR("%s: error: op not supported %s (%s)\n", __func__, node->name, ggml_op_name(node->op));
         }
@@ -9733,7 +9734,7 @@ bool ggml_cl_compute_forward(ggml_backend_t backend, struct ggml_tensor * tensor
         default:
             return false;
     }
-
+    // GGML_LOG_INFO("=============== tensor op is: %d", tensor->op);
     func(backend, tensor->src[0], tensor->src[1], tensor);
     return true;
 }
