@@ -891,12 +891,12 @@ struct llm_graph_context {
          std::vector<ggml_tensor *> res_w,
          const ConvBias & conv_b,
          ggml_tensor * emb_row,
-         const std::vector<ggml_tensor *> & down_w0,
-         const std::vector<ggml_tensor *> & down_w2,
-         const std::vector<ggml_tensor *> & mid_w0,
-         const std::vector<ggml_tensor *> & mid_w2,
-         const std::vector<ggml_tensor *> & up_w0,
-         const std::vector<ggml_tensor *> & up_w2,
+        //  const std::vector<ggml_tensor *> & down_w0,
+        //  const std::vector<ggml_tensor *> & down_w2,
+        //  const std::vector<ggml_tensor *> & mid_w0,
+        //  const std::vector<ggml_tensor *> & mid_w2,
+        //  const std::vector<ggml_tensor *> & up_w0,
+        //  const std::vector<ggml_tensor *> & up_w2,
          const llama_model & model,
          int32_t step) const;
     
