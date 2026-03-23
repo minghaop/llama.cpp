@@ -449,6 +449,7 @@ struct ggml_backend_opencl_context {
     cl_program program_rope;
     cl_program program_scale;
     cl_program program_silu;
+    cl_program program_mish;
     cl_program program_sigmoid;
     cl_program program_softmax_f32;
     cl_program program_softmax_f16;
@@ -484,6 +485,7 @@ struct ggml_backend_opencl_context {
     cl_kernel kernel_sqrt_cont_f32, kernel_sqrt_cont_f32_4, kernel_sqrt_cont_f16, kernel_sqrt_cont_f16_4;
     cl_kernel kernel_mean_f32;
     cl_kernel kernel_silu, kernel_silu_4;
+    cl_kernel kernel_mish, kernel_mish_4;
     cl_kernel kernel_gelu, kernel_gelu_4;
     cl_kernel kernel_gelu_erf, kernel_gelu_erf_4;
     cl_kernel kernel_gelu_quick, kernel_gelu_quick_4;
@@ -1414,6 +1416,23 @@ static void load_cl_kernels(ggml_backend_opencl_context *backend_ctx, ggml_cl_ve
 
         CL_CHECK((backend_ctx->kernel_silu   = clCreateKernel(backend_ctx->program_silu, "kernel_silu", &err), err));
         CL_CHECK((backend_ctx->kernel_silu_4 = clCreateKernel(backend_ctx->program_silu, "kernel_silu_4", &err), err));
+        GGML_LOG_CONT(".");
+    }
+
+    // mish
+    {
+#ifdef GGML_OPENCL_EMBED_KERNELS
+        const std::string kernel_src {
+            #include "mish.cl.h"
+        };
+#else
+        const std::string kernel_src = read_file("mish.cl");
+#endif
+        backend_ctx->program_mish =
+            build_program_from_source(backend_ctx->context, backend_ctx->device, kernel_src.c_str(), compile_opts);
+
+        CL_CHECK((backend_ctx->kernel_mish   = clCreateKernel(backend_ctx->program_mish, "kernel_mish", &err), err));
+        CL_CHECK((backend_ctx->kernel_mish_4 = clCreateKernel(backend_ctx->program_mish, "kernel_mish_4", &err), err));
         GGML_LOG_CONT(".");
     }
 
@@ -3081,6 +3100,7 @@ static bool ggml_opencl_supports_op(ggml_backend_dev_t dev, const struct ggml_te
             switch (ggml_get_unary_op(op)) {
                 case GGML_UNARY_OP_GELU:
                 case GGML_UNARY_OP_SILU:
+                case GGML_UNARY_OP_MISH:
                 case GGML_UNARY_OP_RELU:
                 case GGML_UNARY_OP_GELU_ERF:
                 case GGML_UNARY_OP_GELU_QUICK:
@@ -5764,6 +5784,50 @@ static void ggml_cl_silu(ggml_backend_t backend, const ggml_tensor * src0, const
         n /= 4;
     } else {
         kernel = backend_ctx->kernel_silu;
+    }
+
+    CL_CHECK(clSetKernelArg(kernel, 0, sizeof(cl_mem),   &extra0->data_device));
+    CL_CHECK(clSetKernelArg(kernel, 1, sizeof(cl_ulong), &offset0));
+    CL_CHECK(clSetKernelArg(kernel, 2, sizeof(cl_mem),   &extrad->data_device));
+    CL_CHECK(clSetKernelArg(kernel, 3, sizeof(cl_ulong), &offsetd));
+
+    size_t global_work_size[] = {(size_t)n, 1, 1};
+    size_t local_work_size[] = {64, 1, 1};
+
+    size_t * local_work_size_ptr = local_work_size;
+    if (n % 64 != 0 && !backend_ctx->non_uniform_workgroups) {
+        local_work_size_ptr = nullptr;  // Let driver choose the work-group sizes.
+    }
+
+    backend_ctx->enqueue_ndrange_kernel(kernel, 3, global_work_size, local_work_size_ptr, dst);
+}
+
+static void ggml_cl_mish(ggml_backend_t backend, const ggml_tensor * src0, const ggml_tensor * src1, ggml_tensor * dst) {
+    GGML_ASSERT(src0);
+    GGML_ASSERT(src0->extra);
+    GGML_ASSERT(dst);
+    GGML_ASSERT(dst->extra);
+
+    UNUSED(src1);
+
+    ggml_backend_opencl_context *backend_ctx = (ggml_backend_opencl_context *)backend->context;
+
+    ggml_tensor_extra_cl * extra0 = (ggml_tensor_extra_cl *)src0->extra;
+    ggml_tensor_extra_cl * extrad = (ggml_tensor_extra_cl *)dst->extra;
+
+    cl_ulong offset0 = extra0->offset + src0->view_offs;
+    cl_ulong offsetd = extrad->offset + dst->view_offs;
+
+    cl_kernel kernel;
+
+    int n = ggml_nelements(dst);
+
+    // 选择 Mish kernel
+    if (n % 4 == 0) {
+        kernel = backend_ctx->kernel_mish_4;
+        n /= 4;
+    } else {
+        kernel = backend_ctx->kernel_mish;
     }
 
     CL_CHECK(clSetKernelArg(kernel, 0, sizeof(cl_mem),   &extra0->data_device));
@@ -9568,6 +9632,12 @@ bool ggml_cl_compute_forward(ggml_backend_t backend, struct ggml_tensor * tensor
                         return false;
                     }
                     func = ggml_cl_silu;
+                    break;
+                case GGML_UNARY_OP_MISH:
+                    if (!any_on_device) {
+                        return false;
+                    }
+                    func = ggml_cl_mish;
                     break;
                 case GGML_UNARY_OP_RELU:
                     if (!any_on_device) {
