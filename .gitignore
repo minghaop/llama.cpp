@@ -22,6 +22,7 @@
 *.tmp
 *.gguf
 *.onnx
+*.mnn
 *.bin
 
 # IDE / OS
