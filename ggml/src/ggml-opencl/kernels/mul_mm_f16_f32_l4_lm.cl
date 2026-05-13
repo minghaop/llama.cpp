@@ -16,6 +16,9 @@ kernel void kernel_mul_mm_f16_f32_l4_lm(
     ulong offset1,
     global float * dst,
     ulong offsetd,
+    global float * bias,
+    ulong offsetb,
+    int use_bias,
 
     int ne00,
     int ne01,
@@ -37,6 +40,7 @@ kernel void kernel_mul_mm_f16_f32_l4_lm(
     src0 = (global half4*)((global char*)src0 + offset0);
     src1 = (global float4*)((global char*)src1 + offset1);
     dst = (global float*)((global char*)dst + offsetd);
+    bias = (global float*)((global char*)bias + offsetb);
 
     local half  buf_a[BM * BK];
     local float buf_b[BN * BK];
@@ -139,7 +143,11 @@ kernel void kernel_mul_mm_f16_f32_l4_lm(
     for (int cc = 0; cc < TN; cc++) {
         for (int cr = 0; cr < TM; cr++) {
             if (dr + cr < ne01 && dc + cc < ne11) {
-                dst[offsets + (dc + cc) * stride_d + dr + cr] = sums[cc * TM + cr];
+                float v = sums[cc * TM + cr];
+                if (use_bias) {
+                    v += bias[dr + cr];
+                }
+                dst[offsets + (dc + cc) * stride_d + dr + cr] = v;
             }
         }
     }

@@ -367,9 +367,14 @@ internal class InferenceEngineImpl private constructor(
 
     override suspend fun loadFlowModel(pathToModel: String) =
         withContext(llamaDispatcher) {
-            check(_state.value is InferenceEngine.State.ModelReady) {
+            check(
+                _state.value is InferenceEngine.State.ModelReady ||
+                    _state.value is InferenceEngine.State.Initialized,
+            ) {
                 "Cannot load flow model in ${_state.value.javaClass.simpleName}!"
             }
+            val previousState = _state.value
+            _state.value = InferenceEngine.State.LoadingModel
             require(pathToModel.isNotBlank()) { "Flow model path is empty" }
             val modelFile = File(pathToModel)
             modelFile.let {
@@ -385,6 +390,14 @@ internal class InferenceEngineImpl private constructor(
                     )
                 }
             }
+            _readyForSystemPrompt = false
+            _cancelGeneration = false
+            _state.value = InferenceEngine.State.ModelReady
+            Log.i(
+                TAG,
+                "[LoadFlowModel] ready, previousState=${previousState.javaClass.simpleName}, path=$pathToModel",
+            )
+            Unit
         }
 
     override suspend fun loadHiftModel(pathToModel: String) =

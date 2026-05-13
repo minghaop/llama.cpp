@@ -1,6 +1,8 @@
 package com.example.llama
 
 import android.content.Context
+import android.os.Trace
+import android.util.Log
 import com.arm.aichat.AiChat
 import com.arm.aichat.InferenceEngine
 import com.arm.aichat.isModelLoaded
@@ -13,6 +15,7 @@ import java.io.IOException
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.util.Locale
+import java.util.zip.ZipFile
 import kotlin.math.cos
 import kotlin.math.exp
 import kotlin.math.max
@@ -50,6 +53,8 @@ sealed class InferenceEvent {
     data class StageEnded(val info: StageEndedInfo) : InferenceEvent()
     data class Failed(val stage: InferenceStage, val message: String) : InferenceEvent()
     data class AudioDuration(val seconds: Double, val samples: Int, val sampleRate: Int) : InferenceEvent()
+    data class FlowBreakdown(val encoderSeconds: Double, val decoderSeconds: Double, val totalSeconds: Double) : InferenceEvent()
+    data class Note(val message: String) : InferenceEvent()
 }
 
 class LlamaInferenceBridge(
@@ -65,6 +70,16 @@ class LlamaInferenceBridge(
     private var qwenTokenizerService: QwenTokenizerService? = null
     @Volatile
     private var promptFrontEndEngine: PromptFrontEndEngine? = null
+    @Volatile
+    private var onnxQnnFlowRunner: OnnxQnnFlowRunner? = null
+    @Volatile
+    private var mnnFlowEncoderRunner: MnnFlowRunner? = null
+    @Volatile
+    private var mnnFlowDecoderRunner: MnnFlowDecoderRunner? = null
+    @Volatile
+    private var mnnHifiGanRunner: MnnHifiGanRunner? = null
+    @Volatile
+    private var mnnLlmRunner: MnnLlmRunner? = null
 
     suspend fun runInference(
         ttsText: String,
@@ -76,9 +91,158 @@ class LlamaInferenceBridge(
         fun emit(event: InferenceEvent) {
             onEvent?.invoke(event)
         }
+        val runStart = nowSeconds()
+        fun done(result: String, stage: InferenceStage): String {
+            Log.i(
+                TAG,
+                "runInference finished: stage=$stage result=$result total=${"%.3f".format(Locale.US, nowSeconds() - runStart)} s",
+            )
+            return result
+        }
 
         var currentStage = InferenceStage.frontEnd
+        Trace.beginSection("runInference_total")
         return try {
+            Log.i(TAG, "runInference started")
+            if (LLM_ONLY_TEST_MODE) {
+                currentStage = InferenceStage.llm
+                val resources = ensureLocalResourcesReady()
+                val llmRunner = ensureMnnLlmRunnerReady(resources)
+                val llmOutput = runLLMInferenceFromPt(
+                    runner = llmRunner,
+                    resources = resources,
+                    lmInputPtFile = resources.lmInputPt,
+                    onEvent = onEvent,
+                )
+                return done("LLM_ONLY_OK:promptSeq=${llmOutput.promptSeqLen},newTokens=${llmOutput.generatedTokens}", currentStage)
+            }
+            if (HIFIGAN_ONLY_TEST_MODE) {
+                currentStage = InferenceStage.hift
+                emit(InferenceEvent.StageBegan(InferenceStage.hift, "HifiGan init: 正在加载模型"))
+                val resources = ensureHifiGanOnlyResourcesReady()
+                Log.i(TAG, "[HifiGanOnly] enabled, skip FrontEnd/LLM/Flow/VoiceGeneration and run hifigan with prepacked inputs")
+                val hifiganRunner = ensureMnnHifiGanRunnerReady(resources.hifiganModel)
+                emit(
+                    InferenceEvent.StageProgress(
+                        stage = InferenceStage.hift,
+                        unitName = "HifiGan init: 模型加载完成",
+                        unitsDone = 1,
+                        secondsElapsed = 0.0,
+                        instUPS = 0.0,
+                        avgUPS = 0.0,
+                    ),
+                )
+                val hiftResult = runHifiGanInferenceFromBins(
+                    runner = hifiganRunner,
+                    inputDir = resources.hifiganInputsBinDir,
+                    onEvent = onEvent,
+                )
+                return done("HIFIGAN_ONLY_OK:units=${hiftResult.outputSamples}", currentStage)
+            }
+
+            if (FLOW_ONLY_TEST_MODE) {
+                currentStage = InferenceStage.flow
+                val resources = ensureFlowOnlyResourcesReady()
+                val flowResult = if (!USE_MNN_LLM_BACKEND) {
+                    Log.i(TAG, "[FlowOnly][llama.cpp] enabled, skip FrontEnd/LLM/HIFT and run flow model with prepacked bins")
+                    Log.i(TAG, "[FlowOnly][llama.cpp] flowModel=${resources.flowModel.absolutePath}")
+                    emit(InferenceEvent.StageBegan(InferenceStage.flow, "Flow init: loading llama.cpp flow model"))
+                    val flowEngine = ensureFlowOnlyEngineReady(flowModelFile = resources.flowModel)
+                    emit(
+                        InferenceEvent.StageProgress(
+                            stage = InferenceStage.flow,
+                            unitName = "Flow init: llama.cpp flow model ready",
+                            unitsDone = 1,
+                            secondsElapsed = 0.0,
+                            instUPS = 0.0,
+                            avgUPS = 0.0,
+                        ),
+                    )
+                    runFlowInferenceFromBins(
+                        engine = flowEngine,
+                        inputDir = resources.flowInputsBinDir,
+                        noisePeFile = resources.noisePe,
+                        onEvent = onEvent,
+                    )
+                } else {
+                    Log.i(TAG, "[EncDecOnly] enabled, skip FrontEnd/LLM/HIFT and run encoder+decoder with prepacked bins")
+                    Log.i(
+                        TAG,
+                        "[EncDecOnly] encoder=${resources.flowEncoderModel.absolutePath}, " +
+                            "decoder=${resources.flowDecoderModel.absolutePath}, " +
+                            "onnxQnn=${resources.flowQnnModel.absolutePath}",
+                    )
+                    if (FLOW_ONLY_USE_ONNX_QNN_GPU) {
+                        runCatching {
+                            emit(InferenceEvent.StageBegan(InferenceStage.flow, "Flow init: loading ONNX QNN GPU"))
+                            val flowRunner = ensureOnnxQnnFlowRunnerReady(flowQnnModelFile = resources.flowQnnModel)
+                            emit(
+                                InferenceEvent.StageProgress(
+                                    stage = InferenceStage.flow,
+                                    unitName = "Flow init: ONNX QNN GPU ready",
+                                    unitsDone = 1,
+                                    secondsElapsed = 0.0,
+                                    instUPS = 0.0,
+                                    avgUPS = 0.0,
+                                ),
+                            )
+                            runFlowInferenceFromBins(
+                                runner = flowRunner,
+                                inputDir = resources.flowInputsBinDir,
+                                onEvent = onEvent,
+                            )
+                        }.getOrElse { err ->
+                            Log.w(TAG, "[EncDecOnly][ONNX-QNN] failed, fallback to MNN encoder/decoder", err)
+                            emit(InferenceEvent.Note("[EncDecOnly] ONNX QNN GPU failed, fallback to MNN: ${err.message}"))
+                            emit(InferenceEvent.StageBegan(InferenceStage.flow, "Encoder/Decoder init: loading MNN models"))
+                            val flowEncoderRunner = ensureMnnFlowEncoderRunnerReady(flowEncoderModelFile = resources.flowEncoderModel)
+                            val flowDecoderRunner = ensureMnnFlowDecoderRunnerReady(flowDecoderModelFile = resources.flowDecoderModel)
+                            emit(
+                                InferenceEvent.StageProgress(
+                                    stage = InferenceStage.flow,
+                                    unitName = "Encoder/Decoder init: MNN models loaded",
+                                    unitsDone = 1,
+                                    secondsElapsed = 0.0,
+                                    instUPS = 0.0,
+                                    avgUPS = 0.0,
+                                ),
+                            )
+                            runFlowInferenceFromBins(
+                                encoderRunner = flowEncoderRunner,
+                                decoderRunner = flowDecoderRunner,
+                                inputDir = resources.flowInputsBinDir,
+                                onEvent = onEvent,
+                            )
+                        }
+                    } else {
+                        emit(InferenceEvent.StageBegan(InferenceStage.flow, "Encoder/Decoder init: loading MNN models"))
+                        val flowEncoderRunner = ensureMnnFlowEncoderRunnerReady(flowEncoderModelFile = resources.flowEncoderModel)
+                        val flowDecoderRunner = ensureMnnFlowDecoderRunnerReady(flowDecoderModelFile = resources.flowDecoderModel)
+                        emit(
+                            InferenceEvent.StageProgress(
+                                stage = InferenceStage.flow,
+                                unitName = "Encoder/Decoder init: MNN models loaded",
+                                unitsDone = 1,
+                                secondsElapsed = 0.0,
+                                instUPS = 0.0,
+                                avgUPS = 0.0,
+                            ),
+                        )
+                        runFlowInferenceFromBins(
+                            encoderRunner = flowEncoderRunner,
+                            decoderRunner = flowDecoderRunner,
+                            inputDir = resources.flowInputsBinDir,
+                            onEvent = onEvent,
+                        )
+                    }
+                }
+                return done(if (!USE_MNN_LLM_BACKEND) {
+                    "FLOW_ONLY_LLAMA_CPP_OK:units=${flowResult.units}"
+                } else {
+                    "ENCODER_DECODER_ONLY_OK:units=${flowResult.units}"
+                }, currentStage)
+            }
+
             val resources = ensureLocalResourcesReady()
 
             currentStage = InferenceStage.frontEnd
@@ -90,11 +254,20 @@ class LlamaInferenceBridge(
             )
 
             currentStage = InferenceStage.llmPrepare
-            val loadedEngine = ensureEngineReady(
-                modelFile = resources.llmModel,
-                flowModelFile = resources.flowModel,
-                hiftModelFile = resources.hiftModel,
+            Log.i(
+                TAG,
+                "[LLMPrepare] begin ensureEngineReady, llm=${resources.llmModel.absolutePath}, " +
+                    "flow=${resources.flowModel.absolutePath}, hifigan=${resources.hifiganModel.absolutePath}",
             )
+            val loadedEngine = if (USE_MNN_LLM_BACKEND) {
+                ensureFlowOnlyEngineReady(flowModelFile = resources.flowModel)
+            } else {
+                ensureEngineReady(
+                    modelFile = resources.llmModel,
+                    flowModelFile = resources.flowModel,
+                )
+            }
+            Log.i(TAG, "[LLMPrepare] ensureEngineReady done")
             val llmResult = runLLMInference(
                 ttsText = ttsText,
                 promptText = promptText,
@@ -114,20 +287,35 @@ class LlamaInferenceBridge(
             )
 
             currentStage = InferenceStage.hift
+            emit(InferenceEvent.StageBegan(InferenceStage.hift, "HifiGan init: 正在加载模型"))
+            val hifiganRunner = ensureMnnHifiGanRunnerReady(resources.hifiganModel)
+            emit(
+                InferenceEvent.StageProgress(
+                    stage = InferenceStage.hift,
+                    unitName = "HifiGan init: 模型加载完成",
+                    unitsDone = 1,
+                    secondsElapsed = 0.0,
+                    instUPS = 0.0,
+                    avgUPS = 0.0,
+                ),
+            )
             val hiftResult = runHIFTInference(
                 flowResult = flowResult,
-                engine = loadedEngine,
+                runner = hifiganRunner,
                 onEvent = onEvent,
             )
 
             currentStage = InferenceStage.voiceGeneration
-            runVoiceGeneration(
+            done(runVoiceGeneration(
                 hiftResult = hiftResult,
                 onEvent = onEvent,
-            )
+            ), currentStage)
         } catch (t: Throwable) {
+            Log.e(TAG, "runInference failed at $currentStage", t)
             emit(InferenceEvent.Failed(currentStage, t.message ?: t.toString()))
-            "false"
+            done("false", currentStage)
+        } finally {
+            Trace.endSection()
         }
     }
 
@@ -146,6 +334,31 @@ class LlamaInferenceBridge(
         if (activeFrontEnd != null) {
             runCatching { activeFrontEnd.close() }
             promptFrontEndEngine = null
+        }
+        val activeMnnFlowEncoder = mnnFlowEncoderRunner
+        if (activeMnnFlowEncoder != null) {
+            runCatching { activeMnnFlowEncoder.close() }
+            mnnFlowEncoderRunner = null
+        }
+        val activeMnnFlowDecoder = mnnFlowDecoderRunner
+        if (activeMnnFlowDecoder != null) {
+            runCatching { activeMnnFlowDecoder.close() }
+            mnnFlowDecoderRunner = null
+        }
+        val activeOnnxQnnFlow = onnxQnnFlowRunner
+        if (activeOnnxQnnFlow != null) {
+            runCatching { activeOnnxQnnFlow.close() }
+            onnxQnnFlowRunner = null
+        }
+        val activeMnnHifiGan = mnnHifiGanRunner
+        if (activeMnnHifiGan != null) {
+            runCatching { activeMnnHifiGan.close() }
+            mnnHifiGanRunner = null
+        }
+        val activeMnnLlm = mnnLlmRunner
+        if (activeMnnLlm != null) {
+            runCatching { activeMnnLlm.close() }
+            mnnLlmRunner = null
         }
         localResources = null
     }
@@ -205,11 +418,18 @@ class LlamaInferenceBridge(
 
         val prepBegin = nowSeconds()
         emit(InferenceEvent.StageBegan(InferenceStage.llmPrepare, "LLM preprocessing"))
+        Log.i(TAG, "[LLMPrepare] tokenizer init begin: ${resources.tokenizerDir.absolutePath}")
 
         val tokenizerEntries = resources.tokenizerDir.list()?.size ?: 0
         val tokenizer = ensureQwenTokenizerReady(resources.tokenizerDir)
+        Log.i(TAG, "[LLMPrepare] tokenizer init done, entries=$tokenizerEntries")
+        Log.i(TAG, "[LLMPrepare] tokenizer encode begin")
         val ttsTokenIds = tokenizer.encodeSync(ttsText)
         val promptTokenIds = tokenizer.encodeSync(promptText)
+        Log.i(
+            TAG,
+            "[LLMPrepare] tokenizer encode done, ttsLen=${ttsTokenIds.size}, promptLen=${promptTokenIds.size}",
+        )
         val ttsTokenLength = ttsTokenIds.size
         val promptTokenLength = promptTokenIds.size
         val prepUnits = (
@@ -229,6 +449,7 @@ class LlamaInferenceBridge(
                 ),
             ),
         )
+        Log.i(TAG, "[LLMPrepare] done in ${"%.3f".format(Locale.US, nowSeconds() - prepBegin)} s")
 
         val llmBegin = nowSeconds()
         emit(
@@ -270,14 +491,27 @@ class LlamaInferenceBridge(
         var nPast = 0
         val rng = SeededRNG(seed = 0L)
 
-        engine.resetKvCache()
+        val mnnRunner = if (USE_MNN_LLM_BACKEND) {
+            ensureMnnLlmRunnerReady(resources)
+        } else {
+            null
+        }
+        if (USE_MNN_LLM_BACKEND) {
+            mnnRunner!!.resetKvCache()
+        } else {
+            engine.resetKvCache()
+        }
 
         val reportEverySeconds = 1.0
         var lastReportT = llmBegin
         var lastReportCount = 0
 
         for (i in 0 until maxLen) {
-            val llmRes = engine.decodeEmbeddings(currentInput, nPast)
+            val llmRes = if (USE_MNN_LLM_BACKEND) {
+                mnnRunner!!.decodeEmbeddings(currentInput, nPast)
+            } else {
+                engine.decodeEmbeddings(currentInput, nPast)
+            }
             val totalElements = llmRes.size
             require(totalElements != 0 && totalElements % LLM_HIDDEN_SIZE == 0) {
                 "llm_res size $totalElements not multiple of $LLM_HIDDEN_SIZE"
@@ -295,6 +529,10 @@ class LlamaInferenceBridge(
                 samplingNum = 25,
                 ignoreEOS = i < minLen,
                 rng = rng,
+            )
+            Log.i(
+                TAG,
+                "[LLM] step=$i topId=$topId nPast=$nPast generated=${outTokens.size}",
             )
             if (topId == SamplingAlgorithm.SPEECH_TOKEN_SIZE) {
                 break
@@ -366,7 +604,6 @@ class LlamaInferenceBridge(
         val t0 = nowSeconds()
         emit(InferenceEvent.StageBegan(InferenceStage.flow, "Flow inference"))
 
-        require(llmTokens.isNotEmpty()) { "Flow input llmTokens is empty" }
         require(frontEndResult.speechFeat.isNotEmpty()) { "Flow input speechFeat is empty" }
         require(frontEndResult.speechEmbedding.isNotEmpty()) { "Flow input speechEmbedding is empty" }
         require(frontEndResult.speechTokenLen > 0) { "Flow prompt token len is invalid: ${frontEndResult.speechTokenLen}" }
@@ -409,35 +646,666 @@ class LlamaInferenceBridge(
         return FlowResult(units = units, output = flowOutput)
     }
 
+    private suspend fun runFlowInferenceFromBins(
+        engine: InferenceEngine,
+        inputDir: File,
+        noisePeFile: File,
+        onEvent: ((InferenceEvent) -> Unit)? = null,
+    ): FlowResult {
+        fun emit(event: InferenceEvent) {
+            onEvent?.invoke(event)
+        }
+
+        val t0 = nowSeconds()
+        emit(InferenceEvent.StageBegan(InferenceStage.flow, "Flow inference (prepacked bins, llama.cpp)"))
+        Trace.beginSection("FlowOnly_llamaCpp_total")
+        try {
+
+            val tLoadInput0 = nowSeconds()
+            Trace.beginSection("FlowOnly_loadInput")
+            val inputs = try {
+                readFlowOnlyInputBundle(inputDir)
+            } finally {
+                Trace.endSection()
+            }
+            Trace.beginSection("FlowOnly_loadNoisePe")
+            val noise = try {
+                loadNoisePe(noisePeFile)
+            } finally {
+                Trace.endSection()
+            }
+            val loadInputSeconds = nowSeconds() - tLoadInput0
+            val flowTokenCount = inputs.tokenLen.coerceAtMost(inputs.flowToken.size)
+            val promptTokenCount = inputs.promptTokenLen.coerceAtMost(inputs.promptToken.size)
+            require(flowTokenCount > 0) { "flow token count must be > 0, got=$flowTokenCount" }
+            require(promptTokenCount > 0) { "prompt token count must be > 0, got=$promptTokenCount" }
+            val tMergeToken0 = nowSeconds()
+            Trace.beginSection("FlowOnly_mergeToken")
+            val mergedTokens = try {
+                val tmp = IntArray(flowTokenCount + promptTokenCount)
+                var i = 0
+                while (i < promptTokenCount) {
+                    tmp[i] = inputs.promptToken[i].toInt()
+                    i += 1
+                }
+                var j = 0
+                while (j < flowTokenCount) {
+                    tmp[promptTokenCount + j] = inputs.flowToken[j].toInt()
+                    j += 1
+                }
+                tmp
+            } finally {
+                Trace.endSection()
+            }
+            val mergeTokenSeconds = nowSeconds() - tMergeToken0
+        Log.i(
+            TAG,
+            "[FlowOnly][llama.cpp] inputs loaded, token=${inputs.flowToken.size}, tokenLen=${inputs.tokenLen}, " +
+                "promptToken=${inputs.promptToken.size}, promptTokenLen=${inputs.promptTokenLen}, " +
+                "promptFeat=${inputs.promptFeat.size}, promptFeatLen=${inputs.promptFeatLen}, " +
+                "embedding=${inputs.embedding.size}, mergedToken=${mergedTokens.size}",
+        )
+
+            val tNative0 = nowSeconds()
+            Trace.beginSection("FlowOnly_nativeEncodeFlow")
+            val flowOutput = try {
+                engine.encodeFlow(
+                    inputEmbeddings = inputs.embedding,
+                    flowFeat = inputs.promptFeat,
+                    flowToken = mergedTokens,
+                    tokenLen = flowTokenCount,
+                    promptTokenLen = promptTokenCount,
+                    promptFeatLen = inputs.promptFeatLen,
+                    randNoise = noise.randNoise,
+                    extendPe = noise.extendPe,
+                )
+            } finally {
+                Trace.endSection()
+            }
+            val nativeSeconds = nowSeconds() - tNative0
+
+            val tPost0 = nowSeconds()
+            Trace.beginSection("FlowOnly_post")
+            try {
+                emit(InferenceEvent.Note(buildDecoderHeadPreviewNote(flowOutput)))
+            } finally {
+                Trace.endSection()
+            }
+            val postSeconds = nowSeconds() - tPost0
+            val units = inputs.flowToken.size.coerceAtLeast(1)
+            val seconds = nowSeconds() - t0
+            Log.i(
+                TAG,
+                "[FlowOnly][llama.cpp] timing: total=${"%.3f".format(Locale.US, seconds)}s, " +
+                    "loadInput=${"%.3f".format(Locale.US, loadInputSeconds)}s, " +
+                    "mergeToken=${"%.3f".format(Locale.US, mergeTokenSeconds)}s, " +
+                    "nativeEncodeFlow=${"%.3f".format(Locale.US, nativeSeconds)}s, " +
+                    "post=${"%.3f".format(Locale.US, postSeconds)}s",
+            )
+            emit(
+                InferenceEvent.Note(
+                    "[FlowOnly][llama.cpp] total=${"%.3f".format(Locale.US, seconds)}s " +
+                        "(loadInput=${"%.3f".format(Locale.US, loadInputSeconds)}s, " +
+                        "mergeToken=${"%.3f".format(Locale.US, mergeTokenSeconds)}s, " +
+                        "nativeEncodeFlow=${"%.3f".format(Locale.US, nativeSeconds)}s, " +
+                        "post=${"%.3f".format(Locale.US, postSeconds)}s)",
+                ),
+            )
+            emit(
+                InferenceEvent.StageEnded(
+                    StageEndedInfo(
+                        stage = InferenceStage.flow,
+                        unitName = "Flow Inference completed",
+                        units = units,
+                        seconds = seconds,
+                        avgUPS = if (seconds > 0) units / seconds else 0.0,
+                    ),
+                ),
+            )
+            return FlowResult(units = units, output = flowOutput)
+        } finally {
+            Trace.endSection()
+        }
+    }
+
+    private suspend fun runFlowInferenceFromBins(
+        encoderRunner: MnnFlowRunner,
+        decoderRunner: MnnFlowDecoderRunner,
+        inputDir: File,
+        onEvent: ((InferenceEvent) -> Unit)? = null,
+    ): FlowResult {
+        fun emit(event: InferenceEvent) {
+            onEvent?.invoke(event)
+        }
+
+        val t0 = nowSeconds()
+        emit(InferenceEvent.StageBegan(InferenceStage.flow, "Encoder/Decoder inference (prepacked inputs)"))
+
+        val inputs = readFlowOnlyInputBundle(inputDir)
+        val decoderInputs = readFlowDecoderInputPt(File(inputDir, FILE_FLOW_DECODER_INPUT_PT))
+        Log.i(
+            TAG,
+            "[EncDecOnly][MNN] encoder inputs loaded, token=${inputs.flowToken.size}, tokenLen=${inputs.tokenLen}, " +
+                "promptToken=${inputs.promptToken.size}, promptTokenLen=${inputs.promptTokenLen}, " +
+                "promptFeat=${inputs.promptFeat.size}, promptFeatLen=${inputs.promptFeatLen}, " +
+                "embedding=${inputs.embedding.size}, streaming=${inputs.streaming}, finalize=${inputs.finalize}",
+        )
+        Log.i(TAG, decoderInputs.describeForLog())
+
+        val encoderStart = nowSeconds()
+        encoderRunner.forward(
+            token = inputs.flowToken,
+            tokenLen = inputs.tokenLen,
+            promptToken = inputs.promptToken,
+            promptTokenLen = inputs.promptTokenLen,
+            promptFeat = inputs.promptFeat,
+            promptFeatLen = inputs.promptFeatLen,
+            embedding = inputs.embedding,
+            streaming = inputs.streaming,
+            finalize = inputs.finalize,
+        )
+        val encoderSeconds = nowSeconds() - encoderStart
+        val decoderStart = nowSeconds()
+        val flowOutput = when (decoderInputs.mode) {
+            FlowDecoderInputMode.Legacy5 -> decoderRunner.forward(
+                mu = decoderInputs.mu,
+                mask = decoderInputs.mask,
+                z = decoderInputs.z,
+                spks = decoderInputs.spks,
+                cond = decoderInputs.cond,
+            )
+            FlowDecoderInputMode.Prepared6 -> decoderRunner.forwardPrepared6(
+                xIn = decoderInputs.xIn,
+                maskIn = decoderInputs.maskIn,
+                muIn = decoderInputs.muIn,
+                tIn = decoderInputs.tIn,
+                spksIn = decoderInputs.spksIn,
+                condIn = decoderInputs.condIn,
+            )
+        }
+        val decoderSeconds = nowSeconds() - decoderStart
+        val totalSeconds = nowSeconds() - t0
+
+        val opProfileSummary = encoderRunner.consumeLastProfileSummary()
+        if (!opProfileSummary.isNullOrBlank()) {
+            emit(InferenceEvent.Note("[EncoderOp] $opProfileSummary"))
+        }
+        val decoderProfileSummary = decoderRunner.consumeLastProfileSummary()
+        if (!decoderProfileSummary.isNullOrBlank()) {
+            emit(InferenceEvent.Note("[DecoderOp] $decoderProfileSummary"))
+        }
+        emit(InferenceEvent.Note(buildDecoderHeadPreviewNote(flowOutput)))
+        emit(
+            InferenceEvent.FlowBreakdown(
+                encoderSeconds = encoderSeconds,
+                decoderSeconds = decoderSeconds,
+                totalSeconds = totalSeconds,
+            ),
+        )
+
+        val units = inputs.flowToken.size.coerceAtLeast(1)
+        emit(
+            InferenceEvent.StageEnded(
+                StageEndedInfo(
+                    stage = InferenceStage.flow,
+                    unitName = "Encoder/Decoder inference completed",
+                    units = units,
+                    seconds = totalSeconds,
+                    avgUPS = if (totalSeconds > 0) units / totalSeconds else 0.0,
+                ),
+            ),
+        )
+        return FlowResult(
+            units = units,
+            output = flowOutput,
+        )
+    }
+
+    private suspend fun runFlowInferenceFromBins(
+        runner: OnnxQnnFlowRunner,
+        inputDir: File,
+        onEvent: ((InferenceEvent) -> Unit)? = null,
+    ): FlowResult {
+        fun emit(event: InferenceEvent) {
+            onEvent?.invoke(event)
+        }
+
+        val t0 = nowSeconds()
+        emit(InferenceEvent.StageBegan(InferenceStage.flow, "Flow inference (prepacked inputs, ONNX QNN GPU)"))
+
+        val inputs = readFlowOnlyInputBundle(inputDir)
+        Log.i(
+            TAG,
+            "[FlowOnly][ONNX-QNN] inputs loaded, token=${inputs.flowToken.size}, tokenLen=${inputs.tokenLen}, " +
+                "promptToken=${inputs.promptToken.size}, promptTokenLen=${inputs.promptTokenLen}, " +
+                "promptFeat=${inputs.promptFeat.size}, promptFeatLen=${inputs.promptFeatLen}, " +
+                "embedding=${inputs.embedding.size}, streaming=${inputs.streaming}, finalize=${inputs.finalize}",
+        )
+        emit(InferenceEvent.Note("[FlowOnly] ONNX Runtime QNN backend=$DEFAULT_QNN_GPU_BACKEND_PATH"))
+        if (!runner.cpuFallbackDisabled) {
+            emit(InferenceEvent.Note("[FlowOnly] ONNX QNN is running with CPU fallback enabled for unsupported ops"))
+        }
+
+        val flowOutput = runner.forward(
+            token = inputs.flowToken,
+            tokenLen = inputs.tokenLen,
+            promptToken = inputs.promptToken,
+            promptTokenLen = inputs.promptTokenLen,
+            promptFeat = inputs.promptFeat,
+            promptFeatLen = inputs.promptFeatLen,
+            embedding = inputs.embedding,
+            streaming = inputs.streaming,
+            finalize = inputs.finalize,
+        )
+        emit(InferenceEvent.Note(buildDecoderHeadPreviewNote(flowOutput)))
+
+        val units = inputs.flowToken.size.coerceAtLeast(1)
+        val seconds = nowSeconds() - t0
+        emit(
+            InferenceEvent.StageEnded(
+                StageEndedInfo(
+                    stage = InferenceStage.flow,
+                    unitName = "Flow Inference completed",
+                    units = units,
+                    seconds = seconds,
+                    avgUPS = if (seconds > 0) units / seconds else 0.0,
+                ),
+            ),
+        )
+        return FlowResult(
+            units = units,
+            output = flowOutput,
+        )
+    }
+
+    private fun readFlowOnlyInputBundle(inputDir: File): FlowOnlyInputBundle =
+        FlowOnlyInputBundle(
+            flowToken = readRawInt64Array(File(inputDir, FILE_FLOW_INPUT_TOKEN)),
+            tokenLen = readRawInt32Scalar(File(inputDir, FILE_FLOW_INPUT_TOKEN_LEN)),
+            promptToken = readRawInt64Array(File(inputDir, FILE_FLOW_INPUT_PROMPT_TOKEN)),
+            promptTokenLen = readRawInt32Scalar(File(inputDir, FILE_FLOW_INPUT_PROMPT_TOKEN_LEN)),
+            promptFeat = readRawFloatArray(File(inputDir, FILE_FLOW_INPUT_PROMPT_FEAT)),
+            promptFeatLen = readRawInt32Scalar(File(inputDir, FILE_FLOW_INPUT_PROMPT_FEAT_LEN)),
+            embedding = readRawFloatArray(File(inputDir, FILE_FLOW_INPUT_EMBEDDING)),
+            streaming = readRawBoolByte(File(inputDir, FILE_FLOW_INPUT_STREAMING)),
+            finalize = readRawBoolByte(File(inputDir, FILE_FLOW_INPUT_FINALIZE)),
+        )
+
+    private fun readFlowDecoderInputPt(ptFile: File): FlowDecoderInputBundle {
+        require(ptFile.exists() && ptFile.isFile) { "${ptFile.name} not found: ${ptFile.absolutePath}" }
+        java.util.zip.ZipFile(ptFile).use { zip ->
+            val entries = ArrayList<java.util.zip.ZipEntry>()
+            val enumeration = zip.entries()
+            while (enumeration.hasMoreElements()) {
+                entries.add(enumeration.nextElement())
+            }
+            val sortedDataEntries = entries
+                .filter { !it.isDirectory && it.name.contains("/data/") && it.size > 0L }
+                .mapNotNull { entry ->
+                    val suffix = entry.name.substringAfterLast("/data/", missingDelimiterValue = "")
+                    val index = suffix.toIntOrNull() ?: return@mapNotNull null
+                    index to entry
+                }
+                .sortedBy { it.first }
+            require(sortedDataEntries.size >= 5) {
+                "${ptFile.name} missing storage entries, expected >=5, got=${sortedDataEntries.size}"
+            }
+            val storage = sortedDataEntries.associate { (idx, entry) ->
+                idx to readFloatStorageEntry(zip, entry)
+            }
+            val data0 = storage[0] ?: error("${ptFile.name} missing data/0")
+            val data1 = storage[1] ?: error("${ptFile.name} missing data/1")
+            val data2 = storage[2] ?: error("${ptFile.name} missing data/2")
+            val data3 = storage[3] ?: error("${ptFile.name} missing data/3")
+            val data4 = storage[4] ?: error("${ptFile.name} missing data/4")
+
+            val data5 = storage[5]
+            val looksLikePrepared6 =
+                data5 != null &&
+                    data0.size == data2.size &&
+                    data0.size == data5.size &&
+                    data3.size == 2 &&
+                    data4.size == FLOW_DECODER_MEL_BINS * 2
+            if (looksLikePrepared6) {
+                require(data0.size % (FLOW_DECODER_MEL_BINS * 2) == 0) {
+                    "flow decoder x_in size invalid: ${data0.size}, not divisible by ${FLOW_DECODER_MEL_BINS * 2}"
+                }
+                val seqLen = data0.size / (FLOW_DECODER_MEL_BINS * 2)
+                require(data1.size == seqLen * 2) {
+                    "flow decoder mask_in size invalid: ${data1.size}, expected=${seqLen * 2}"
+                }
+                return FlowDecoderInputBundle(
+                    mode = FlowDecoderInputMode.Prepared6,
+                    xIn = data0,
+                    maskIn = data1,
+                    muIn = data2,
+                    tIn = data3,
+                    spksIn = data4,
+                    condIn = data5,
+                )
+            }
+
+            val mu = data0
+            val mask = data1
+            val z = data2
+            val spks = data3
+            val cond = data4
+
+            require(mu.size % FLOW_DECODER_MEL_BINS == 0) {
+                "flow decoder mu size invalid: ${mu.size}, not divisible by $FLOW_DECODER_MEL_BINS"
+            }
+            require(z.size == mu.size && cond.size == mu.size) {
+                "flow decoder z/cond size mismatch: mu=${mu.size}, z=${z.size}, cond=${cond.size}"
+            }
+            require(spks.size == FLOW_DECODER_MEL_BINS) {
+                "flow decoder spks size invalid: ${spks.size}, expected $FLOW_DECODER_MEL_BINS"
+            }
+            val seqLen = mu.size / FLOW_DECODER_MEL_BINS
+            require(mask.size == seqLen) {
+                "flow decoder mask size invalid: ${mask.size}, expected seqLen=$seqLen"
+            }
+            return FlowDecoderInputBundle(
+                mode = FlowDecoderInputMode.Legacy5,
+                mu = mu,
+                mask = mask,
+                z = z,
+                spks = spks,
+                cond = cond,
+            )
+        }
+    }
+
+    private fun readFloatStorageEntry(zip: java.util.zip.ZipFile, entry: java.util.zip.ZipEntry): FloatArray {
+        val bytes = zip.getInputStream(entry).use { it.readBytes() }
+        require(bytes.size % 4 == 0) {
+            "Invalid float storage bytes in ${entry.name}: ${bytes.size}"
+        }
+        val out = FloatArray(bytes.size / 4)
+        val bb = ByteBuffer.wrap(bytes).order(ByteOrder.LITTLE_ENDIAN)
+        for (i in out.indices) {
+            out[i] = bb.float
+        }
+        return out
+    }
+
     private suspend fun runHIFTInference(
         flowResult: FlowResult,
-        engine: InferenceEngine,
+        runner: MnnHifiGanRunner,
         onEvent: ((InferenceEvent) -> Unit)? = null,
     ): HiftResult {
         fun emit(event: InferenceEvent) {
             onEvent?.invoke(event)
         }
 
-        val t0 = nowSeconds()
-        emit(InferenceEvent.StageBegan(InferenceStage.hift, "HifiGan inference"))
+        emit(
+            InferenceEvent.StageProgress(
+                stage = InferenceStage.hift,
+                unitName = "HifiGan 推理中...",
+                unitsDone = 1,
+                secondsElapsed = 0.0,
+                instUPS = 0.0,
+                avgUPS = 0.0,
+            ),
+        )
 
         require(flowResult.output.isNotEmpty()) { "HIFT input is empty" }
 
-        val hiftOutput = engine.encodeHift(flowResult.output)
+        val shape = inferHifiGanInputShape(flowResult.output.size)
+        val t0 = nowSeconds()
+        val hiftOutput = runner.forward(
+            input = flowResult.output,
+            shape = shape,
+        )
         require(hiftOutput.isNotEmpty()) { "HIFT output is empty" }
         val outputSamples = hiftOutput.size
+        val elapsed = nowSeconds() - t0
         emit(
             InferenceEvent.StageEnded(
                 StageEndedInfo(
                     stage = InferenceStage.hift,
                     unitName = "HifiGan Inference completed",
                     units = outputSamples,
-                    seconds = nowSeconds() - t0,
-                    avgUPS = 0.0,
+                    seconds = elapsed,
+                    avgUPS = if (elapsed > 0.0) outputSamples / elapsed else 0.0,
                 ),
             ),
         )
         return HiftResult(outputSamples = outputSamples, output = hiftOutput)
+    }
+
+    private suspend fun runHifiGanInferenceFromBins(
+        runner: MnnHifiGanRunner,
+        inputDir: File,
+        onEvent: ((InferenceEvent) -> Unit)? = null,
+    ): HiftResult {
+        fun emit(event: InferenceEvent) {
+            onEvent?.invoke(event)
+        }
+
+        emit(
+            InferenceEvent.StageProgress(
+                stage = InferenceStage.hift,
+                unitName = "HifiGan 推理中...",
+                unitsDone = 1,
+                secondsElapsed = 0.0,
+                instUPS = 0.0,
+                avgUPS = 0.0,
+            ),
+        )
+
+        val input = readRawFloatArray(File(inputDir, FILE_HIFIGAN_INPUT))
+        val shape = readRawIntShapeText(File(inputDir, FILE_HIFIGAN_INPUT_SHAPE))
+        val t0 = nowSeconds()
+        val hiftOutput = runner.forward(
+            input = input,
+            shape = shape,
+        )
+        require(hiftOutput.isNotEmpty()) { "HifiGan output is empty" }
+
+        val outputSamples = hiftOutput.size
+        val elapsed = nowSeconds() - t0
+        emit(
+            InferenceEvent.StageEnded(
+                StageEndedInfo(
+                    stage = InferenceStage.hift,
+                    unitName = "HifiGan Inference completed",
+                    units = outputSamples,
+                    seconds = elapsed,
+                    avgUPS = if (elapsed > 0.0) outputSamples / elapsed else 0.0,
+                ),
+            ),
+        )
+        return HiftResult(outputSamples = outputSamples, output = hiftOutput)
+    }
+
+    private fun runLLMInferenceFromPt(
+        runner: MnnLlmRunner,
+        resources: LocalResourceFiles,
+        lmInputPtFile: File,
+        onEvent: ((InferenceEvent) -> Unit)? = null,
+    ): LlmOnlyOutput {
+        fun emit(event: InferenceEvent) {
+            onEvent?.invoke(event)
+        }
+
+        emit(InferenceEvent.StageBegan(InferenceStage.llm, "LLM token generation (llm_input.pt)"))
+        runner.resetKvCache()
+        val inputEmbeddings = readTorchPtInputsEmbeddings(lmInputPtFile)
+        require(inputEmbeddings.isNotEmpty()) { "LM input embeddings are empty: ${lmInputPtFile.absolutePath}" }
+        require(inputEmbeddings.size % LLM_HIDDEN_SIZE == 0) {
+            "LM input embedding size ${inputEmbeddings.size} is not divisible by $LLM_HIDDEN_SIZE"
+        }
+        val promptSeqLen = inputEmbeddings.size / LLM_HIDDEN_SIZE
+        require(promptSeqLen > 0) { "LM input seqLen must be > 0" }
+
+        val llmBegin = nowSeconds()
+        val params = ModelParameters()
+        params.loadFromBinary(resources.speechEmbeddingWeight.absolutePath, "speech_embedding.weight")
+        params.loadFromBinary(resources.llmDecoderWeight.absolutePath, "llm_decoder.weight")
+        params.loadFromBinary(resources.llmDecoderBias.absolutePath, "llm_decoder.bias")
+
+        val outTokens = ArrayList<Int>(LLM_ONLY_MAX_NEW_TOKENS.coerceAtMost(2048))
+        val rng = SeededRNG(seed = 0L)
+        var currentInput = inputEmbeddings
+        var nPast = 0
+        val reportEverySeconds = 1.0
+        var lastReportT = llmBegin
+        var lastReportCount = 0
+        try {
+            for (i in 0 until LLM_ONLY_MAX_NEW_TOKENS) {
+                val llmRes = runner.decodeEmbeddings(currentInput, nPast)
+                val totalElements = llmRes.size
+                require(totalElements != 0 && totalElements % LLM_HIDDEN_SIZE == 0) {
+                    "llm_res size $totalElements not multiple of $LLM_HIDDEN_SIZE"
+                }
+
+                nPast += (currentInput.size / LLM_HIDDEN_SIZE).coerceAtLeast(1)
+                val start = totalElements - LLM_HIDDEN_SIZE
+                val lastTokenVector = llmRes.copyOfRange(start, totalElements)
+                val logp = params.computeLogProbabilities(lastTokenVector)
+                require(logp != null && logp.isNotEmpty()) { "computeLogProbabilities failed" }
+
+                val topId = SamplingAlgorithm.samplingIds(
+                    logProbs = logp,
+                    decoderTokens = outTokens.toIntArray(),
+                    samplingNum = 25,
+                    ignoreEOS = i < LLM_ONLY_MIN_NEW_TOKENS,
+                    rng = rng,
+                )
+                Log.i(
+                    TAG,
+                    "[LLM_ONLY] step=$i topId=$topId nPast=$nPast generated=${outTokens.size}",
+                )
+                if (topId == SamplingAlgorithm.SPEECH_TOKEN_SIZE) {
+                    break
+                }
+                if (topId > SamplingAlgorithm.SPEECH_TOKEN_SIZE) {
+                    continue
+                }
+                outTokens.add(topId)
+
+                val embeddingVector = params.getEmbeddingRow("speech_embedding.weight", topId)
+                require(!(embeddingVector == null || embeddingVector.isEmpty())) { "getEmbeddingRow failed: $topId" }
+                currentInput = embeddingVector
+
+                val now = nowSeconds()
+                if (now - lastReportT >= reportEverySeconds) {
+                    val total = outTokens.size
+                    val elapsed = (now - llmBegin).coerceAtLeast(1e-9)
+                    val dt = (now - lastReportT).coerceAtLeast(1e-9)
+                    val dTok = total - lastReportCount
+                    val inst = dTok / dt
+                    val avg = total / elapsed
+                    emit(
+                        InferenceEvent.StageProgress(
+                            stage = InferenceStage.llm,
+                            unitName = "token",
+                            unitsDone = total,
+                            secondsElapsed = elapsed,
+                            instUPS = inst,
+                            avgUPS = avg,
+                        ),
+                    )
+                    lastReportT = now
+                    lastReportCount = total
+                }
+            }
+        } finally {
+            params.clear()
+        }
+
+        val elapsed = nowSeconds() - llmBegin
+        emit(
+            InferenceEvent.StageEnded(
+                StageEndedInfo(
+                    stage = InferenceStage.llm,
+                    unitName = "LLM inference completed",
+                    units = outTokens.size,
+                    seconds = elapsed,
+                    avgUPS = if (elapsed > 0.0) outTokens.size / elapsed else 0.0,
+                ),
+            ),
+        )
+        return LlmOnlyOutput(
+            promptSeqLen = promptSeqLen,
+            generatedTokens = outTokens.size,
+        )
+    }
+
+    private suspend fun ensureHifiGanOnlyResourcesReady(): HifiGanOnlyResourceFiles =
+        engineMutex.withLock {
+            installBundledResourcesIfPresent()
+            val modelsDir = ensureDirectory(File(appContext.filesDir, DIRECTORY_MODELS))
+            val resourcesDir = ensureDirectory(File(appContext.filesDir, DIRECTORY_LOCAL_RESOURCES))
+            HifiGanOnlyResourceFiles(
+                hifiganModel = resolveRequiredFile(FILE_HIFIGAN_MODEL, listOf(File(modelsDir, FILE_HIFIGAN_MODEL))),
+                hifiganInputsBinDir = resolveRequiredDirectory(
+                    DIR_HIFIGAN_INPUTS_BIN,
+                    listOf(File(resourcesDir, DIR_HIFIGAN_INPUTS_BIN)),
+                ),
+            )
+        }
+
+    private suspend fun ensureFlowOnlyResourcesReady(): FlowOnlyResourceFiles =
+        engineMutex.withLock {
+            installBundledResourcesIfPresent()
+            val modelsDir = ensureDirectory(File(appContext.filesDir, DIRECTORY_MODELS))
+            val resourcesDir = ensureDirectory(File(appContext.filesDir, DIRECTORY_LOCAL_RESOURCES))
+            val flowModel = resolveRequiredFile(
+                FILE_FLOW_GGUF_MODEL,
+                listOf(
+                    File(modelsDir, FILE_FLOW_GGUF_MODEL),
+                    File(modelsDir, FILE_LLM_MODEL),
+                ),
+            )
+            val noisePe = resolveRequiredFile(FILE_NOISE_PE, listOf(File(resourcesDir, FILE_NOISE_PE)))
+            val flowInputsBinDir = resolveRequiredDirectory(
+                DIR_FLOW_INPUTS_BIN,
+                listOf(File(resourcesDir, DIR_FLOW_INPUTS_BIN)),
+            )
+
+            if (!USE_MNN_LLM_BACKEND) {
+                FlowOnlyResourceFiles(
+                    flowModel = flowModel,
+                    flowEncoderModel = flowModel,
+                    flowDecoderModel = flowModel,
+                    flowQnnModel = flowModel,
+                    noisePe = noisePe,
+                    flowInputsBinDir = flowInputsBinDir,
+                )
+            } else {
+                val mnnModelsDir = ensureDirectory(File(modelsDir, DIR_MNN_MODELS))
+                FlowOnlyResourceFiles(
+                    flowModel = flowModel,
+                    flowEncoderModel = resolveRequiredFile(
+                        "$DIR_MNN_MODELS/$FILE_FLOW_ENCODER_MODEL",
+                        listOf(File(mnnModelsDir, FILE_FLOW_ENCODER_MODEL)),
+                    ),
+                    flowDecoderModel = resolveRequiredFile(
+                        "$DIR_MNN_MODELS/$FILE_FLOW_DECODER_MODEL_TEST_OP",
+                        listOf(
+                            File(mnnModelsDir, FILE_FLOW_DECODER_MODEL_TEST_OP),
+                            File(mnnModelsDir, FILE_FLOW_DECODER_MODEL_GPU_SIMPLIFIED),
+                            File(mnnModelsDir, FILE_FLOW_DECODER_MODEL),
+                        ),
+                    ),
+                    flowQnnModel = resolveRequiredFile(
+                        FILE_FLOW_QNN_ONNX_MODEL,
+                        listOf(File(modelsDir, FILE_FLOW_QNN_ONNX_MODEL)),
+                    ),
+                    noisePe = noisePe,
+                    flowInputsBinDir = flowInputsBinDir,
+                )
+            }
+        }
+
+    private fun inferHifiGanInputShape(flatSize: Int): IntArray {
+        require(flatSize > 0) { "HifiGan input size must be > 0" }
+        require(flatSize % HIFIGAN_MEL_BINS == 0) {
+            "Invalid HifiGan input size: $flatSize, must be divisible by $HIFIGAN_MEL_BINS"
+        }
+        val frames = flatSize / HIFIGAN_MEL_BINS
+        return intArrayOf(1, HIFIGAN_MEL_BINS, frames)
     }
 
     private suspend fun runVoiceGeneration(
@@ -515,6 +1383,97 @@ class LlamaInferenceBridge(
         }
 
         return NoisePeData(randNoise = randNoise, extendPe = extendPe)
+    }
+
+    private fun readRawInt32Array(file: File): IntArray {
+        val bytes = file.readBytes()
+        require(bytes.size % 4 == 0) { "Invalid int32 bin size: ${file.absolutePath}, bytes=${bytes.size}" }
+        val bb = ByteBuffer.wrap(bytes).order(ByteOrder.LITTLE_ENDIAN)
+        val out = IntArray(bytes.size / 4)
+        for (i in out.indices) out[i] = bb.int
+        return out
+    }
+
+    private fun readRawInt64Array(file: File): LongArray {
+        val bytes = file.readBytes()
+        require(bytes.size % 8 == 0) { "Invalid int64 bin size: ${file.absolutePath}, bytes=${bytes.size}" }
+        val bb = ByteBuffer.wrap(bytes).order(ByteOrder.LITTLE_ENDIAN)
+        val out = LongArray(bytes.size / 8)
+        for (i in out.indices) out[i] = bb.long
+        return out
+    }
+
+    private fun readRawFloatArray(file: File): FloatArray {
+        val bytes = file.readBytes()
+        require(bytes.size % 4 == 0) { "Invalid float32 bin size: ${file.absolutePath}, bytes=${bytes.size}" }
+        val bb = ByteBuffer.wrap(bytes).order(ByteOrder.LITTLE_ENDIAN)
+        val out = FloatArray(bytes.size / 4)
+        for (i in out.indices) out[i] = bb.float
+        return out
+    }
+
+    private fun readRawInt32Scalar(file: File): Int {
+        val bytes = file.readBytes()
+        require(bytes.size == 4) { "Invalid int32 scalar bin size: ${file.absolutePath}, bytes=${bytes.size}" }
+        return ByteBuffer.wrap(bytes).order(ByteOrder.LITTLE_ENDIAN).int
+    }
+
+    private fun readRawIntShapeText(file: File): IntArray {
+        val raw = file.readText(Charsets.UTF_8).trim()
+        require(raw.isNotEmpty()) { "Empty shape text: ${file.absolutePath}" }
+        val tokens = raw.split(Regex("[,xX\\s]+")).filter { it.isNotBlank() }
+        require(tokens.isNotEmpty()) { "Invalid shape text: ${file.absolutePath}, text=$raw" }
+        val shape = IntArray(tokens.size)
+        for (i in tokens.indices) {
+            val dim = tokens[i].toIntOrNull()
+                ?: error("Invalid shape dim '${tokens[i]}' in ${file.absolutePath}")
+            require(dim > 0) { "Shape dim must be > 0 in ${file.absolutePath}, got $dim" }
+            shape[i] = dim
+        }
+        return shape
+    }
+
+    private fun readRawBoolByte(file: File): Boolean {
+        val bytes = file.readBytes()
+        require(bytes.size == 1) { "Invalid bool bin size: ${file.absolutePath}, bytes=${bytes.size}" }
+        return bytes[0].toInt() != 0
+    }
+
+    private fun readTorchPtInputsEmbeddings(ptFile: File): FloatArray {
+        require(ptFile.exists() && ptFile.isFile) { "llm_input.pt not found: ${ptFile.absolutePath}" }
+        ZipFile(ptFile).use { zip ->
+            val allEntries = ArrayList<java.util.zip.ZipEntry>()
+            val enumeration = zip.entries()
+            while (enumeration.hasMoreElements()) {
+                allEntries.add(enumeration.nextElement())
+            }
+
+            val candidates = allEntries
+                .filter { !it.isDirectory && it.name.contains("/data/") && it.size > 0L }
+                .sortedByDescending { it.size }
+            require(candidates.isNotEmpty()) {
+                "No tensor storage entries found in ${ptFile.absolutePath}"
+            }
+            val preferred = candidates.filter { it.name.endsWith("/data/0") }
+            val selectionPool = if (preferred.isNotEmpty()) preferred else candidates
+
+            val selected = selectionPool.firstOrNull { entry ->
+                val bytes = entry.size
+                bytes % 4L == 0L &&
+                    ((bytes / 4L) % LLM_HIDDEN_SIZE.toLong() == 0L)
+            } ?: error(
+                "No compatible float storage found in ${ptFile.absolutePath}, candidates=${selectionPool.map { it.name }}",
+            )
+
+            val bytes = zip.getInputStream(selected).use { it.readBytes() }
+            require(bytes.size % 4 == 0) { "Invalid float data bytes in ${selected.name}: ${bytes.size}" }
+            val out = FloatArray(bytes.size / 4)
+            val bb = ByteBuffer.wrap(bytes).order(ByteOrder.LITTLE_ENDIAN)
+            for (i in out.indices) {
+                out[i] = bb.float
+            }
+            return out
+        }
     }
 
     private fun reconstructWaveformFromHift(hiftOutput: FloatArray): FloatArray {
@@ -753,20 +1712,167 @@ class LlamaInferenceBridge(
         }
     }
 
-    private suspend fun ensureEngineReady(modelFile: File, flowModelFile: File, hiftModelFile: File): InferenceEngine =
+    private fun buildDecoderHeadPreviewNote(output: FloatArray): String {
+        if (output.isEmpty()) {
+            return "[DecoderOut] [0,0,:8]=[] (empty output)"
+        }
+        val count = min(8, output.size)
+        val values = (0 until count).joinToString(
+            separator = ", ",
+            prefix = "[",
+            postfix = "]",
+        ) { i -> String.format(Locale.US, "%.6f", output[i]) }
+        return "[DecoderOut] [0,0,:8]=$values"
+    }
+
+    private suspend fun ensureEngineReady(modelFile: File, flowModelFile: File): InferenceEngine =
         engineMutex.withLock {
             engine?.let { return it }
 
             installBundledResourcesIfPresent()
+            Log.i(TAG, "[LLMPrepare] get InferenceEngine instance")
+            val loaded = AiChat.getInferenceEngine(appContext)
+            val state = loaded.state.value
+            Log.i(TAG, "[LLMPrepare] current engine state=${state.javaClass.simpleName}")
+            if (state.isModelLoaded || state is InferenceEngine.State.Error) {
+                Log.i(TAG, "[LLMPrepare] cleanUp old engine state")
+                loaded.cleanUp()
+                Log.i(TAG, "[LLMPrepare] cleanUp done")
+            }
+            val t0 = nowSeconds()
+            Log.i(TAG, "[LLMPrepare] loadModel begin: ${modelFile.absolutePath} (bytes=${modelFile.length()})")
+            loaded.loadModel(modelFile.absolutePath)
+            Log.i(TAG, "[LLMPrepare] loadModel done in ${"%.3f".format(Locale.US, nowSeconds() - t0)} s")
+
+            val t1 = nowSeconds()
+            Log.i(TAG, "[LLMPrepare] loadFlowModel begin: ${flowModelFile.absolutePath} (bytes=${flowModelFile.length()})")
+            loaded.loadFlowModel(flowModelFile.absolutePath)
+            Log.i(TAG, "[LLMPrepare] loadFlowModel done in ${"%.3f".format(Locale.US, nowSeconds() - t1)} s")
+            engine = loaded
+            loaded
+        }
+
+    private suspend fun ensureFlowOnlyEngineReady(flowModelFile: File): InferenceEngine =
+        engineMutex.withLock {
+            engine?.let { return it }
+
+            installBundledResourcesIfPresent()
+            Log.i(TAG, "[FlowOnly] get InferenceEngine instance")
             val loaded = AiChat.getInferenceEngine(appContext)
             val state = loaded.state.value
             if (state.isModelLoaded || state is InferenceEngine.State.Error) {
                 loaded.cleanUp()
             }
-            loaded.loadModel(modelFile.absolutePath)
+            val t0 = nowSeconds()
+            Log.i(TAG, "[FlowOnly] loadFlowModel begin: ${flowModelFile.absolutePath} (bytes=${flowModelFile.length()})")
             loaded.loadFlowModel(flowModelFile.absolutePath)
-            loaded.loadHiftModel(hiftModelFile.absolutePath)
+            Log.i(TAG, "[FlowOnly] loadFlowModel done in ${"%.3f".format(Locale.US, nowSeconds() - t0)} s")
             engine = loaded
+            loaded
+        }
+
+    private suspend fun ensureMnnFlowEncoderRunnerReady(flowEncoderModelFile: File): MnnFlowRunner =
+        engineMutex.withLock {
+            mnnFlowEncoderRunner?.let { return it }
+
+            installBundledResourcesIfPresent()
+            val t0 = nowSeconds()
+            Log.i(
+                TAG,
+                "[FlowOnly][MNN] encoder load begin: ${flowEncoderModelFile.absolutePath} (bytes=${flowEncoderModelFile.length()})",
+            )
+            val loaded = MnnFlowRunner.load(
+                modelFile = flowEncoderModelFile,
+                enableOpProfile = FLOW_MNN_OP_PROFILE_ENABLED,
+            )
+            Log.i(
+                TAG,
+                "[FlowOnly][MNN] encoder load done in ${"%.3f".format(Locale.US, nowSeconds() - t0)} s",
+            )
+            mnnFlowEncoderRunner = loaded
+            loaded
+        }
+
+    private suspend fun ensureMnnFlowDecoderRunnerReady(flowDecoderModelFile: File): MnnFlowDecoderRunner =
+        engineMutex.withLock {
+            mnnFlowDecoderRunner?.let { return it }
+
+            installBundledResourcesIfPresent()
+            val t0 = nowSeconds()
+            Log.i(
+                TAG,
+                "[FlowOnly][MNN] decoder load begin: ${flowDecoderModelFile.absolutePath} (bytes=${flowDecoderModelFile.length()})",
+            )
+            val loaded = MnnFlowDecoderRunner.load(
+                modelFile = flowDecoderModelFile,
+                enableOpProfile = FLOW_MNN_OP_PROFILE_ENABLED,
+            )
+            Log.i(
+                TAG,
+                "[FlowOnly][MNN] decoder load done in ${"%.3f".format(Locale.US, nowSeconds() - t0)} s",
+            )
+            mnnFlowDecoderRunner = loaded
+            loaded
+        }
+
+    private suspend fun ensureOnnxQnnFlowRunnerReady(flowQnnModelFile: File): OnnxQnnFlowRunner =
+        engineMutex.withLock {
+            onnxQnnFlowRunner?.let { return it }
+
+            installBundledResourcesIfPresent()
+            val t0 = nowSeconds()
+            Log.i(
+                TAG,
+                "[FlowOnly][ONNX-QNN] session load begin: ${flowQnnModelFile.absolutePath} (bytes=${flowQnnModelFile.length()})",
+            )
+            val loaded = OnnxQnnFlowRunner.load(
+                modelFile = flowQnnModelFile,
+                backendPath = DEFAULT_QNN_GPU_BACKEND_PATH,
+                disableCpuFallback = false,
+            )
+            Log.i(
+                TAG,
+                "[FlowOnly][ONNX-QNN] session load done in ${"%.3f".format(Locale.US, nowSeconds() - t0)} s, " +
+                    "disableCpuFallback=${loaded.cpuFallbackDisabled}",
+            )
+            onnxQnnFlowRunner = loaded
+            loaded
+        }
+
+    private suspend fun ensureMnnHifiGanRunnerReady(hifiganModelFile: File): MnnHifiGanRunner =
+        engineMutex.withLock {
+            mnnHifiGanRunner?.let { return it }
+
+            installBundledResourcesIfPresent()
+            val t0 = nowSeconds()
+            Log.i(
+                TAG,
+                "[HifiGan][MNN] module load begin: ${hifiganModelFile.absolutePath} (bytes=${hifiganModelFile.length()})",
+            )
+            val loaded = MnnHifiGanRunner.load(modelFile = hifiganModelFile)
+            Log.i(
+                TAG,
+                "[HifiGan][MNN] module load done in ${"%.3f".format(Locale.US, nowSeconds() - t0)} s",
+            )
+            mnnHifiGanRunner = loaded
+            loaded
+        }
+
+    private suspend fun ensureMnnLlmRunnerReady(resources: LocalResourceFiles): MnnLlmRunner =
+        engineMutex.withLock {
+            mnnLlmRunner?.let { return it }
+
+            val configFile = resources.mnnLlmConfig
+                ?: error(
+                    "MNN LLM config not found. Expected one of:\n" +
+                        "- ${File(appContext.filesDir, "$DIRECTORY_MODELS/$DIR_MNN_MODELS/$FILE_MNN_LLM_CONFIG").absolutePath}\n" +
+                        "- ${File(appContext.filesDir, "$DIRECTORY_MODELS/$FILE_MNN_LLM_CONFIG").absolutePath}",
+                )
+            val t0 = nowSeconds()
+            Log.i(TAG, "[MNN-LLM] load begin: ${configFile.absolutePath} (bytes=${configFile.length()})")
+            val loaded = MnnLlmRunner.load(configFile = configFile)
+            Log.i(TAG, "[MNN-LLM] load done in ${"%.3f".format(Locale.US, nowSeconds() - t0)} s")
+            mnnLlmRunner = loaded
             loaded
         }
 
@@ -803,12 +1909,39 @@ class LlamaInferenceBridge(
             if (!it.exists()) it.mkdirs()
         }
         copyAssetDirectoryIfPresent(assetDir = ASSET_DIR_MODELS, targetDir = targetModelsDir)
+        ensureCriticalResourceFilesSynced(
+            assetDir = ASSET_DIR_MODELS,
+            targetDir = targetModelsDir,
+            requiredFileCandidates = listOf(
+                listOf(FILE_FLOW_GGUF_MODEL, FILE_LLM_MODEL),
+                listOf("$DIR_MNN_MODELS/$FILE_MNN_LLM_CONFIG", FILE_MNN_LLM_CONFIG),
+                listOf("$DIR_MNN_MODELS/$FILE_FLOW_MODEL"),
+                listOf("$DIR_MNN_MODELS/$FILE_FLOW_ENCODER_MODEL"),
+                listOf(
+                    "$DIR_MNN_MODELS/$FILE_FLOW_DECODER_MODEL_TEST_OP",
+                    "$DIR_MNN_MODELS/$FILE_FLOW_DECODER_MODEL",
+                ),
+                listOf(
+                    "$DIR_MNN_MODELS/$FILE_FLOW_MODEL_WEIGHTS",
+                    "$DIR_MNN_MODELS/$FILE_FLOW_MODEL_WEIGHT",
+                ),
+                listOf(FILE_FLOW_QNN_ONNX_MODEL),
+            ),
+        )
 
         val targetResourcesDir = File(appContext.filesDir, DIRECTORY_LOCAL_RESOURCES).also {
             if (it.exists() && !it.isDirectory) it.delete()
             if (!it.exists()) it.mkdirs()
         }
         copyAssetDirectoryIfPresent(assetDir = ASSET_DIR_LOCAL_RESOURCES, targetDir = targetResourcesDir)
+        ensureCriticalResourceFilesSynced(
+            assetDir = ASSET_DIR_LOCAL_RESOURCES,
+            targetDir = targetResourcesDir,
+            requiredFileCandidates = listOf(
+                listOf(FILE_LLM_INPUT_PT, FILE_LLM_INPUT_PT_LEGACY, FILE_LLM_INPUT_PT_UPPER_LEGACY),
+                listOf("$DIR_FLOW_INPUTS_BIN/$FILE_FLOW_DECODER_INPUT_PT"),
+            ),
+        )
     }
 
     private fun copyAssetDirectoryIfPresent(assetDir: String, targetDir: File) {
@@ -823,8 +1956,12 @@ class LlamaInferenceBridge(
             targetDir.mkdirs()
         }
         val markerFile = File(targetDir, ASSET_SYNC_MARKER)
+        val expectedToken = currentAssetSyncToken(assetDir)
         if (markerFile.exists()) {
-            return
+            val recorded = runCatching { markerFile.readText() }.getOrNull()?.trim().orEmpty()
+            if (recorded == expectedToken) {
+                return
+            }
         }
 
         entries.forEach { entry ->
@@ -854,7 +1991,39 @@ class LlamaInferenceBridge(
                 tempFile.renameTo(targetFile)
             }
         }
-        markerFile.writeText("ok")
+        markerFile.writeText(expectedToken)
+    }
+
+    private fun currentAssetSyncToken(assetDir: String): String {
+        val pkgInfo = appContext.packageManager.getPackageInfo(appContext.packageName, 0)
+        return "dir=$assetDir;updatedAt=${pkgInfo.lastUpdateTime};version=${pkgInfo.longVersionCode}"
+    }
+
+    private fun ensureCriticalResourceFilesSynced(
+        assetDir: String,
+        targetDir: File,
+        requiredFileCandidates: List<List<String>>,
+    ) {
+        val hasMissing = requiredFileCandidates.any { candidates ->
+            candidates.none { name -> File(targetDir, name).isFile }
+        }
+        if (!hasMissing) return
+
+        clearSyncMarkersRecursively(targetDir)
+        copyAssetDirectoryIfPresent(assetDir = assetDir, targetDir = targetDir)
+    }
+
+    private fun clearSyncMarkersRecursively(dir: File) {
+        if (!dir.exists() || !dir.isDirectory) return
+        val marker = File(dir, ASSET_SYNC_MARKER)
+        if (marker.exists()) {
+            marker.delete()
+        }
+        dir.listFiles()?.forEach { child ->
+            if (child.isDirectory) {
+                clearSyncMarkersRecursively(child)
+            }
+        }
     }
 
     private fun resolveModelFile(): File {
@@ -876,11 +2045,28 @@ class LlamaInferenceBridge(
             installBundledResourcesIfPresent()
             val modelsDir = ensureDirectory(File(appContext.filesDir, DIRECTORY_MODELS))
             val resourcesDir = ensureDirectory(File(appContext.filesDir, DIRECTORY_LOCAL_RESOURCES))
+            val mnnModelsDir = ensureDirectory(File(modelsDir, DIR_MNN_MODELS))
 
             val resolved = LocalResourceFiles(
                 llmModel = resolveOptionalFile(listOf(File(modelsDir, FILE_LLM_MODEL))) ?: resolveModelFile(),
-                flowModel = resolveRequiredFile(FILE_FLOW_MODEL, listOf(File(modelsDir, FILE_FLOW_MODEL))),
-                hiftModel = resolveRequiredFile(FILE_HIFT_MODEL, listOf(File(modelsDir, FILE_HIFT_MODEL))),
+                mnnLlmConfig = resolveOptionalFile(
+                    listOf(
+                        File(modelsDir, "$DIR_MNN_MODELS/$FILE_MNN_LLM_CONFIG"),
+                        File(modelsDir, FILE_MNN_LLM_CONFIG),
+                    ),
+                ),
+                flowModel = resolveRequiredFile(
+                    "$DIR_MNN_MODELS/$FILE_FLOW_MODEL",
+                    listOf(File(mnnModelsDir, FILE_FLOW_MODEL)),
+                ),
+                flowModelWeight = resolveRequiredFile(
+                    "$DIR_MNN_MODELS/$FILE_FLOW_MODEL_WEIGHTS",
+                    listOf(
+                        File(mnnModelsDir, FILE_FLOW_MODEL_WEIGHTS),
+                        File(mnnModelsDir, FILE_FLOW_MODEL_WEIGHT),
+                    ),
+                ),
+                hifiganModel = resolveRequiredFile(FILE_HIFIGAN_MODEL, listOf(File(modelsDir, FILE_HIFIGAN_MODEL))),
                 modelInputZh = resolveRequiredFile(FILE_MODEL_INPUT_ZH, listOf(File(resourcesDir, FILE_MODEL_INPUT_ZH))),
                 modelInputZh2 = resolveRequiredFile(FILE_MODEL_INPUT_ZH2, listOf(File(resourcesDir, FILE_MODEL_INPUT_ZH2))),
                 modelInputEn = resolveRequiredFile(FILE_MODEL_INPUT_EN, listOf(File(resourcesDir, FILE_MODEL_INPUT_EN))),
@@ -891,6 +2077,14 @@ class LlamaInferenceBridge(
                 llmDecoderBias = resolveRequiredFile(FILE_LLM_DECODER_BIAS, listOf(File(resourcesDir, FILE_LLM_DECODER_BIAS))),
                 speechEmbeddingWeight = resolveRequiredFile(FILE_SPEECH_EMBEDDING_WEIGHT, listOf(File(resourcesDir, FILE_SPEECH_EMBEDDING_WEIGHT))),
                 llmEmbedTokens = resolveRequiredFile(FILE_LLM_EMBED_TOKENS, listOf(File(resourcesDir, FILE_LLM_EMBED_TOKENS))),
+                lmInputPt = resolveRequiredFile(
+                    FILE_LLM_INPUT_PT,
+                    listOf(
+                        File(resourcesDir, FILE_LLM_INPUT_PT),
+                        File(resourcesDir, FILE_LLM_INPUT_PT_LEGACY),
+                        File(resourcesDir, FILE_LLM_INPUT_PT_UPPER_LEGACY),
+                    ),
+                ),
                 noisePe = resolveRequiredFile(FILE_NOISE_PE, listOf(File(resourcesDir, FILE_NOISE_PE))),
                 sosEosEmb = resolveRequiredFile(FILE_SOS_EOS_EMB, listOf(File(resourcesDir, FILE_SOS_EOS_EMB))),
                 taskIdEmb = resolveRequiredFile(FILE_TASK_ID_EMB, listOf(File(resourcesDir, FILE_TASK_ID_EMB))),
@@ -905,6 +2099,8 @@ class LlamaInferenceBridge(
                 poveyWindow400 = resolveRequiredFile(FILE_POVEY_WINDOW_400, listOf(File(resourcesDir, FILE_POVEY_WINDOW_400))),
                 melBanks80x257 = resolveRequiredFile(FILE_MEL_BANKS_80x257, listOf(File(resourcesDir, FILE_MEL_BANKS_80x257))),
                 tokenizerDir = resolveRequiredDirectory(DIR_QWEN2_TOKENIZER, listOf(File(resourcesDir, DIR_QWEN2_TOKENIZER))),
+                flowInputsBinDir = resolveRequiredDirectory(DIR_FLOW_INPUTS_BIN, listOf(File(resourcesDir, DIR_FLOW_INPUTS_BIN))),
+                hifiganInputsBinDir = resolveRequiredDirectory(DIR_HIFIGAN_INPUTS_BIN, listOf(File(resourcesDir, DIR_HIFIGAN_INPUTS_BIN))),
             )
             localResources = resolved
             resolved
@@ -944,15 +2140,32 @@ class LlamaInferenceBridge(
     private fun nowSeconds() = System.nanoTime() / 1_000_000_000.0
 
     companion object {
+        private const val TAG = "LlamaInferenceBridge"
+        private const val USE_MNN_LLM_BACKEND = false
+        private const val LLM_ONLY_TEST_MODE = false
+        private const val FLOW_ONLY_TEST_MODE = true
+        private const val HIFIGAN_ONLY_TEST_MODE = false
+        private const val FLOW_MNN_OP_PROFILE_ENABLED = true
+        private const val FLOW_ONLY_USE_ONNX_QNN_GPU = false
         private const val ASSET_SYNC_MARKER = ".asset_sync_ok"
         private const val DIRECTORY_MODELS = "models"
         private const val DIRECTORY_LOCAL_RESOURCES = "local_llm_resources"
         private const val ASSET_DIR_MODELS = "models"
         private const val ASSET_DIR_LOCAL_RESOURCES = "local_llm_resources"
 
-        private const val FILE_LLM_MODEL = "cosyvoice2-0.5B-Q2_K.gguf"
-        private const val FILE_FLOW_MODEL = "flow_fp32.gguf"
-        private const val FILE_HIFT_MODEL = "hift_fp32.gguf"
+        private const val FILE_LLM_MODEL = "flow_fp32.gguf"
+        private const val FILE_FLOW_GGUF_MODEL = "flow_fp32.gguf"
+        private const val DIR_MNN_MODELS = "mnnModels"
+        private const val FILE_MNN_LLM_CONFIG = "config.json"
+        private const val FILE_FLOW_MODEL = "flow.mnn"
+        private const val FILE_FLOW_ENCODER_MODEL = "flow_encoder.mnn"
+        private const val FILE_FLOW_DECODER_MODEL = "flow_decoder.mnn"
+        private const val FILE_FLOW_DECODER_MODEL_TEST_OP = "flow_decoder_test_op.mnn"
+        private const val FILE_FLOW_DECODER_MODEL_GPU_SIMPLIFIED = "flow_decoder_gpu_simplified.mnn"
+        private const val FILE_FLOW_QNN_ONNX_MODEL = "flow_qnn_ort_opt.onnx"
+        private const val FILE_FLOW_MODEL_WEIGHTS = "flow.mnn.weights"
+        private const val FILE_FLOW_MODEL_WEIGHT = "flow.mnn.weight"
+        private const val FILE_HIFIGAN_MODEL = "hifigan.mnn"
 
         private const val FILE_MODEL_INPUT_ZH = "model_input_zh.bin"
         private const val FILE_MODEL_INPUT_ZH2 = "model_input_zh2.bin"
@@ -964,6 +2177,9 @@ class LlamaInferenceBridge(
         private const val FILE_LLM_DECODER_BIAS = "llm_decoder_bias.bin"
         private const val FILE_SPEECH_EMBEDDING_WEIGHT = "speech_embedding_weight.bin"
         private const val FILE_LLM_EMBED_TOKENS = "llm_embed_tokens.bin"
+        private const val FILE_LLM_INPUT_PT = "llm_input.pt"
+        private const val FILE_LLM_INPUT_PT_LEGACY = "lm_input.pt"
+        private const val FILE_LLM_INPUT_PT_UPPER_LEGACY = "LLM_input.pt"
         private const val FILE_NOISE_PE = "noise_pe.bin"
         private const val FILE_SOS_EOS_EMB = "sos_eos_emb.bin"
         private const val FILE_TASK_ID_EMB = "task_id_emb.bin"
@@ -978,14 +2194,34 @@ class LlamaInferenceBridge(
         private const val FILE_POVEY_WINDOW_400 = "povey_window_400.bin"
         private const val FILE_MEL_BANKS_80x257 = "mel_banks_80x257.bin"
         private const val DIR_QWEN2_TOKENIZER = "qwen2_tokenizer"
+        private const val DIR_FLOW_INPUTS_BIN = "flow_inputs_bin"
+        private const val DIR_HIFIGAN_INPUTS_BIN = "hifigan_inputs_bin"
+
+        private const val FILE_HIFIGAN_INPUT = "0_input.bin"
+        private const val FILE_HIFIGAN_INPUT_SHAPE = "0_input.shape.txt"
+
+        private const val FILE_FLOW_INPUT_TOKEN = "0_token.bin"
+        private const val FILE_FLOW_INPUT_TOKEN_LEN = "1_token_len.bin"
+        private const val FILE_FLOW_INPUT_PROMPT_TOKEN = "2_prompt_token.bin"
+        private const val FILE_FLOW_INPUT_PROMPT_TOKEN_LEN = "3_prompt_token_len.bin"
+        private const val FILE_FLOW_INPUT_PROMPT_FEAT = "4_prompt_feat.bin"
+        private const val FILE_FLOW_INPUT_PROMPT_FEAT_LEN = "5_prompt_feat_len.bin"
+        private const val FILE_FLOW_INPUT_EMBEDDING = "6_embedding.bin"
+        private const val FILE_FLOW_INPUT_STREAMING = "7_streaming.bin"
+        private const val FILE_FLOW_INPUT_FINALIZE = "8_finalize.bin"
+        private const val FILE_FLOW_DECODER_INPUT_PT = "flow_decoder_inputs.pt"
 
         private const val DEFAULT_SYSTEM_PROMPT =
             "You are a concise assistant. Return plain text suitable for speech output."
+        private const val LLM_ONLY_MIN_NEW_TOKENS = 0
+        private const val LLM_ONLY_MAX_NEW_TOKENS = 512
         private const val LLM_HIDDEN_SIZE = 896
+        private const val FLOW_DECODER_MEL_BINS = 80
         private const val HIFT_N_FFT = 16
         private const val HIFT_HOP_LENGTH = 4
         private const val HIFT_N_FREQ = HIFT_N_FFT / 2 + 1
         private const val HIFT_FRAME_FEATURES = HIFT_N_FREQ * 2
+        private const val HIFIGAN_MEL_BINS = 80
     }
 }
 
@@ -1018,10 +2254,17 @@ private data class NoisePeData(
     val extendPe: FloatArray,
 )
 
+private data class LlmOnlyOutput(
+    val promptSeqLen: Int,
+    val generatedTokens: Int,
+)
+
 private data class LocalResourceFiles(
     val llmModel: File,
+    val mnnLlmConfig: File?,
     val flowModel: File,
-    val hiftModel: File,
+    val flowModelWeight: File,
+    val hifiganModel: File,
     val modelInputZh: File,
     val modelInputZh2: File,
     val modelInputEn: File,
@@ -1032,6 +2275,7 @@ private data class LocalResourceFiles(
     val llmDecoderBias: File,
     val speechEmbeddingWeight: File,
     val llmEmbedTokens: File,
+    val lmInputPt: File,
     val noisePe: File,
     val sosEosEmb: File,
     val taskIdEmb: File,
@@ -1046,4 +2290,62 @@ private data class LocalResourceFiles(
     val poveyWindow400: File,
     val melBanks80x257: File,
     val tokenizerDir: File,
+    val flowInputsBinDir: File,
+    val hifiganInputsBinDir: File,
+)
+
+private data class FlowOnlyResourceFiles(
+    val flowModel: File,
+    val flowEncoderModel: File,
+    val flowDecoderModel: File,
+    val flowQnnModel: File,
+    val noisePe: File,
+    val flowInputsBinDir: File,
+)
+
+private enum class FlowDecoderInputMode {
+    Legacy5,
+    Prepared6,
+}
+
+private data class FlowDecoderInputBundle(
+    val mode: FlowDecoderInputMode,
+    val mu: FloatArray = FloatArray(0),
+    val mask: FloatArray = FloatArray(0),
+    val z: FloatArray = FloatArray(0),
+    val spks: FloatArray = FloatArray(0),
+    val cond: FloatArray = FloatArray(0),
+    val xIn: FloatArray = FloatArray(0),
+    val maskIn: FloatArray = FloatArray(0),
+    val muIn: FloatArray = FloatArray(0),
+    val tIn: FloatArray = FloatArray(0),
+    val spksIn: FloatArray = FloatArray(0),
+    val condIn: FloatArray = FloatArray(0),
+) {
+    fun describeForLog(): String =
+        when (mode) {
+            FlowDecoderInputMode.Legacy5 ->
+                "[EncDecOnly][MNN] decoder pt loaded, mode=legacy5, mu=${mu.size}, mask=${mask.size}, " +
+                    "z=${z.size}, spks=${spks.size}, cond=${cond.size}"
+            FlowDecoderInputMode.Prepared6 ->
+                "[EncDecOnly][MNN] decoder pt loaded, mode=prepared6, x_in=${xIn.size}, mask_in=${maskIn.size}, " +
+                    "mu_in=${muIn.size}, t_in=${tIn.size}, spks_in=${spksIn.size}, cond_in=${condIn.size}"
+        }
+}
+
+private data class FlowOnlyInputBundle(
+    val flowToken: LongArray,
+    val tokenLen: Int,
+    val promptToken: LongArray,
+    val promptTokenLen: Int,
+    val promptFeat: FloatArray,
+    val promptFeatLen: Int,
+    val embedding: FloatArray,
+    val streaming: Boolean,
+    val finalize: Boolean,
+)
+
+private data class HifiGanOnlyResourceFiles(
+    val hifiganModel: File,
+    val hifiganInputsBinDir: File,
 )

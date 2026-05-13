@@ -86,18 +86,27 @@ class MainActivity : AppCompatActivity() {
     private val stageRunning = mutableSetOf<InferenceStage>()
     private val stageLastUnitsDone = mutableMapOf<InferenceStage, Int>()
     private val stageLastAvgUPS = mutableMapOf<InferenceStage, Double>()
+    private val stageLastStatusText = mutableMapOf<InferenceStage, String>()
     private var audioDurationSeconds: Double? = null
+    private var flowEncoderSeconds: Double? = null
+    private var flowDecoderSeconds: Double? = null
+    private var flowTotalSeconds: Double? = null
     private val eventLogLines = ArrayDeque<String>()
     private var lastProgressRenderMs = 0L
 
-    private val stageOrder = listOf(
-        InferenceStage.frontEnd,
-        InferenceStage.llmPrepare,
-        InferenceStage.llm,
-        InferenceStage.flow,
-        InferenceStage.hift,
-        InferenceStage.voiceGeneration,
-    )
+    private val stageOrder = when {
+        LLM_ONLY_UI_MODE -> listOf(InferenceStage.llm)
+        FLOW_ONLY_UI_MODE -> listOf(InferenceStage.flow)
+        HIFIGAN_ONLY_UI_MODE -> listOf(InferenceStage.hift)
+        else -> listOf(
+            InferenceStage.frontEnd,
+            InferenceStage.llmPrepare,
+            InferenceStage.llm,
+            InferenceStage.flow,
+            InferenceStage.hift,
+            InferenceStage.voiceGeneration,
+        )
+    }
 
     private val requestMicPermission = registerForActivityResult(
         ActivityResultContracts.RequestPermission(),
@@ -567,6 +576,18 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
+        if (LLM_ONLY_UI_MODE) {
+            val fallbackPrompt = promptHistory.firstOrNull()
+                ?: PromptHistoryItem(
+                    id = UUID.randomUUID().toString(),
+                    index = 0,
+                    text = "",
+                    audioPath = null,
+                )
+            startGeneration(promptItem = fallbackPrompt, promptText = "", ttsText = "")
+            return
+        }
+
         val promptText = promptTextInput.text.toString().trim()
         if (promptText.isEmpty()) {
             appendEventLine("Prompt 文本为空")
@@ -599,8 +620,23 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun startGeneration(promptItem: PromptHistoryItem, promptText: String, ttsText: String) {
-        resetInferenceInfo("开始生成：PR${promptItem.index}")
-        setOnlyRunningStage(InferenceStage.frontEnd)
+        resetInferenceInfo(
+            if (LLM_ONLY_UI_MODE) {
+                "开始 LLM 推理"
+            } else if (HIFIGAN_ONLY_UI_MODE) {
+                "开始 HifiGan 推理"
+            } else {
+                "开始生成：PR${promptItem.index}"
+            },
+        )
+        setOnlyRunningStage(
+            when {
+                LLM_ONLY_UI_MODE -> InferenceStage.llm
+                FLOW_ONLY_UI_MODE -> InferenceStage.flow
+                HIFIGAN_ONLY_UI_MODE -> InferenceStage.hift
+                else -> InferenceStage.frontEnd
+            },
+        )
         stopPlayback(pauseState = HistoryPlaybackState.Stopped)
         isGenerating = true
         generationSeq += 1
@@ -610,12 +646,17 @@ class MainActivity : AppCompatActivity() {
         generationJob?.cancel()
         generationJob = lifecycleScope.launch(Dispatchers.IO) {
             val resultPath = runCatching {
-                val promptAudio = loadPromptMono16k(promptItem)
+                val promptAudio = if (LLM_ONLY_UI_MODE || HIFIGAN_ONLY_UI_MODE) {
+                    FloatArray(0)
+                } else {
+                    loadPromptMono16k(promptItem)
+                }
+                val promptSampleRate = if (LLM_ONLY_UI_MODE || HIFIGAN_ONLY_UI_MODE) 0 else inferencePromptSampleRate
                 inferenceBridge.runInference(
                     ttsText = ttsText,
                     promptText = promptText,
                     promptAudio = promptAudio,
-                    promptSampleRate = inferencePromptSampleRate,
+                    promptSampleRate = promptSampleRate,
                     onEvent = { event -> handleInferenceEvent(event) },
                 )
             }.getOrElse { t ->
@@ -629,6 +670,12 @@ class MainActivity : AppCompatActivity() {
                 if (seq != generationSeq) return@withContext
                 if (resultPath == "false") {
                     appendEventLine("生成失败")
+                } else if (resultPath.startsWith("LLM_ONLY_OK:")) {
+                    appendEventLine("LLM-only 测试完成：$resultPath")
+                } else if (resultPath.startsWith("ENCODER_DECODER_ONLY_OK:")) {
+                    appendEventLine("Encoder/Decoder-only 测试完成：$resultPath")
+                } else if (resultPath.startsWith("HIFIGAN_ONLY_OK:")) {
+                    appendEventLine("HifiGan-only 测试完成：$resultPath")
                 } else {
                     addGeneratedHistory(resultPath, promptItem.index)
                     appendEventLine("生成完成")
@@ -722,17 +769,20 @@ class MainActivity : AppCompatActivity() {
         runOnUiThread {
             when (event) {
                 is InferenceEvent.StageBegan -> {
+                    stageLastStatusText[event.stage] = event.unitName
                     setOnlyRunningStage(event.stage)
                     renderInferenceInfoThrottled(force = true)
                 }
                 is InferenceEvent.StageProgress -> {
                     stageLastUnitsDone[event.stage] = event.unitsDone
                     stageLastAvgUPS[event.stage] = event.avgUPS
+                    stageLastStatusText[event.stage] = event.unitName
                     setOnlyRunningStage(event.stage)
                     renderInferenceInfoThrottled(force = event.stage != InferenceStage.llm)
                 }
                 is InferenceEvent.StageEnded -> {
                     val stage = event.info.stage
+                    stageLastStatusText[stage] = event.info.unitName
                     stageEndedInfo[stage] = StageEndedDisplay(
                         seconds = event.info.seconds,
                         units = stageLastUnitsDone[stage] ?: event.info.units,
@@ -752,6 +802,21 @@ class MainActivity : AppCompatActivity() {
                     appendEventLine("voiceGeneration audio ${"%.3f".format(event.seconds)}s")
                     renderInferenceInfoThrottled(force = true)
                 }
+                is InferenceEvent.FlowBreakdown -> {
+                    flowEncoderSeconds = event.encoderSeconds
+                    flowDecoderSeconds = event.decoderSeconds
+                    flowTotalSeconds = event.totalSeconds
+                    appendEventLine(
+                        "Encoder/Decoder breakdown encoder=${"%.4f".format(event.encoderSeconds)}s " +
+                            "decoder=${"%.4f".format(event.decoderSeconds)}s " +
+                            "total=${"%.4f".format(event.totalSeconds)}s",
+                    )
+                    renderInferenceInfoThrottled(force = true)
+                }
+                is InferenceEvent.Note -> {
+                    appendEventLine(event.message)
+                    renderInferenceInfoThrottled(force = true)
+                }
             }
         }
     }
@@ -762,7 +827,11 @@ class MainActivity : AppCompatActivity() {
         stageRunning.clear()
         stageLastUnitsDone.clear()
         stageLastAvgUPS.clear()
+        stageLastStatusText.clear()
         audioDurationSeconds = null
+        flowEncoderSeconds = null
+        flowDecoderSeconds = null
+        flowTotalSeconds = null
         lastProgressRenderMs = 0L
         appendEventLine(initialMessage)
         renderInferenceInfo()
@@ -806,11 +875,58 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun renderInferenceInfo() {
+        if (LLM_ONLY_UI_MODE) {
+            val llmText = llmStageText()
+            val llmSeconds = stageEndedInfo[InferenceStage.llm]?.seconds
+            val sb = StringBuilder()
+            sb.appendLine("Progress")
+            sb.appendLine("────────────")
+            sb.appendLine("[LLM]             $llmText")
+            sb.appendLine("[llmTime]         ${llmSeconds?.let { "%.4fs".format(it) } ?: "-"}")
+            sb.appendLine()
+            sb.appendLine("Events")
+            sb.appendLine("────────────")
+            eventLogLines.forEach { sb.appendLine(it) }
+            inferenceInfoTv.text = sb.toString()
+            return
+        }
+
+        if (FLOW_ONLY_UI_MODE) {
+            val flowSeconds = flowTotalSeconds ?: stageEndedInfo[InferenceStage.flow]?.seconds
+            val sb = StringBuilder()
+            sb.appendLine("Progress")
+            sb.appendLine("────────────")
+            sb.appendLine("[FlowTime]        ${flowSeconds?.let { "%.4fs".format(it) } ?: "-"}")
+            sb.appendLine()
+            sb.appendLine("Events")
+            sb.appendLine("────────────")
+            eventLogLines.forEach { sb.appendLine(it) }
+            inferenceInfoTv.text = sb.toString()
+            return
+        }
+
+        if (HIFIGAN_ONLY_UI_MODE) {
+            val hiftText = stageText(InferenceStage.hift)
+            val hiftSeconds = stageEndedInfo[InferenceStage.hift]?.seconds
+            val sb = StringBuilder()
+            sb.appendLine("Progress")
+            sb.appendLine("────────────")
+            sb.appendLine("[HifiGan]         $hiftText")
+            sb.appendLine("[hifiganTime]     ${hiftSeconds?.let { "%.4fs".format(it) } ?: "-"}")
+            sb.appendLine()
+            sb.appendLine("Events")
+            sb.appendLine("────────────")
+            eventLogLines.forEach { sb.appendLine(it) }
+            inferenceInfoTv.text = sb.toString()
+            return
+        }
+
         val frontEndText = stageText(InferenceStage.frontEnd)
         val llmPrepareText = stageText(InferenceStage.llmPrepare)
         val llmText = llmStageText()
-        val flowText = stageText(InferenceStage.flow)
+        val flowSeconds = flowTotalSeconds ?: stageEndedInfo[InferenceStage.flow]?.seconds
         val hiftText = stageText(InferenceStage.hift)
+        val hiftSeconds = stageEndedInfo[InferenceStage.hift]?.seconds
         val voiceText = voiceStageText()
 
         val totalTime = listOf(
@@ -831,8 +947,11 @@ class MainActivity : AppCompatActivity() {
         sb.appendLine("[FrontEnd]        $frontEndText")
         sb.appendLine("[LLMPrepare]      $llmPrepareText")
         sb.appendLine("[LLM]             $llmText")
-        sb.appendLine("[Flow]            $flowText")
+        sb.appendLine("[flowEncoderTime] ${flowEncoderSeconds?.let { "%.4fs".format(it) } ?: "-"}")
+        sb.appendLine("[flowDecoderTime] ${flowDecoderSeconds?.let { "%.4fs".format(it) } ?: "-"}")
+        sb.appendLine("[flowTime]        ${flowSeconds?.let { "%.4fs".format(it) } ?: "-"}")
         sb.appendLine("[HifiGan]         $hiftText")
+        sb.appendLine("[hifiganTime]     ${hiftSeconds?.let { "%.4fs".format(it) } ?: "-"}")
         sb.appendLine("[voiceGeneration] $voiceText")
         sb.appendLine("[totalTime]       ${totalTime?.let { "%.4fs".format(it) } ?: "-"}")
         sb.appendLine("[RTF]             ${rtf?.let { "%.4f".format(it) } ?: "-"}")
@@ -846,7 +965,7 @@ class MainActivity : AppCompatActivity() {
     private fun stageText(stage: InferenceStage): String {
         val ended = stageEndedInfo[stage]
         if (ended != null) return "%.4fs".format(ended.seconds)
-        if (stageRunning.contains(stage)) return "处理中..."
+        if (stageRunning.contains(stage)) return stageLastStatusText[stage] ?: "处理中..."
         return "-"
     }
 
@@ -1329,6 +1448,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     companion object {
+        private const val LLM_ONLY_UI_MODE = false
+        private const val FLOW_ONLY_UI_MODE = true
+        private const val HIFIGAN_ONLY_UI_MODE = false
         private const val MAX_PROMPT_HISTORY = 30
         private const val MAX_TTS_HISTORY = 30
         private const val MAX_GENERATED_HISTORY = 30
