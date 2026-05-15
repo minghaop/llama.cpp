@@ -4,7 +4,7 @@
 #define LOAD_VEC_B 4
 
 #define BM 64
-#define BN 64
+#define BN 128
 #define BK 16
 #define TM 4
 #define TN 8

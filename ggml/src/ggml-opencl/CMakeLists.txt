@@ -96,6 +96,8 @@ set(GGML_OPENCL_KERNELS
     gemv_moe_mxfp4_f32
     mul_mm_f32_f32_l4_lm
     mul_mm_f16_f32_l4_lm
+    mul_mm_f32_f32_l4_lm_ep
+    mul_mm_f16_f32_l4_lm_ep
     mul_mm_q8_0_f32_l4_lm
     mul
     norm

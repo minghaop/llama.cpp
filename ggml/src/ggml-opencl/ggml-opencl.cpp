@@ -1791,7 +1791,7 @@ static void load_cl_kernels(ggml_backend_opencl_context *backend_ctx, ggml_cl_ve
                 {192, 192,  16, 16}, {256, 256,  16, 16},
             };
             const ggml_opencl_flash_dims fa_dims_adreno_a7x[] = {
-                { 40,  40,  64, 32}, { 64,  64, 128, 32}, { 80,  80, 128, 32}, { 96,  96, 128, 32},
+                { 40,  40,  64, 32}, { 64,  64, 128, 24}, { 80,  80, 128, 32}, { 96,  96, 128, 32},
                 {112, 112,  64, 32}, {128, 128,  64, 32}, {192, 128,  32, 16},
                 {192, 192,  32, 16}, {256, 256,  16, 16},
             };
@@ -3336,6 +3336,8 @@ static bool ggml_opencl_is_noop_tensor(const ggml_tensor * t) {
     return t->op == GGML_OP_RESHAPE || t->op == GGML_OP_TRANSPOSE || t->op == GGML_OP_VIEW || t->op == GGML_OP_PERMUTE || t->op == GGML_OP_NONE;
 }
 
+static const ggml_tensor * ggml_opencl_resolve_passthrough_src0(const ggml_tensor * t);
+
 static bool ggml_opencl_find_unique_unary_consumer(
         const ggml_cgraph * cgraph,
         const std::unordered_map<const ggml_tensor *, std::vector<int>> & users,
@@ -3369,6 +3371,101 @@ static bool ggml_opencl_find_unique_unary_consumer(
         return false;
     }
     return false;
+}
+
+static bool ggml_opencl_find_unique_consumer_op(
+        const ggml_cgraph * cgraph,
+        const std::unordered_map<const ggml_tensor *, std::vector<int>> & users,
+        const ggml_tensor * producer,
+        enum ggml_op target_op,
+        bool allow_src1_match,
+        int * out_idx) {
+    if (producer == nullptr || out_idx == nullptr) {
+        return false;
+    }
+    const ggml_tensor * cur = producer;
+    for (int depth = 0; depth < 16; ++depth) {
+        auto it = users.find(cur);
+        if (it == users.end() || it->second.size() != 1) {
+            return false;
+        }
+        const int uidx = it->second[0];
+        if (uidx < 0 || uidx >= cgraph->n_nodes) {
+            return false;
+        }
+        const ggml_tensor * u = cgraph->nodes[uidx];
+        if (u == nullptr) {
+            return false;
+        }
+        if (u->op == target_op) {
+            if (u->src[0] == cur || (allow_src1_match && u->src[1] == cur)) {
+                *out_idx = uidx;
+                return true;
+            }
+            return false;
+        }
+        if (ggml_opencl_is_noop_tensor(u) && u->src[0] == cur) {
+            cur = u;
+            continue;
+        }
+        return false;
+    }
+    return false;
+}
+
+static bool ggml_opencl_can_fuse_mul_mat_add_loose(const ggml_tensor * mul_mat, const ggml_tensor * add) {
+    if (mul_mat == nullptr || add == nullptr) {
+        return false;
+    }
+    if (mul_mat->op != GGML_OP_MUL_MAT || add->op != GGML_OP_ADD) {
+        return false;
+    }
+
+    const ggml_tensor * add_src0 = add->src[0];
+    const ggml_tensor * add_src1 = add->src[1];
+    if (add_src0 == nullptr || add_src1 == nullptr) {
+        return false;
+    }
+
+    const ggml_tensor * add_src0_resolved = ggml_opencl_resolve_passthrough_src0(add_src0);
+    const ggml_tensor * add_src1_resolved = ggml_opencl_resolve_passthrough_src0(add_src1);
+
+    const ggml_tensor * bias = nullptr;
+    if (add_src0_resolved == mul_mat) {
+        bias = add_src1;
+    } else if (add_src1_resolved == mul_mat) {
+        bias = add_src0;
+    } else {
+        return false;
+    }
+
+    const bool src0_ok = mul_mat->src[0]->type == GGML_TYPE_F32 || mul_mat->src[0]->type == GGML_TYPE_F16;
+    const bool src1_ok = mul_mat->src[1]->type == GGML_TYPE_F32;
+    if (!src0_ok || !src1_ok || mul_mat->type != GGML_TYPE_F32 || add->type != GGML_TYPE_F32) {
+        return false;
+    }
+
+    if (!ggml_is_contiguous(mul_mat->src[0]) ||
+        !ggml_is_contiguous(mul_mat->src[1]) ||
+        mul_mat->src[0]->ne[0] % 16 != 0 ||
+        mul_mat->src[1]->ne[1] <= 1) {
+        return false;
+    }
+
+    if (bias == nullptr ||
+        bias->type != GGML_TYPE_F32 ||
+        !ggml_is_contiguous(bias) ||
+        bias->ne[1] != 1 || bias->ne[2] != 1 || bias->ne[3] != 1 ||
+        ggml_nelements(bias) != bias->ne[0] ||
+        bias->ne[0] != add->ne[0]) {
+        return false;
+    }
+
+    if (!ggml_are_same_shape(mul_mat, add) || !ggml_is_contiguous(add)) {
+        return false;
+    }
+
+    return true;
 }
 
 static int ggml_opencl_next_compute_node_idx(const ggml_cgraph * cgraph, int idx) {
@@ -3483,10 +3580,10 @@ static bool ggml_opencl_can_fuse(const struct ggml_cgraph * cgraph, int node_idx
         const ggml_tensor * add     = cgraph->nodes[node_idx + 1];
         const ggml_tensor * unary   = cgraph->nodes[node_idx + 2];
 
-        if (unary->src[0] != add) {
+        if (ggml_opencl_resolve_passthrough_src0(unary->src[0]) != add) {
             return false;
         }
-        if (ggml_get_unary_op(unary) != GGML_UNARY_OP_GELU_ERF) {
+        if (ggml_opencl_epilogue_unary_mode(ggml_get_unary_op(unary)) == GGML_OPENCL_EPILOGUE_UNARY_NONE) {
             return false;
         }
 
@@ -3888,6 +3985,29 @@ static ggml_status ggml_backend_opencl_graph_compute(ggml_backend_t backend, ggm
             continue;
         }
         if (!backend_ctx->disable_fusion &&
+            node->op == GGML_OP_MUL_MAT) {
+            int add_idx = -1;
+            if (ggml_opencl_find_unique_consumer_op(cgraph, tensor_users, node, GGML_OP_ADD, true, &add_idx) && add_idx > i) {
+                ggml_tensor * add = cgraph->nodes[add_idx];
+                if (ggml_opencl_can_fuse_mul_mat_add_loose(node, add)) {
+                    int unary_idx = -1;
+                    if (ggml_opencl_find_unique_unary_consumer(cgraph, tensor_users, add, &unary_idx) && unary_idx >= 0) {
+                        ggml_tensor * unary = cgraph->nodes[unary_idx];
+                        const int ep_mode = ggml_opencl_epilogue_unary_mode(ggml_get_unary_op(unary));
+                        if (ep_mode != GGML_OPENCL_EPILOGUE_UNARY_NONE &&
+                            ggml_is_contiguous(unary) &&
+                            ggml_are_same_shape(add, unary)) {
+                            ggml_opencl_op_mul_mat_add_unary_fused(backend, node, add, unary);
+                            skip_nodes.insert(add);
+                            skip_nodes.insert(unary);
+                            fused_mul_mat_add_unary_count += 1;
+                            continue;
+                        }
+                    }
+                }
+            }
+        }
+        if (!backend_ctx->disable_fusion &&
             i + 2 < cgraph->n_nodes &&
             ggml_opencl_can_fuse_mul_mat_add_add(node, cgraph->nodes[i + 1], cgraph->nodes[i + 2])) {
             ggml_opencl_op_mul_mat_add_add_fused(backend, node, cgraph->nodes[i + 1], cgraph->nodes[i + 2]);
@@ -3901,6 +4021,26 @@ static ggml_status ggml_backend_opencl_graph_compute(ggml_backend_t backend, ggm
             fused_mul_mat_add_unary_count += 1;
             i += 2;
             continue;
+        }
+        if (!backend_ctx->disable_fusion &&
+            i + 2 < cgraph->n_nodes &&
+            (cgraph->nodes[i + 2]->op == GGML_OP_CONT || cgraph->nodes[i + 2]->op == GGML_OP_DUP || cgraph->nodes[i + 2]->op == GGML_OP_CPY) &&
+            ggml_opencl_can_fuse(cgraph, i, { GGML_OP_MUL_MAT, GGML_OP_ADD, cgraph->nodes[i + 2]->op })) {
+            int unary_idx = -1;
+            ggml_tensor * mid = cgraph->nodes[i + 2];
+            if (ggml_opencl_find_unique_unary_consumer(cgraph, tensor_users, mid, &unary_idx) && unary_idx >= 0) {
+                ggml_tensor * unary = cgraph->nodes[unary_idx];
+                const int ep_mode = ggml_opencl_epilogue_unary_mode(ggml_get_unary_op(unary));
+                if (ep_mode != GGML_OPENCL_EPILOGUE_UNARY_NONE &&
+                    ggml_is_contiguous(unary) &&
+                    ggml_are_same_shape(mid, unary)) {
+                    ggml_opencl_op_mul_mat_add_unary_fused(backend, node, cgraph->nodes[i + 1], unary);
+                    skip_nodes.insert(unary);
+                    fused_mul_mat_add_unary_count += 1;
+                    i += 2;
+                    continue;
+                }
+            }
         }
         if (!backend_ctx->disable_fusion &&
             ggml_opencl_can_fuse(cgraph, i, { GGML_OP_MUL_MAT, GGML_OP_ADD, GGML_OP_CONT })) {
@@ -7325,7 +7465,7 @@ static void ggml_opencl_op_mul_mat_add_unary_fused(
     GGML_ASSERT(mul_mat_tensor->op == GGML_OP_MUL_MAT);
     GGML_ASSERT(add_tensor->op == GGML_OP_ADD);
     GGML_ASSERT(unary_tensor->op == GGML_OP_UNARY);
-    GGML_ASSERT(unary_tensor->src[0] == add_tensor);
+    GGML_ASSERT(ggml_opencl_resolve_passthrough_src0(unary_tensor->src[0]) == add_tensor);
 
     const ggml_tensor * bias = nullptr;
     if (add_tensor->src[0] == mul_mat_tensor) {
@@ -9444,8 +9584,8 @@ static void ggml_cl_mul_mat(ggml_backend_t backend, const ggml_tensor * src0, co
     } // if (ne01 && ne1)
 #endif // GGML_OPENCL_USE_ADRENO_KERNELS
 
-    // GEMM using local memory
-    // Current BK = 16, so ne00 % 16 == 0
+    // GEMM using local memory.
+    // Current BK = 16, so ne00 % 16 == 0.
     if (ggml_is_contiguous(src0) &&
         ggml_is_contiguous(src1) &&
         src1t == GGML_TYPE_F32 &&
@@ -9453,10 +9593,11 @@ static void ggml_cl_mul_mat(ggml_backend_t backend, const ggml_tensor * src0, co
         ne11 > 1) {
         switch(src0t) {
             case GGML_TYPE_F32: {
-                const bool use_ep = use_bias && (epilogue_unary_mode != GGML_OPENCL_EPILOGUE_UNARY_NONE || use_add_rhs) &&
+                const bool use_ep = use_bias &&
+                                    (epilogue_unary_mode != GGML_OPENCL_EPILOGUE_UNARY_NONE || use_add_rhs) &&
                                     backend_ctx->kernel_mul_mm_f32_f32_l4_lm_ep != nullptr;
                 kernel = use_ep ? backend_ctx->kernel_mul_mm_f32_f32_l4_lm_ep : backend_ctx->kernel_mul_mm_f32_f32_l4_lm;
-                nth0 = 128; // calculated as (BM*BN)/(TM*TN)
+                nth0 = 256; // calculated as (BM*BN)/(TM*TN) for BM=64, BN=128, TM=4, TN=8
 
                 int batch_stride_a = ne00*ne01;
                 int batch_stride_b = ne10*ne11;
@@ -9516,18 +9657,19 @@ static void ggml_cl_mul_mat(ggml_backend_t backend, const ggml_tensor * src0, co
                     CL_CHECK(clSetKernelArg(kernel, 21, sizeof(int),      &r3));
                 }
 
-                // 64 is block tile size BM and BN - change here when BM and BN in the kernel are changed.
-                size_t global_work_size[] = {(size_t)(CEIL_DIV(ne01, 64)*nth0), (size_t)(CEIL_DIV(ne11, 64)), (size_t)ne12*ne13};
+                // BM=64, BN=128 for l4_lm kernels in this path.
+                size_t global_work_size[] = {(size_t)(CEIL_DIV(ne01, 64)*nth0), (size_t)(CEIL_DIV(ne11, 128)), (size_t)ne12*ne13};
                 size_t local_work_size[] = {(size_t)nth0, 1, 1};
 
                 backend_ctx->enqueue_ndrange_kernel(kernel, 3, global_work_size, local_work_size, dst);
                 return;
             }
             case GGML_TYPE_F16: {
-                const bool use_ep = use_bias && (epilogue_unary_mode != GGML_OPENCL_EPILOGUE_UNARY_NONE || use_add_rhs) &&
+                const bool use_ep = use_bias &&
+                                    (epilogue_unary_mode != GGML_OPENCL_EPILOGUE_UNARY_NONE || use_add_rhs) &&
                                     backend_ctx->kernel_mul_mm_f16_f32_l4_lm_ep != nullptr;
                 kernel = use_ep ? backend_ctx->kernel_mul_mm_f16_f32_l4_lm_ep : backend_ctx->kernel_mul_mm_f16_f32_l4_lm;
-                nth0 = 128; // calculated as (BM*BN)/(TM*TN)
+                nth0 = 256; // calculated as (BM*BN)/(TM*TN) for BM=64, BN=128, TM=4, TN=8
 
                 int batch_stride_a = ne00*ne01;
                 int batch_stride_b = ne10*ne11;
@@ -9587,8 +9729,8 @@ static void ggml_cl_mul_mat(ggml_backend_t backend, const ggml_tensor * src0, co
                     CL_CHECK(clSetKernelArg(kernel, 21, sizeof(int),      &r3));
                 }
 
-                // 64 is block tile size BM and BN - change here when BM and BN in the kernel are changed.
-                size_t global_work_size[] = {(size_t)(CEIL_DIV(ne01, 64)*nth0), (size_t)(CEIL_DIV(ne11, 64)), (size_t)ne12*ne13};
+                // BM=64, BN=128 for l4_lm kernels in this path.
+                size_t global_work_size[] = {(size_t)(CEIL_DIV(ne01, 64)*nth0), (size_t)(CEIL_DIV(ne11, 128)), (size_t)ne12*ne13};
                 size_t local_work_size[] = {(size_t)nth0, 1, 1};
 
                 backend_ctx->enqueue_ndrange_kernel(kernel, 3, global_work_size, local_work_size, dst);

@@ -9,16 +9,36 @@
 #define TM 4
 #define TN 8
 
-kernel void kernel_mul_mm_f16_f32_l4_lm(
-    global half4 * src0,
+#define EPILOGUE_UNARY_NONE      0
+#define EPILOGUE_UNARY_GELU_ERF  1
+#define EPILOGUE_UNARY_SILU      2
+#define EPILOGUE_UNARY_MISH      3
+
+#define SQRT_2_INV 0.70710678118654752440084436210484f
+
+inline float ggml_opencl_apply_epilogue_unary(float x, int unary_op) {
+    if (unary_op == EPILOGUE_UNARY_GELU_ERF) {
+        return 0.5f * x * (1.0f + erf(x * SQRT_2_INV));
+    }
+    if (unary_op == EPILOGUE_UNARY_SILU) {
+        return x / (1.0f + exp(-x));
+    }
+    if (unary_op == EPILOGUE_UNARY_MISH) {
+        float sp = log(1.0f + exp(x));
+        return x * tanh(sp);
+    }
+    return x;
+}
+
+kernel void kernel_mul_mm_f32_f32_l4_lm_ep(
+    global float4 * src0,
     ulong offset0,
     global float4 * src1,
     ulong offset1,
+    global float * bias,
+    ulong offset_bias,
     global float * dst,
     ulong offsetd,
-    global float * bias,
-    ulong offsetb,
-    int use_bias,
 
     int ne00,
     int ne01,
@@ -35,14 +55,21 @@ kernel void kernel_mul_mm_f16_f32_l4_lm(
     int batch_stride_d,
 
     int r2,
-    int r3
-) {
-    src0 = (global half4*)((global char*)src0 + offset0);
-    src1 = (global float4*)((global char*)src1 + offset1);
-    dst = (global float*)((global char*)dst + offsetd);
-    bias = (global float*)((global char*)bias + offsetb);
+    int r3,
 
-    local half  buf_a[BM * BK];
+    int bias_mode,
+    int unary_op,
+    global float * add_rhs,
+    ulong offset_add_rhs,
+    int add_mode
+) {
+    src0 = (global float4*)((global char*)src0 + offset0);
+    src1 = (global float4*)((global char*)src1 + offset1);
+    bias = (global float*)((global char*)bias + offset_bias);
+    dst = (global float*)((global char*)dst + offsetd);
+    add_rhs = (global float*)((global char*)add_rhs + offset_add_rhs);
+
+    local float buf_a[BM * BK];
     local float buf_b[BN * BK];
 
     const int batch_idx = get_global_id(2);
@@ -74,7 +101,7 @@ kernel void kernel_mul_mm_f16_f32_l4_lm(
     int pos_b = (batch_idx   * batch_stride_b + ic * BN * stride_b) / LOAD_VEC_B;
 
     float sums[TM * TN];
-    half  cache_a[TM];
+    float cache_a[TM];
     float cache_b[TN];
 
     for (int i = 0; i < TM * TN; i++) {
@@ -90,10 +117,10 @@ kernel void kernel_mul_mm_f16_f32_l4_lm(
                 buf_a[(loadr_a * LOAD_VEC_A + 2) * BM + loadc_a + l] = src0[idx].s2;
                 buf_a[(loadr_a * LOAD_VEC_A + 3) * BM + loadc_a + l] = src0[idx].s3;
             } else {
-                buf_a[(loadr_a * LOAD_VEC_A + 0) * BM + loadc_a + l] = 0.0h;
-                buf_a[(loadr_a * LOAD_VEC_A + 1) * BM + loadc_a + l] = 0.0h;
-                buf_a[(loadr_a * LOAD_VEC_A + 2) * BM + loadc_a + l] = 0.0h;
-                buf_a[(loadr_a * LOAD_VEC_A + 3) * BM + loadc_a + l] = 0.0h;
+                buf_a[(loadr_a * LOAD_VEC_A + 0) * BM + loadc_a + l] = 0.0f;
+                buf_a[(loadr_a * LOAD_VEC_A + 1) * BM + loadc_a + l] = 0.0f;
+                buf_a[(loadr_a * LOAD_VEC_A + 2) * BM + loadc_a + l] = 0.0f;
+                buf_a[(loadr_a * LOAD_VEC_A + 3) * BM + loadc_a + l] = 0.0f;
             }
         }
 
@@ -105,10 +132,10 @@ kernel void kernel_mul_mm_f16_f32_l4_lm(
                 buf_b[(loadr_b * LOAD_VEC_B + 2) * BN + loadc_b + l] = src1[idx].s2;
                 buf_b[(loadr_b * LOAD_VEC_B + 3) * BN + loadc_b + l] = src1[idx].s3;
             } else {
-                buf_b[(loadr_b * LOAD_VEC_B + 0) * BN + loadc_b + l] = 0.0h;
-                buf_b[(loadr_b * LOAD_VEC_B + 1) * BN + loadc_b + l] = 0.0h;
-                buf_b[(loadr_b * LOAD_VEC_B + 2) * BN + loadc_b + l] = 0.0h;
-                buf_b[(loadr_b * LOAD_VEC_B + 3) * BN + loadc_b + l] = 0.0h;
+                buf_b[(loadr_b * LOAD_VEC_B + 0) * BN + loadc_b + l] = 0.0f;
+                buf_b[(loadr_b * LOAD_VEC_B + 1) * BN + loadc_b + l] = 0.0f;
+                buf_b[(loadr_b * LOAD_VEC_B + 2) * BN + loadc_b + l] = 0.0f;
+                buf_b[(loadr_b * LOAD_VEC_B + 3) * BN + loadc_b + l] = 0.0f;
             }
         }
 
@@ -121,6 +148,7 @@ kernel void kernel_mul_mm_f16_f32_l4_lm(
             for (int j = 0; j < TM; j++) {
                 cache_a[j] = buf_a[(i) * BM + th_r * TM + j];
             }
+
             for (int j = 0; j < TN; j++) {
                 cache_b[j] = buf_b[(i) * BN + th_c * TN + j];
             }
@@ -128,7 +156,7 @@ kernel void kernel_mul_mm_f16_f32_l4_lm(
             for (int cc = 0; cc < TN; cc++) {
                 for (int cr = 0; cr < TM; cr++) {
                     const int sums_idx = cc*TM + cr;
-                    sums[sums_idx] = mad(convert_float(cache_a[cr]), cache_b[cc], sums[sums_idx]);
+                    sums[sums_idx] = mad(cache_a[cr], cache_b[cc], sums[sums_idx]);
                 }
             }
         }
@@ -143,11 +171,13 @@ kernel void kernel_mul_mm_f16_f32_l4_lm(
     for (int cc = 0; cc < TN; cc++) {
         for (int cr = 0; cr < TM; cr++) {
             if (dr + cr < ne01 && dc + cc < ne11) {
-                float v = sums[cc * TM + cr];
-                if (use_bias) {
-                    v += bias[dr + cr];
+                const int out_idx = offsets + (dc + cc) * stride_d + dr + cr;
+                const int bias_idx = (bias_mode == 0) ? (dr + cr) : out_idx;
+                float v = sums[cc * TM + cr] + bias[bias_idx];
+                if (add_mode != 0) {
+                    v += add_rhs[out_idx];
                 }
-                dst[offsets + (dc + cc) * stride_d + dr + cr] = v;
+                dst[out_idx] = ggml_opencl_apply_epilogue_unary(v, unary_op);
             }
         }
     }
