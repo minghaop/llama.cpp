@@ -13,9 +13,9 @@ class LiteRtFlowRunner private constructor(
     private val modelFile: File,
 ) : Closeable {
     private val ioLock = Any()
-    private val inputBuffers: List<TensorBuffer> = compiledModel.createInputBuffers()
-    private val outputBuffers: List<TensorBuffer> = compiledModel.createOutputBuffers()
-    private val signatureBindings: SignatureBindings? = createSignatureBindingsOrNull()
+    private val inputBuffers: List<TensorBuffer>
+    private val outputBuffers: List<TensorBuffer>
+    private val runSignatureKey: String?
     private var bindings: InputBindings? = null
     private val tokenLenHolder = IntArray(1)
     private val promptTokenLenHolder = IntArray(1)
@@ -27,6 +27,19 @@ class LiteRtFlowRunner private constructor(
     private var promptTokenIntScratch = IntArray(0)
 
     init {
+        val signatureInputs = runCatching { compiledModel.createInputBuffers(SIGNATURE_KEY) }.getOrNull()
+        val signatureOutputs = runCatching { compiledModel.createOutputBuffers(SIGNATURE_KEY) }.getOrNull()
+        if (!signatureInputs.isNullOrEmpty() && !signatureOutputs.isNullOrEmpty()) {
+            inputBuffers = signatureInputs
+            outputBuffers = signatureOutputs
+            runSignatureKey = SIGNATURE_KEY
+            Log.i(TAG, "LiteRT using signature buffers: key=$SIGNATURE_KEY, in=${inputBuffers.size}, out=${outputBuffers.size}")
+        } else {
+            inputBuffers = compiledModel.createInputBuffers()
+            outputBuffers = compiledModel.createOutputBuffers()
+            runSignatureKey = null
+            Log.i(TAG, "LiteRT using positional buffers: in=${inputBuffers.size}, out=${outputBuffers.size}")
+        }
         require(inputBuffers.size >= 6) { "LiteRT input count < 6: ${inputBuffers.size}" }
         require(outputBuffers.isNotEmpty()) { "LiteRT output count is 0" }
     }
@@ -47,22 +60,6 @@ class LiteRtFlowRunner private constructor(
         require(promptFeat.isNotEmpty()) { "promptFeat cannot be empty" }
         require(embedding.isNotEmpty()) { "embedding cannot be empty" }
         synchronized(ioLock) {
-            signatureBindings?.let { sb ->
-                writeTokenLike(sb.inputs[IN_ARGS_0]!!, token, "args_0")
-                tokenLenHolder[0] = tokenLen.coerceAtLeast(1)
-                sb.inputs[IN_ARGS_1]!!.writeInt(tokenLenHolder)
-                writeTokenLike(sb.inputs[IN_ARGS_2]!!, promptToken, "args_2")
-                promptTokenLenHolder[0] = promptTokenLen.coerceAtLeast(1)
-                sb.inputs[IN_ARGS_3]!!.writeInt(promptTokenLenHolder)
-                sb.inputs[IN_ARGS_4]!!.writeFloat(promptFeat)
-                promptFeatLenHolder[0] = promptFeatLen.coerceAtLeast(1)
-                sb.inputs[IN_ARGS_5]!!.writeInt(promptFeatLenHolder)
-                sb.inputs[IN_ARGS_6]!!.writeFloat(embedding)
-
-                compiledModel.run(sb.inputs, sb.outputs, sb.signatureKey)
-                return sb.outputs[OUT_OUTPUT_0]!!.readFloat()
-            }
-
             val resolved = resolveBindingsIfNeeded(
                 token = token,
                 tokenLen = tokenLen,
@@ -87,30 +84,26 @@ class LiteRtFlowRunner private constructor(
                 finalize = finalize,
             )
             // Keep one explicit synchronous call path: run + output read on the same thread.
-            compiledModel.run(inputBuffers, outputBuffers)
+            if (runSignatureKey != null) {
+                compiledModel.run(inputBuffers, outputBuffers, runSignatureKey)
+            } else {
+                compiledModel.run(inputBuffers, outputBuffers)
+            }
             return outputBuffers[0].readFloat()
         }
     }
 
     override fun close() {
-        signatureBindings?.inputs?.values?.forEach { runCatching { it.close() } }
-        signatureBindings?.outputs?.values?.forEach { runCatching { it.close() } }
         inputBuffers.forEach { runCatching { it.close() } }
         outputBuffers.forEach { runCatching { it.close() } }
         runCatching { compiledModel.close() }
     }
 
-    private data class SignatureBindings(
-        val signatureKey: String,
-        val inputs: LinkedHashMap<String, TensorBuffer>,
-        val outputs: LinkedHashMap<String, TensorBuffer>,
-    )
-
     private data class InputBindings(
         val token: Int,
-        val tokenLen: Int,
+        val tokenLen: Int = -1,
         val promptToken: Int,
-        val promptTokenLen: Int,
+        val promptTokenLen: Int = -1,
         val promptFeat: Int,
         val embedding: Int,
         val promptFeatLen: Int = -1,
@@ -131,45 +124,16 @@ class LiteRtFlowRunner private constructor(
     ): InputBindings {
         bindings?.let { return it }
 
-        // Prefer deterministic positional mapping for known flow input layouts.
-        // 7-input layout:
-        //   0 token, 1 token_len, 2 prompt_token, 3 prompt_token_len, 4 prompt_feat, 5 prompt_feat_len, 6 embedding
-        // 9-input layout:
-        //   above + 7 streaming, 8 finalize
-        if (inputBuffers.size == 7 || inputBuffers.size == 9) {
-            val resolved =
-                InputBindings(
-                    token = 0,
-                    tokenLen = 1,
-                    promptToken = 2,
-                    promptTokenLen = 3,
-                    promptFeat = 4,
-                    promptFeatLen = 5,
-                    embedding = 6,
-                    streaming = if (inputBuffers.size >= 8) 7 else -1,
-                    finalize = if (inputBuffers.size >= 9) 8 else -1,
-                )
-            bindings = resolved
-            Log.i(TAG, "LiteRT positional-bind: inputCount=${inputBuffers.size}, model=${modelFile.name}")
-            if (resolved.streaming < 0 || resolved.finalize < 0) {
-                Log.w(
-                    TAG,
-                    "LiteRT optional input missing: streaming=${resolved.streaming}, finalize=${resolved.finalize} for ${modelFile.name}",
-                )
-            }
-            return resolved
-        }
-
         val used = HashSet<Int>()
         val tokenIdx = bindRequired(inputBuffers, used, "token") { writeTokenLike(it, token, "token") }
-        val tokenLenIdx = bindRequired(inputBuffers, used, "token_len") {
+        val tokenLenIdx = bindOptional(inputBuffers, used, "token_len") {
             tokenLenHolder[0] = tokenLen.coerceAtLeast(1)
             it.writeInt(tokenLenHolder)
         }
         val promptTokenIdx = bindRequired(inputBuffers, used, "prompt_token") {
             writeTokenLike(it, promptToken, "prompt_token")
         }
-        val promptTokenLenIdx = bindRequired(inputBuffers, used, "prompt_token_len") {
+        val promptTokenLenIdx = bindOptional(inputBuffers, used, "prompt_token_len") {
             promptTokenLenHolder[0] = promptTokenLen.coerceAtLeast(1)
             it.writeInt(promptTokenLenHolder)
         }
@@ -199,6 +163,13 @@ class LiteRtFlowRunner private constructor(
                 "LiteRT optional input missing: streaming=${resolved.streaming}, finalize=${resolved.finalize} for ${modelFile.name}",
             )
         }
+        if (resolved.tokenLen < 0 || resolved.promptTokenLen < 0 || resolved.promptFeatLen < 0) {
+            Log.w(
+                TAG,
+                "LiteRT length input missing: token_len=${resolved.tokenLen}, " +
+                    "prompt_token_len=${resolved.promptTokenLen}, prompt_feat_len=${resolved.promptFeatLen} for ${modelFile.name}",
+            )
+        }
         return resolved
     }
 
@@ -215,11 +186,15 @@ class LiteRtFlowRunner private constructor(
         finalize: Boolean,
     ) {
         writeTokenLike(inputBuffers[resolved.token], token, "token")
-        tokenLenHolder[0] = tokenLen.coerceAtLeast(1)
-        inputBuffers[resolved.tokenLen].writeInt(tokenLenHolder)
+        if (resolved.tokenLen >= 0) {
+            tokenLenHolder[0] = tokenLen.coerceAtLeast(1)
+            inputBuffers[resolved.tokenLen].writeInt(tokenLenHolder)
+        }
         writeTokenLike(inputBuffers[resolved.promptToken], promptToken, "prompt_token")
-        promptTokenLenHolder[0] = promptTokenLen.coerceAtLeast(1)
-        inputBuffers[resolved.promptTokenLen].writeInt(promptTokenLenHolder)
+        if (resolved.promptTokenLen >= 0) {
+            promptTokenLenHolder[0] = promptTokenLen.coerceAtLeast(1)
+            inputBuffers[resolved.promptTokenLen].writeInt(promptTokenLenHolder)
+        }
         inputBuffers[resolved.promptFeat].writeFloat(promptFeat)
         inputBuffers[resolved.embedding].writeFloat(embedding)
 
@@ -271,6 +246,12 @@ class LiteRtFlowRunner private constructor(
 
     private fun writeTokenLike(buffer: TensorBuffer, value: LongArray, label: String) {
         runCatching {
+            buffer.writeLong(value)
+            return
+        }.onFailure {
+            Log.w(TAG, "LiteRT input '$label' fallback to int32 write for ${modelFile.name}: ${it.message}")
+        }
+        runCatching {
             val intArray =
                 if (label == "token") {
                     if (tokenIntScratch.size != value.size) tokenIntScratch = IntArray(value.size)
@@ -291,8 +272,7 @@ class LiteRtFlowRunner private constructor(
             buffer.writeInt(intArray)
             return
         }.onFailure {
-            buffer.writeLong(value)
-            Log.w(TAG, "LiteRT input '$label' accepted int64 instead of int32 for ${modelFile.name}")
+            throw IllegalStateException("LiteRT cannot write token input '$label' for ${modelFile.name}", it)
         }
     }
 
@@ -313,46 +293,9 @@ class LiteRtFlowRunner private constructor(
         Log.w(TAG, "LiteRT input '$label' accepted int64 instead of bool for ${modelFile.name}")
     }
 
-    private fun createSignatureBindingsOrNull(): SignatureBindings? {
-        if (inputBuffers.size != 7) return null
-        return runCatching {
-            val inputs = linkedMapOf<String, TensorBuffer>()
-            inputs[IN_ARGS_0] = compiledModel.createInputBuffer(IN_ARGS_0, SIGNATURE_KEY)
-            inputs[IN_ARGS_1] = compiledModel.createInputBuffer(IN_ARGS_1, SIGNATURE_KEY)
-            inputs[IN_ARGS_2] = compiledModel.createInputBuffer(IN_ARGS_2, SIGNATURE_KEY)
-            inputs[IN_ARGS_3] = compiledModel.createInputBuffer(IN_ARGS_3, SIGNATURE_KEY)
-            inputs[IN_ARGS_4] = compiledModel.createInputBuffer(IN_ARGS_4, SIGNATURE_KEY)
-            inputs[IN_ARGS_5] = compiledModel.createInputBuffer(IN_ARGS_5, SIGNATURE_KEY)
-            inputs[IN_ARGS_6] = compiledModel.createInputBuffer(IN_ARGS_6, SIGNATURE_KEY)
-
-            val outputs = linkedMapOf<String, TensorBuffer>()
-            outputs[OUT_OUTPUT_0] = compiledModel.createOutputBuffer(OUT_OUTPUT_0, SIGNATURE_KEY)
-
-            Log.i(
-                TAG,
-                "LiteRT signature-bind enabled: signature=$SIGNATURE_KEY, inputs=${inputs.keys}, outputs=${outputs.keys}",
-            )
-            SignatureBindings(
-                signatureKey = SIGNATURE_KEY,
-                inputs = inputs,
-                outputs = outputs,
-            )
-        }.onFailure { t ->
-            Log.w(TAG, "LiteRT signature-bind unavailable, fallback to positional/auto bind: ${t.message}")
-        }.getOrNull()
-    }
-
     companion object {
         private const val TAG = "LiteRtFlowRunner"
         private const val SIGNATURE_KEY = "serving_default"
-        private const val IN_ARGS_0 = "args_0"
-        private const val IN_ARGS_1 = "args_1"
-        private const val IN_ARGS_2 = "args_2"
-        private const val IN_ARGS_3 = "args_3"
-        private const val IN_ARGS_4 = "args_4"
-        private const val IN_ARGS_5 = "args_5"
-        private const val IN_ARGS_6 = "args_6"
-        private const val OUT_OUTPUT_0 = "output_0"
         private const val MAX_SAFE_MODEL_BYTES = 500L * 1024L * 1024L
         // Empirical guardrail:
         // On Pixel 10 Pro (PowerVR OpenCL stack), compiling the ~466 MiB flow.tflite
@@ -375,29 +318,19 @@ class LiteRtFlowRunner private constructor(
             }
 
             val attempts = mutableListOf<GpuAttempt>()
-            attempts += GpuAttempt("GPU(OPENCL,FP32)") {
-                CompiledModel.Options(Accelerator.GPU).apply {
-                    this.gpuOptions = CompiledModel.GpuOptions(
-                        precision = CompiledModel.GpuOptions.Precision.FP32,
-                        backend = CompiledModel.GpuOptions.Backend.OPENCL,
-                        numStepsOfCommandBufferPreparations = 0,
-                    )
-                }
-            }
             attempts += GpuAttempt("GPU(OPENGL,FP32)") {
                 CompiledModel.Options(Accelerator.GPU).apply {
                     this.gpuOptions = CompiledModel.GpuOptions(
+                        constantTensorSharing = false,
+                        allowSrcQuantizedFcConvOps = false,
                         precision = CompiledModel.GpuOptions.Precision.FP32,
+                        bufferStorageType = CompiledModel.GpuOptions.BufferStorageType.BUFFER,
+                        preferTextureWeights = false,
+                        serializeProgramCache = false,
+                        serializeExternalTensors = false,
+                        externalTensorsMode = false,
                         backend = CompiledModel.GpuOptions.Backend.OPENGL,
-                        numStepsOfCommandBufferPreparations = 0,
-                    )
-                }
-            }
-            attempts += GpuAttempt("GPU(AUTOMATIC,FP32)") {
-                CompiledModel.Options(Accelerator.GPU).apply {
-                    this.gpuOptions = CompiledModel.GpuOptions(
-                        precision = CompiledModel.GpuOptions.Precision.FP32,
-                        backend = CompiledModel.GpuOptions.Backend.AUTOMATIC,
+                        priority = CompiledModel.GpuOptions.Priority.HIGH,
                         numStepsOfCommandBufferPreparations = 0,
                     )
                 }
