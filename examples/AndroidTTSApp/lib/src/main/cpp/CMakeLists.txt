@@ -38,7 +38,8 @@ add_subdirectory(${TOKENIZERS_CPP_SRC} build-tokenizers-cpp)
 
 add_library(${CMAKE_PROJECT_NAME} SHARED
         ai_chat.cpp
-        qwen_tokenizer_jni.cpp)
+        qwen_tokenizer_jni.cpp
+        litert_native_flow_jni.cpp)
 
 target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE
         GGML_SYSTEM_ARCH=${GGML_SYSTEM_ARCH}
@@ -47,15 +48,20 @@ target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE
 )
 
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
+        ${CMAKE_CURRENT_LIST_DIR}
         ${LLAMA_SRC}
         ${LLAMA_SRC}/common
         ${LLAMA_SRC}/include
         ${LLAMA_SRC}/ggml/include
-        ${LLAMA_SRC}/ggml/src)
+        ${LLAMA_SRC}/ggml/src
+        ${CMAKE_CURRENT_LIST_DIR}/third_party_litert_c)
 
 target_link_libraries(${CMAKE_PROJECT_NAME}
         llama
         common
         tokenizers_cpp
         android
-        log)
+        log
+        EGL
+        GLESv3
+        dl)

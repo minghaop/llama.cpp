@@ -24,6 +24,7 @@
 *.onnx
 *.mnn
 *.bin
+*.tflite
 
 # IDE / OS
 
