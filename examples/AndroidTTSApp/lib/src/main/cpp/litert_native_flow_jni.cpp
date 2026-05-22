@@ -35,7 +35,7 @@ namespace {
 
 constexpr const char *kTag = "LiteRtNativeFlowJNI";
 constexpr bool kForceCpuRuntime = false;
-constexpr bool kRequireGpuRuntime = false;
+constexpr bool kRequireGpuRuntime = true;
 
 constexpr const char *kInputFiles[] = {
     "0_token.bin",
