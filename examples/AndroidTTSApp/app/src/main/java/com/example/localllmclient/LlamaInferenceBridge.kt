@@ -73,6 +73,10 @@ class LlamaInferenceBridge(
     @Volatile
     private var onnxQnnFlowRunner: OnnxQnnFlowRunner? = null
     @Volatile
+    private var liteRtFlowRunner: LiteRtFlowRunner? = null
+    @Volatile
+    private var liteRtNativeFlowRunner: LiteRtNativeFlowRunner? = null
+    @Volatile
     private var mnnFlowEncoderRunner: MnnFlowRunner? = null
     @Volatile
     private var mnnFlowDecoderRunner: MnnFlowDecoderRunner? = null
@@ -143,78 +147,93 @@ class LlamaInferenceBridge(
             if (FLOW_ONLY_TEST_MODE) {
                 currentStage = InferenceStage.flow
                 val resources = ensureFlowOnlyResourcesReady()
-                val flowResult = if (!USE_MNN_LLM_BACKEND) {
-                    Log.i(TAG, "[FlowOnly][llama.cpp] enabled, skip FrontEnd/LLM/HIFT and run flow model with prepacked bins")
-                    Log.i(TAG, "[FlowOnly][llama.cpp] flowModel=${resources.flowModel.absolutePath}")
-                    emit(InferenceEvent.StageBegan(InferenceStage.flow, "Flow init: loading llama.cpp flow model"))
-                    val flowEngine = ensureFlowOnlyEngineReady(flowModelFile = resources.flowModel)
-                    emit(
-                        InferenceEvent.StageProgress(
-                            stage = InferenceStage.flow,
-                            unitName = "Flow init: llama.cpp flow model ready",
-                            unitsDone = 1,
-                            secondsElapsed = 0.0,
-                            instUPS = 0.0,
-                            avgUPS = 0.0,
-                        ),
-                    )
-                    runFlowInferenceFromBins(
-                        engine = flowEngine,
-                        inputDir = resources.flowInputsBinDir,
-                        noisePeFile = resources.noisePe,
-                        onEvent = onEvent,
-                    )
-                } else {
-                    Log.i(TAG, "[EncDecOnly] enabled, skip FrontEnd/LLM/HIFT and run encoder+decoder with prepacked bins")
-                    Log.i(
-                        TAG,
-                        "[EncDecOnly] encoder=${resources.flowEncoderModel.absolutePath}, " +
-                            "decoder=${resources.flowDecoderModel.absolutePath}, " +
-                            "onnxQnn=${resources.flowQnnModel.absolutePath}",
-                    )
-                    if (FLOW_ONLY_USE_ONNX_QNN_GPU) {
-                        runCatching {
-                            emit(InferenceEvent.StageBegan(InferenceStage.flow, "Flow init: loading ONNX QNN GPU"))
-                            val flowRunner = ensureOnnxQnnFlowRunnerReady(flowQnnModelFile = resources.flowQnnModel)
-                            emit(
-                                InferenceEvent.StageProgress(
-                                    stage = InferenceStage.flow,
-                                    unitName = "Flow init: ONNX QNN GPU ready",
-                                    unitsDone = 1,
-                                    secondsElapsed = 0.0,
-                                    instUPS = 0.0,
-                                    avgUPS = 0.0,
-                                ),
-                            )
-                            runFlowInferenceFromBins(
-                                runner = flowRunner,
-                                inputDir = resources.flowInputsBinDir,
-                                onEvent = onEvent,
-                            )
-                        }.getOrElse { err ->
-                            Log.w(TAG, "[EncDecOnly][ONNX-QNN] failed, fallback to MNN encoder/decoder", err)
-                            emit(InferenceEvent.Note("[EncDecOnly] ONNX QNN GPU failed, fallback to MNN: ${err.message}"))
-                            emit(InferenceEvent.StageBegan(InferenceStage.flow, "Encoder/Decoder init: loading MNN models"))
-                            val flowEncoderRunner = ensureMnnFlowEncoderRunnerReady(flowEncoderModelFile = resources.flowEncoderModel)
-                            val flowDecoderRunner = ensureMnnFlowDecoderRunnerReady(flowDecoderModelFile = resources.flowDecoderModel)
-                            emit(
-                                InferenceEvent.StageProgress(
-                                    stage = InferenceStage.flow,
-                                    unitName = "Encoder/Decoder init: MNN models loaded",
-                                    unitsDone = 1,
-                                    secondsElapsed = 0.0,
-                                    instUPS = 0.0,
-                                    avgUPS = 0.0,
-                                ),
-                            )
-                            runFlowInferenceFromBins(
-                                encoderRunner = flowEncoderRunner,
-                                decoderRunner = flowDecoderRunner,
-                                inputDir = resources.flowInputsBinDir,
-                                onEvent = onEvent,
-                            )
-                        }
-                    } else {
+                val flowResult = when (FLOW_ONLY_BACKEND) {
+                    FlowOnlyBackend.LITERT_CPP -> {
+                        Log.i(TAG, "[FlowOnly][LiteRT][C++] enabled, run flow.tflite with prepacked bins")
+                        Log.i(TAG, "[FlowOnly][LiteRT][C++] flowModel=${resources.flowLiteRtModel.absolutePath}")
+                        emit(InferenceEvent.StageBegan(InferenceStage.flow, "Flow init: loading LiteRT C++ flow model"))
+                        val flowRunner = ensureLiteRtNativeFlowRunnerReady(flowLiteRtModelFile = resources.flowLiteRtModel)
+                        emit(InferenceEvent.Note("[FlowOnly][LiteRT][C++] runtime=${flowRunner.runtimeMode}"))
+                        emit(
+                            InferenceEvent.StageProgress(
+                                stage = InferenceStage.flow,
+                                unitName = "Flow init: LiteRT C++ model ready",
+                                unitsDone = 1,
+                                secondsElapsed = 0.0,
+                                instUPS = 0.0,
+                                avgUPS = 0.0,
+                            ),
+                        )
+                        runFlowInferenceFromBins(
+                            runner = flowRunner,
+                            inputDir = resources.flowInputsBinDir,
+                            onEvent = onEvent,
+                        )
+                    }
+                    FlowOnlyBackend.LITERT -> {
+                        Log.i(TAG, "[FlowOnly][LiteRT] enabled, run flow.tflite with prepacked bins")
+                        Log.i(TAG, "[FlowOnly][LiteRT] flowModel=${resources.flowLiteRtModel.absolutePath}")
+                        emit(InferenceEvent.StageBegan(InferenceStage.flow, "Flow init: loading LiteRT flow model"))
+                        val flowRunner = ensureLiteRtFlowRunnerReady(flowLiteRtModelFile = resources.flowLiteRtModel)
+                        emit(InferenceEvent.Note("[FlowOnly][LiteRT] runtime=${flowRunner.runtimeMode}"))
+                        emit(
+                            InferenceEvent.StageProgress(
+                                stage = InferenceStage.flow,
+                                unitName = "Flow init: LiteRT model ready",
+                                unitsDone = 1,
+                                secondsElapsed = 0.0,
+                                instUPS = 0.0,
+                                avgUPS = 0.0,
+                            ),
+                        )
+                        runFlowInferenceFromBins(
+                            runner = flowRunner,
+                            inputDir = resources.flowInputsBinDir,
+                            onEvent = onEvent,
+                        )
+                    }
+                    FlowOnlyBackend.LLAMA_CPP -> {
+                        Log.i(TAG, "[FlowOnly][llama.cpp] enabled, skip FrontEnd/LLM/HIFT and run flow model with prepacked bins")
+                        Log.i(TAG, "[FlowOnly][llama.cpp] flowModel=${resources.flowModel.absolutePath}")
+                        emit(InferenceEvent.StageBegan(InferenceStage.flow, "Flow init: loading llama.cpp flow model"))
+                        val flowEngine = ensureFlowOnlyEngineReady(flowModelFile = resources.flowModel)
+                        emit(
+                            InferenceEvent.StageProgress(
+                                stage = InferenceStage.flow,
+                                unitName = "Flow init: llama.cpp flow model ready",
+                                unitsDone = 1,
+                                secondsElapsed = 0.0,
+                                instUPS = 0.0,
+                                avgUPS = 0.0,
+                            ),
+                        )
+                        runFlowInferenceFromBins(
+                            engine = flowEngine,
+                            inputDir = resources.flowInputsBinDir,
+                            noisePeFile = resources.noisePe,
+                            onEvent = onEvent,
+                        )
+                    }
+                    FlowOnlyBackend.ONNX_QNN_GPU -> {
+                        emit(InferenceEvent.StageBegan(InferenceStage.flow, "Flow init: loading ONNX QNN GPU"))
+                        val flowRunner = ensureOnnxQnnFlowRunnerReady(flowQnnModelFile = resources.flowQnnModel)
+                        emit(
+                            InferenceEvent.StageProgress(
+                                stage = InferenceStage.flow,
+                                unitName = "Flow init: ONNX QNN GPU ready",
+                                unitsDone = 1,
+                                secondsElapsed = 0.0,
+                                instUPS = 0.0,
+                                avgUPS = 0.0,
+                            ),
+                        )
+                        runFlowInferenceFromBins(
+                            runner = flowRunner,
+                            inputDir = resources.flowInputsBinDir,
+                            onEvent = onEvent,
+                        )
+                    }
+                    FlowOnlyBackend.MNN_ENCODER_DECODER -> {
                         emit(InferenceEvent.StageBegan(InferenceStage.flow, "Encoder/Decoder init: loading MNN models"))
                         val flowEncoderRunner = ensureMnnFlowEncoderRunnerReady(flowEncoderModelFile = resources.flowEncoderModel)
                         val flowDecoderRunner = ensureMnnFlowDecoderRunnerReady(flowDecoderModelFile = resources.flowDecoderModel)
@@ -236,11 +255,14 @@ class LlamaInferenceBridge(
                         )
                     }
                 }
-                return done(if (!USE_MNN_LLM_BACKEND) {
-                    "FLOW_ONLY_LLAMA_CPP_OK:units=${flowResult.units}"
-                } else {
-                    "ENCODER_DECODER_ONLY_OK:units=${flowResult.units}"
-                }, currentStage)
+                val tag = when (FLOW_ONLY_BACKEND) {
+                    FlowOnlyBackend.LITERT_CPP -> "FLOW_ONLY_LITERT_CPP_OK"
+                    FlowOnlyBackend.LITERT -> "FLOW_ONLY_LITERT_OK"
+                    FlowOnlyBackend.LLAMA_CPP -> "FLOW_ONLY_LLAMA_CPP_OK"
+                    FlowOnlyBackend.ONNX_QNN_GPU -> "FLOW_ONLY_ONNX_QNN_OK"
+                    FlowOnlyBackend.MNN_ENCODER_DECODER -> "ENCODER_DECODER_ONLY_OK"
+                }
+                return done("$tag:units=${flowResult.units}", currentStage)
             }
 
             val resources = ensureLocalResourcesReady()
@@ -349,6 +371,16 @@ class LlamaInferenceBridge(
         if (activeOnnxQnnFlow != null) {
             runCatching { activeOnnxQnnFlow.close() }
             onnxQnnFlowRunner = null
+        }
+        val activeLiteRtFlow = liteRtFlowRunner
+        if (activeLiteRtFlow != null) {
+            runCatching { activeLiteRtFlow.close() }
+            liteRtFlowRunner = null
+        }
+        val activeLiteRtNativeFlow = liteRtNativeFlowRunner
+        if (activeLiteRtNativeFlow != null) {
+            runCatching { activeLiteRtNativeFlow.close() }
+            liteRtNativeFlowRunner = null
         }
         val activeMnnHifiGan = mnnHifiGanRunner
         if (activeMnnHifiGan != null) {
@@ -918,6 +950,131 @@ class LlamaInferenceBridge(
         )
     }
 
+    private suspend fun runFlowInferenceFromBins(
+        runner: LiteRtFlowRunner,
+        inputDir: File,
+        onEvent: ((InferenceEvent) -> Unit)? = null,
+    ): FlowResult {
+        fun emit(event: InferenceEvent) {
+            onEvent?.invoke(event)
+        }
+
+        val t0 = nowSeconds()
+        emit(InferenceEvent.StageBegan(InferenceStage.flow, "Flow inference (prepacked inputs, LiteRT)"))
+
+        val inputs = readFlowOnlyInputBundle(inputDir)
+        Log.i(
+            TAG,
+            "[FlowOnly][LiteRT] inputs loaded, token=${inputs.flowToken.size}, tokenLen=${inputs.tokenLen}, " +
+                "promptToken=${inputs.promptToken.size}, promptTokenLen=${inputs.promptTokenLen}, " +
+                "promptFeat=${inputs.promptFeat.size}, promptFeatLen=${inputs.promptFeatLen}, " +
+                "embedding=${inputs.embedding.size}, streaming=${inputs.streaming}, finalize=${inputs.finalize}",
+        )
+        emit(InferenceEvent.Note("[FlowOnly][LiteRT] runtime=${runner.runtimeMode}"))
+        val streamingForRun = false
+        val finalizeForRun = true
+        Log.i(
+            TAG,
+            "[FlowOnly][LiteRT] force streaming=0/finalize=1, rawStreaming=${inputs.streaming}, rawFinalize=${inputs.finalize}",
+        )
+
+        val flowOutput = runner.forward(
+            token = inputs.flowToken,
+            tokenLen = inputs.tokenLen,
+            promptToken = inputs.promptToken,
+            promptTokenLen = inputs.promptTokenLen,
+            promptFeat = inputs.promptFeat,
+            promptFeatLen = inputs.promptFeatLen,
+            embedding = inputs.embedding,
+            streaming = streamingForRun,
+            finalize = finalizeForRun,
+        )
+        val nonZero = flowOutput.count { it != 0.0f }
+        var minV = Float.POSITIVE_INFINITY
+        var maxV = Float.NEGATIVE_INFINITY
+        var sumV = 0.0
+        for (v in flowOutput) {
+            if (v < minV) minV = v
+            if (v > maxV) maxV = v
+            sumV += v
+        }
+        val meanV = if (flowOutput.isNotEmpty()) sumV / flowOutput.size else 0.0
+        Log.i(
+            TAG,
+            "[FlowOnly][LiteRT] output stats: size=${flowOutput.size}, nonZero=$nonZero, " +
+                "min=${"%.6f".format(Locale.US, minV)}, max=${"%.6f".format(Locale.US, maxV)}, mean=${"%.6f".format(Locale.US, meanV)}",
+        )
+
+        emit(InferenceEvent.Note(buildDecoderHeadPreviewNote(flowOutput)))
+        val units = inputs.flowToken.size.coerceAtLeast(1)
+        val seconds = nowSeconds() - t0
+        emit(
+            InferenceEvent.StageEnded(
+                StageEndedInfo(
+                    stage = InferenceStage.flow,
+                    unitName = "Flow Inference completed",
+                    units = units,
+                    seconds = seconds,
+                    avgUPS = if (seconds > 0) units / seconds else 0.0,
+                ),
+            ),
+        )
+        return FlowResult(
+            units = units,
+            output = flowOutput,
+        )
+    }
+
+    private suspend fun runFlowInferenceFromBins(
+        runner: LiteRtNativeFlowRunner,
+        inputDir: File,
+        onEvent: ((InferenceEvent) -> Unit)? = null,
+    ): FlowResult {
+        fun emit(event: InferenceEvent) {
+            onEvent?.invoke(event)
+        }
+
+        val t0 = nowSeconds()
+        emit(InferenceEvent.StageBegan(InferenceStage.flow, "Flow inference (prepacked inputs, LiteRT C++)"))
+        emit(InferenceEvent.Note("[FlowOnly][LiteRT] runtime=${runner.runtimeMode}"))
+
+        val flowOutput = runner.forwardFromBin(inputDir)
+        val nonZero = flowOutput.count { it != 0.0f }
+        var minV = Float.POSITIVE_INFINITY
+        var maxV = Float.NEGATIVE_INFINITY
+        var sumV = 0.0
+        for (v in flowOutput) {
+            if (v < minV) minV = v
+            if (v > maxV) maxV = v
+            sumV += v
+        }
+        val meanV = if (flowOutput.isNotEmpty()) sumV / flowOutput.size else 0.0
+        Log.i(
+            TAG,
+            "[FlowOnly][LiteRT][C++] output stats: size=${flowOutput.size}, nonZero=$nonZero, " +
+                "min=${"%.6f".format(Locale.US, minV)}, max=${"%.6f".format(Locale.US, maxV)}, mean=${"%.6f".format(Locale.US, meanV)}",
+        )
+        emit(InferenceEvent.Note(buildDecoderHeadPreviewNote(flowOutput)))
+
+        val units = (File(inputDir, FILE_FLOW_INPUT_TOKEN).length() / Long.SIZE_BYTES).toInt().coerceAtLeast(1)
+        val seconds = nowSeconds() - t0
+        emit(
+            InferenceEvent.StageEnded(
+                StageEndedInfo(
+                    stage = InferenceStage.flow,
+                    unitName = "Flow Inference completed",
+                    units = units,
+                    seconds = seconds,
+                    avgUPS = if (seconds > 0) units / seconds else 0.0,
+                ),
+            ),
+        )
+        return FlowResult(
+            units = units,
+            output = flowOutput,
+        )
+    }
+
     private fun readFlowOnlyInputBundle(inputDir: File): FlowOnlyInputBundle =
         FlowOnlyInputBundle(
             flowToken = readRawInt64Array(File(inputDir, FILE_FLOW_INPUT_TOKEN)),
@@ -1251,30 +1408,53 @@ class LlamaInferenceBridge(
             installBundledResourcesIfPresent()
             val modelsDir = ensureDirectory(File(appContext.filesDir, DIRECTORY_MODELS))
             val resourcesDir = ensureDirectory(File(appContext.filesDir, DIRECTORY_LOCAL_RESOURCES))
-            val flowModel = resolveRequiredFile(
-                FILE_FLOW_GGUF_MODEL,
-                listOf(
-                    File(modelsDir, FILE_FLOW_GGUF_MODEL),
-                    File(modelsDir, FILE_LLM_MODEL),
-                ),
-            )
-            val noisePe = resolveRequiredFile(FILE_NOISE_PE, listOf(File(resourcesDir, FILE_NOISE_PE)))
+            val optionalNoisePe = resolveOptionalFile(listOf(File(resourcesDir, FILE_NOISE_PE)))
             val flowInputsBinDir = resolveRequiredDirectory(
                 DIR_FLOW_INPUTS_BIN,
                 listOf(File(resourcesDir, DIR_FLOW_INPUTS_BIN)),
             )
+            val flowLiteRtModel = resolveRequiredFile(
+                FILE_FLOW_TFLITE_MODEL,
+                listOf(File(modelsDir, FILE_FLOW_TFLITE_MODEL)),
+            )
 
-            if (!USE_MNN_LLM_BACKEND) {
+            if (FLOW_ONLY_BACKEND == FlowOnlyBackend.LITERT || FLOW_ONLY_BACKEND == FlowOnlyBackend.LITERT_CPP) {
+                FlowOnlyResourceFiles(
+                    flowModel = flowLiteRtModel,
+                    flowEncoderModel = flowLiteRtModel,
+                    flowDecoderModel = flowLiteRtModel,
+                    flowQnnModel = flowLiteRtModel,
+                    flowLiteRtModel = flowLiteRtModel,
+                    noisePe = optionalNoisePe ?: flowLiteRtModel,
+                    flowInputsBinDir = flowInputsBinDir,
+                )
+            } else if (FLOW_ONLY_BACKEND == FlowOnlyBackend.LLAMA_CPP) {
+                val flowModel = resolveRequiredFile(
+                    FILE_FLOW_GGUF_MODEL,
+                    listOf(
+                        File(modelsDir, FILE_FLOW_GGUF_MODEL),
+                        File(modelsDir, FILE_LLM_MODEL),
+                    ),
+                )
+                val noisePe = resolveRequiredFile(FILE_NOISE_PE, listOf(File(resourcesDir, FILE_NOISE_PE)))
                 FlowOnlyResourceFiles(
                     flowModel = flowModel,
                     flowEncoderModel = flowModel,
                     flowDecoderModel = flowModel,
                     flowQnnModel = flowModel,
+                    flowLiteRtModel = flowLiteRtModel,
                     noisePe = noisePe,
                     flowInputsBinDir = flowInputsBinDir,
                 )
             } else {
                 val mnnModelsDir = ensureDirectory(File(modelsDir, DIR_MNN_MODELS))
+                val flowModel = resolveRequiredFile(
+                    FILE_FLOW_GGUF_MODEL,
+                    listOf(
+                        File(modelsDir, FILE_FLOW_GGUF_MODEL),
+                        File(modelsDir, FILE_LLM_MODEL),
+                    ),
+                )
                 FlowOnlyResourceFiles(
                     flowModel = flowModel,
                     flowEncoderModel = resolveRequiredFile(
@@ -1293,7 +1473,8 @@ class LlamaInferenceBridge(
                         FILE_FLOW_QNN_ONNX_MODEL,
                         listOf(File(modelsDir, FILE_FLOW_QNN_ONNX_MODEL)),
                     ),
-                    noisePe = noisePe,
+                    flowLiteRtModel = flowLiteRtModel,
+                    noisePe = optionalNoisePe ?: flowLiteRtModel,
                     flowInputsBinDir = flowInputsBinDir,
                 )
             }
@@ -1771,6 +1952,44 @@ class LlamaInferenceBridge(
             loaded
         }
 
+    private suspend fun ensureLiteRtFlowRunnerReady(flowLiteRtModelFile: File): LiteRtFlowRunner =
+        engineMutex.withLock {
+            liteRtFlowRunner?.let { return it }
+
+            installBundledResourcesIfPresent()
+            val t0 = nowSeconds()
+            Log.i(
+                TAG,
+                "[FlowOnly][LiteRT] load begin: ${flowLiteRtModelFile.absolutePath} (bytes=${flowLiteRtModelFile.length()})",
+            )
+            val loaded = LiteRtFlowRunner.load(modelFile = flowLiteRtModelFile)
+            Log.i(
+                TAG,
+                "[FlowOnly][LiteRT] load done in ${"%.3f".format(Locale.US, nowSeconds() - t0)} s, runtime=${loaded.runtimeMode}",
+            )
+            liteRtFlowRunner = loaded
+            loaded
+        }
+
+    private suspend fun ensureLiteRtNativeFlowRunnerReady(flowLiteRtModelFile: File): LiteRtNativeFlowRunner =
+        engineMutex.withLock {
+            liteRtNativeFlowRunner?.let { return it }
+
+            installBundledResourcesIfPresent()
+            val t0 = nowSeconds()
+            Log.i(
+                TAG,
+                "[FlowOnly][LiteRT][C++] load begin: ${flowLiteRtModelFile.absolutePath} (bytes=${flowLiteRtModelFile.length()})",
+            )
+            val loaded = LiteRtNativeFlowRunner.load(modelFile = flowLiteRtModelFile)
+            Log.i(
+                TAG,
+                "[FlowOnly][LiteRT][C++] load done in ${"%.3f".format(Locale.US, nowSeconds() - t0)} s, runtime=${loaded.runtimeMode}",
+            )
+            liteRtNativeFlowRunner = loaded
+            loaded
+        }
+
     private suspend fun ensureMnnFlowEncoderRunnerReady(flowEncoderModelFile: File): MnnFlowRunner =
         engineMutex.withLock {
             mnnFlowEncoderRunner?.let { return it }
@@ -1926,6 +2145,7 @@ class LlamaInferenceBridge(
                     "$DIR_MNN_MODELS/$FILE_FLOW_MODEL_WEIGHT",
                 ),
                 listOf(FILE_FLOW_QNN_ONNX_MODEL),
+                listOf(FILE_FLOW_TFLITE_MODEL),
             ),
         )
 
@@ -2139,14 +2359,22 @@ class LlamaInferenceBridge(
 
     private fun nowSeconds() = System.nanoTime() / 1_000_000_000.0
 
+    private enum class FlowOnlyBackend {
+        LLAMA_CPP,
+        MNN_ENCODER_DECODER,
+        ONNX_QNN_GPU,
+        LITERT_CPP,
+        LITERT,
+    }
+
     companion object {
         private const val TAG = "LlamaInferenceBridge"
         private const val USE_MNN_LLM_BACKEND = false
         private const val LLM_ONLY_TEST_MODE = false
         private const val FLOW_ONLY_TEST_MODE = true
         private const val HIFIGAN_ONLY_TEST_MODE = false
+        private val FLOW_ONLY_BACKEND = FlowOnlyBackend.LITERT
         private const val FLOW_MNN_OP_PROFILE_ENABLED = true
-        private const val FLOW_ONLY_USE_ONNX_QNN_GPU = false
         private const val ASSET_SYNC_MARKER = ".asset_sync_ok"
         private const val DIRECTORY_MODELS = "models"
         private const val DIRECTORY_LOCAL_RESOURCES = "local_llm_resources"
@@ -2163,6 +2391,7 @@ class LlamaInferenceBridge(
         private const val FILE_FLOW_DECODER_MODEL_TEST_OP = "flow_decoder_test_op.mnn"
         private const val FILE_FLOW_DECODER_MODEL_GPU_SIMPLIFIED = "flow_decoder_gpu_simplified.mnn"
         private const val FILE_FLOW_QNN_ONNX_MODEL = "flow_qnn_ort_opt.onnx"
+        private const val FILE_FLOW_TFLITE_MODEL = "flow.tflite"
         private const val FILE_FLOW_MODEL_WEIGHTS = "flow.mnn.weights"
         private const val FILE_FLOW_MODEL_WEIGHT = "flow.mnn.weight"
         private const val FILE_HIFIGAN_MODEL = "hifigan.mnn"
@@ -2299,6 +2528,7 @@ private data class FlowOnlyResourceFiles(
     val flowEncoderModel: File,
     val flowDecoderModel: File,
     val flowQnnModel: File,
+    val flowLiteRtModel: File,
     val noisePe: File,
     val flowInputsBinDir: File,
 )

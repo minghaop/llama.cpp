@@ -52,7 +52,12 @@ android {
     packaging {
         jniLibs {
             useLegacyPackaging = true
-            pickFirsts += setOf("**/libc++_shared.so")
+            excludes += setOf("**/libLiteRtGpuAccelerator.so")
+            pickFirsts += setOf(
+                "**/libc++_shared.so",
+                "**/libLiteRt.so",
+                "**/libLiteRtClGlAccelerator.so",
+            )
         }
     }
     compileOptions {
@@ -72,6 +77,7 @@ kotlin {
 dependencies {
     implementation(libs.bundles.androidx)
     implementation(libs.material)
+    implementation(libs.litert)
     implementation("com.microsoft.onnxruntime:onnxruntime-android:1.20.0")
 
     implementation(project(":lib"))
