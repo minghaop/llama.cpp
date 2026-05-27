@@ -1,0 +1,78 @@
+name: LiteRT AOT Google Tensor (AndroidTTSApp)
+
+on:
+  workflow_dispatch:
+    inputs:
+      soc:
+        description: "Google Tensor SoC target"
+        required: true
+        default: "G5"
+        type: choice
+        options:
+          - G3
+          - G4
+          - G5
+          - ALL
+      model_path:
+        description: "Model path relative to repo root"
+        required: true
+        default: "examples/AndroidTTSApp/app/src/main/assets/models/flow.tflite"
+        type: string
+
+jobs:
+  compile-aot:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 90
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Verify runner AVX support
+        run: |
+          set -euo pipefail
+          grep -qi avx /proc/cpuinfo
+          echo "AVX detected."
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Download LiteRT Google Tensor plugin compiler
+        env:
+          LITERT_PLUGIN_COMPILER_URL: ${{ secrets.LITERT_PLUGIN_COMPILER_URL }}
+        run: |
+          set -euo pipefail
+          if [ -z "${LITERT_PLUGIN_COMPILER_URL:-}" ]; then
+            echo "Missing secret: LITERT_PLUGIN_COMPILER_URL"
+            echo "Set it to a direct download URL of litert_plugin_compiler.tar.gz"
+            exit 2
+          fi
+          mkdir -p /tmp/litert
+          curl -fL --retry 3 --retry-delay 3 \
+            "${LITERT_PLUGIN_COMPILER_URL}" \
+            -o /tmp/litert/litert_plugin_compiler.tar.gz
+          ls -lh /tmp/litert/litert_plugin_compiler.tar.gz
+
+      - name: Run AOT compile
+        env:
+          GOOGLE_TENSOR_SDK_BETA: /tmp/litert/litert_plugin_compiler.tar.gz
+        run: |
+          set -euo pipefail
+          cd examples/AndroidTTSApp
+          OUT_DIR="npu_aot_out_flow_ci"
+          ./tools/run_litert_aot_google_tensor.sh \
+            --model "${GITHUB_WORKSPACE}/${{ inputs.model_path }}" \
+            --out-dir "${OUT_DIR}" \
+            --model-name flow \
+            --soc "${{ inputs.soc }}"
+          ls -lah "${OUT_DIR}"
+
+      - name: Upload AOT outputs
+        uses: actions/upload-artifact@v4
+        with:
+          name: litert-aot-${{ inputs.soc }}-${{ github.run_number }}
+          path: |
+            examples/AndroidTTSApp/npu_aot_out_flow_ci/**
+          if-no-files-found: error

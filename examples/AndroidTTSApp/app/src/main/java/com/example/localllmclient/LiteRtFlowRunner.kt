@@ -1,16 +1,21 @@
 package com.example.llama
 
+import android.content.Context
 import android.util.Log
 import com.google.ai.edge.litert.Accelerator
+import com.google.ai.edge.litert.BuiltinNpuAcceleratorProvider
 import com.google.ai.edge.litert.CompiledModel
+import com.google.ai.edge.litert.Environment
 import com.google.ai.edge.litert.TensorBuffer
 import java.io.Closeable
 import java.io.File
+import kotlinx.coroutines.runBlocking
 
 class LiteRtFlowRunner private constructor(
     private val compiledModel: CompiledModel,
     val runtimeMode: String,
     private val modelFile: File,
+    private val environment: Environment? = null,
 ) : Closeable {
     private val ioLock = Any()
     private val inputBuffers: List<TensorBuffer>
@@ -97,6 +102,7 @@ class LiteRtFlowRunner private constructor(
         inputBuffers.forEach { runCatching { it.close() } }
         outputBuffers.forEach { runCatching { it.close() } }
         runCatching { compiledModel.close() }
+        runCatching { environment?.close() }
     }
 
     private data class InputBindings(
@@ -301,12 +307,12 @@ class LiteRtFlowRunner private constructor(
         // On Pixel 10 Pro (PowerVR OpenCL stack), compiling the ~466 MiB flow.tflite
         // crashes inside libPVROCL with Scudo OOM during kernel creation.
         // Keep OpenCL only for smaller models.
-        private data class GpuAttempt(
+        private data class LiteRtAttempt(
             val mode: String,
-            val optionsBuilder: () -> CompiledModel.Options,
+            val creator: () -> Pair<CompiledModel, Environment?>,
         )
 
-        fun load(modelFile: File): LiteRtFlowRunner {
+        fun load(context: Context, modelFile: File): LiteRtFlowRunner {
             require(modelFile.exists() && modelFile.isFile) {
                 "LiteRT flow model not found: ${modelFile.absolutePath}"
             }
@@ -317,43 +323,53 @@ class LiteRtFlowRunner private constructor(
                     "Please replace with a smaller/optimized flow.tflite."
             }
 
-            val attempts = mutableListOf<GpuAttempt>()
-            attempts += GpuAttempt("GPU(OPENGL,FP32)") {
-                CompiledModel.Options(Accelerator.GPU).apply {
-                    this.gpuOptions = CompiledModel.GpuOptions(
-                        constantTensorSharing = false,
-                        allowSrcQuantizedFcConvOps = false,
-                        precision = CompiledModel.GpuOptions.Precision.FP32,
-                        bufferStorageType = CompiledModel.GpuOptions.BufferStorageType.BUFFER,
-                        preferTextureWeights = false,
-                        serializeProgramCache = false,
-                        serializeExternalTensors = false,
-                        externalTensorsMode = false,
-                        backend = CompiledModel.GpuOptions.Backend.OPENGL,
-                        priority = CompiledModel.GpuOptions.Priority.HIGH,
-                        numStepsOfCommandBufferPreparations = 0,
-                    )
+            val attempts = mutableListOf<LiteRtAttempt>()
+            attempts += LiteRtAttempt("NPU") {
+                val provider = BuiltinNpuAcceleratorProvider(context)
+                check(provider.isDeviceSupported()) { "NPU not supported on this device" }
+                if (!provider.isLibraryReady()) {
+                    runBlocking { provider.downloadLibrary() }
                 }
+                check(provider.isLibraryReady()) { "NPU runtime library not ready" }
+
+                val libraryDir = provider.getLibraryDir().trim()
+                val env = if (libraryDir.isNotEmpty()) {
+                    Environment.create(
+                        provider,
+                        mapOf(
+                            Environment.Option.CompilerPluginLibraryDir to libraryDir,
+                            Environment.Option.DispatchLibraryDir to libraryDir,
+                        ),
+                    )
+                } else {
+                    Environment.create(provider)
+                }
+
+                val options = CompiledModel.Options(Accelerator.NPU)
+                val model = CompiledModel.create(modelFile.absolutePath, options, env)
+                model to env
             }
 
             attempts.forEach { attempt ->
                 val result = runCatching {
-                    Log.i(TAG, "Try LiteRT GPU mode=${attempt.mode}")
-                    CompiledModel.create(modelFile.absolutePath, attempt.optionsBuilder())
+                    Log.i(TAG, "Try LiteRT mode=${attempt.mode}")
+                    attempt.creator()
                 }
-                val compiled = result.getOrNull()
-                if (compiled != null) {
-                    Log.i(TAG, "LiteRT flow model loaded in GPU mode=${attempt.mode}: ${modelFile.absolutePath}")
+                val created = result.getOrNull()
+                if (created != null) {
+                    val (compiled, env) = created
+                    Log.i(TAG, "LiteRT flow model loaded in mode=${attempt.mode}: ${modelFile.absolutePath}")
                     return LiteRtFlowRunner(
                         compiledModel = compiled,
                         runtimeMode = attempt.mode,
                         modelFile = modelFile,
+                        environment = env,
                     )
                 }
-                Log.w(TAG, "LiteRT GPU mode failed: ${attempt.mode}, reason=${result.exceptionOrNull()?.message}")
+                Log.w(TAG, "LiteRT mode failed: ${attempt.mode}, reason=${result.exceptionOrNull()?.message}")
             }
 
-            error("All LiteRT GPU attempts failed for model=${modelFile.name}")
+            error("All LiteRT attempts failed for model=${modelFile.name}")
         }
     }
 }
