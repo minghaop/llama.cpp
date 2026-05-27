@@ -1415,8 +1415,15 @@ class LlamaInferenceBridge(
             )
             val flowLiteRtModel = resolveRequiredFile(
                 FILE_FLOW_TFLITE_MODEL,
-                listOf(File(modelsDir, FILE_FLOW_TFLITE_MODEL)),
+                listOf(
+                    File(modelsDir, FILE_FLOW_TFLITE_NPU_G5_MODEL),
+                    File(modelsDir, FILE_FLOW_TFLITE_NPU_G4_MODEL),
+                    File(modelsDir, FILE_FLOW_TFLITE_NPU_G3_MODEL),
+                    File(modelsDir, FILE_FLOW_TFLITE_FALLBACK_MODEL),
+                    File(modelsDir, FILE_FLOW_TFLITE_MODEL),
+                ),
             )
+            Log.i(TAG, "[FlowOnly][LiteRT] selected model=${flowLiteRtModel.absolutePath}")
 
             if (FLOW_ONLY_BACKEND == FlowOnlyBackend.LITERT || FLOW_ONLY_BACKEND == FlowOnlyBackend.LITERT_CPP) {
                 FlowOnlyResourceFiles(
@@ -1962,7 +1969,10 @@ class LlamaInferenceBridge(
                 TAG,
                 "[FlowOnly][LiteRT] load begin: ${flowLiteRtModelFile.absolutePath} (bytes=${flowLiteRtModelFile.length()})",
             )
-            val loaded = LiteRtFlowRunner.load(modelFile = flowLiteRtModelFile)
+            val loaded = LiteRtFlowRunner.load(
+                context = appContext,
+                modelFile = flowLiteRtModelFile,
+            )
             Log.i(
                 TAG,
                 "[FlowOnly][LiteRT] load done in ${"%.3f".format(Locale.US, nowSeconds() - t0)} s, runtime=${loaded.runtimeMode}",
@@ -2145,7 +2155,13 @@ class LlamaInferenceBridge(
                     "$DIR_MNN_MODELS/$FILE_FLOW_MODEL_WEIGHT",
                 ),
                 listOf(FILE_FLOW_QNN_ONNX_MODEL),
-                listOf(FILE_FLOW_TFLITE_MODEL),
+                listOf(
+                    FILE_FLOW_TFLITE_NPU_G5_MODEL,
+                    FILE_FLOW_TFLITE_NPU_G4_MODEL,
+                    FILE_FLOW_TFLITE_NPU_G3_MODEL,
+                    FILE_FLOW_TFLITE_FALLBACK_MODEL,
+                    FILE_FLOW_TFLITE_MODEL,
+                ),
             ),
         )
 
@@ -2373,7 +2389,7 @@ class LlamaInferenceBridge(
         private const val LLM_ONLY_TEST_MODE = false
         private const val FLOW_ONLY_TEST_MODE = true
         private const val HIFIGAN_ONLY_TEST_MODE = false
-        private val FLOW_ONLY_BACKEND = FlowOnlyBackend.LITERT_CPP
+        private val FLOW_ONLY_BACKEND = FlowOnlyBackend.LLAMA_CPP
         private const val FLOW_MNN_OP_PROFILE_ENABLED = true
         private const val ASSET_SYNC_MARKER = ".asset_sync_ok"
         private const val DIRECTORY_MODELS = "models"
@@ -2392,6 +2408,10 @@ class LlamaInferenceBridge(
         private const val FILE_FLOW_DECODER_MODEL_GPU_SIMPLIFIED = "flow_decoder_gpu_simplified.mnn"
         private const val FILE_FLOW_QNN_ONNX_MODEL = "flow_qnn_ort_opt.onnx"
         private const val FILE_FLOW_TFLITE_MODEL = "flow.tflite"
+        private const val FILE_FLOW_TFLITE_FALLBACK_MODEL = "flow_fallback.tflite"
+        private const val FILE_FLOW_TFLITE_NPU_G3_MODEL = "flow_Google_Tensor_G3.tflite"
+        private const val FILE_FLOW_TFLITE_NPU_G4_MODEL = "flow_Google_Tensor_G4.tflite"
+        private const val FILE_FLOW_TFLITE_NPU_G5_MODEL = "flow_Google_Tensor_G5.tflite"
         private const val FILE_FLOW_MODEL_WEIGHTS = "flow.mnn.weights"
         private const val FILE_FLOW_MODEL_WEIGHT = "flow.mnn.weight"
         private const val FILE_HIFIGAN_MODEL = "hifigan.mnn"

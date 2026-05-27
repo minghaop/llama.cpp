@@ -2,6 +2,7 @@
 
 #define ACC_TYPE float
 #define ACC_TYPE4 float4
+#define ACC_TYPE8 float8
 #define DATA_TYPE half
 #define DATA_TYPE4 half4
 #define CONVERT_ACC4(x) convert_float4(x)
@@ -10,7 +11,9 @@
 #define DK_VEC (DK/4)
 #define DV_VEC (DV/4)
 #define WG_SIZE (BLOCK_M)
+#ifndef Q1_WG_SIZE
 #define Q1_WG_SIZE 64
+#endif
 
 #if (defined(GGML_FLASH_ATTN_FORCE_SUBGROUP) && (GGML_FLASH_ATTN_FORCE_SUBGROUP != 0)) && \
     (defined(cl_khr_subgroups) || defined(__opencl_c_subgroups))
@@ -333,24 +336,65 @@ __kernel void flash_attn_f16_q1(
     }
     const global DATA_TYPE* mask_ptr_q1 =
         (mask_base != NULL) ? (const global DATA_TYPE*)(mask_base) : NULL;
+    const int has_mask_q1 = (mask_ptr_q1 != NULL);
+    const int has_softcap_q1 = (logit_softcap > 0.0f);
+    const int fast_path_q1 = (!has_mask_q1 && !has_softcap_q1);
 
     ACC_TYPE m_i = (sinks_ptr != NULL) ? sinks_ptr[head_idx] : -INFINITY;
-    for (int k_idx = tid; k_idx < n_kv; k_idx += Q1_WG_SIZE) {
-        const ulong k_row_offset = batch_idx * k_nb3 + head_kv_idx * k_nb2 + k_idx * k_nb1;
-        const global DATA_TYPE4* k_ptr = (const global DATA_TYPE4*)(k_base + k_row_offset);
-        ACC_TYPE dot_sum = 0.0f;
-        #pragma unroll
-        for (int k = 0; k < DK_VEC; k++) {
-            dot_sum += dot(q_priv[k], CONVERT_ACC4(k_ptr[k]));
+    if (fast_path_q1) {
+        for (int k_idx = tid; k_idx < n_kv; k_idx += Q1_WG_SIZE) {
+            const ulong k_row_offset = batch_idx * k_nb3 + head_kv_idx * k_nb2 + k_idx * k_nb1;
+            const global DATA_TYPE4* k_ptr = (const global DATA_TYPE4*)(k_base + k_row_offset);
+            ACC_TYPE dot_sum = 0.0f;
+            #pragma unroll
+            for (int k = 0; k < DK_VEC; k++) {
+                dot_sum += dot(q_priv[k], CONVERT_ACC4(k_ptr[k]));
+            }
+            const ACC_TYPE score = dot_sum * scale;
+            m_i = max(m_i, score);
         }
-        ACC_TYPE score = dot_sum * scale;
-        if (mask_ptr_q1 != NULL) {
-            score += slope * (ACC_TYPE)mask_ptr_q1[k_idx];
+    } else {
+        if (has_mask_q1 && has_softcap_q1) {
+            for (int k_idx = tid; k_idx < n_kv; k_idx += Q1_WG_SIZE) {
+                const ulong k_row_offset = batch_idx * k_nb3 + head_kv_idx * k_nb2 + k_idx * k_nb1;
+                const global DATA_TYPE4* k_ptr = (const global DATA_TYPE4*)(k_base + k_row_offset);
+                ACC_TYPE dot_sum = 0.0f;
+                #pragma unroll
+                for (int k = 0; k < DK_VEC; k++) {
+                    dot_sum += dot(q_priv[k], CONVERT_ACC4(k_ptr[k]));
+                }
+                ACC_TYPE score = dot_sum * scale;
+                score += slope * (ACC_TYPE)mask_ptr_q1[k_idx];
+                score = logit_softcap * tanh(score / logit_softcap);
+                m_i = max(m_i, score);
+            }
+        } else if (has_mask_q1) {
+            for (int k_idx = tid; k_idx < n_kv; k_idx += Q1_WG_SIZE) {
+                const ulong k_row_offset = batch_idx * k_nb3 + head_kv_idx * k_nb2 + k_idx * k_nb1;
+                const global DATA_TYPE4* k_ptr = (const global DATA_TYPE4*)(k_base + k_row_offset);
+                ACC_TYPE dot_sum = 0.0f;
+                #pragma unroll
+                for (int k = 0; k < DK_VEC; k++) {
+                    dot_sum += dot(q_priv[k], CONVERT_ACC4(k_ptr[k]));
+                }
+                ACC_TYPE score = dot_sum * scale;
+                score += slope * (ACC_TYPE)mask_ptr_q1[k_idx];
+                m_i = max(m_i, score);
+            }
+        } else {
+            for (int k_idx = tid; k_idx < n_kv; k_idx += Q1_WG_SIZE) {
+                const ulong k_row_offset = batch_idx * k_nb3 + head_kv_idx * k_nb2 + k_idx * k_nb1;
+                const global DATA_TYPE4* k_ptr = (const global DATA_TYPE4*)(k_base + k_row_offset);
+                ACC_TYPE dot_sum = 0.0f;
+                #pragma unroll
+                for (int k = 0; k < DK_VEC; k++) {
+                    dot_sum += dot(q_priv[k], CONVERT_ACC4(k_ptr[k]));
+                }
+                ACC_TYPE score = dot_sum * scale;
+                score = logit_softcap * tanh(score / logit_softcap);
+                m_i = max(m_i, score);
+            }
         }
-        if (logit_softcap > 0.0f) {
-            score = logit_softcap * tanh(score / logit_softcap);
-        }
-        m_i = max(m_i, score);
     }
 
     __local ACC_TYPE local_m[Q1_WG_SIZE];
@@ -390,33 +434,93 @@ __kernel void flash_attn_f16_q1(
     for (int i = 0; i < DV_VEC; ++i) o_acc[i] = (ACC_TYPE4)(0.0f);
     ACC_TYPE l_i = 0.0f;
 
-    for (int k_idx = tid; k_idx < n_kv; k_idx += Q1_WG_SIZE) {
-        const ulong k_row_offset = batch_idx * k_nb3 + head_kv_idx * k_nb2 + k_idx * k_nb1;
-        const ulong v_row_offset = batch_idx * v_nb3 + head_kv_idx * v_nb2 + k_idx * v_nb1;
-        const global DATA_TYPE4* k_ptr = (const global DATA_TYPE4*)(k_base + k_row_offset);
-        const global DATA_TYPE4* v_ptr = (const global DATA_TYPE4*)(v_base + v_row_offset);
-        ACC_TYPE dot_sum = 0.0f;
-        #pragma unroll
-        for (int k = 0; k < DK_VEC; k++) {
-            dot_sum += dot(q_priv[k], CONVERT_ACC4(k_ptr[k]));
+    if (fast_path_q1) {
+        for (int k_idx = tid; k_idx < n_kv; k_idx += Q1_WG_SIZE) {
+            const ulong k_row_offset = batch_idx * k_nb3 + head_kv_idx * k_nb2 + k_idx * k_nb1;
+            const ulong v_row_offset = batch_idx * v_nb3 + head_kv_idx * v_nb2 + k_idx * v_nb1;
+            const global DATA_TYPE4* k_ptr = (const global DATA_TYPE4*)(k_base + k_row_offset);
+            const global DATA_TYPE4* v_ptr = (const global DATA_TYPE4*)(v_base + v_row_offset);
+            ACC_TYPE dot_sum = 0.0f;
+            #pragma unroll
+            for (int k = 0; k < DK_VEC; k++) {
+                dot_sum += dot(q_priv[k], CONVERT_ACC4(k_ptr[k]));
+            }
+            const ACC_TYPE score = dot_sum * scale;
+            const ACC_TYPE p = exp(score - m_final);
+            l_i += p;
+            #pragma unroll
+            for (int i = 0; i < DV_VEC; i++) {
+                o_acc[i] = mad(p, CONVERT_ACC4(v_ptr[i]), o_acc[i]);
+            }
         }
-        ACC_TYPE score = dot_sum * scale;
-        if (mask_ptr_q1 != NULL) {
-            score += slope * (ACC_TYPE)mask_ptr_q1[k_idx];
-        }
-        if (logit_softcap > 0.0f) {
-            score = logit_softcap * tanh(score / logit_softcap);
-        }
-        const ACC_TYPE p = exp(score - m_final);
-        l_i += p;
-        #pragma unroll
-        for (int i = 0; i < DV_VEC; i++) {
-            o_acc[i] = mad(p, CONVERT_ACC4(v_ptr[i]), o_acc[i]);
+    } else {
+        if (has_mask_q1 && has_softcap_q1) {
+            for (int k_idx = tid; k_idx < n_kv; k_idx += Q1_WG_SIZE) {
+                const ulong k_row_offset = batch_idx * k_nb3 + head_kv_idx * k_nb2 + k_idx * k_nb1;
+                const ulong v_row_offset = batch_idx * v_nb3 + head_kv_idx * v_nb2 + k_idx * v_nb1;
+                const global DATA_TYPE4* k_ptr = (const global DATA_TYPE4*)(k_base + k_row_offset);
+                const global DATA_TYPE4* v_ptr = (const global DATA_TYPE4*)(v_base + v_row_offset);
+                ACC_TYPE dot_sum = 0.0f;
+                #pragma unroll
+                for (int k = 0; k < DK_VEC; k++) {
+                    dot_sum += dot(q_priv[k], CONVERT_ACC4(k_ptr[k]));
+                }
+                ACC_TYPE score = dot_sum * scale;
+                score += slope * (ACC_TYPE)mask_ptr_q1[k_idx];
+                score = logit_softcap * tanh(score / logit_softcap);
+                const ACC_TYPE p = exp(score - m_final);
+                l_i += p;
+                #pragma unroll
+                for (int i = 0; i < DV_VEC; i++) {
+                    o_acc[i] = mad(p, CONVERT_ACC4(v_ptr[i]), o_acc[i]);
+                }
+            }
+        } else if (has_mask_q1) {
+            for (int k_idx = tid; k_idx < n_kv; k_idx += Q1_WG_SIZE) {
+                const ulong k_row_offset = batch_idx * k_nb3 + head_kv_idx * k_nb2 + k_idx * k_nb1;
+                const ulong v_row_offset = batch_idx * v_nb3 + head_kv_idx * v_nb2 + k_idx * v_nb1;
+                const global DATA_TYPE4* k_ptr = (const global DATA_TYPE4*)(k_base + k_row_offset);
+                const global DATA_TYPE4* v_ptr = (const global DATA_TYPE4*)(v_base + v_row_offset);
+                ACC_TYPE dot_sum = 0.0f;
+                #pragma unroll
+                for (int k = 0; k < DK_VEC; k++) {
+                    dot_sum += dot(q_priv[k], CONVERT_ACC4(k_ptr[k]));
+                }
+                ACC_TYPE score = dot_sum * scale;
+                score += slope * (ACC_TYPE)mask_ptr_q1[k_idx];
+                const ACC_TYPE p = exp(score - m_final);
+                l_i += p;
+                #pragma unroll
+                for (int i = 0; i < DV_VEC; i++) {
+                    o_acc[i] = mad(p, CONVERT_ACC4(v_ptr[i]), o_acc[i]);
+                }
+            }
+        } else {
+            for (int k_idx = tid; k_idx < n_kv; k_idx += Q1_WG_SIZE) {
+                const ulong k_row_offset = batch_idx * k_nb3 + head_kv_idx * k_nb2 + k_idx * k_nb1;
+                const ulong v_row_offset = batch_idx * v_nb3 + head_kv_idx * v_nb2 + k_idx * v_nb1;
+                const global DATA_TYPE4* k_ptr = (const global DATA_TYPE4*)(k_base + k_row_offset);
+                const global DATA_TYPE4* v_ptr = (const global DATA_TYPE4*)(v_base + v_row_offset);
+                ACC_TYPE dot_sum = 0.0f;
+                #pragma unroll
+                for (int k = 0; k < DK_VEC; k++) {
+                    dot_sum += dot(q_priv[k], CONVERT_ACC4(k_ptr[k]));
+                }
+                ACC_TYPE score = dot_sum * scale;
+                score = logit_softcap * tanh(score / logit_softcap);
+                const ACC_TYPE p = exp(score - m_final);
+                l_i += p;
+                #pragma unroll
+                for (int i = 0; i < DV_VEC; i++) {
+                    o_acc[i] = mad(p, CONVERT_ACC4(v_ptr[i]), o_acc[i]);
+                }
+            }
         }
     }
 
     __local ACC_TYPE local_l[Q1_WG_SIZE];
     __local ACC_TYPE4 local_o_comp[Q1_WG_SIZE];
+    __local ACC_TYPE8 local_o_comp8[Q1_WG_SIZE];
 #if GGML_FLASH_ATTN_USE_SUBGROUP
     ACC_TYPE sg_l = sub_group_reduce_add(l_i);
     if (sg_lid == 0) {
@@ -452,8 +556,8 @@ __kernel void flash_attn_f16_q1(
 
     if (l_final > 0.0f) {
         const ACC_TYPE l_inv = 1.0f / l_final;
-        for (int i = 0; i < DV_VEC; i++) {
 #if GGML_FLASH_ATTN_USE_SUBGROUP
+        for (int i = 0; i < DV_VEC; i++) {
             ACC_TYPE4 v = o_acc[i];
             const ACC_TYPE s0 = sub_group_reduce_add(v.s0);
             const ACC_TYPE s1 = sub_group_reduce_add(v.s1);
@@ -477,7 +581,29 @@ __kernel void flash_attn_f16_q1(
             if (tid == 0) {
                 o_row[i] = CONVERT_DATA4(local_o_comp[0] * l_inv);
             }
+        }
 #else
+        for (int i = 0; i + 1 < DV_VEC; i += 2) {
+            const ACC_TYPE4 a0 = o_acc[i];
+            const ACC_TYPE4 a1 = o_acc[i + 1];
+            local_o_comp8[tid] = (ACC_TYPE8)(
+                a0.s0, a0.s1, a0.s2, a0.s3,
+                a1.s0, a1.s1, a1.s2, a1.s3
+            );
+            barrier(CLK_LOCAL_MEM_FENCE);
+            #pragma unroll
+            for (int s = Q1_WG_SIZE / 2; s > 0; s >>= 1) {
+                if (tid < s) local_o_comp8[tid] += local_o_comp8[tid + s];
+                barrier(CLK_LOCAL_MEM_FENCE);
+            }
+            if (tid == 0) {
+                const ACC_TYPE8 r = local_o_comp8[0];
+                o_row[i] = CONVERT_DATA4((ACC_TYPE4)(r.s0, r.s1, r.s2, r.s3) * l_inv);
+                o_row[i + 1] = CONVERT_DATA4((ACC_TYPE4)(r.s4, r.s5, r.s6, r.s7) * l_inv);
+            }
+        }
+        if (DV_VEC & 1) {
+            const int i = DV_VEC - 1;
             local_o_comp[tid] = o_acc[i];
             barrier(CLK_LOCAL_MEM_FENCE);
             #pragma unroll
@@ -488,8 +614,8 @@ __kernel void flash_attn_f16_q1(
             if (tid == 0) {
                 o_row[i] = CONVERT_DATA4(local_o_comp[0] * l_inv);
             }
-#endif
         }
+#endif
     } else if (tid == 0) {
         #pragma unroll
         for (int i = 0; i < DV_VEC; ++i) o_row[i] = (DATA_TYPE4)(0.0f);
