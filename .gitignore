@@ -153,3 +153,45 @@ poetry.toml
 /run-chat.sh
 
 
+
+# Android build outputs
+examples/AndroidTTSApp/app/build/
+examples/AndroidTTSApp/lib/build/
+examples/AndroidTTSApp/**/build/
+examples/AndroidTTSApp/**/.cxx/
+
+# Local model assets / generated assets
+examples/AndroidTTSApp/app/src/main/assets/models/
+examples/AndroidTTSApp/app/src/main/assets_disabled/
+examples/AndroidTTSApp/app/src/main/assets_disabled/**
+
+# Qualcomm / LiteRT local SDKs
+examples/AndroidTTSApp/qairt/
+examples/AndroidTTSApp/tools/google_tensor_ml_sdk/
+
+# Apple build outputs
+build-apple/
+build-ios-device/
+build-tvos-device/
+build-visionos/
+build-ios-sim/
+build-tvos-sim/
+build-visionos-sim/
+build-macos/
+
+# Large binary artifacts
+*.apk
+*.a
+*.so
+*.dylib
+*.dll
+*.dSYM/
+*.xcframework/
+*.gguf
+*.onnx
+*.bin
+*.mnn
+*.weight
+*.mnn.weight
+*.jar
+*.zip
