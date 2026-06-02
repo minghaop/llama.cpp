@@ -242,6 +242,7 @@ bool llama_batch_allocr::init(
             /*prompt_feat_len =*/ (uint32_t) batch.prompt_feat_len,
             /*rand_noise     =*/ batch.rand_noise,
             /*extend_pe     =*/ batch.extend_pe,
+            /*stream        =*/ batch.stream,
             /*.data         =*/ {},
         };
 
@@ -456,6 +457,7 @@ llama_ubatch llama_batch_allocr::ubatch_reserve(uint32_t n_seq_tokens, uint32_t 
         /*prompt_feat_len =*/ udata->prompt_feat_len,
         /*rand_noise     =*/ udata->rand_noise.data(),
         /*extend_pe     =*/ udata->extend_pe.data(),
+        /*stream        =*/ udata->stream,
         /*.data         =*/ std::move(udata),
     };
 
@@ -743,7 +745,7 @@ llama_ubatch llama_batch_allocr::ubatch_add(const std::vector<int32_t> & idxs, u
         udata->flow_token.resize(flow_token_data_len);
         udata->flow_feat .resize(batch.prompt_feat_len);
         udata->rand_noise .resize(80*50*300);
-        udata->extend_pe .resize(9999 * 512);
+        udata->extend_pe .resize(9999 * 512); 
     }
     
 
@@ -854,6 +856,7 @@ llama_ubatch llama_batch_allocr::ubatch_add(const std::vector<int32_t> & idxs, u
         /*prompt_feat_len =*/ batch.prompt_feat_len,
         /*rand_noise     =*/ batch.rand_noise ? udata->rand_noise.data() : nullptr,
         /*extend_pe     =*/ batch.extend_pe ? udata->extend_pe.data() : nullptr,
+        /*stream        =*/ batch.stream,
         /*.data         =*/ std::move(udata),
     };
 
@@ -966,10 +969,11 @@ struct llama_batch llama_batch_get_one(
         /*token_len =*/ 0,
         /*prompt_token_len =*/ 0,
         /*prompt_feat_len =*/ 0,
+        /*stream    =*/ 0,
     };
 }
 
-struct llama_batch llama_batch_init(int32_t n_tokens_alloc, int32_t embd, int32_t n_seq_max, int32_t is_flow) {
+struct llama_batch llama_batch_init(int32_t n_tokens_alloc, int32_t embd, int32_t n_seq_max, int32_t is_flow, int32_t stream) {
     llama_batch batch = {
         /*n_tokens =*/ 0,
         /*tokens   =*/ nullptr,
@@ -978,13 +982,14 @@ struct llama_batch llama_batch_init(int32_t n_tokens_alloc, int32_t embd, int32_
         /*n_seq_id =*/ nullptr,
         /*seq_id   =*/ nullptr,
         /*logits   =*/ nullptr,
-        /*flow_token =*/ nullptr,
+        /*flow_token=*/ nullptr,
         /*flow_feat =*/ nullptr,
         /*token_len =*/ 0,
         /*prompt_token_len =*/ 0,
         /*prompt_feat_len =*/ 0,
         /*rand_noise =*/ nullptr,
         /*extend_pe =*/ nullptr,
+        /*stream    =*/ 0,
     };
 
     if (embd) {

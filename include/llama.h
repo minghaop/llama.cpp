@@ -240,11 +240,12 @@ extern "C" {
 
         llama_token  *  flow_token;
         float        *  flow_feat;
-        uint32_t         token_len;
-        uint32_t         prompt_token_len;
-        uint32_t         prompt_feat_len;
+        uint32_t        token_len;
+        uint32_t        prompt_token_len;
+        uint32_t        prompt_feat_len;
         float        *  rand_noise;
         float        *  extend_pe;
+        int32_t         stream;
     } llama_batch;
 
     enum llama_model_kv_override_type {

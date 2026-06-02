@@ -181,6 +181,16 @@ public:
     ggml_tensor * input_rand_noise = nullptr; //F32 [token_len, seq_len]
 };
 
+class llm_graph_input_stream : public llm_graph_input_i {
+public:
+    llm_graph_input_stream()            = default;
+    virtual ~llm_graph_input_stream()   = default;
+    
+    void set_input(const llama_ubatch * ubatch) override;
+    
+    int32_t input_stream = 0;
+};
+
 class llm_graph_input_pos : public llm_graph_input_i {
 public:
     llm_graph_input_pos(uint32_t n_pos_per_embd) : n_pos_per_embd(n_pos_per_embd) {}
@@ -756,7 +766,6 @@ struct llm_graph_context {
          ggml_tensor * conv2_mw,
          ggml_tensor * conv2_mb) const;
     
-    ggml_tensor * flip_weight(ggml_cgraph * gf, ggml_tensor * conv_mw) const;
 
     ggml_tensor * build_rel_pos_attn(
          ggml_cgraph * gf,
@@ -817,15 +826,13 @@ struct llm_graph_context {
          int target_len,
          int batch_size) const;
     
-    ggml_tensor * ggml_spda(
-         ggml_tensor * q, 
-         ggml_tensor * k, 
-         ggml_tensor * v, 
-         ggml_tensor * mask,
-         float dropout_p, 
-         bool is_causal, 
-         float scale, 
-         bool enable_gqa) const;
+    ggml_tensor * build_encoder(
+        ggml_tensor * token,
+        int32_t token_len,
+        ggml_tensor * context,
+        ggml_tensor * extend_pe,
+        bool streaming, 
+        const llama_model & model) const;
     
     ggml_tensor * build_basic_attn(
          ggml_tensor * x, 
@@ -1006,6 +1013,7 @@ struct llm_graph_context {
     ggml_tensor * build_inp_prompt_feat() const;
     ggml_tensor * build_inp_rand_noise() const;
     ggml_tensor * build_inp_extend_pe() const;
+    int32_t build_stream() const;
 
     //
     // attention

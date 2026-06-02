@@ -59,6 +59,7 @@ struct llama_ubatch {
     uint32_t        prompt_feat_len;
     float        *  rand_noise;
     float        *  extend_pe;
+    int32_t         stream;
 
     struct data_t {
         std::vector<llama_token>    token;
@@ -76,6 +77,7 @@ struct llama_ubatch {
         uint32_t                    prompt_feat_len;
         std::vector<float>          rand_noise;
         std::vector<float>          extend_pe;
+        int32_t                     stream;
 
         std::vector<llama_seq_id> seq_id_data;
     };
