@@ -1,7 +1,9 @@
 #include <android/log.h>
 #include <jni.h>
+#include <algorithm>
 #include <iomanip>
 #include <cmath>
+#include <cctype>
 #include <climits>
 #include <cstdlib>
 #include <cstring>
@@ -72,6 +74,89 @@ static llama_context                    * g_hift_context;
 static llama_batch                        g_hift_batch;
 static inline void prepare_text_batch_for_decode(llama_batch &b);
 
+static std::string ascii_upper(std::string value) {
+    std::transform(value.begin(), value.end(), value.begin(), [](unsigned char c) {
+        return static_cast<char>(std::toupper(c));
+    });
+    return value;
+}
+
+static bool env_flag_enabled(const char *name, bool default_value) {
+    const char *raw = std::getenv(name);
+    if (raw == nullptr || *raw == '\0') {
+        return default_value;
+    }
+    const std::string value = ascii_upper(raw);
+    if (value == "1" || value == "TRUE" || value == "YES" || value == "ON") {
+        return true;
+    }
+    if (value == "0" || value == "FALSE" || value == "NO" || value == "OFF") {
+        return false;
+    }
+    return default_value;
+}
+
+static void log_available_backend_devices() {
+    const size_t ndev = ggml_backend_dev_count();
+    LOGi("%s: ggml backend devices=%zu", __func__, ndev);
+    for (size_t i = 0; i < ndev; ++i) {
+        ggml_backend_dev_t dev = ggml_backend_dev_get(i);
+        if (dev == nullptr) {
+            continue;
+        }
+        ggml_backend_dev_props props = {};
+        ggml_backend_dev_get_props(dev, &props);
+        const double total_mb = static_cast<double>(props.memory_total) / (1024.0 * 1024.0);
+        const double free_mb = static_cast<double>(props.memory_free) / (1024.0 * 1024.0);
+        LOGi(
+                "  dev[%zu]: name=%s desc=%s type=%d mem=%.1f/%.1f MiB",
+                i,
+                props.name != nullptr ? props.name : "<null>",
+                props.description != nullptr ? props.description : "<null>",
+                static_cast<int>(props.type),
+                free_mb,
+                total_mb);
+    }
+}
+
+static ggml_backend_dev_t find_backend_device_ci(const std::string &wanted_name) {
+    const std::string wanted_upper = ascii_upper(wanted_name);
+    for (size_t i = 0; i < ggml_backend_dev_count(); ++i) {
+        ggml_backend_dev_t dev = ggml_backend_dev_get(i);
+        if (dev == nullptr) {
+            continue;
+        }
+        const char *name = ggml_backend_dev_name(dev);
+        if (name == nullptr) {
+            continue;
+        }
+        if (ascii_upper(name) == wanted_upper) {
+            return dev;
+        }
+    }
+    return nullptr;
+}
+
+static ggml_backend_dev_t select_htp_device() {
+    const char *requested = std::getenv("LLAMA_ANDROID_DEVICE");
+    const std::string first_choice =
+            (requested != nullptr && *requested != '\0') ? requested : "HTP0";
+
+    ggml_backend_dev_t dev = find_backend_device_ci(first_choice);
+    if (dev != nullptr) {
+        return dev;
+    }
+
+    const char *fallbacks[] = {"HTP0", "HTP1", "HTP2", "HTP3", "HTP4"};
+    for (const char *name : fallbacks) {
+        dev = find_backend_device_ci(name);
+        if (dev != nullptr) {
+            return dev;
+        }
+    }
+    return nullptr;
+}
+
 // Compatibility shim for llama_batch_init() signature differences across forks.
 template <typename Fn = decltype(&llama_batch_init)>
 static llama_batch llama_batch_init_compat(int32_t n_tokens, int32_t embd, int32_t n_seq_max, int32_t is_flow = 0) {
@@ -89,44 +174,77 @@ Java_com_arm_aichat_internal_InferenceEngineImpl_init(JNIEnv *env, jobject /*unu
     // Set llama log handler to Android
     llama_log_set(aichat_android_log_callback, nullptr);
 
-    // Loading all CPU backend variants
+    // Allow forcing Hexagon arch from app-side runtime.
+    // LLAMA_ANDROID_HEXAGON_ARCH has priority; if not set we default to v79 for SM8635-class devices.
+    const char *forced_hex_arch = std::getenv("LLAMA_ANDROID_HEXAGON_ARCH");
+    if (forced_hex_arch != nullptr && *forced_hex_arch != '\0') {
+        setenv("GGML_HEXAGON_ARCH", forced_hex_arch, 1);
+        LOGi("%s: forcing GGML_HEXAGON_ARCH from LLAMA_ANDROID_HEXAGON_ARCH=%s", __func__, forced_hex_arch);
+    } else {
+        LOGi("%s: using auto-detected GGML_HEXAGON_ARCH (LLAMA_ANDROID_HEXAGON_ARCH not set)", __func__);
+    }
+
+    // Host buffer mode may trigger FastRPC fd-ref failures on some devices/ROMs.
+    // Use non-host-buffer path by default, while still allowing external override.
+    const char *forced_hostbuf = std::getenv("LLAMA_ANDROID_HEXAGON_HOSTBUF");
+    if (forced_hostbuf != nullptr && *forced_hostbuf != '\0') {
+        setenv("GGML_HEXAGON_HOSTBUF", forced_hostbuf, 1);
+        LOGi("%s: forcing GGML_HEXAGON_HOSTBUF=%s from LLAMA_ANDROID_HEXAGON_HOSTBUF", __func__, forced_hostbuf);
+    } else {
+        setenv("GGML_HEXAGON_HOSTBUF", "0", 0);
+        LOGi("%s: default GGML_HEXAGON_HOSTBUF=0", __func__);
+    }
+
+    const char *forced_opsync = std::getenv("LLAMA_ANDROID_HEXAGON_OPSYNC");
+    if (forced_opsync != nullptr && *forced_opsync != '\0') {
+        setenv("GGML_HEXAGON_OPSYNC", forced_opsync, 1);
+        LOGi("%s: forcing GGML_HEXAGON_OPSYNC=%s from LLAMA_ANDROID_HEXAGON_OPSYNC", __func__, forced_opsync);
+    } else {
+        setenv("GGML_HEXAGON_OPSYNC", "1", 0);
+        LOGi("%s: default GGML_HEXAGON_OPSYNC=1", __func__);
+    }
+
+    const char *forced_verbose = std::getenv("LLAMA_ANDROID_HEXAGON_VERBOSE");
+    if (forced_verbose != nullptr && *forced_verbose != '\0') {
+        setenv("GGML_HEXAGON_VERBOSE", forced_verbose, 1);
+        LOGi("%s: forcing GGML_HEXAGON_VERBOSE=%s from LLAMA_ANDROID_HEXAGON_VERBOSE", __func__, forced_verbose);
+    } else {
+        setenv("GGML_HEXAGON_VERBOSE", "1", 0);
+        LOGi("%s: default GGML_HEXAGON_VERBOSE=1", __func__);
+    }
+
+    // Loading all backend variants from app native lib dir first.
     const auto *path_to_backend = env->GetStringUTFChars(nativeLibDir, 0);
+    if (path_to_backend != nullptr && *path_to_backend != '\0') {
+        // Hexagon DSP loader searches ADSP_LIBRARY_PATH for libggml-htp-v*.so.
+        // For APK-based deployments we must point it to the extracted jniLibs folder.
+        std::string adsp_library_path = std::string(path_to_backend)
+                                        + ";/vendor/lib64/rfs/dsp"
+                                        + ";/vendor/lib/rfsa/adsp"
+                                        + ";/vendor/lib/rfsa/dsp"
+                                        + ";/vendor/dsp"
+                                        + ";/dsp";
+        setenv("ADSP_LIBRARY_PATH", adsp_library_path.c_str(), 1);
+        LOGi("%s: ADSP_LIBRARY_PATH=%s", __func__, adsp_library_path.c_str());
+
+        // Keep host-side dynamic lookup aligned with app-native library dir.
+        setenv("LD_LIBRARY_PATH", path_to_backend, 1);
+        LOGi("%s: LD_LIBRARY_PATH=%s", __func__, path_to_backend);
+    }
     LOGi("Loading backends from %s", path_to_backend);
     ggml_backend_load_all_from_path(path_to_backend);
-    if (ggml_backend_dev_by_type(GGML_BACKEND_DEVICE_TYPE_CPU) == nullptr) {
-        // Fallback #1: default search path
-        LOGw("%s: CPU backend not found from nativeLibDir, trying default search paths", __func__);
-        ggml_backend_load_all();
-    }
-    if (ggml_backend_dev_by_type(GGML_BACKEND_DEVICE_TYPE_CPU) == nullptr) {
-        // Fallback #2: explicit sonames for Android arm64 variants
-        const char *backend_candidates[] = {
-                "libggml-cpu-android_armv9.2_2.so",
-                "libggml-cpu-android_armv9.2_1.so",
-                "libggml-cpu-android_armv9.0_1.so",
-                "libggml-cpu-android_armv8.6_1.so",
-                "libggml-cpu-android_armv8.2_2.so",
-                "libggml-cpu-android_armv8.2_1.so",
-                "libggml-cpu-android_armv8.0_1.so",
-                "libggml-cpu.so",
-        };
-        for (const char *candidate : backend_candidates) {
-            if (ggml_backend_dev_by_type(GGML_BACKEND_DEVICE_TYPE_CPU) != nullptr) {
-                break;
-            }
-            LOGw("%s: trying backend candidate: %s", __func__, candidate);
-            ggml_backend_load(candidate);
-        }
-    }
+    // Keep default lookup as a soft fallback. Avoid force-probing CPU with ggml_backend_dev_by_type()
+    // here because failed HTP session creation can leave transient null devices in some builds.
+    ggml_backend_load_all();
     const auto reg_count = ggml_backend_reg_count();
     const auto dev_count = ggml_backend_dev_count();
     LOGi("%s: backend registry count=%zu, device count=%zu", __func__, reg_count, dev_count);
+    log_available_backend_devices();
     env->ReleaseStringUTFChars(nativeLibDir, path_to_backend);
 
     // Initialize backends
     llama_backend_init();
-    LOGi("Backend initiated; Log handler set. CPU backend available=%s",
-         ggml_backend_dev_by_type(GGML_BACKEND_DEVICE_TYPE_CPU) != nullptr ? "true" : "false");
+    LOGi("Backend initiated; Log handler set.");
 }
 
 extern "C"
@@ -339,12 +457,29 @@ static int load_aux_model(
     model_params.is_hift = !is_flow;
     LOGi("%s: %s n_gpu_layers=%d", __func__, is_flow ? "flow" : "hift", model_params.n_gpu_layers);
 
-    // ggml_backend_dev_t cpu_dev = ggml_backend_dev_by_type(GGML_BACKEND_DEVICE_TYPE_CPU);
-    // if (cpu_dev != nullptr) {
-    //     g_model_devices[0] = cpu_dev;
-    //     g_model_devices[1] = nullptr;
-    //     model_params.devices = g_model_devices;
-    // }
+    const bool force_htp = env_flag_enabled("LLAMA_ANDROID_FORCE_HTP", true);
+    ggml_backend_dev_t selected = select_htp_device();
+    if (selected != nullptr) {
+        const char *name = ggml_backend_dev_name(selected);
+        g_model_devices[0] = selected;
+        g_model_devices[1] = nullptr;
+        model_params.devices = g_model_devices;
+        LOGi("%s: %s selected device=%s (LLAMA_ANDROID_FORCE_HTP=%s)",
+             __func__,
+             is_flow ? "flow" : "hift",
+             name != nullptr ? name : "<null>",
+             force_htp ? "1" : "0");
+    } else if (force_htp) {
+        LOGe("%s: %s requested pure HTP inference but no HTP device is available. "
+             "Ensure libggml-hexagon.so and libggml-htp-v*.so are packaged.",
+             __func__,
+             is_flow ? "flow" : "hift");
+        return -5;
+    } else {
+        LOGw("%s: %s HTP device not found; using default ggml device selection.",
+             __func__,
+             is_flow ? "flow" : "hift");
+    }
 
     {
         std::ifstream model_file(model_path, std::ios::binary);

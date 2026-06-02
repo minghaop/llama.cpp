@@ -1,0 +1,1634 @@
+--------- beginning of system
+06-01 10:59:52.636 D/InputManager( 2026): injectMotionEvent: 11792-{action=ACTION_DOWN, id[0]=0, x[0]=540.0, y[0]=1453.0, pointerCount=1, eventTime=108094571, deviceId=4}
+06-01 10:59:52.646 D/InputManager( 2026): injectMotionEvent: 11792-{action=ACTION_UP, id[0]=0, x[0]=540.0, y[0]=1453.0, pointerCount=1, eventTime=108094571, deviceId=4}
+--------- beginning of main
+06-01 10:59:52.681 I/LlamaInferenceBridge(11671): runInference started
+06-01 10:59:52.756 I/SDM     ( 1442): DisplayBase::CommitThread: Received idle timeout, panel: cmd, timeout: 69999 us
+06-01 10:59:52.781 W/ContextImpl( 2026): Calling a method in the system process without a qualified user: android.app.ContextImpl.sendBroadcast:1249 android.content.ContextWrapper.sendBroadcast:506 jp.co.sharp.android.brightkeep.BrightKeepService.checkTimerEvent:508 jp.co.sharp.android.brightkeep.BrightKeepService.onSensorHubChanged:1182 jp.co.sharp.android.sensorhub.AccelerometerSHEXConverter.onSensorChanged:102 
+06-01 10:59:52.782 V/BrightKeepService( 2026): getAction: jp.co.sharp.android.intent.action.CLICK_SCREEN_ON isOutOfHand: false
+06-01 10:59:53.308 D/BoundBrokerSvc( 5709): onUnbind: Intent { act=com.google.android.gms.common.telemetry.service.START dat=chimera-action:/... cmp=com.google.android.gms/.chimera.PersistentApiService }
+06-01 10:59:54.823 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 10:59:54.833 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 10:59:54.886 I/LlamaInferenceBridge(11671): [FlowOnly][llama.cpp] enabled, skip FrontEnd/LLM/HIFT and run flow model with prepacked bins
+06-01 10:59:54.886 I/LlamaInferenceBridge(11671): [FlowOnly][llama.cpp] flowModel=/data/user/0/com.example.llama.aichat/files/models/flow_fp32.gguf
+06-01 10:59:54.887 I/LlamaInferenceBridge(11671): [FlowOnly] get InferenceEngine instance
+06-01 10:59:54.887 I/InferenceEngineImpl(11671): Instantiating InferenceEngineImpl,,,
+06-01 10:59:54.887 I/LlamaInferenceBridge(11671): [FlowOnly] loadFlowModel begin: /data/user/0/com.example.llama.aichat/files/models/flow_fp32.gguf (bytes=450294560)
+06-01 10:59:54.887 I/InferenceEngineImpl(11671): Loading native library...
+06-01 10:59:54.891 D/nativeloader(11671): Load /data/app/~~a2SLK7PL-TLTgx5tsDBA3g==/com.example.llama.aichat-6QUXUBDmV9xy4llt3JguRw==/lib/arm64/libai-chat.so using class loader ns clns-7 (caller=/data/app/~~a2SLK7PL-TLTgx5tsDBA3g==/com.example.llama.aichat-6QUXUBDmV9xy4llt3JguRw==/base.apk): ok
+06-01 10:59:54.891 I/ai-chat (11671): Loading backends from /data/app/~~a2SLK7PL-TLTgx5tsDBA3g==/com.example.llama.aichat-6QUXUBDmV9xy4llt3JguRw==/lib/arm64
+06-01 10:59:54.894 I/ai-chat (11671): ggml_opencl: selected platform: 'QUALCOMM Snapdragon(TM)'
+06-01 10:59:54.899 I/ai-chat (11671): ggml_opencl: device: 'QUALCOMM Adreno(TM) 735 (OpenCL 3.0 Adreno(TM) 735)'
+06-01 10:59:54.899 I/ai-chat (11671): ggml_opencl: OpenCL driver: OpenCL 3.0 QUALCOMM build: commit unknown Compiler E031.45.02.16
+06-01 10:59:54.899 I/ai-chat (11671): ggml_opencl: vector subgroup broadcast support: false
+06-01 10:59:54.899 I/ai-chat (11671): ggml_opencl: device FP16 support: true
+06-01 10:59:54.899 I/ai-chat (11671): ggml_opencl: mem base addr align: 128
+06-01 10:59:54.899 I/ai-chat (11671): ggml_opencl: max mem alloc size: 1024 MB
+06-01 10:59:54.899 I/ai-chat (11671): ggml_opencl: device max workgroup size: 1024
+06-01 10:59:54.899 I/ai-chat (11671): ggml_opencl: SVM coarse grain buffer support: true
+06-01 10:59:54.899 I/ai-chat (11671): ggml_opencl: SVM fine grain buffer support: true
+06-01 10:59:54.899 I/ai-chat (11671): ggml_opencl: SVM fine grain system support: false
+06-01 10:59:54.899 I/ai-chat (11671): ggml_opencl: SVM atomics support: true
+06-01 10:59:54.899 I/ai-chat (11671): ggml_opencl: flattening quantized weights representation as struct of arrays (GGML_OPENCL_SOA_Q)
+06-01 10:59:54.899 I/ai-chat (11671): ggml_opencl: using kernels optimized for Adreno (GGML_OPENCL_USE_ADRENO_KERNELS)
+06-01 10:59:54.899 I/ai-chat (11671): ggml_opencl: loading OpenCL kernels
+06-01 10:59:54.940 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 10:59:54.966 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 10:59:54.985 I/SDM     ( 1442): DisplayBase::CommitThread: Received idle timeout, panel: cmd, timeout: 70000 us
+06-01 10:59:54.995 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 10:59:55.096 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 10:59:55.108 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 10:59:55.209 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 10:59:55.231 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 10:59:55.332 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 10:59:55.357 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 10:59:55.376 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 10:59:55.478 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 10:59:55.478 E/Diag_Lib( 2200): diag: Diag_LSM_Init: invoked for pid: 2200 with init_count: 0
+06-01 10:59:55.478 E/Diag_Lib( 2200): diag:failed to connect to diag socket
+06-01 10:59:55.478 E/Diag_Lib( 2200):  Diag_LSM_Init: Failed to open handle to diag driver, error = 111
+06-01 10:59:55.497 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 10:59:55.512 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 10:59:55.612 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 10:59:55.622 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 10:59:55.723 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 10:59:55.744 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 10:59:55.763 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 10:59:55.766 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] wait_event:Wait done with Cmd 33
+06-01 10:59:55.766 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] do_listen_events: Rcvd valid Netlink Cmd 0 Err 0
+06-01 10:59:55.864 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 10:59:55.965 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 10:59:56.066 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 10:59:56.105 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 10:59:56.119 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 10:59:56.220 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 10:59:56.224 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 10:59:56.326 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 10:59:56.335 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 10:59:56.436 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 10:59:56.498 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 10:59:56.534 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 10:59:56.634 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 10:59:56.638 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 10:59:56.639 I/ai-chat (11671): ggml_opencl: flash_attn tuning profile=adreno_a7x_high_m_fixed q1_wg=64 q1_split_k=4 subgroup=off
+06-01 10:59:56.639 I/ai-chat (11671): ggml_opencl: flash_attn q1 kernel=v2 (split-k stage1+stage2 reduce enabled)
+06-01 10:59:56.739 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 10:59:56.805 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 10:59:56.819 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 10:59:56.919 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 10:59:56.931 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 10:59:57.032 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 10:59:57.081 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 10:59:57.100 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 10:59:57.201 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 10:59:57.289 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 10:59:57.304 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 10:59:57.405 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 10:59:57.461 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 10:59:57.483 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 10:59:57.561 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] wait_event:Wait done with Cmd 34
+06-01 10:59:57.562 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] do_listen_events: Rcvd valid Netlink Cmd 34 Err 0
+06-01 10:59:57.562 D/WifiNl80211Manager( 2026): Scan result ready event
+06-01 10:59:57.562 D/WifiNative( 2026): Scan result ready event
+06-01 10:59:57.564 D/LOWI-9.0.1.77( 2441): [LOWI-Scan]  -- associated
+06-01 10:59:57.564 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.565 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:13 FREQ: 5300, cFreq1[40:80:160] = [5310:0:0] cFreq2 = 0 SSID IDEA-Office, RSSI(dBM): -41, 11mcRanging: No, Country Code = CNI
+06-01 10:59:57.565 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.565 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:00 FREQ: 2452, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID Scc-test, RSSI(dBM): -57, 11mcRanging: No, Country Code = CNI
+06-01 10:59:57.565 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.565 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:02 FREQ: 2452, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID IDEA-Guest, RSSI(dBM): -57, 11mcRanging: No, Country Code = CNI
+06-01 10:59:57.565 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.565 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:03 FREQ: 2452, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID IDEA-Office, RSSI(dBM): -58, 11mcRanging: No, Country Code = CNI
+06-01 10:59:57.565 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.566 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS cc:d8:43:**:**:89 FREQ: 5745, cFreq1[40:80:160] = [5755:5775:0] cFreq2 = 0 SSID SPU_______5G, RSSI(dBM): -50, 11mcRanging: No, Country Code =    
+06-01 10:59:57.566 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.566 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS cc:d8:43:**:**:88 FREQ: 2412, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID SPU_______2.4G, RSSI(dBM): -48, 11mcRanging: No, Country Code =    
+06-01 10:59:57.567 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.567 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 74:39:89:**:**:f9 FREQ: 2412, cFreq1[40:80:160] = [2422:0:0] cFreq2 = 0 SSID TP-LINK_C0F9_2.4G, RSSI(dBM): -38, 11mcRanging: No, Country Code = CN 
+06-01 10:59:57.567 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.567 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 78:47:5f:**:**:20 FREQ: 2437, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID ChinaNet-cS7i, RSSI(dBM): -66, 11mcRanging: No, Country Code =    
+06-01 10:59:57.567 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.567 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] adjust_age:AP AGE upper limit reached. Dont store
+06-01 10:59:57.567 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 90:f9:b7:**:**:d4 FREQ: 2412, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID hw_manage_fcd0, RSSI(dBM): -63, 11mcRanging: No, Country Code = DB
+06-01 10:59:57.567 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.567 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:e2 FREQ: 2432, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID IDEA-Guest, RSSI(dBM): -66, 11mcRanging: No, Country Code = CNI
+06-01 10:59:57.567 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.568 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:e3 FREQ: 2432, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID IDEA-Office, RSSI(dBM): -66, 11mcRanging: No, Country Code = CNI
+06-01 10:59:57.568 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.568 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 68:ea:05:**:**:14 FREQ: 2437, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID ChinaNet-cS7i, RSSI(dBM): -59, 11mcRanging: No, Country Code =    
+06-01 10:59:57.568 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.568 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:c3 FREQ: 2472, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID IDEA-Office, RSSI(dBM): -71, 11mcRanging: No, Country Code = CNI
+06-01 10:59:57.568 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.568 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:f0 FREQ: 5745, cFreq1[40:80:160] = [5755:0:0] cFreq2 = 0 SSID Scc-test, RSSI(dBM): -78, 11mcRanging: No, Country Code = CNI
+06-01 10:59:57.568 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.569 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:f2 FREQ: 5745, cFreq1[40:80:160] = [5755:0:0] cFreq2 = 0 SSID IDEA-Guest, RSSI(dBM): -78, 11mcRanging: No, Country Code = CNI
+06-01 10:59:57.569 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.569 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:f3 FREQ: 5745, cFreq1[40:80:160] = [5755:0:0] cFreq2 = 0 SSID IDEA-Office, RSSI(dBM): -78, 11mcRanging: No, Country Code = CNI
+06-01 10:59:57.569 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.569 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS e0:27:6c:**:**:a0 FREQ: 5765, cFreq1[40:80:160] = [5755:5775:0] cFreq2 = 0 SSID NoNetworkTest, RSSI(dBM): -68, 11mcRanging: No, Country Code = CN 
+06-01 10:59:57.569 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.569 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:d0 FREQ: 5785, cFreq1[40:80:160] = [5795:0:0] cFreq2 = 0 SSID Scc-test, RSSI(dBM): -66, 11mcRanging: No, Country Code = CNI
+06-01 10:59:57.569 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.569 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:d2 FREQ: 5785, cFreq1[40:80:160] = [5795:0:0] cFreq2 = 0 SSID IDEA-Guest, RSSI(dBM): -66, 11mcRanging: No, Country Code = CNI
+06-01 10:59:57.570 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.570 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:d3 FREQ: 5785, cFreq1[40:80:160] = [5795:0:0] cFreq2 = 0 SSID IDEA-Office, RSSI(dBM): -66, 11mcRanging: No, Country Code = CNI
+06-01 10:59:57.570 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.570 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:c2 FREQ: 2472, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID IDEA-Guest, RSSI(dBM): -69, 11mcRanging: No, Country Code = CNI
+06-01 10:59:57.570 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.570 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 90:f9:b7:**:**:94 FREQ: 2412, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID hw_manage_ff90, RSSI(dBM): -65, 11mcRanging: No, Country Code = DB
+06-01 10:59:57.570 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.570 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 90:f9:b7:**:**:74 FREQ: 2437, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID hw_manage_5270, RSSI(dBM): -68, 11mcRanging: No, Country Code = DB
+06-01 10:59:57.571 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.571 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:c0 FREQ: 2472, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID Scc-test, RSSI(dBM): -71, 11mcRanging: No, Country Code = CNI
+06-01 10:59:57.571 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.571 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] adjust_age:AP AGE upper limit reached. Dont store
+06-01 10:59:57.571 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 7e:39:89:**:**:f9 FREQ: 2412, cFreq1[40:80:160] = [2422:0:0] cFreq2 = 0 SSID , RSSI(dBM): -36, 11mcRanging: No, Country Code = CN 
+06-01 10:59:57.571 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.571 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] adjust_age:AP AGE upper limit reached. Dont store
+06-01 10:59:57.571 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS e0:65:55:**:**:c5 FREQ: 2417, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID MEDICARE, RSSI(dBM): -76, 11mcRanging: No, Country Code = CN
+06-01 10:59:57.571 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.572 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 08:aa:89:**:**:a0 FREQ: 2427, cFreq1[40:80:160] = [2437:0:0] cFreq2 = 0 SSID fexlink1, RSSI(dBM): -74, 11mcRanging: No, Country Code = US 
+06-01 10:59:57.572 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.572 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:e0 FREQ: 2432, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID Scc-test, RSSI(dBM): -66, 11mcRanging: No, Country Code = CNI
+06-01 10:59:57.572 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.572 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS c6:b2:5b:**:**:57 FREQ: 2462, cFreq1[40:80:160] = [2462:0:0] cFreq2 = 0 SSID , RSSI(dBM): -60, 11mcRanging: No, Country Code = CN
+06-01 10:59:57.572 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.572 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS c8:4c:78:**:**:3b FREQ: 2462, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID ____________, RSSI(dBM): -68, 11mcRanging: No, Country Code = CN 
+06-01 10:59:57.573 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.573 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 08:aa:89:**:**:a1 FREQ: 5805, cFreq1[40:80:160] = [5795:5775:0] cFreq2 = 0 SSID fexlink1, RSSI(dBM): -83, 11mcRanging: No, Country Code = US 
+06-01 10:59:57.573 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.573 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] adjust_age:AP AGE upper limit reached. Dont store
+06-01 10:59:57.573 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS e0:27:6c:**:**:21 FREQ: 5805, cFreq1[40:80:160] = [5795:5775:0] cFreq2 = 0 SSID , RSSI(dBM): -76, 11mcRanging: No, Country Code = CN 
+06-01 10:59:57.573 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.573 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS e2:27:6c:**:**:21 FREQ: 5805, cFreq1[40:80:160] = [5795:5775:0] cFreq2 = 0 SSID , RSSI(dBM): -77, 11mcRanging: No, Country Code = CN 
+06-01 10:59:57.573 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.573 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS c6:b2:5b:**:**:57 FREQ: 5300, cFreq1[40:80:160] = [5310:5290:5290] cFreq2 = 5250 SSID fexlink_5G, RSSI(dBM): -72, 11mcRanging: No, Country Code = CN
+06-01 10:59:57.574 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.574 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS c6:b2:5b:**:**:57 FREQ: 5300, cFreq1[40:80:160] = [5310:5290:5290] cFreq2 = 5250 SSID fexlink_iot_5G, RSSI(dBM): -72, 11mcRanging: No, Country Code = CN
+06-01 10:59:57.574 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.574 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:10 FREQ: 5300, cFreq1[40:80:160] = [5310:0:0] cFreq2 = 0 SSID Scc-test, RSSI(dBM): -38, 11mcRanging: No, Country Code = CNI
+06-01 10:59:57.574 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.574 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:12 FREQ: 5300, cFreq1[40:80:160] = [5310:0:0] cFreq2 = 0 SSID IDEA-Guest, RSSI(dBM): -38, 11mcRanging: No, Country Code = CNI
+06-01 10:59:57.574 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.574 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS c6:b2:5b:**:**:57 FREQ: 5300, cFreq1[40:80:160] = [5310:5290:5290] cFreq2 = 5250 SSID , RSSI(dBM): -71, 11mcRanging: No, Country Code = CN
+06-01 10:59:57.574 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.575 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] adjust_age:AP AGE upper limit reached. Dont store
+06-01 10:59:57.575 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 68:ea:05:**:**:1c FREQ: 5180, cFreq1[40:80:160] = [5190:5210:5210] cFreq2 = 5250 SSID , RSSI(dBM): -78, 11mcRanging: No, Country Code =    
+06-01 10:59:57.575 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.575 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 74:39:89:**:**:fb FREQ: 5180, cFreq1[40:80:160] = [5190:5210:5210] cFreq2 = 5250 SSID TP-LINK_C0F9, RSSI(dBM): -43, 11mcRanging: No, Country Code = CN 
+06-01 10:59:57.575 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.575 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 7e:39:89:**:**:fb FREQ: 5180, cFreq1[40:80:160] = [5190:5210:5210] cFreq2 = 5250 SSID , RSSI(dBM): -44, 11mcRanging: No, Country Code = CN 
+06-01 10:59:57.575 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.575 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS d2:d8:43:**:**:88 FREQ: 2412, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID , RSSI(dBM): -50, 11mcRanging: No, Country Code =    
+06-01 10:59:57.576 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.576 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 78:47:5f:**:**:2a FREQ: 5180, cFreq1[40:80:160] = [5190:5210:5210] cFreq2 = 5250 SSID , RSSI(dBM): -76, 11mcRanging: No, Country Code =    
+06-01 10:59:57.576 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.576 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] adjust_age:AP AGE upper limit reached. Dont store
+06-01 10:59:57.576 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 0a:aa:89:**:**:a0 FREQ: 2427, cFreq1[40:80:160] = [2437:0:0] cFreq2 = 0 SSID , RSSI(dBM): -74, 11mcRanging: No, Country Code = US 
+06-01 10:59:57.576 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.576 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:30 FREQ: 2432, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID Scc-test, RSSI(dBM): -75, 11mcRanging: No, Country Code = CNI
+06-01 10:59:57.576 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.576 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] adjust_age:AP AGE upper limit reached. Dont store
+06-01 10:59:57.577 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 8c:ee:fd:**:**:84 FREQ: 2437, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID ChinaNet-z9AC, RSSI(dBM): -62, 11mcRanging: No, Country Code = CN 
+06-01 10:59:57.577 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.577 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 78:52:37:**:**:a4 FREQ: 2437, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID EasyLogic-2101-2.4G, RSSI(dBM): -65, 11mcRanging: No, Country Code = CN 
+06-01 10:59:57.577 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.577 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:f2 FREQ: 5220, cFreq1[40:80:160] = [5230:0:0] cFreq2 = 0 SSID IDEA-Guest, RSSI(dBM): -59, 11mcRanging: No, Country Code = CNI
+06-01 10:59:57.577 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.577 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:f3 FREQ: 5220, cFreq1[40:80:160] = [5230:0:0] cFreq2 = 0 SSID IDEA-Office, RSSI(dBM): -59, 11mcRanging: No, Country Code = CNI
+06-01 10:59:57.577 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.577 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 8c:35:92:**:**:0c FREQ: 5220, cFreq1[40:80:160] = [5230:0:0] cFreq2 = 0 SSID DIRECT-DO20FYNVVHRFRCZUCmsRY, RSSI(dBM): -80, 11mcRanging: No, Country Code =    
+06-01 10:59:57.577 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.577 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS c6:b2:5b:**:**:57 FREQ: 2462, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID fexlink_iot, RSSI(dBM): -61, 11mcRanging: No, Country Code = CN
+06-01 10:59:57.578 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.578 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:40 FREQ: 5260, cFreq1[40:80:160] = [5270:0:0] cFreq2 = 0 SSID Scc-test, RSSI(dBM): -67, 11mcRanging: No, Country Code = CNI
+06-01 10:59:57.578 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.578 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:42 FREQ: 5260, cFreq1[40:80:160] = [5270:0:0] cFreq2 = 0 SSID IDEA-Guest, RSSI(dBM): -67, 11mcRanging: No, Country Code = CNI
+06-01 10:59:57.578 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.578 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:43 FREQ: 5260, cFreq1[40:80:160] = [5270:0:0] cFreq2 = 0 SSID IDEA-Office, RSSI(dBM): -67, 11mcRanging: No, Country Code = CNI
+06-01 10:59:57.578 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.578 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:f0 FREQ: 5260, cFreq1[40:80:160] = [5270:0:0] cFreq2 = 0 SSID Scc-test, RSSI(dBM): -70, 11mcRanging: No, Country Code = CNI
+06-01 10:59:57.578 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.578 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:f2 FREQ: 5260, cFreq1[40:80:160] = [5270:0:0] cFreq2 = 0 SSID IDEA-Guest, RSSI(dBM): -70, 11mcRanging: No, Country Code = CNI
+06-01 10:59:57.578 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.578 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:f3 FREQ: 5260, cFreq1[40:80:160] = [5270:0:0] cFreq2 = 0 SSID IDEA-Office, RSSI(dBM): -71, 11mcRanging: No, Country Code = CNI
+06-01 10:59:57.578 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.578 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS c4:b2:5b:**:**:57 FREQ: 2462, cFreq1[40:80:160] = [2462:0:0] cFreq2 = 0 SSID fexlink, RSSI(dBM): -62, 11mcRanging: No, Country Code = CN
+06-01 10:59:57.578 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.578 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:d0 FREQ: 5300, cFreq1[40:80:160] = [5310:0:0] cFreq2 = 0 SSID Scc-test, RSSI(dBM): -80, 11mcRanging: No, Country Code = CNI
+06-01 10:59:57.578 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.578 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:d2 FREQ: 5300, cFreq1[40:80:160] = [5310:0:0] cFreq2 = 0 SSID IDEA-Guest, RSSI(dBM): -83, 11mcRanging: No, Country Code = CNI
+06-01 10:59:57.578 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.578 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] adjust_age:AP AGE upper limit reached. Dont store
+06-01 10:59:57.578 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:d3 FREQ: 5300, cFreq1[40:80:160] = [5310:0:0] cFreq2 = 0 SSID IDEA-Office, RSSI(dBM): -79, 11mcRanging: No, Country Code = CNI
+06-01 10:59:57.579 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.579 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS dc:a3:33:**:**:ba FREQ: 2412, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID ChinaNet-frXR, RSSI(dBM): -80, 11mcRanging: No, Country Code = US 
+06-01 10:59:57.579 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.579 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 78:52:37:**:**:a5 FREQ: 5180, cFreq1[40:80:160] = [5190:5210:5210] cFreq2 = 5250 SSID EasyLogic-2101-5G, RSSI(dBM): -80, 11mcRanging: No, Country Code = CN 
+06-01 10:59:57.579 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.579 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 7a:52:37:**:**:a5 FREQ: 5180, cFreq1[40:80:160] = [5190:5210:5210] cFreq2 = 5250 SSID , RSSI(dBM): -80, 11mcRanging: No, Country Code = CN 
+06-01 10:59:57.579 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.579 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 78:47:5f:**:**:29 FREQ: 5180, cFreq1[40:80:160] = [5190:5210:5210] cFreq2 = 5250 SSID ChinaNet-cS7i-5G, RSSI(dBM): -76, 11mcRanging: No, Country Code =    
+06-01 10:59:57.579 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.579 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 7c:b5:9b:**:**:1d FREQ: 2432, cFreq1[40:80:160] = [2442:0:0] cFreq2 = 0 SSID ______2, RSSI(dBM): -75, 11mcRanging: No, Country Code =    
+06-01 10:59:57.579 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.579 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:33 FREQ: 2432, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID IDEA-Office, RSSI(dBM): -75, 11mcRanging: No, Country Code = CNI
+06-01 10:59:57.579 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.579 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:32 FREQ: 2432, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID IDEA-Guest, RSSI(dBM): -74, 11mcRanging: No, Country Code = CNI
+06-01 10:59:57.579 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.579 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:f0 FREQ: 5220, cFreq1[40:80:160] = [5230:0:0] cFreq2 = 0 SSID Scc-test, RSSI(dBM): -59, 11mcRanging: No, Country Code = CNI
+06-01 10:59:57.579 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.579 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:70 FREQ: 5220, cFreq1[40:80:160] = [5230:0:0] cFreq2 = 0 SSID Scc-test, RSSI(dBM): -82, 11mcRanging: No, Country Code = CNI
+06-01 10:59:57.579 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.579 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:72 FREQ: 5220, cFreq1[40:80:160] = [5230:0:0] cFreq2 = 0 SSID IDEA-Guest, RSSI(dBM): -81, 11mcRanging: No, Country Code = CNI
+06-01 10:59:57.579 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.579 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:73 FREQ: 5220, cFreq1[40:80:160] = [5230:0:0] cFreq2 = 0 SSID IDEA-Office, RSSI(dBM): -81, 11mcRanging: No, Country Code = CNI
+06-01 10:59:57.579 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.579 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 68:77:da:**:**:be FREQ: 2442, cFreq1[40:80:160] = [2442:0:0] cFreq2 = 0 SSID MEDICARE, RSSI(dBM): -74, 11mcRanging: No, Country Code = CN
+06-01 10:59:57.579 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.579 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 76:77:da:**:**:be FREQ: 2442, cFreq1[40:80:160] = [2442:0:0] cFreq2 = 0 SSID , RSSI(dBM): -74, 11mcRanging: No, Country Code = CN
+06-01 10:59:57.579 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.579 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:e0 FREQ: 2452, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID Scc-test, RSSI(dBM): -79, 11mcRanging: No, Country Code = CNI
+06-01 10:59:57.580 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.580 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:e3 FREQ: 2452, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID IDEA-Office, RSSI(dBM): -79, 11mcRanging: No, Country Code = CNI
+06-01 10:59:57.580 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.580 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 8c:ee:fd:**:**:85 FREQ: 5240, cFreq1[40:80:160] = [5230:5210:5210] cFreq2 = 5250 SSID ChinaNet-z9AC-5G, RSSI(dBM): -77, 11mcRanging: No, Country Code = CN 
+06-01 10:59:57.580 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.580 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:c2 FREQ: 2452, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID IDEA-Guest, RSSI(dBM): -80, 11mcRanging: No, Country Code = CNI
+06-01 10:59:57.580 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.580 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:c3 FREQ: 2452, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID IDEA-Office, RSSI(dBM): -81, 11mcRanging: No, Country Code = CNI
+06-01 10:59:57.580 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.580 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 78:91:e9:**:**:51 FREQ: 2452, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID ChinaNet-722m, RSSI(dBM): -72, 11mcRanging: No, Country Code = CN 
+06-01 10:59:57.580 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.580 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 60:3a:7c:**:**:e2 FREQ: 2462, cFreq1[40:80:160] = [2452:0:0] cFreq2 = 0 SSID _______________, RSSI(dBM): -71, 11mcRanging: No, Country Code = CN 
+06-01 10:59:57.580 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.580 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 62:e4:9b:**:**:c2 FREQ: 2462, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID HUAWEI_B311_A8CA, RSSI(dBM): -77, 11mcRanging: No, Country Code =    
+06-01 10:59:57.580 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 10:59:57.580 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 8c:35:92:**:**:26 FREQ: 2472, cFreq1[40:80:160] = [2462:0:0] cFreq2 = 0 SSID DIRECT-WI20FRUWMmsCW, RSSI(dBM): -77, 11mcRanging: No, Country Code =    
+06-01 10:59:57.580 D/LOWI-9.0.1.77( 2441): [LOWIDiagLog] Log: lowiMeasResult->request: invalid null argument
+06-01 10:59:57.580 I/LOWI-9.0.1.77( 2441): [LOWI-Scan] lowi_close_record:Scan done in 506070801ms, 75 APs in scan results
+06-01 10:59:57.580 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] WipsScanUsingNL: passive scan cached 0, took 20015 ms, err 0
+06-01 10:59:57.580 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] lowi_proc_req_passive_scan_with_live_meas - No WLAN Frames to be parsed
+06-01 10:59:57.580 D/LOWI-9.0.1.77( 2441): [LOWIScanResultReceiver] Send scan meas to listener
+06-01 10:59:57.580 D/WificondScannerImpl( 2026): Filtering out 8 scan results.
+06-01 10:59:57.580 D/LOWI-9.0.1.77( 2441): [LOWIScanResultReceiver] Enter passive listening mode
+06-01 10:59:57.580 D/LOWI-9.0.1.77( 2441): [LOWIWifiDriverInterface] getMeasurements - Passive listening mode
+06-01 10:59:57.580 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] WipsScanUsingNL:wait -1 sec for netlink message
+06-01 10:59:57.580 D/LOWI-9.0.1.77( 2441): [LOWIEventReceiver] handleEvent:FROM:NA, TO:NA, REQ:NA, IREQ:NA, REQ_ID:0, RESP:NA, INFO:NA
+06-01 10:59:57.580 D/LOWI-9.0.1.77( 2441): [LOWIBackgroundScanMgr] isRspForBgScanMgr: evt(LOWI_NO_EVT) - not handled
+06-01 10:59:57.580 D/LOWI-9.0.1.77( 2441): [LOWIScheduler] manageMsg: NULL results or NULL request in results
+06-01 10:59:57.581 D/LOWI-9.0.1.77( 2441): [LOWIController] Measurements received
+06-01 10:59:57.581 D/LOWI-9.0.1.77( 2441): [LOWICacheManager] putInCache:Num of Meas to add: 75
+06-01 10:59:57.583 D/LOWI-9.0.1.77( 2441): [LOWIController] processMeasurementResults: No current Request. Cache measurements
+06-01 10:59:57.583 D/LOWI-9.0.1.77( 2441): [LOWIController] sendAsyncScanResponse: Request FreeWifiScanObserver_72 is from a different client.
+06-01 10:59:57.584 D/LOWI-9.0.1.77( 2441): [LOWIController] generateResponse: Type (ASYNC_DISCOVERY_SCAN_RESULTS) ScanStatus (1) request FreeWifiScanObserver_72
+06-01 10:59:57.584 D/LOWI-9.0.1.77( 2441): [LOWIEventDispatcher] sendResponse - originator = FreeWifiScanObserver
+06-01 10:59:57.584 D/LOWI-9.0.1.77( 2441): [LOWIUtils] injectScanMeasurements - num of APs = 75
+06-01 10:59:57.587 I/LOWI-9.0.1.77( 2441): [LOWIUtils] responseToOutPostcard - TO: FreeWifiScanObserver, FROM:   LOWI-SERVER, RESP:  LOWI_ASYNC_DISCOVERY_SCAN_RESULTS
+06-01 10:59:57.587 I/WifiScanner( 5709): onFullResults
+06-01 10:59:57.589 I/WifiScanner( 5709): onFullResults
+06-01 10:59:57.589 D/LOWI-9.0.1.77( 2441): [LOWIControllerExtn] sendLOWILpDiscoveryScanResponse: Not a discovery scan response
+06-01 10:59:57.589 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 10:59:57.609 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 10:59:57.625 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 10:59:57.710 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 10:59:57.722 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 10:59:57.796 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 10:59:57.841 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-01 10:59:57.864 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 10:59:57.879 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 10:59:57.906 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 10:59:57.915 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-01 10:59:57.931 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 10:59:57.960 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 10:59:58.061 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 10:59:58.145 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 10:59:58.169 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 10:59:58.234 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 10:59:58.239 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-01 10:59:58.307 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 10:59:58.332 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 10:59:58.433 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 10:59:58.457 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 10:59:58.472 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 10:59:58.557 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 10:59:58.569 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 10:59:58.644 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 10:59:58.664 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-01 10:59:58.758 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 10:59:58.785 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 10:59:58.886 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 10:59:58.937 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 10:59:58.953 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 10:59:59.036 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 10:59:59.047 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 10:59:59.148 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 10:59:59.214 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 10:59:59.243 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 10:59:59.344 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 10:59:59.435 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 10:59:59.454 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 10:59:59.542 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 10:59:59.544 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-01 10:59:59.616 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 10:59:59.622 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 10:59:59.723 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 10:59:59.794 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 10:59:59.808 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 10:59:59.892 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 10:59:59.903 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 10:59:59.997 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:00.002 D/ActivityManager( 2026): sync unfroze 7894 com.android.settings for 3
+06-01 11:00:00.005 D/ActivityManager( 2026): sync unfroze 5610 jp.co.sharp.android.usbchargingalart for 10
+06-01 11:00:00.006 D/ActivityManager( 2026): sync unfroze 11040 com.android.keychain for 10
+06-01 11:00:00.007 D/ActivityManager( 2026): sync unfroze 8465 jp.co.sharp.android.shlogdservice for 10
+06-01 11:00:00.007 D/ActivityManager( 2026): sync unfroze 8371 jp.co.sharp.android.bsc for 10
+06-01 11:00:00.008 D/ActivityManager( 2026): sync unfroze 10382 com.android.DeviceAsWebcam for 10
+06-01 11:00:00.009 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-01 11:00:00.010 D/DetectMoisture( 5610): onUEvent: 
+06-01 11:00:00.013 D/BoundBrokerSvc( 5709): onRebind: Intent { act=com.google.android.gms.common.telemetry.service.START dat=chimera-action:/... cmp=com.google.android.gms/.chimera.PersistentApiService }
+06-01 11:00:00.013 W/UEventObserver( 5610): type=1400 audit(0.0:19929): avc:  denied  { search } for  name="wireless" dev="sysfs" ino=141656 scontext=u:r:system_app:s0 tcontext=u:object_r:vendor_sysfs_usb_supply:s0 tclass=dir permissive=0
+06-01 11:00:00.013 W/UEventObserver( 5610): type=1400 audit(0.0:19930): avc:  denied  { search } for  name="wireless" dev="sysfs" ino=141656 scontext=u:r:system_app:s0 tcontext=u:object_r:vendor_sysfs_usb_supply:s0 tclass=dir permissive=0
+06-01 11:00:00.018 D/PeriodicJobReceiver( 7894): refresh periodic job from action=com.android.settings.battery.action.PERIODIC_JOB_UPDATE
+06-01 11:00:00.019 D/BatteryUsageDataLoader( 7894): loadUsageDataSafely() in the AsyncTask
+06-01 11:00:00.022 D/PeriodicJobManager( 7894): schedule next alarm job at 6月 01, 2026, 12:00:00
+06-01 11:00:00.099 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:00.115 I/SDM     ( 1442): DisplayBase::CommitThread: Received idle timeout, panel: cmd, timeout: 70000 us
+06-01 11:00:00.134 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:00.169 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/base.apk' with 1 weak references
+06-01 11:00:00.170 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_config.arm64_v8a.apk' with 1 weak references
+06-01 11:00:00.170 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_config.en.apk' with 1 weak references
+06-01 11:00:00.170 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_config.xxhdpi.apk' with 1 weak references
+06-01 11:00:00.170 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_config.zh.apk' with 1 weak references
+06-01 11:00:00.170 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_g_biglib.apk' with 1 weak references
+06-01 11:00:00.170 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_g_biglib.config.arm64_v8a.apk' with 1 weak references
+06-01 11:00:00.170 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_g_biglib.config.en.apk' with 1 weak references
+06-01 11:00:00.170 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_g_biglib.config.zh.apk' with 1 weak references
+06-01 11:00:00.170 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_g_flutter.apk' with 1 weak references
+06-01 11:00:00.171 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_g_flutter.config.arm64_v8a.apk' with 1 weak references
+06-01 11:00:00.171 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_g_flutter.config.en.apk' with 1 weak references
+06-01 11:00:00.171 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_g_flutter.config.xxhdpi.apk' with 1 weak references
+06-01 11:00:00.171 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_g_flutter.config.zh.apk' with 1 weak references
+06-01 11:00:00.171 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_g_voipengine.apk' with 1 weak references
+06-01 11:00:00.171 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_g_voipengine.config.arm64_v8a.apk' with 1 weak references
+06-01 11:00:00.171 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_g_voipengine.config.xxhdpi.apk' with 1 weak references
+06-01 11:00:00.171 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_g_voipengine.config.zh.apk' with 1 weak references
+06-01 11:00:00.171 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_m_cloud_live.apk' with 1 weak references
+06-01 11:00:00.171 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_m_cloud_live.config.arm64_v8a.apk' with 1 weak references
+06-01 11:00:00.171 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_m_cloud_live.config.en.apk' with 1 weak references
+06-01 11:00:00.171 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_m_cloud_live.config.xxhdpi.apk' with 1 weak references
+06-01 11:00:00.171 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_m_cloud_live.config.zh.apk' with 1 weak references
+06-01 11:00:00.171 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_m_filescan.apk' with 1 weak references
+06-01 11:00:00.172 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_m_filescan.config.arm64_v8a.apk' with 1 weak references
+06-01 11:00:00.172 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_m_filescan.config.en.apk' with 1 weak references
+06-01 11:00:00.172 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_m_filescan.config.xxhdpi.apk' with 1 weak references
+06-01 11:00:00.172 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_m_filescan.config.zh.apk' with 1 weak references
+06-01 11:00:00.172 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_m_mailplugin.apk' with 1 weak references
+06-01 11:00:00.172 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_m_mailplugin.config.arm64_v8a.apk' with 1 weak references
+06-01 11:00:00.172 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_m_mailplugin.config.en.apk' with 1 weak references
+06-01 11:00:00.172 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_m_mailplugin.config.xxhdpi.apk' with 1 weak references
+06-01 11:00:00.172 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_m_mailplugin.config.zh.apk' with 1 weak references
+06-01 11:00:00.173 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_m_tencent_meeting.apk' with 1 weak references
+06-01 11:00:00.173 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_m_tencent_meeting.config.arm64_v8a.apk' with 1 weak references
+06-01 11:00:00.173 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_m_tencent_meeting.config.en.apk' with 1 weak references
+06-01 11:00:00.173 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_m_tencent_meeting.config.xxhdpi.apk' with 1 weak references
+06-01 11:00:00.173 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_m_tencent_meeting.config.zh.apk' with 1 weak references
+06-01 11:00:00.173 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_plugin_wxapp.apk' with 1 weak references
+06-01 11:00:00.173 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_plugin_wxapp.config.arm64_v8a.apk' with 1 weak references
+06-01 11:00:00.173 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_plugin_wxapp.config.en.apk' with 1 weak references
+06-01 11:00:00.173 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_plugin_wxapp.config.xxhdpi.apk' with 1 weak references
+06-01 11:00:00.173 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_plugin_wxapp.config.zh.apk' with 1 weak references
+06-01 11:00:00.174 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /system_ext/priv-app/FeliCaLockControl_gp/FeliCaLockControl_gp.apk' with 1 weak references
+06-01 11:00:00.174 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~iOYUjsaIpNJLamCX25MXaw==/com.google.android.odad-MBa7IROJWEF-Ji0Fl754XQ==/base.apk' with 1 weak references
+06-01 11:00:00.174 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~4QbnfKKUreso5xxv06-cuw==/ccc71.at.free-8oU-ZH6M3Pt30_4M1bL3QA==/base.apk' with 1 weak references
+06-01 11:00:00.174 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~4QbnfKKUreso5xxv06-cuw==/ccc71.at.free-8oU-ZH6M3Pt30_4M1bL3QA==/split_config.arm64_v8a.apk' with 1 weak references
+06-01 11:00:00.174 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~4QbnfKKUreso5xxv06-cuw==/ccc71.at.free-8oU-ZH6M3Pt30_4M1bL3QA==/split_config.xxhdpi.apk' with 1 weak references
+06-01 11:00:00.175 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~4QbnfKKUreso5xxv06-cuw==/ccc71.at.free-8oU-ZH6M3Pt30_4M1bL3QA==/split_config.zh.apk' with 1 weak references
+06-01 11:00:00.175 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~1q2Lr_CLtMZq5B6C6xMSRA==/com.duolingo-RBCI7-W9jkWHP5uxt0-TZA==/base.apk' with 1 weak references
+06-01 11:00:00.175 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~1q2Lr_CLtMZq5B6C6xMSRA==/com.duolingo-RBCI7-W9jkWHP5uxt0-TZA==/split_config.arm64_v8a.apk' with 1 weak references
+06-01 11:00:00.175 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~1q2Lr_CLtMZq5B6C6xMSRA==/com.duolingo-RBCI7-W9jkWHP5uxt0-TZA==/split_config.xxhdpi.apk' with 1 weak references
+06-01 11:00:00.175 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~i3v0pzR0F5P5SaE_qJaX4Q==/com.google.android.contactkeys-AJMmjjfCkfFTmBtUGh4L0A==/base.apk' with 1 weak references
+06-01 11:00:00.176 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~i3v0pzR0F5P5SaE_qJaX4Q==/com.google.android.contactkeys-AJMmjjfCkfFTmBtUGh4L0A==/split_config.arm64_v8a.apk' with 1 weak references
+06-01 11:00:00.176 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~i3v0pzR0F5P5SaE_qJaX4Q==/com.google.android.contactkeys-AJMmjjfCkfFTmBtUGh4L0A==/split_config.xxhdpi.apk' with 1 weak references
+06-01 11:00:00.176 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~i3v0pzR0F5P5SaE_qJaX4Q==/com.google.android.contactkeys-AJMmjjfCkfFTmBtUGh4L0A==/split_config.zh.apk' with 1 weak references
+06-01 11:00:00.176 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~JfqGfVYn-mOc6_ygvMHpQA==/com.google.android.safetycore-vqLr-zuDQ7Pluv0qzEhidQ==/base.apk' with 1 weak references
+06-01 11:00:00.176 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~JfqGfVYn-mOc6_ygvMHpQA==/com.google.android.safetycore-vqLr-zuDQ7Pluv0qzEhidQ==/split_config.arm64_v8a.apk' with 1 weak references
+06-01 11:00:00.176 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~JfqGfVYn-mOc6_ygvMHpQA==/com.google.android.safetycore-vqLr-zuDQ7Pluv0qzEhidQ==/split_config.en.apk' with 1 weak references
+06-01 11:00:00.176 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~JfqGfVYn-mOc6_ygvMHpQA==/com.google.android.safetycore-vqLr-zuDQ7Pluv0qzEhidQ==/split_config.xxhdpi.apk' with 1 weak references
+06-01 11:00:00.176 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~JfqGfVYn-mOc6_ygvMHpQA==/com.google.android.safetycore-vqLr-zuDQ7Pluv0qzEhidQ==/split_config.zh.apk' with 1 weak references
+06-01 11:00:00.176 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~d6IPFuCbqvUxGNt8b6zfsg==/com.google.android.apps.chromecast.app-Ip4do-WuVeKwdjskmZZJPg==/base.apk' with 1 weak references
+06-01 11:00:00.177 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~d6IPFuCbqvUxGNt8b6zfsg==/com.google.android.apps.chromecast.app-Ip4do-WuVeKwdjskmZZJPg==/split_config.arm64_v8a.apk' with 1 weak references
+06-01 11:00:00.177 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~d6IPFuCbqvUxGNt8b6zfsg==/com.google.android.apps.chromecast.app-Ip4do-WuVeKwdjskmZZJPg==/split_config.xxhdpi.apk' with 1 weak references
+06-01 11:00:00.177 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~d6IPFuCbqvUxGNt8b6zfsg==/com.google.android.apps.chromecast.app-Ip4do-WuVeKwdjskmZZJPg==/split_config.zh.apk' with 1 weak references
+06-01 11:00:00.177 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~FcNrUWRz4duLMk9tW_3KNw==/com.github.kr328.clash-tBNLMaW9TEBYJ6j6OmGG2g==/base.apk' with 1 weak references
+06-01 11:00:00.177 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~a2SLK7PL-TLTgx5tsDBA3g==/com.example.llama.aichat-6QUXUBDmV9xy4llt3JguRw==/base.apk' with 1 weak references
+06-01 11:00:00.177 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /apex/com.android.permission/priv-app/GooglePermissionController@361524160/GooglePermissionController.apk' with 1 weak references
+06-01 11:00:00.178 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '/product/overlay/GooglePermissionControllerOverlay.apk' with 1 weak references
+06-01 11:00:00.179 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /apex/com.android.rkpd/priv-app/rkpdapp.google@361420880/rkpdapp.google.apk' with 1 weak references
+06-01 11:00:00.179 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /apex/com.android.extservices/priv-app/GoogleExtServices@361153320/GoogleExtServices.apk' with 1 weak references
+06-01 11:00:00.179 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /apex/com.android.cellbroadcast/priv-app/GoogleCellBroadcastApp@361524280/GoogleCellBroadcastApp.apk' with 1 weak references
+06-01 11:00:00.180 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '/product/overlay/CellBroadcastReceiver-mvno/CellBroadcastReceiver-mvno.apk' with 1 weak references
+06-01 11:00:00.180 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /apex/com.android.healthfitness/priv-app/HealthConnectControllerGoogle@361420700/HealthConnectControllerGoogle.apk' with 1 weak references
+06-01 11:00:00.181 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /apex/com.android.mediaprovider/priv-app/MediaProviderGoogle@361521100/MediaProviderGoogle.apk' with 1 weak references
+06-01 11:00:00.181 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '/product/overlay/MediaProviderOverlay.apk' with 1 weak references
+06-01 11:00:00.181 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /apex/com.android.mediaprovider/priv-app/PhotopickerGoogle@361521100/PhotopickerGoogle.apk' with 1 weak references
+06-01 11:00:00.182 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /apex/com.android.adservices/priv-app/AdServicesApkGoogle@361153320/AdServicesApkGoogle.apk' with 1 weak references
+06-01 11:00:00.182 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /system_ext/app/StsPermission2/StsPermission2.apk' with 1 weak references
+06-01 11:00:00.182 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /system_ext/app/SHWallpaper_Material/SHWallpaper_Material.apk' with 1 weak references
+06-01 11:00:00.183 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '/product/overlay/Wallpaper-mikazuki/Wallpaper-mikazuki.apk' with 1 weak references
+06-01 11:00:00.183 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '/product/overlay/Wallpaper-ma2/Wallpaper-ma2.apk' with 1 weak references
+06-01 11:00:00.183 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /system_ext/app/Sgsc/Sgsc.apk' with 1 weak references
+06-01 11:00:00.183 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /system_ext/app/RestoreGuide-forMaterial/RestoreGuide-forMaterial.apk' with 1 weak references
+06-01 11:00:00.184 W/ndroid.settings( 7894): ApkAssets: Deleting an ApkAssets object '<empty> and /system_ext/app/LockWallpaperChanger_UIver5/LockWallpaperChanger_UIver5.apk' with 1 weak references
+06-01 11:00:00.188 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:00.191 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-01 11:00:00.292 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:00.306 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:00.314 W/BatteryEntry( 7894): unknown attribute:AUDIO
+06-01 11:00:00.314 W/BatteryEntry( 7894): unknown attribute:VIDEO
+06-01 11:00:00.315 W/BatteryEntry( 7894): unknown attribute:SYSTEM_SERVICES
+06-01 11:00:00.315 W/BatteryEntry( 7894): unknown attribute:SENSORS
+06-01 11:00:00.316 W/BatteryEntry( 7894): unknown attribute:WAKELOCK
+06-01 11:00:00.316 W/BatteryEntry( 7894): unknown attribute:MEMORY
+06-01 11:00:00.317 W/BatteryEntry( 7894): unknown attribute:IDLE
+06-01 11:00:00.317 W/BatteryEntry( 7894): unknown attribute:REATTRIBUTED_TO_OTHER_CONSUMERS
+06-01 11:00:00.318 D/BatteryUsageDataLoader( 7894): getBatteryUsageStats() in 295/ms
+06-01 11:00:00.321 W/DatabaseUtils( 7894): no consumed power but has running time for 天気 time=0|0|232197841
+06-01 11:00:00.331 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:00.368 D/DatabaseUtils( 7894): insert() battery states data into database with isFullChargeStart:false
+06-01 11:00:00.370 D/DatabaseUtils( 7894): sendBatteryEntryData() size=79 in 52/ms
+06-01 11:00:00.371 D/BatteryUsageContentProvider( 7894): getQueryUserId from uri: content://com.android.settings.battery.usage.provider/appUsageLatestTimestamp?userid=0
+06-01 11:00:00.371 D/BatteryUsageContentProvider( 7894): getAppUsageLatestTimestamp() for user 0 in 0/ms
+06-01 11:00:00.373 D/DatabaseUtils( 7894): getAppUsageStartTimestampOfUser() userId=0 latestTimestamp=5月 29, 2026, 17:55:14 in 2/ms
+06-01 11:00:00.376 D/DataProcessor( 7894): getAppUsageEventsForUser(): 0 from 1780048514179 to 1780282800371 in 3/ms
+06-01 11:00:00.376 D/DataProcessor( 7894): getAppUsageEvents() for all unlocked users in 5/ms
+06-01 11:00:00.379 W/DataProcessor( 7894): Read 13 relevant events (80 total) from UsageStatsManager
+06-01 11:00:00.379 D/BatteryUsageDataLoader( 7894): loadAppUsageData() size=13 in 8/ms
+06-01 11:00:00.385 D/DatabaseUtils( 7894): insert() app usage events data into database
+06-01 11:00:00.385 D/DatabaseUtils( 7894): sendAppUsageEventData() size=13 in 6/ms
+06-01 11:00:00.385 D/BatteryUsageContentProvider( 7894): getLastFullChargeTimestamp() in 0/ms
+06-01 11:00:00.386 D/DatabaseUtils( 7894): getLastFullChargeTime() lastFullChargeTime=5月 29, 2026, 17:55:11 in 1/ms
+06-01 11:00:00.386 D/DatabaseUtils( 7894): getBatteryEvents for timestamp: 1780048511434
+06-01 11:00:00.386 D/BatteryUsageContentProvider( 7894): getQueryBatteryEventTypes from uri: content://com.android.settings.battery.usage.provider/BatteryEvent?timestamp=1780048511434&batteryEventType=3%2C4
+06-01 11:00:00.387 D/BatteryUsageContentProvider( 7894): getQueryTimestamp from uri: content://com.android.settings.battery.usage.provider/BatteryEvent?timestamp=1780048511434&batteryEventType=3%2C4
+06-01 11:00:00.387 W/BatteryUsageContentProvider( 7894): getBatteryEvents() in 0/ms
+06-01 11:00:00.387 D/DatabaseUtils( 7894): getBatteryEvents size=68 in 1/ms
+06-01 11:00:00.388 D/DataProcessManager( 7894): getPeriodBatteryLevelData() startTimestamp=6月 01, 2026, 10:00:00
+06-01 11:00:00.388 D/DataProcessManager( 7894): execute getBatteryLevelData in 3/ms, batteryLevelRecordEvents.size=68
+06-01 11:00:00.388 D/BatteryUsageDataLoader( 7894): preprocessBatteryUsageSlots() no new battery usage data.
+06-01 11:00:00.388 D/BatteryUsageDataLoader( 7894): loadUsageDataSafely() in 369/ms
+06-01 11:00:00.431 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:00.439 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:00.447 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:00.454 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:00.479 E/Diag_Lib( 2200): diag: Diag_LSM_Init: invoked for pid: 2200 with init_count: 0
+06-01 11:00:00.479 E/Diag_Lib( 2200): diag:failed to connect to diag socket
+06-01 11:00:00.479 E/Diag_Lib( 2200):  Diag_LSM_Init: Failed to open handle to diag driver, error = 111
+06-01 11:00:00.511 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:00.611 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:00.652 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:00.657 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-01 11:00:00.675 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:00.705 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:00.756 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:00.764 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-01 11:00:00.862 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:00.874 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:00.954 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:00.963 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:01.054 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:01.067 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-01 11:00:01.153 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:01.181 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:01.238 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:01.339 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-01 11:00:01.351 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:01.359 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:01.460 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:01.477 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:01.518 D/ActivityManager( 2026): freezing 6921 com.google.android.gms
+06-01 11:00:01.578 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:01.679 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-01 11:00:01.702 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:01.709 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:01.727 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:01.736 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:01.793 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:01.799 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-01 11:00:01.899 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 4
+06-01 11:00:01.912 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:01.920 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:02.021 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:02.045 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:02.077 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:02.086 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:02.096 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:02.162 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:02.260 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:02.272 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:02.372 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:02.475 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-01 11:00:02.526 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:02.540 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:02.633 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:02.645 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:02.717 D/ActivityManager( 2026): sync unfroze 6921 com.google.android.gms for 6
+06-01 11:00:02.718 W/BestClock( 2026): java.time.DateTimeException: Missing network time fix
+06-01 11:00:02.720 I/QCC:exitReceiver( 3738): onReceive
+06-01 11:00:02.720 I/QCC:ActiveCareService( 3738): handleMessage: 15
+06-01 11:00:02.720 I/QCC:ActiveCareService( 3738): _APP_EXIT RunningMainJobType: 0
+06-01 11:00:02.720 W/QCC:ApplicationManager( 3738): getJobQueue empty or null 
+06-01 11:00:02.720 I/QCC:ApplicationManager( 3738): runQueue: false
+06-01 11:00:02.720 I/QCC:JobConnWait( 3738): runJobConnWait: true
+06-01 11:00:02.720 I/QCC:TransferContants( 3738): getCheckQdmaTransfer :false
+06-01 11:00:02.721 I/QCC:JobConnWait( 3738): runJobConnWait: true
+06-01 11:00:02.721 I/QCC:ApplicationManager( 3738): not exitApp jobQueue not empty: 0 ,/ there is activeSession /pending job
+06-01 11:00:02.721 I/QCC:ActiveCareService( 3738): skip exitApp - set exitAlarm
+06-01 11:00:02.721 I/QCC:ActiveCareService( 3738): set exitAlarm
+06-01 11:00:02.728 W/BestClock( 2026): java.time.DateTimeException: Missing network time fix
+06-01 11:00:02.744 I/Authzen ( 6921): [DeviceStateSyncManager] The server is in sync with current state. Nothing to do
+06-01 11:00:02.745 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:02.846 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-01 11:00:02.870 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:02.879 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:02.897 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:02.910 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:02.965 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:02.972 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-01 11:00:03.073 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 4
+06-01 11:00:03.083 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:03.111 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:03.212 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:03.233 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:03.250 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:03.264 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:03.324 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:03.426 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:03.431 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:03.439 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:03.476 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:03.500 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:03.507 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:03.527 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:03.535 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:03.596 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:03.609 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-01 11:00:03.710 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:03.776 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:03.794 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:03.895 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:03.922 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:03.942 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:03.955 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:04.024 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:04.030 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-01 11:00:04.059 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:04.078 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:04.119 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:04.208 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:04.216 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:04.299 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:04.400 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-01 11:00:04.447 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:04.461 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:04.562 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:04.575 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:04.675 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:04.776 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-01 11:00:04.812 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:04.846 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:04.902 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:05.003 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-01 11:00:05.025 D/BoundBrokerSvc( 5709): onUnbind: Intent { act=com.google.android.gms.common.telemetry.service.START dat=chimera-action:/... cmp=com.google.android.gms/.chimera.PersistentApiService }
+06-01 11:00:05.071 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:05.088 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:05.189 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:05.206 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:05.230 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:05.246 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:05.259 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:05.328 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:05.333 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-01 11:00:05.362 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:05.377 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:05.413 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:05.420 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-01 11:00:05.453 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:05.463 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:05.479 E/Diag_Lib( 2200): diag: Diag_LSM_Init: invoked for pid: 2200 with init_count: 0
+06-01 11:00:05.480 E/Diag_Lib( 2200): diag:failed to connect to diag socket
+06-01 11:00:05.480 E/Diag_Lib( 2200):  Diag_LSM_Init: Failed to open handle to diag driver, error = 111
+06-01 11:00:05.502 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:05.509 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-01 11:00:05.533 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:05.542 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:05.638 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:05.739 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-01 11:00:05.840 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 4
+06-01 11:00:05.856 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:05.961 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:06.060 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:06.088 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:06.109 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:06.125 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:06.158 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:06.210 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:06.218 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:06.319 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-01 11:00:06.334 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:06.345 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:06.419 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:06.432 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:06.439 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:06.467 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:06.479 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:06.530 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:06.562 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-01 11:00:06.663 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:06.764 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:06.770 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:06.784 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:06.884 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:06.901 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:06.922 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:06.932 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:07.034 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:07.123 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:07.139 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:07.173 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:07.177 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-01 11:00:07.199 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:07.207 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:07.301 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:07.403 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-01 11:00:07.504 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 4
+06-01 11:00:07.521 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:07.537 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:07.591 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:07.595 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:07.695 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:07.709 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:07.750 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:07.770 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:07.786 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:07.820 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:07.834 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:07.885 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:07.986 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:08.060 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:08.089 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:08.095 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:08.193 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:08.294 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-01 11:00:08.395 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:08.496 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:08.559 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:08.564 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:08.614 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:08.624 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:08.707 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:08.757 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:08.779 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:08.799 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:08.849 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:08.874 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:08.943 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:08.948 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-01 11:00:08.973 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:08.983 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:09.059 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:09.065 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-01 11:00:09.095 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:09.102 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:09.178 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:09.184 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-01 11:00:09.195 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:09.208 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:09.241 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:09.256 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:09.304 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:09.310 I/android.hardware.health-service.sharp( 1352): batteryChargeTimeToFullNowSeconds: 843 -> 781
+06-01 11:00:09.319 D/PowerUI ( 3524): can't show warning due to - plugged: true status unknown: false
+06-01 11:00:09.320 D/DeviceStatisticsService( 3684): onReceive: action= android.intent.action.BATTERY_CHANGED
+06-01 11:00:09.320 D/QtiCarrierConfigHelper( 3721): WARNING, no carrier configs on phone Id: 0
+06-01 11:00:09.321 D/QtiCarrierConfigHelper( 3721): WARNING, no carrier configs on phone Id: 1
+06-01 11:00:09.325 V/DeviceStatisticsService( 3684): chargerType=1 batteryLevel=99 totalBatteryCapacity=4697400
+06-01 11:00:09.329 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-01 11:00:09.347 W/System  ( 3524): A resource failed to call release. 
+06-01 11:00:09.348 W/System  ( 3524): A resource failed to call release. 
+06-01 11:00:09.348 W/System  ( 3524): A resource failed to call release. 
+06-01 11:00:09.351 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 4
+06-01 11:00:09.351 W/System  ( 3524): A resource failed to call release. 
+06-01 11:00:09.351 W/System  ( 3524): A resource failed to call release. 
+06-01 11:00:09.351 W/System  ( 3524): A resource failed to call release. 
+06-01 11:00:09.354 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 5
+06-01 11:00:09.372 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:09.390 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:09.414 I/SDM     ( 1442): DisplayBase::CommitThread: Received idle timeout, panel: cmd, timeout: 70000 us
+06-01 11:00:09.430 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:09.483 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-01 11:00:09.584 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 4
+06-01 11:00:09.596 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:09.608 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:09.709 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:09.810 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:09.822 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:09.835 D/MainJobService( 8384): BATTERY_PER_CHANGED: start
+06-01 11:00:09.836 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:09.836 D/MainJobService( 8384): BATTERY_PER_CHANGED: end
+06-01 11:00:09.836 I/WM-WorkerWrapper( 8384): Worker result SUCCESS for Work [ id=263f7e89-2371-42f4-9bb9-fdb0570075d9, tags={ jp.co.sharp.android.ichargeservice.MainJobService } ]
+06-01 11:00:09.880 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:09.889 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:09.950 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:10.051 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-01 11:00:10.071 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:10.081 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:10.145 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:10.155 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-01 11:00:10.182 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:10.191 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:10.289 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:10.337 E/iCharge.Receiver( 7333): jp.co.sharp.android.ichargeservice.action.BATTERY_PER_CHANGED
+06-01 11:00:10.356 D/MainJobService( 7333): BATTERY_PER_CHANGED: start percentage: 99
+06-01 11:00:10.356 D/MainJobService( 7333): BATTERY_PER_CHANGED: end
+06-01 11:00:10.356 I/WM-WorkerWrapper( 7333): Worker result SUCCESS for Work [ id=0358f87a-b42e-438f-a18b-c8e05f028d8b, tags={ jp.co.sharp.android.icharge.services.MainJobService } ]
+06-01 11:00:10.390 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-01 11:00:10.480 E/Diag_Lib( 2200): diag: Diag_LSM_Init: invoked for pid: 2200 with init_count: 0
+06-01 11:00:10.481 E/Diag_Lib( 2200): diag:failed to connect to diag socket
+06-01 11:00:10.481 E/Diag_Lib( 2200):  Diag_LSM_Init: Failed to open handle to diag driver, error = 111
+06-01 11:00:10.491 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:10.591 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-01 11:00:10.607 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:10.629 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:10.653 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:10.657 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:10.757 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:10.794 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:10.829 D/ActivityManager( 2026): sync unfroze 8801 com.google.android.contacts for 3
+06-01 11:00:10.832 D/ShortcutService( 2026): received package broadcast intent: Intent { act=android.intent.action.PACKAGE_CHANGED dat=package: flg=0x45000010 (has extras) }
+06-01 11:00:10.832 D/ShortcutService( 2026): changing package: jp.co.sharp.android.icharge userId0
+06-01 11:00:10.832 D/ShortcutService( 2026): handlePackageChanged: jp.co.sharp.android.icharge user=0
+06-01 11:00:10.832 D/ShortcutService( 2026): rescanPackageIfNeeded 0@jp.co.sharp.android.icharge, forceRescan=true , isNewApp=true
+06-01 11:00:10.833 E/statsd  ( 1253): Could not find a broadcast receiver for (10269 987654323)
+06-01 11:00:10.833 D/CarrierSvcBindHelper( 3736): onPackageModified: jp.co.sharp.android.icharge
+06-01 11:00:10.834 D/EuiccConnector( 3736): handleMessage: E msg.what=1
+06-01 11:00:10.834 D/EuiccConnector( 3736): processMsg: ConnectedState
+06-01 11:00:10.834 D/EuiccConnector( 3736): processMsg: DisconnectedState
+06-01 11:00:10.835 D/ShortcutService( 2026): Package jp.co.sharp.android.icharge has 0 manifest shortcut(s), and 0 share target(s)
+06-01 11:00:10.835 D/EuiccConnector( 3736): handleMessage: X
+06-01 11:00:10.835 D/CarrierSvcBindHelper( 3736): No carrier app for: 0
+06-01 11:00:10.836 D/CarrierSvcBindHelper( 3736): No carrier app for: 1
+06-01 11:00:10.838 I/RegisteredComponentCache( 4705): New Components => 
+06-01 11:00:10.838 I/RegisteredComponentCache( 4705): ComponentInfo: ResolveInfo{b504970 com.android.apps.tag/.TagViewer m=0x108000 userHandle=UserHandle{0}}, techs: android.nfc.tech.Ndef, 
+06-01 11:00:10.838 I/RegisteredComponentCache( 4705): Removed Components => 
+06-01 11:00:10.838 I/RegisteredComponentCache( 4705): ComponentInfo: ResolveInfo{9e576ed com.android.apps.tag/.TagViewer m=0x108000 userHandle=UserHandle{0}}, techs: android.nfc.tech.Ndef, 
+06-01 11:00:10.840 I/PermissionControllerServiceImpl( 3862): Updating user sensitive for uid 10250
+06-01 11:00:10.841 I/PermissionControllerServiceImpl( 3862): Updating user sensitive for uid 10249
+06-01 11:00:10.841 D/ShortcutService( 2026): received package broadcast intent: Intent { act=android.intent.action.PACKAGE_CHANGED dat=package: flg=0x45000010 (has extras) }
+06-01 11:00:10.841 D/ShortcutService( 2026): changing package: jp.co.sharp.android.ichargeservice userId0
+06-01 11:00:10.841 D/ShortcutService( 2026): handlePackageChanged: jp.co.sharp.android.ichargeservice user=0
+06-01 11:00:10.841 D/ShortcutService( 2026): rescanPackageIfNeeded 0@jp.co.sharp.android.ichargeservice, forceRescan=true , isNewApp=true
+06-01 11:00:10.841 D/ShortcutService( 2026): Package jp.co.sharp.android.ichargeservice has 0 manifest shortcut(s), and 0 share target(s)
+06-01 11:00:10.842 D/EuiccConnector( 3736): handleMessage: E msg.what=1
+06-01 11:00:10.842 D/EuiccConnector( 3736): processMsg: ConnectedState
+06-01 11:00:10.842 D/EuiccConnector( 3736): processMsg: DisconnectedState
+06-01 11:00:10.843 I/RegisteredComponentCache( 4705): New Components => 
+06-01 11:00:10.843 I/RegisteredComponentCache( 4705): ComponentInfo: ResolveInfo{866540f com.android.apps.tag/.TagViewer m=0x108000 userHandle=UserHandle{0}}, techs: android.nfc.tech.Ndef, 
+06-01 11:00:10.843 I/RegisteredComponentCache( 4705): Removed Components => 
+06-01 11:00:10.843 I/RegisteredComponentCache( 4705): ComponentInfo: ResolveInfo{b504970 com.android.apps.tag/.TagViewer m=0x108000 userHandle=UserHandle{0}}, techs: android.nfc.tech.Ndef, 
+06-01 11:00:10.846 D/EuiccConnector( 3736): handleMessage: X
+06-01 11:00:10.848 W/AppOpService( 2026): Ignored setUidMode call for runtime permission app op: uid = 1001, code = READ_SMS, mode = allow, callingUid = 1001, oldMode = allow
+06-01 11:00:10.848 W/AppOpService( 2026): Ignored setUidMode call for runtime permission app op: uid = 1001, code = RECEIVE_SMS, mode = allow, callingUid = 1001, oldMode = allow
+06-01 11:00:10.848 W/AS.AudioService( 2026): handleMessage({ when=0 what=35 target=com.android.server.audio.AudioService$AudioHandler }) from pid=2026, uid=1000
+06-01 11:00:10.848 W/AppOpService( 2026): Ignored setUidMode call for runtime permission app op: uid = 1001, code = RECEIVE_WAP_PUSH, mode = allow, callingUid = 1001, oldMode = allow
+06-01 11:00:10.849 W/AppOpService( 2026): Ignored setUidMode call for runtime permission app op: uid = 1001, code = SEND_SMS, mode = allow, callingUid = 1001, oldMode = allow
+06-01 11:00:10.849 W/AppOpService( 2026): Ignored setUidMode call for runtime permission app op: uid = 1001, code = READ_CELL_BROADCASTS, mode = allow, callingUid = 1001, oldMode = allow
+06-01 11:00:10.849 W/MagnificationConnectionManager( 2026): requestConnection duplicated request: connect=false, mConnectionState=DISCONNECTED
+06-01 11:00:10.850 D/PackageUpdatedTask( 4001): Package updated: mOp=UPDATE packages=[jp.co.sharp.android.icharge]
+06-01 11:00:10.850 D/ImsResolver( 3736): maybeAddedImsService, packageName: jp.co.sharp.android.icharge
+06-01 11:00:10.851 W/AllAppsList( 4001): updatePromiseInstallInfo: no Activities matched updated package, removing all apps from package=jp.co.sharp.android.icharge
+06-01 11:00:10.851 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:00:10.851 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:00:10.851 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:00:10.851 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:00:10.851 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:00:10.851 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:00:10.851 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:00:10.851 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:00:10.851 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:00:10.851 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:00:10.851 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:00:10.851 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:00:10.851 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:00:10.851 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:00:10.851 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:00:10.851 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:00:10.851 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:00:10.851 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:00:10.851 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:00:10.851 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:00:10.852 D/CarrierSvcBindHelper( 3736): onPackageModified: jp.co.sharp.android.ichargeservice
+06-01 11:00:10.852 D/CarrierSvcBindHelper( 3736): No carrier app for: 0
+06-01 11:00:10.852 D/CarrierSvcBindHelper( 3736): No carrier app for: 1
+06-01 11:00:10.856 W/AppOpService( 2026): Ignored setUidMode call for runtime permission app op: uid = 1001, code = READ_SMS, mode = allow, callingUid = 1001, oldMode = allow
+06-01 11:00:10.856 W/AppOpService( 2026): Ignored setUidMode call for runtime permission app op: uid = 1001, code = RECEIVE_SMS, mode = allow, callingUid = 1001, oldMode = allow
+06-01 11:00:10.856 W/AppOpService( 2026): Ignored setUidMode call for runtime permission app op: uid = 1001, code = RECEIVE_WAP_PUSH, mode = allow, callingUid = 1001, oldMode = allow
+06-01 11:00:10.856 W/AppOpService( 2026): Ignored setUidMode call for runtime permission app op: uid = 1001, code = SEND_SMS, mode = allow, callingUid = 1001, oldMode = allow
+06-01 11:00:10.856 W/AppOpService( 2026): Ignored setUidMode call for runtime permission app op: uid = 1001, code = READ_CELL_BROADCASTS, mode = allow, callingUid = 1001, oldMode = allow
+06-01 11:00:10.858 D/ImsResolver( 3736): maybeAddedImsService, packageName: jp.co.sharp.android.ichargeservice
+06-01 11:00:10.876 W/AS.AudioService( 2026): handleMessage({ when=-1ms what=35 target=com.android.server.audio.AudioService$AudioHandler }) from pid=2026, uid=1000
+06-01 11:00:10.876 W/MagnificationConnectionManager( 2026): requestConnection duplicated request: connect=false, mConnectionState=DISCONNECTED
+06-01 11:00:10.877 D/PackageUpdatedTask( 4001): Package updated: mOp=UPDATE packages=[jp.co.sharp.android.ichargeservice]
+06-01 11:00:10.878 W/AllAppsList( 4001): updatePromiseInstallInfo: no Activities matched updated package, removing all apps from package=jp.co.sharp.android.ichargeservice
+06-01 11:00:10.878 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:00:10.878 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:00:10.878 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:00:10.878 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:00:10.878 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:00:10.878 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:00:10.878 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:00:10.878 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:00:10.878 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:00:10.878 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:00:10.878 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:00:10.878 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:00:10.878 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:00:10.878 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:00:10.878 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:00:10.878 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:00:10.878 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:00:10.878 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:00:10.878 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:00:10.878 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:00:10.896 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:10.948 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:10.962 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:11.037 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:11.041 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-01 11:00:11.066 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:11.077 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:11.151 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:11.157 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-01 11:00:11.187 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:11.199 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:11.266 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:11.273 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-01 11:00:11.286 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:11.295 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:11.330 D/ControlsListingControllerImpl( 3524): ServiceConfig reloaded, count: 1
+06-01 11:00:11.330 D/ControlsListingControllerImpl( 3524): ServiceConfig reloaded, count: 1
+06-01 11:00:11.342 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:11.347 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:11.348 W/d.process.acore( 4176): Reducing the number of considered missed Gc histogram windows from 120 to 100
+06-01 11:00:11.354 I/ComponentChangedIO( 6921): Feature is not enabled, skipping component changed intent operation [CONTEXT service_id=469 ]
+06-01 11:00:11.354 I/ComponentChangedIO( 6921): Feature is not enabled, skipping component changed intent operation [CONTEXT service_id=469 ]
+06-01 11:00:11.405 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:11.442 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-01 11:00:11.543 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:11.643 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-01 11:00:11.744 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:11.845 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-01 11:00:11.896 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:11.932 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:11.964 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:11.973 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:12.002 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:12.023 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:12.046 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:12.061 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:12.084 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:12.090 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:12.167 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:12.219 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:12.225 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:12.239 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:12.244 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:12.256 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:12.263 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:12.291 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:12.357 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:12.368 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:12.469 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:12.521 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:12.536 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:12.613 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:12.621 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-01 11:00:12.657 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:12.672 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:12.770 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:12.777 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-01 11:00:12.815 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:12.830 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:12.871 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:12.889 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:12.938 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:13.039 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-01 11:00:13.141 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 4
+06-01 11:00:13.167 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:13.175 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:13.195 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:13.251 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-01 11:00:13.352 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 4
+06-01 11:00:13.393 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:13.406 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:13.462 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:13.466 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-01 11:00:13.485 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:13.496 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:13.597 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:13.622 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:13.631 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:13.654 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:13.710 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:13.721 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:13.764 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:13.821 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:13.829 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:13.914 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:13.919 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-01 11:00:13.950 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:13.959 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:14.047 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:14.054 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-01 11:00:14.087 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:14.096 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:14.179 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:14.185 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-01 11:00:14.198 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:14.211 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:14.252 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:14.260 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:14.311 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:14.412 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-01 11:00:14.513 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:14.614 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-01 11:00:14.715 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 4
+06-01 11:00:14.743 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:14.749 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:14.813 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:14.816 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-01 11:00:14.833 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:14.859 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:14.889 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:14.897 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:14.967 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:14.983 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:15.006 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:15.143 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:15.150 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:15.163 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:15.170 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:15.184 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:15.190 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:15.219 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:15.284 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:15.298 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:15.399 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:15.444 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:15.457 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:15.481 E/Diag_Lib( 2200): diag: Diag_LSM_Init: invoked for pid: 2200 with init_count: 0
+06-01 11:00:15.481 E/Diag_Lib( 2200): diag:failed to connect to diag socket
+06-01 11:00:15.481 E/Diag_Lib( 2200):  Diag_LSM_Init: Failed to open handle to diag driver, error = 111
+06-01 11:00:15.538 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:15.544 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-01 11:00:15.579 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:15.595 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:15.696 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:15.736 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:15.750 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:15.796 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:15.808 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:15.909 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:16.010 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:16.111 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:16.212 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:16.306 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:16.314 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-01 11:00:16.415 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:16.516 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:16.608 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:16.613 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-01 11:00:16.700 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:16.711 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:16.794 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:16.796 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-01 11:00:16.897 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:16.998 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:17.099 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:17.200 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-01 11:00:17.267 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:17.297 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:17.328 I/ai-chat (11671): ggml_opencl: default device: 'QUALCOMM Adreno(TM) 735 (OpenCL 3.0 Adreno(TM) 735)'
+06-01 11:00:17.328 I/ai-chat (11671): load_backend: loaded OpenCL backend from /data/app/~~a2SLK7PL-TLTgx5tsDBA3g==/com.example.llama.aichat-6QUXUBDmV9xy4llt3JguRw==/lib/arm64/libggml-opencl.so
+06-01 11:00:17.331 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:17.340 I/DMABUFHEAPS(11671): Using DMA-BUF heap named: system
+06-01 11:00:17.340 I/com.example.llama.aichat(11671): vendor/qcom/proprietary/adsprpc/src/rpcmem_android.c:182: set up allocator 0xb400006eb80605d0 for DMA buf heap system, ION heap system, heap mask 0x2000000, flags 0x1, legacy flags 0x1
+06-01 11:00:17.340 I/com.example.llama.aichat(11671): vendor/qcom/proprietary/adsprpc/src/fastrpc_config.c:319: Reading configuration file: com.example.llama.aichat.debugconfig
+06-01 11:00:17.340 I/com.example.llama.aichat(11671): vendor/qcom/proprietary/adsprpc/src/fastrpc_config.c:350: fastrpc_config_init: Couldn't find file com.example.llama.aichat.debugconfig, errno (No such file or directory) at /vendor/lib64/rfs/dsp, /vendor/lib/rfsa/adsp,
+06-01 11:00:17.340 I/com.example.llama.aichat(11671): vendor/qcom/proprietary/adsprpc/src/fastrpc_apps_user.c:4536: fastrpc_apps_user_init done  with default domain:3 and &fastrpc_trace:0x6d5ae790d0
+06-01 11:00:17.340 I/com.example.llama.aichat(11671): vendor/qcom/proprietary/adsprpc/src/fastrpc_apps_user.c:4650: multidsplib_env_init: libcdsprpc.so loaded
+06-01 11:00:17.340 I/com.example.llama.aichat(11671): vendor/qcom/proprietary/adsprpc/src/fastrpc_apps_user.c:4176: close_dev: unloading library libcdsprpc.so
+06-01 11:00:17.340 I/com.example.llama.aichat(11671): vendor/qcom/proprietary/adsprpc/src/fastrpc_apps_user.c:3294: domain_deinit for domain 0: dev -1
+06-01 11:00:17.340 I/com.example.llama.aichat(11671): vendor/qcom/proprietary/adsprpc/src/fastrpc_apps_user.c:3294: domain_deinit for domain 1: dev -1
+06-01 11:00:17.340 I/com.example.llama.aichat(11671): vendor/qcom/proprietary/adsprpc/src/fastrpc_apps_user.c:3294: domain_deinit for domain 2: dev -1
+06-01 11:00:17.340 I/com.example.llama.aichat(11671): vendor/qcom/proprietary/adsprpc/src/fastrpc_apps_user.c:3294: domain_deinit for domain 3: dev -1
+06-01 11:00:17.340 I/com.example.llama.aichat(11671): vendor/qcom/proprietary/adsprpc/src/fastrpc_apps_user.c:3294: domain_deinit for domain 4: dev -1
+06-01 11:00:17.340 I/com.example.llama.aichat(11671): vendor/qcom/proprietary/adsprpc/src/fastrpc_apps_user.c:3294: domain_deinit for domain 5: dev -1
+06-01 11:00:17.340 I/com.example.llama.aichat(11671): vendor/qcom/proprietary/adsprpc/src/fastrpc_apps_user.c:3294: domain_deinit for domain 6: dev -1
+06-01 11:00:17.340 I/com.example.llama.aichat(11671): vendor/qcom/proprietary/adsprpc/src/fastrpc_apps_user.c:3294: domain_deinit for domain 7: dev -1
+06-01 11:00:17.340 I/com.example.llama.aichat(11671): vendor/qcom/proprietary/adsprpc/src/fastrpc_apps_user.c:3294: domain_deinit for domain 8: dev -1
+06-01 11:00:17.340 I/com.example.llama.aichat(11671): vendor/qcom/proprietary/adsprpc/src/fastrpc_apps_user.c:3294: domain_deinit for domain 9: dev -1
+06-01 11:00:17.340 I/com.example.llama.aichat(11671): vendor/qcom/proprietary/adsprpc/src/fastrpc_apps_user.c:3294: domain_deinit for domain 10: dev -1
+06-01 11:00:17.340 I/com.example.llama.aichat(11671): vendor/qcom/proprietary/adsprpc/src/fastrpc_apps_user.c:3294: domain_deinit for domain 11: dev -1
+06-01 11:00:17.340 I/com.example.llama.aichat(11671): vendor/qcom/proprietary/adsprpc/src/fastrpc_apps_user.c:3294: domain_deinit for domain 12: dev -1
+06-01 11:00:17.340 I/com.example.llama.aichat(11671): vendor/qcom/proprietary/adsprpc/src/fastrpc_apps_user.c:3294: domain_deinit for domain 13: dev -1
+06-01 11:00:17.340 I/com.example.llama.aichat(11671): vendor/qcom/proprietary/adsprpc/src/fastrpc_apps_user.c:3294: domain_deinit for domain 14: dev -1
+06-01 11:00:17.340 I/com.example.llama.aichat(11671): vendor/qcom/proprietary/adsprpc/src/fastrpc_apps_user.c:3294: domain_deinit for domain 15: dev -1
+06-01 11:00:17.340 I/com.example.llama.aichat(11671): vendor/qcom/proprietary/adsprpc/src/rpcmem_android.c:323: rpcmem_deinit_internal done
+06-01 11:00:17.340 I/com.example.llama.aichat(11671): vendor/qcom/proprietary/adsprpc/src/fastrpc_apps_user.c:4434: fastrpc_apps_user_deinit done
+06-01 11:00:17.337 W/DefaultDispatch(11671): type=1400 audit(0.0:19931): avc:  denied  { search } for  name="/" dev="sde18" ino=2 scontext=u:r:untrusted_app:s0:c72,c257,c512,c768 tcontext=u:object_r:adsprpcd_file:s0 tclass=dir permissive=0 app=com.example.llama.aichat
+06-01 11:00:17.337 W/DefaultDispatch(11671): type=1400 audit(0.0:19932): avc:  denied  { getattr } for  path="/vendor/dsp" dev="sde18" ino=2 scontext=u:r:untrusted_app:s0:c72,c257,c512,c768 tcontext=u:object_r:adsprpcd_file:s0 tclass=dir permissive=0 app=com.example.llama.aichat
+06-01 11:00:17.337 W/DefaultDispatch(11671): type=1400 audit(0.0:19933): avc:  denied  { search } for  name="/" dev="sde18" ino=2 scontext=u:r:untrusted_app:s0:c72,c257,c512,c768 tcontext=u:object_r:adsprpcd_file:s0 tclass=dir permissive=0 app=com.example.llama.aichat
+06-01 11:00:17.337 W/DefaultDispatch(11671): type=1400 audit(0.0:19934): avc:  denied  { getattr } for  path="/vendor/dsp" dev="sde18" ino=2 scontext=u:r:untrusted_app:s0:c72,c257,c512,c768 tcontext=u:object_r:adsprpcd_file:s0 tclass=dir permissive=0 app=com.example.llama.aichat
+06-01 11:00:17.345 I/ai-chat (11671): load_backend: loaded CPU backend from /data/app/~~a2SLK7PL-TLTgx5tsDBA3g==/com.example.llama.aichat-6QUXUBDmV9xy4llt3JguRw==/lib/arm64/libggml-cpu-android_armv8.6_1.so
+06-01 11:00:17.346 I/ai-chat (11671): Java_com_arm_aichat_internal_InferenceEngineImpl_init: backend registry count=2, device count=2
+06-01 11:00:17.346 I/ai-chat (11671): log_available_backend_devices: ggml backend devices=2
+06-01 11:00:17.346 I/ai-chat (11671):   dev[0]: name=GPUOpenCL desc=QUALCOMM Adreno(TM) 735 type=1 mem=0.0/0.0 MiB
+06-01 11:00:17.346 I/ai-chat (11671):   dev[1]: name=CPU desc=CPU type=0 mem=11357.6/11357.6 MiB
+06-01 11:00:17.346 I/ai-chat (11671): Backend initiated; Log handler set. CPU backend available=true
+06-01 11:00:17.346 I/InferenceEngineImpl(11671): Native library loaded! System info: 
+06-01 11:00:17.346 I/InferenceEngineImpl(11671): CPU : NEON = 1 | ARM_FMA = 1 | FP16_VA = 1 | MATMUL_INT8 = 1 | DOTPROD = 1 | OPENMP = 1 | REPACK = 1 | 
+06-01 11:00:17.346 I/ai-chat (11671): load_aux_model: flow n_gpu_layers=-1
+06-01 11:00:17.346 W/ai-chat (11671): load_aux_model: flow HTP device not found; using default ggml device selection.
+06-01 11:00:17.346 I/ai-chat (11671): GPU设备: GPUOpenCL, 最大命令缓冲区: 1
+06-01 11:00:17.346 I/ai-chat (11671): llama_model_load_from_file_impl: using device GPUOpenCL (QUALCOMM Adreno(TM) 735) (unknown id) - 0 MiB free
+06-01 11:00:17.352 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:17.354 I/ai-chat (11671): llama_model_loader: loaded meta data with 49 key-value pairs and 1121 tensors from /data/user/0/com.example.llama.aichat/files/models/flow_fp32.gguf (version GGUF V3 (latest))
+06-01 11:00:17.354 I/ai-chat (11671): llama_model_loader: Dumping metadata keys/values. Note: KV overrides do not apply in this output.
+06-01 11:00:17.354 I/ai-chat (11671): llama_model_loader: - kv   0:                       general.architecture str              = CosyVoiceFlow
+06-01 11:00:17.354 I/ai-chat (11671): llama_model_loader: - kv   1:                               general.type str              = model
+06-01 11:00:17.354 I/ai-chat (11671): llama_model_loader: - kv   2:                               general.name str              = Flow
+06-01 11:00:17.354 I/ai-chat (11671): llama_model_loader: - kv   3:                         general.size_label str              = 113M
+06-01 11:00:17.354 I/ai-chat (11671): llama_model_loader: - kv   4:                   cosyvoiceflow.vocab_size u32              = 6561
+06-01 11:00:17.354 I/ai-chat (11671): llama_model_loader: - kv   5:              cosyvoiceflow.token_mel_ratio f32              = 2.000000
+06-01 11:00:17.354 I/ai-chat (11671): llama_model_loader: - kv   6:                cosyvoiceflow.spk_embed_dim u32              = 192
+06-01 11:00:17.354 I/ai-chat (11671): llama_model_loader: - kv   7:            cosyvoiceflow.pre_lookahead_len u32              = 3
+06-01 11:00:17.354 I/ai-chat (11671): llama_model_loader: - kv   8:                     cosyvoiceflow.out_type str              = mel
+06-01 11:00:17.354 I/ai-chat (11671): llama_model_loader: - kv   9:                  cosyvoiceflow.output_size u32              = 80
+06-01 11:00:17.354 I/ai-chat (11671): llama_model_loader: - kv  10:               cosyvoiceflow.only_mask_loss bool             = false
+06-01 11:00:17.354 I/ai-chat (11671): llama_model_loader: - kv  11:                   cosyvoiceflow.input_size u32              = 512
+06-01 11:00:17.354 I/ai-chat (11671): llama_model_loader: - kv  12:             cosyvoiceflow.input_frame_rate u32              = 25
+06-01 11:00:17.354 I/ai-chat (11671): llama_model_loader: - kv  13:      cosyvoiceflow.encoder_attention_heads u32              = 8
+06-01 11:00:17.354 I/ai-chat (11671): llama_model_loader: - kv  14: cosyvoiceflow.encoder_attention_dropout_rate f32              = 0.100000
+06-01 11:00:17.354 I/ai-chat (11671): llama_model_loader: - kv  15:         cosyvoiceflow.encoder_dropout_rate f32              = 0.100000
+06-01 11:00:17.354 I/ai-chat (11671): llama_model_loader: - kv  16:          cosyvoiceflow.encoder_input_layer str              = linear
+06-01 11:00:17.354 I/ai-chat (11671): llama_model_loader: - kv  17:           cosyvoiceflow.encoder_input_size u32              = 512
+06-01 11:00:17.354 I/ai-chat (11671): llama_model_loader: - kv  18:         cosyvoiceflow.encoder_linear_units u32              = 2048
+06-01 11:00:17.354 I/ai-chat (11671): llama_model_loader: - kv  19:        cosyvoiceflow.encoder_macaron_style bool             = false
+06-01 11:00:17.354 I/ai-chat (11671): llama_model_loader: - kv  20:     cosyvoiceflow.encoder_normalize_before bool             = false
+06-01 11:00:17.354 I/ai-chat (11671): llama_model_loader: - kv  21:           cosyvoiceflow.encoder_num_blocks u32              = 6
+06-01 11:00:17.354 I/ai-chat (11671): llama_model_loader: - kv  22:          cosyvoiceflow.encoder_output_size u32              = 512
+06-01 11:00:17.354 I/ai-chat (11671): llama_model_loader: - kv  23:   cosyvoiceflow.encoder_pos_enc_layer_type str              = rel_pos_espnet
+06-01 11:00:17.354 I/ai-chat (11671): llama_model_loader: - kv  24:     cosyvoiceflow.encoder_pos_dropout_rate f32              = 0.100000
+06-01 11:00:17.354 I/ai-chat (11671): llama_model_loader: - kv  25: cosyvoiceflow.encoder_selfattention_layer_type str              = rel_selfattn
+06-01 11:00:17.354 I/ai-chat (11671): llama_model_loader: - kv  26:    cosyvoiceflow.encoder_static_chunk_size u32              = 25
+06-01 11:00:17.354 I/ai-chat (11671): llama_model_loader: - kv  27:       cosyvoiceflow.encoder_use_cnn_module bool             = false
+06-01 11:00:17.354 I/ai-chat (11671): llama_model_loader: - kv  28:               cosyvoiceflow.decoder_act_fn str              = gelu
+06-01 11:00:17.354 I/ai-chat (11671): llama_model_loader: - kv  29:   cosyvoiceflow.decoder_attention_head_dim u32              = 64
+06-01 11:00:17.354 I/ai-chat (11671): llama_model_loader: - kv  30:             cosyvoiceflow.decoder_channels arr[i32,1]       = [256]
+06-01 11:00:17.354 I/ai-chat (11671): llama_model_loader: - kv  31:              cosyvoiceflow.decoder_dropout f32              = 0.000000
+06-01 11:00:17.354 I/ai-chat (11671): llama_model_loader: - kv  32: cosyvoiceflow.decoder_estimator_input_channels u32              = 320
+06-01 11:00:17.354 I/ai-chat (11671): llama_model_loader: - kv  33:          cosyvoiceflow.decoder_in_channels u32              = 240
+06-01 11:00:17.354 I/ai-chat (11671): llama_model_loader: - kv  34:       cosyvoiceflow.decoder_infer_cfg_rate f32              = 0.700000
+06-01 11:00:17.354 I/ai-chat (11671): llama_model_loader: - kv  35:             cosyvoiceflow.decoder_n_blocks u32              = 4
+06-01 11:00:17.354 I/ai-chat (11671): llama_model_loader: - kv  36:               cosyvoiceflow.decoder_n_spks u32              = 1
+06-01 11:00:17.354 I/ai-chat (11671): llama_model_loader: - kv  37: cosyvoiceflow.decoder_decoding_left_chunks i32              = -1
+06-01 11:00:17.354 I/ai-chat (11671): llama_model_loader: - kv  38:            cosyvoiceflow.decoder_num_heads u32              = 8
+06-01 11:00:17.354 I/ai-chat (11671): llama_model_loader: - kv  39:       cosyvoiceflow.decoder_num_mid_blocks u32              = 12
+06-01 11:00:17.354 I/ai-chat (11671): llama_model_loader: - kv  40:      cosyvoiceflow.decoder_output_channels u32              = 80
+06-01 11:00:17.354 I/ai-chat (11671): llama_model_loader: - kv  41:        cosyvoiceflow.decoder_reg_loss_type str              = l1
+06-01 11:00:17.354 I/ai-chat (11671): llama_model_loader: - kv  42:            cosyvoiceflow.decoder_sigma_min f32              = 0.000001
+06-01 11:00:17.354 I/ai-chat (11671): llama_model_loader: - kv  43:               cosyvoiceflow.decoder_solver str              = euler
+06-01 11:00:17.354 I/ai-chat (11671): llama_model_loader: - kv  44:          cosyvoiceflow.decoder_spk_emb_dim u32              = 80
+06-01 11:00:17.354 I/ai-chat (11671): llama_model_loader: - kv  45:    cosyvoiceflow.decoder_static_chunk_size u32              = 50
+06-01 11:00:17.354 I/ai-chat (11671): llama_model_loader: - kv  46:          cosyvoiceflow.decoder_t_scheduler str              = cosine
+06-01 11:00:17.354 I/ai-chat (11671): llama_model_loader: - kv  47:       cosyvoiceflow.decoder_train_cfg_rate f32              = 0.200000
+06-01 11:00:17.354 I/ai-chat (11671): llama_model_loader: - kv  48:               general.quantization_version u32              = 2
+06-01 11:00:17.354 I/ai-chat (11671): llama_model_loader: - type  f32: 1121 tensors
+06-01 11:00:17.354 I/ai-chat (11671): print_info: file format = GGUF V3 (latest)
+06-01 11:00:17.354 I/ai-chat (11671): print_info: file type   = all F32 (guessed)
+06-01 11:00:17.354 I/ai-chat (11671): print_info: file size   = 429.34 MiB (32.00 BPW) 
+06-01 11:00:17.354 I/ai-chat (11671): &&&&&&&&&&&&&&&&&&&&&&&&&& flow status is: 1, hift status is: 0
+06-01 11:00:17.354 I/ai-chat (11671): &&&&&&&&&&&&&&&&&&&&&&&&&& flow status is: 1, hift status is: 0
+06-01 11:00:17.354 I/ai-chat (11671): print_info: arch             = CosyVoiceFlow
+06-01 11:00:17.354 I/ai-chat (11671): print_info: vocab_only       = 0
+06-01 11:00:17.354 I/ai-chat (11671): print_info: no_alloc         = 0
+06-01 11:00:17.354 I/ai-chat (11671): print_info: model type       = ?B
+06-01 11:00:17.354 I/ai-chat (11671): print_info: model params     = 112.55 M
+06-01 11:00:17.354 I/ai-chat (11671): print_info: general.name     = n/a
+06-01 11:00:17.354 I/ai-chat (11671): &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& n_layer is: 1127, use_hift is: 0
+06-01 11:00:17.354 I/ai-chat (11671): load_tensors: loading model tensors, this can take a while... (mmap = true)
+06-01 11:00:17.403 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:17.420 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:17.456 I/ai-chat (11671): load_tensors: offloading output layer to GPU
+06-01 11:00:17.456 I/ai-chat (11671): load_tensors: offloading 1126 repeating layers to GPU
+06-01 11:00:17.456 I/ai-chat (11671): load_tensors: offloaded 1128/1128 layers to GPU
+06-01 11:00:17.456 I/ai-chat (11671): load_tensors:   CPU_Mapped model buffer size =    12.81 MiB
+06-01 11:00:17.456 I/ai-chat (11671): load_tensors:       OpenCL model buffer size =   416.53 MiB
+06-01 11:00:17.521 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:17.551 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:17.555 I/ai-chat (11671): llama_context: constructing llama_context
+06-01 11:00:17.555 I/ai-chat (11671): llama_context: n_seq_max     = 1
+06-01 11:00:17.555 I/ai-chat (11671): llama_context: n_ctx         = 2048
+06-01 11:00:17.555 I/ai-chat (11671): llama_context: n_ctx_seq     = 2048
+06-01 11:00:17.555 I/ai-chat (11671): llama_context: n_batch       = 896
+06-01 11:00:17.555 I/ai-chat (11671): llama_context: n_ubatch      = 896
+06-01 11:00:17.555 I/ai-chat (11671): llama_context: causal_attn   = 1
+06-01 11:00:17.555 I/ai-chat (11671): llama_context: flash_attn    = enabled
+06-01 11:00:17.555 I/ai-chat (11671): llama_context: kv_unified    = false
+06-01 11:00:17.555 I/ai-chat (11671): llama_context: freq_base     = 0.0
+06-01 11:00:17.555 I/ai-chat (11671): llama_context: freq_scale    = 1
+06-01 11:00:17.555 W/ai-chat (11671): llama_context: n_ctx_seq (2048) > n_ctx_train (0) -- possible training context overflow
+06-01 11:00:17.555 I/ai-chat (11671): llama_context:        CPU  output buffer size =     0.00 MiB
+06-01 11:00:17.567 I/ai-chat (11671): llama_context: graph nodes  = -1
+06-01 11:00:17.567 I/ai-chat (11671): llama_context: graph splits = -1
+06-01 11:00:17.567 I/InferenceEngineImpl(11671): [LoadFlowModel] ready, previousState=a, path=/data/user/0/com.example.llama.aichat/files/models/flow_fp32.gguf
+06-01 11:00:17.567 I/LlamaInferenceBridge(11671): [FlowOnly] loadFlowModel done in 22.680 s
+06-01 11:00:17.570 I/le.llama.aichat(11671): Waiting for a blocking GC NativeAlloc
+06-01 11:00:17.599 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-01 11:00:17.601 D/DisplayModeController( 1608): setDesiredMode 4630947186934302339 {mode={fps=60.00 Hz, modePtr={id=3, vsyncRate=60.00 Hz, peakRefreshRate=60.00 Hz}}, emitEvent=true, force=false}
+06-01 11:00:17.603 W/SDM     ( 1442): HWDeviceDRM::GetSupportedBitClkRate: Requested rate not supported: 1348000000
+06-01 11:00:17.603 I/SDM     ( 1442): HWDeviceDRM::UpdateMixerAttributes: Mixer WxH 1080x2340-1 for Peripheral
+06-01 11:00:17.604 I/SDM     ( 1442): HWCDisplay::SubmitDisplayConfig: Active configuration changed from config 2 to 3
+06-01 11:00:17.608 I/DisplayDeviceRepository( 2026): Display device changed render timings: "内置屏幕", renderFrameRate=60.000004, presentationDeadlineNanos=18666666, appVsyncOffsetNanos=-1000000
+06-01 11:00:17.611 D/BrightnessThermalClamper( 2026): Thermal status observer already started
+06-01 11:00:17.611 D/AudioFlinger( 1591): setParameters(): io 0, keyvalue screen_state=on, calling pid 2026 calling uid 1000
+06-01 11:00:17.612 D/AHAL: AudioDevice( 1345): SetParameters: 1523: enter: screen_state=on
+06-01 11:00:17.612 D/AHAL: AudioVoice( 1345): VoiceSetParameters: 119: Enter params: screen_state=on
+06-01 11:00:17.612 D/AHAL: AudioVoice( 1345): VoiceSetParameters: 403: Exit ret: 0
+06-01 11:00:17.612 D/AHAL: hfp( 1345): hfp_set_parameters: 444: enter
+06-01 11:00:17.612 D/AHAL: FM( 1345): fm_set_parameters: 261: Enter
+06-01 11:00:17.612 D/AHAL: FM( 1345): fm_set_parameters: 319: exit
+06-01 11:00:17.612 D/AHAL: AudioDevice( 1345): SetParameters: 1640:  - screen = on
+06-01 11:00:17.612 I/PAL: ResourceManager( 1345): setParameter: 10586: Screen State:1
+06-01 11:00:17.612 D/AHAL: AudioDevice( 1345): SetParameters: 2344: exit: screen_state=on
+06-01 11:00:17.612 I/LlamaInferenceBridge(11671): [FlowOnly][llama.cpp] inputs loaded, token=445, tokenLen=445, promptToken=322, promptTokenLen=322, promptFeat=51520, promptFeatLen=644, embedding=192, mergedToken=767
+06-01 11:00:17.619 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:17.625 I/ai-chat (11671): &&&&&&&&&&&&&&&&&&&&&&& n_tokens is: 192
+06-01 11:00:17.631 I/ai-chat (11671): &&&&&&&&&&&&&&&& [spks_t after shape is: ] spks_t shape is: {1534, 80, 2, 1}
+06-01 11:00:17.632 I/ai-chat (11671): &&&&&&&&&& step is: 1
+06-01 11:00:17.632 I/ai-chat (11671): &&&&&&&&&& step is: 2
+06-01 11:00:17.632 I/ai-chat (11671): &&&&&&&&&& step is: 3
+06-01 11:00:17.633 I/ai-chat (11671): &&&&&&&&&& step is: 4
+06-01 11:00:17.633 I/ai-chat (11671): &&&&&&&&&& step is: 5
+06-01 11:00:17.633 I/ai-chat (11671): &&&&&&&&&& step is: 6
+06-01 11:00:17.633 I/ai-chat (11671): &&&&&&&&&& step is: 7
+06-01 11:00:17.634 I/ai-chat (11671): &&&&&&&&&& step is: 8
+06-01 11:00:17.634 I/ai-chat (11671): &&&&&&&&&& step is: 9
+06-01 11:00:17.634 I/ai-chat (11671): &&&&&&&&&& step is: 10
+06-01 11:00:17.635 I/ai-chat (11671): =================== build: 4135 us
+06-01 11:00:17.662 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:17.687 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:17.688 I/SDM     ( 1442): DisplayBase::CommitThread: Received idle timeout, panel: cmd, timeout: 70000 us
+06-01 11:00:17.740 I/ai-chat (11671): ggml_opencl: candidate chain count ADD->UNARY=0, MUL->UNARY=0, MUL_MAT->UNARY=0, MUL_MAT->ADD->MID=0, MUL_MAT->ADD->ADD=0
+06-01 11:00:17.740 I/ai-chat (11671): ggml_opencl: candidate chain count (CONT|DUP|CPY)->UNARY direct=0 unique=0 cond_fail=0
+06-01 11:00:17.740 I/ai-chat (11671): ggml_opencl: op-seq profiling disabled or graph too small (ops=4)
+06-01 11:00:17.742 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:20.020 D/ActivityManager( 2026): freezing 5610 jp.co.sharp.android.usbchargingalart
+06-01 11:00:20.022 D/ActivityManager( 2026): freezing 7894 com.android.settings
+06-01 11:00:20.023 D/ActivityManager( 2026): freezing 11040 com.android.keychain
+06-01 11:00:20.024 D/ActivityManager( 2026): freezing 8465 jp.co.sharp.android.shlogdservice
+06-01 11:00:20.025 D/ActivityManager( 2026): freezing 8371 jp.co.sharp.android.bsc
+06-01 11:00:20.026 D/ActivityManager( 2026): freezing 10382 com.android.DeviceAsWebcam
+06-01 11:00:20.482 E/Diag_Lib( 2200): diag: Diag_LSM_Init: invoked for pid: 2200 with init_count: 0
+06-01 11:00:20.482 E/Diag_Lib( 2200): diag:failed to connect to diag socket
+06-01 11:00:20.483 E/Diag_Lib( 2200):  Diag_LSM_Init: Failed to open handle to diag driver, error = 111
+06-01 11:00:20.843 D/ActivityManager( 2026): freezing 8801 com.google.android.contacts
+06-01 11:00:20.846 D/InetDiagMessage( 2026): Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET, states=14
+06-01 11:00:20.848 D/InetDiagMessage( 2026): Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET6, states=14
+06-01 11:00:20.848 D/InetDiagMessage( 2026): Destroyed live tcp sockets for uids={10203} in 3ms
+06-01 11:00:25.484 E/Diag_Lib( 2200): diag: Diag_LSM_Init: invoked for pid: 2200 with init_count: 0
+06-01 11:00:25.484 E/Diag_Lib( 2200): diag:failed to connect to diag socket
+06-01 11:00:25.484 E/Diag_Lib( 2200):  Diag_LSM_Init: Failed to open handle to diag driver, error = 111
+06-01 11:00:25.809 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-01 11:00:25.878 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-01 11:00:25.925 D/QtiCarrierConfigHelper( 3721): WARNING, no carrier configs on phone Id: 0
+06-01 11:00:25.925 D/QtiCarrierConfigHelper( 3721): WARNING, no carrier configs on phone Id: 1
+06-01 11:00:25.925 D/DeviceStatisticsService( 3684): onReceive: action= android.intent.action.BATTERY_CHANGED
+06-01 11:00:25.926 D/PowerUI ( 3524): can't show warning due to - plugged: true status unknown: false
+06-01 11:00:25.929 V/DeviceStatisticsService( 3684): chargerType=1 batteryLevel=99 totalBatteryCapacity=4697400
+06-01 11:00:25.942 D/DisplayModeController( 1608): setDesiredMode 4630947186934302339 {mode={fps=120.00 Hz, modePtr={id=2, vsyncRate=120.00 Hz, peakRefreshRate=120.00 Hz}}, emitEvent=true, force=false}
+06-01 11:00:25.944 W/SDM     ( 1442): HWDeviceDRM::GetSupportedBitClkRate: Requested rate not supported: 1348000000
+06-01 11:00:25.945 I/SDM     ( 1442): HWDeviceDRM::UpdateMixerAttributes: Mixer WxH 1080x2340-1 for Peripheral
+06-01 11:00:25.945 I/SDM     ( 1442): HWCDisplay::SubmitDisplayConfig: Active configuration changed from config 3 to 2
+06-01 11:00:25.971 I/DisplayDeviceRepository( 2026): Display device changed render timings: "内置屏幕", renderFrameRate=120.00001, presentationDeadlineNanos=10333333, appVsyncOffsetNanos=-1000000
+06-01 11:00:25.973 D/BrightnessThermalClamper( 2026): Thermal status observer already started
+06-01 11:00:25.975 D/DisplayManagerService( 2026): Ignore redundant display event 0/2 to 10201/5354
+06-01 11:00:25.975 D/AudioFlinger( 1591): setParameters(): io 0, keyvalue screen_state=on, calling pid 2026 calling uid 1000
+06-01 11:00:25.975 D/AHAL: AudioDevice( 1345): SetParameters: 1523: enter: screen_state=on
+06-01 11:00:25.975 D/AHAL: AudioVoice( 1345): VoiceSetParameters: 119: Enter params: screen_state=on
+06-01 11:00:25.975 D/AHAL: AudioVoice( 1345): VoiceSetParameters: 403: Exit ret: 0
+06-01 11:00:25.975 D/AHAL: hfp( 1345): hfp_set_parameters: 444: enter
+06-01 11:00:25.975 D/AHAL: FM( 1345): fm_set_parameters: 261: Enter
+06-01 11:00:25.975 D/AHAL: FM( 1345): fm_set_parameters: 319: exit
+06-01 11:00:25.975 D/AHAL: AudioDevice( 1345): SetParameters: 1640:  - screen = on
+06-01 11:00:25.975 I/PAL: ResourceManager( 1345): setParameter: 10586: Screen State:1
+06-01 11:00:25.975 D/AHAL: AudioDevice( 1345): SetParameters: 2344: exit: screen_state=on
+06-01 11:00:25.976 D/DisplayManagerService( 2026): Ignore redundant display event 0/2 to 10186/10842
+06-01 11:00:25.976 D/DisplayManagerService( 2026): Ignore redundant display event 0/2 to 10369/26314
+06-01 11:00:25.976 D/DisplayManagerService( 2026): Ignore redundant display event 0/2 to 10369/26600
+06-01 11:00:26.041 I/SDM     ( 1442): DisplayBase::CommitThread: Received idle timeout, panel: cmd, timeout: 70000 us
+06-01 11:00:26.448 D/MainJobService( 8384): BATTERY_PER_CHANGED: start
+06-01 11:00:26.449 D/MainJobService( 8384): BATTERY_PER_CHANGED: end
+06-01 11:00:26.449 I/WM-WorkerWrapper( 8384): Worker result SUCCESS for Work [ id=14ab7c95-f7f7-4dc1-b78e-1b7f0951e1df, tags={ jp.co.sharp.android.ichargeservice.MainJobService } ]
+06-01 11:00:26.951 E/iCharge.Receiver( 7333): jp.co.sharp.android.ichargeservice.action.BATTERY_PER_CHANGED
+06-01 11:00:26.973 D/MainJobService( 7333): BATTERY_PER_CHANGED: start percentage: 99
+06-01 11:00:26.973 D/MainJobService( 7333): BATTERY_PER_CHANGED: end
+06-01 11:00:26.974 I/WM-WorkerWrapper( 7333): Worker result SUCCESS for Work [ id=e6bebe30-ea0b-4430-b6a3-1293cda967c2, tags={ jp.co.sharp.android.icharge.services.MainJobService } ]
+06-01 11:00:27.440 D/ActivityManager( 2026): sync unfroze 8801 com.google.android.contacts for 3
+06-01 11:00:27.446 D/CarrierSvcBindHelper( 3736): onPackageModified: jp.co.sharp.android.icharge
+06-01 11:00:27.446 D/EuiccConnector( 3736): handleMessage: E msg.what=1
+06-01 11:00:27.446 D/EuiccConnector( 3736): processMsg: ConnectedState
+06-01 11:00:27.446 D/EuiccConnector( 3736): processMsg: DisconnectedState
+06-01 11:00:27.447 D/CarrierSvcBindHelper( 3736): No carrier app for: 0
+06-01 11:00:27.447 D/CarrierSvcBindHelper( 3736): No carrier app for: 1
+06-01 11:00:27.448 D/ShortcutService( 2026): received package broadcast intent: Intent { act=android.intent.action.PACKAGE_CHANGED dat=package: flg=0x45000010 (has extras) }
+06-01 11:00:27.448 D/ShortcutService( 2026): changing package: jp.co.sharp.android.icharge userId0
+06-01 11:00:27.448 I/RegisteredComponentCache( 4705): New Components => 
+06-01 11:00:27.449 D/ShortcutService( 2026): handlePackageChanged: jp.co.sharp.android.icharge user=0
+06-01 11:00:27.449 I/RegisteredComponentCache( 4705): ComponentInfo: ResolveInfo{86b9a7a com.android.apps.tag/.TagViewer m=0x108000 userHandle=UserHandle{0}}, techs: android.nfc.tech.Ndef, 
+06-01 11:00:27.449 I/RegisteredComponentCache( 4705): Removed Components => 
+06-01 11:00:27.449 D/ShortcutService( 2026): rescanPackageIfNeeded 0@jp.co.sharp.android.icharge, forceRescan=true , isNewApp=true
+06-01 11:00:27.449 I/RegisteredComponentCache( 4705): ComponentInfo: ResolveInfo{866540f com.android.apps.tag/.TagViewer m=0x108000 userHandle=UserHandle{0}}, techs: android.nfc.tech.Ndef, 
+06-01 11:00:27.449 D/ShortcutService( 2026): Package jp.co.sharp.android.icharge has 0 manifest shortcut(s), and 0 share target(s)
+06-01 11:00:27.450 D/EuiccConnector( 3736): handleMessage: X
+06-01 11:00:27.453 D/ShortcutService( 2026): received package broadcast intent: Intent { act=android.intent.action.PACKAGE_CHANGED dat=package: flg=0x45000010 (has extras) }
+06-01 11:00:27.453 D/ShortcutService( 2026): changing package: jp.co.sharp.android.ichargeservice userId0
+06-01 11:00:27.453 D/ShortcutService( 2026): handlePackageChanged: jp.co.sharp.android.ichargeservice user=0
+06-01 11:00:27.453 D/ShortcutService( 2026): rescanPackageIfNeeded 0@jp.co.sharp.android.ichargeservice, forceRescan=true , isNewApp=true
+06-01 11:00:27.453 D/ShortcutService( 2026): Package jp.co.sharp.android.ichargeservice has 0 manifest shortcut(s), and 0 share target(s)
+06-01 11:00:27.455 W/AppOpService( 2026): Ignored setUidMode call for runtime permission app op: uid = 1001, code = READ_SMS, mode = allow, callingUid = 1001, oldMode = allow
+06-01 11:00:27.455 W/AppOpService( 2026): Ignored setUidMode call for runtime permission app op: uid = 1001, code = RECEIVE_SMS, mode = allow, callingUid = 1001, oldMode = allow
+06-01 11:00:27.455 W/AppOpService( 2026): Ignored setUidMode call for runtime permission app op: uid = 1001, code = RECEIVE_WAP_PUSH, mode = allow, callingUid = 1001, oldMode = allow
+06-01 11:00:27.455 W/AppOpService( 2026): Ignored setUidMode call for runtime permission app op: uid = 1001, code = SEND_SMS, mode = allow, callingUid = 1001, oldMode = allow
+06-01 11:00:27.455 W/AppOpService( 2026): Ignored setUidMode call for runtime permission app op: uid = 1001, code = READ_CELL_BROADCASTS, mode = allow, callingUid = 1001, oldMode = allow
+06-01 11:00:27.456 I/RegisteredComponentCache( 4705): New Components => 
+06-01 11:00:27.456 I/RegisteredComponentCache( 4705): ComponentInfo: ResolveInfo{e1bf821 com.android.apps.tag/.TagViewer m=0x108000 userHandle=UserHandle{0}}, techs: android.nfc.tech.Ndef, 
+06-01 11:00:27.456 I/RegisteredComponentCache( 4705): Removed Components => 
+06-01 11:00:27.456 I/RegisteredComponentCache( 4705): ComponentInfo: ResolveInfo{86b9a7a com.android.apps.tag/.TagViewer m=0x108000 userHandle=UserHandle{0}}, techs: android.nfc.tech.Ndef, 
+06-01 11:00:27.456 W/MagnificationConnectionManager( 2026): requestConnection duplicated request: connect=false, mConnectionState=DISCONNECTED
+06-01 11:00:27.456 W/AS.AudioService( 2026): handleMessage({ when=0 what=35 target=com.android.server.audio.AudioService$AudioHandler }) from pid=2026, uid=1000
+06-01 11:00:27.457 D/PackageUpdatedTask( 4001): Package updated: mOp=UPDATE packages=[jp.co.sharp.android.icharge]
+06-01 11:00:27.458 W/AllAppsList( 4001): updatePromiseInstallInfo: no Activities matched updated package, removing all apps from package=jp.co.sharp.android.icharge
+06-01 11:00:27.458 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:00:27.458 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:00:27.458 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:00:27.458 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:00:27.458 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:00:27.458 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:00:27.458 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:00:27.458 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:00:27.458 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:00:27.458 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:00:27.458 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:00:27.458 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:00:27.458 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:00:27.458 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:00:27.458 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:00:27.458 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:00:27.458 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:00:27.458 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:00:27.458 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:00:27.458 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:00:27.459 I/PermissionControllerServiceImpl( 3862): Updating user sensitive for uid 10250
+06-01 11:00:27.460 D/ImsResolver( 3736): maybeAddedImsService, packageName: jp.co.sharp.android.icharge
+06-01 11:00:27.460 D/CarrierSvcBindHelper( 3736): onPackageModified: jp.co.sharp.android.ichargeservice
+06-01 11:00:27.461 D/CarrierSvcBindHelper( 3736): No carrier app for: 0
+06-01 11:00:27.461 D/CarrierSvcBindHelper( 3736): No carrier app for: 1
+06-01 11:00:27.462 D/EuiccConnector( 3736): handleMessage: E msg.what=1
+06-01 11:00:27.462 D/EuiccConnector( 3736): processMsg: ConnectedState
+06-01 11:00:27.462 D/EuiccConnector( 3736): processMsg: DisconnectedState
+06-01 11:00:27.465 D/EuiccConnector( 3736): handleMessage: X
+06-01 11:00:27.465 W/AppOpService( 2026): Ignored setUidMode call for runtime permission app op: uid = 1001, code = READ_SMS, mode = allow, callingUid = 1001, oldMode = allow
+06-01 11:00:27.465 W/AppOpService( 2026): Ignored setUidMode call for runtime permission app op: uid = 1001, code = RECEIVE_SMS, mode = allow, callingUid = 1001, oldMode = allow
+06-01 11:00:27.465 W/AppOpService( 2026): Ignored setUidMode call for runtime permission app op: uid = 1001, code = RECEIVE_WAP_PUSH, mode = allow, callingUid = 1001, oldMode = allow
+06-01 11:00:27.465 W/AppOpService( 2026): Ignored setUidMode call for runtime permission app op: uid = 1001, code = SEND_SMS, mode = allow, callingUid = 1001, oldMode = allow
+06-01 11:00:27.466 W/AppOpService( 2026): Ignored setUidMode call for runtime permission app op: uid = 1001, code = READ_CELL_BROADCASTS, mode = allow, callingUid = 1001, oldMode = allow
+06-01 11:00:27.468 D/ImsResolver( 3736): maybeAddedImsService, packageName: jp.co.sharp.android.ichargeservice
+06-01 11:00:27.471 I/PermissionControllerServiceImpl( 3862): Updating user sensitive for uid 10249
+06-01 11:00:27.475 I/android.hardware.health-service.sharp( 1352): batteryChargeTimeToFullNowSeconds: 781 -> 607
+06-01 11:00:27.478 D/QtiCarrierConfigHelper( 3721): WARNING, no carrier configs on phone Id: 0
+06-01 11:00:27.478 D/QtiCarrierConfigHelper( 3721): WARNING, no carrier configs on phone Id: 1
+06-01 11:00:27.478 D/DeviceStatisticsService( 3684): onReceive: action= android.intent.action.BATTERY_CHANGED
+06-01 11:00:27.481 D/PowerUI ( 3524): can't show warning due to - plugged: true status unknown: false
+06-01 11:00:27.483 V/DeviceStatisticsService( 3684): chargerType=1 batteryLevel=99 totalBatteryCapacity=4701200
+06-01 11:00:27.484 W/AS.AudioService( 2026): handleMessage({ when=0 what=35 target=com.android.server.audio.AudioService$AudioHandler }) from pid=2026, uid=1000
+06-01 11:00:27.485 W/MagnificationConnectionManager( 2026): requestConnection duplicated request: connect=false, mConnectionState=DISCONNECTED
+06-01 11:00:27.486 D/PackageUpdatedTask( 4001): Package updated: mOp=UPDATE packages=[jp.co.sharp.android.ichargeservice]
+06-01 11:00:27.488 W/AllAppsList( 4001): updatePromiseInstallInfo: no Activities matched updated package, removing all apps from package=jp.co.sharp.android.ichargeservice
+06-01 11:00:27.488 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:00:27.488 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:00:27.488 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:00:27.488 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:00:27.488 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:00:27.488 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:00:27.488 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:00:27.488 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:00:27.489 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:00:27.489 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:00:27.489 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:00:27.489 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:00:27.489 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:00:27.489 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:00:27.489 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:00:27.489 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:00:27.489 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:00:27.489 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:00:27.489 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:00:27.489 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:00:27.568 I/SDM     ( 1442): DisplayBase::CommitThread: Received idle timeout, panel: cmd, timeout: 70000 us
+06-01 11:00:27.943 D/ControlsListingControllerImpl( 3524): ServiceConfig reloaded, count: 1
+06-01 11:00:27.945 D/ControlsListingControllerImpl( 3524): ServiceConfig reloaded, count: 1
+06-01 11:00:27.969 I/ComponentChangedIO( 6921): Feature is not enabled, skipping component changed intent operation [CONTEXT service_id=469 ]
+06-01 11:00:27.970 I/ComponentChangedIO( 6921): Feature is not enabled, skipping component changed intent operation [CONTEXT service_id=469 ]
+06-01 11:00:28.000 D/MainJobService( 8384): BATTERY_PER_CHANGED: start
+06-01 11:00:28.000 D/MainJobService( 8384): BATTERY_PER_CHANGED: end
+06-01 11:00:28.001 I/WM-WorkerWrapper( 8384): Worker result SUCCESS for Work [ id=4a3e32af-8026-416d-81e0-113939c1fcb2, tags={ jp.co.sharp.android.ichargeservice.MainJobService } ]
+06-01 11:00:28.501 E/iCharge.Receiver( 7333): jp.co.sharp.android.ichargeservice.action.BATTERY_PER_CHANGED
+06-01 11:00:28.520 D/MainJobService( 7333): BATTERY_PER_CHANGED: start percentage: 99
+06-01 11:00:28.520 D/MainJobService( 7333): BATTERY_PER_CHANGED: end
+06-01 11:00:28.521 I/WM-WorkerWrapper( 7333): Worker result SUCCESS for Work [ id=cbb73dd1-05f6-4182-8c66-8692b252771a, tags={ jp.co.sharp.android.icharge.services.MainJobService } ]
+06-01 11:00:29.000 W/AS.AudioService( 2026): handleMessage({ when=0 what=35 target=com.android.server.audio.AudioService$AudioHandler }) from pid=2026, uid=1000
+06-01 11:00:29.000 D/ShortcutService( 2026): received package broadcast intent: Intent { act=android.intent.action.PACKAGE_CHANGED dat=package: flg=0x45000010 (has extras) }
+06-01 11:00:29.001 D/ShortcutService( 2026): changing package: jp.co.sharp.android.icharge userId0
+06-01 11:00:29.001 D/ShortcutService( 2026): handlePackageChanged: jp.co.sharp.android.icharge user=0
+06-01 11:00:29.001 D/ShortcutService( 2026): rescanPackageIfNeeded 0@jp.co.sharp.android.icharge, forceRescan=true , isNewApp=true
+06-01 11:00:29.001 W/MagnificationConnectionManager( 2026): requestConnection duplicated request: connect=false, mConnectionState=DISCONNECTED
+06-01 11:00:29.003 D/CarrierSvcBindHelper( 3736): onPackageModified: jp.co.sharp.android.icharge
+06-01 11:00:29.003 D/EuiccConnector( 3736): handleMessage: E msg.what=1
+06-01 11:00:29.003 D/EuiccConnector( 3736): processMsg: ConnectedState
+06-01 11:00:29.003 D/EuiccConnector( 3736): processMsg: DisconnectedState
+06-01 11:00:29.003 I/PermissionControllerServiceImpl( 3862): Updating user sensitive for uid 10250
+06-01 11:00:29.004 D/CarrierSvcBindHelper( 3736): No carrier app for: 0
+06-01 11:00:29.004 D/CarrierSvcBindHelper( 3736): No carrier app for: 1
+06-01 11:00:29.005 D/EuiccConnector( 3736): handleMessage: X
+06-01 11:00:29.005 D/EuiccConnector( 3736): handleMessage: E msg.what=1
+06-01 11:00:29.005 D/EuiccConnector( 3736): processMsg: ConnectedState
+06-01 11:00:29.005 D/EuiccConnector( 3736): processMsg: DisconnectedState
+06-01 11:00:29.005 D/EuiccConnector( 3736): handleMessage: X
+06-01 11:00:29.006 I/RegisteredComponentCache( 4705): New Components => 
+06-01 11:00:29.006 I/RegisteredComponentCache( 4705): ComponentInfo: ResolveInfo{31fd334 com.android.apps.tag/.TagViewer m=0x108000 userHandle=UserHandle{0}}, techs: android.nfc.tech.Ndef, 
+06-01 11:00:29.006 I/RegisteredComponentCache( 4705): Removed Components => 
+06-01 11:00:29.006 I/RegisteredComponentCache( 4705): ComponentInfo: ResolveInfo{e1bf821 com.android.apps.tag/.TagViewer m=0x108000 userHandle=UserHandle{0}}, techs: android.nfc.tech.Ndef, 
+06-01 11:00:29.007 D/PackageUpdatedTask( 4001): Package updated: mOp=UPDATE packages=[jp.co.sharp.android.icharge]
+06-01 11:00:29.009 I/PermissionControllerServiceImpl( 3862): Updating user sensitive for uid 10249
+06-01 11:00:29.010 W/AllAppsList( 4001): updatePromiseInstallInfo: no Activities matched updated package, removing all apps from package=jp.co.sharp.android.icharge
+06-01 11:00:29.010 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:00:29.010 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:00:29.010 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:00:29.010 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:00:29.010 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:00:29.010 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:00:29.010 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:00:29.010 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:00:29.010 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:00:29.010 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:00:29.010 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:00:29.010 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:00:29.010 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:00:29.010 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:00:29.010 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:00:29.010 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:00:29.010 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:00:29.010 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:00:29.010 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:00:29.010 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:00:29.011 D/ShortcutService( 2026): Package jp.co.sharp.android.icharge has 0 manifest shortcut(s), and 0 share target(s)
+06-01 11:00:29.011 D/ShortcutService( 2026): received package broadcast intent: Intent { act=android.intent.action.PACKAGE_CHANGED dat=package: flg=0x45000010 (has extras) }
+06-01 11:00:29.011 D/ShortcutService( 2026): changing package: jp.co.sharp.android.ichargeservice userId0
+06-01 11:00:29.011 D/ShortcutService( 2026): handlePackageChanged: jp.co.sharp.android.ichargeservice user=0
+06-01 11:00:29.011 D/ShortcutService( 2026): rescanPackageIfNeeded 0@jp.co.sharp.android.ichargeservice, forceRescan=true , isNewApp=true
+06-01 11:00:29.011 D/ShortcutService( 2026): Package jp.co.sharp.android.ichargeservice has 0 manifest shortcut(s), and 0 share target(s)
+06-01 11:00:29.012 I/RegisteredComponentCache( 4705): New Components => 
+06-01 11:00:29.012 I/RegisteredComponentCache( 4705): ComponentInfo: ResolveInfo{c02aba3 com.android.apps.tag/.TagViewer m=0x108000 userHandle=UserHandle{0}}, techs: android.nfc.tech.Ndef, 
+06-01 11:00:29.012 I/RegisteredComponentCache( 4705): Removed Components => 
+06-01 11:00:29.012 I/RegisteredComponentCache( 4705): ComponentInfo: ResolveInfo{31fd334 com.android.apps.tag/.TagViewer m=0x108000 userHandle=UserHandle{0}}, techs: android.nfc.tech.Ndef, 
+06-01 11:00:29.013 W/AppOpService( 2026): Ignored setUidMode call for runtime permission app op: uid = 1001, code = READ_SMS, mode = allow, callingUid = 1001, oldMode = allow
+06-01 11:00:29.013 W/AppOpService( 2026): Ignored setUidMode call for runtime permission app op: uid = 1001, code = RECEIVE_SMS, mode = allow, callingUid = 1001, oldMode = allow
+06-01 11:00:29.013 W/AppOpService( 2026): Ignored setUidMode call for runtime permission app op: uid = 1001, code = RECEIVE_WAP_PUSH, mode = allow, callingUid = 1001, oldMode = allow
+06-01 11:00:29.013 W/AppOpService( 2026): Ignored setUidMode call for runtime permission app op: uid = 1001, code = SEND_SMS, mode = allow, callingUid = 1001, oldMode = allow
+06-01 11:00:29.014 W/AppOpService( 2026): Ignored setUidMode call for runtime permission app op: uid = 1001, code = READ_CELL_BROADCASTS, mode = allow, callingUid = 1001, oldMode = allow
+06-01 11:00:29.015 D/CarrierSvcBindHelper( 3736): onPackageModified: jp.co.sharp.android.ichargeservice
+06-01 11:00:29.015 D/ImsResolver( 3736): maybeAddedImsService, packageName: jp.co.sharp.android.icharge
+06-01 11:00:29.015 D/CarrierSvcBindHelper( 3736): No carrier app for: 0
+06-01 11:00:29.015 D/CarrierSvcBindHelper( 3736): No carrier app for: 1
+06-01 11:00:29.019 W/AS.AudioService( 2026): handleMessage({ when=0 what=35 target=com.android.server.audio.AudioService$AudioHandler }) from pid=2026, uid=1000
+06-01 11:00:29.019 W/MagnificationConnectionManager( 2026): requestConnection duplicated request: connect=false, mConnectionState=DISCONNECTED
+06-01 11:00:29.020 D/PackageUpdatedTask( 4001): Package updated: mOp=UPDATE packages=[jp.co.sharp.android.ichargeservice]
+06-01 11:00:29.025 W/AllAppsList( 4001): updatePromiseInstallInfo: no Activities matched updated package, removing all apps from package=jp.co.sharp.android.ichargeservice
+06-01 11:00:29.025 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:00:29.025 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:00:29.025 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:00:29.025 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:00:29.025 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:00:29.025 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:00:29.025 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:00:29.025 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:00:29.025 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:00:29.025 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:00:29.025 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:00:29.025 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:00:29.025 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:00:29.025 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:00:29.025 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:00:29.025 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:00:29.025 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:00:29.025 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:00:29.025 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:00:29.025 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:00:29.026 W/AppOpService( 2026): Ignored setUidMode call for runtime permission app op: uid = 1001, code = READ_SMS, mode = allow, callingUid = 1001, oldMode = allow
+06-01 11:00:29.026 W/AppOpService( 2026): Ignored setUidMode call for runtime permission app op: uid = 1001, code = RECEIVE_SMS, mode = allow, callingUid = 1001, oldMode = allow
+06-01 11:00:29.027 W/AppOpService( 2026): Ignored setUidMode call for runtime permission app op: uid = 1001, code = RECEIVE_WAP_PUSH, mode = allow, callingUid = 1001, oldMode = allow
+06-01 11:00:29.027 W/AppOpService( 2026): Ignored setUidMode call for runtime permission app op: uid = 1001, code = SEND_SMS, mode = allow, callingUid = 1001, oldMode = allow
+06-01 11:00:29.027 W/AppOpService( 2026): Ignored setUidMode call for runtime permission app op: uid = 1001, code = READ_CELL_BROADCASTS, mode = allow, callingUid = 1001, oldMode = allow
+06-01 11:00:29.029 D/ImsResolver( 3736): maybeAddedImsService, packageName: jp.co.sharp.android.ichargeservice
+06-01 11:00:29.491 D/ControlsListingControllerImpl( 3524): ServiceConfig reloaded, count: 1
+06-01 11:00:29.492 D/ControlsListingControllerImpl( 3524): ServiceConfig reloaded, count: 1
+06-01 11:00:29.507 I/ComponentChangedIO( 6921): Feature is not enabled, skipping component changed intent operation [CONTEXT service_id=469 ]
+06-01 11:00:29.509 I/ComponentChangedIO( 6921): Feature is not enabled, skipping component changed intent operation [CONTEXT service_id=469 ]
+06-01 11:00:30.485 E/Diag_Lib( 2200): diag: Diag_LSM_Init: invoked for pid: 2200 with init_count: 0
+06-01 11:00:30.485 E/Diag_Lib( 2200): diag:failed to connect to diag socket
+06-01 11:00:30.485 E/Diag_Lib( 2200):  Diag_LSM_Init: Failed to open handle to diag driver, error = 111
+06-01 11:00:35.486 E/Diag_Lib( 2200): diag: Diag_LSM_Init: invoked for pid: 2200 with init_count: 0
+06-01 11:00:35.487 E/Diag_Lib( 2200): diag:failed to connect to diag socket
+06-01 11:00:35.487 E/Diag_Lib( 2200):  Diag_LSM_Init: Failed to open handle to diag driver, error = 111
+06-01 11:00:35.771 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] wait_event:Wait done with Cmd 33
+06-01 11:00:35.771 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] do_listen_events: Rcvd valid Netlink Cmd 0 Err 0
+06-01 11:00:37.523 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] wait_event:Wait done with Cmd 34
+06-01 11:00:37.523 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] do_listen_events: Rcvd valid Netlink Cmd 34 Err 0
+06-01 11:00:37.524 D/WifiNl80211Manager( 2026): Scan result ready event
+06-01 11:00:37.524 D/WifiNative( 2026): Scan result ready event
+06-01 11:00:37.525 D/LOWI-9.0.1.77( 2441): [LOWI-Scan]  -- associated
+06-01 11:00:37.525 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 11:00:37.525 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:13 FREQ: 5300, cFreq1[40:80:160] = [5310:0:0] cFreq2 = 0 SSID IDEA-Office, RSSI(dBM): -40, 11mcRanging: No, Country Code = CNI
+06-01 11:00:37.525 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 11:00:37.525 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:00 FREQ: 2452, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID Scc-test, RSSI(dBM): -58, 11mcRanging: No, Country Code = CNI
+06-01 11:00:37.525 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 11:00:37.525 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:02 FREQ: 2452, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID IDEA-Guest, RSSI(dBM): -58, 11mcRanging: No, Country Code = CNI
+06-01 11:00:37.525 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 11:00:37.525 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:03 FREQ: 2452, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID IDEA-Office, RSSI(dBM): -58, 11mcRanging: No, Country Code = CNI
+06-01 11:00:37.525 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 11:00:37.525 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS cc:d8:43:**:**:89 FREQ: 5745, cFreq1[40:80:160] = [5755:5775:0] cFreq2 = 0 SSID SPU_______5G, RSSI(dBM): -48, 11mcRanging: No, Country Code =    
+06-01 11:00:37.525 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 11:00:37.525 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS cc:d8:43:**:**:88 FREQ: 2412, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID SPU_______2.4G, RSSI(dBM): -45, 11mcRanging: No, Country Code =    
+06-01 11:00:37.525 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 11:00:37.525 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 74:39:89:**:**:f9 FREQ: 2412, cFreq1[40:80:160] = [2422:0:0] cFreq2 = 0 SSID TP-LINK_C0F9_2.4G, RSSI(dBM): -34, 11mcRanging: No, Country Code = CN 
+06-01 11:00:37.526 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 11:00:37.526 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 78:47:5f:**:**:20 FREQ: 2437, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID ChinaNet-cS7i, RSSI(dBM): -66, 11mcRanging: No, Country Code =    
+06-01 11:00:37.526 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 11:00:37.526 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 90:f9:b7:**:**:d4 FREQ: 2412, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID hw_manage_fcd0, RSSI(dBM): -62, 11mcRanging: No, Country Code = DB
+06-01 11:00:37.526 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 11:00:37.526 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:e2 FREQ: 2432, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID IDEA-Guest, RSSI(dBM): -68, 11mcRanging: No, Country Code = CNI
+06-01 11:00:37.526 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 11:00:37.526 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:e3 FREQ: 2432, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID IDEA-Office, RSSI(dBM): -69, 11mcRanging: No, Country Code = CNI
+06-01 11:00:37.526 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 11:00:37.526 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 68:ea:05:**:**:14 FREQ: 2437, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID ChinaNet-cS7i, RSSI(dBM): -65, 11mcRanging: No, Country Code =    
+06-01 11:00:37.526 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 11:00:37.526 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:c3 FREQ: 2472, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID IDEA-Office, RSSI(dBM): -75, 11mcRanging: No, Country Code = CNI
+06-01 11:00:37.526 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 11:00:37.526 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS e0:27:6c:**:**:a0 FREQ: 5765, cFreq1[40:80:160] = [5755:5775:0] cFreq2 = 0 SSID NoNetworkTest, RSSI(dBM): -70, 11mcRanging: No, Country Code = CN 
+06-01 11:00:37.526 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 11:00:37.526 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:d0 FREQ: 5785, cFreq1[40:80:160] = [5795:0:0] cFreq2 = 0 SSID Scc-test, RSSI(dBM): -67, 11mcRanging: No, Country Code = CNI
+06-01 11:00:37.526 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 11:00:37.527 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:d2 FREQ: 5785, cFreq1[40:80:160] = [5795:0:0] cFreq2 = 0 SSID IDEA-Guest, RSSI(dBM): -66, 11mcRanging: No, Country Code = CNI
+06-01 11:00:37.527 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 11:00:37.527 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:d3 FREQ: 5785, cFreq1[40:80:160] = [5795:0:0] cFreq2 = 0 SSID IDEA-Office, RSSI(dBM): -67, 11mcRanging: No, Country Code = CNI
+06-01 11:00:37.527 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 11:00:37.527 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:c2 FREQ: 2472, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID IDEA-Guest, RSSI(dBM): -73, 11mcRanging: No, Country Code = CNI
+06-01 11:00:37.527 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 11:00:37.527 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 90:f9:b7:**:**:94 FREQ: 2412, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID hw_manage_ff90, RSSI(dBM): -69, 11mcRanging: No, Country Code = DB
+06-01 11:00:37.528 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 11:00:37.528 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:c0 FREQ: 2472, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID Scc-test, RSSI(dBM): -69, 11mcRanging: No, Country Code = CNI
+06-01 11:00:37.528 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 11:00:37.528 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:e0 FREQ: 2432, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID Scc-test, RSSI(dBM): -69, 11mcRanging: No, Country Code = CNI
+06-01 11:00:37.528 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 11:00:37.529 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS c8:4c:78:**:**:3b FREQ: 2462, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID ____________, RSSI(dBM): -65, 11mcRanging: No, Country Code = CN 
+06-01 11:00:37.529 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 11:00:37.529 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 08:aa:89:**:**:a1 FREQ: 5805, cFreq1[40:80:160] = [5795:5775:0] cFreq2 = 0 SSID fexlink1, RSSI(dBM): -85, 11mcRanging: No, Country Code = US 
+06-01 11:00:37.529 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 11:00:37.529 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS c6:b2:5b:**:**:57 FREQ: 5300, cFreq1[40:80:160] = [5310:5290:5290] cFreq2 = 5250 SSID fexlink_5G, RSSI(dBM): -74, 11mcRanging: No, Country Code = CN
+06-01 11:00:37.530 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 11:00:37.530 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:10 FREQ: 5300, cFreq1[40:80:160] = [5310:0:0] cFreq2 = 0 SSID Scc-test, RSSI(dBM): -40, 11mcRanging: No, Country Code = CNI
+06-01 11:00:37.530 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 11:00:37.530 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:12 FREQ: 5300, cFreq1[40:80:160] = [5310:0:0] cFreq2 = 0 SSID IDEA-Guest, RSSI(dBM): -41, 11mcRanging: No, Country Code = CNI
+06-01 11:00:37.530 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 11:00:37.530 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS c6:b2:5b:**:**:57 FREQ: 5300, cFreq1[40:80:160] = [5310:5290:5290] cFreq2 = 5250 SSID , RSSI(dBM): -75, 11mcRanging: No, Country Code = CN
+06-01 11:00:37.531 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 11:00:37.531 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 68:ea:05:**:**:1c FREQ: 5180, cFreq1[40:80:160] = [5190:5210:5210] cFreq2 = 5250 SSID , RSSI(dBM): -77, 11mcRanging: No, Country Code =    
+06-01 11:00:37.531 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 11:00:37.531 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 74:39:89:**:**:fb FREQ: 5180, cFreq1[40:80:160] = [5190:5210:5210] cFreq2 = 5250 SSID TP-LINK_C0F9, RSSI(dBM): -42, 11mcRanging: No, Country Code = CN 
+06-01 11:00:37.531 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 11:00:37.532 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 7e:39:89:**:**:fb FREQ: 5180, cFreq1[40:80:160] = [5190:5210:5210] cFreq2 = 5250 SSID , RSSI(dBM): -42, 11mcRanging: No, Country Code = CN 
+06-01 11:00:37.532 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 11:00:37.532 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS d2:d8:43:**:**:88 FREQ: 2412, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID , RSSI(dBM): -45, 11mcRanging: No, Country Code =    
+06-01 11:00:37.532 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 11:00:37.532 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 78:47:5f:**:**:2a FREQ: 5180, cFreq1[40:80:160] = [5190:5210:5210] cFreq2 = 5250 SSID , RSSI(dBM): -76, 11mcRanging: No, Country Code =    
+06-01 11:00:37.532 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 11:00:37.532 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 8c:ee:fd:**:**:84 FREQ: 2437, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID ChinaNet-z9AC, RSSI(dBM): -61, 11mcRanging: No, Country Code = CN 
+06-01 11:00:37.533 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 11:00:37.533 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 78:52:37:**:**:a4 FREQ: 2437, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID EasyLogic-2101-2.4G, RSSI(dBM): -67, 11mcRanging: No, Country Code = CN 
+06-01 11:00:37.533 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 11:00:37.533 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:f2 FREQ: 5220, cFreq1[40:80:160] = [5230:0:0] cFreq2 = 0 SSID IDEA-Guest, RSSI(dBM): -60, 11mcRanging: No, Country Code = CNI
+06-01 11:00:37.533 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 11:00:37.533 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:f3 FREQ: 5220, cFreq1[40:80:160] = [5230:0:0] cFreq2 = 0 SSID IDEA-Office, RSSI(dBM): -60, 11mcRanging: No, Country Code = CNI
+06-01 11:00:37.533 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 11:00:37.533 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 8c:35:92:**:**:0c FREQ: 5220, cFreq1[40:80:160] = [5230:0:0] cFreq2 = 0 SSID DIRECT-DO20FYNVVHRFRCZUCmsRY, RSSI(dBM): -81, 11mcRanging: No, Country Code =    
+06-01 11:00:37.533 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 11:00:37.533 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS c6:b2:5b:**:**:57 FREQ: 2462, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID fexlink_iot, RSSI(dBM): -59, 11mcRanging: No, Country Code = CN
+06-01 11:00:37.533 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 11:00:37.533 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:40 FREQ: 5260, cFreq1[40:80:160] = [5270:0:0] cFreq2 = 0 SSID Scc-test, RSSI(dBM): -66, 11mcRanging: No, Country Code = CNI
+06-01 11:00:37.534 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 11:00:37.534 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:42 FREQ: 5260, cFreq1[40:80:160] = [5270:0:0] cFreq2 = 0 SSID IDEA-Guest, RSSI(dBM): -66, 11mcRanging: No, Country Code = CNI
+06-01 11:00:37.534 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 11:00:37.534 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:43 FREQ: 5260, cFreq1[40:80:160] = [5270:0:0] cFreq2 = 0 SSID IDEA-Office, RSSI(dBM): -66, 11mcRanging: No, Country Code = CNI
+06-01 11:00:37.534 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 11:00:37.534 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:f0 FREQ: 5260, cFreq1[40:80:160] = [5270:0:0] cFreq2 = 0 SSID Scc-test, RSSI(dBM): -70, 11mcRanging: No, Country Code = CNI
+06-01 11:00:37.534 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 11:00:37.534 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:f2 FREQ: 5260, cFreq1[40:80:160] = [5270:0:0] cFreq2 = 0 SSID IDEA-Guest, RSSI(dBM): -69, 11mcRanging: No, Country Code = CNI
+06-01 11:00:37.534 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 11:00:37.534 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:f3 FREQ: 5260, cFreq1[40:80:160] = [5270:0:0] cFreq2 = 0 SSID IDEA-Office, RSSI(dBM): -69, 11mcRanging: No, Country Code = CNI
+06-01 11:00:37.535 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 11:00:37.535 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS c4:b2:5b:**:**:57 FREQ: 2462, cFreq1[40:80:160] = [2462:0:0] cFreq2 = 0 SSID fexlink, RSSI(dBM): -59, 11mcRanging: No, Country Code = CN
+06-01 11:00:37.535 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 11:00:37.535 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:d0 FREQ: 5300, cFreq1[40:80:160] = [5310:0:0] cFreq2 = 0 SSID Scc-test, RSSI(dBM): -82, 11mcRanging: No, Country Code = CNI
+06-01 11:00:37.535 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 11:00:37.535 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:d2 FREQ: 5300, cFreq1[40:80:160] = [5310:0:0] cFreq2 = 0 SSID IDEA-Guest, RSSI(dBM): -82, 11mcRanging: No, Country Code = CNI
+06-01 11:00:37.535 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 11:00:37.535 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 78:52:37:**:**:a5 FREQ: 5180, cFreq1[40:80:160] = [5190:5210:5210] cFreq2 = 5250 SSID EasyLogic-2101-5G, RSSI(dBM): -80, 11mcRanging: No, Country Code = CN 
+06-01 11:00:37.535 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 11:00:37.535 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 7a:52:37:**:**:a5 FREQ: 5180, cFreq1[40:80:160] = [5190:5210:5210] cFreq2 = 5250 SSID , RSSI(dBM): -81, 11mcRanging: No, Country Code = CN 
+06-01 11:00:37.535 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 11:00:37.535 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 78:47:5f:**:**:29 FREQ: 5180, cFreq1[40:80:160] = [5190:5210:5210] cFreq2 = 5250 SSID ChinaNet-cS7i-5G, RSSI(dBM): -77, 11mcRanging: No, Country Code =    
+06-01 11:00:37.536 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 11:00:37.536 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:33 FREQ: 2432, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID IDEA-Office, RSSI(dBM): -77, 11mcRanging: No, Country Code = CNI
+06-01 11:00:37.536 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 11:00:37.536 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:32 FREQ: 2432, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID IDEA-Guest, RSSI(dBM): -75, 11mcRanging: No, Country Code = CNI
+06-01 11:00:37.536 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 11:00:37.536 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:f0 FREQ: 5220, cFreq1[40:80:160] = [5230:0:0] cFreq2 = 0 SSID Scc-test, RSSI(dBM): -60, 11mcRanging: No, Country Code = CNI
+06-01 11:00:37.536 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 11:00:37.536 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:e0 FREQ: 2452, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID Scc-test, RSSI(dBM): -76, 11mcRanging: No, Country Code = CNI
+06-01 11:00:37.536 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 11:00:37.536 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:e3 FREQ: 2452, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID IDEA-Office, RSSI(dBM): -80, 11mcRanging: No, Country Code = CNI
+06-01 11:00:37.536 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 11:00:37.536 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 8c:ee:fd:**:**:85 FREQ: 5240, cFreq1[40:80:160] = [5230:5210:5210] cFreq2 = 5250 SSID ChinaNet-z9AC-5G, RSSI(dBM): -77, 11mcRanging: No, Country Code = CN 
+06-01 11:00:37.537 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 11:00:37.537 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 62:e4:9b:**:**:c2 FREQ: 2462, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID HUAWEI_B311_A8CA, RSSI(dBM): -75, 11mcRanging: No, Country Code =    
+06-01 11:00:37.537 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 11:00:37.537 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 8c:35:92:**:**:26 FREQ: 2472, cFreq1[40:80:160] = [2462:0:0] cFreq2 = 0 SSID DIRECT-WI20FRUWMmsCW, RSSI(dBM): -77, 11mcRanging: No, Country Code =    
+06-01 11:00:37.537 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 11:00:37.537 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 68:ea:05:**:**:1d FREQ: 5180, cFreq1[40:80:160] = [5190:5210:5210] cFreq2 = 5250 SSID ChinaNet-cS7i-5G, RSSI(dBM): -76, 11mcRanging: No, Country Code =    
+06-01 11:00:37.537 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 11:00:37.537 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 84:f5:eb:**:**:fa FREQ: 2437, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID ____________, RSSI(dBM): -74, 11mcRanging: No, Country Code = CN 
+06-01 11:00:37.537 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 11:00:37.537 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 9c:73:70:**:**:e2 FREQ: 2452, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID IDEA-Guest, RSSI(dBM): -78, 11mcRanging: No, Country Code = CNI
+06-01 11:00:37.537 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 11:00:37.537 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS d6:d8:43:**:**:89 FREQ: 5745, cFreq1[40:80:160] = [5755:5775:0] cFreq2 = 0 SSID , RSSI(dBM): -49, 11mcRanging: No, Country Code =    
+06-01 11:00:37.538 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] 
+06-01 11:00:37.538 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] BSS 7e:39:89:**:**:fc FREQ: 5765, cFreq1[40:80:160] = [5755:5775:0] cFreq2 = 0 SSID , RSSI(dBM): -35, 11mcRanging: No, Country Code = CN 
+06-01 11:00:37.538 D/LOWI-9.0.1.77( 2441): [LOWIDiagLog] Log: lowiMeasResult->request: invalid null argument
+06-01 11:00:37.538 I/LOWI-9.0.1.77( 2441): [LOWI-Scan] lowi_close_record:Scan done in 506110759ms, 63 APs in scan results
+06-01 11:00:37.538 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] WipsScanUsingNL: passive scan cached 0, took 39958 ms, err 0
+06-01 11:00:37.538 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] lowi_proc_req_passive_scan_with_live_meas - No WLAN Frames to be parsed
+06-01 11:00:37.538 D/LOWI-9.0.1.77( 2441): [LOWIScanResultReceiver] Send scan meas to listener
+06-01 11:00:37.538 D/LOWI-9.0.1.77( 2441): [LOWIScanResultReceiver] Enter passive listening mode
+06-01 11:00:37.538 D/LOWI-9.0.1.77( 2441): [LOWIWifiDriverInterface] getMeasurements - Passive listening mode
+06-01 11:00:37.538 D/LOWI-9.0.1.77( 2441): [LOWI-Scan] WipsScanUsingNL:wait -1 sec for netlink message
+06-01 11:00:37.538 D/LOWI-9.0.1.77( 2441): [LOWIEventReceiver] handleEvent:FROM:NA, TO:NA, REQ:NA, IREQ:NA, REQ_ID:0, RESP:NA, INFO:NA
+06-01 11:00:37.538 D/LOWI-9.0.1.77( 2441): [LOWIBackgroundScanMgr] isRspForBgScanMgr: evt(LOWI_NO_EVT) - not handled
+06-01 11:00:37.538 D/LOWI-9.0.1.77( 2441): [LOWIScheduler] manageMsg: NULL results or NULL request in results
+06-01 11:00:37.538 D/LOWI-9.0.1.77( 2441): [LOWIController] Measurements received
+06-01 11:00:37.538 D/LOWI-9.0.1.77( 2441): [LOWICacheManager] putInCache:Num of Meas to add: 63
+06-01 11:00:37.541 D/LOWI-9.0.1.77( 2441): [LOWIController] processMeasurementResults: No current Request. Cache measurements
+06-01 11:00:37.541 D/LOWI-9.0.1.77( 2441): [LOWIController] sendAsyncScanResponse: Request FreeWifiScanObserver_72 is from a different client.
+06-01 11:00:37.541 D/LOWI-9.0.1.77( 2441): [LOWIController] generateResponse: Type (ASYNC_DISCOVERY_SCAN_RESULTS) ScanStatus (1) request FreeWifiScanObserver_72
+06-01 11:00:37.541 D/LOWI-9.0.1.77( 2441): [LOWIEventDispatcher] sendResponse - originator = FreeWifiScanObserver
+06-01 11:00:37.541 D/LOWI-9.0.1.77( 2441): [LOWIUtils] injectScanMeasurements - num of APs = 63
+06-01 11:00:37.544 I/WifiScanner( 5709): onFullResults
+06-01 11:00:37.545 I/WifiScanner( 5709): onFullResults
+06-01 11:00:37.547 I/LOWI-9.0.1.77( 2441): [LOWIUtils] responseToOutPostcard - TO: FreeWifiScanObserver, FROM:   LOWI-SERVER, RESP:  LOWI_ASYNC_DISCOVERY_SCAN_RESULTS
+06-01 11:00:37.549 D/LOWI-9.0.1.77( 2441): [LOWIControllerExtn] sendLOWILpDiscoveryScanResponse: Not a discovery scan response
+06-01 11:00:37.673 D/EuiccConnector( 3736): handleMessage: E msg.what=3
+06-01 11:00:37.673 D/EuiccConnector( 3736): processMsg: ConnectedState
+06-01 11:00:37.676 I/EuiccGoogle(17877): [2] EuiccServiceImpl.onDestroy: onDestroy: EuiccService on destroy.
+06-01 11:00:37.679 D/EuiccConnector( 3736): transitionTo: destState=AvailableState
+06-01 11:00:37.680 D/EuiccConnector( 3736): handleMessage: new destination call exit/enter
+06-01 11:00:37.680 D/EuiccConnector( 3736): setupTempStateStackWithStatesToEnter: X mTempStateStackCount=2,curStateInfo: null
+06-01 11:00:37.680 D/EuiccConnector( 3736): invokeExitMethods: ConnectedState
+06-01 11:00:37.681 D/EuiccConnector( 3736): invokeExitMethods: DisconnectedState
+06-01 11:00:37.681 D/EuiccConnector( 3736): moveTempStackToStateStack: i=1,j=0
+06-01 11:00:37.681 D/EuiccConnector( 3736): moveTempStackToStateStack: i=0,j=1
+06-01 11:00:37.681 D/EuiccConnector( 3736): moveTempStackToStateStack: X mStateStackTop=1,startingIndex=0,Top=AvailableState
+06-01 11:00:37.681 D/EuiccConnector( 3736): invokeEnterMethods: UnavailableState
+06-01 11:00:37.681 D/EuiccConnector( 3736): invokeEnterMethods: AvailableState
+06-01 11:00:37.681 D/EuiccConnector( 3736): handleMessage: X
+06-01 11:00:37.729 D/NetworkMonitor/103( 3620): Forcing reevaluation for UID 0. Dns signal count: 0

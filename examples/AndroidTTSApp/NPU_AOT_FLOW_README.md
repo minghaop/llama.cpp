@@ -54,3 +54,19 @@ Notes:
 - Run on Linux x86_64 (Ubuntu 22.04 recommended by official docs).
 - To list SoCs available in your installed LiteRT package:
   `python3 tools/litert_aot_compile_qualcomm.py --list-soc`
+
+## On-device NPU JIT in this app
+This project is now configured to test LiteRT Flow inference with NPU JIT first:
+
+- `FLOW_ONLY_TEST_MODE=true`
+- `FLOW_ONLY_BACKEND=LITERT`
+- `LITERT_FORCE_NPU_JIT_MODEL=true` (prefers `flow.tflite` over precompiled AOT artifacts)
+
+Runtime notes:
+- `LiteRtFlowRunner` uses `CompiledModel.Options(Accelerator.NPU)`.
+- NPU library readiness is logged; if unavailable, model load fails fast.
+
+Useful logcat filters:
+```bash
+adb logcat | grep -Ei "LlamaInferenceBridge|LiteRtFlowRunner|FlowOnly\\]\\[LiteRT|NPU|QNN|fallback"
+```

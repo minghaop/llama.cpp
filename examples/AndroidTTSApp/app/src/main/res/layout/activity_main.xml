@@ -121,14 +121,32 @@
             android:minLines="3"
             android:padding="10dp" />
 
-        <Button
-            android:id="@+id/generate_button"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginHorizontal="20dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="生成"
-            android:textAllCaps="false" />
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/generate_button"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="6dp"
+                android:layout_weight="1"
+                android:text="生成"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/stream_generate_button"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="6dp"
+                android:layout_marginEnd="20dp"
+                android:layout_weight="1"
+                android:text="流式生成"
+                android:textAllCaps="false" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"

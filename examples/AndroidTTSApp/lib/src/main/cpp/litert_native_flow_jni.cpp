@@ -23,6 +23,7 @@
 #include "third_party_litert_c/litert_common.h"
 #include "third_party_litert_c/litert_compiled_model.h"
 #include "third_party_litert_c/litert_environment.h"
+#include "third_party_litert_c/litert_environment_options.h"
 #include "third_party_litert_c/litert_model.h"
 #include "third_party_litert_c/litert_opaque_options.h"
 #include "third_party_litert_c/litert_options.h"
@@ -35,7 +36,7 @@ namespace {
 
 constexpr const char *kTag = "LiteRtNativeFlowJNI";
 constexpr bool kForceCpuRuntime = false;
-constexpr bool kRequireGpuRuntime = true;
+constexpr bool kRequireNpuRuntime = true;
 
 constexpr const char *kInputFiles[] = {
     "0_token.bin",
@@ -166,9 +167,12 @@ struct LiteRtApi {
     Fn<LiteRtStatus (*)(LiteRtTensorBuffer, void **, LiteRtTensorBufferLockMode)> LockTensorBuffer = nullptr;
     Fn<LiteRtStatus (*)(LiteRtTensorBuffer)> UnlockTensorBuffer = nullptr;
     Fn<LiteRtStatus (*)(LiteRtTensorBuffer, size_t *)> GetTensorBufferSize = nullptr;
+    Fn<const char *(*)(LiteRtStatus)> GetStatusString = nullptr;
 
     bool load() {
-        handle = dlopen("libLiteRt.so", RTLD_NOW | RTLD_LOCAL);
+        // Qualcomm compiler/dispatch plugins resolve LiteRT symbols via global scope.
+        // Use RTLD_GLOBAL so plugin dlopen can bind symbols like LiteRtQualcommOptionsGet.
+        handle = dlopen("libLiteRt.so", RTLD_NOW | RTLD_GLOBAL);
         if (!handle) {
             __android_log_print(ANDROID_LOG_ERROR, kTag, "dlopen libLiteRt.so failed: %s", dlerror());
             return false;
@@ -337,6 +341,7 @@ struct LiteRtApi {
         LOAD_SYM(LockTensorBuffer, "LiteRtLockTensorBuffer");
         LOAD_SYM(UnlockTensorBuffer, "LiteRtUnlockTensorBuffer");
         LOAD_SYM(GetTensorBufferSize, "LiteRtGetTensorBufferSize");
+        LOAD_SYM_OPTIONAL(GetStatusString, "LiteRtGetStatusString");
 #undef LOAD_SYM
 #undef LOAD_SYM_OPTIONAL
         coreReady = true;
@@ -358,6 +363,11 @@ LiteRtApi &api() {
 }
 
 std::string statusMsg(const char *name, LiteRtStatus st) {
+    const char *statusStr = api().GetStatusString ? api().GetStatusString(st) : nullptr;
+    if (statusStr && statusStr[0] != '\0') {
+        return std::string(name) + " failed, status=" + std::to_string(static_cast<int>(st)) +
+               " (" + statusStr + ")";
+    }
     return std::string(name) + " failed, status=" + std::to_string(static_cast<int>(st));
 }
 
@@ -370,6 +380,12 @@ void checkStatus(JNIEnv *env, const char *name, LiteRtStatus st) {
 bool fileExists(const std::string &path) {
     struct stat st {};
     return stat(path.c_str(), &st) == 0;
+}
+
+bool dirExists(const std::string &path) {
+    struct stat st {};
+    if (stat(path.c_str(), &st) != 0) return false;
+    return S_ISDIR(st.st_mode);
 }
 
 size_t fileSize(const std::string &path) {
@@ -768,6 +784,16 @@ LiteRtStatus createGpuOpaqueOptions(
     return st;
 }
 
+LiteRtStatus createQualcommOpaqueOptions(
+        const std::string &toml,
+        LiteRtOpaqueOptions *opaqueOut) {
+    if (opaqueOut == nullptr) return kLiteRtStatusErrorInvalidArgument;
+    auto *payloadBytes = static_cast<char *>(std::malloc(toml.size() + 1));
+    if (payloadBytes == nullptr) return kLiteRtStatusErrorMemoryAllocationFailure;
+    std::memcpy(payloadBytes, toml.c_str(), toml.size() + 1);
+    return api().CreateOpaqueOptions("qualcomm", payloadBytes, freePayloadDeleter, opaqueOut);
+}
+
 LiteRtCompiledModel tryCreateCompiled(
         LiteRtEnvironment env,
         LiteRtModel model,
@@ -791,6 +817,47 @@ LiteRtCompiledModel tryCreateCompiled(
         const auto st = api().CreateCompiledModel(env, model, options, &cm);
         __android_log_print(ANDROID_LOG_INFO, kTag, "CreateCompiledModel mode=CPU status=%d", static_cast<int>(st));
         if (st == kLiteRtStatusOk) {
+            cleanup();
+            return cm;
+        }
+        cleanup();
+        return nullptr;
+    }
+
+    if (mode == "NPU") {
+        if (api().SetOptionsHardwareAccelerators(options, kLiteRtHwAcceleratorNpu) != kLiteRtStatusOk) {
+            cleanup();
+            return nullptr;
+        }
+        LiteRtOpaqueOptions qcOpaque = nullptr;
+        const std::string qcToml =
+                "optimization_level = 0\n"
+                "graph_priority = 1\n";
+        auto qcSt = createQualcommOpaqueOptions(qcToml, &qcOpaque);
+        __android_log_print(
+                qcSt == kLiteRtStatusOk ? ANDROID_LOG_INFO : ANDROID_LOG_WARN,
+                kTag,
+                "CreateOpaqueOptions identifier=qualcomm profile=safe_o0 status=%d payload=%s",
+                static_cast<int>(qcSt),
+                qcToml.c_str());
+        if (qcSt == kLiteRtStatusOk) {
+            const auto addSt = api().AddOpaqueOptions(options, qcOpaque);
+            __android_log_print(
+                    addSt == kLiteRtStatusOk ? ANDROID_LOG_INFO : ANDROID_LOG_WARN,
+                    kTag,
+                    "AddOpaqueOptions identifier=qualcomm profile=safe_o0 status=%d",
+                    static_cast<int>(addSt));
+        }
+        LiteRtCompiledModel cm = nullptr;
+        const auto st = api().CreateCompiledModel(env, model, options, &cm);
+        const char *statusStr = api().GetStatusString ? api().GetStatusString(st) : "";
+        __android_log_print(
+                ANDROID_LOG_INFO,
+                kTag,
+                "CreateCompiledModel mode=NPU profile=safe_o0 status=%d (%s)",
+                static_cast<int>(st),
+                statusStr ? statusStr : "");
+        if (st == kLiteRtStatusOk && cm != nullptr) {
             cleanup();
             return cm;
         }
@@ -884,7 +951,10 @@ LiteRtCompiledModel tryCreateCompiled(
     return nullptr;
 }
 
-std::unique_ptr<FlowRunner> createRunner(JNIEnv *env, const std::string &modelPath) {
+std::unique_ptr<FlowRunner> createRunner(
+        JNIEnv *env,
+        const std::string &modelPath,
+        const std::string &libraryDirFromJava) {
     auto &lrt = api();
     if (!lrt.handle || !lrt.coreReady) {
         throwRuntime(env, "LiteRT runtime library not loaded");
@@ -897,11 +967,60 @@ std::unique_ptr<FlowRunner> createRunner(JNIEnv *env, const std::string &modelPa
                 kTag,
                 "EGL context init failed, continue for OpenCL path");
     }
-    checkStatus(env, "LiteRtCreateEnvironment", lrt.CreateEnvironment(0, nullptr, &runner->env));
+    std::string runtimeLibraryDir = libraryDirFromJava;
+    if (runtimeLibraryDir.empty() && dirExists("/vendor/lib64")) {
+        runtimeLibraryDir = "/vendor/lib64";
+    }
+
+    std::vector<LiteRtEnvOption> envOptions;
+    envOptions.reserve(6);
+    LiteRtEnvOption autoRegisterOption {};
+    autoRegisterOption.tag = kLiteRtEnvOptionTagAutoRegisterAccelerators;
+    autoRegisterOption.value.type = kLiteRtAnyTypeInt;
+    autoRegisterOption.value.int_value = kLiteRtHwAcceleratorNpu;
+    envOptions.push_back(autoRegisterOption);
+    LiteRtEnvOption minLoggerSeverityOption {};
+    minLoggerSeverityOption.tag = kLiteRtEnvOptionTagMinLoggerSeverity;
+    minLoggerSeverityOption.value.type = kLiteRtAnyTypeInt;
+    minLoggerSeverityOption.value.int_value = -1;  // debug
+    envOptions.push_back(minLoggerSeverityOption);
+    if (!runtimeLibraryDir.empty()) {
+        LiteRtEnvOption compilerPluginDirOption {};
+        compilerPluginDirOption.tag = kLiteRtEnvOptionTagCompilerPluginLibraryDir;
+        compilerPluginDirOption.value.type = kLiteRtAnyTypeString;
+        compilerPluginDirOption.value.str_value = runtimeLibraryDir.c_str();
+        envOptions.push_back(compilerPluginDirOption);
+
+        LiteRtEnvOption dispatchDirOption {};
+        dispatchDirOption.tag = kLiteRtEnvOptionTagDispatchLibraryDir;
+        dispatchDirOption.value.type = kLiteRtAnyTypeString;
+        dispatchDirOption.value.str_value = runtimeLibraryDir.c_str();
+        envOptions.push_back(dispatchDirOption);
+
+        LiteRtEnvOption runtimeDirOption {};
+        runtimeDirOption.tag = kLiteRtEnvOptionTagRuntimeLibraryDir;
+        runtimeDirOption.value.type = kLiteRtAnyTypeString;
+        runtimeDirOption.value.str_value = runtimeLibraryDir.c_str();
+        envOptions.push_back(runtimeDirOption);
+    }
+    __android_log_print(
+            ANDROID_LOG_INFO,
+            kTag,
+            "LiteRT env opts: libraryDir='%s', optionCount=%zu, minLoggerSeverity=%lld",
+            runtimeLibraryDir.empty() ? "<empty>" : runtimeLibraryDir.c_str(),
+            envOptions.size(),
+            static_cast<long long>(minLoggerSeverityOption.value.int_value));
+    checkStatus(
+            env,
+            "LiteRtCreateEnvironment",
+            lrt.CreateEnvironment(
+                    static_cast<int>(envOptions.size()),
+                    envOptions.empty() ? nullptr : envOptions.data(),
+                    &runner->env));
     checkStatus(env, "LiteRtCreateModelFromFile", lrt.CreateModelFromFile(modelPath.c_str(), &runner->model));
 
     const std::string modelDir = dirNameOf(modelPath);
-    const std::string serializationDir = modelDir + "/litert_gpu_cache";
+    const std::string serializationDir = modelDir + "/litert_npu_cache";
     if (!ensureDir(serializationDir)) {
         __android_log_print(
                 ANDROID_LOG_WARN,
@@ -910,7 +1029,7 @@ std::unique_ptr<FlowRunner> createRunner(JNIEnv *env, const std::string &modelPa
                 serializationDir.c_str());
     }
     const std::string modelCacheKey =
-            "flow_opengl_fp32_" + baseNameOf(modelPath) + "_" + std::to_string(fileSize(modelPath));
+            "flow_npu_" + baseNameOf(modelPath) + "_" + std::to_string(fileSize(modelPath));
 
     (void)fileSize(modelPath);
     LiteRtCompiledModel cm = nullptr;
@@ -919,26 +1038,18 @@ std::unique_ptr<FlowRunner> createRunner(JNIEnv *env, const std::string &modelPa
         cm = tryCreateCompiled(runner->env, runner->model, serializationDir, modelCacheKey, "CPU", {});
         if (cm) runtime = "CPU";
     } else {
-        cm = tryCreateCompiled(
-                runner->env,
-                runner->model,
-                serializationDir,
-                modelCacheKey,
-                "GPU",
-                {
-                        {kLiteRtGpuBackendOpenGl, kLiteRtDelegatePrecisionFp32},
-                });
-        if (cm) runtime = lrt.gpuOptionReady ? "GPU(OPENGL)" : "GPU(DEFAULT)";
+        cm = tryCreateCompiled(runner->env, runner->model, serializationDir, modelCacheKey, "NPU", {});
+        if (cm) runtime = "NPU";
     }
 
-    // No implicit GPU fallback here: avoid unexpected OpenGL path with missing EGL context.
-    if (!cm && !kRequireGpuRuntime) {
+    // No implicit fallback here: avoid silently running on CPU when pure NPU is required.
+    if (!cm && !kRequireNpuRuntime) {
         cm = tryCreateCompiled(runner->env, runner->model, serializationDir, modelCacheKey, "CPU", {});
         runtime = "CPU";
     }
     if (!cm) {
-        if (kRequireGpuRuntime) {
-            throwRuntime(env, "LiteRT GPU is required, but GPU compiled model creation failed");
+        if (kRequireNpuRuntime) {
+            throwRuntime(env, "LiteRT NPU is required, but NPU compiled model creation failed");
         } else {
             throwRuntime(env, "LiteRT C++ API failed to create compiled model");
         }
@@ -1092,7 +1203,11 @@ jobject makeCreateResult(JNIEnv *env, jlong handle, const std::string &runtime) 
 
 extern "C"
 JNIEXPORT jobject JNICALL
-Java_com_example_llama_LiteRtNativeFlowRunner_nativeCreate(JNIEnv *env, jclass, jstring modelPath_) {
+Java_com_example_llama_LiteRtNativeFlowRunner_nativeCreate(
+        JNIEnv *env,
+        jclass,
+        jstring modelPath_,
+        jstring libraryDir_) {
     try {
         const char *modelPath = env->GetStringUTFChars(modelPath_, nullptr);
         std::string path = modelPath ? modelPath : "";
@@ -1100,7 +1215,12 @@ Java_com_example_llama_LiteRtNativeFlowRunner_nativeCreate(JNIEnv *env, jclass, 
         if (path.empty()) {
             throwRuntime(env, "modelPath is empty");
         }
-        auto runner = createRunner(env, path);
+        const char *libraryDirChars = libraryDir_ ? env->GetStringUTFChars(libraryDir_, nullptr) : nullptr;
+        std::string libraryDir = libraryDirChars ? libraryDirChars : "";
+        if (libraryDirChars) {
+            env->ReleaseStringUTFChars(libraryDir_, libraryDirChars);
+        }
+        auto runner = createRunner(env, path, libraryDir);
         auto *raw = runner.release();
         __android_log_print(ANDROID_LOG_INFO, kTag, "LiteRT native runner created, runtime=%s", raw->runtimeMode.c_str());
         return makeCreateResult(env, reinterpret_cast<jlong>(raw), raw->runtimeMode);

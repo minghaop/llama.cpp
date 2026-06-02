@@ -1,0 +1,1641 @@
+--------- beginning of main
+06-01 11:49:04.680  8321  9456 I bzu     : Potential packages: 17, blocklist size: 6106, allowlist size: 11, latency: PT0.027S
+06-01 11:49:04.683  8321  8321 I btq     : Starting work type: HANDLE_PACKAGES_CHANGED using foreground service, isShort: false
+06-01 11:49:04.685  8321  8321 I WorkService: Work service created
+06-01 11:49:04.686  2026  3779 E IPCThreadState: Binder transaction failure. id: 5266593, BR_*: 29189, error: -22 (Invalid argument)
+06-01 11:49:04.686  8321  9461 I ckq     : Started coroutine watchdog: work-service, duration: PT3M
+06-01 11:49:04.686  2026  3779 W Process : Unable to open /proc/13529/status
+--------- beginning of system
+06-01 11:49:04.688  2026  3779 D WindowManager: setParent old=ActivityRecord{b3d946d u0 com.example.llama.aichat/com.example.llama.MainActivity t1099 f}},new=null,this window=Window{73abde5 u0 com.example.llama.aichat/com.example.llama.MainActivity EXITING},callers=com.android.server.wm.WindowContainer.removeChild:833 com.android.server.wm.ActivityRecord.removeChild:4750 com.android.server.wm.ActivityRecord.removeChild:435 com.android.server.wm.WindowContainer.removeImmediately:891 com.android.server.wm.WindowState.removeImmediately:2391 com.android.server.wm.WindowContainer.removeImmediately:867 
+06-01 11:49:04.688  2026  3779 D WindowManager: setParent old=Task{5bf98a2 #1099 type=standard A=10328:com.example.llama.aichat},new=null,this window=ActivityRecord{b3d946d u0 com.example.llama.aichat/com.example.llama.MainActivity t1099 f}},callers=com.android.server.wm.WindowContainer.removeChild:833 com.android.server.wm.TaskFragment.removeChild:3089 com.android.server.wm.Task.removeChild:1565 com.android.server.wm.Task.removeChild:1548 com.android.server.wm.WindowContainer.removeImmediately:891 com.android.server.wm.WindowToken.removeImmediately:359 
+06-01 11:49:04.689  2026  3779 D WindowManager: setParent old=DefaultTaskDisplayArea@262318950,new=null,this window=Task{5bf98a2 #1099 type=standard A=10328:com.example.llama.aichat},callers=com.android.server.wm.WindowContainer.removeChild:833 com.android.server.wm.TaskDisplayArea.removeChildTask:351 com.android.server.wm.TaskDisplayArea.removeChild:342 com.android.server.wm.WindowContainer.removeImmediately:891 com.android.server.wm.TaskFragment.removeImmediately:3169 com.android.server.wm.Task.removeImmediately:2730 
+06-01 11:49:04.690  3524  3586 V WindowManagerShell: Track 0 became idle
+06-01 11:49:04.690  3524  3586 V WindowManagerShell: All active transition animations finished
+06-01 11:49:04.691  2026  3779 W ForegroundServiceTypeLoggerModule: Foreground service start for UID: 10365 does not have any types
+06-01 11:49:04.692  4001  4001 I TopTaskTracker: onTaskRemoved: taskId=1099
+06-01 11:49:04.692  4001  4001 I TopTaskTracker: onTaskRemoved: taskId=1099
+06-01 11:49:04.692  2026  3613 W UserManagerService: Requested status bar icon for non-badged user 0
+06-01 11:49:04.693  8321  8321 I WorkService: Moved work service to foreground
+06-01 11:49:04.693  8321  8321 I btq     : Starting the handler for work type: HANDLE_PACKAGES_CHANGED
+06-01 11:49:04.693  8321  8321 I WorkService: Work service returning from onStartCommand, work count: 1
+06-01 11:49:04.693  8321 13706 I bte     : No reboot detected, boot count: 8
+06-01 11:49:04.695  2026  9438 W UserManagerService: Requested status bar icon for non-badged user 0
+06-01 11:49:04.696  2026  4417 W libc    : Access denied finding property "ro.bootimage.build.fingerprint"
+06-01 11:49:04.689  2026  2026 W pool-53-thread-: type=1400 audit(0.0:20119): avc:  denied  { read } for  name="u:object_r:build_bootimage_prop:s0" dev="tmpfs" ino=150 scontext=u:r:system_server:s0 tcontext=u:object_r:build_bootimage_prop:s0 tclass=file permissive=0
+06-01 11:49:04.696  2026 10304 W qdgralloc: getInterlacedFlag: getMetaData returned 3, defaulting to interlaced_flag = 0
+06-01 11:49:04.706  8321 13706 I bte     : Found: 3 changed packages for sequence number: 4953, new sequence number: 4970
+06-01 11:49:04.707  1608  1608 E BpTransactionCompletedListener: Failed to transact (-32)
+06-01 11:49:04.719  8321 13706 I bte     : Handling installed or updated package: jp.co.sharp.android.ichargeservice
+06-01 11:49:04.720  8321 13706 I ckk     : Attempting to classify package: jp.co.sharp.android.ichargeservice using model: bll_1
+06-01 11:49:04.720  8321 13706 I ckk     : Skipping package: jp.co.sharp.android.ichargeservice, it is not a potential package
+06-01 11:49:04.721  8321 13706 I bte     : Handling installed or updated package: jp.co.sharp.android.icharge
+06-01 11:49:04.722  8321 13706 I ckk     : Attempting to classify package: jp.co.sharp.android.icharge using model: bll_1
+06-01 11:49:04.722  8321 13706 I ckk     : Skipping package: jp.co.sharp.android.icharge, it is not a potential package
+06-01 11:49:04.741  2026  2118 D ActivityManager: notifyResumeComponent isGame : false
+06-01 11:49:04.749  2026  2048 I system_server: Background concurrent mark compact GC freed 21MB AllocSpace bytes, 33(920KB) LOS objects, 27% free, 62MB/86MB, paused 2.264ms,3.887ms total 190.181ms
+06-01 11:49:04.751  2026  2050 W system_server: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~Ul3K4orIvHNyVF2cUAzAJw==/com.example.llama.aichat-Q3oNjako8OZ_SMvZVPj8Aw==/base.apk' with 1 weak references
+06-01 11:49:04.842  2026  9438 I ActivityManager: Force stopping com.example.llama.aichat appid=10328 user=0: from pid 13709
+06-01 11:49:04.851  2026  9438 I AppsFilter: interaction: PackageSetting{55292c5 com.android.microdroid.empty_payload/10311} -> PackageSetting{cf429a9 com.example.llama.aichat/10328} BLOCKED
+06-01 11:49:04.851  2026  9438 I AppsFilter: interaction: PackageSetting{9aecb4b com.example.portraitcroppertest/10347} -> PackageSetting{cf429a9 com.example.llama.aichat/10328} BLOCKED
+06-01 11:49:04.851  2026  9438 I AppsFilter: interaction: PackageSetting{85f9928 com.example.portraitcropperservice/10350} -> PackageSetting{cf429a9 com.example.llama.aichat/10328} BLOCKED
+06-01 11:49:04.859  3736  3736 D CarrierSvcBindHelper: onHandleForceStop: [com.example.llama.aichat]
+06-01 11:49:04.859  3736  3910 D EuiccConnector: handleMessage: E msg.what=1
+06-01 11:49:04.860  3736  3910 D EuiccConnector: processMsg: ConnectedState
+06-01 11:49:04.860  3736  3736 D CarrierSvcBindHelper: No carrier app for: 0
+06-01 11:49:04.860  3736  3910 D EuiccConnector: processMsg: DisconnectedState
+06-01 11:49:04.860  3736  3736 D CarrierSvcBindHelper: No carrier app for: 1
+06-01 11:49:04.861  3736  3910 D EuiccConnector: handleMessage: X
+06-01 11:49:04.862  2026  2050 W System  : A resource failed to call close. 
+06-01 11:49:04.862  2026  2050 W System  : A resource failed to call release. 
+06-01 11:49:04.862  2026  2050 W system_server: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~wB1ZigdHyy4Iv2rFTf1-0Q==/com.google.android.gms-y5Lo72rvCdp5r0n6ivgzSw==/base.apk' with 1 weak references
+06-01 11:49:04.863  2026  2050 W system_server: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~wB1ZigdHyy4Iv2rFTf1-0Q==/com.google.android.gms-y5Lo72rvCdp5r0n6ivgzSw==/split_AdsDynamite_installtime.apk' with 1 weak references
+06-01 11:49:04.863  2026  2050 W system_server: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~wB1ZigdHyy4Iv2rFTf1-0Q==/com.google.android.gms-y5Lo72rvCdp5r0n6ivgzSw==/split_CronetDynamite_installtime.apk' with 1 weak references
+06-01 11:49:04.863  2026  2050 W system_server: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~wB1ZigdHyy4Iv2rFTf1-0Q==/com.google.android.gms-y5Lo72rvCdp5r0n6ivgzSw==/split_DynamiteLoader_installtime.apk' with 1 weak references
+06-01 11:49:04.863  2026  2050 W system_server: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~wB1ZigdHyy4Iv2rFTf1-0Q==/com.google.android.gms-y5Lo72rvCdp5r0n6ivgzSw==/split_DynamiteModulesA_installtime.apk' with 1 weak references
+06-01 11:49:04.863  2026  2050 W system_server: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~wB1ZigdHyy4Iv2rFTf1-0Q==/com.google.android.gms-y5Lo72rvCdp5r0n6ivgzSw==/split_DynamiteModulesC_installtime.apk' with 1 weak references
+06-01 11:49:04.863  2026  2050 W system_server: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~wB1ZigdHyy4Iv2rFTf1-0Q==/com.google.android.gms-y5Lo72rvCdp5r0n6ivgzSw==/split_GoogleCertificates_installtime.apk' with 1 weak references
+06-01 11:49:04.863  2026  2050 W system_server: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~wB1ZigdHyy4Iv2rFTf1-0Q==/com.google.android.gms-y5Lo72rvCdp5r0n6ivgzSw==/split_MapsDynamite_installtime.apk' with 1 weak references
+06-01 11:49:04.863  2026  2050 W system_server: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~wB1ZigdHyy4Iv2rFTf1-0Q==/com.google.android.gms-y5Lo72rvCdp5r0n6ivgzSw==/split_MeasurementDynamite_installtime.apk' with 1 weak references
+06-01 11:49:04.863  2026  2050 W system_server: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~wB1ZigdHyy4Iv2rFTf1-0Q==/com.google.android.gms-y5Lo72rvCdp5r0n6ivgzSw==/split_config.xxhdpi.apk' with 1 weak references
+06-01 11:49:04.863  2026  2050 W system_server: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~wB1ZigdHyy4Iv2rFTf1-0Q==/com.google.android.gms-y5Lo72rvCdp5r0n6ivgzSw==/split_config.zh.apk' with 1 weak references
+06-01 11:49:04.863  2026  2050 W system_server: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~xp08ZQ0iXv9AQ7UE7yi6Fw==/com.google.android.inputmethod.latin-yXNNCUWliU86Mnro58AU_A==/base.apk' with 1 weak references
+06-01 11:49:04.863  2026  2050 W system_server: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~xp08ZQ0iXv9AQ7UE7yi6Fw==/com.google.android.inputmethod.latin-yXNNCUWliU86Mnro58AU_A==/split_brella_feature_split.apk' with 1 weak references
+06-01 11:49:04.863  2026  2050 W system_server: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~xp08ZQ0iXv9AQ7UE7yi6Fw==/com.google.android.inputmethod.latin-yXNNCUWliU86Mnro58AU_A==/split_config.xxhdpi.apk' with 1 weak references
+06-01 11:49:04.863  2026  2050 W system_server: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~xp08ZQ0iXv9AQ7UE7yi6Fw==/com.google.android.inputmethod.latin-yXNNCUWliU86Mnro58AU_A==/split_tenoranimation_feature_split.apk' with 1 weak references
+06-01 11:49:04.863  2026  2050 W system_server: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~nzQLFffGbmtVE3KZQIWWeg==/com.google.android.tts-Eig0ALBo7Uchl7QqXV_FRQ==/base.apk' with 1 weak references
+06-01 11:49:04.864  2026  2050 W system_server: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~nzQLFffGbmtVE3KZQIWWeg==/com.google.android.tts-Eig0ALBo7Uchl7QqXV_FRQ==/split_config.arm64_v8a.apk' with 1 weak references
+06-01 11:49:04.864  2026  2050 W system_server: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~nzQLFffGbmtVE3KZQIWWeg==/com.google.android.tts-Eig0ALBo7Uchl7QqXV_FRQ==/split_config.xxhdpi.apk' with 1 weak references
+06-01 11:49:04.864  2026  2050 W system_server: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~nzQLFffGbmtVE3KZQIWWeg==/com.google.android.tts-Eig0ALBo7Uchl7QqXV_FRQ==/split_config.zh.apk' with 1 weak references
+06-01 11:49:04.864  2026  2050 W system_server: ApkAssets: Deleting an ApkAssets object '<empty> and /system/priv-app/InputDevices/InputDevices.apk' with 1 weak references
+06-01 11:49:04.864  2026  2050 W system_server: ApkAssets: Deleting an ApkAssets object '<empty> and /system_ext/app/AccessibilityMenu/AccessibilityMenu.apk' with 1 weak references
+06-01 11:49:04.864  2026  2050 W system_server: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~55pPEAJyguZvGxu9ikLexA==/com.google.android.accessibility.switchaccess-H209C1TnqIJcCwXKr40uMw==/base.apk' with 1 weak references
+06-01 11:49:04.864  2026  2050 W system_server: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~55pPEAJyguZvGxu9ikLexA==/com.google.android.accessibility.switchaccess-H209C1TnqIJcCwXKr40uMw==/split_config.arm64_v8a.apk' with 1 weak references
+06-01 11:49:04.864  2026  2050 W system_server: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~ruMdTH3fIqjcJ7SUyA_Q6Q==/com.google.android.marvin.talkback-ZbV2RJ274cT2a78oK5WDVg==/base.apk' with 1 weak references
+06-01 11:49:04.864  2026  2050 W system_server: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~ruMdTH3fIqjcJ7SUyA_Q6Q==/com.google.android.marvin.talkback-ZbV2RJ274cT2a78oK5WDVg==/split_config.arm64_v8a.apk' with 1 weak references
+06-01 11:49:04.865  2026  2050 W system_server: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~4QbnfKKUreso5xxv06-cuw==/ccc71.at.free-8oU-ZH6M3Pt30_4M1bL3QA==/base.apk' with 1 weak references
+06-01 11:49:04.865  2026  2050 W system_server: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~4QbnfKKUreso5xxv06-cuw==/ccc71.at.free-8oU-ZH6M3Pt30_4M1bL3QA==/split_config.arm64_v8a.apk' with 1 weak references
+06-01 11:49:04.865  2026  2050 W system_server: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~4QbnfKKUreso5xxv06-cuw==/ccc71.at.free-8oU-ZH6M3Pt30_4M1bL3QA==/split_config.xxhdpi.apk' with 1 weak references
+06-01 11:49:04.865  2026  2050 W system_server: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~4QbnfKKUreso5xxv06-cuw==/ccc71.at.free-8oU-ZH6M3Pt30_4M1bL3QA==/split_config.zh.apk' with 1 weak references
+06-01 11:49:04.865  2026  2050 W system_server: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~5qwS9seE_cVETlH84H9rlQ==/com.google.android.apps.tachyon-yyuUZpNQOBzfbRWnYwgByA==/base.apk' with 1 weak references
+06-01 11:49:04.865  2026  2050 W system_server: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~5qwS9seE_cVETlH84H9rlQ==/com.google.android.apps.tachyon-yyuUZpNQOBzfbRWnYwgByA==/split_config.arm64_v8a.apk' with 1 weak references
+06-01 11:49:04.865  2026  2050 W system_server: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~5qwS9seE_cVETlH84H9rlQ==/com.google.android.apps.tachyon-yyuUZpNQOBzfbRWnYwgByA==/split_config.xxhdpi.apk' with 1 weak references
+06-01 11:49:04.865  2026  2050 W system_server: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~5qwS9seE_cVETlH84H9rlQ==/com.google.android.apps.tachyon-yyuUZpNQOBzfbRWnYwgByA==/split_config.zh.apk' with 1 weak references
+06-01 11:49:04.865  2026  2050 W system_server: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~8XJQ8Oi-PQuHM37Asu0I6g==/com.google.android.gm-C0RgPL-y19RWnJrMomVk6w==/base.apk' with 1 weak references
+06-01 11:49:04.865  2026  2050 W system_server: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~8XJQ8Oi-PQuHM37Asu0I6g==/com.google.android.gm-C0RgPL-y19RWnJrMomVk6w==/split_config.arm64_v8a.apk' with 1 weak references
+06-01 11:49:04.865  2026  2050 W system_server: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~8XJQ8Oi-PQuHM37Asu0I6g==/com.google.android.gm-C0RgPL-y19RWnJrMomVk6w==/split_config.xxhdpi.apk' with 1 weak references
+06-01 11:49:04.865  2026  2050 W system_server: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~8XJQ8Oi-PQuHM37Asu0I6g==/com.google.android.gm-C0RgPL-y19RWnJrMomVk6w==/split_config.zh.apk' with 1 weak references
+06-01 11:49:04.865  2026  2050 W system_server: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~frb-bhhe-RbAOBLcwhCKaQ==/com.google.android.apps.adm-5mdgyyM5l62O5r7C3sCuww==/base.apk' with 1 weak references
+06-01 11:49:04.865  2026  2050 W system_server: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~frb-bhhe-RbAOBLcwhCKaQ==/com.google.android.apps.adm-5mdgyyM5l62O5r7C3sCuww==/split_config.arm64_v8a.apk' with 1 weak references
+06-01 11:49:04.865  2026  2050 W system_server: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~frb-bhhe-RbAOBLcwhCKaQ==/com.google.android.apps.adm-5mdgyyM5l62O5r7C3sCuww==/split_config.xxhdpi.apk' with 1 weak references
+06-01 11:49:04.865  2026  2050 W system_server: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~frb-bhhe-RbAOBLcwhCKaQ==/com.google.android.apps.adm-5mdgyyM5l62O5r7C3sCuww==/split_config.zh.apk' with 1 weak references
+06-01 11:49:04.866  2026  2050 W system_server: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~1q2Lr_CLtMZq5B6C6xMSRA==/com.duolingo-RBCI7-W9jkWHP5uxt0-TZA==/base.apk' with 1 weak references
+06-01 11:49:04.866  2026  2050 W system_server: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~s1O-nock3GymLnh03npT4g==/com.google.android.apps.wellbeing-Q7cXemj205Gb2FTzd0uq5g==/base.apk' with 1 weak references
+06-01 11:49:04.866  2026  2050 W system_server: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~s1O-nock3GymLnh03npT4g==/com.google.android.apps.wellbeing-Q7cXemj205Gb2FTzd0uq5g==/split_config.xxhdpi.apk' with 1 weak references
+06-01 11:49:04.866  2026  2050 W system_server: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~1q2Lr_CLtMZq5B6C6xMSRA==/com.duolingo-RBCI7-W9jkWHP5uxt0-TZA==/split_config.arm64_v8a.apk' with 1 weak references
+06-01 11:49:04.866  2026  2050 W system_server: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~1q2Lr_CLtMZq5B6C6xMSRA==/com.duolingo-RBCI7-W9jkWHP5uxt0-TZA==/split_config.xxhdpi.apk' with 1 weak references
+06-01 11:49:04.866  2026  2050 W system_server: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~xv1gZ1ZVx9qHm6TUA3fp7w==/com.google.android.calendar-fqHqMcVIXzcyw3BC1R8aQg==/base.apk' with 1 weak references
+06-01 11:49:04.866  2026  2050 W system_server: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~xv1gZ1ZVx9qHm6TUA3fp7w==/com.google.android.calendar-fqHqMcVIXzcyw3BC1R8aQg==/split_config.arm64_v8a.apk' with 1 weak references
+06-01 11:49:04.866  2026  2050 W system_server: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~xv1gZ1ZVx9qHm6TUA3fp7w==/com.google.android.calendar-fqHqMcVIXzcyw3BC1R8aQg==/split_config.xxhdpi.apk' with 1 weak references
+06-01 11:49:04.866  2026  2050 W system_server: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~xv1gZ1ZVx9qHm6TUA3fp7w==/com.google.android.calendar-fqHqMcVIXzcyw3BC1R8aQg==/split_config.zh.apk' with 1 weak references
+06-01 11:49:04.929  2026  4002 W ActivityTaskManager: callingPackage for (uid=2000, pid=13714) has no WPC
+06-01 11:49:04.931  2026  4002 W OptProp : Cannot read opt property android.window.PROPERTY_COMPAT_ALLOW_ORIENTATION_OVERRIDE
+06-01 11:49:04.933  2026  4002 V GrammaticalInflectionUtils: AttributionSource: android.content.AttributionSource@914cd22 does not have READ_SYSTEM_GRAMMATICAL_GENDER permission.
+06-01 11:49:04.934  2026  4002 W OptProp : Cannot read opt property android.window.PROPERTY_COMPAT_ALLOW_RESIZEABLE_ACTIVITY_OVERRIDES
+06-01 11:49:04.934  2026  4002 W OptProp : Cannot read opt property android.window.PROPERTY_COMPAT_ALLOW_MIN_ASPECT_RATIO_OVERRIDE
+06-01 11:49:04.938  1500  1565 E ANDR-PERF-RESOURCEQS: ANDR-PERF-RESOURCEQS: AddAndApply() 131: Resource value ffffffff is not supported
+06-01 11:49:04.938  1500  1565 E ANDR-PERF-UTIL: ANDR-PERF-UTIL: change_node_val() 319: Failed to update node /proc/sys/walt/sched_per_task_boost with value 65535 0
+06-01 11:49:04.938  1500  1565 E ANDR-PERF-OPTSHANDLER: ANDR-PERF-OPTSHANDLER: sched_reset_task_boost() 3633: can't reset task 4294967295
+06-01 11:49:04.938  1500  1565 E ANDR-PERF-RESOURCEQS: ANDR-PERF-RESOURCEQS: RemoveAndApply() 292: Failed to reset optimization here [3, 32]
+06-01 11:49:04.939  1500  1565 E ANDR-PERF-UTIL: ANDR-PERF-UTIL: change_node_val() 319: Failed to update node /proc/sys/walt/sched_per_task_boost with value 0 3
+06-01 11:49:04.939  1500  1565 E ANDR-PERF-OPTSHANDLER: ANDR-PERF-OPTSHANDLER: sched_task_boost() 3609: can't boost task 0
+06-01 11:49:04.939  1500  1565 E ANDR-PERF-RESOURCEQS: ANDR-PERF-RESOURCEQS: AddAndApply() 167: Failed to apply optimization [3, 32]
+06-01 11:49:04.943  3620  4241 D IpClient/wlan0: interfaceLinkStateChanged: ifindex 23 up
+06-01 11:49:04.944  2026  4002 I ActivityTaskManager: START u0 {flg=0x10000000 cmp=com.example.llama.aichat/com.example.llama.MainActivity} with LAUNCH_MULTIPLE from uid 2000 (BAL_ALLOW_PERMISSION) result code=0
+06-01 11:49:04.945  3524  3586 V WindowManagerShell: Transition requested (#367): android.os.BinderProxy@42191d1 TransitionRequestInfo { type = OPEN, triggerTask = TaskInfo{userId=0 taskId=1100 displayId=0 isRunning=true baseIntent=Intent { flg=0x10000000 cmp=com.example.llama.aichat/com.example.llama.MainActivity } baseActivity=ComponentInfo{com.example.llama.aichat/com.example.llama.MainActivity} topActivity=ComponentInfo{com.example.llama.aichat/com.example.llama.MainActivity} origActivity=null realActivity=ComponentInfo{com.example.llama.aichat/com.example.llama.MainActivity} numActivities=1 lastActiveTime=509038612 supportsMultiWindow=true resizeMode=1 isResizeable=true minWidth=-1 minHeight=-1 defaultMinSize=220 token=WCT{android.window.IWindowContainerToken$Stub$Proxy@55ef436} topActivityType=1 pictureInPictureParams=null shouldDockBigOverlays=false launchIntoPipHostTaskId=-1 lastParentTaskIdBeforePip=-1 displayCutoutSafeInsets=Rect(0, 86 - 0, 0) topActivityInfo=ActivityInfo{f9a9f37 com.example.llama.MainActivity} launchCookies=[] positionInParent=Point(0, 0) parentTaskId=-1 isFocused=false isVisible=false isVisibleRequested=false isSleeping=false locusId=null displayAreaFeatureId=1 isTopActivityTransparent=false appCompatTaskInfo=AppCompatTaskInfo { topActivityInSizeCompat=false topActivityEligibleForLetterboxEducation= falseisLetterboxEducationEnabled= false isLetterboxDoubleTapEnabled= false topActivityEligibleForUserAspectRatioButton= false topActivityBoundsLetterboxed= false isFromLetterboxDoubleTap= false topActivityLetterboxVerticalPosition= -1 topActivityLetterboxHorizontalPosition= -1 topActivityLetterboxWidth=1080 topActivityLetterboxHeight=2340 isUserFullscreenOverrideEnabled=false isSystemFullscreenOverrideEnabled=false cameraCompatTaskInfo=CameraCompatTaskInfo { cameraCompatControlState=hidden freeformCameraCompatMode=inactive}}}, pipTask = null, remoteTransition = null, displayChange = null, flags = 0, debugId = 367 }
+06-01 11:49:04.945  2026  2068 V GrammaticalInflectionUtils: AttributionSource: android.content.AttributionSource@914cd22 does not have READ_SYSTEM_GRAMMATICAL_GENDER permission.
+06-01 11:49:04.945  4001  4001 W SplitSelectStateCtor: Missing session instanceIds
+06-01 11:49:04.945  4001  4001 D StatsLog: LAUNCHER_SPLIT_SELECTION_EXIT_INTERRUPTED
+06-01 11:49:04.948  2026  3395 I AppsFilter: interaction: PackageSetting{55292c5 com.android.microdroid.empty_payload/10311} -> PackageSetting{99339f4 com.example.llama.aichat/10328} BLOCKED
+06-01 11:49:04.948  2026  3395 I AppsFilter: interaction: PackageSetting{9aecb4b com.example.portraitcroppertest/10347} -> PackageSetting{99339f4 com.example.llama.aichat/10328} BLOCKED
+06-01 11:49:04.948  1608  1608 I BpBinder: onLastStrongRef automatically unlinking death recipients: 
+06-01 11:49:04.949  3524  3586 D WindowManagerShell: setLauncherKeepClearAreaHeight: visible=false, height=492
+06-01 11:49:04.949  2026  3395 I AppsFilter: interaction: PackageSetting{85f9928 com.example.portraitcropperservice/10350} -> PackageSetting{99339f4 com.example.llama.aichat/10328} BLOCKED
+06-01 11:49:04.953  4001  4001 I TopTaskTracker: onTaskMovedToFront: (moved taskInfo to front) taskId=1100, baseIntent=Intent { flg=0x10000000 cmp=com.example.llama.aichat/com.example.llama.MainActivity }
+06-01 11:49:04.957  1255  1255 D Zygote  : Forked child process 13722
+06-01 11:49:04.958  2026  2119 I ActivityManager: Start proc 13722:com.example.llama.aichat/u0a328 for next-top-activity {com.example.llama.aichat/com.example.llama.MainActivity}
+06-01 11:49:04.958  3524  3624 D InputEventReceiver: Input log is disabled in InputEventReceiver.
+06-01 11:49:04.958  2026 13723 W ContextImpl: Calling a method in the system process without a qualified user: android.app.ContextImpl.sendBroadcast:1249 com.qualcomm.qti.Performance$SendGameLaunchBroadcast.run:327 java.lang.Thread.run:1564 <bottom of call stack> <bottom of call stack> 
+06-01 11:49:04.959  2026  3395 D CoreBackPreview: Window{81ead5 u0 Splash Screen com.example.llama.aichat}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@5549c78, mPriority=0, mIsAnimationCallback=false}
+06-01 11:49:04.960  2026  9438 W WindowManager: Changing focus from Window{bfe95a8 u0 jp.co.sharp.android.launcher3/jp.co.sharp.android.launcher3.uioverrides.QuickstepLauncher} to null displayId=0 Callers=com.android.server.wm.RootWindowContainer.updateFocusedWindowLocked:479 com.android.server.wm.WindowManagerService.updateFocusedWindowLocked:6654 com.android.server.wm.WindowManagerService.relayoutWindowInner:2780 com.android.server.wm.WindowManagerService.relayoutWindow:2450 
+06-01 11:49:04.962  3524  3658 W qdgralloc: getInterlacedFlag: getMetaData returned 3, defaulting to interlaced_flag = 0
+06-01 11:49:04.965 13722 13722 I le.llama.aichat: Using CollectorTypeCMC GC.
+06-01 11:49:04.967  3524  9564 V WindowManagerShell: onTransitionReady(transaction=8701603760217)
+06-01 11:49:04.967  3524  3586 V WindowManagerShell: onTransitionReady (#367) android.os.BinderProxy@42191d1: {id=367 t=OPEN f=0x0 trk=0 r=[0@Point(0, 0)] c=[{WCT{android.window.IWindowContainerToken$Stub$Proxy@565a31a} m=OPEN f=NONE leash=Surface(name=Task=1100)/@0xc383e2f sb=Rect(0, 0 - 1080, 2340) eb=Rect(0, 0 - 1080, 2340) d=0 taskParent=-1},{WCT{android.window.IWindowContainerToken$Stub$Proxy@4148e4b} m=TO_BACK f=SHOW_WALLPAPER leash=Surface(name=Task=1)/@0xe3efc3c sb=Rect(0, 0 - 1080, 2340) eb=Rect(0, 0 - 1080, 2340) d=0 taskParent=-1}]}
+06-01 11:49:04.967  3524  3586 V WindowManagerShell: Playing animation for (#367) android.os.BinderProxy@42191d1@0
+06-01 11:49:04.967  3524  3586 V WindowManagerShell:  try handler com.android.wm.shell.transition.DefaultMixedHandler@bcb2e86
+06-01 11:49:04.967  3524  3586 V WindowManagerShell:  try handler com.android.wm.shell.keyguard.KeyguardTransitionHandler@f53d347
+06-01 11:49:04.967  3524  3586 V WindowManagerShell:  try handler com.android.wm.shell.pip.PipTransition@503d02c
+06-01 11:49:04.967  3524  3586 V WindowManagerShell:  try handler com.android.wm.shell.activityembedding.ActivityEmbeddingController@a153af5
+06-01 11:49:04.967  3524  3586 V WindowManagerShell:  try handler com.android.wm.shell.recents.RecentsTransitionHandler@17ef08a
+06-01 11:49:04.967  3524  3586 V ShellRecents: RecentsTransitionHandler.startAnimation: no controller found
+06-01 11:49:04.967  3524  3586 V WindowManagerShell:  try handler com.android.wm.shell.splitscreen.StageCoordinator@512a6fb
+06-01 11:49:04.967  3524  3586 V WindowManagerShell:  try handler com.android.wm.shell.transition.RemoteTransitionHandler@8f3c318
+06-01 11:49:04.967  3524  3586 V WindowManagerShell: Transition doesn't have explicit remote, search filters for match for {id=367 t=OPEN f=0x0 trk=0 r=[0@Point(0, 0)] c=[{WCT{android.window.IWindowContainerToken$Stub$Proxy@565a31a} m=OPEN f=NONE leash=Surface(name=Task=1100)/@0xc383e2f sb=Rect(0, 0 - 1080, 2340) eb=Rect(0, 0 - 1080, 2340) d=0 taskParent=-1},{WCT{android.window.IWindowContainerToken$Stub$Proxy@4148e4b} m=TO_BACK f=SHOW_WALLPAPER leash=Surface(name=Task=1)/@0xe3efc3c sb=Rect(0, 0 - 1080, 2340) eb=Rect(0, 0 - 1080, 2340) d=0 taskParent=-1}]}
+06-01 11:49:04.967  3524  3586 V WindowManagerShell:  Checking filter Pair{{types=[] flags=0x0] notFlags=0x100 checks=[{atype=home independent=true modes=[OPEN,TO_FRONT] flags=NONE mustBeTask=false order=TOP topActivity=ComponentInfo{jp.co.sharp.android.launcher3/jp.co.sharp.android.launcher3.uioverrides.QuickstepLauncher} launchCookie=null},{atype=standard independent=true modes=[CLOSE,TO_BACK] flags=NONE mustBeTask=false order=ANY topActivity=null launchCookie=null}]} RemoteTransition { remoteTransition = android.window.IRemoteTransition$Stub$Proxy@1cb9171, appThread = android.app.IApplicationThread$Stub$Proxy@8638b56, debugName = QuickstepLaunchHome }}
+06-01 11:49:04.967  3524  3586 V WindowManagerShell:  Delegate animation for (#367) to null
+06-01 11:49:04.967  3524  3586 V WindowManagerShell:  try handler com.android.wm.shell.transition.DefaultTransitionHandler@15ab7d7
+06-01 11:49:04.967  3524  3586 V WindowManagerShell: start default transition animation, info = {id=367 t=OPEN f=0x0 trk=0 r=[0@Point(0, 0)] c=[{WCT{android.window.IWindowContainerToken$Stub$Proxy@565a31a} m=OPEN f=NONE leash=Surface(name=Task=1100)/@0xc383e2f sb=Rect(0, 0 - 1080, 2340) eb=Rect(0, 0 - 1080, 2340) d=0 taskParent=-1},{WCT{android.window.IWindowContainerToken$Stub$Proxy@4148e4b} m=TO_BACK f=SHOW_WALLPAPER leash=Surface(name=Task=1)/@0xe3efc3c sb=Rect(0, 0 - 1080, 2340) eb=Rect(0, 0 - 1080, 2340) d=0 taskParent=-1}]}
+06-01 11:49:04.967  3524  3586 V WindowManagerShell: loadAnimation: anim=android.view.animation.AnimationSet@91da028 animAttr=0x13 type=OPEN isEntrance=false
+06-01 11:49:04.968  3524  3586 V WindowManagerShell: loadAnimation: anim=android.view.animation.AnimationSet@f599141 animAttr=0x12 type=OPEN isEntrance=true
+06-01 11:49:04.968  3524  3586 V WindowManagerShell:  animated by com.android.wm.shell.transition.DefaultTransitionHandler@15ab7d7
+06-01 11:49:04.968  2026  2064 V WindowManager: Sent Transition (#367) createdAt=06-01 11:49:04.935 via request=TransitionRequestInfo { type = OPEN, triggerTask = TaskInfo{userId=0 taskId=1100 displayId=0 isRunning=true baseIntent=Intent { flg=0x10000000 cmp=com.example.llama.aichat/com.example.llama.MainActivity } baseActivity=ComponentInfo{com.example.llama.aichat/com.example.llama.MainActivity} topActivity=ComponentInfo{com.example.llama.aichat/com.example.llama.MainActivity} origActivity=null realActivity=ComponentInfo{com.example.llama.aichat/com.example.llama.MainActivity} numActivities=1 lastActiveTime=509038612 supportsMultiWindow=true resizeMode=1 isResizeable=true minWidth=-1 minHeight=-1 defaultMinSize=220 token=WCT{RemoteToken{4e75953 Task{cc65148 #1100 type=standard A=10328:com.example.llama.aichat}}} topActivityType=1 pictureInPictureParams=null shouldDockBigOverlays=false launchIntoPipHostTaskId=-1 lastParentTaskIdBeforePip=-1 displayCutoutSafeInsets=Rect(0, 86 - 0, 0) topActivityInfo=ActivityInfo{cea8290 com.example.llama.MainActivity} launchCookies=[] positionInParent=Point(0, 0) parentTaskId=-1 isFocused=false isVisible=false isVisibleRequested=false isSleeping=false locusId=null displayAreaFeatureId=1 isTopActivityTransparent=false appCompatTaskInfo=AppCompatTaskInfo { topActivityInSizeCompat=false topActivityEligibleForLetterboxEducation= falseisLetterboxEducationEnabled= false isLetterboxDoubleTapEnabled= false topActivityEligibleForUserAspectRatioButton= false topActivityBoundsLetterboxed= false isFromLetterboxDoubleTap= false topActivityLetterboxVerticalPosition= -1 topActivityLetterboxHorizontalPosition= -1 topActivityLetterboxWidth=1080 topActivityLetterboxHeight=2340 isUserFullscreenOverrideEnabled=false isSystemFullscreenOverrideEnabled=false cameraCompatTaskInfo=CameraCompatTaskInfo { cameraCompatControlState=hidden freeformCameraCompatMode=inactive}}}, pipTask = null, remoteTransition = null, displayChange = null, flags = 0, debugId = 367 }
+06-01 11:49:04.968  2026  2064 V WindowManager:     startWCT=WindowContainerTransaction { changes = {} hops = [] errorCallbackToken=null taskFragmentOrganizer=null }
+06-01 11:49:04.968  2026  2064 V WindowManager:     info={id=367 t=OPEN f=0x0 trk=0 r=[0@Point(0, 0)] c=[
+06-01 11:49:04.968  2026  2064 V WindowManager:         {WCT{RemoteToken{4e75953 Task{cc65148 #1100 type=standard A=10328:com.example.llama.aichat}}} m=OPEN f=NONE leash=Surface(name=Task=1100)/@0x9835f51 sb=Rect(0, 0 - 1080, 2340) eb=Rect(0, 0 - 1080, 2340) d=0 taskParent=-1},
+06-01 11:49:04.968  2026  2064 V WindowManager:         {WCT{RemoteToken{7dd01da Task{88acdf9 #1 type=home}}} m=TO_BACK f=SHOW_WALLPAPER leash=Surface(name=Task=1)/@0x75530b4 sb=Rect(0, 0 - 1080, 2340) eb=Rect(0, 0 - 1080, 2340) d=0 taskParent=-1}
+06-01 11:49:04.968  2026  2064 V WindowManager:     ]}
+06-01 11:49:04.970  2026  9438 W UserManagerService: Requested status bar icon for non-badged user 0
+06-01 11:49:04.970 13722 13722 D nativeloader: Load libframework-connectivity-tiramisu-jni.so using APEX ns com_android_tethering for caller /apex/com.android.tethering/javalib/framework-connectivity-t.jar: ok
+06-01 11:49:04.973  2026  9438 V ActivityManager: New death recipient com.android.server.am.ActivityManagerService$AppDeathRecipient@f01a789 for thread android.os.BinderProxy@1b6438e
+06-01 11:49:04.977  4614 12175 D MainProcessObserver: pid:13722 uid:10328 foregroundActivities:true
+06-01 11:49:04.979  2026  9438 W ActivityTaskManager: MANAGE_ACTIVITY_STACKS is deprecated, please use alternative permission: MANAGE_ACTIVITY_TASKS
+06-01 11:49:04.979  4424  4475 I ekjt    : (REDACTED) HDM. appOpsListener %s %s
+06-01 11:49:04.979  4424  4475 I ekjt    : (REDACTED) HDM. Ignoring irrelevant audio permission changes for package %s
+06-01 11:49:04.979  4614 12175 D onForegroundChanged: topActivity:ComponentInfo{com.example.llama.aichat/com.example.llama.MainActivity}, taskId:1100, windowingMode:1
+06-01 11:49:04.979  4614 12175 D onForegroundChanged: packageName:com.example.llama.aichat
+06-01 11:49:04.985  4418  9696 D EventRepositoryImpl: onChangeForeground(com.example.llama.aichat, 1100)
+06-01 11:49:04.987  4418  9696 D EventRepositoryImpl: onDeactivatedApplication()
+06-01 11:49:04.989  4418  9696 D EventRepositoryImpl: onActivatedApplication(com.example.llama.aichat)
+06-01 11:49:04.990  8434  8434 D ScShoCaptureReceirver: receive ACTION_LOCK_CLIPNOW_FOR_SETTING
+06-01 11:49:04.992 13722 13722 D nativeloader: Configuring clns-7 for other apk /data/app/~~kSF05J4MzCFEHpbQfxJwZA==/com.example.llama.aichat-qMGnnvvO4q_RHseNPL0aQw==/base.apk. target_sdk_version=36, uses_libraries=libOpenCL.so:libcdsprpc.so, library_path=/data/app/~~kSF05J4MzCFEHpbQfxJwZA==/com.example.llama.aichat-qMGnnvvO4q_RHseNPL0aQw==/lib/arm64:/data/app/~~kSF05J4MzCFEHpbQfxJwZA==/com.example.llama.aichat-qMGnnvvO4q_RHseNPL0aQw==/base.apk!/lib/arm64-v8a, permitted_path=/data:/mnt/expand:/data/user/0/com.example.llama.aichat
+06-01 11:49:04.995 13722 13722 V GraphicsEnvironment: Currently set values for:
+06-01 11:49:04.995 13722 13722 V GraphicsEnvironment:   angle_gl_driver_selection_pkgs=[]
+06-01 11:49:04.995 13722 13722 V GraphicsEnvironment:   angle_gl_driver_selection_values=[]
+06-01 11:49:04.995 13722 13722 V GraphicsEnvironment: Global.Settings values are invalid: number of packages: 0, number of values: 0
+06-01 11:49:04.995 13722 13722 V GraphicsEnvironment: Updatable production driver is not supported on the device.
+06-01 11:49:04.996 13722 13722 W ResOptExtFactory: ResOptExtFactoryImpl not found
+06-01 11:49:04.997 13722 13722 D WM-WrkMgrInitializer: Initializing WorkManager with default configuration.
+06-01 11:49:04.999 13722 13722 D WM-PackageManagerHelper: Skipping component enablement for androidx.work.impl.background.systemjob.SystemJobService
+06-01 11:49:04.999 13722 13722 D WM-Schedulers: Created SystemJobScheduler and enabled SystemJobService
+06-01 11:49:05.006 13722 13740 D vulkan  : searching for layers in '/data/app/~~kSF05J4MzCFEHpbQfxJwZA==/com.example.llama.aichat-qMGnnvvO4q_RHseNPL0aQw==/lib/arm64'
+06-01 11:49:05.006 13722 13740 D vulkan  : searching for layers in '/data/app/~~kSF05J4MzCFEHpbQfxJwZA==/com.example.llama.aichat-qMGnnvvO4q_RHseNPL0aQw==/base.apk!/lib/arm64-v8a'
+06-01 11:49:05.011  1538  1538 I qspmHal : enter getGpuProf at: -2125682829
+06-01 11:49:05.011  1538  1538 I qspmHal : Coudn't match the GFX PID 13722 to AT PID 0. Checking in local cache.
+06-01 11:49:05.011  1538  1538 E qspmHal : PID 13722 from GFX didn't match!!
+06-01 11:49:05.012 13722 13740 I AdrenoVK-0: ===== BEGIN DUMP OF OVERRIDDEN SETTINGS =====
+06-01 11:49:05.012 13722 13740 I AdrenoVK-0: ===== END DUMP OF OVERRIDDEN SETTINGS =====
+06-01 11:49:05.015 13722 13740 I AdrenoVK-0: QUALCOMM build          : 43c70540de, Ibee7afe120
+06-01 11:49:05.015 13722 13740 I AdrenoVK-0: Build Date              : 07/17/24
+06-01 11:49:05.015 13722 13740 I AdrenoVK-0: Shader Compiler Version : E031.45.02.16
+06-01 11:49:05.015 13722 13740 I AdrenoVK-0: Local Branch            : 
+06-01 11:49:05.015 13722 13740 I AdrenoVK-0: Remote Branch           : refs/tags/AU_LINUX_ANDROID_LA.VENDOR.14.3.0.11.00.00.973.576
+06-01 11:49:05.015 13722 13740 I AdrenoVK-0: Remote Branch           : NONE
+06-01 11:49:05.015 13722 13740 I AdrenoVK-0: Reconstruct Branch      : NOTHING
+06-01 11:49:05.016 13722 13740 I AdrenoVK-0: Build Config            : S P 16.1.2 AArch64
+06-01 11:49:05.016 13722 13740 I AdrenoVK-0: Driver Path             : /vendor/lib64/hw/vulkan.adreno.so
+06-01 11:49:05.016 13722 13740 I AdrenoVK-0: Driver Version          : 0762.24
+06-01 11:49:05.016 13722 13740 I AdrenoVK-0: PFP                     : 0x01310168
+06-01 11:49:05.016 13722 13740 I AdrenoVK-0: ME                      : 0x00000000
+06-01 11:49:05.016 13722 13740 I AdrenoVK-0: Application Name    : android framework
+06-01 11:49:05.016 13722 13740 I AdrenoVK-0: Application Version : 0x00000000
+06-01 11:49:05.016 13722 13740 I AdrenoVK-0: Engine Name         : android framework
+06-01 11:49:05.016 13722 13740 I AdrenoVK-0: Engine Version      : 0x00000000
+06-01 11:49:05.016 13722 13740 I AdrenoVK-0: Api Version         : 0x00401000
+06-01 11:49:05.026 13722 13722 D AppCompatDelegate: Checking for metadata for AppLocalesMetadataHolderService : Service not found
+06-01 11:49:05.041 13722 13722 W MaterialButton: MaterialButton manages its own background to control elevation, shape, color and states. Consider using backgroundTint, shapeAppearance and other attributes where available. A custom background will ignore these attributes and you should consider handling interaction states such as pressed, focused and disabled
+06-01 11:49:05.041 13722 13722 W MaterialButton: MaterialButton manages its own background to control elevation, shape, color and states. Consider using backgroundTint, shapeAppearance and other attributes where available. A custom background will ignore these attributes and you should consider handling interaction states such as pressed, focused and disabled
+06-01 11:49:05.041 13722 13722 W MaterialButton: MaterialButton manages its own background to control elevation, shape, color and states. Consider using backgroundTint, shapeAppearance and other attributes where available. A custom background will ignore these attributes and you should consider handling interaction states such as pressed, focused and disabled
+06-01 11:49:05.041 13722 13722 W MaterialButton: MaterialButton manages its own background to control elevation, shape, color and states. Consider using backgroundTint, shapeAppearance and other attributes where available. A custom background will ignore these attributes and you should consider handling interaction states such as pressed, focused and disabled
+06-01 11:49:05.041 13722 13722 W MaterialButton: MaterialButton manages its own background to control elevation, shape, color and states. Consider using backgroundTint, shapeAppearance and other attributes where available. A custom background will ignore these attributes and you should consider handling interaction states such as pressed, focused and disabled
+06-01 11:49:05.043 13722 13722 W MaterialButton: MaterialButton manages its own background to control elevation, shape, color and states. Consider using backgroundTint, shapeAppearance and other attributes where available. A custom background will ignore these attributes and you should consider handling interaction states such as pressed, focused and disabled
+06-01 11:49:05.043 13722 13722 W MaterialButton: MaterialButton manages its own background to control elevation, shape, color and states. Consider using backgroundTint, shapeAppearance and other attributes where available. A custom background will ignore these attributes and you should consider handling interaction states such as pressed, focused and disabled
+06-01 11:49:05.043 13722 13722 W WindowOnBackDispatcher: OnBackInvokedCallback is not enabled for the application.
+06-01 11:49:05.043 13722 13722 W WindowOnBackDispatcher: Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+06-01 11:49:05.044  7586  7595 W .makersiteappli: Reducing the number of considered missed Gc histogram windows from 2437 to 100
+06-01 11:49:05.044 13722 13722 I ContentCaptureHelper: Setting logging level to OFF
+06-01 11:49:05.045 26853 26853 I byee    : onPause
+06-01 11:49:05.046 26853 26853 W dnth    : measuring already stopped.
+06-01 11:49:05.049 13722 13722 D InputEventReceiver: Input log is disabled in InputEventReceiver.
+06-01 11:49:05.050 13722 13722 D AutofillManager: view not autofillable - has multiline input type
+06-01 11:49:05.050 13722 13722 D AutofillManager: view not autofillable - has multiline input type
+06-01 11:49:05.050 13722 13722 D AutofillManager: view not autofillable - has multiline input type
+06-01 11:49:05.050 13722 13722 D AutofillManager: view not autofillable - has multiline input type
+06-01 11:49:05.051  2026  3395 D CoreBackPreview: Window{23d6884 u0 com.example.llama.aichat/com.example.llama.MainActivity}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@b735ca2, mPriority=0, mIsAnimationCallback=false}
+06-01 11:49:05.057  2026  3395 W WindowManager: Changing focus from null to Window{23d6884 u0 com.example.llama.aichat/com.example.llama.MainActivity} displayId=0 Callers=com.android.server.wm.RootWindowContainer.updateFocusedWindowLocked:479 com.android.server.wm.WindowManagerService.updateFocusedWindowLocked:6654 com.android.server.wm.WindowManagerService.relayoutWindowInner:2780 com.android.server.wm.WindowManagerService.relayoutWindow:2450 
+06-01 11:49:05.060   943   943 I hwservicemanager: getTransport: Cannot find entry android.hardware.graphics.allocator@4.0::IAllocator/default in either framework or device VINTF manifest.
+06-01 11:49:05.061  4515  4515 W MediaProvider: WorkProfileOwnerApps cache is empty
+06-01 11:49:05.061  4515  4515 D PickerSyncLockManager: Trying to acquire lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@6098f39[Unlocked]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = []
+06-01 11:49:05.061  4515  4515 D CloseableReentrantLock: Successfully acquired lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@6098f39[Locked by thread main]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = []
+06-01 11:49:05.061  4515  4515 D CloseableReentrantLock: Successfully released lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@6098f39[Unlocked]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = []
+06-01 11:49:05.062 13722 13740 I AdrenoUtils: <ReadGpuID:357>: Reading chip ID through GSL
+06-01 11:49:05.062 13722 13740 W qdgralloc: getInterlacedFlag: getMetaData returned 3, defaulting to interlaced_flag = 0
+06-01 11:49:05.064  1500  7373 E ANDR-PERF-LM: FeatureState: deleteRow() 208: Entry not found in db
+06-01 11:49:05.064  1500  7381 E ANDR-PERF-LM: FeatureState: deleteRow() 208: Entry not found in db
+06-01 11:49:05.068  3524  3524 D ControlsListingControllerImpl: ServiceConfig reloaded, count: 1
+06-01 11:49:05.069 10842 10842 I Finsky  : [2] ajol - Received: android.intent.action.PACKAGE_REMOVED, [b87jivnbBQq0atgw1Xf-Ggu1xd0FqUEHy7hWhoHpV4c]
+06-01 11:49:05.069  4614  4614 I System.out: intent:Intent { act=android.intent.action.PACKAGE_ADDED dat=package: flg=0x4000010 (has extras) }
+06-01 11:49:05.069  4614  4614 I System.out: intent:Intent { act=ACTION_SET_GAME_VIEW flg=0x10 (has extras) }
+06-01 11:49:05.069  4812  7185 W SQLiteLog: (28) double-quoted string literal: "com.example.llama.aichat"
+06-01 11:49:05.069  3524  3524 D ControlsListingControllerImpl: ServiceConfig reloaded, count: 1
+06-01 11:49:05.069  2026  9439 W JobInfo : Job 'jp.co.sharp.android.gamingbasemodule/.GamingMenuJobIntentService#990' has a deadline with no functional constraints. The deadline won't improve job execution latency. Consider removing the deadline.
+06-01 11:49:05.070  3524  3524 D ControlsListingControllerImpl: ServiceConfig reloaded, count: 1
+06-01 11:49:05.071 10922 10922 I Finsky:background: [2] ajob - Received: android.intent.action.PACKAGE_REMOVED, [b87jivnbBQq0atgw1Xf-Ggu1xd0FqUEHy7hWhoHpV4c]
+06-01 11:49:05.072  4424  5017 I dsyd    : (REDACTED) maybeUpdateCacheDataForAddedPackage %s
+06-01 11:49:05.074 13722 13740 W qdgralloc: getInterlacedFlag: getMetaData returned 3, defaulting to interlaced_flag = 0
+06-01 11:49:05.080  4614  4614 I System.out: intent:Intent { act=ACTION_SET_NOTIFICATION_SUPPRESSION_TYPE flg=0x10 (has extras) }
+06-01 11:49:05.081  2026  2064 I ActivityTaskManager: Displayed com.example.llama.aichat/com.example.llama.MainActivity for user 0: +146ms
+06-01 11:49:05.081 10842 10842 I Finsky  : [2] AIM: AppInfoCacheUpdater -> invalidating apps: [com.example.llama.aichat]
+06-01 11:49:05.081 10842 10842 I Finsky  : [2] AIM: AppInfoManager-Perf > getApps > called for 1 apps
+06-01 11:49:05.082  2026  4002 W JobInfo : Job 'jp.co.sharp.android.gamingbasemodule/.GamingMenuJobIntentService#990' has a deadline with no functional constraints. The deadline won't improve job execution latency. Consider removing the deadline.
+06-01 11:49:05.084  3524  3658 W qdgralloc: getInterlacedFlag: getMetaData returned 3, defaulting to interlaced_flag = 0
+06-01 11:49:05.087 10842 13752 I Finsky  : [1607] [ContentSync] finished, scheduled=false
+06-01 11:49:05.088  1500  7373 E ANDR-PERF-LM: MetaMeter: handleAsync() 166: LightningLaunches Invalid Async
+06-01 11:49:05.089 10842 10874 I Finsky  : [65] AIM: AppInfoManager-Perf > OnDeviceAppInfo > cacheHitCount=0, cacheMissCount=1. Missed  in cache (limit 10) : [com.example.llama.aichat]
+06-01 11:49:05.089 13372 13374 I artd    : GetBestInfo: odex next to the dex file (/data/app/~~kSF05J4MzCFEHpbQfxJwZA==/com.example.llama.aichat-qMGnnvvO4q_RHseNPL0aQw==/oat/arm64/base.odex) is kOatUpToDate with filter 'verify' executable 'false'
+06-01 11:49:05.089 10842 10842 I Finsky  : [2] ajol - Received: android.intent.action.PACKAGE_ADDED, [b87jivnbBQq0atgw1Xf-Ggu1xd0FqUEHy7hWhoHpV4c]
+06-01 11:49:05.089 10842 10871 I Finsky  : [62] AIM: Got app ownership map. App counts: . Unique apps: 0
+06-01 11:49:05.089 10842 10871 E Finsky  : [62] [Counters] attempted to use a non-positive increment for: 4752
+06-01 11:49:05.090 10842 10871 E Finsky  : [62] [Counters] attempted to use a non-positive increment for: 4753
+06-01 11:49:05.090 10842 10873 I Finsky  : [64] AIM: AppInfoManager-Perf > OnDeviceAppInfo > cacheHitCount=1, cacheMissCount=0. Missed  in cache (limit 10) : []
+06-01 11:49:05.091  4408  4968 I AiAiVC  : Centralized allowlist: requested package com.google.android.apps.messaging is in the allowlist
+06-01 11:49:05.091  4408  4968 I AiAiVC  : Centralized allowlist: requested package com.google.android.gm is in the allowlist
+06-01 11:49:05.091  3524  3658 W qdgralloc: getInterlacedFlag: getMetaData returned 3, defaulting to interlaced_flag = 0
+06-01 11:49:05.091  4408  4968 I AiAiVC  : Centralized allowlist: requested package com.google.android.apps.messaging is in the allowlist
+06-01 11:49:05.091  4408  4968 I AiAiVC  : Centralized allowlist: requested package com.google.android.gm is in the allowlist
+06-01 11:49:05.091  4408  4968 I AiAiVC  : Centralized allowlist: requested package com.google.android.apps.messaging is in the allowlist
+06-01 11:49:05.091  4408  4968 I AiAiVC  : Centralized allowlist: requested package com.google.android.gm is in the allowlist
+06-01 11:49:05.092  4408  4968 I AiAiVC  : Centralized allowlist: requested package com.google.android.apps.messaging is in the allowlist
+06-01 11:49:05.092  4408  4968 I AiAiVC  : Centralized allowlist: requested package com.google.android.gm is in the allowlist
+06-01 11:49:05.092 10842 10873 I Finsky  : [64] AIM: Got app ownership map. App counts: . Unique apps: 0
+06-01 11:49:05.092  4408  4968 I AiAiVC  : Centralized allowlist: requested package com.google.android.apps.messaging is in the allowlist
+06-01 11:49:05.092 10842 10873 E Finsky  : [64] [Counters] attempted to use a non-positive increment for: 4752
+06-01 11:49:05.092  4408  4968 I AiAiVC  : Centralized allowlist: requested package com.google.android.gm is in the allowlist
+06-01 11:49:05.093  4408  4968 I AiAiVC  : Centralized allowlist: requested package com.google.android.apps.messaging is in the allowlist
+06-01 11:49:05.093  4408  4968 I AiAiVC  : Centralized allowlist: requested package com.google.android.gm is in the allowlist
+06-01 11:49:05.093  4614  4614 I System.out: intent:Intent { act=ACTION_SET_FINGERPRINT_SENSOR flg=0x10 (has extras) }
+06-01 11:49:05.094  4812  7185 W SQLiteLog: (28) double-quoted string literal: "com.example.llama.aichat"
+06-01 11:49:05.094  2026  5432 W JobInfo : Job 'jp.co.sharp.android.gamingbasemodule/.GamingMenuJobIntentService#990' has a deadline with no functional constraints. The deadline won't improve job execution latency. Consider removing the deadline.
+06-01 11:49:05.094  4614  4614 I System.out: intent:Intent { act=ACTION_SET_GESTURES flg=0x10 (has extras) }
+06-01 11:49:05.094  2026  9439 W JobInfo : Job 'jp.co.sharp.android.gamingbasemodule/.GamingMenuJobIntentService#990' has a deadline with no functional constraints. The deadline won't improve job execution latency. Consider removing the deadline.
+06-01 11:49:05.095  2026  3325 I ImeTracker: com.example.llama.aichat:249bafd0: onRequestHide at ORIGIN_SERVER reason HIDE_UNSPECIFIED_WINDOW fromUser false
+06-01 11:49:05.095  2026  3325 I ImeTracker: com.example.llama.aichat:249bafd0: onCancelled at PHASE_SERVER_SHOULD_HIDE
+06-01 11:49:05.095 13372 13686 I artd    : GetBestInfo: odex next to the dex file (/data/app/~~kSF05J4MzCFEHpbQfxJwZA==/com.example.llama.aichat-qMGnnvvO4q_RHseNPL0aQw==/oat/arm64/base.odex) is kOatUpToDate with filter 'verify' executable 'false'
+06-01 11:49:05.096  8272  8272 D InputEventReceiver: Input log is disabled in InputEventReceiver.
+06-01 11:49:05.097 10842 10871 E Finsky  : [62] [Counters] attempted to use a non-positive increment for: 4753
+06-01 11:49:05.098 10842 13752 I Finsky  : [1607] [ContentSync] finished, scheduled=false
+06-01 11:49:05.099 13722 13740 W qdgralloc: getInterlacedFlag: getMetaData returned 3, defaulting to interlaced_flag = 0
+06-01 11:49:05.099  3524  3658 W qdgralloc: getInterlacedFlag: getMetaData returned 3, defaulting to interlaced_flag = 0
+06-01 11:49:05.101 10922 13754 I Finsky:background: [870] Wrote row to frosting DB: 7533
+06-01 11:49:05.101  8272  8272 I GoogleInputMethodService: GoogleInputMethodService.onFinishInput():2259 
+06-01 11:49:05.102  8272  8272 I Module  : DeviceLockedStatusModuleProvider$Module.updateDeviceLockedStatus():103 repeatCheckTimes = 0, locked = false
+06-01 11:49:05.102  8272  8272 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1446 onStartInput(EditorInfo{EditorInfo{packageName=com.example.llama.aichat, inputType=0, inputTypeString=NULL, enableLearning=false, autoCorrection=false, autoComplete=false, imeOptions=0, privateImeOptions=null, actionName=UNSPECIFIED, actionLabel=null, initialSelStart=-1, initialSelEnd=-1, initialCapsMode=0, label=null, fieldId=0, fieldName=null, extras=null, hintText=null, hintLocales=[]}}, false)
+06-01 11:49:05.102  8272  8272 W AndroidIME: LatinIMEBase.updateInputViewCoverNavigation():327 Null input view, cannot update padding!
+06-01 11:49:05.102  8272  8272 I Module  : DeviceLockedStatusModuleProvider$Module.updateDeviceLockedStatus():103 repeatCheckTimes = 1, locked = false
+06-01 11:49:05.103  2026  5432 W PackageConfigPersister: App-specific configuration not found for packageName: com.example.llama.aichat and userId: 0
+06-01 11:49:05.105  4812  7185 W SQLiteLog: (28) double-quoted string literal: "com.example.llama.aichat"
+06-01 11:49:05.105  4614  6557 V GamingMenuJobIntentService: GAMING_ACTION_SET_GAME_VIEW: start
+06-01 11:49:05.105  4614  6557 V GamingMenuJobIntentService: GAMING_ACTION_SET_GAME_VIEW: end
+06-01 11:49:05.106  4614  6557 V GamingMenuJobIntentService: GAMING_ACTION_SET_NOTIFICATION_SUPPRESSION_TYPE: start
+06-01 11:49:05.106  4614  6557 V setNotificationSuppressionType: start: type:0
+06-01 11:49:05.106 10922 13754 I Finsky:background: [870] Wrote row to frosting DB: 7534
+06-01 11:49:05.106  4614  6557 V setNotificationSuppressionType: granted
+06-01 11:49:05.106  4614  6557 V setNotificationSuppressionType: end
+06-01 11:49:05.106  4614  6557 V GamingMenuJobIntentService: GAMING_ACTION_SET_NOTIFICATION_SUPPRESSION_TYPE: end
+06-01 11:49:05.107  4614  6557 V GamingMenuJobIntentService: GAMING_ACTION_SET_FINGERPRINT_SENSOR: start
+06-01 11:49:05.107 10922 10922 I Finsky:background: [2] ajob - Received: android.intent.action.PACKAGE_ADDED, [b87jivnbBQq0atgw1Xf-Ggu1xd0FqUEHy7hWhoHpV4c]
+06-01 11:49:05.107  4614  6557 V setFingerprintSensor: enabled = 1
+06-01 11:49:05.107 13372 13374 I artd    : GetBestInfo: odex next to the dex file (/data/app/~~kSF05J4MzCFEHpbQfxJwZA==/com.example.llama.aichat-qMGnnvvO4q_RHseNPL0aQw==/oat/arm64/base.odex) is kOatUpToDate with filter 'verify' executable 'false'
+06-01 11:49:05.108  4614  6557 V GamingMenuJobIntentService: GAMING_ACTION_SET_FINGERPRINT_SENSOR: end
+06-01 11:49:05.109  4614  6557 V GamingMenuJobIntentService: GAMING_ACTION_SET_GESTURES: start
+06-01 11:49:05.110  4614  6557 V GamingMenuJobIntentService: GAMING_ACTION_SET_GESTURES: end
+06-01 11:49:05.113 10842 10842 I Finsky  : [2] AIM: AppInfoCacheUpdater -> invalidating apps: [com.example.llama.aichat]
+06-01 11:49:05.113 10842 10842 I Finsky  : [2] AIM: AppInfoManager-Perf > getApps > called for 1 apps
+06-01 11:49:05.114 10842 10842 I Finsky  : [2] DTU: Received onPackageAdded, replacing: true
+06-01 11:49:05.119 10922 10922 I Finsky:background: [2] ajob - Received: android.intent.action.PACKAGE_ADDED, [b87jivnbBQq0atgw1Xf-Ggu1xd0FqUEHy7hWhoHpV4c]
+06-01 11:49:05.120 13372 13374 I artd    : GetBestInfo: odex next to the dex file (/data/app/~~kSF05J4MzCFEHpbQfxJwZA==/com.example.llama.aichat-qMGnnvvO4q_RHseNPL0aQw==/oat/arm64/base.odex) is kOatUpToDate with filter 'verify' executable 'false'
+06-01 11:49:05.120 10922 13754 I Finsky:background: [870] Wrote row to frosting DB: 7535
+06-01 11:49:05.122 10842 10871 I Finsky  : [62] AIM: AppInfoManager-Perf > OnDeviceAppInfo > cacheHitCount=0, cacheMissCount=1. Missed  in cache (limit 10) : [com.example.llama.aichat]
+06-01 11:49:05.122 10842 10871 I Finsky  : [62] AIM: Got app ownership map. App counts: . Unique apps: 0
+06-01 11:49:05.122 10842 10871 E Finsky  : [62] [Counters] attempted to use a non-positive increment for: 4752
+06-01 11:49:05.123 10842 10871 E Finsky  : [62] [Counters] attempted to use a non-positive increment for: 4753
+06-01 11:49:05.124 10922 10968 I Finsky:background: [58] IQ:PSL: skipping onPackageRemoved(replacing=true) for untracked package=com.example.llama.aichat
+06-01 11:49:05.128 10922 10922 I Finsky:background: [2] ajob - Deduping intent android.intent.action.PACKAGE_ADDED
+06-01 11:49:05.129 12233 13769 I AppBackupStateCleanupIO: Backup state cleanup on uninstall is disabled. [CONTEXT service_id=229 ]
+06-01 11:49:05.130 12233 13765 I FraudProtectUtils: (REDACTED) Latest bank app list size: %d, %s isBankApp: %b
+06-01 11:49:05.130 12233 13765 I PackageInstalledIntentO: (REDACTED) Package %s is not a bank app. Skipping updates.
+06-01 11:49:05.130 10922 10922 I Finsky:background: [2] ajob - Received: android.intent.action.PACKAGE_ADDED, [b87jivnbBQq0atgw1Xf-Ggu1xd0FqUEHy7hWhoHpV4c]
+06-01 11:49:05.131  5709 13771 I Fitness : (REDACTED) FitCleanupIntentOperation received Intent %s
+06-01 11:49:05.133  5709 13760 I ProximityAuth: [RecentAppsMediator] Package added: (user=UserHandle{0}) com.example.llama.aichat
+06-01 11:49:05.136 10842 10842 I Finsky  : [2] ajol - Received: android.intent.action.PACKAGE_ADDED, [b87jivnbBQq0atgw1Xf-Ggu1xd0FqUEHy7hWhoHpV4c]
+06-01 11:49:05.138 12233 13766 I Auth    : (REDACTED) [SupervisedAccountIntentOperation] onHandleIntent: %s
+06-01 11:49:05.139 10922 13754 I Finsky:background: [870] Wrote row to frosting DB: 7536
+06-01 11:49:05.139 12233 13769 W AppInstallOperation: FDL Migration::InstallIntentOperation by FDL Module [CONTEXT service_id=77 ]
+06-01 11:49:05.141 12233 12233 D BoundBrokerSvc: onBind: Intent { act=com.google.android.gms.common.BIND_SHARED_PREFS pkg=com.google.android.gms }
+06-01 11:49:05.141 12233 12233 D BoundBrokerSvc: Loading bound service for intent: Intent { act=com.google.android.gms.common.BIND_SHARED_PREFS pkg=com.google.android.gms }
+06-01 11:49:05.142 12233 13765 I FraudProtectUtils: (REDACTED) Latest bank app list size: %d, %s isBankApp: %b
+06-01 11:49:05.142 12233 13765 I PackageInstalledIntentO: (REDACTED) Package %s is not a bank app. Skipping updates.
+06-01 11:49:05.145 10842 10842 I Finsky  : [2] ajol - Deduping intent android.intent.action.PACKAGE_ADDED
+06-01 11:49:05.146 10842 10842 I Finsky  : [2] ajol - Received: android.intent.action.PACKAGE_ADDED, [b87jivnbBQq0atgw1Xf-Ggu1xd0FqUEHy7hWhoHpV4c]
+06-01 11:49:05.147 12233 13769 I NearbyDiscovery: (REDACTED) processGrantSlicePermission: %s
+06-01 11:49:05.149 10922 13754 I Finsky:background: [870] Wrote row to frosting DB: 7537
+06-01 11:49:05.149 10922 10922 I Finsky:background: [2] ajob - Deduping intent android.intent.action.PACKAGE_ADDED
+06-01 11:49:05.149 10922 10986 I Finsky:background: [69] RECEIVER_PACKAGE_MONITOR_BACKGROUND#logWorkEndAndFinishGoAsync: SUCCESS
+06-01 11:49:05.153 10842 10842 I Finsky  : [2] ajol - Deduping intent android.intent.action.PACKAGE_ADDED
+06-01 11:49:05.153 10842 10859 I Finsky  : [50] RECEIVER_PACKAGE_MONITOR#logWorkEndAndFinishGoAsync: SUCCESS
+06-01 11:49:05.153 10922 13754 I Finsky:background: [870] Wrote row to frosting DB: 7538
+06-01 11:49:05.161 12233 13766 W SQLiteLog: (28) double-quoted string literal: "com.example.llama.aichat"
+06-01 11:49:05.161 10842 10872 I Finsky  : [63] AIM: AppInfoManager-Perf > OnDeviceAppInfo > cacheHitCount=1, cacheMissCount=0. Missed  in cache (limit 10) : []
+06-01 11:49:05.166  5709 10414 W Auth    : [TokenResponseCallback] TokenResponse failed with exception [CONTEXT service_id=343 ]
+06-01 11:49:05.166  5709 10414 W Auth    : dalz: Failed to process request
+06-01 11:49:05.166  5709 10414 W Auth    : 	at damg.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):23)
+06-01 11:49:05.166  5709 10414 W Auth    : 	at daqd.b(:com.google.android.gms@261833035@26.18.33 (260400-913931251):15)
+06-01 11:49:05.166  5709 10414 W Auth    : 	at dapc.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):82)
+06-01 11:49:05.166  5709 10414 W Auth    : 	at ljg.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):19)
+06-01 11:49:05.166  5709 10414 W Auth    : 	at dapj.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):6)
+06-01 11:49:05.166  5709 10414 W Auth    : 	at cbsz.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):9)
+06-01 11:49:05.166  5709 10414 W Auth    : 	at ahaq.b(:com.google.android.gms@261833035@26.18.33 (260400-913931251):13)
+06-01 11:49:05.166  5709 10414 W Auth    : 	at ahaq.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):130)
+06-01 11:49:05.166  5709 10414 W Auth    : 	at apib.b(:com.google.android.gms@261833035@26.18.33 (260400-913931251):28)
+06-01 11:49:05.166  5709 10414 W Auth    : 	at ahwj.d(:com.google.android.gms@261833035@26.18.33 (260400-913931251):170)
+06-01 11:49:05.166  5709 10414 W Auth    : 	at ahwj.b(:com.google.android.gms@261833035@26.18.33 (260400-913931251):47)
+06-01 11:49:05.166  5709 10414 W Auth    : 	at ahwh.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):745)
+06-01 11:49:05.166  5709 10414 W Auth    : 	at ahga.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):82)
+06-01 11:49:05.166  5709 10414 W Auth    : 	at aavt.d(:com.google.android.gms@261833035@26.18.33 (260400-913931251):40)
+06-01 11:49:05.166  5709 10414 W Auth    : 	at aavt.dispatchTransaction(:com.google.android.gms@261833035@26.18.33 (260400-913931251):153)
+06-01 11:49:05.166  5709 10414 W Auth    : 	at cbwg.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):64)
+06-01 11:49:05.166  5709 10414 W Auth    : 	at aaac.onTransact(:com.google.android.gms@261833035@26.18.33 (260400-913931251):23)
+06-01 11:49:05.166  5709 10414 W Auth    : 	at android.os.Binder.transact(Binder.java:1345)
+06-01 11:49:05.166  5709 10414 W Auth    : 	at cpzs.onTransact(:com.google.android.gms@261833035@26.18.33 (260400-913931251):12)
+06-01 11:49:05.166  5709 10414 W Auth    : 	at android.os.Binder.transact(Binder.java:1345)
+06-01 11:49:05.166  5709 10414 W Auth    : 	at cbwu.onTransact(:com.google.android.gms@261833035@26.18.33 (260400-913931251):169)
+06-01 11:49:05.166  5709 10414 W Auth    : 	at android.os.Binder.execTransactInternal(Binder.java:1500)
+06-01 11:49:05.166  5709 10414 W Auth    : 	at android.os.Binder.execTransact(Binder.java:1444)
+06-01 11:49:05.166  5709 10414 W Auth    : Caused by: dapf: Connectivity error
+06-01 11:49:05.166  5709 10414 W Auth    : 	at dapc.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):76)
+06-01 11:49:05.166  5709 10414 W Auth    : 	... 20 more
+06-01 11:49:05.166  5709 10414 W Auth    : Caused by: java.io.IOException
+06-01 11:49:05.166  5709 10414 W Auth    : 	at dapc.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):73)
+06-01 11:49:05.166  5709 10414 W Auth    : 	... 20 more
+06-01 11:49:05.168  5709 10414 E AuthPII : [RequestTokenManager] getToken() -> NETWORK_ERROR. App: com.google.android.gms, Service: oauth2:https://www.googleapis.com/auth/plus.me
+06-01 11:49:05.168  5709 10414 E AuthPII : bjco: Error when calling server using GmsNetworkStack.
+06-01 11:49:05.168  5709 10414 E AuthPII : 	at ahwj.b(:com.google.android.gms@261833035@26.18.33 (260400-913931251):1542)
+06-01 11:49:05.168  5709 10414 E AuthPII : 	at ahwh.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):745)
+06-01 11:49:05.168  5709 10414 E AuthPII : 	at ahga.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):82)
+06-01 11:49:05.168  5709 10414 E AuthPII : 	at aavt.d(:com.google.android.gms@261833035@26.18.33 (260400-913931251):40)
+06-01 11:49:05.168  5709 10414 E AuthPII : 	at aavt.dispatchTransaction(:com.google.android.gms@261833035@26.18.33 (260400-913931251):153)
+06-01 11:49:05.168  5709 10414 E AuthPII : 	at cbwg.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):64)
+06-01 11:49:05.168  5709 10414 E AuthPII : 	at aaac.onTransact(:com.google.android.gms@261833035@26.18.33 (260400-913931251):23)
+06-01 11:49:05.168  5709 10414 E AuthPII : 	at android.os.Binder.transact(Binder.java:1345)
+06-01 11:49:05.168  5709 10414 E AuthPII : 	at cpzs.onTransact(:com.google.android.gms@261833035@26.18.33 (260400-913931251):12)
+06-01 11:49:05.168  5709 10414 E AuthPII : 	at android.os.Binder.transact(Binder.java:1345)
+06-01 11:49:05.168  5709 10414 E AuthPII : 	at cbwu.onTransact(:com.google.android.gms@261833035@26.18.33 (260400-913931251):169)
+06-01 11:49:05.168  5709 10414 E AuthPII : 	at android.os.Binder.execTransactInternal(Binder.java:1500)
+06-01 11:49:05.168  5709 10414 E AuthPII : 	at android.os.Binder.execTransact(Binder.java:1444)
+06-01 11:49:05.168  5709 10414 E AuthPII : Caused by: bjco: Error requesting token.
+06-01 11:49:05.168  5709 10414 E AuthPII : 	at ahwj.d(:com.google.android.gms@261833035@26.18.33 (260400-913931251):212)
+06-01 11:49:05.168  5709 10414 E AuthPII : 	at ahwj.b(:com.google.android.gms@261833035@26.18.33 (260400-913931251):47)
+06-01 11:49:05.168  5709 10414 E AuthPII : 	... 12 more
+06-01 11:49:05.168  5709 10414 E AuthPII : Caused by: java.util.concurrent.ExecutionException: dalz: Failed to process request
+06-01 11:49:05.168  5709 10414 E AuthPII : 	at hmmz.j(:com.google.android.gms@261833035@26.18.33 (260400-913931251):21)
+06-01 11:49:05.168  5709 10414 E AuthPII : 	at hmni.u(:com.google.android.gms@261833035@26.18.33 (260400-913931251):110)
+06-01 11:49:05.168  5709 10414 E AuthPII : 	at ahwj.d(:com.google.android.gms@261833035@26.18.33 (260400-913931251):197)
+06-01 11:49:05.168  5709 10414 E AuthPII : 	... 13 more
+06-01 11:49:05.168  5709 10414 E AuthPII : Caused by: dalz: Failed to process request
+06-01 11:49:05.168  5709 10414 E AuthPII : 	at damg.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):23)
+06-01 11:49:05.168  5709 10414 E AuthPII : 	at daqd.b(:com.google.android.gms@261833035@26.18.33 (260400-913931251):15)
+06-01 11:49:05.168  5709 10414 E AuthPII : 	at dapc.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):82)
+06-01 11:49:05.168  5709 10414 E AuthPII : 	at ljg.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):19)
+06-01 11:49:05.168  5709 10414 E AuthPII : 	at dapj.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):6)
+06-01 11:49:05.168  5709 10414 E AuthPII : 	at cbsz.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):9)
+06-01 11:49:05.168  5709 10414 E AuthPII : 	at ahaq.b(:com.google.android.gms@261833035@26.18.33 (260400-913931251):13)
+06-01 11:49:05.168  5709 10414 E AuthPII : 	at ahaq.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):130)
+06-01 11:49:05.168  5709 10414 E AuthPII : 	at apib.b(:com.google.android.gms@261833035@26.18.33 (260400-913931251):28)
+06-01 11:49:05.168  5709 10414 E AuthPII : 	at ahwj.d(:com.google.android.gms@261833035@26.18.33 (260400-913931251):170)
+06-01 11:49:05.168  5709 10414 E AuthPII : 	... 13 more
+06-01 11:49:05.168  5709 10414 E AuthPII : Caused by: dapf: Connectivity error
+06-01 11:49:05.168  5709 10414 E AuthPII : 	at dapc.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):76)
+06-01 11:49:05.168  5709 10414 E AuthPII : 	... 20 more
+06-01 11:49:05.168  5709 10414 E AuthPII : Caused by: java.io.IOException
+06-01 11:49:05.168  5709 10414 E AuthPII : 	at dapc.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):73)
+06-01 11:49:05.168  5709 10414 E AuthPII : 	... 20 more
+06-01 11:49:05.168  5709 10414 E AuthPII : Message is Error when calling server using GmsNetworkStack.
+06-01 11:49:05.168  5709 10414 E AuthPII : bjco: Error when calling server using GmsNetworkStack.
+06-01 11:49:05.168  5709 10414 E AuthPII : 	at ahwj.b(:com.google.android.gms@261833035@26.18.33 (260400-913931251):1542)
+06-01 11:49:05.168  5709 10414 E AuthPII : 	at ahwh.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):745)
+06-01 11:49:05.168  5709 10414 E AuthPII : 	at ahga.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):82)
+06-01 11:49:05.168  5709 10414 E AuthPII : 	at aavt.d(:com.google.android.gms@261833035@26.18.33 (260400-913931251):40)
+06-01 11:49:05.168  5709 10414 E AuthPII : 	at aavt.dispatchTransaction(:com.google.android.gms@261833035@26.18.33 (260400-913931251):153)
+06-01 11:49:05.168  5709 10414 E AuthPII : 	at cbwg.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):64)
+06-01 11:49:05.168  5709 10414 E AuthPII : 	at aaac.onTransact(:com.google.android.gms@261833035@26.18.33 (260400-913931251):23)
+06-01 11:49:05.168  5709 10414 E AuthPII : 	at android.os.Binder.transact(Binder.java:1345)
+06-01 11:49:05.168  5709 10414 E AuthPII : 	at cpzs.onTransact(:com.google.android.gms@261833035@26.18.33 (260400-913931251):12)
+06-01 11:49:05.168  5709 10414 E AuthPII : 	at android.os.Binder.transact(Binder.java:1345)
+06-01 11:49:05.168  5709 10414 E AuthPII : 	at cbwu.onTransact(:com.google.android.gms@261833035@26.18.33 (260400-913931251):169)
+06-01 11:49:05.168  5709 10414 E AuthPII : 	at android.os.Binder.execTransactInternal(Binder.java:1500)
+06-01 11:49:05.168  5709 10414 E AuthPII : 	at android.os.Binder.execTransact(Binder.java:1444)
+06-01 11:49:05.168  5709 10414 E AuthPII : Caused by: bjco: Error requesting token.
+06-01 11:49:05.168  5709 10414 E AuthPII : 	at ahwj.d(:com.google.android.gms@261833035@26.18.33 (260400-913931251):212)
+06-01 11:49:05.168  5709 10414 E AuthPII : 	at ahwj.b(:com.google.android.gms@261833035@26.18.33 (260400-913931251):47)
+06-01 11:49:05.168  5709 10414 E AuthPII : 	... 12 more
+06-01 11:49:05.168  5709 10414 E AuthPII : Caused by: java.util.concurrent.ExecutionException: dalz: Failed to process request
+06-01 11:49:05.168  5709 10414 E AuthPII : 	at hmmz.j(:com.google.android.gms@261833035@26.18.33 (260400-913931251):21)
+06-01 11:49:05.168  5709 10414 E AuthPII : 	at hmni.u(:com.google.android.gms@261833035@26.18.33 (260400-913931251):110)
+06-01 11:49:05.168  5709 10414 E AuthPII : 	at ahwj.d(:com.google.android.gms@261833035@26.18.33 (260400-913931251):197)
+06-01 11:49:05.168  5709 10414 E AuthPII : 	... 13 more
+06-01 11:49:05.168  5709 10414 E AuthPII : Caused by: dalz: Failed to process request
+06-01 11:49:05.168  5709 10414 E AuthPII : 	at damg.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):23)
+06-01 11:49:05.168  5709 10414 E AuthPII : 	at daqd.b(:com.google.android.gms@261833035@26.18.33 (260400-913931251):15)
+06-01 11:49:05.168  5709 10414 E AuthPII : 	at dapc.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):82)
+06-01 11:49:05.168  5709 10414 E AuthPII : 	at ljg.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):19)
+06-01 11:49:05.168  5709 10414 E AuthPII : 	at dapj.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):6)
+06-01 11:49:05.168  5709 10414 E AuthPII : 	at cbsz.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):9)
+06-01 11:49:05.168  5709 10414 E AuthPII : 	at ahaq.b(:com.google.android.gms@261833035@26.18.33 (260400-913931251):13)
+06-01 11:49:05.168  5709 10414 E AuthPII : 	at ahaq.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):130)
+06-01 11:49:05.168  5709 10414 E AuthPII : 	at apib.b(:com.google.android.gms@261833035@26.18.33 (260400-913931251):28)
+06-01 11:49:05.168  5709 10414 E AuthPII : 	at ahwj.d(:com.google.android.gms@261833035@26.18.33 (260400-913931251):170)
+06-01 11:49:05.168  5709 10414 E AuthPII : 	... 13 more
+06-01 11:49:05.168  5709 10414 E AuthPII : Caused by: dapf: Connectivity error
+06-01 11:49:05.168  5709 10414 E AuthPII : 	at dapc.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):76)
+06-01 11:49:05.168  5709 10414 E AuthPII : 	... 20 more
+06-01 11:49:05.168  5709 10414 E AuthPII : Caused by: java.io.IOException
+06-01 11:49:05.168  5709 10414 E AuthPII : 	at dapc.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):73)
+06-01 11:49:05.168  5709 10414 E AuthPII : 	... 20 more
+06-01 11:49:05.168  5709 10414 I Auth    : (REDACTED) [AccountIdManager] Token response failed with status=%s
+06-01 11:49:05.169  2026  9439 W ParceledListSlice: Element #192 is 16568 bytes.
+06-01 11:49:05.172 10842 10871 I Finsky  : [62] AIM: Got app ownership map. App counts: . Unique apps: 0
+06-01 11:49:05.172 10842 10871 E Finsky  : [62] [Counters] attempted to use a non-positive increment for: 4752
+06-01 11:49:05.177  2026  9642 W ParceledListSlice: Element #192 is 16568 bytes.
+06-01 11:49:05.177 10842 10872 E Finsky  : [63] [Counters] attempted to use a non-positive increment for: 4753
+06-01 11:49:05.181 10842 10872 I Finsky  : [63] AIM: AppInfoManager-Perf > ItemModel > CacheSize=53, cacheHitCount=0, cacheMissCount=0, total appsWithNoServerDataCount=4. Missed  in cache (limit 10) : []
+06-01 11:49:05.181 12233 12459 I Icing   : IndexChimeraService.getServiceInterface callingPackage=com.google.android.gms componentName=AppsCorpus serviceId=36
+06-01 11:49:05.186 12233 12233 D BoundBrokerSvc: onBind: Intent { act=com.google.android.gms.feedback.internal.IFeedbackService dat=chimera-action:/... cmp=com.google.android.gms/.chimera.GmsBoundBrokerService }
+06-01 11:49:05.186 12233 12233 D BoundBrokerSvc: Loading bound service for intent: Intent { act=com.google.android.gms.feedback.internal.IFeedbackService dat=chimera-action:/... cmp=com.google.android.gms/.chimera.GmsBoundBrokerService }
+06-01 11:49:05.186  5709 10414 W Auth    : [TokenResponseCallback] TokenResponse failed with exception [CONTEXT service_id=343 ]
+06-01 11:49:05.186  5709 10414 W Auth    : dalz: Failed to process request
+06-01 11:49:05.186  5709 10414 W Auth    : 	at damg.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):23)
+06-01 11:49:05.186  5709 10414 W Auth    : 	at daqd.b(:com.google.android.gms@261833035@26.18.33 (260400-913931251):15)
+06-01 11:49:05.186  5709 10414 W Auth    : 	at dapc.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):82)
+06-01 11:49:05.186  5709 10414 W Auth    : 	at ljg.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):19)
+06-01 11:49:05.186  5709 10414 W Auth    : 	at dapj.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):6)
+06-01 11:49:05.186  5709 10414 W Auth    : 	at cbsz.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):9)
+06-01 11:49:05.186  5709 10414 W Auth    : 	at ahaq.b(:com.google.android.gms@261833035@26.18.33 (260400-913931251):13)
+06-01 11:49:05.186  5709 10414 W Auth    : 	at ahaq.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):130)
+06-01 11:49:05.186  5709 10414 W Auth    : 	at apib.b(:com.google.android.gms@261833035@26.18.33 (260400-913931251):28)
+06-01 11:49:05.186  5709 10414 W Auth    : 	at ahwj.d(:com.google.android.gms@261833035@26.18.33 (260400-913931251):170)
+06-01 11:49:05.186  5709 10414 W Auth    : 	at ahwj.b(:com.google.android.gms@261833035@26.18.33 (260400-913931251):47)
+06-01 11:49:05.186  5709 10414 W Auth    : 	at ahwh.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):745)
+06-01 11:49:05.186  5709 10414 W Auth    : 	at ahgg.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):55)
+06-01 11:49:05.186  5709 10414 W Auth    : 	at ahgg.h(:com.google.android.gms@261833035@26.18.33 (260400-913931251):108)
+06-01 11:49:05.186  5709 10414 W Auth    : 	at ahgg.b(:com.google.android.gms@261833035@26.18.33 (260400-913931251):817)
+06-01 11:49:05.186  5709 10414 W Auth    : 	at ahgg.c(:com.google.android.gms@261833035@26.18.33 (260400-913931251):5)
+06-01 11:49:05.186  5709 10414 W Auth    : 	at aavt.d(:com.google.android.gms@261833035@26.18.33 (260400-913931251):65)
+06-01 11:49:05.186  5709 10414 W Auth    : 	at aavt.dispatchTransaction(:com.google.android.gms@261833035@26.18.33 (260400-913931251):153)
+06-01 11:49:05.186  5709 10414 W Auth    : 	at cbwg.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):64)
+06-01 11:49:05.186  5709 10414 W Auth    : 	at aaac.onTransact(:com.google.android.gms@261833035@26.18.33 (260400-913931251):23)
+06-01 11:49:05.186  5709 10414 W Auth    : 	at android.os.Binder.transact(Binder.java:1345)
+06-01 11:49:05.186  5709 10414 W Auth    : 	at cpzs.onTransact(:com.google.android.gms@261833035@26.18.33 (260400-913931251):12)
+06-01 11:49:05.186  5709 10414 W Auth    : 	at android.os.Binder.transact(Binder.java:1345)
+06-01 11:49:05.186  5709 10414 W Auth    : 	at cbwu.onTransact(:com.google.android.gms@261833035@26.18.33 (260400-913931251):169)
+06-01 11:49:05.186  5709 10414 W Auth    : 	at android.os.Binder.execTransactInternal(Binder.java:1500)
+06-01 11:49:05.186  5709 10414 W Auth    : 	at android.os.Binder.execTransact(Binder.java:1444)
+06-01 11:49:05.186  5709 10414 W Auth    : Caused by: dapf: Connectivity error
+06-01 11:49:05.186  5709 10414 W Auth    : 	at dapc.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):76)
+06-01 11:49:05.186  5709 10414 W Auth    : 	... 23 more
+06-01 11:49:05.186  5709 10414 W Auth    : Caused by: java.io.IOException
+06-01 11:49:05.186  5709 10414 W Auth    : 	at dapc.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):73)
+06-01 11:49:05.186  5709 10414 W Auth    : 	... 23 more
+06-01 11:49:05.187  5709 10414 E AuthPII : [RequestTokenManager] getToken() -> NETWORK_ERROR. App: com.google.android.gms, Service: oauth2:https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/account.capabilities https://www.googleapis.com/auth/account.service_flags
+06-01 11:49:05.187  5709 10414 E AuthPII : bjco: Error when calling server using GmsNetworkStack.
+06-01 11:49:05.187  5709 10414 E AuthPII : 	at ahwj.b(:com.google.android.gms@261833035@26.18.33 (260400-913931251):1542)
+06-01 11:49:05.187  5709 10414 E AuthPII : 	at ahwh.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):745)
+06-01 11:49:05.187  5709 10414 E AuthPII : 	at ahgg.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):55)
+06-01 11:49:05.187  5709 10414 E AuthPII : 	at ahgg.h(:com.google.android.gms@261833035@26.18.33 (260400-913931251):108)
+06-01 11:49:05.187  5709 10414 E AuthPII : 	at ahgg.b(:com.google.android.gms@261833035@26.18.33 (260400-913931251):817)
+06-01 11:49:05.187  5709 10414 E AuthPII : 	at ahgg.c(:com.google.android.gms@261833035@26.18.33 (260400-913931251):5)
+06-01 11:49:05.187  5709 10414 E AuthPII : 	at aavt.d(:com.google.android.gms@261833035@26.18.33 (260400-913931251):65)
+06-01 11:49:05.187  5709 10414 E AuthPII : 	at aavt.dispatchTransaction(:com.google.android.gms@261833035@26.18.33 (260400-913931251):153)
+06-01 11:49:05.187  5709 10414 E AuthPII : 	at cbwg.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):64)
+06-01 11:49:05.187  5709 10414 E AuthPII : 	at aaac.onTransact(:com.google.android.gms@261833035@26.18.33 (260400-913931251):23)
+06-01 11:49:05.187  5709 10414 E AuthPII : 	at android.os.Binder.transact(Binder.java:1345)
+06-01 11:49:05.187  5709 10414 E AuthPII : 	at cpzs.onTransact(:com.google.android.gms@261833035@26.18.33 (260400-913931251):12)
+06-01 11:49:05.187  5709 10414 E AuthPII : 	at android.os.Binder.transact(Binder.java:1345)
+06-01 11:49:05.187  5709 10414 E AuthPII : 	at cbwu.onTransact(:com.google.android.gms@261833035@26.18.33 (260400-913931251):169)
+06-01 11:49:05.187  5709 10414 E AuthPII : 	at android.os.Binder.execTransactInternal(Binder.java:1500)
+06-01 11:49:05.187  5709 10414 E AuthPII : 	at android.os.Binder.execTransact(Binder.java:1444)
+06-01 11:49:05.187  5709 10414 E AuthPII : Caused by: bjco: Error requesting token.
+06-01 11:49:05.187  5709 10414 E AuthPII : 	at ahwj.d(:com.google.android.gms@261833035@26.18.33 (260400-913931251):212)
+06-01 11:49:05.187  5709 10414 E AuthPII : 	at ahwj.b(:com.google.android.gms@261833035@26.18.33 (260400-913931251):47)
+06-01 11:49:05.187  5709 10414 E AuthPII : 	... 15 more
+06-01 11:49:05.187  5709 10414 E AuthPII : Caused by: java.util.concurrent.ExecutionException: dalz: Failed to process request
+06-01 11:49:05.187  5709 10414 E AuthPII : 	at hmmz.j(:com.google.android.gms@261833035@26.18.33 (260400-913931251):21)
+06-01 11:49:05.187  5709 10414 E AuthPII : 	at hmni.u(:com.google.android.gms@261833035@26.18.33 (260400-913931251):110)
+06-01 11:49:05.187  5709 10414 E AuthPII : 	at ahwj.d(:com.google.android.gms@261833035@26.18.33 (260400-913931251):197)
+06-01 11:49:05.187  5709 10414 E AuthPII : 	... 16 more
+06-01 11:49:05.187  5709 10414 E AuthPII : Caused by: dalz: Failed to process request
+06-01 11:49:05.187  5709 10414 E AuthPII : 	at damg.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):23)
+06-01 11:49:05.187  5709 10414 E AuthPII : 	at daqd.b(:com.google.android.gms@261833035@26.18.33 (260400-913931251):15)
+06-01 11:49:05.187  5709 10414 E AuthPII : 	at dapc.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):82)
+06-01 11:49:05.187  5709 10414 E AuthPII : 	at ljg.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):19)
+06-01 11:49:05.187  5709 10414 E AuthPII : 	at dapj.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):6)
+06-01 11:49:05.187  5709 10414 E AuthPII : 	at cbsz.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):9)
+06-01 11:49:05.187  5709 10414 E AuthPII : 	at ahaq.b(:com.google.android.gms@261833035@26.18.33 (260400-913931251):13)
+06-01 11:49:05.187  5709 10414 E AuthPII : 	at ahaq.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):130)
+06-01 11:49:05.187  5709 10414 E AuthPII : 	at apib.b(:com.google.android.gms@261833035@26.18.33 (260400-913931251):28)
+06-01 11:49:05.187  5709 10414 E AuthPII : 	at ahwj.d(:com.google.android.gms@261833035@26.18.33 (260400-913931251):170)
+06-01 11:49:05.187  5709 10414 E AuthPII : 	... 16 more
+06-01 11:49:05.187  5709 10414 E AuthPII : Caused by: dapf: Connectivity error
+06-01 11:49:05.187  5709 10414 E AuthPII : 	at dapc.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):76)
+06-01 11:49:05.187  5709 10414 E AuthPII : 	... 23 more
+06-01 11:49:05.187  5709 10414 E AuthPII : Caused by: java.io.IOException
+06-01 11:49:05.187  5709 10414 E AuthPII : 	at dapc.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):73)
+06-01 11:49:05.187  5709 10414 E AuthPII : 	... 23 more
+06-01 11:49:05.188  5709 10414 E AuthPII : Message is Error when calling server using GmsNetworkStack.
+06-01 11:49:05.188  5709 10414 E AuthPII : bjco: Error when calling server using GmsNetworkStack.
+06-01 11:49:05.188  5709 10414 E AuthPII : 	at ahwj.b(:com.google.android.gms@261833035@26.18.33 (260400-913931251):1542)
+06-01 11:49:05.188  5709 10414 E AuthPII : 	at ahwh.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):745)
+06-01 11:49:05.188  5709 10414 E AuthPII : 	at ahgg.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):55)
+06-01 11:49:05.188  5709 10414 E AuthPII : 	at ahgg.h(:com.google.android.gms@261833035@26.18.33 (260400-913931251):108)
+06-01 11:49:05.188  5709 10414 E AuthPII : 	at ahgg.b(:com.google.android.gms@261833035@26.18.33 (260400-913931251):817)
+06-01 11:49:05.188  5709 10414 E AuthPII : 	at ahgg.c(:com.google.android.gms@261833035@26.18.33 (260400-913931251):5)
+06-01 11:49:05.188  5709 10414 E AuthPII : 	at aavt.d(:com.google.android.gms@261833035@26.18.33 (260400-913931251):65)
+06-01 11:49:05.188  5709 10414 E AuthPII : 	at aavt.dispatchTransaction(:com.google.android.gms@261833035@26.18.33 (260400-913931251):153)
+06-01 11:49:05.188  5709 10414 E AuthPII : 	at cbwg.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):64)
+06-01 11:49:05.188  5709 10414 E AuthPII : 	at aaac.onTransact(:com.google.android.gms@261833035@26.18.33 (260400-913931251):23)
+06-01 11:49:05.188  5709 10414 E AuthPII : 	at android.os.Binder.transact(Binder.java:1345)
+06-01 11:49:05.188  5709 10414 E AuthPII : 	at cpzs.onTransact(:com.google.android.gms@261833035@26.18.33 (260400-913931251):12)
+06-01 11:49:05.188  5709 10414 E AuthPII : 	at android.os.Binder.transact(Binder.java:1345)
+06-01 11:49:05.188  5709 10414 E AuthPII : 	at cbwu.onTransact(:com.google.android.gms@261833035@26.18.33 (260400-913931251):169)
+06-01 11:49:05.188  5709 10414 E AuthPII : 	at android.os.Binder.execTransactInternal(Binder.java:1500)
+06-01 11:49:05.188  5709 10414 E AuthPII : 	at android.os.Binder.execTransact(Binder.java:1444)
+06-01 11:49:05.188  5709 10414 E AuthPII : Caused by: bjco: Error requesting token.
+06-01 11:49:05.188  5709 10414 E AuthPII : 	at ahwj.d(:com.google.android.gms@261833035@26.18.33 (260400-913931251):212)
+06-01 11:49:05.188  5709 10414 E AuthPII : 	at ahwj.b(:com.google.android.gms@261833035@26.18.33 (260400-913931251):47)
+06-01 11:49:05.188  5709 10414 E AuthPII : 	... 15 more
+06-01 11:49:05.188  5709 10414 E AuthPII : Caused by: java.util.concurrent.ExecutionException: dalz: Failed to process request
+06-01 11:49:05.188  5709 10414 E AuthPII : 	at hmmz.j(:com.google.android.gms@261833035@26.18.33 (260400-913931251):21)
+06-01 11:49:05.188  5709 10414 E AuthPII : 	at hmni.u(:com.google.android.gms@261833035@26.18.33 (260400-913931251):110)
+06-01 11:49:05.188  5709 10414 E AuthPII : 	at ahwj.d(:com.google.android.gms@261833035@26.18.33 (260400-913931251):197)
+06-01 11:49:05.188  5709 10414 E AuthPII : 	... 16 more
+06-01 11:49:05.188  5709 10414 E AuthPII : Caused by: dalz: Failed to process request
+06-01 11:49:05.188  5709 10414 E AuthPII : 	at damg.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):23)
+06-01 11:49:05.188  5709 10414 E AuthPII : 	at daqd.b(:com.google.android.gms@261833035@26.18.33 (260400-913931251):15)
+06-01 11:49:05.188  5709 10414 E AuthPII : 	at dapc.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):82)
+06-01 11:49:05.188  5709 10414 E AuthPII : 	at ljg.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):19)
+06-01 11:49:05.188  5709 10414 E AuthPII : 	at dapj.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):6)
+06-01 11:49:05.188  5709 10414 E AuthPII : 	at cbsz.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):9)
+06-01 11:49:05.188  5709 10414 E AuthPII : 	at ahaq.b(:com.google.android.gms@261833035@26.18.33 (260400-913931251):13)
+06-01 11:49:05.188  5709 10414 E AuthPII : 	at ahaq.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):130)
+06-01 11:49:05.188  5709 10414 E AuthPII : 	at apib.b(:com.google.android.gms@261833035@26.18.33 (260400-913931251):28)
+06-01 11:49:05.188  5709 10414 E AuthPII : 	at ahwj.d(:com.google.android.gms@261833035@26.18.33 (260400-913931251):170)
+06-01 11:49:05.188  5709 10414 E AuthPII : 	... 16 more
+06-01 11:49:05.188  5709 10414 E AuthPII : Caused by: dapf: Connectivity error
+06-01 11:49:05.188  5709 10414 E AuthPII : 	at dapc.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):76)
+06-01 11:49:05.188  5709 10414 E AuthPII : 	... 23 more
+06-01 11:49:05.188  5709 10414 E AuthPII : Caused by: java.io.IOException
+06-01 11:49:05.188  5709 10414 E AuthPII : 	at dapc.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):73)
+06-01 11:49:05.188  5709 10414 E AuthPII : 	... 23 more
+06-01 11:49:05.188  5709 10414 W Auth    : [AccountStateDownloader] Unable to look up account state from server: couldn't fetch accessToken [CONTEXT service_id=343 ]
+06-01 11:49:05.188  5709 10414 W Auth    : [GaiaIdSync] Empty email. Not updating db. [CONTEXT service_id=153 ]
+06-01 11:49:05.189 10842 10874 I Finsky  : [65] AIM: AppInfoManager-Perf > ItemModel > CacheSize=53, cacheHitCount=0, cacheMissCount=0, total appsWithNoServerDataCount=4. Missed  in cache (limit 10) : []
+06-01 11:49:05.192 10842 10874 I Finsky  : [65] AIM: AppInfoManager-Perf > ItemModel > CacheSize=53, cacheHitCount=0, cacheMissCount=0, total appsWithNoServerDataCount=4. Missed  in cache (limit 10) : []
+06-01 11:49:05.195 10842 10874 I Finsky  : [65] AIM: AppInfoManager-Perf > ItemModel > CacheSize=53, cacheHitCount=0, cacheMissCount=0, total appsWithNoServerDataCount=4. Missed  in cache (limit 10) : []
+06-01 11:49:05.197 10842 10871 I Finsky  : [62] AIM: AppInfoManager-Perf > getApps > data collection finished
+06-01 11:49:05.197 10842 10871 I Finsky  : [62] AIM: AppInfoManager-Perf > maybeDestroyAppInfoManager is called. actives = 2
+06-01 11:49:05.197 10842 10871 I Finsky  : [62] AIM: AppInfoManager-Perf > getApps > data collection finished
+06-01 11:49:05.197 10842 10871 I Finsky  : [62] AIM: AppInfoManager-Perf > maybeDestroyAppInfoManager is called. actives = 1
+06-01 11:49:05.204  2026  3395 V SafetySourceDataValidat: Package: com.android.vending has expected signature
+06-01 11:49:05.204  2026  3395 V SafetySourceDataValidat: Package: com.android.vending has expected signature
+06-01 11:49:05.205 12233 12972 I Icing   : Usage reports ok 1, Failed Usage reports 0, indexed 0, rejected 0
+06-01 11:49:05.206   958   958 E KeymasterUtils: IKMHal_sendCmd failed with rsp_header->status: -28
+06-01 11:49:05.206   958   958 E KeyMasterHalDevice: abort_operation
+06-01 11:49:05.206   958   958 E KeyMasterHalDevice: ret: -28
+06-01 11:49:05.207 12233 12457 I Icing   : IndexChimeraService.getServiceInterface callingPackage=com.google.android.gms componentName=null serviceId=30
+06-01 11:49:05.224 12233 12972 I Icing   : Usage reports ok 0, Failed Usage reports 0, indexed 0, rejected 0
+06-01 11:49:05.226   958   958 E KeymasterUtils: IKMHal_sendCmd failed with rsp_header->status: -28
+06-01 11:49:05.226   958   958 E KeyMasterHalDevice: abort_operation
+06-01 11:49:05.226   958   958 E KeyMasterHalDevice: ret: -28
+06-01 11:49:05.229 12233 12972 I Icing   : Indexing com.google.android.gms-apps from com.google.android.gms
+06-01 11:49:05.231  5709  5715 W .gms.persistent: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~kSF05J4MzCFEHpbQfxJwZA==/com.example.llama.aichat-qMGnnvvO4q_RHseNPL0aQw==/base.apk' with 1 weak references
+06-01 11:49:05.237 12233 12972 I Icing   : Indexing done com.google.android.gms-apps
+06-01 11:49:05.238 12233 12972 I Icing   : Indexing com.google.android.gms-apps from com.google.android.gms
+06-01 11:49:05.238 12233 12972 I Icing   : Indexing done com.google.android.gms-apps
+06-01 11:49:05.249  3524  3586 V WindowManagerShell: Transition animation finished (aborted=false), notifying core (#367) android.os.BinderProxy@42191d1@0
+06-01 11:49:05.250  2026  2064 V WindowManager: Finish Transition (#367): created at 06-01 11:49:04.935 collect-started=0.047ms request-sent=8.67ms started=10.328ms ready=29.947ms sent=31.199ms finished=315.154ms
+06-01 11:49:05.251  4001  4001 D VRI[QuickstepLauncher]: visibilityChanged oldVisibility=true newVisibility=false
+06-01 11:49:05.251 26853 26853 D VRI[GoogleDiscoverWindow]: visibilityChanged oldVisibility=true newVisibility=false
+06-01 11:49:05.252  3524  3586 V WindowManagerShell: Track 0 became idle
+06-01 11:49:05.252  3524  3586 V WindowManagerShell: All active transition animations finished
+06-01 11:49:05.252  2026  9439 W UserManagerService: Requested status bar icon for non-badged user 0
+06-01 11:49:05.252  2026  9439 W UserManagerService: Requested status bar icon for non-badged user 0
+06-01 11:49:05.273  4001  4001 D BaseDepthController: setSurface:
+06-01 11:49:05.273  4001  4001 D BaseDepthController: 	mWaitingOnSurfaceValidity: false
+06-01 11:49:05.273  4001  4001 D BaseDepthController: 	mSurface: null
+06-01 11:49:05.273  4001  4001 D BaseDepthController: mSurface is null and mCurrentBlur is: 0
+06-01 11:49:05.273  4001  4001 D StateManager: goToState - fromState: Normal, toState: Normal, partial trace:
+06-01 11:49:05.273  4001  4001 D StateManager: 	at com.android.launcher3.statemanager.StateManager.moveToRestState(StateManager.java:458)
+06-01 11:49:05.273  4001  4001 D StateManager: 	at com.android.launcher3.statemanager.StateManager.moveToRestState(StateManager.java:449)
+06-01 11:49:05.273  4001  4001 D StateManager: 	at com.android.launcher3.statemanager.StatefulActivity.onStop(StatefulActivity.java:122)
+06-01 11:49:05.275  4001  4001 D StatsLog: LAUNCHER_ONSTOP
+06-01 11:49:05.280 26853 26853 I byee    : onStop
+06-01 11:49:05.285  4614 30096 D MainProcessObserver: pid:4001 uid:10231 foregroundActivities:false
+06-01 11:49:05.285  2026  4440 W ActivityTaskManager: MANAGE_ACTIVITY_STACKS is deprecated, please use alternative permission: MANAGE_ACTIVITY_TASKS
+06-01 11:49:05.286  4614 30096 D onForegroundChanged: topActivity:ComponentInfo{com.example.llama.aichat/com.example.llama.MainActivity}, taskId:1100, windowingMode:1
+06-01 11:49:05.286  4614 30096 D onForegroundChanged: packageName:com.example.llama.aichat
+06-01 11:49:05.312  2026  4440 W ActivityTaskManager: MANAGE_ACTIVITY_STACKS is deprecated, please use alternative permission: MANAGE_ACTIVITY_TASKS
+06-01 11:49:05.312 10842 10848 W android.vending: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~kSF05J4MzCFEHpbQfxJwZA==/com.example.llama.aichat-qMGnnvvO4q_RHseNPL0aQw==/base.apk' with 1 weak references
+06-01 11:49:05.439  3524  3624 W WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=android.view.ViewRootImpl$$ExternalSyntheticLambda11@a1e1dc2
+06-01 11:49:05.440  2026  9439 D CoreBackPreview: Window{81ead5 u0 Splash Screen com.example.llama.aichat EXITING}: Setting back callback null
+06-01 11:49:05.442  2026  3395 W InputManager-JNI: Input channel object '81ead5 Splash Screen com.example.llama.aichat (client)' was disposed without first being removed with the input manager!
+06-01 11:49:05.484 26853 26857 W chbox:googleapp: Reducing the number of considered missed Gc histogram windows from 125 to 100
+06-01 11:49:05.489  3524  3624 W FrameTracker: Missing HWUI jank callback for vsyncId: 979946, CUJ=J<SPLASHSCREEN_EXIT_ANIM>
+06-01 11:49:05.489  3524  3624 W FrameTracker: Missing HWUI jank callback for vsyncId: 980078, CUJ=J<SPLASHSCREEN_EXIT_ANIM>
+06-01 11:49:05.489  3524  3624 W FrameTracker: Missing HWUI jank callback for vsyncId: 980321, CUJ=J<SPLASHSCREEN_EXIT_ANIM>
+06-01 11:49:05.489  3524  3624 W FrameTracker: Missing HWUI jank callback for vsyncId: 980426, CUJ=J<SPLASHSCREEN_EXIT_ANIM>
+06-01 11:49:05.489  3524  3624 W FrameTracker: Missing SF jank callback for vsyncId: 980441, CUJ=J<SPLASHSCREEN_EXIT_ANIM>
+06-01 11:49:05.496  2026  2118 D ActivityManager: notifyResumeComponent isGame : false
+06-01 11:49:05.560  5709 10414 I FontLog : (REDACTED) Received query %s, URI %s
+06-01 11:49:05.561  5709 10414 I FontLog : (REDACTED) Query [%s] resolved to %s
+06-01 11:49:05.563  5709 10414 I FontLog : (REDACTED) Fetch %s end status %s
+06-01 11:49:05.565  5709  5753 I FontLog : (REDACTED) Pulling font file for id = %d, cache size = %d
+06-01 11:49:05.569  5709  5753 I FontLog : (REDACTED) Pulling font file for id = %d, cache size = %d
+06-01 11:49:05.592  2026  2069 D WindowManager: setParent old=ActivityRecord{5acfeb u0 com.example.llama.aichat/com.example.llama.MainActivity t1100},new=null,this window=Window{81ead5 u0 Splash Screen com.example.llama.aichat},callers=com.android.server.wm.WindowContainer.removeChild:833 com.android.server.wm.ActivityRecord.removeChild:4750 com.android.server.wm.ActivityRecord.removeChild:435 com.android.server.wm.WindowContainer.removeImmediately:891 com.android.server.wm.WindowState.removeImmediately:2391 com.android.server.wm.WindowState.destroySurface:3371 
+06-01 11:49:05.662  8321 13706 I bte     : Handling installed or updated package: com.example.llama.aichat
+06-01 11:49:05.662  8321 13706 I ckk     : Attempting to classify package: com.example.llama.aichat using model: bll_1
+06-01 11:49:05.688  2026  9439 W ParceledListSlice: Element #27 is 20064 bytes.
+06-01 11:49:05.690  2026  9439 W ParceledListSlice: Element #28 is 21044 bytes.
+06-01 11:49:05.712  2026  3395 W ParceledListSlice: Element #237 is 42700 bytes.
+06-01 11:49:05.713  2026  3395 W ParceledListSlice: Element #238 is 42744 bytes.
+06-01 11:49:05.713  2026  3395 W ParceledListSlice: Overly large reply size: 88192
+06-01 11:49:05.714  2026  3395 W ParceledListSlice: Element #239 is 42744 bytes.
+06-01 11:49:05.714  2026  3395 W ParceledListSlice: Element #240 is 42748 bytes.
+06-01 11:49:05.714  2026  3395 W ParceledListSlice: Overly large reply size: 85508
+06-01 11:49:05.715  2026  3395 W ParceledListSlice: Element #241 is 42704 bytes.
+06-01 11:49:05.715  2026  3395 W ParceledListSlice: Element #242 is 42704 bytes.
+06-01 11:49:05.715  2026  3395 W ParceledListSlice: Overly large reply size: 85424
+06-01 11:49:05.716  2026  3395 W ParceledListSlice: Element #243 is 42716 bytes.
+06-01 11:49:05.736  8321 13706 I buj     : BLL finished for package: com.example.llama.aichat, score: 6.0, verdict: NOT_HARMFUL
+06-01 11:49:05.736  8321 13706 I ckk     : Finished new classification for package: com.example.llama.aichat, model: bll_1, verdict: NOT_HARMFUL, score: 6.0
+06-01 11:49:05.741  8321 13706 I bte     : Work finished, result: Result(successCount=3, failureCount=0), latency: PT1.045S
+06-01 11:49:05.745  8321  9481 I btq     : Finished work type: HANDLE_PACKAGES_CHANGED, success: true, latency: PT1.049S
+06-01 11:49:05.745  8321  8321 I WorkService: Stopping the work service
+06-01 11:49:05.746  2026  3395 W ForegroundServiceTypeLoggerModule: FGS stop call for: 10365 has no types!
+06-01 11:49:05.749  8321  8321 I WorkService: Work service moved out of the foreground
+06-01 11:49:05.750  8321  8321 I WorkService: Work service destroyed
+06-01 11:49:05.750  8321  8321 I ckq     : Stopping watchdog: work-service, completed in time
+06-01 11:49:05.990  2026  3395 W ActivityTaskManager: MANAGE_ACTIVITY_STACKS is deprecated, please use alternative permission: MANAGE_ACTIVITY_TASKS
+06-01 11:49:06.289  2026  3395 W ActivityTaskManager: MANAGE_ACTIVITY_STACKS is deprecated, please use alternative permission: MANAGE_ACTIVITY_TASKS
+06-01 11:49:06.654 13722 13740 W qdgralloc: getInterlacedFlag: getMetaData returned 3, defaulting to interlaced_flag = 0
+06-01 11:49:06.946  2200  3058 E Diag_Lib: diag: Diag_LSM_Init: invoked for pid: 2200 with init_count: 0
+06-01 11:49:06.947  2200  3058 E Diag_Lib: diag:failed to connect to diag socket
+06-01 11:49:06.948  2200  3058 E Diag_Lib:  Diag_LSM_Init: Failed to open handle to diag driver, error = 111
+06-01 11:49:06.999  1442  1628 I SDM     : DisplayBase::CommitThread: Received idle timeout, panel: cmd, timeout: 70000 us
+06-01 11:49:07.306  4001  4001 D LauncherShUtilities: isDebugModel 5 false
+06-01 11:49:07.644  8321  8321 I ContentProtectionServic: CP service destroyed
+06-01 11:49:07.649  2026  2026 I RemoteContentProtectionService: Connection status for: ComponentInfo{com.google.android.odad/com.google.android.apps.miphone.odad.contentprotection.ContentProtectionService} changed to: disconnected
+06-01 11:49:07.678  8321  8329 W le.android.odad: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~kSF05J4MzCFEHpbQfxJwZA==/com.example.llama.aichat-qMGnnvvO4q_RHseNPL0aQw==/base.apk' with 1 weak references
+06-01 11:49:09.044  2026  4440 D InputManager: injectMotionEvent: 13790-{action=ACTION_DOWN, id[0]=0, x[0]=540.0, y[0]=1453.0, pointerCount=1, eventTime=111050980, deviceId=4}
+06-01 11:49:09.056  2026  4440 D InputManager: injectMotionEvent: 13790-{action=ACTION_UP, id[0]=0, x[0]=540.0, y[0]=1453.0, pointerCount=1, eventTime=111050980, deviceId=4}
+06-01 11:49:09.089 13722 13794 I LlamaInferenceBridge: runInference started
+06-01 11:49:09.113  5709  5709 D BoundBrokerSvc: onRebind: Intent { act=com.google.android.gms.common.telemetry.service.START dat=chimera-action:/... cmp=com.google.android.gms/.chimera.PersistentApiService }
+06-01 11:49:09.171  1442  1628 I SDM     : DisplayBase::CommitThread: Received idle timeout, panel: cmd, timeout: 69999 us
+06-01 11:49:09.317  3684  3684 D DeviceStatisticsService: onReceive: action= android.intent.action.BATTERY_CHANGED
+06-01 11:49:09.317  3721  3721 D QtiCarrierConfigHelper: WARNING, no carrier configs on phone Id: 0
+06-01 11:49:09.317  3721  3721 D QtiCarrierConfigHelper: WARNING, no carrier configs on phone Id: 1
+06-01 11:49:09.318  3524  9484 D PowerUI : can't show warning due to - plugged: true status unknown: false
+06-01 11:49:09.323  3684  3684 V DeviceStatisticsService: chargerType=1 batteryLevel=100 totalBatteryCapacity=4716000
+06-01 11:49:09.410  1442  1628 I SDM     : DisplayBase::CommitThread: Received idle timeout, panel: cmd, timeout: 70000 us
+06-01 11:49:09.828  8384  8743 D MainJobService: BATTERY_FULL_CHARGED: start
+06-01 11:49:09.829  8384  8743 D MainJobService: BATTERY_FULL_CHARGED: end
+06-01 11:49:09.829  8384  8743 D MainJobService: BATTERY_PER_CHANGED: start
+06-01 11:49:09.830  8384  8743 D MainJobService: BATTERY_PER_CHANGED: end
+06-01 11:49:09.830  8384  8519 I WM-WorkerWrapper: Worker result SUCCESS for Work [ id=0173d294-6e36-4091-803b-5c69cb1031c7, tags={ jp.co.sharp.android.ichargeservice.MainJobService } ]
+06-01 11:49:10.324 13722 13797 D ProfileInstaller: Installing profile for com.example.llama.aichat
+06-01 11:49:10.329  7333  7333 E iCharge.Receiver: jp.co.sharp.android.ichargeservice.action.BATTERY_FULL_CHARGED
+06-01 11:49:10.330  7333  7333 E iCharge.Receiver: jp.co.sharp.android.ichargeservice.action.BATTERY_PER_CHANGED
+06-01 11:49:10.341  7333  8694 D MainJobService: ACTION_BATTERY_FULL_CHARGED: start
+06-01 11:49:10.341  7333  8694 D MainJobService: ACTION_BATTERY_FULL_CHARGED: end
+06-01 11:49:10.342  7333  8697 D MainJobService: BATTERY_PER_CHANGED: start percentage: 100
+06-01 11:49:10.342  7333  8697 D MainJobService: BATTERY_PER_CHANGED: end
+06-01 11:49:10.342  7333  8680 I WM-WorkerWrapper: Worker result SUCCESS for Work [ id=07c135a0-6a5e-4883-b5f3-ddb19f15834e, tags={ jp.co.sharp.android.icharge.services.MainJobService } ]
+06-01 11:49:10.343  7333  8680 I WM-WorkerWrapper: Worker result SUCCESS for Work [ id=f41b43cb-f9e5-4423-bbce-b31416627ad3, tags={ jp.co.sharp.android.icharge.services.MainJobService } ]
+06-01 11:49:10.409  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:10.510  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:10.540  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:10.640  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:10.659  2026 13620 W ContextImpl: Calling a method in the system process without a qualified user: android.app.ContextImpl.sendBroadcast:1249 android.content.ContextWrapper.sendBroadcast:506 jp.co.sharp.android.brightkeep.BrightKeepService.checkTimerEvent:508 jp.co.sharp.android.brightkeep.BrightKeepService.access$000:83 jp.co.sharp.android.brightkeep.BrightKeepService$TouchCheckTask.run:671 
+06-01 11:49:10.660  2026 13620 V BrightKeepService: changeCurrentStatus old=NoTouchTimeOutState new=NormalState
+06-01 11:49:10.661  2026 13620 D [SensorHub][Manager2]: registerSensorHubListener
+06-01 11:49:10.661  2026 13620 D SensorService: enable start. handle=11
+06-01 11:49:10.661  2026  2026 V BrightKeepService: getAction: jp.co.sharp.android.intent.action.CLICK_SCREEN_ON isOutOfHand: false
+06-01 11:49:10.661  2026 13620 D SensorService: called from jp.co.sharp.android.sensorhub.AccelerometerSHEXConverter.
+06-01 11:49:10.661  2026 13620 D SensorService: connection info count:1
+06-01 11:49:10.661  2026 13620 D SensorService: 	 lsm6dso Accelerometer Non-wakeup [0x0000000b] 
+06-01 11:49:10.661  2026 13620 D SensorService: request senosor type:1
+06-01 11:49:10.662  1356  1356 I sensors-hal: batch:167, android.sensor.accelerometer/11, period=240000000, max_latency=0
+06-01 11:49:10.662  1356  1356 I sensors-hal: set_config:75, sample_period_ns is adjusted to 240000000 based on min/max delay_ns
+06-01 11:49:10.662  1356  1356 I sensors-hal: batch:176, android.sensor.accelerometer/11, period=240000000, max_latency=0 request completed
+06-01 11:49:10.663  1356  1356 I sensors-hal: activate:134, android.sensor.accelerometer/11 en=1
+06-01 11:49:10.663  1356  1356 I sensors-hal: acquire_qsh_interface:117, acquire_qsh_interface with sensor_id 31 , conn_type 2 
+06-01 11:49:10.664  1342  1474 I minksocket: MinkIPC MESSAGE: ( 1342:1474 ) MinkIPC_QRTR_Service:351 minkipc = 0xb4000075d7c46b90 sock = 18, client with node 1 port 5051 went down
+06-01 11:49:10.664  1342  1476 I minksocket: MinkIPC MESSAGE: ( 1342:1476 ) MinkIPC_QRTR_Service:351 minkipc = 0xb4000075d7c45b10 sock = 24, client with node 1 port 5051 went down
+06-01 11:49:10.664  1342  1474 I minksocket: MinkIPC MESSAGE: ( 1342:1474 ) MinkIPC_QRTR_Service:351 minkipc = 0xb4000075d7c46b90 sock = 18, client with node 1 port 5052 went down
+06-01 11:49:10.664  1342  1476 I minksocket: MinkIPC MESSAGE: ( 1342:1476 ) MinkIPC_QRTR_Service:351 minkipc = 0xb4000075d7c45b10 sock = 24, client with node 1 port 5052 went down
+06-01 11:49:10.665  1342  1474 I minksocket: MinkIPC MESSAGE: ( 1342:1474 ) MinkIPC_QRTR_Service:351 minkipc = 0xb4000075d7c46b90 sock = 18, client with node 1 port 5053 went down
+06-01 11:49:10.665  1342  1476 I minksocket: MinkIPC MESSAGE: ( 1342:1476 ) MinkIPC_QRTR_Service:351 minkipc = 0xb4000075d7c45b10 sock = 24, client with node 1 port 5053 went down
+06-01 11:49:10.665  1356  1356 I sensors-hal: qsh_qmi:35, qsh_qmi
+06-01 11:49:10.665  1356  1356 I sensors-hal: register_cb:309, suid(low=11115320498015681092,high=2286538866409242278) is new. register callbacks
+06-01 11:49:10.665  1356  1356 I sensors-hal: send_sensor_config_request:492, resampler is used, set resampler config
+06-01 11:49:10.665  1356  1356 I sensors-hal: send_sync_sensor_request:435, send sync request
+06-01 11:49:10.665  1356  1356 I sensors-hal: send_sync_sensor_request:445, send_sync_sensor_request before send_request for accel with SUID low=11115320498015681092 high=2286538866409242278
+06-01 11:49:10.666  1356  1356 I sensors-hal: send_sync_sensor_request:464, wait for notification of response
+06-01 11:49:10.666  1342  1476 I minksocket: MinkIPC MESSAGE: ( 1342:1476 ) MinkIPC_QRTR_Service:351 minkipc = 0xb4000075d7c45b10 sock = 24, client with node 1 port 5054 went down
+06-01 11:49:10.666  1342  1474 I minksocket: MinkIPC MESSAGE: ( 1342:1474 ) MinkIPC_QRTR_Service:351 minkipc = 0xb4000075d7c46b90 sock = 18, client with node 1 port 5054 went down
+06-01 11:49:10.666  1356 13799 I sensors-hal: qsh_conn_resp_cb:745, resp_value = 0 for accel 
+06-01 11:49:10.666  1356  1356 I sensors-hal: send_sync_sensor_request:470, takes 0 ms to receive the response with 0
+06-01 11:49:10.666  1356  1356 I sensors-hal: activate:145, android.sensor.accelerometer/11 en=1 completed
+06-01 11:49:10.666  2026 13620 D SensorService: enable end. 
+06-01 11:49:10.666  2026 13620 D BrightKeepService: registerAccelerometerListener ret : 0
+06-01 11:49:10.676  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:10.777  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:10.826  2026  2118 D ActivityManager: sync unfroze 8801 com.google.android.contacts for 3
+06-01 11:49:10.828  8801  8801 D ActivityThread: Package [com.example.llama.aichat] reported as REPLACED, but missing application info. Assuming REMOVED.
+06-01 11:49:10.828  3736  3736 D CarrierSvcBindHelper: onPackageModified: jp.co.sharp.android.icharge
+06-01 11:49:10.828  3736  3910 D EuiccConnector: handleMessage: E msg.what=1
+06-01 11:49:10.828  3736  3910 D EuiccConnector: processMsg: ConnectedState
+06-01 11:49:10.828  3736  3910 D EuiccConnector: processMsg: DisconnectedState
+06-01 11:49:10.829  2026  3448 D ShortcutService: received package broadcast intent: Intent { act=android.intent.action.PACKAGE_CHANGED dat=package: flg=0x45000010 (has extras) }
+06-01 11:49:10.829  2026  3448 D ShortcutService: changing package: jp.co.sharp.android.icharge userId0
+06-01 11:49:10.829  2026  3448 D ShortcutService: handlePackageChanged: jp.co.sharp.android.icharge user=0
+06-01 11:49:10.829  2026  3448 D ShortcutService: rescanPackageIfNeeded 0@jp.co.sharp.android.icharge, forceRescan=true , isNewApp=true
+06-01 11:49:10.829  3736  3736 D CarrierSvcBindHelper: No carrier app for: 0
+06-01 11:49:10.829  3736  3736 D CarrierSvcBindHelper: No carrier app for: 1
+06-01 11:49:10.830  2026  3448 D ShortcutService: Package jp.co.sharp.android.icharge has 0 manifest shortcut(s), and 0 share target(s)
+06-01 11:49:10.830  8801  8801 D ActivityThread: Package [com.example.llama.aichat] reported as REPLACED, but missing application info. Assuming REMOVED.
+06-01 11:49:10.831  4705  4705 I RegisteredComponentCache: New Components => 
+06-01 11:49:10.831  4705  4705 I RegisteredComponentCache: ComponentInfo: ResolveInfo{fcc650c com.android.apps.tag/.TagViewer m=0x108000 userHandle=UserHandle{0}}, techs: android.nfc.tech.Ndef, 
+06-01 11:49:10.831  4705  4705 I RegisteredComponentCache: Removed Components => 
+06-01 11:49:10.831  4705  4705 I RegisteredComponentCache: ComponentInfo: ResolveInfo{f5af747 com.android.apps.tag/.TagViewer m=0x108000 userHandle=UserHandle{0}}, techs: android.nfc.tech.Ndef, 
+06-01 11:49:10.831  3862 11847 I PermissionControllerServiceImpl: Updating user sensitive for uid 10250
+06-01 11:49:10.835  3736  3910 D EuiccConnector: handleMessage: X
+06-01 11:49:10.842  2026  9439 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = READ_SMS, mode = allow, callingUid = 1001, oldMode = allow
+06-01 11:49:10.842  2026  4440 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = RECEIVE_SMS, mode = allow, callingUid = 1001, oldMode = allow
+06-01 11:49:10.842  2026  9642 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = RECEIVE_WAP_PUSH, mode = allow, callingUid = 1001, oldMode = allow
+06-01 11:49:10.842  2026  9642 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = SEND_SMS, mode = allow, callingUid = 1001, oldMode = allow
+06-01 11:49:10.842  2026  9642 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = READ_CELL_BROADCASTS, mode = allow, callingUid = 1001, oldMode = allow
+06-01 11:49:10.843  3736  3910 D EuiccConnector: handleMessage: E msg.what=1
+06-01 11:49:10.843  3736  3910 D EuiccConnector: processMsg: ConnectedState
+06-01 11:49:10.843  3736  3910 D EuiccConnector: processMsg: DisconnectedState
+06-01 11:49:10.843  4705  4705 I RegisteredComponentCache: New Components => 
+06-01 11:49:10.843  4705  4705 I RegisteredComponentCache: ComponentInfo: ResolveInfo{398695b com.android.apps.tag/.TagViewer m=0x108000 userHandle=UserHandle{0}}, techs: android.nfc.tech.Ndef, 
+06-01 11:49:10.843  4705  4705 I RegisteredComponentCache: Removed Components => 
+06-01 11:49:10.843  4705  4705 I RegisteredComponentCache: ComponentInfo: ResolveInfo{fcc650c com.android.apps.tag/.TagViewer m=0x108000 userHandle=UserHandle{0}}, techs: android.nfc.tech.Ndef, 
+06-01 11:49:10.844  2026  3448 D ShortcutService: received package broadcast intent: Intent { act=android.intent.action.PACKAGE_CHANGED dat=package: flg=0x45000010 (has extras) }
+06-01 11:49:10.844  2026  3448 D ShortcutService: changing package: jp.co.sharp.android.ichargeservice userId0
+06-01 11:49:10.844  2026  3448 D ShortcutService: handlePackageChanged: jp.co.sharp.android.ichargeservice user=0
+06-01 11:49:10.844  2026  3448 D ShortcutService: rescanPackageIfNeeded 0@jp.co.sharp.android.ichargeservice, forceRescan=true , isNewApp=true
+06-01 11:49:10.844  2026  3448 D ShortcutService: Package jp.co.sharp.android.ichargeservice has 0 manifest shortcut(s), and 0 share target(s)
+06-01 11:49:10.844  3736  3910 D EuiccConnector: handleMessage: X
+06-01 11:49:10.845  3862 11847 I PermissionControllerServiceImpl: Updating user sensitive for uid 10249
+06-01 11:49:10.846  3736  4019 D ImsResolver: maybeAddedImsService, packageName: jp.co.sharp.android.icharge
+06-01 11:49:10.847  3736  3736 D CarrierSvcBindHelper: onPackageModified: jp.co.sharp.android.ichargeservice
+06-01 11:49:10.847  3736  3736 D CarrierSvcBindHelper: No carrier app for: 0
+06-01 11:49:10.847  3736  3736 D CarrierSvcBindHelper: No carrier app for: 1
+06-01 11:49:10.851  2026  4440 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = READ_SMS, mode = allow, callingUid = 1001, oldMode = allow
+06-01 11:49:10.851  2026  4440 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = RECEIVE_SMS, mode = allow, callingUid = 1001, oldMode = allow
+06-01 11:49:10.851  2026  4440 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = RECEIVE_WAP_PUSH, mode = allow, callingUid = 1001, oldMode = allow
+06-01 11:49:10.851  2026  4440 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = SEND_SMS, mode = allow, callingUid = 1001, oldMode = allow
+06-01 11:49:10.851  2026  4440 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = READ_CELL_BROADCASTS, mode = allow, callingUid = 1001, oldMode = allow
+06-01 11:49:10.853  3736  4019 D ImsResolver: maybeAddedImsService, packageName: jp.co.sharp.android.ichargeservice
+06-01 11:49:10.870  2026  3399 W AS.AudioService: handleMessage({ when=0 what=35 target=com.android.server.audio.AudioService$AudioHandler }) from pid=2026, uid=1000
+06-01 11:49:10.871  2026  2104 W MagnificationConnectionManager: requestConnection duplicated request: connect=false, mConnectionState=DISCONNECTED
+06-01 11:49:10.872  4001  4038 D PackageUpdatedTask: Package updated: mOp=UPDATE packages=[jp.co.sharp.android.icharge]
+06-01 11:49:10.874  4001  4038 W AllAppsList: updatePromiseInstallInfo: no Activities matched updated package, removing all apps from package=jp.co.sharp.android.icharge
+06-01 11:49:10.874  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:49:10.874  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:49:10.874  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:49:10.874  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:49:10.874  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:49:10.874  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:49:10.874  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:49:10.874  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:49:10.874  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:49:10.874  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:49:10.874  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:49:10.874  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:49:10.874  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:49:10.874  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:49:10.874  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:49:10.874  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:49:10.874  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:49:10.874  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:49:10.874  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:49:10.874  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:49:10.876  2026  3399 W AS.AudioService: handleMessage({ when=-1ms what=35 target=com.android.server.audio.AudioService$AudioHandler }) from pid=2026, uid=1000
+06-01 11:49:10.876  2026  2104 W MagnificationConnectionManager: requestConnection duplicated request: connect=false, mConnectionState=DISCONNECTED
+06-01 11:49:10.877  4001  4038 D PackageUpdatedTask: Package updated: mOp=UPDATE packages=[jp.co.sharp.android.ichargeservice]
+06-01 11:49:10.878  4001  4038 W AllAppsList: updatePromiseInstallInfo: no Activities matched updated package, removing all apps from package=jp.co.sharp.android.ichargeservice
+06-01 11:49:10.878  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:49:10.878  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:49:10.878  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:49:10.878  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:49:10.878  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:49:10.878  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:49:10.878  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:49:10.878  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:49:10.878  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:49:10.878  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -102
+06-01 11:49:10.878  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:49:10.878  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:49:10.878  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:49:10.878  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:49:10.878  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:49:10.878  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:49:10.878  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:49:10.878  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:49:10.878  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:49:10.878  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -103
+06-01 11:49:11.027  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:11.069  3736  3910 D EuiccConnector: handleMessage: E msg.what=3
+06-01 11:49:11.069  3736  3910 D EuiccConnector: processMsg: ConnectedState
+06-01 11:49:11.071  3736  3910 D EuiccConnector: transitionTo: destState=AvailableState
+06-01 11:49:11.071  3736  3910 D EuiccConnector: handleMessage: new destination call exit/enter
+06-01 11:49:11.071  3736  3910 D EuiccConnector: setupTempStateStackWithStatesToEnter: X mTempStateStackCount=2,curStateInfo: null
+06-01 11:49:11.071  3736  3910 D EuiccConnector: invokeExitMethods: ConnectedState
+06-01 11:49:11.071  3736  3910 D EuiccConnector: invokeExitMethods: DisconnectedState
+06-01 11:49:11.071  3736  3910 D EuiccConnector: moveTempStackToStateStack: i=1,j=0
+06-01 11:49:11.071  3736  3910 D EuiccConnector: moveTempStackToStateStack: i=0,j=1
+06-01 11:49:11.071  3736  3910 D EuiccConnector: moveTempStackToStateStack: X mStateStackTop=1,startingIndex=0,Top=AvailableState
+06-01 11:49:11.071  3736  3910 D EuiccConnector: invokeEnterMethods: UnavailableState
+06-01 11:49:11.071  3736  3910 D EuiccConnector: invokeEnterMethods: AvailableState
+06-01 11:49:11.071  3736  3910 D EuiccConnector: handleMessage: X
+06-01 11:49:11.071 17877 17877 I EuiccGoogle: [2] EuiccServiceImpl.onDestroy: onDestroy: EuiccService on destroy.
+06-01 11:49:11.128  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:11.135  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:11.235  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:11.252  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:11.327  3524  3524 D ControlsListingControllerImpl: ServiceConfig reloaded, count: 1
+06-01 11:49:11.328  3524  3524 D ControlsListingControllerImpl: ServiceConfig reloaded, count: 1
+06-01 11:49:11.340 12233 13775 I ComponentChangedIO: Feature is not enabled, skipping component changed intent operation [CONTEXT service_id=469 ]
+06-01 11:49:11.341 12233 13775 I ComponentChangedIO: Feature is not enabled, skipping component changed intent operation [CONTEXT service_id=469 ]
+06-01 11:49:11.352  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:11.386 13722 13794 I LlamaInferenceBridge: [FlowOnly][llama.cpp] enabled, skip FrontEnd/LLM/HIFT and run flow model with prepacked bins
+06-01 11:49:11.386 13722 13794 I LlamaInferenceBridge: [FlowOnly][llama.cpp] flowModel=/data/user/0/com.example.llama.aichat/files/models/flow_fp32.gguf
+06-01 11:49:11.386 13722 13794 I LlamaInferenceBridge: [FlowOnly] get InferenceEngine instance
+06-01 11:49:11.386 13722 13794 I InferenceEngineImpl: Instantiating InferenceEngineImpl,,,
+06-01 11:49:11.387 13722 13794 I LlamaInferenceBridge: [FlowOnly] loadFlowModel begin: /data/user/0/com.example.llama.aichat/files/models/flow_fp32.gguf (bytes=450294560)
+06-01 11:49:11.387 13722 13794 I InferenceEngineImpl: Loading native library...
+06-01 11:49:11.390  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:11.391 13722 13794 D nativeloader: Load /data/app/~~kSF05J4MzCFEHpbQfxJwZA==/com.example.llama.aichat-qMGnnvvO4q_RHseNPL0aQw==/lib/arm64/libai-chat.so using class loader ns clns-7 (caller=/data/app/~~kSF05J4MzCFEHpbQfxJwZA==/com.example.llama.aichat-qMGnnvvO4q_RHseNPL0aQw==/base.apk): ok
+06-01 11:49:11.391 13722 13794 I ai-chat : Java_com_arm_aichat_internal_InferenceEngineImpl_init: default GGML_HEXAGON_ARCH=79
+06-01 11:49:11.391 13722 13794 I ai-chat : Java_com_arm_aichat_internal_InferenceEngineImpl_init: ADSP_LIBRARY_PATH=/data/app/~~kSF05J4MzCFEHpbQfxJwZA==/com.example.llama.aichat-qMGnnvvO4q_RHseNPL0aQw==/lib/arm64;/vendor/lib64/rfs/dsp;/vendor/lib/rfsa/adsp;/vendor/lib/rfsa/dsp;/vendor/dsp;/dsp
+06-01 11:49:11.391 13722 13794 I ai-chat : Java_com_arm_aichat_internal_InferenceEngineImpl_init: LD_LIBRARY_PATH=/data/app/~~kSF05J4MzCFEHpbQfxJwZA==/com.example.llama.aichat-qMGnnvvO4q_RHseNPL0aQw==/lib/arm64
+06-01 11:49:11.391 13722 13794 I ai-chat : Loading backends from /data/app/~~kSF05J4MzCFEHpbQfxJwZA==/com.example.llama.aichat-qMGnnvvO4q_RHseNPL0aQw==/lib/arm64
+06-01 11:49:11.393 13722 13794 I ai-chat : ggml_opencl: selected platform: 'QUALCOMM Snapdragon(TM)'
+06-01 11:49:11.398 13722 13794 I ai-chat : ggml_opencl: device: 'QUALCOMM Adreno(TM) 735 (OpenCL 3.0 Adreno(TM) 735)'
+06-01 11:49:11.398 13722 13794 I ai-chat : ggml_opencl: OpenCL driver: OpenCL 3.0 QUALCOMM build: commit unknown Compiler E031.45.02.16
+06-01 11:49:11.398 13722 13794 I ai-chat : ggml_opencl: vector subgroup broadcast support: false
+06-01 11:49:11.398 13722 13794 I ai-chat : ggml_opencl: device FP16 support: true
+06-01 11:49:11.398 13722 13794 I ai-chat : ggml_opencl: mem base addr align: 128
+06-01 11:49:11.398 13722 13794 I ai-chat : ggml_opencl: max mem alloc size: 1024 MB
+06-01 11:49:11.398 13722 13794 I ai-chat : ggml_opencl: device max workgroup size: 1024
+06-01 11:49:11.398 13722 13794 I ai-chat : ggml_opencl: SVM coarse grain buffer support: true
+06-01 11:49:11.398 13722 13794 I ai-chat : ggml_opencl: SVM fine grain buffer support: true
+06-01 11:49:11.398 13722 13794 I ai-chat : ggml_opencl: SVM fine grain system support: false
+06-01 11:49:11.398 13722 13794 I ai-chat : ggml_opencl: SVM atomics support: true
+06-01 11:49:11.398 13722 13794 I ai-chat : ggml_opencl: flattening quantized weights representation as struct of arrays (GGML_OPENCL_SOA_Q)
+06-01 11:49:11.398 13722 13794 I ai-chat : ggml_opencl: using kernels optimized for Adreno (GGML_OPENCL_USE_ADRENO_KERNELS)
+06-01 11:49:11.398 13722 13794 I ai-chat : ggml_opencl: loading OpenCL kernels
+06-01 11:49:11.423  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:11.484  1442  1628 I SDM     : DisplayBase::CommitThread: Received idle timeout, panel: cmd, timeout: 69999 us
+06-01 11:49:11.524  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:11.590  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:11.602  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:11.703  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:11.803  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:11.816 12233 12972 I gle.android.gms: Explicit concurrent mark compact GC freed 4746KB AllocSpace bytes, 14(600KB) LOS objects, 49% free, 5919KB/11MB, paused 190us,1.222ms total 24.271ms
+06-01 11:49:11.822 12233 12239 W gle.android.gms: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~kSF05J4MzCFEHpbQfxJwZA==/com.example.llama.aichat-qMGnnvvO4q_RHseNPL0aQw==/base.apk' with 1 weak references
+06-01 11:49:11.904  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:11.948  2200  3058 E Diag_Lib: diag: Diag_LSM_Init: invoked for pid: 2200 with init_count: 0
+06-01 11:49:11.949  2200  3058 E Diag_Lib: diag:failed to connect to diag socket
+06-01 11:49:11.949  2200  3058 E Diag_Lib:  Diag_LSM_Init: Failed to open handle to diag driver, error = 111
+06-01 11:49:12.005  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:12.106  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:12.143  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:12.150  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:12.251  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:12.351  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:12.452  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:12.553  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:12.654  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:12.754  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:12.855  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:12.927  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:12.938  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:13.039  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:13.140  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:13.186 13722 13794 I ai-chat : ggml_opencl: flash_attn tuning profile=adreno_a7x_high_m_fixed q1_wg=64 q1_split_k=4 subgroup=off
+06-01 11:49:13.186 13722 13794 I ai-chat : ggml_opencl: flash_attn q1 kernel=v2 (split-k stage1+stage2 reduce enabled)
+06-01 11:49:13.241  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:13.342  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:13.362  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:13.377  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:13.478  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:13.512  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:13.570  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:13.671  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:13.725  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:13.743  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:13.844  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:13.944  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:14.019  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:14.039  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:14.140  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:14.148  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:14.249  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:14.252  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:14.265  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:14.346  5709  5709 D BoundBrokerSvc: onUnbind: Intent { act=com.google.android.gms.common.telemetry.service.START dat=chimera-action:/... cmp=com.google.android.gms/.chimera.PersistentApiService }
+06-01 11:49:14.351  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:14.410  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:14.500  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:14.529  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:14.574  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:14.675  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:14.718  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:14.733  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:14.797  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:14.814  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:14.882  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:14.904  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:14.954  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:14.996  2026  3295 D ActivityManager: freezing 7586 sharp.jp.android.makersiteappli
+06-01 11:49:15.000  2026  3382 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET, states=14
+06-01 11:49:15.002  2026  3382 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET6, states=14
+06-01 11:49:15.002  2026  3382 D InetDiagMessage: Destroyed live tcp sockets for uids={10286} in 4ms
+06-01 11:49:15.055  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:15.156  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:15.227  1033 13679 I keystore2: system/security/keystore2/watchdog/src/lib.rs:319 - Watchdog thread idle -> terminating. Have a great day.
+06-01 11:49:15.257  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:15.341  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:15.365  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:15.413  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:15.416  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:15.517  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:15.526  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:15.538  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:15.639  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:15.643  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:15.679  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:15.684  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:15.785  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 4
+06-01 11:49:15.795  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:15.808  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:15.812  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:15.817  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:15.885  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:15.887  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:15.974  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:15.983  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:16.081  2026  3382 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET, states=14
+06-01 11:49:16.083  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:16.085  2026  3382 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET6, states=14
+06-01 11:49:16.085  2026  3382 D InetDiagMessage: Destroyed live tcp sockets for uids={10164} in 8ms
+06-01 11:49:16.089  2026  3382 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET, states=14
+06-01 11:49:16.092  2026  3382 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET6, states=14
+06-01 11:49:16.092  2026  3382 D InetDiagMessage: Destroyed live tcp sockets for uids={20164} in 6ms
+06-01 11:49:16.184  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:16.207  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 4
+06-01 11:49:16.212  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 5
+06-01 11:49:16.312  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 6
+06-01 11:49:16.456  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:16.469  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:16.567  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:16.575  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:16.676  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:16.777  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:16.858 10922 10922 I Finsky:background: [2] Memory trim requested to level 40
+06-01 11:49:16.858 10842 10842 I Finsky  : [2] Memory trim requested to level 40
+06-01 11:49:16.858 10842 10842 I Finsky  : [2] Flushing in-memory image cache
+06-01 11:49:16.860 10929 10929 I Finsky:quick_launch: [2] Memory trim requested to level 40
+06-01 11:49:16.877  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 4
+06-01 11:49:16.910  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:16.921  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:16.950  2200  3058 E Diag_Lib: diag: Diag_LSM_Init: invoked for pid: 2200 with init_count: 0
+06-01 11:49:16.950  2200  3058 E Diag_Lib: diag:failed to connect to diag socket
+06-01 11:49:16.950  2200  3058 E Diag_Lib:  Diag_LSM_Init: Failed to open handle to diag driver, error = 111
+06-01 11:49:17.022  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:17.057  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:17.072  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:17.117  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:17.124  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:17.224  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:17.296  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:17.299  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:17.367  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:17.369  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:17.470  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:17.571  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:17.577  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:17.582  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:17.659  2026  3295 D ActivityManager: freezing 8321 com.google.android.odad
+06-01 11:49:17.666  2026  3382 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET, states=14
+06-01 11:49:17.669  2026  3382 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET6, states=14
+06-01 11:49:17.669  2026  3382 D InetDiagMessage: Destroyed live tcp sockets for uids={10365} in 8ms
+06-01 11:49:17.674  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:17.691  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:17.782  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:17.795  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:17.859  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:17.863  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:17.865  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 4
+06-01 11:49:17.911  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:17.920  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:17.960  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:18.062  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:18.109  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:18.112  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:18.166  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:18.171  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:18.272  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:18.347  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:18.353  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:18.427  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:18.443  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:18.544  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 4
+06-01 11:49:18.560  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:18.565  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:18.666  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:18.703  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:18.715  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:18.731  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:18.740  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:18.801  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:18.810  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:18.909  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:18.919  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:18.955  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:18.960  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:18.970  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:18.976  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:19.045  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:19.066  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:19.100 12233 12233 D BoundBrokerSvc: onUnbind: Intent { act=com.google.android.gms.safetynet.service.START pkg=com.google.android.gms }
+06-01 11:49:19.167  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:19.268  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:19.289  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:19.296  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:19.349  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:19.450  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:19.529  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:19.542  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:19.615  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:19.633  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:19.733  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 4
+06-01 11:49:19.745  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:19.764  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:19.865  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:19.905  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:19.921  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:19.980  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:19.988  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:20.089  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:20.168  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:20.172  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:20.235 12233 12233 D BoundBrokerSvc: onUnbind: Intent { act=com.google.android.gms.feedback.internal.IFeedbackService dat=chimera-action:/... cmp=com.google.android.gms/.chimera.GmsBoundBrokerService }
+06-01 11:49:20.247  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:20.330 12233 12233 D BoundBrokerSvc: onUnbind: Intent { act=com.google.android.gms.inappreach.service.START dat=chimera-action:/... cmp=com.google.android.gms/.chimera.GmsApiService }
+06-01 11:49:20.348  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:20.444  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:20.460  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:20.561  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:20.582  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:20.611  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:20.620  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:20.688  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:20.700  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:20.800  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:20.850  2026  3295 D ActivityManager: freezing 8801 com.google.android.contacts
+06-01 11:49:20.857  2026  3382 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET, states=14
+06-01 11:49:20.861  2026  3382 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET6, states=14
+06-01 11:49:20.861  2026  3382 D InetDiagMessage: Destroyed live tcp sockets for uids={10203} in 8ms
+06-01 11:49:20.881  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:20.943  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:21.046  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:21.074  2026  3295 D ActivityManager: freezing 17877 com.google.android.euicc
+06-01 11:49:21.080  2026  3382 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET, states=14
+06-01 11:49:21.084  2026  3382 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET6, states=14
+06-01 11:49:21.084  2026  3382 D InetDiagMessage: Destroyed live tcp sockets for uids={10164} in 8ms
+06-01 11:49:21.093  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:21.194  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:21.244  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:21.256  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:21.309  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:21.313  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:21.414  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:21.497  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:21.502  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:21.580  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:21.604  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:21.705  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 4
+06-01 11:49:21.738  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:21.751  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:21.852  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:21.902  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:21.915  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:21.936  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:21.943  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:21.951  2200  3058 E Diag_Lib: diag: Diag_LSM_Init: invoked for pid: 2200 with init_count: 0
+06-01 11:49:21.951  2200  3058 E Diag_Lib: diag:failed to connect to diag socket
+06-01 11:49:21.951  2200  3058 E Diag_Lib:  Diag_LSM_Init: Failed to open handle to diag driver, error = 111
+06-01 11:49:22.012  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:22.024  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:22.125  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 4
+06-01 11:49:22.132  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:22.145  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:22.190  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:22.205  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:22.229  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:22.237  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:22.316  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:22.362  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:22.464  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 4
+06-01 11:49:22.476  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:22.486  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:22.518  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:22.552  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:22.593  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:22.602  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:22.670 10922 10948 I Finsky:background: [47] Stats for Executor: bgExecutor vrc@9567dcf[Running, pool size = 4, active threads = 0, queued tasks = 0, completed tasks = 1807]
+06-01 11:49:22.671 10922 10948 I Finsky:background: [47] Stats for Executor: LightweightExecutor vrc@30ea963[Running, pool size = 4, active threads = 0, queued tasks = 0, completed tasks = 595]
+06-01 11:49:22.671 10922 10948 I Finsky:background: [47] Stats for Executor: BlockingExecutor vrc@b73d45e[Running, pool size = 2, active threads = 0, queued tasks = 0, completed tasks = 1610]
+06-01 11:49:22.678 10929 10949 I Finsky:quick_launch: [47] Stats for Executor: BlockingExecutor vrc@e74b346[Running, pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 8]
+06-01 11:49:22.679 10929 10949 I Finsky:quick_launch: [47] Stats for Executor: bgExecutor vrc@dab4e2e[Running, pool size = 4, active threads = 0, queued tasks = 0, completed tasks = 187]
+06-01 11:49:22.679 10929 10949 I Finsky:quick_launch: [47] Stats for Executor: LightweightExecutor vrc@9495b92[Running, pool size = 4, active threads = 0, queued tasks = 0, completed tasks = 62]
+06-01 11:49:22.683 10842 10856 I Finsky  : [47] Stats for Executor: LightweightExecutor vrc@fcb0ad7[Running, pool size = 4, active threads = 0, queued tasks = 0, completed tasks = 8274]
+06-01 11:49:22.683 10842 10856 I Finsky  : [47] Stats for Executor: BlockingExecutor vrc@dab4e2e[Running, pool size = 2, active threads = 0, queued tasks = 0, completed tasks = 1764]
+06-01 11:49:22.683 10842 10856 I Finsky  : [47] Stats for Executor: bgExecutor vrc@d5bcd42[Running, pool size = 4, active threads = 0, queued tasks = 0, completed tasks = 27376]
+06-01 11:49:22.683 10842 10856 I Finsky  : [47] Stats for Executor: GrpcBackgroundExecutor vrc@584de9b[Running, pool size = 4, active threads = 0, queued tasks = 0, completed tasks = 13]
+06-01 11:49:22.703  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:22.750  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:22.779  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:22.813  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:22.824  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:22.918  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:23.019  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:23.055  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:23.063  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:23.109  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:23.140  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:23.145  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:23.225  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:23.273  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:23.374  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:23.475  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:23.576  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:23.602  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:23.621  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:23.633  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:23.643  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:23.722  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:23.726  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:23.827  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:23.839  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:23.846  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:23.883  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:23.893  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:23.916  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:23.925  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:24.000  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:24.101  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:24.201  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 4
+06-01 11:49:24.242  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:24.259  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:24.359  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:24.381  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:24.391  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:24.492  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:24.504  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:24.596  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:24.697  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:24.731  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:24.744  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:24.783  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:24.790  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:24.815  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:24.823  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:24.911  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:24.975  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:25.076  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 4
+06-01 11:49:25.109  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:25.118  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:25.154  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:25.157  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:25.254  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:25.269  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:25.370  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:25.479  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:25.525  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:25.537  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:25.596  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:25.604  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:25.666  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:25.767  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:25.786  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:25.886  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:25.908  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:25.941  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:25.948  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:26.038  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:26.107  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:26.207  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 4
+06-01 11:49:26.234  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:26.247  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:26.276  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:26.335  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:26.376  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:26.392  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:26.493  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:26.521  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:26.542  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:26.568  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:26.579  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:26.681  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:26.781  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:26.834  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:26.848  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:26.881  2026  3295 D ActivityManager: freezing 10922 com.android.vending:background
+06-01 11:49:26.883  2026  3295 D ActivityManager: freezing 10842 com.android.vending
+06-01 11:49:26.885  2026  3295 D ActivityManager: freezing 10929 com.android.vending:quick_launch
+06-01 11:49:26.886  2026  3295 D ActivityManager: freezing 7340 com.android.vending:instant_app_installer
+06-01 11:49:26.887  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:26.900  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:26.929  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:26.937  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:26.952  2200  3058 E Diag_Lib: diag: Diag_LSM_Init: invoked for pid: 2200 with init_count: 0
+06-01 11:49:26.952  2200  3058 E Diag_Lib: diag:failed to connect to diag socket
+06-01 11:49:26.952  2200  3058 E Diag_Lib:  Diag_LSM_Init: Failed to open handle to diag driver, error = 111
+06-01 11:49:27.018  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:27.019  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:27.120  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 4
+06-01 11:49:27.136  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:27.142  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:27.167  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:27.217  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:27.312  2026  3382 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET, states=14
+06-01 11:49:27.314  2026  3382 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET6, states=14
+06-01 11:49:27.314  2026  3382 D InetDiagMessage: Destroyed live tcp sockets for uids={10186} in 3ms
+06-01 11:49:27.317  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 4
+06-01 11:49:27.339  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:27.353  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:27.454  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:27.494  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:27.502  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:27.584  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:27.595  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:27.638  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:27.651  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:27.751  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:27.852  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:27.892  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:27.897  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:27.947  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:27.958  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:28.012  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:28.017  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:28.049  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:28.061  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:28.154  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:28.233  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:28.334  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 4
+06-01 11:49:28.347  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:28.360  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:28.385  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:28.388  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:28.489  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 4
+06-01 11:49:28.502  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:28.511  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:28.535  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:28.636  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:28.665  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:28.694  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:28.730  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:28.734  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:28.835  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:28.847  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:28.853  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:28.952  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:28.980  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:29.037  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:29.054  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:29.154  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:29.255  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:29.279  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:29.288  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:29.383  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:29.395  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:29.457  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:29.471  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:29.544  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:29.555  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:29.595  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:29.607  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:29.708  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:29.782  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:29.883  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 4
+06-01 11:49:29.902  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:29.911  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:29.930  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:30.031  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:30.031  1253  1266 E statsd  : Could not find a broadcast receiver for (10269 987654323)
+06-01 11:49:30.132  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 4
+06-01 11:49:30.208  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:30.213  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:30.246  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:30.250  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:30.270  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:30.279  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:30.345  2026  3295 D ActivityManager: freezing 12233 com.google.android.gms
+06-01 11:49:30.380  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:30.441  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:30.488  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:30.540  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:30.557  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:30.658  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:30.747  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:30.758  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:30.842  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:30.854  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:30.887  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:30.893  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:30.962  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:31.001  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:31.011  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:31.103  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:31.156  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:31.257  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:31.358  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:31.458  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:31.559  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:31.634  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:31.661  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:31.697  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:31.701  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:31.801  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:31.810  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:31.822  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:31.897  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:31.947  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:31.952  2200  3058 E Diag_Lib: diag: Diag_LSM_Init: invoked for pid: 2200 with init_count: 0
+06-01 11:49:31.952  2200  3058 E Diag_Lib: diag:failed to connect to diag socket
+06-01 11:49:31.953  2200  3058 E Diag_Lib:  Diag_LSM_Init: Failed to open handle to diag driver, error = 111
+06-01 11:49:32.004  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:32.023  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:32.124  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:32.225  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:32.326  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:32.427  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:32.503  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:32.510  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:32.549  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:32.561  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:32.661  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:32.762  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:32.863  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:32.964  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:33.065  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:33.165  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:33.266  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:33.367  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:33.468  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:33.569  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:33.670  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:33.770  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:33.871  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:33.972  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:34.042  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:34.099  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:34.110  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:34.151 13722 13794 I ai-chat : ggml_opencl: default device: 'QUALCOMM Adreno(TM) 735 (OpenCL 3.0 Adreno(TM) 735)'
+06-01 11:49:34.151 13722 13794 I ai-chat : load_backend: loaded OpenCL backend from /data/app/~~kSF05J4MzCFEHpbQfxJwZA==/com.example.llama.aichat-qMGnnvvO4q_RHseNPL0aQw==/lib/arm64/libggml-opencl.so
+06-01 11:49:34.153 13722 13794 I DMABUFHEAPS: Using DMA-BUF heap named: system
+06-01 11:49:34.153 13722 13794 I com.example.llama.aichat: vendor/qcom/proprietary/adsprpc/src/rpcmem_android.c:182: set up allocator 0xb400006eb8047dd0 for DMA buf heap system, ION heap system, heap mask 0x2000000, flags 0x1, legacy flags 0x1
+06-01 11:49:34.153 13722 13794 I com.example.llama.aichat: vendor/qcom/proprietary/adsprpc/src/fastrpc_config.c:319: Reading configuration file: com.example.llama.aichat.debugconfig
+06-01 11:49:34.153 13722 13794 I com.example.llama.aichat: vendor/qcom/proprietary/adsprpc/src/fastrpc_config.c:350: fastrpc_config_init: Couldn't find file com.example.llama.aichat.debugconfig, errno (No such file or directory) at /data/app/~~kSF05J4MzCFEHpbQfxJwZA==/com.example.llama.aichat-qMGnnvvO4q_RHseNPL0aQw==/lib/arm64, /vendor/lib64/rfs/dsp, /vendor/lib/rfsa/ad
+06-01 11:49:34.153 13722 13794 I com.example.llama.aichat: vendor/qcom/proprietary/adsprpc/src/fastrpc_apps_user.c:4536: fastrpc_apps_user_init done  with default domain:3 and &fastrpc_trace:0x6d5cb740d0
+06-01 11:49:34.153 13722 13794 I com.example.llama.aichat: vendor/qcom/proprietary/adsprpc/src/fastrpc_apps_user.c:4650: multidsplib_env_init: libcdsprpc.so loaded
+06-01 11:49:34.153 13722 13794 I ai-chat : ggml-hex: Hexagon backend (experimental) : allocating new registry : ndev 1
+06-01 11:49:34.153 13722 13794 I ai-chat : ggml-hex: Hexagon Arch version v79
+06-01 11:49:34.149 13722 13722 W DefaultDispatch: type=1400 audit(0.0:20120): avc:  denied  { search } for  name="/" dev="sde18" ino=2 scontext=u:r:untrusted_app:s0:c72,c257,c512,c768 tcontext=u:object_r:adsprpcd_file:s0 tclass=dir permissive=0 app=com.example.llama.aichat
+06-01 11:49:34.153 13722 13794 I ai-chat : ggml-hex: allocating new session: HTP0
+06-01 11:49:34.153 13722 13794 I com.example.llama.aichat: vendor/qcom/proprietary/adsprpc/src/fastrpc_apps_user.c:2747: remote_session_control Unsigned PD enable 1 request for domain 3
+06-01 11:49:34.153 13722 13794 I com.example.llama.aichat: vendor/qcom/proprietary/adsprpc/src/fastrpc_apps_user.c:3479: open_device_node: no access to default device of domain 3, open thru HAL, (sess_id 0)
+06-01 11:49:34.154  1453  1493 I dsp-manager: DspManager.cpp (105): DspManager: constructor done for client PID 13722
+06-01 11:49:34.155  1453  1493 I dsp-manager: DspManager.cpp (64): openSession: device fd 6 opened for domain 3
+06-01 11:49:34.155 13722 13794 I dsp-client: DspClient.cpp (132): open_hal_session: opened device fd 185 for domain 3
+06-01 11:49:34.155 13722 13794 I com.example.llama.aichat: vendor/qcom/proprietary/adsprpc/src/fastrpc_apps_user.c:3509: close_device_node: close device 185 thru HAL on domain 3
+06-01 11:49:34.149 13722 13722 W DefaultDispatch: type=1400 audit(0.0:20121): avc:  denied  { getattr } for  path="/vendor/dsp" dev="sde18" ino=2 scontext=u:r:untrusted_app:s0:c72,c257,c512,c768 tcontext=u:object_r:adsprpcd_file:s0 tclass=dir permissive=0 app=com.example.llama.aichat
+06-01 11:49:34.155  1453  1493 I dsp-manager: DspManager.cpp (89): closeSession: closed dev 6 on domain 3
+06-01 11:49:34.155  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:34.149 13722 13722 W DefaultDispatch: type=1400 audit(0.0:20122): avc:  denied  { search } for  name="/" dev="sde18" ino=2 scontext=u:r:untrusted_app:s0:c72,c257,c512,c768 tcontext=u:object_r:adsprpcd_file:s0 tclass=dir permissive=0 app=com.example.llama.aichat
+06-01 11:49:34.155 13722 13794 I dsp-client: DspClient.cpp (150): close_hal_session: closed device fd 185 on domain 3
+06-01 11:49:34.155 13722 13794 I com.example.llama.aichat: vendor/qcom/proprietary/adsprpc/src/fastrpc_apps_user.c:3479: open_device_node: no access to default device of domain 3, open thru HAL, (sess_id 0)
+06-01 11:49:34.155  1453  1493 I dsp-manager: DspManager.cpp (64): openSession: device fd 6 opened for domain 3
+06-01 11:49:34.155 13722 13794 I dsp-client: DspClient.cpp (132): open_hal_session: opened device fd 185 for domain 3
+06-01 11:49:34.155 13722 13794 E com.example.llama.aichat: vendor/qcom/proprietary/adsprpc/src/fastrpc_apps_user.c:3684: Error 0xd: open_shell failed for domain 3 search paths used are /dsp/, /vendor/dsp/, /vendor/dsp/xdsp/ (errno Permission denied)
+06-01 11:49:34.149 13722 13722 W DefaultDispatch: type=1400 audit(0.0:20123): avc:  denied  { getattr } for  path="/vendor/dsp" dev="sde18" ino=2 scontext=u:r:untrusted_app:s0:c72,c257,c512,c768 tcontext=u:object_r:adsprpcd_file:s0 tclass=dir permissive=0 app=com.example.llama.aichat
+06-01 11:49:34.155 13722 13794 W libc    : Access denied finding property "persist.vendor.fastrpc.process.attrs"
+06-01 11:49:34.149 13722 13722 W DefaultDispatch: type=1400 audit(0.0:20124): avc:  denied  { search } for  name="/" dev="sde18" ino=2 scontext=u:r:untrusted_app:s0:c72,c257,c512,c768 tcontext=u:object_r:adsprpcd_file:s0 tclass=dir permissive=0 app=com.example.llama.aichat
+06-01 11:49:34.149 13722 13722 W DefaultDispatch: type=1400 audit(0.0:20125): avc:  denied  { getattr } for  path="/vendor/dsp" dev="sde18" ino=2 scontext=u:r:untrusted_app:s0:c72,c257,c512,c768 tcontext=u:object_r:adsprpcd_file:s0 tclass=dir permissive=0 app=com.example.llama.aichat
+06-01 11:49:34.160  2214  2286 I cdsprpcd: vendor/qcom/proprietary/adsprpc/src/apps_std_imp.c:1012: Successfully opened file /vendor/dsp/cdsp/fastrpc_shell_unsigned_3
+06-01 11:49:34.186 13722 13794 I com.example.llama.aichat: vendor/qcom/proprietary/adsprpc/src/fastrpc_apps_user.c:3769: Created user PD on domain 3, dbg_trace 0x0, enabled attr=> RPC timeout:0, Dbg Mode:N, CRC:N, Unsigned:Y, Signed:N, Adapt QOS:N, PD dump: (Config:N, Dbg:N), Perf: (Kernel:N, DSP:N), Iregion:N, QTF:N, UAF:N userPD initmem len:0x500000, Log pkt: N
+06-01 11:49:34.189 13722 13808 I com.example.llama.aichat: vendor/qcom/proprietary/adsprpc/src/listener_android.c:116: listener thread starting
+06-01 11:49:34.190 13722 13794 E com.example.llama.aichat: vendor/qcom/proprietary/adsprpc/src/log_config.c:610:Error : Unable to add watcher for folder /data/app/~~kSF05J4MzCFEHpbQfxJwZA==/com.example.llama.aichat-qMGnnvvO4q_RHseNPL0aQw==/lib/arm64 : errno is Permission denied
+06-01 11:49:34.190 13722 13794 E com.example.llama.aichat: vendor/qcom/proprietary/adsprpc/src/log_config.c:610:Error : Unable to add watcher for folder /vendor/lib64/rfs/dsp : errno is Permission denied
+06-01 11:49:34.190 13722 13794 E com.example.llama.aichat: vendor/qcom/proprietary/adsprpc/src/log_config.c:610:Error : Unable to add watcher for folder /vendor/lib/rfsa/adsp : errno is Permission denied
+06-01 11:49:34.190 13722 13794 E com.example.llama.aichat: vendor/qcom/proprietary/adsprpc/src/log_config.c:610:Error : Unable to add watcher for folder /vendor/lib64/rfs/dsp : errno is Permission denied
+06-01 11:49:34.190 13722 13794 E com.example.llama.aichat: vendor/qcom/proprietary/adsprpc/src/log_config.c:610:Error : Unable to add watcher for folder /vendor/lib/rfsa/adsp : errno is Permission denied
+06-01 11:49:34.190 13722 13794 I com.example.llama.aichat: vendor/qcom/proprietary/adsprpc/src/fastrpc_perf.c:278: fastrpc_perf_init: enabled systrace 0x0 and RPC traces (kernel 0, dsp 0) with frequency 1000
+06-01 11:49:34.190 13722 13809 I com.example.llama.aichat: vendor/qcom/proprietary/adsprpc/src/log_config.c:362: file_watcher_thread starting for domain 3
+06-01 11:49:34.190 13722 13809 W com.example.llama.aichat: vendor/qcom/proprietary/adsprpc/src/log_config.c:382:file_watcher_thread: Couldn't find file com.example.llama.aichat.farf, errno (No such file or directory) at ;/vendor/lib64/rfs/dsp;/vendor/lib/rfsa/adsp;/vendor/lib/rfsa/dsp;/vendor/dsp;
+06-01 11:49:34.192 13722 13808 I com.example.llama.aichat: vendor/qcom/proprietary/adsprpc/src/mod_table.c:701: open_mod_table_open_from_static: reverse module apps_std opened with handle 0x5cb76db8 (idx 0)
+06-01 11:49:34.192 13722 13808 D com.example.llama.aichat: vendor/qcom/proprietary/adsprpc/src/apps_std_imp.c:380: apps_std_fopen_fd: done for /data/app/~~kSF05J4MzCFEHpbQfxJwZA==/com.example.llama.aichat-qMGnnvvO4q_RHseNPL0aQw==/lib/arm64/cdsp/./libggml-htp-v79.so with fopen:25us, read:0us, rpc_alloc:0us, mmap:0us
+06-01 11:49:34.193 13722 13808 D com.example.llama.aichat: vendor/qcom/proprietary/adsprpc/src/apps_std_imp.c:380: apps_std_fopen_fd: done for /data/app/~~kSF05J4MzCFEHpbQfxJwZA==/com.example.llama.aichat-qMGnnvvO4q_RHseNPL0aQw==/lib/arm64/./libggml-htp-v79.so with fopen:23us, read:47us, rpc_alloc:76us, mmap:283us
+06-01 11:49:34.193 13722 13808 I com.example.llama.aichat: vendor/qcom/proprietary/adsprpc/src/apps_std_imp.c:1149: Successfully opened file /data/app/~~kSF05J4MzCFEHpbQfxJwZA==/com.example.llama.aichat-qMGnnvvO4q_RHseNPL0aQw==/lib/arm64/./libggml-htp-v79.so
+06-01 11:49:34.194 13722 13808 I com.example.llama.aichat: vendor/qcom/proprietary/adsprpc/src/mod_table.c:701: open_mod_table_open_from_static: reverse module apps_mem opened with handle 0x5cb76eb8 (idx 1)
+06-01 11:49:34.197 13722 13794 I com.example.llama.aichat: vendor/qcom/proprietary/adsprpc/src/fastrpc_apps_user.c:1709: remote_handle64_open: opened handle 0xb400006f68086a90 (remote 0x1ecb8b0) for file:///libggml-htp-v79.so?htp_iface_skel_handle_invoke&_modver=1.0&_dom=cdsp&_session=0 on domain 3 (spawn time 37228 us, load time 6949 us), num handles 1
+06-01 11:49:34.197 13722 13794 I ai-chat : ggml-hex: new session: HTP0 : session-id 0 domain-id 3 uri file:///libggml-htp-v79.so?htp_iface_skel_handle_invoke&_modver=1.0&_dom=cdsp&_session=0 handle 0xb400006f68086a90
+06-01 11:49:34.197 13722 13810 I com.example.llama.aichat: vendor/qcom/proprietary/adsprpc/src/fastrpc_latency.c:97: fastrpc_latency_thread_handler started for QoS with activity window 100 ms
+06-01 11:49:34.197 13722 13794 I com.example.llama.aichat: vendor/qcom/proprietary/adsprpc/src/fastrpc_apps_user.c:2399: remote_handle_control_domain: requested QOS 1, latency 1 for domain 3 handle 0xb400006f68086a90
+06-01 11:49:34.197 13722 13794 I com.example.llama.aichat: vendor/qcom/proprietary/adsprpc/src/fastrpc_apps_user.c:1709: remote_handle64_open: opened handle 0xb400006f68059690 (remote 0x1ecb6b0) for file:///libdspqueue_rpc_skel.so?dspqueue_rpc_skel_handle_invoke&_modver=1.0&_dom=cdsp&_session=0 on domain 3 (spawn time 0 us, load time 134 us), num handles 2
+06-01 11:49:34.197 13722 13794 I com.example.llama.aichat: vendor/qcom/proprietary/adsprpc/src/fastrpc_notif.c:104: fastrpc_notif_domain_init: FastRPC notification worker thread launched
+06-01 11:49:34.198 13722 13811 I com.example.llama.aichat: vendor/qcom/proprietary/adsprpc/src/fastrpc_apps_user.c:2045: get_remote_notif_response: received status notification 0 for domain 3, session 0
+06-01 11:49:34.198 13722 13794 I com.example.llama.aichat: vendor/qcom/proprietary/adsprpc/src/fastrpc_apps_user.c:2883: remote_session_control Register PD status notification request for domain 3
+06-01 11:49:34.199 13722 13794 E com.example.llama.aichat: vendor/qcom/proprietary/adsprpc/src/fastrpc_apps_user.c:1494: Error 0x80000414: remote_handle64_invoke failed for handle 0xb400006f68059690, method 3 on domain 3 (sc 0x3010100) (errno Success)
+06-01 11:49:34.199 13722 13794 I com.example.llama.aichat: vendor/qcom/proprietary/adsprpc/src/dspqueue/dspqueue_cpu.c:624: dspqueue_create: created Queue 0, 0xb400006eb8078a50, DSP 0x00000000 for domain 3
+06-01 11:49:34.199 13722 13794 I ai-chat : load_backend: loaded HTP backend from /data/app/~~kSF05J4MzCFEHpbQfxJwZA==/com.example.llama.aichat-qMGnnvvO4q_RHseNPL0aQw==/lib/arm64/libggml-hexagon.so
+06-01 11:49:34.205 13722 13794 I ai-chat : load_backend: loaded CPU backend from /data/app/~~kSF05J4MzCFEHpbQfxJwZA==/com.example.llama.aichat-qMGnnvvO4q_RHseNPL0aQw==/lib/arm64/libggml-cpu-android_armv8.6_1.so
+06-01 11:49:34.205 13722 13794 I ai-chat : Java_com_arm_aichat_internal_InferenceEngineImpl_init: backend registry count=3, device count=3
+06-01 11:49:34.205 13722 13794 I ai-chat : log_available_backend_devices: ggml backend devices=3
+06-01 11:49:34.205 13722 13794 I ai-chat :   dev[0]: name=GPUOpenCL desc=QUALCOMM Adreno(TM) 735 type=1 mem=0.0/0.0 MiB
+06-01 11:49:34.205 13722 13794 I ai-chat :   dev[1]: name=HTP0 desc=Hexagon type=1 mem=2048.0/2048.0 MiB
+06-01 11:49:34.205 13722 13794 I ai-chat :   dev[2]: name=CPU desc=CPU type=0 mem=11357.6/11357.6 MiB
+06-01 11:49:34.205 13722 13794 I ai-chat : Backend initiated; Log handler set.
+06-01 11:49:34.206 13722 13794 I InferenceEngineImpl: Native library loaded! System info: 
+06-01 11:49:34.206 13722 13794 I InferenceEngineImpl: CPU : NEON = 1 | ARM_FMA = 1 | FP16_VA = 1 | MATMUL_INT8 = 1 | DOTPROD = 1 | OPENMP = 1 | REPACK = 1 | 
+06-01 11:49:34.206 13722 13794 I ai-chat : load_aux_model: flow n_gpu_layers=-1
+06-01 11:49:34.206 13722 13794 I ai-chat : load_aux_model: flow selected device=HTP0 (LLAMA_ANDROID_FORCE_HTP=1)
+06-01 11:49:34.206 13722 13794 I ai-chat : llama_model_load_from_file_impl: using device HTP0 (Hexagon) (unknown id) - 2048 MiB free
+06-01 11:49:34.216 13722 13794 I ai-chat : llama_model_loader: loaded meta data with 49 key-value pairs and 1121 tensors from /data/user/0/com.example.llama.aichat/files/models/flow_fp32.gguf (version GGUF V3 (latest))
+06-01 11:49:34.216 13722 13794 I ai-chat : llama_model_loader: Dumping metadata keys/values. Note: KV overrides do not apply in this output.
+06-01 11:49:34.216 13722 13794 I ai-chat : llama_model_loader: - kv   0:                       general.architecture str              = CosyVoiceFlow
+06-01 11:49:34.216 13722 13794 I ai-chat : llama_model_loader: - kv   1:                               general.type str              = model
+06-01 11:49:34.216 13722 13794 I ai-chat : llama_model_loader: - kv   2:                               general.name str              = Flow
+06-01 11:49:34.216 13722 13794 I ai-chat : llama_model_loader: - kv   3:                         general.size_label str              = 113M
+06-01 11:49:34.216 13722 13794 I ai-chat : llama_model_loader: - kv   4:                   cosyvoiceflow.vocab_size u32              = 6561
+06-01 11:49:34.216 13722 13794 I ai-chat : llama_model_loader: - kv   5:              cosyvoiceflow.token_mel_ratio f32              = 2.000000
+06-01 11:49:34.216 13722 13794 I ai-chat : llama_model_loader: - kv   6:                cosyvoiceflow.spk_embed_dim u32              = 192
+06-01 11:49:34.216 13722 13794 I ai-chat : llama_model_loader: - kv   7:            cosyvoiceflow.pre_lookahead_len u32              = 3
+06-01 11:49:34.216 13722 13794 I ai-chat : llama_model_loader: - kv   8:                     cosyvoiceflow.out_type str              = mel
+06-01 11:49:34.216 13722 13794 I ai-chat : llama_model_loader: - kv   9:                  cosyvoiceflow.output_size u32              = 80
+06-01 11:49:34.216 13722 13794 I ai-chat : llama_model_loader: - kv  10:               cosyvoiceflow.only_mask_loss bool             = false
+06-01 11:49:34.216 13722 13794 I ai-chat : llama_model_loader: - kv  11:                   cosyvoiceflow.input_size u32              = 512
+06-01 11:49:34.216 13722 13794 I ai-chat : llama_model_loader: - kv  12:             cosyvoiceflow.input_frame_rate u32              = 25
+06-01 11:49:34.216 13722 13794 I ai-chat : llama_model_loader: - kv  13:      cosyvoiceflow.encoder_attention_heads u32              = 8
+06-01 11:49:34.216 13722 13794 I ai-chat : llama_model_loader: - kv  14: cosyvoiceflow.encoder_attention_dropout_rate f32              = 0.100000
+06-01 11:49:34.216 13722 13794 I ai-chat : llama_model_loader: - kv  15:         cosyvoiceflow.encoder_dropout_rate f32              = 0.100000
+06-01 11:49:34.216 13722 13794 I ai-chat : llama_model_loader: - kv  16:          cosyvoiceflow.encoder_input_layer str              = linear
+06-01 11:49:34.216 13722 13794 I ai-chat : llama_model_loader: - kv  17:           cosyvoiceflow.encoder_input_size u32              = 512
+06-01 11:49:34.216 13722 13794 I ai-chat : llama_model_loader: - kv  18:         cosyvoiceflow.encoder_linear_units u32              = 2048
+06-01 11:49:34.216 13722 13794 I ai-chat : llama_model_loader: - kv  19:        cosyvoiceflow.encoder_macaron_style bool             = false
+06-01 11:49:34.216 13722 13794 I ai-chat : llama_model_loader: - kv  20:     cosyvoiceflow.encoder_normalize_before bool             = false
+06-01 11:49:34.216 13722 13794 I ai-chat : llama_model_loader: - kv  21:           cosyvoiceflow.encoder_num_blocks u32              = 6
+06-01 11:49:34.216 13722 13794 I ai-chat : llama_model_loader: - kv  22:          cosyvoiceflow.encoder_output_size u32              = 512
+06-01 11:49:34.216 13722 13794 I ai-chat : llama_model_loader: - kv  23:   cosyvoiceflow.encoder_pos_enc_layer_type str              = rel_pos_espnet
+06-01 11:49:34.216 13722 13794 I ai-chat : llama_model_loader: - kv  24:     cosyvoiceflow.encoder_pos_dropout_rate f32              = 0.100000
+06-01 11:49:34.216 13722 13794 I ai-chat : llama_model_loader: - kv  25: cosyvoiceflow.encoder_selfattention_layer_type str              = rel_selfattn
+06-01 11:49:34.216 13722 13794 I ai-chat : llama_model_loader: - kv  26:    cosyvoiceflow.encoder_static_chunk_size u32              = 25
+06-01 11:49:34.216 13722 13794 I ai-chat : llama_model_loader: - kv  27:       cosyvoiceflow.encoder_use_cnn_module bool             = false
+06-01 11:49:34.216 13722 13794 I ai-chat : llama_model_loader: - kv  28:               cosyvoiceflow.decoder_act_fn str              = gelu
+06-01 11:49:34.216 13722 13794 I ai-chat : llama_model_loader: - kv  29:   cosyvoiceflow.decoder_attention_head_dim u32              = 64
+06-01 11:49:34.216 13722 13794 I ai-chat : llama_model_loader: - kv  30:             cosyvoiceflow.decoder_channels arr[i32,1]       = [256]
+06-01 11:49:34.216 13722 13794 I ai-chat : llama_model_loader: - kv  31:              cosyvoiceflow.decoder_dropout f32              = 0.000000
+06-01 11:49:34.216 13722 13794 I ai-chat : llama_model_loader: - kv  32: cosyvoiceflow.decoder_estimator_input_channels u32              = 320
+06-01 11:49:34.216 13722 13794 I ai-chat : llama_model_loader: - kv  33:          cosyvoiceflow.decoder_in_channels u32              = 240
+06-01 11:49:34.216 13722 13794 I ai-chat : llama_model_loader: - kv  34:       cosyvoiceflow.decoder_infer_cfg_rate f32              = 0.700000
+06-01 11:49:34.216 13722 13794 I ai-chat : llama_model_loader: - kv  35:             cosyvoiceflow.decoder_n_blocks u32              = 4
+06-01 11:49:34.216 13722 13794 I ai-chat : llama_model_loader: - kv  36:               cosyvoiceflow.decoder_n_spks u32              = 1
+06-01 11:49:34.216 13722 13794 I ai-chat : llama_model_loader: - kv  37: cosyvoiceflow.decoder_decoding_left_chunks i32              = -1
+06-01 11:49:34.216 13722 13794 I ai-chat : llama_model_loader: - kv  38:            cosyvoiceflow.decoder_num_heads u32              = 8
+06-01 11:49:34.216 13722 13794 I ai-chat : llama_model_loader: - kv  39:       cosyvoiceflow.decoder_num_mid_blocks u32              = 12
+06-01 11:49:34.216 13722 13794 I ai-chat : llama_model_loader: - kv  40:      cosyvoiceflow.decoder_output_channels u32              = 80
+06-01 11:49:34.216 13722 13794 I ai-chat : llama_model_loader: - kv  41:        cosyvoiceflow.decoder_reg_loss_type str              = l1
+06-01 11:49:34.216 13722 13794 I ai-chat : llama_model_loader: - kv  42:            cosyvoiceflow.decoder_sigma_min f32              = 0.000001
+06-01 11:49:34.216 13722 13794 I ai-chat : llama_model_loader: - kv  43:               cosyvoiceflow.decoder_solver str              = euler
+06-01 11:49:34.216 13722 13794 I ai-chat : llama_model_loader: - kv  44:          cosyvoiceflow.decoder_spk_emb_dim u32              = 80
+06-01 11:49:34.216 13722 13794 I ai-chat : llama_model_loader: - kv  45:    cosyvoiceflow.decoder_static_chunk_size u32              = 50
+06-01 11:49:34.216 13722 13794 I ai-chat : llama_model_loader: - kv  46:          cosyvoiceflow.decoder_t_scheduler str              = cosine
+06-01 11:49:34.216 13722 13794 I ai-chat : llama_model_loader: - kv  47:       cosyvoiceflow.decoder_train_cfg_rate f32              = 0.200000
+06-01 11:49:34.216 13722 13794 I ai-chat : llama_model_loader: - kv  48:               general.quantization_version u32              = 2
+06-01 11:49:34.216 13722 13794 I ai-chat : llama_model_loader: - type  f32: 1121 tensors
+06-01 11:49:34.216 13722 13794 I ai-chat : print_info: file format = GGUF V3 (latest)
+06-01 11:49:34.216 13722 13794 I ai-chat : print_info: file type   = all F32 (guessed)
+06-01 11:49:34.216 13722 13794 I ai-chat : print_info: file size   = 429.34 MiB (32.00 BPW) 
+06-01 11:49:34.216 13722 13794 I ai-chat : &&&&&&&&&&&&&&&&&&&&&&&&&& flow status is: 1, hift status is: 0
+06-01 11:49:34.216 13722 13794 I ai-chat : &&&&&&&&&&&&&&&&&&&&&&&&&& flow status is: 1, hift status is: 0
+06-01 11:49:34.216 13722 13794 I ai-chat : print_info: arch             = CosyVoiceFlow
+06-01 11:49:34.216 13722 13794 I ai-chat : print_info: vocab_only       = 0
+06-01 11:49:34.216 13722 13794 I ai-chat : print_info: no_alloc         = 0
+06-01 11:49:34.216 13722 13794 I ai-chat : print_info: model type       = ?B
+06-01 11:49:34.216 13722 13794 I ai-chat : print_info: model params     = 112.55 M
+06-01 11:49:34.216 13722 13794 I ai-chat : print_info: general.name     = n/a
+06-01 11:49:34.216 13722 13794 I ai-chat : &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& n_layer is: 1127, use_hift is: 0
+06-01 11:49:34.216 13722 13794 I ai-chat : load_tensors: loading model tensors, this can take a while... (mmap = true)
+06-01 11:49:34.225  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:34.253 13722 13794 I ai-chat : load_tensors: offloading output layer to GPU
+06-01 11:49:34.253 13722 13794 I ai-chat : load_tensors: offloading 1126 repeating layers to GPU
+06-01 11:49:34.253 13722 13794 I ai-chat : load_tensors: offloaded 1128/1128 layers to GPU
+06-01 11:49:34.253 13722 13794 I ai-chat : load_tensors:   CPU_Mapped model buffer size =   427.65 MiB
+06-01 11:49:34.253 13722 13794 I ai-chat : load_tensors:         HTP0 model buffer size =    41.06 MiB
+06-01 11:49:34.257  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:34.259 13722 13794 I ai-chat : llama_context: constructing llama_context
+06-01 11:49:34.259 13722 13794 I ai-chat : llama_context: n_seq_max     = 1
+06-01 11:49:34.259 13722 13794 I ai-chat : llama_context: n_ctx         = 2048
+06-01 11:49:34.259 13722 13794 I ai-chat : llama_context: n_ctx_seq     = 2048
+06-01 11:49:34.259 13722 13794 I ai-chat : llama_context: n_batch       = 896
+06-01 11:49:34.259 13722 13794 I ai-chat : llama_context: n_ubatch      = 896
+06-01 11:49:34.259 13722 13794 I ai-chat : llama_context: causal_attn   = 1
+06-01 11:49:34.259 13722 13794 I ai-chat : llama_context: flash_attn    = enabled
+06-01 11:49:34.259 13722 13794 I ai-chat : llama_context: kv_unified    = false
+06-01 11:49:34.259 13722 13794 I ai-chat : llama_context: freq_base     = 0.0
+06-01 11:49:34.259 13722 13794 I ai-chat : llama_context: freq_scale    = 1
+06-01 11:49:34.259 13722 13794 W ai-chat : llama_context: n_ctx_seq (2048) > n_ctx_train (0) -- possible training context overflow
+06-01 11:49:34.259 13722 13794 I ai-chat : llama_context:        CPU  output buffer size =     0.00 MiB
+06-01 11:49:34.263 13722 13794 I ai-chat : llama_context: graph nodes  = -1
+06-01 11:49:34.263 13722 13794 I ai-chat : llama_context: graph splits = -1
+06-01 11:49:34.263 13722 13794 I InferenceEngineImpl: [LoadFlowModel] ready, previousState=a, path=/data/user/0/com.example.llama.aichat/files/models/flow_fp32.gguf
+06-01 11:49:34.263 13722 13794 I LlamaInferenceBridge: [FlowOnly] loadFlowModel done in 22.877 s
+06-01 11:49:34.265 13722 13722 I le.llama.aichat: Waiting for a blocking GC NativeAlloc
+06-01 11:49:34.265 13722 13728 W le.llama.aichat: userfaultfd: MOVE ioctl seems unsupported: Connection timed out
+06-01 11:49:34.267 13722 13728 I le.llama.aichat: Background concurrent mark compact GC freed 2787KB AllocSpace bytes, 12(2804KB) LOS objects, 46% free, 27MB/51MB, paused 258us,490us total 767.432ms
+06-01 11:49:34.278  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:34.297  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:34.311 13722 13794 I LlamaInferenceBridge: [FlowOnly][llama.cpp] inputs loaded, token=445, tokenLen=445, promptToken=322, promptTokenLen=322, promptFeat=51520, promptFeatLen=644, embedding=192, mergedToken=767
+06-01 11:49:34.313  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:34.324 13722 13794 I ai-chat : &&&&&&&&&&&&&&&&&&&&&&& n_tokens is: 192
+06-01 11:49:34.333 13722 13794 I ai-chat : &&&&&&&&&&&&&&&& [spks_t after shape is: ] spks_t shape is: {1534, 80, 2, 1}
+06-01 11:49:34.333  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:49:34.333 13722 13794 I ai-chat : &&&&&&&&&& step is: 1
+06-01 11:49:34.333 13722 13794 I ai-chat : &&&&&&&&&& step is: 2
+06-01 11:49:34.334 13722 13794 I ai-chat : &&&&&&&&&& step is: 3
+06-01 11:49:34.334 13722 13794 I ai-chat : &&&&&&&&&& step is: 4
+06-01 11:49:34.334 13722 13794 I ai-chat : &&&&&&&&&& step is: 5
+06-01 11:49:34.335 13722 13794 I ai-chat : &&&&&&&&&& step is: 6
+06-01 11:49:34.335 13722 13794 I ai-chat : &&&&&&&&&& step is: 7
+06-01 11:49:34.335 13722 13794 I ai-chat : &&&&&&&&&& step is: 8
+06-01 11:49:34.335 13722 13794 I ai-chat : &&&&&&&&&& step is: 9
+06-01 11:49:34.336 13722 13794 I ai-chat : &&&&&&&&&& step is: 10
+06-01 11:49:34.337 13722 13794 I ai-chat : =================== build: 4525 us
+06-01 11:49:34.350  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:49:34.359  1442  1628 I SDM     : DisplayBase::CommitThread: Received idle timeout, panel: cmd, timeout: 69999 us
+06-01 11:49:34.451  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:49:34.509  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:49:34.598  2026  3282 E JobScheduler.JobStatus: App com.google.android.apps.messaging became active but still in NEVER bucket
+06-01 11:49:34.598  2026  3282 E JobScheduler.JobStatus: App com.google.android.apps.messaging became active but still in NEVER bucket
+06-01 11:49:34.599  2026  3282 E JobScheduler.JobStatus: App com.google.android.apps.messaging became active but still in NEVER bucket
+06-01 11:49:34.599  2026  3282 E JobScheduler.JobStatus: App com.google.android.apps.messaging became active but still in NEVER bucket
+06-01 11:49:34.599  2026  3282 E JobScheduler.JobStatus: App com.google.android.apps.messaging became active but still in NEVER bucket
+06-01 11:49:34.600  2026  3282 E JobScheduler.JobStatus: App com.google.android.apps.messaging became active but still in NEVER bucket
+06-01 11:49:34.600  2026  3282 E JobScheduler.JobStatus: App com.google.android.apps.messaging became active but still in NEVER bucket
+06-01 11:49:34.600  2026  3282 E JobScheduler.JobStatus: App com.google.android.apps.messaging became active but still in NEVER bucket
+06-01 11:49:34.601  2026  3282 E JobScheduler.JobStatus: App com.google.android.apps.messaging became active but still in NEVER bucket
+06-01 11:49:34.601  2026  3282 E JobScheduler.JobStatus: App com.google.android.apps.messaging became active but still in NEVER bucket
+06-01 11:49:34.601  2026  3282 E JobScheduler.JobStatus: App com.google.android.apps.messaging became active but still in NEVER bucket
+06-01 11:49:34.601  2026  3282 E JobScheduler.JobStatus: App com.google.android.apps.messaging became active but still in NEVER bucket
+06-01 11:49:34.602  2026  3282 E JobScheduler.JobStatus: App com.google.android.apps.messaging became active but still in NEVER bucket
+06-01 11:49:34.602  2026  3282 E JobScheduler.JobStatus: App com.google.android.apps.messaging became active but still in NEVER bucket
+06-01 11:49:34.606  1357  1372 I android.hardware.thermal-service.qti: sensor: cpu-2-0-0 temperature: 95.1 old: 0 new: 3
+06-01 11:49:34.609  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 4
+06-01 11:49:34.710  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 5
+06-01 11:49:34.758  4513  4865 E ThermalEngine: TM Id 'CPU2_MONITOR' Sensor 'cpu-2-0-0' - alarm raised 1
+06-01 11:49:34.758  4513  4865 I ThermalEngine: ACTION: CPU - Setting CPU[0] to 3
+06-01 11:49:34.759  4513  4865 I ThermalEngine: ACTION: CPU - Setting CPU[3] to 5
+06-01 11:49:34.759  4513  4865 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 6
+06-01 11:49:35.698  1357  1372 I android.hardware.thermal-service.qti: sensor: cpu-2-0-0 temperature: 75.6 old: 3 new: 0
+06-01 11:49:35.705  4513  4865 E ThermalEngine: TM Id 'CPU2_MONITOR' Sensor 'cpu-2-0-0' - alarm cleared 1 
+06-01 11:49:35.706  4513  4865 I ThermalEngine: ACTION: CPU - Setting CPU[0] to 0
+06-01 11:49:35.706  4513  4865 I ThermalEngine: ACTION: CPU - Setting CPU[3] to 0
+06-01 11:49:35.881  1357  1372 I android.hardware.thermal-service.qti: sensor: cpu-2-0-0 temperature: 95.1 old: 0 new: 3
+06-01 11:49:35.903  4513  4865 E ThermalEngine: TM Id 'CPU2_MONITOR' Sensor 'cpu-2-0-0' - alarm raised 1
+06-01 11:49:35.904  4513  4865 I ThermalEngine: ACTION: CPU - Setting CPU[0] to 3
+06-01 11:49:35.904  4513  4865 I ThermalEngine: ACTION: CPU - Setting CPU[3] to 5
+06-01 11:49:36.953  2200  3058 E Diag_Lib: diag: Diag_LSM_Init: invoked for pid: 2200 with init_count: 0
+06-01 11:49:36.953  2200  3058 E Diag_Lib: diag:failed to connect to diag socket
+06-01 11:49:36.953  2200  3058 E Diag_Lib:  Diag_LSM_Init: Failed to open handle to diag driver, error = 111
+06-01 11:49:38.914  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 7
+06-01 11:49:39.015  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 8
+06-01 11:49:39.417  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 7
+06-01 11:49:39.518  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 8
+06-01 11:49:41.954  2200  3058 E Diag_Lib: diag: Diag_LSM_Init: invoked for pid: 2200 with init_count: 0
+06-01 11:49:41.954  2200  3058 E Diag_Lib: diag:failed to connect to diag socket
+06-01 11:49:41.955  2200  3058 E Diag_Lib:  Diag_LSM_Init: Failed to open handle to diag driver, error = 111
+06-01 11:49:42.342  1374  1374 E IPCThreadState: binder thread pool (1 threads) starved for 133 ms

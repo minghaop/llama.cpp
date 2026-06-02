@@ -78,6 +78,8 @@ dependencies {
     implementation(libs.bundles.androidx)
     implementation(libs.material)
     implementation(libs.litert)
+    runtimeOnly("com.qualcomm.qti:qnn-litert-delegate:2.46.0")
+    runtimeOnly("com.qualcomm.qti:qnn-runtime:2.46.0")
     implementation("com.microsoft.onnxruntime:onnxruntime-android:1.20.0")
 
     implementation(project(":lib"))

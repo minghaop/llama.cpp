@@ -1,6 +1,7 @@
 package com.example.llama
 
 import android.content.Context
+import android.os.Debug
 import android.util.Log
 import com.google.ai.edge.litert.Accelerator
 import com.google.ai.edge.litert.BuiltinNpuAcceleratorProvider
@@ -32,19 +33,12 @@ class LiteRtFlowRunner private constructor(
     private var promptTokenIntScratch = IntArray(0)
 
     init {
-        val signatureInputs = runCatching { compiledModel.createInputBuffers(SIGNATURE_KEY) }.getOrNull()
-        val signatureOutputs = runCatching { compiledModel.createOutputBuffers(SIGNATURE_KEY) }.getOrNull()
-        if (!signatureInputs.isNullOrEmpty() && !signatureOutputs.isNullOrEmpty()) {
-            inputBuffers = signatureInputs
-            outputBuffers = signatureOutputs
-            runSignatureKey = SIGNATURE_KEY
-            Log.i(TAG, "LiteRT using signature buffers: key=$SIGNATURE_KEY, in=${inputBuffers.size}, out=${outputBuffers.size}")
-        } else {
-            inputBuffers = compiledModel.createInputBuffers()
-            outputBuffers = compiledModel.createOutputBuffers()
-            runSignatureKey = null
-            Log.i(TAG, "LiteRT using positional buffers: in=${inputBuffers.size}, out=${outputBuffers.size}")
-        }
+        // Workaround: avoid nativeRunBySignature crash on some devices/runtime combos.
+        // Use positional I/O buffers and positional run path only.
+        inputBuffers = compiledModel.createInputBuffers()
+        outputBuffers = compiledModel.createOutputBuffers()
+        runSignatureKey = null
+        Log.i(TAG, "LiteRT using positional buffers: in=${inputBuffers.size}, out=${outputBuffers.size}")
         require(inputBuffers.size >= 6) { "LiteRT input count < 6: ${inputBuffers.size}" }
         require(outputBuffers.isNotEmpty()) { "LiteRT output count is 0" }
     }
@@ -65,6 +59,9 @@ class LiteRtFlowRunner private constructor(
         require(promptFeat.isNotEmpty()) { "promptFeat cannot be empty" }
         require(embedding.isNotEmpty()) { "embedding cannot be empty" }
         synchronized(ioLock) {
+            val tStart = System.nanoTime()
+            val cpuStart = Debug.threadCpuTimeNanos()
+            val tResolveStart = System.nanoTime()
             val resolved = resolveBindingsIfNeeded(
                 token = token,
                 tokenLen = tokenLen,
@@ -76,6 +73,9 @@ class LiteRtFlowRunner private constructor(
                 streaming = streaming,
                 finalize = finalize,
             )
+            val tResolveEnd = System.nanoTime()
+
+            val tWriteStart = System.nanoTime()
             writeInputs(
                 resolved = resolved,
                 token = token,
@@ -88,13 +88,38 @@ class LiteRtFlowRunner private constructor(
                 streaming = streaming,
                 finalize = finalize,
             )
+            val tWriteEnd = System.nanoTime()
+
+            val tRunStart = System.nanoTime()
+            val runCpuStart = Debug.threadCpuTimeNanos()
             // Keep one explicit synchronous call path: run + output read on the same thread.
             if (runSignatureKey != null) {
                 compiledModel.run(inputBuffers, outputBuffers, runSignatureKey)
             } else {
                 compiledModel.run(inputBuffers, outputBuffers)
             }
-            return outputBuffers[0].readFloat()
+            val tRunEnd = System.nanoTime()
+            val runCpuEnd = Debug.threadCpuTimeNanos()
+
+            val tReadStart = System.nanoTime()
+            val output = outputBuffers[0].readFloat()
+            val tReadEnd = System.nanoTime()
+            val cpuEnd = Debug.threadCpuTimeNanos()
+
+            Log.i(
+                TAG,
+                "[Profile][LiteRT] mode=$runtimeMode model=${modelFile.name} " +
+                    "resolve=${nanosToMs(tResolveEnd - tResolveStart)}ms " +
+                    "write=${nanosToMs(tWriteEnd - tWriteStart)}ms " +
+                    "run=${nanosToMs(tRunEnd - tRunStart)}ms " +
+                    "runCpu=${nanosToMs(runCpuEnd - runCpuStart)}ms " +
+                    "read=${nanosToMs(tReadEnd - tReadStart)}ms " +
+                    "total=${nanosToMs(tReadEnd - tStart)}ms " +
+                    "totalCpu=${nanosToMs(cpuEnd - cpuStart)}ms " +
+                    "outSize=${output.size} token=${token.size} promptToken=${promptToken.size} " +
+                    "promptFeat=${promptFeat.size} embedding=${embedding.size}",
+            )
+            return output
         }
     }
 
@@ -303,6 +328,8 @@ class LiteRtFlowRunner private constructor(
         private const val TAG = "LiteRtFlowRunner"
         private const val SIGNATURE_KEY = "serving_default"
         private const val MAX_SAFE_MODEL_BYTES = 500L * 1024L * 1024L
+
+        private fun nanosToMs(ns: Long): String = "%.3f".format(ns / 1_000_000.0)
         // Empirical guardrail:
         // On Pixel 10 Pro (PowerVR OpenCL stack), compiling the ~466 MiB flow.tflite
         // crashes inside libPVROCL with Scudo OOM during kernel creation.
@@ -324,26 +351,27 @@ class LiteRtFlowRunner private constructor(
             }
 
             val attempts = mutableListOf<LiteRtAttempt>()
+            Log.i(TAG, "LiteRT NPU-only mode: skip NPU_DIRECT to avoid silent CPU fallback.")
             attempts += LiteRtAttempt("NPU") {
                 val provider = BuiltinNpuAcceleratorProvider(context)
                 check(provider.isDeviceSupported()) { "NPU not supported on this device" }
                 if (!provider.isLibraryReady()) {
+                    Log.i(TAG, "LiteRT NPU runtime library not ready, downloading...")
                     runBlocking { provider.downloadLibrary() }
                 }
                 check(provider.isLibraryReady()) { "NPU runtime library not ready" }
 
                 val libraryDir = provider.getLibraryDir().trim()
-                val env = if (libraryDir.isNotEmpty()) {
-                    Environment.create(
-                        provider,
-                        mapOf(
-                            Environment.Option.CompilerPluginLibraryDir to libraryDir,
-                            Environment.Option.DispatchLibraryDir to libraryDir,
-                        ),
-                    )
-                } else {
-                    Environment.create(provider)
+                val envOptions = linkedMapOf<Environment.Option, String>()
+                if (libraryDir.isNotEmpty()) {
+                    envOptions[Environment.Option.CompilerPluginLibraryDir] = libraryDir
+                    envOptions[Environment.Option.DispatchLibraryDir] = libraryDir
                 }
+                val env = Environment.create(provider, envOptions)
+                Log.i(
+                    TAG,
+                    "LiteRT NPU env prepared: libraryDir='${libraryDir.ifEmpty { "<builtin>" }}'",
+                )
 
                 val options = CompiledModel.Options(Accelerator.NPU)
                 val model = CompiledModel.create(modelFile.absolutePath, options, env)

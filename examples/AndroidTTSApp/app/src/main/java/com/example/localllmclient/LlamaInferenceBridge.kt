@@ -6,14 +6,23 @@ import android.util.Log
 import com.arm.aichat.AiChat
 import com.arm.aichat.InferenceEngine
 import com.arm.aichat.isModelLoaded
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
+import org.json.JSONArray
+import org.json.JSONObject
+import java.io.BufferedReader
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import java.io.InputStreamReader
+import java.net.HttpURLConnection
+import java.net.URL
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
+import java.util.Base64
 import java.util.Locale
 import java.util.zip.ZipFile
 import kotlin.math.cos
@@ -90,6 +99,8 @@ class LlamaInferenceBridge(
         promptText: String,
         promptAudio: FloatArray,
         promptSampleRate: Int,
+        flowStreaming: Boolean = false,
+        flowFinalize: Boolean? = null,
         onEvent: ((InferenceEvent) -> Unit)? = null,
     ): String {
         fun emit(event: InferenceEvent) {
@@ -107,7 +118,7 @@ class LlamaInferenceBridge(
         var currentStage = InferenceStage.frontEnd
         Trace.beginSection("runInference_total")
         return try {
-            Log.i(TAG, "runInference started")
+            Log.i(TAG, "runInference started, flowStreaming=$flowStreaming, flowFinalize=$flowFinalize")
             if (LLM_ONLY_TEST_MODE) {
                 currentStage = InferenceStage.llm
                 val resources = ensureLocalResourcesReady()
@@ -167,6 +178,7 @@ class LlamaInferenceBridge(
                         runFlowInferenceFromBins(
                             runner = flowRunner,
                             inputDir = resources.flowInputsBinDir,
+                            flowStreaming = flowStreaming,
                             onEvent = onEvent,
                         )
                     }
@@ -189,6 +201,7 @@ class LlamaInferenceBridge(
                         runFlowInferenceFromBins(
                             runner = flowRunner,
                             inputDir = resources.flowInputsBinDir,
+                            flowStreaming = flowStreaming,
                             onEvent = onEvent,
                         )
                     }
@@ -211,6 +224,7 @@ class LlamaInferenceBridge(
                             engine = flowEngine,
                             inputDir = resources.flowInputsBinDir,
                             noisePeFile = resources.noisePe,
+                            flowStreaming = flowStreaming,
                             onEvent = onEvent,
                         )
                     }
@@ -230,6 +244,7 @@ class LlamaInferenceBridge(
                         runFlowInferenceFromBins(
                             runner = flowRunner,
                             inputDir = resources.flowInputsBinDir,
+                            flowStreaming = flowStreaming,
                             onEvent = onEvent,
                         )
                     }
@@ -251,6 +266,7 @@ class LlamaInferenceBridge(
                             encoderRunner = flowEncoderRunner,
                             decoderRunner = flowDecoderRunner,
                             inputDir = resources.flowInputsBinDir,
+                            flowStreaming = flowStreaming,
                             onEvent = onEvent,
                         )
                     }
@@ -278,15 +294,18 @@ class LlamaInferenceBridge(
             currentStage = InferenceStage.llmPrepare
             Log.i(
                 TAG,
-                "[LLMPrepare] begin ensureEngineReady, llm=${resources.llmModel.absolutePath}, " +
-                    "flow=${resources.flowModel.absolutePath}, hifigan=${resources.hifiganModel.absolutePath}",
+                "[LLMPrepare] begin, llmBackend=${if (USE_MNN_LLM_BACKEND) "MNN-CPU" else "llama.cpp"} " +
+                    "flowBackend=${if (USE_HTTP_FLOW_BACKEND) "HTTP" else "local"} " +
+                    "hifiganBackend=MNN-$HIFIGAN_BACKEND_LABEL",
             )
             val loadedEngine = if (USE_MNN_LLM_BACKEND) {
-                ensureFlowOnlyEngineReady(flowModelFile = resources.flowModel)
+                ensureMnnLlmRunnerReady(resources)
+                null
             } else {
                 ensureEngineReady(
                     modelFile = resources.llmModel,
                     flowModelFile = resources.flowModel,
+                    loadFlowModel = !USE_HTTP_FLOW_BACKEND,
                 )
             }
             Log.i(TAG, "[LLMPrepare] ensureEngineReady done")
@@ -300,13 +319,26 @@ class LlamaInferenceBridge(
             )
 
             currentStage = InferenceStage.flow
-            val flowResult = runFlowInference(
-                llmTokens = llmResult.speechTokens,
-                frontEndResult = frontEndResult,
-                engine = loadedEngine,
-                resources = resources,
-                onEvent = onEvent,
-            )
+            val flowResult =
+                if (USE_HTTP_FLOW_BACKEND) {
+                    runFlowInferenceHttp(
+                        llmTokens = llmResult.speechTokens,
+                        frontEndResult = frontEndResult,
+                        flowStreaming = flowStreaming,
+                        flowFinalize = flowFinalize,
+                        onEvent = onEvent,
+                    )
+                } else {
+                    runFlowInference(
+                        llmTokens = llmResult.speechTokens,
+                        frontEndResult = frontEndResult,
+                        engine = requireNotNull(loadedEngine) { "Local flow backend requires InferenceEngine" },
+                        resources = resources,
+                        flowStreaming = flowStreaming,
+                        flowFinalize = flowFinalize,
+                        onEvent = onEvent,
+                    )
+                }
 
             currentStage = InferenceStage.hift
             emit(InferenceEvent.StageBegan(InferenceStage.hift, "HifiGan init: 正在加载模型"))
@@ -440,7 +472,7 @@ class LlamaInferenceBridge(
         ttsText: String,
         promptText: String,
         frontEndResult: FrontEndResult,
-        engine: InferenceEngine,
+        engine: InferenceEngine?,
         resources: LocalResourceFiles,
         onEvent: ((InferenceEvent) -> Unit)? = null,
     ): LLMResult {
@@ -531,7 +563,7 @@ class LlamaInferenceBridge(
         if (USE_MNN_LLM_BACKEND) {
             mnnRunner!!.resetKvCache()
         } else {
-            engine.resetKvCache()
+            requireNotNull(engine) { "llama.cpp LLM backend requires InferenceEngine" }.resetKvCache()
         }
 
         val reportEverySeconds = 1.0
@@ -542,7 +574,8 @@ class LlamaInferenceBridge(
             val llmRes = if (USE_MNN_LLM_BACKEND) {
                 mnnRunner!!.decodeEmbeddings(currentInput, nPast)
             } else {
-                engine.decodeEmbeddings(currentInput, nPast)
+                requireNotNull(engine) { "llama.cpp LLM backend requires InferenceEngine" }
+                    .decodeEmbeddings(currentInput, nPast)
             }
             val totalElements = llmRes.size
             require(totalElements != 0 && totalElements % LLM_HIDDEN_SIZE == 0) {
@@ -627,6 +660,8 @@ class LlamaInferenceBridge(
         frontEndResult: FrontEndResult,
         engine: InferenceEngine,
         resources: LocalResourceFiles,
+        flowStreaming: Boolean? = null,
+        flowFinalize: Boolean? = null,
         onEvent: ((InferenceEvent) -> Unit)? = null,
     ): FlowResult {
         fun emit(event: InferenceEvent) {
@@ -641,6 +676,12 @@ class LlamaInferenceBridge(
         require(frontEndResult.speechTokenLen > 0) { "Flow prompt token len is invalid: ${frontEndResult.speechTokenLen}" }
         require(frontEndResult.speechFeatLen > 0) { "Flow prompt feat len is invalid: ${frontEndResult.speechFeatLen}" }
 
+        val flags = resolveFlowExecutionFlags(
+            requestedStreaming = flowStreaming,
+            requestedFinalize = flowFinalize,
+            defaultStreaming = false,
+            defaultFinalize = true,
+        )
         val noise = loadNoisePe(resources.noisePe)
         val mergedToken = IntArray(frontEndResult.speechTokens.size + llmTokens.size)
         if (frontEndResult.speechTokens.isNotEmpty()) {
@@ -649,6 +690,12 @@ class LlamaInferenceBridge(
         if (llmTokens.isNotEmpty()) {
             System.arraycopy(llmTokens, 0, mergedToken, frontEndResult.speechTokens.size, llmTokens.size)
         }
+        Log.i(
+            TAG,
+            "[FlowMain] llmToken=${llmTokens.size}, promptToken=${frontEndResult.speechTokens.size}, " +
+                "promptFeat=${frontEndResult.speechFeat.size}, promptFeatLen=${frontEndResult.speechFeatLen}, " +
+                "embedding=${frontEndResult.speechEmbedding.size}, streaming=${flags.streaming}, finalize=${flags.finalize}",
+        )
 
         val flowOutput = engine.encodeFlow(
             inputEmbeddings = frontEndResult.speechEmbedding,
@@ -678,10 +725,72 @@ class LlamaInferenceBridge(
         return FlowResult(units = units, output = flowOutput)
     }
 
+    private suspend fun runFlowInferenceHttp(
+        llmTokens: IntArray,
+        frontEndResult: FrontEndResult,
+        flowStreaming: Boolean,
+        flowFinalize: Boolean? = null,
+        onEvent: ((InferenceEvent) -> Unit)? = null,
+    ): FlowResult {
+        fun emit(event: InferenceEvent) {
+            onEvent?.invoke(event)
+        }
+
+        emit(InferenceEvent.StageBegan(InferenceStage.flow, "Flow HTTP inference"))
+        require(frontEndResult.speechTokens.isNotEmpty()) { "Flow HTTP prompt_token is empty" }
+        require(frontEndResult.speechFeat.isNotEmpty()) { "Flow HTTP prompt_feat is empty" }
+        require(frontEndResult.speechFeatLen > 0) { "Flow HTTP prompt_feat_len is invalid: ${frontEndResult.speechFeatLen}" }
+        require(frontEndResult.speechEmbedding.isNotEmpty()) { "Flow HTTP embedding is empty" }
+
+        val started = nowSeconds()
+        emit(InferenceEvent.Note("[FlowHTTP] endpoint=$FLOW_HTTP_ENDPOINT stream=$flowStreaming finalize=$flowFinalize"))
+
+        val response = withContext(Dispatchers.IO) {
+            requestFlowMelOverHttp(
+                endpoint = FLOW_HTTP_ENDPOINT,
+                llmTokens = llmTokens,
+                frontEndResult = frontEndResult,
+                stream = flowStreaming,
+                onChunk = { chunkCount, totalFrames ->
+                    val elapsed = nowSeconds() - started
+                    emit(
+                        InferenceEvent.StageProgress(
+                            stage = InferenceStage.flow,
+                            unitName = "Flow HTTP chunk",
+                            unitsDone = totalFrames,
+                            secondsElapsed = elapsed,
+                            instUPS = if (elapsed > 0.0) totalFrames / elapsed else 0.0,
+                            avgUPS = if (elapsed > 0.0) totalFrames / elapsed else 0.0,
+                        ),
+                    )
+                    Log.i(
+                        TAG,
+                        "[FlowHTTP] received chunk=$chunkCount totalFrames=$totalFrames elapsed=${"%.3f".format(Locale.US, elapsed)} s",
+                    )
+                },
+            )
+        }
+
+        val elapsed = nowSeconds() - started
+        emit(
+            InferenceEvent.StageEnded(
+                StageEndedInfo(
+                    stage = InferenceStage.flow,
+                    unitName = "Flow HTTP completed",
+                    units = response.totalFrames,
+                    seconds = elapsed,
+                    avgUPS = if (elapsed > 0.0) response.totalFrames / elapsed else 0.0,
+                ),
+            ),
+        )
+        return FlowResult(units = response.totalFrames, output = response.mel)
+    }
+
     private suspend fun runFlowInferenceFromBins(
         engine: InferenceEngine,
         inputDir: File,
         noisePeFile: File,
+        flowStreaming: Boolean? = null,
         onEvent: ((InferenceEvent) -> Unit)? = null,
     ): FlowResult {
         fun emit(event: InferenceEvent) {
@@ -690,6 +799,9 @@ class LlamaInferenceBridge(
 
         val t0 = nowSeconds()
         emit(InferenceEvent.StageBegan(InferenceStage.flow, "Flow inference (prepacked bins, llama.cpp)"))
+        if (flowStreaming != null) {
+            emit(InferenceEvent.Note("[FlowOnly][llama.cpp] ui flowStreaming=$flowStreaming (not used by llama.cpp flow path)"))
+        }
         Trace.beginSection("FlowOnly_llamaCpp_total")
         try {
 
@@ -804,6 +916,7 @@ class LlamaInferenceBridge(
         encoderRunner: MnnFlowRunner,
         decoderRunner: MnnFlowDecoderRunner,
         inputDir: File,
+        flowStreaming: Boolean? = null,
         onEvent: ((InferenceEvent) -> Unit)? = null,
     ): FlowResult {
         fun emit(event: InferenceEvent) {
@@ -825,6 +938,11 @@ class LlamaInferenceBridge(
         Log.i(TAG, decoderInputs.describeForLog())
 
         val encoderStart = nowSeconds()
+        val flags = resolveFlowExecutionFlags(
+            requestedStreaming = flowStreaming,
+            defaultStreaming = inputs.streaming,
+            defaultFinalize = inputs.finalize,
+        )
         encoderRunner.forward(
             token = inputs.flowToken,
             tokenLen = inputs.tokenLen,
@@ -833,8 +951,8 @@ class LlamaInferenceBridge(
             promptFeat = inputs.promptFeat,
             promptFeatLen = inputs.promptFeatLen,
             embedding = inputs.embedding,
-            streaming = inputs.streaming,
-            finalize = inputs.finalize,
+            streaming = flags.streaming,
+            finalize = flags.finalize,
         )
         val encoderSeconds = nowSeconds() - encoderStart
         val decoderStart = nowSeconds()
@@ -896,6 +1014,7 @@ class LlamaInferenceBridge(
     private suspend fun runFlowInferenceFromBins(
         runner: OnnxQnnFlowRunner,
         inputDir: File,
+        flowStreaming: Boolean? = null,
         onEvent: ((InferenceEvent) -> Unit)? = null,
     ): FlowResult {
         fun emit(event: InferenceEvent) {
@@ -918,6 +1037,11 @@ class LlamaInferenceBridge(
             emit(InferenceEvent.Note("[FlowOnly] ONNX QNN is running with CPU fallback enabled for unsupported ops"))
         }
 
+        val flags = resolveFlowExecutionFlags(
+            requestedStreaming = flowStreaming,
+            defaultStreaming = inputs.streaming,
+            defaultFinalize = inputs.finalize,
+        )
         val flowOutput = runner.forward(
             token = inputs.flowToken,
             tokenLen = inputs.tokenLen,
@@ -926,8 +1050,8 @@ class LlamaInferenceBridge(
             promptFeat = inputs.promptFeat,
             promptFeatLen = inputs.promptFeatLen,
             embedding = inputs.embedding,
-            streaming = inputs.streaming,
-            finalize = inputs.finalize,
+            streaming = flags.streaming,
+            finalize = flags.finalize,
         )
         emit(InferenceEvent.Note(buildDecoderHeadPreviewNote(flowOutput)))
 
@@ -953,6 +1077,7 @@ class LlamaInferenceBridge(
     private suspend fun runFlowInferenceFromBins(
         runner: LiteRtFlowRunner,
         inputDir: File,
+        flowStreaming: Boolean? = null,
         onEvent: ((InferenceEvent) -> Unit)? = null,
     ): FlowResult {
         fun emit(event: InferenceEvent) {
@@ -962,7 +1087,9 @@ class LlamaInferenceBridge(
         val t0 = nowSeconds()
         emit(InferenceEvent.StageBegan(InferenceStage.flow, "Flow inference (prepacked inputs, LiteRT)"))
 
+        val tReadStart = nowSeconds()
         val inputs = readFlowOnlyInputBundle(inputDir)
+        val readSeconds = nowSeconds() - tReadStart
         Log.i(
             TAG,
             "[FlowOnly][LiteRT] inputs loaded, token=${inputs.flowToken.size}, tokenLen=${inputs.tokenLen}, " +
@@ -970,14 +1097,23 @@ class LlamaInferenceBridge(
                 "promptFeat=${inputs.promptFeat.size}, promptFeatLen=${inputs.promptFeatLen}, " +
                 "embedding=${inputs.embedding.size}, streaming=${inputs.streaming}, finalize=${inputs.finalize}",
         )
-        emit(InferenceEvent.Note("[FlowOnly][LiteRT] runtime=${runner.runtimeMode}"))
-        val streamingForRun = false
-        val finalizeForRun = true
         Log.i(
             TAG,
-            "[FlowOnly][LiteRT] force streaming=0/finalize=1, rawStreaming=${inputs.streaming}, rawFinalize=${inputs.finalize}",
+            "[Profile][FlowOnly][LiteRT] input_read=${"%.3f".format(Locale.US, readSeconds)} s from ${inputDir.absolutePath}",
+        )
+        emit(InferenceEvent.Note("[FlowOnly][LiteRT] runtime=${runner.runtimeMode}"))
+        val flags = resolveFlowExecutionFlags(
+            requestedStreaming = flowStreaming,
+            defaultStreaming = inputs.streaming,
+            defaultFinalize = inputs.finalize,
+        )
+        Log.i(
+            TAG,
+            "[FlowOnly][LiteRT] run streaming=${if (flags.streaming) 1 else 0}/finalize=${if (flags.finalize) 1 else 0}, " +
+                "rawStreaming=${inputs.streaming}, rawFinalize=${inputs.finalize}",
         )
 
+        val tForwardStart = nowSeconds()
         val flowOutput = runner.forward(
             token = inputs.flowToken,
             tokenLen = inputs.tokenLen,
@@ -986,8 +1122,13 @@ class LlamaInferenceBridge(
             promptFeat = inputs.promptFeat,
             promptFeatLen = inputs.promptFeatLen,
             embedding = inputs.embedding,
-            streaming = streamingForRun,
-            finalize = finalizeForRun,
+            streaming = flags.streaming,
+            finalize = flags.finalize,
+        )
+        val forwardSeconds = nowSeconds() - tForwardStart
+        Log.i(
+            TAG,
+            "[Profile][FlowOnly][LiteRT] forward=${"%.3f".format(Locale.US, forwardSeconds)} s runtime=${runner.runtimeMode}",
         )
         val nonZero = flowOutput.count { it != 0.0f }
         var minV = Float.POSITIVE_INFINITY
@@ -1028,6 +1169,7 @@ class LlamaInferenceBridge(
     private suspend fun runFlowInferenceFromBins(
         runner: LiteRtNativeFlowRunner,
         inputDir: File,
+        flowStreaming: Boolean? = null,
         onEvent: ((InferenceEvent) -> Unit)? = null,
     ): FlowResult {
         fun emit(event: InferenceEvent) {
@@ -1037,6 +1179,9 @@ class LlamaInferenceBridge(
         val t0 = nowSeconds()
         emit(InferenceEvent.StageBegan(InferenceStage.flow, "Flow inference (prepacked inputs, LiteRT C++)"))
         emit(InferenceEvent.Note("[FlowOnly][LiteRT] runtime=${runner.runtimeMode}"))
+        if (flowStreaming != null) {
+            emit(InferenceEvent.Note("[FlowOnly][LiteRT][C++] ui flowStreaming=$flowStreaming (not used by C++ bin path)"))
+        }
 
         val flowOutput = runner.forwardFromBin(inputDir)
         val nonZero = flowOutput.count { it != 0.0f }
@@ -1275,6 +1420,195 @@ class LlamaInferenceBridge(
         return HiftResult(outputSamples = outputSamples, output = hiftOutput)
     }
 
+    private fun requestFlowMelOverHttp(
+        endpoint: String,
+        llmTokens: IntArray,
+        frontEndResult: FrontEndResult,
+        stream: Boolean,
+        onChunk: (chunkCount: Int, totalFrames: Int) -> Unit,
+    ): FlowHttpResponse {
+        val connection = (URL(endpoint).openConnection() as HttpURLConnection).apply {
+            requestMethod = "POST"
+            connectTimeout = FLOW_HTTP_CONNECT_TIMEOUT_MS
+            readTimeout = FLOW_HTTP_READ_TIMEOUT_MS
+            doInput = true
+            doOutput = true
+            useCaches = false
+            setRequestProperty("Content-Type", "application/json; charset=utf-8")
+            setRequestProperty("Accept", "application/x-ndjson")
+        }
+
+        try {
+            val payload = buildFlowHttpRequestJson(llmTokens, frontEndResult, stream)
+            connection.outputStream.bufferedWriter(Charsets.UTF_8).use { writer ->
+                writer.write(payload.toString())
+            }
+
+            val code = connection.responseCode
+            val streamReader = if (code in 200..299) {
+                connection.inputStream
+            } else {
+                connection.errorStream ?: connection.inputStream
+            }
+
+            BufferedReader(InputStreamReader(streamReader, Charsets.UTF_8)).use { reader ->
+                if (code !in 200..299) {
+                    val errorBody = reader.readText()
+                    error("Flow HTTP failed: code=$code body=${errorBody.take(512)}")
+                }
+
+                val chunks = ArrayList<FlowHttpMelChunk>()
+                var totalFrames = 0
+                reader.lineSequence()
+                    .filter { it.isNotBlank() }
+                    .forEach { line ->
+                        val item = JSONObject(line)
+                        if (item.has("error")) {
+                            val errorType = item.optString("error", "UnknownError")
+                            val message = item.optString("message", line)
+                            error("Flow HTTP returned error chunk: $errorType: $message")
+                        }
+
+                        val melPayload = item.getJSONObject("tts_mel")
+                        val chunk = decodeFlowHttpMelChunk(melPayload)
+                        chunks += chunk
+                        totalFrames += chunk.frames
+                        onChunk(chunks.size, totalFrames)
+                    }
+
+                require(chunks.isNotEmpty()) { "Flow HTTP returned no mel chunks" }
+                val stitched = stitchFlowHttpChunks(chunks)
+                require(stitched.isNotEmpty()) { "Flow HTTP stitched mel is empty" }
+                return FlowHttpResponse(totalFrames = totalFrames, mel = stitched)
+            }
+        } finally {
+            connection.disconnect()
+        }
+    }
+
+    private fun buildFlowHttpRequestJson(
+        llmTokens: IntArray,
+        frontEndResult: FrontEndResult,
+        stream: Boolean,
+    ): JSONObject =
+        JSONObject().apply {
+            put("stream", stream)
+            put(
+                "llm_token",
+                JSONArray().apply {
+                    llmTokens.forEach { put(it) }
+                },
+            )
+            put(
+                "flow_prompt_speech_token",
+                encodeTensorPayloadJson(
+                    shape = intArrayOf(1, frontEndResult.speechTokenLen),
+                    dtype = "int64",
+                    bytes = encodeIntArrayAsInt64Bytes(frontEndResult.speechTokens, frontEndResult.speechTokenLen),
+                ),
+            )
+            put(
+                "prompt_speech_feat",
+                encodeTensorPayloadJson(
+                    shape = intArrayOf(1, frontEndResult.speechFeatLen, HIFIGAN_MEL_BINS),
+                    dtype = "float32",
+                    bytes = encodeFloatArrayBytes(frontEndResult.speechFeat),
+                ),
+            )
+            put(
+                "prompt_speech_feat_len",
+                JSONArray().apply {
+                    put(frontEndResult.speechFeatLen)
+                },
+            )
+            put(
+                "flow_embedding",
+                encodeTensorPayloadJson(
+                    shape = intArrayOf(1, frontEndResult.speechEmbeddingLen),
+                    dtype = "float32",
+                    bytes = encodeFloatArrayBytes(frontEndResult.speechEmbedding),
+                ),
+            )
+        }
+
+    private fun encodeTensorPayloadJson(
+        shape: IntArray,
+        dtype: String,
+        bytes: ByteArray,
+    ): JSONObject =
+        JSONObject().apply {
+            put(
+                "shape",
+                JSONArray().apply {
+                    shape.forEach { put(it) }
+                },
+            )
+            put("dtype", dtype)
+            put("data", Base64.getEncoder().encodeToString(bytes))
+        }
+
+    private fun decodeFlowHttpMelChunk(payload: JSONObject): FlowHttpMelChunk {
+        val shapeJson = payload.getJSONArray("shape")
+        require(shapeJson.length() == 3) { "Flow HTTP mel shape must be rank-3, got=${shapeJson.length()}" }
+        val shape = IntArray(shapeJson.length()) { index -> shapeJson.getInt(index) }
+        require(shape[0] == 1) { "Flow HTTP mel batch must be 1, got=${shape[0]}" }
+        require(shape[1] == HIFIGAN_MEL_BINS) { "Flow HTTP mel bins must be $HIFIGAN_MEL_BINS, got=${shape[1]}" }
+        val frames = shape[2]
+        require(frames >= 0) { "Flow HTTP mel frames invalid: $frames" }
+
+        val dtype = payload.getString("dtype")
+        require(dtype == "float32") { "Flow HTTP mel dtype must be float32, got=$dtype" }
+        val data = Base64.getDecoder().decode(payload.getString("data"))
+        val floats = decodeFloatArrayBytes(data)
+        require(floats.size == shape[0] * shape[1] * shape[2]) {
+            "Flow HTTP mel size mismatch: data=${floats.size}, shape=${shape.joinToString("x")}"
+        }
+        return FlowHttpMelChunk(frames = frames, mel = floats)
+    }
+
+    private fun stitchFlowHttpChunks(chunks: List<FlowHttpMelChunk>): FloatArray {
+        val totalFrames = chunks.sumOf { it.frames }
+        require(totalFrames > 0) { "Flow HTTP total frames must be > 0" }
+        val output = FloatArray(HIFIGAN_MEL_BINS * totalFrames)
+        var frameOffset = 0
+        chunks.forEach { chunk ->
+            if (chunk.frames == 0) return@forEach
+            for (melBin in 0 until HIFIGAN_MEL_BINS) {
+                val srcOffset = melBin * chunk.frames
+                val dstOffset = melBin * totalFrames + frameOffset
+                System.arraycopy(chunk.mel, srcOffset, output, dstOffset, chunk.frames)
+            }
+            frameOffset += chunk.frames
+        }
+        return output
+    }
+
+    private fun encodeFloatArrayBytes(values: FloatArray): ByteArray =
+        ByteBuffer.allocate(values.size * 4)
+            .order(ByteOrder.LITTLE_ENDIAN)
+            .apply { values.forEach { putFloat(it) } }
+            .array()
+
+    private fun decodeFloatArrayBytes(bytes: ByteArray): FloatArray {
+        require(bytes.size % 4 == 0) { "Invalid float byte size: ${bytes.size}" }
+        val out = FloatArray(bytes.size / 4)
+        val buffer = ByteBuffer.wrap(bytes).order(ByteOrder.LITTLE_ENDIAN)
+        for (i in out.indices) {
+            out[i] = buffer.float
+        }
+        return out
+    }
+
+    private fun encodeIntArrayAsInt64Bytes(values: IntArray, length: Int): ByteArray =
+        ByteBuffer.allocate(length * 8)
+            .order(ByteOrder.LITTLE_ENDIAN)
+            .apply {
+                for (i in 0 until length) {
+                    putLong(values[i].toLong())
+                }
+            }
+            .array()
+
     private fun runLLMInferenceFromPt(
         runner: MnnLlmRunner,
         resources: LocalResourceFiles,
@@ -1413,19 +1747,46 @@ class LlamaInferenceBridge(
                 DIR_FLOW_INPUTS_BIN,
                 listOf(File(resourcesDir, DIR_FLOW_INPUTS_BIN)),
             )
-            val flowLiteRtModel = resolveRequiredFile(
-                FILE_FLOW_TFLITE_MODEL,
-                listOf(
-                    File(modelsDir, FILE_FLOW_TFLITE_NPU_G5_MODEL),
-                    File(modelsDir, FILE_FLOW_TFLITE_NPU_G4_MODEL),
-                    File(modelsDir, FILE_FLOW_TFLITE_NPU_G3_MODEL),
-                    File(modelsDir, FILE_FLOW_TFLITE_FALLBACK_MODEL),
-                    File(modelsDir, FILE_FLOW_TFLITE_MODEL),
-                ),
-            )
-            Log.i(TAG, "[FlowOnly][LiteRT] selected model=${flowLiteRtModel.absolutePath}")
 
             if (FLOW_ONLY_BACKEND == FlowOnlyBackend.LITERT || FLOW_ONLY_BACKEND == FlowOnlyBackend.LITERT_CPP) {
+                val preferJitModelFirst = LITERT_FORCE_NPU_JIT_MODEL
+                val preferNpuFallbackModelFirst = FLOW_ONLY_BACKEND == FlowOnlyBackend.LITERT_CPP
+                val flowLiteRtCandidates =
+                    if (preferNpuFallbackModelFirst) {
+                        listOf(
+                            File(modelsDir, FILE_FLOW_TFLITE_FALLBACK_MODEL),
+                            File(modelsDir, FILE_FLOW_TFLITE_MODEL),
+                            File(modelsDir, FILE_FLOW_TFLITE_NPU_G5_MODEL),
+                            File(modelsDir, FILE_FLOW_TFLITE_NPU_G4_MODEL),
+                            File(modelsDir, FILE_FLOW_TFLITE_NPU_G3_MODEL),
+                        )
+                    } else if (preferJitModelFirst) {
+                        listOf(
+                            File(modelsDir, FILE_FLOW_TFLITE_MODEL),
+                            File(modelsDir, FILE_FLOW_TFLITE_NPU_G5_MODEL),
+                            File(modelsDir, FILE_FLOW_TFLITE_NPU_G4_MODEL),
+                            File(modelsDir, FILE_FLOW_TFLITE_NPU_G3_MODEL),
+                            File(modelsDir, FILE_FLOW_TFLITE_FALLBACK_MODEL),
+                        )
+                    } else {
+                        listOf(
+                            File(modelsDir, FILE_FLOW_TFLITE_NPU_G5_MODEL),
+                            File(modelsDir, FILE_FLOW_TFLITE_NPU_G4_MODEL),
+                            File(modelsDir, FILE_FLOW_TFLITE_NPU_G3_MODEL),
+                            File(modelsDir, FILE_FLOW_TFLITE_FALLBACK_MODEL),
+                            File(modelsDir, FILE_FLOW_TFLITE_MODEL),
+                        )
+                    }
+                val flowLiteRtModel = resolveRequiredFile(
+                    FILE_FLOW_TFLITE_MODEL,
+                    flowLiteRtCandidates,
+                )
+                Log.i(
+                    TAG,
+                    "[FlowOnly][LiteRT] selected model=${flowLiteRtModel.absolutePath}, " +
+                        "preferJitModelFirst=$preferJitModelFirst, " +
+                        "preferNpuFallbackModelFirst=$preferNpuFallbackModelFirst",
+                )
                 FlowOnlyResourceFiles(
                     flowModel = flowLiteRtModel,
                     flowEncoderModel = flowLiteRtModel,
@@ -1436,12 +1797,10 @@ class LlamaInferenceBridge(
                     flowInputsBinDir = flowInputsBinDir,
                 )
             } else if (FLOW_ONLY_BACKEND == FlowOnlyBackend.LLAMA_CPP) {
-                val flowModel = resolveRequiredFile(
-                    FILE_FLOW_GGUF_MODEL,
-                    listOf(
-                        File(modelsDir, FILE_FLOW_GGUF_MODEL),
-                        File(modelsDir, FILE_LLM_MODEL),
-                    ),
+                val flowModel = resolveRequiredFileInDirIgnoreCase(
+                    label = FILE_FLOW_GGUF_MODEL,
+                    directory = modelsDir,
+                    names = FLOW_GGUF_MODEL_CANDIDATES,
                 )
                 val noisePe = resolveRequiredFile(FILE_NOISE_PE, listOf(File(resourcesDir, FILE_NOISE_PE)))
                 FlowOnlyResourceFiles(
@@ -1449,12 +1808,22 @@ class LlamaInferenceBridge(
                     flowEncoderModel = flowModel,
                     flowDecoderModel = flowModel,
                     flowQnnModel = flowModel,
-                    flowLiteRtModel = flowLiteRtModel,
+                    flowLiteRtModel = flowModel,
                     noisePe = noisePe,
                     flowInputsBinDir = flowInputsBinDir,
                 )
             } else {
                 val mnnModelsDir = ensureDirectory(File(modelsDir, DIR_MNN_MODELS))
+                val flowLiteRtModel = resolveRequiredFile(
+                    FILE_FLOW_TFLITE_MODEL,
+                    listOf(
+                        File(modelsDir, FILE_FLOW_TFLITE_MODEL),
+                        File(modelsDir, FILE_FLOW_TFLITE_FALLBACK_MODEL),
+                        File(modelsDir, FILE_FLOW_TFLITE_NPU_G5_MODEL),
+                        File(modelsDir, FILE_FLOW_TFLITE_NPU_G4_MODEL),
+                        File(modelsDir, FILE_FLOW_TFLITE_NPU_G3_MODEL),
+                    ),
+                )
                 val flowModel = resolveRequiredFile(
                     FILE_FLOW_GGUF_MODEL,
                     listOf(
@@ -1625,6 +1994,17 @@ class LlamaInferenceBridge(
         val bytes = file.readBytes()
         require(bytes.size == 1) { "Invalid bool bin size: ${file.absolutePath}, bytes=${bytes.size}" }
         return bytes[0].toInt() != 0
+    }
+
+    private fun resolveFlowExecutionFlags(
+        requestedStreaming: Boolean?,
+        requestedFinalize: Boolean? = null,
+        defaultStreaming: Boolean,
+        defaultFinalize: Boolean,
+    ): FlowExecutionFlags {
+        val streaming = requestedStreaming ?: defaultStreaming
+        val finalize = requestedFinalize ?: defaultFinalize
+        return FlowExecutionFlags(streaming = streaming, finalize = finalize)
     }
 
     private fun readTorchPtInputsEmbeddings(ptFile: File): FloatArray {
@@ -1913,7 +2293,7 @@ class LlamaInferenceBridge(
         return "[DecoderOut] [0,0,:8]=$values"
     }
 
-    private suspend fun ensureEngineReady(modelFile: File, flowModelFile: File): InferenceEngine =
+    private suspend fun ensureEngineReady(modelFile: File, flowModelFile: File, loadFlowModel: Boolean = true): InferenceEngine =
         engineMutex.withLock {
             engine?.let { return it }
 
@@ -1932,10 +2312,14 @@ class LlamaInferenceBridge(
             loaded.loadModel(modelFile.absolutePath)
             Log.i(TAG, "[LLMPrepare] loadModel done in ${"%.3f".format(Locale.US, nowSeconds() - t0)} s")
 
-            val t1 = nowSeconds()
-            Log.i(TAG, "[LLMPrepare] loadFlowModel begin: ${flowModelFile.absolutePath} (bytes=${flowModelFile.length()})")
-            loaded.loadFlowModel(flowModelFile.absolutePath)
-            Log.i(TAG, "[LLMPrepare] loadFlowModel done in ${"%.3f".format(Locale.US, nowSeconds() - t1)} s")
+            if (loadFlowModel) {
+                val t1 = nowSeconds()
+                Log.i(TAG, "[LLMPrepare] loadFlowModel begin: ${flowModelFile.absolutePath} (bytes=${flowModelFile.length()})")
+                loaded.loadFlowModel(flowModelFile.absolutePath)
+                Log.i(TAG, "[LLMPrepare] loadFlowModel done in ${"%.3f".format(Locale.US, nowSeconds() - t1)} s")
+            } else {
+                Log.i(TAG, "[LLMPrepare] skip loadFlowModel by config")
+            }
             engine = loaded
             loaded
         }
@@ -1991,7 +2375,10 @@ class LlamaInferenceBridge(
                 TAG,
                 "[FlowOnly][LiteRT][C++] load begin: ${flowLiteRtModelFile.absolutePath} (bytes=${flowLiteRtModelFile.length()})",
             )
-            val loaded = LiteRtNativeFlowRunner.load(modelFile = flowLiteRtModelFile)
+            val loaded = LiteRtNativeFlowRunner.load(
+                context = appContext,
+                modelFile = flowLiteRtModelFile,
+            )
             Log.i(
                 TAG,
                 "[FlowOnly][LiteRT][C++] load done in ${"%.3f".format(Locale.US, nowSeconds() - t0)} s, runtime=${loaded.runtimeMode}",
@@ -2076,7 +2463,7 @@ class LlamaInferenceBridge(
             val t0 = nowSeconds()
             Log.i(
                 TAG,
-                "[HifiGan][MNN] module load begin: ${hifiganModelFile.absolutePath} (bytes=${hifiganModelFile.length()})",
+                "[HifiGan][MNN] module load begin: ${hifiganModelFile.absolutePath} (bytes=${hifiganModelFile.length()}) backend=$HIFIGAN_BACKEND_LABEL",
             )
             val loaded = MnnHifiGanRunner.load(modelFile = hifiganModelFile)
             Log.i(
@@ -2098,7 +2485,7 @@ class LlamaInferenceBridge(
                         "- ${File(appContext.filesDir, "$DIRECTORY_MODELS/$FILE_MNN_LLM_CONFIG").absolutePath}",
                 )
             val t0 = nowSeconds()
-            Log.i(TAG, "[MNN-LLM] load begin: ${configFile.absolutePath} (bytes=${configFile.length()})")
+            Log.i(TAG, "[MNN-LLM] load begin: ${configFile.absolutePath} (bytes=${configFile.length()}) backend=CPU")
             val loaded = MnnLlmRunner.load(configFile = configFile)
             Log.i(TAG, "[MNN-LLM] load done in ${"%.3f".format(Locale.US, nowSeconds() - t0)} s")
             mnnLlmRunner = loaded
@@ -2154,6 +2541,7 @@ class LlamaInferenceBridge(
                     "$DIR_MNN_MODELS/$FILE_FLOW_MODEL_WEIGHTS",
                     "$DIR_MNN_MODELS/$FILE_FLOW_MODEL_WEIGHT",
                 ),
+                listOf(FILE_HIFIGAN_MODEL),
                 listOf(FILE_FLOW_QNN_ONNX_MODEL),
                 listOf(
                     FILE_FLOW_TFLITE_NPU_G5_MODEL,
@@ -2284,24 +2672,24 @@ class LlamaInferenceBridge(
             val mnnModelsDir = ensureDirectory(File(modelsDir, DIR_MNN_MODELS))
 
             val resolved = LocalResourceFiles(
-                llmModel = resolveOptionalFile(listOf(File(modelsDir, FILE_LLM_MODEL))) ?: resolveModelFile(),
+                llmModel =
+                    resolveOptionalFileInDirIgnoreCase(modelsDir, FLOW_GGUF_MODEL_CANDIDATES)
+                        ?: resolveModelFile(),
                 mnnLlmConfig = resolveOptionalFile(
                     listOf(
                         File(modelsDir, "$DIR_MNN_MODELS/$FILE_MNN_LLM_CONFIG"),
                         File(modelsDir, FILE_MNN_LLM_CONFIG),
                     ),
                 ),
-                flowModel = resolveRequiredFile(
-                    "$DIR_MNN_MODELS/$FILE_FLOW_MODEL",
+                flowModel = resolveOptionalFile(
                     listOf(File(mnnModelsDir, FILE_FLOW_MODEL)),
-                ),
-                flowModelWeight = resolveRequiredFile(
-                    "$DIR_MNN_MODELS/$FILE_FLOW_MODEL_WEIGHTS",
+                ) ?: File(mnnModelsDir, FILE_FLOW_MODEL),
+                flowModelWeight = resolveOptionalFile(
                     listOf(
                         File(mnnModelsDir, FILE_FLOW_MODEL_WEIGHTS),
                         File(mnnModelsDir, FILE_FLOW_MODEL_WEIGHT),
                     ),
-                ),
+                ) ?: File(mnnModelsDir, FILE_FLOW_MODEL_WEIGHTS),
                 hifiganModel = resolveRequiredFile(FILE_HIFIGAN_MODEL, listOf(File(modelsDir, FILE_HIFIGAN_MODEL))),
                 modelInputZh = resolveRequiredFile(FILE_MODEL_INPUT_ZH, listOf(File(resourcesDir, FILE_MODEL_INPUT_ZH))),
                 modelInputZh2 = resolveRequiredFile(FILE_MODEL_INPUT_ZH2, listOf(File(resourcesDir, FILE_MODEL_INPUT_ZH2))),
@@ -2335,7 +2723,8 @@ class LlamaInferenceBridge(
                 poveyWindow400 = resolveRequiredFile(FILE_POVEY_WINDOW_400, listOf(File(resourcesDir, FILE_POVEY_WINDOW_400))),
                 melBanks80x257 = resolveRequiredFile(FILE_MEL_BANKS_80x257, listOf(File(resourcesDir, FILE_MEL_BANKS_80x257))),
                 tokenizerDir = resolveRequiredDirectory(DIR_QWEN2_TOKENIZER, listOf(File(resourcesDir, DIR_QWEN2_TOKENIZER))),
-                flowInputsBinDir = resolveRequiredDirectory(DIR_FLOW_INPUTS_BIN, listOf(File(resourcesDir, DIR_FLOW_INPUTS_BIN))),
+                flowInputsBinDir = resolveOptionalDirectory(listOf(File(resourcesDir, DIR_FLOW_INPUTS_BIN)))
+                    ?: File(resourcesDir, DIR_FLOW_INPUTS_BIN),
                 hifiganInputsBinDir = resolveRequiredDirectory(DIR_HIFIGAN_INPUTS_BIN, listOf(File(resourcesDir, DIR_HIFIGAN_INPUTS_BIN))),
             )
             localResources = resolved
@@ -2361,6 +2750,21 @@ class LlamaInferenceBridge(
                 },
             )
 
+    private fun resolveRequiredFileInDirIgnoreCase(
+        label: String,
+        directory: File,
+        names: List<String>,
+    ): File =
+        resolveOptionalFileInDirIgnoreCase(directory, names)
+            ?: error(
+                buildString {
+                    append("缺少文件 ").append(label).append("（已尝试大小写不敏感匹配），请放到目录：")
+                    append("\n- ").append(directory.absolutePath)
+                    append("\n候选文件名：")
+                    names.forEach { append("\n- ").append(it) }
+                },
+            )
+
     private fun resolveRequiredDirectory(label: String, candidates: List<File>): File =
         candidates.firstOrNull { it.exists() && it.isDirectory }
             ?: error(
@@ -2372,6 +2776,24 @@ class LlamaInferenceBridge(
 
     private fun resolveOptionalFile(candidates: List<File>): File? =
         candidates.firstOrNull { it.exists() && it.isFile }
+
+    private fun resolveOptionalDirectory(candidates: List<File>): File? =
+        candidates.firstOrNull { it.exists() && it.isDirectory }
+
+    private fun resolveOptionalFileInDirIgnoreCase(directory: File, names: List<String>): File? {
+        names.forEach { candidateName ->
+            val direct = File(directory, candidateName)
+            if (direct.exists() && direct.isFile) {
+                return direct
+            }
+        }
+
+        val files = directory.listFiles()?.filter { it.isFile } ?: return null
+        names.forEach { candidateName ->
+            files.firstOrNull { it.name.equals(candidateName, ignoreCase = true) }?.let { return it }
+        }
+        return null
+    }
 
     private fun nowSeconds() = System.nanoTime() / 1_000_000_000.0
 
@@ -2385,12 +2807,19 @@ class LlamaInferenceBridge(
 
     companion object {
         private const val TAG = "LlamaInferenceBridge"
-        private const val USE_MNN_LLM_BACKEND = false
+        private const val USE_MNN_LLM_BACKEND = true
+        private const val USE_HTTP_FLOW_BACKEND = true
         private const val LLM_ONLY_TEST_MODE = false
-        private const val FLOW_ONLY_TEST_MODE = true
+        private const val FLOW_ONLY_TEST_MODE = false
         private const val HIFIGAN_ONLY_TEST_MODE = false
+        private const val SKIP_FLOW_STAGE_IN_MAIN_PIPELINE = false
         private val FLOW_ONLY_BACKEND = FlowOnlyBackend.LLAMA_CPP
+        private const val LITERT_FORCE_NPU_JIT_MODEL = true
         private const val FLOW_MNN_OP_PROFILE_ENABLED = true
+        private const val HIFIGAN_BACKEND_LABEL = "Vulkan"
+        private const val FLOW_HTTP_ENDPOINT = "http://192.168.81.7:8100/v1/flow/stream_tts_mel"
+        private const val FLOW_HTTP_CONNECT_TIMEOUT_MS = 15_000
+        private const val FLOW_HTTP_READ_TIMEOUT_MS = 120_000
         private const val ASSET_SYNC_MARKER = ".asset_sync_ok"
         private const val DIRECTORY_MODELS = "models"
         private const val DIRECTORY_LOCAL_RESOURCES = "local_llm_resources"
@@ -2399,6 +2828,15 @@ class LlamaInferenceBridge(
 
         private const val FILE_LLM_MODEL = "flow_fp32.gguf"
         private const val FILE_FLOW_GGUF_MODEL = "flow_fp32.gguf"
+        private val FLOW_GGUF_MODEL_CANDIDATES =
+            listOf(
+                FILE_FLOW_GGUF_MODEL,
+                FILE_LLM_MODEL,
+                "Flow_fp32.gguf",
+                "Flow_FP32.gguf",
+                "FLOW_FP32.gguf",
+                "flow_FP32.gguf",
+            )
         private const val DIR_MNN_MODELS = "mnnModels"
         private const val FILE_MNN_LLM_CONFIG = "config.json"
         private const val FILE_FLOW_MODEL = "flow.mnn"
@@ -2491,6 +2929,16 @@ private data class LLMResult(
 private data class FlowResult(
     val units: Int,
     val output: FloatArray,
+)
+
+private data class FlowHttpMelChunk(
+    val frames: Int,
+    val mel: FloatArray,
+)
+
+private data class FlowHttpResponse(
+    val totalFrames: Int,
+    val mel: FloatArray,
 )
 
 private data class HiftResult(
@@ -2591,6 +3039,11 @@ private data class FlowOnlyInputBundle(
     val promptFeat: FloatArray,
     val promptFeatLen: Int,
     val embedding: FloatArray,
+    val streaming: Boolean,
+    val finalize: Boolean,
+)
+
+private data class FlowExecutionFlags(
     val streaming: Boolean,
     val finalize: Boolean,
 )
