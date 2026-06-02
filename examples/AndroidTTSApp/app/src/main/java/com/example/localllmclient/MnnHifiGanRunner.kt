@@ -45,14 +45,17 @@ class MnnHifiGanRunner private constructor(
 
     companion object {
         private const val TAG = "MnnHifiGanRunner"
+        private const val BACKEND_LABEL = "CPU"
 
         init {
             runCatching { System.loadLibrary("MNN") }
                 .onSuccess { Log.i(TAG, "Loaded libMNN.so") }
                 .onFailure { Log.w(TAG, "Unable to preload libMNN.so: ${it.message}") }
-            runCatching { System.loadLibrary("MNN_Vulkan") }
-                .onSuccess { Log.i(TAG, "Loaded libMNN_Vulkan.so") }
-                .onFailure { Log.w(TAG, "Unable to preload libMNN_Vulkan.so: ${it.message}") }
+            if (BACKEND_LABEL == "Vulkan") {
+                runCatching { System.loadLibrary("MNN_Vulkan") }
+                    .onSuccess { Log.i(TAG, "Loaded libMNN_Vulkan.so") }
+                    .onFailure { Log.w(TAG, "Unable to preload libMNN_Vulkan.so: ${it.message}") }
+            }
             System.loadLibrary("ai-chat")
         }
 

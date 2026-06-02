@@ -6,7 +6,12 @@ import android.util.Log
 import com.arm.aichat.AiChat
 import com.arm.aichat.InferenceEngine
 import com.arm.aichat.isModelLoaded
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.ClosedSendChannelException
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -319,45 +324,56 @@ class LlamaInferenceBridge(
             )
 
             currentStage = InferenceStage.flow
-            val flowResult =
-                if (USE_HTTP_FLOW_BACKEND) {
-                    runFlowInferenceHttp(
-                        llmTokens = llmResult.speechTokens,
-                        frontEndResult = frontEndResult,
-                        flowStreaming = flowStreaming,
-                        flowFinalize = flowFinalize,
-                        onEvent = onEvent,
-                    )
-                } else {
-                    runFlowInference(
-                        llmTokens = llmResult.speechTokens,
-                        frontEndResult = frontEndResult,
-                        engine = requireNotNull(loadedEngine) { "Local flow backend requires InferenceEngine" },
-                        resources = resources,
-                        flowStreaming = flowStreaming,
-                        flowFinalize = flowFinalize,
-                        onEvent = onEvent,
-                    )
-                }
+            val hiftResult = if (USE_HTTP_FLOW_BACKEND && flowStreaming) {
+                val hifiganRunner = ensureMnnHifiGanRunnerReady(resources.hifiganModel)
+                runFlowInferenceHttpStreaming(
+                    llmTokens = llmResult.speechTokens,
+                    frontEndResult = frontEndResult,
+                    runner = hifiganRunner,
+                    flowFinalize = flowFinalize,
+                    onEvent = onEvent,
+                )
+            } else {
+                val flowResult =
+                    if (USE_HTTP_FLOW_BACKEND) {
+                        runFlowInferenceHttp(
+                            llmTokens = llmResult.speechTokens,
+                            frontEndResult = frontEndResult,
+                            flowStreaming = flowStreaming,
+                            flowFinalize = flowFinalize,
+                            onEvent = onEvent,
+                        )
+                    } else {
+                        runFlowInference(
+                            llmTokens = llmResult.speechTokens,
+                            frontEndResult = frontEndResult,
+                            engine = requireNotNull(loadedEngine) { "Local flow backend requires InferenceEngine" },
+                            resources = resources,
+                            flowStreaming = flowStreaming,
+                            flowFinalize = flowFinalize,
+                            onEvent = onEvent,
+                        )
+                    }
 
-            currentStage = InferenceStage.hift
-            emit(InferenceEvent.StageBegan(InferenceStage.hift, "HifiGan init: 正在加载模型"))
-            val hifiganRunner = ensureMnnHifiGanRunnerReady(resources.hifiganModel)
-            emit(
-                InferenceEvent.StageProgress(
-                    stage = InferenceStage.hift,
-                    unitName = "HifiGan init: 模型加载完成",
-                    unitsDone = 1,
-                    secondsElapsed = 0.0,
-                    instUPS = 0.0,
-                    avgUPS = 0.0,
-                ),
-            )
-            val hiftResult = runHIFTInference(
-                flowResult = flowResult,
-                runner = hifiganRunner,
-                onEvent = onEvent,
-            )
+                currentStage = InferenceStage.hift
+                emit(InferenceEvent.StageBegan(InferenceStage.hift, "HifiGan init: 正在加载模型"))
+                val hifiganRunner = ensureMnnHifiGanRunnerReady(resources.hifiganModel)
+                emit(
+                    InferenceEvent.StageProgress(
+                        stage = InferenceStage.hift,
+                        unitName = "HifiGan init: 模型加载完成",
+                        unitsDone = 1,
+                        secondsElapsed = 0.0,
+                        instUPS = 0.0,
+                        avgUPS = 0.0,
+                    ),
+                )
+                runHIFTInference(
+                    flowResult = flowResult,
+                    runner = hifiganRunner,
+                    onEvent = onEvent,
+                )
+            }
 
             currentStage = InferenceStage.voiceGeneration
             done(runVoiceGeneration(
@@ -365,6 +381,8 @@ class LlamaInferenceBridge(
                 onEvent = onEvent,
             ), currentStage)
         } catch (t: Throwable) {
+            val failedStage = (t as? PipelineStageException)?.stage ?: currentStage
+            currentStage = failedStage
             Log.e(TAG, "runInference failed at $currentStage", t)
             emit(InferenceEvent.Failed(currentStage, t.message ?: t.toString()))
             done("false", currentStage)
@@ -745,33 +763,36 @@ class LlamaInferenceBridge(
         val started = nowSeconds()
         emit(InferenceEvent.Note("[FlowHTTP] endpoint=$FLOW_HTTP_ENDPOINT stream=$flowStreaming finalize=$flowFinalize"))
 
-        val response = withContext(Dispatchers.IO) {
-            requestFlowMelOverHttp(
-                endpoint = FLOW_HTTP_ENDPOINT,
-                llmTokens = llmTokens,
-                frontEndResult = frontEndResult,
-                stream = flowStreaming,
-                onChunk = { chunkCount, totalFrames ->
-                    val elapsed = nowSeconds() - started
-                    emit(
-                        InferenceEvent.StageProgress(
-                            stage = InferenceStage.flow,
-                            unitName = "Flow HTTP chunk",
-                            unitsDone = totalFrames,
-                            secondsElapsed = elapsed,
-                            instUPS = if (elapsed > 0.0) totalFrames / elapsed else 0.0,
-                            avgUPS = if (elapsed > 0.0) totalFrames / elapsed else 0.0,
-                        ),
-                    )
-                    Log.i(
-                        TAG,
-                        "[FlowHTTP] received chunk=$chunkCount totalFrames=$totalFrames elapsed=${"%.3f".format(Locale.US, elapsed)} s",
-                    )
-                },
-            )
-        }
+        val response = requestFlowMelOverHttp(
+            endpoint = FLOW_HTTP_ENDPOINT,
+            llmTokens = llmTokens,
+            frontEndResult = frontEndResult,
+            stream = flowStreaming,
+            finalize = flowFinalize,
+            onChunk = { chunkCount, totalFrames ->
+                val elapsed = nowSeconds() - started
+                emit(
+                    InferenceEvent.StageProgress(
+                        stage = InferenceStage.flow,
+                        unitName = "Flow HTTP chunk",
+                        unitsDone = totalFrames,
+                        secondsElapsed = elapsed,
+                        instUPS = if (elapsed > 0.0) totalFrames / elapsed else 0.0,
+                        avgUPS = if (elapsed > 0.0) totalFrames / elapsed else 0.0,
+                    ),
+                )
+                Log.i(
+                    TAG,
+                    "[FlowHTTP] received chunk=$chunkCount totalFrames=$totalFrames elapsed=${"%.3f".format(Locale.US, elapsed)} s",
+                )
+            },
+        )
 
         val elapsed = nowSeconds() - started
+        Log.i(
+            TAG,
+            "[FlowHTTP] mel stats: ${describeFlowMelStats(response.mel, response.totalFrames)}",
+        )
         emit(
             InferenceEvent.StageEnded(
                 StageEndedInfo(
@@ -784,6 +805,103 @@ class LlamaInferenceBridge(
             ),
         )
         return FlowResult(units = response.totalFrames, output = response.mel)
+    }
+
+    private suspend fun runFlowInferenceHttpStreaming(
+        llmTokens: IntArray,
+        frontEndResult: FrontEndResult,
+        runner: MnnHifiGanRunner,
+        flowFinalize: Boolean? = null,
+        onEvent: ((InferenceEvent) -> Unit)? = null,
+    ): HiftResult = coroutineScope {
+        fun emit(event: InferenceEvent) {
+            onEvent?.invoke(event)
+        }
+
+        emit(InferenceEvent.StageBegan(InferenceStage.flow, "Flow HTTP inference"))
+        require(frontEndResult.speechTokens.isNotEmpty()) { "Flow HTTP prompt_token is empty" }
+        require(frontEndResult.speechFeat.isNotEmpty()) { "Flow HTTP prompt_feat is empty" }
+        require(frontEndResult.speechFeatLen > 0) { "Flow HTTP prompt_feat_len is invalid: ${frontEndResult.speechFeatLen}" }
+        require(frontEndResult.speechEmbedding.isNotEmpty()) { "Flow HTTP embedding is empty" }
+
+        val started = nowSeconds()
+        emit(InferenceEvent.Note("[FlowHTTP] endpoint=$FLOW_HTTP_ENDPOINT stream=true finalize=$flowFinalize queue=1"))
+
+        val chunkQueue = Channel<FlowHttpMelChunk>(capacity = 1)
+        val hiftDeferred = async(Dispatchers.Default) {
+            runHifiGanQueueInference(
+                runner = runner,
+                chunkQueue = chunkQueue,
+                onEvent = onEvent,
+            )
+        }
+
+        try {
+            val totalFrames = requestFlowMelChunksOverHttp(
+                endpoint = FLOW_HTTP_ENDPOINT,
+                llmTokens = llmTokens,
+                frontEndResult = frontEndResult,
+                stream = true,
+                finalize = flowFinalize,
+                onChunk = { chunkCount, totalFramesSeen ->
+                    val elapsed = nowSeconds() - started
+                    emit(
+                        InferenceEvent.StageProgress(
+                            stage = InferenceStage.flow,
+                            unitName = "Flow HTTP chunk",
+                            unitsDone = totalFramesSeen,
+                            secondsElapsed = elapsed,
+                            instUPS = if (elapsed > 0.0) totalFramesSeen / elapsed else 0.0,
+                            avgUPS = if (elapsed > 0.0) totalFramesSeen / elapsed else 0.0,
+                        ),
+                    )
+                    Log.i(
+                        TAG,
+                        "[FlowHTTP][stream] received chunk=$chunkCount totalFrames=$totalFramesSeen elapsed=${"%.3f".format(Locale.US, elapsed)} s",
+                    )
+                },
+                onMelChunk = { chunk ->
+                    chunkQueue.send(chunk)
+                },
+            )
+
+            val elapsed = nowSeconds() - started
+            Log.i(
+                TAG,
+                "[FlowHTTP][stream] mel stats: totalFrames=$totalFrames elapsed=${"%.3f".format(Locale.US, elapsed)} s",
+            )
+            emit(
+                InferenceEvent.StageEnded(
+                    StageEndedInfo(
+                        stage = InferenceStage.flow,
+                        unitName = "Flow HTTP completed",
+                        units = totalFrames,
+                        seconds = elapsed,
+                        avgUPS = if (elapsed > 0.0) totalFrames / elapsed else 0.0,
+                    ),
+                ),
+            )
+
+            chunkQueue.close()
+            return@coroutineScope try {
+                hiftDeferred.await()
+            } catch (t: Throwable) {
+                throw PipelineStageException(InferenceStage.hift, t)
+            }
+        } catch (t: Throwable) {
+            if (t is PipelineStageException) {
+                throw t
+            }
+            chunkQueue.close(t)
+            val failedStage = if (t is CancellationException || t is ClosedSendChannelException) {
+                InferenceStage.hift
+            } else {
+                InferenceStage.flow
+            }
+            throw PipelineStageException(failedStage, t)
+        } finally {
+            chunkQueue.close()
+        }
     }
 
     private suspend fun runFlowInferenceFromBins(
@@ -1375,6 +1493,77 @@ class LlamaInferenceBridge(
         return HiftResult(outputSamples = outputSamples, output = hiftOutput)
     }
 
+    private suspend fun runHifiGanQueueInference(
+        runner: MnnHifiGanRunner,
+        chunkQueue: Channel<FlowHttpMelChunk>,
+        onEvent: ((InferenceEvent) -> Unit)? = null,
+    ): HiftResult {
+        fun emit(event: InferenceEvent) {
+            onEvent?.invoke(event)
+        }
+
+        emit(
+            InferenceEvent.StageBegan(InferenceStage.hift, "HifiGan 推理中..."),
+        )
+
+        val started = nowSeconds()
+        val chunkOutputs = ArrayList<FloatArray>()
+        var totalOutputSamples = 0
+        var totalInputFrames = 0
+        var chunkCount = 0
+
+        for (chunk in chunkQueue) {
+            if (chunk.frames <= 0) {
+                continue
+            }
+            chunkCount += 1
+            val shape = inferHifiGanInputShape(chunk.mel.size)
+            val chunkOutput = runner.forward(
+                input = chunk.mel,
+                shape = shape,
+            )
+            require(chunkOutput.isNotEmpty()) { "HifiGan output is empty for chunk=$chunkCount" }
+
+            chunkOutputs += chunkOutput
+            totalOutputSamples += chunkOutput.size
+            totalInputFrames += chunk.frames
+
+            val elapsed = nowSeconds() - started
+            emit(
+                InferenceEvent.StageProgress(
+                    stage = InferenceStage.hift,
+                    unitName = "HifiGan chunk $chunkCount",
+                    unitsDone = totalOutputSamples,
+                    secondsElapsed = elapsed,
+                    instUPS = if (elapsed > 0.0) totalOutputSamples / elapsed else 0.0,
+                    avgUPS = if (elapsed > 0.0) totalOutputSamples / elapsed else 0.0,
+                ),
+            )
+            Log.i(
+                TAG,
+                "[HifiGan][stream] consumed chunk=$chunkCount inputFrames=${chunk.frames} totalInputFrames=$totalInputFrames outputSamples=${chunkOutput.size} totalOutputSamples=$totalOutputSamples elapsed=${"%.3f".format(Locale.US, elapsed)} s",
+            )
+        }
+
+        require(chunkOutputs.isNotEmpty()) { "HifiGan queue produced no output" }
+        val hiftOutput = concatFloatArrays(*chunkOutputs.toTypedArray())
+        chunkOutputs.clear()
+        val outputSamples = hiftOutput.size
+        val elapsed = nowSeconds() - started
+        emit(
+            InferenceEvent.StageEnded(
+                StageEndedInfo(
+                    stage = InferenceStage.hift,
+                    unitName = "HifiGan Inference completed",
+                    units = outputSamples,
+                    seconds = elapsed,
+                    avgUPS = if (elapsed > 0.0) outputSamples / elapsed else 0.0,
+                ),
+            ),
+        )
+        return HiftResult(outputSamples = outputSamples, output = hiftOutput)
+    }
+
     private suspend fun runHifiGanInferenceFromBins(
         runner: MnnHifiGanRunner,
         inputDir: File,
@@ -1420,13 +1609,15 @@ class LlamaInferenceBridge(
         return HiftResult(outputSamples = outputSamples, output = hiftOutput)
     }
 
-    private fun requestFlowMelOverHttp(
+    private suspend fun requestFlowMelChunksOverHttp(
         endpoint: String,
         llmTokens: IntArray,
         frontEndResult: FrontEndResult,
         stream: Boolean,
+        finalize: Boolean? = null,
         onChunk: (chunkCount: Int, totalFrames: Int) -> Unit,
-    ): FlowHttpResponse {
+        onMelChunk: suspend (FlowHttpMelChunk) -> Unit,
+    ): Int = withContext(Dispatchers.IO) {
         val connection = (URL(endpoint).openConnection() as HttpURLConnection).apply {
             requestMethod = "POST"
             connectTimeout = FLOW_HTTP_CONNECT_TIMEOUT_MS
@@ -1439,7 +1630,7 @@ class LlamaInferenceBridge(
         }
 
         try {
-            val payload = buildFlowHttpRequestJson(llmTokens, frontEndResult, stream)
+            val payload = buildFlowHttpRequestJson(llmTokens, frontEndResult, stream, finalize)
             connection.outputStream.bufferedWriter(Charsets.UTF_8).use { writer ->
                 writer.write(payload.toString())
             }
@@ -1457,42 +1648,69 @@ class LlamaInferenceBridge(
                     error("Flow HTTP failed: code=$code body=${errorBody.take(512)}")
                 }
 
-                val chunks = ArrayList<FlowHttpMelChunk>()
                 var totalFrames = 0
-                reader.lineSequence()
-                    .filter { it.isNotBlank() }
-                    .forEach { line ->
-                        val item = JSONObject(line)
-                        if (item.has("error")) {
-                            val errorType = item.optString("error", "UnknownError")
-                            val message = item.optString("message", line)
-                            error("Flow HTTP returned error chunk: $errorType: $message")
-                        }
+                var chunkCount = 0
+                while (true) {
+                    val line = reader.readLine() ?: break
+                    if (line.isBlank()) continue
 
-                        val melPayload = item.getJSONObject("tts_mel")
-                        val chunk = decodeFlowHttpMelChunk(melPayload)
-                        chunks += chunk
-                        totalFrames += chunk.frames
-                        onChunk(chunks.size, totalFrames)
+                    val item = JSONObject(line)
+                    if (item.has("error")) {
+                        val errorType = item.optString("error", "UnknownError")
+                        val message = item.optString("message", line)
+                        error("Flow HTTP returned error chunk: $errorType: $message")
                     }
 
-                require(chunks.isNotEmpty()) { "Flow HTTP returned no mel chunks" }
-                val stitched = stitchFlowHttpChunks(chunks)
-                require(stitched.isNotEmpty()) { "Flow HTTP stitched mel is empty" }
-                return FlowHttpResponse(totalFrames = totalFrames, mel = stitched)
+                    val melPayload = item.getJSONObject("tts_mel")
+                    val chunk = decodeFlowHttpMelChunk(melPayload)
+                    chunkCount += 1
+                    totalFrames += chunk.frames
+                    onChunk(chunkCount, totalFrames)
+                    onMelChunk(chunk)
+                }
+
+                require(chunkCount > 0) { "Flow HTTP returned no mel chunks" }
+                totalFrames
             }
         } finally {
             connection.disconnect()
         }
     }
 
+    private suspend fun requestFlowMelOverHttp(
+        endpoint: String,
+        llmTokens: IntArray,
+        frontEndResult: FrontEndResult,
+        stream: Boolean,
+        finalize: Boolean? = null,
+        onChunk: (chunkCount: Int, totalFrames: Int) -> Unit,
+    ): FlowHttpResponse {
+        val chunks = ArrayList<FlowHttpMelChunk>()
+        val totalFrames = requestFlowMelChunksOverHttp(
+            endpoint = endpoint,
+            llmTokens = llmTokens,
+            frontEndResult = frontEndResult,
+            stream = stream,
+            finalize = finalize,
+            onChunk = onChunk,
+            onMelChunk = { chunk ->
+                chunks += chunk
+            },
+        )
+        val stitched = stitchFlowHttpChunks(chunks)
+        require(stitched.isNotEmpty()) { "Flow HTTP stitched mel is empty" }
+        return FlowHttpResponse(totalFrames = totalFrames, mel = stitched)
+    }
+
     private fun buildFlowHttpRequestJson(
         llmTokens: IntArray,
         frontEndResult: FrontEndResult,
         stream: Boolean,
+        finalize: Boolean? = null,
     ): JSONObject =
         JSONObject().apply {
             put("stream", stream)
+            finalize?.let { put("finalize", it) }
             put(
                 "llm_token",
                 JSONArray().apply {
@@ -1581,6 +1799,33 @@ class LlamaInferenceBridge(
             frameOffset += chunk.frames
         }
         return output
+    }
+
+    private fun describeFlowMelStats(mel: FloatArray, totalFrames: Int): String {
+        if (mel.isEmpty()) {
+            return "empty"
+        }
+        var minV = Float.POSITIVE_INFINITY
+        var maxV = Float.NEGATIVE_INFINITY
+        var sum = 0.0
+        var zeroCount = 0
+        val previewCount = min(8, mel.size)
+        val preview = ArrayList<String>(previewCount)
+        for (i in mel.indices) {
+            val v = mel[i]
+            if (v < minV) minV = v
+            if (v > maxV) maxV = v
+            sum += v.toDouble()
+            if (v == 0f) zeroCount += 1
+            if (i < previewCount) {
+                preview += String.format(Locale.US, "%.6f", v)
+            }
+        }
+        val meanV = sum / mel.size
+        val zeroRatio = zeroCount.toDouble() / mel.size.toDouble()
+        return "frames=$totalFrames, size=${mel.size}, min=${"%.6f".format(Locale.US, minV)}, " +
+            "max=${"%.6f".format(Locale.US, maxV)}, mean=${"%.6f".format(Locale.US, meanV)}, " +
+            "zeroRatio=${"%.4f".format(Locale.US, zeroRatio)}, preview=[${preview.joinToString(", ")}]"
     }
 
     private fun encodeFloatArrayBytes(values: FloatArray): ByteArray =
@@ -2816,7 +3061,7 @@ class LlamaInferenceBridge(
         private val FLOW_ONLY_BACKEND = FlowOnlyBackend.LLAMA_CPP
         private const val LITERT_FORCE_NPU_JIT_MODEL = true
         private const val FLOW_MNN_OP_PROFILE_ENABLED = true
-        private const val HIFIGAN_BACKEND_LABEL = "Vulkan"
+        private const val HIFIGAN_BACKEND_LABEL = "CPU"
         private const val FLOW_HTTP_ENDPOINT = "http://192.168.81.7:8100/v1/flow/stream_tts_mel"
         private const val FLOW_HTTP_CONNECT_TIMEOUT_MS = 15_000
         private const val FLOW_HTTP_READ_TIMEOUT_MS = 120_000
@@ -2945,6 +3190,11 @@ private data class HiftResult(
     val outputSamples: Int,
     val output: FloatArray,
 )
+
+private class PipelineStageException(
+    val stage: InferenceStage,
+    cause: Throwable,
+) : RuntimeException(cause)
 
 private data class NoisePeData(
     val randNoise: FloatArray,

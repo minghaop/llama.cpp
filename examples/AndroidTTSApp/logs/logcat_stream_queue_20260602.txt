@@ -1,0 +1,501 @@
+06-02 18:03:08.816 I/LlamaInferenceBridge(32664): runInference started, flowStreaming=true, flowFinalize=false
+06-02 18:03:15.857 I/LlamaInferenceBridge(32664): [LLMPrepare] begin, llmBackend=MNN-CPU flowBackend=HTTP hifiganBackend=MNN-CPU
+06-02 18:03:15.857 I/LlamaInferenceBridge(32664): [MNN-LLM] load begin: /data/user/0/com.example.llama.aichat/files/models/mnnModels/config.json (bytes=503) backend=CPU
+06-02 18:03:15.869 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeLoadModel: config=/data/user/0/com.example.llama.aichat/files/models/mnnModels/config.json override={"thread_num":4,"backend_type":"cpu","hidden_states":true}
+06-02 18:03:16.255 I/LlamaInferenceBridge(32664): [MNN-LLM] load done in 0.398 s
+06-02 18:03:16.255 I/LlamaInferenceBridge(32664): [LLMPrepare] ensureEngineReady done
+06-02 18:03:16.255 I/LlamaInferenceBridge(32664): [LLMPrepare] tokenizer init begin: /data/user/0/com.example.llama.aichat/files/local_llm_resources/qwen2_tokenizer
+06-02 18:03:16.585 I/LlamaInferenceBridge(32664): [LLMPrepare] tokenizer init done, entries=7
+06-02 18:03:16.585 I/LlamaInferenceBridge(32664): [LLMPrepare] tokenizer encode begin
+06-02 18:03:16.586 I/LlamaInferenceBridge(32664): [LLMPrepare] tokenizer encode done, ttsLen=73, promptLen=37
+06-02 18:03:16.586 I/LlamaInferenceBridge(32664): [LLMPrepare] done in 0.331 s
+06-02 18:03:16.650 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=434 n_past=0
+06-02 18:03:17.896 I/LlamaInferenceBridge(32664): [LLM] step=0 topId=4218 nPast=434 generated=0
+06-02 18:03:17.896 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=434
+06-02 18:03:17.957 I/LlamaInferenceBridge(32664): [LLM] step=1 topId=1950 nPast=435 generated=1
+06-02 18:03:17.957 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=435
+06-02 18:03:18.007 I/LlamaInferenceBridge(32664): [LLM] step=2 topId=1968 nPast=436 generated=2
+06-02 18:03:18.007 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=436
+06-02 18:03:18.049 I/LlamaInferenceBridge(32664): [LLM] step=3 topId=3481 nPast=437 generated=3
+06-02 18:03:18.049 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=437
+06-02 18:03:18.091 I/LlamaInferenceBridge(32664): [LLM] step=4 topId=1295 nPast=438 generated=4
+06-02 18:03:18.091 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=438
+06-02 18:03:18.127 I/LlamaInferenceBridge(32664): [LLM] step=5 topId=2715 nPast=439 generated=5
+06-02 18:03:18.127 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=439
+06-02 18:03:18.164 I/LlamaInferenceBridge(32664): [LLM] step=6 topId=3480 nPast=440 generated=6
+06-02 18:03:18.164 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=440
+06-02 18:03:18.200 I/LlamaInferenceBridge(32664): [LLM] step=7 topId=2024 nPast=441 generated=7
+06-02 18:03:18.201 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=441
+06-02 18:03:18.238 I/LlamaInferenceBridge(32664): [LLM] step=8 topId=1294 nPast=442 generated=8
+06-02 18:03:18.238 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=442
+06-02 18:03:18.277 I/LlamaInferenceBridge(32664): [LLM] step=9 topId=1267 nPast=443 generated=9
+06-02 18:03:18.277 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=443
+06-02 18:03:18.316 I/LlamaInferenceBridge(32664): [LLM] step=10 topId=1825 nPast=444 generated=10
+06-02 18:03:18.316 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=444
+06-02 18:03:18.350 I/LlamaInferenceBridge(32664): [LLM] step=11 topId=1707 nPast=445 generated=11
+06-02 18:03:18.350 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=445
+06-02 18:03:18.384 I/LlamaInferenceBridge(32664): [LLM] step=12 topId=4218 nPast=446 generated=12
+06-02 18:03:18.384 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=446
+06-02 18:03:18.420 I/LlamaInferenceBridge(32664): [LLM] step=13 topId=4218 nPast=447 generated=13
+06-02 18:03:18.420 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=447
+06-02 18:03:18.457 I/LlamaInferenceBridge(32664): [LLM] step=14 topId=4218 nPast=448 generated=14
+06-02 18:03:18.457 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=448
+06-02 18:03:18.494 I/LlamaInferenceBridge(32664): [LLM] step=15 topId=4218 nPast=449 generated=15
+06-02 18:03:18.494 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=449
+06-02 18:03:18.529 I/LlamaInferenceBridge(32664): [LLM] step=16 topId=4137 nPast=450 generated=16
+06-02 18:03:18.529 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=450
+06-02 18:03:18.563 I/LlamaInferenceBridge(32664): [LLM] step=17 topId=4218 nPast=451 generated=17
+06-02 18:03:18.563 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=451
+06-02 18:03:18.598 I/LlamaInferenceBridge(32664): [LLM] step=18 topId=4218 nPast=452 generated=18
+06-02 18:03:18.598 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=452
+06-02 18:03:18.637 I/LlamaInferenceBridge(32664): [LLM] step=19 topId=4218 nPast=453 generated=19
+06-02 18:03:18.637 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=453
+06-02 18:03:18.672 I/LlamaInferenceBridge(32664): [LLM] step=20 topId=4218 nPast=454 generated=20
+06-02 18:03:18.672 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=454
+06-02 18:03:18.708 I/LlamaInferenceBridge(32664): [LLM] step=21 topId=2031 nPast=455 generated=21
+06-02 18:03:18.708 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=455
+06-02 18:03:18.744 I/LlamaInferenceBridge(32664): [LLM] step=22 topId=4218 nPast=456 generated=22
+06-02 18:03:18.744 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=456
+06-02 18:03:18.782 I/LlamaInferenceBridge(32664): [LLM] step=23 topId=4218 nPast=457 generated=23
+06-02 18:03:18.782 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=457
+06-02 18:03:18.816 I/LlamaInferenceBridge(32664): [LLM] step=24 topId=4218 nPast=458 generated=24
+06-02 18:03:18.816 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=458
+06-02 18:03:18.850 I/LlamaInferenceBridge(32664): [LLM] step=25 topId=4218 nPast=459 generated=25
+06-02 18:03:18.851 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=459
+06-02 18:03:18.886 I/LlamaInferenceBridge(32664): [LLM] step=26 topId=3189 nPast=460 generated=26
+06-02 18:03:18.886 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=460
+06-02 18:03:18.921 I/LlamaInferenceBridge(32664): [LLM] step=27 topId=1707 nPast=461 generated=27
+06-02 18:03:18.921 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=461
+06-02 18:03:18.961 I/LlamaInferenceBridge(32664): [LLM] step=28 topId=3648 nPast=462 generated=28
+06-02 18:03:18.961 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=462
+06-02 18:03:18.997 I/LlamaInferenceBridge(32664): [LLM] step=29 topId=3648 nPast=463 generated=29
+06-02 18:03:18.997 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=463
+06-02 18:03:19.033 I/LlamaInferenceBridge(32664): [LLM] step=30 topId=4137 nPast=464 generated=30
+06-02 18:03:19.033 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=464
+06-02 18:03:19.071 I/LlamaInferenceBridge(32664): [LLM] step=31 topId=4218 nPast=465 generated=31
+06-02 18:03:19.071 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=465
+06-02 18:03:19.106 I/LlamaInferenceBridge(32664): [LLM] step=32 topId=4137 nPast=466 generated=32
+06-02 18:03:19.106 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=466
+06-02 18:03:19.140 I/LlamaInferenceBridge(32664): [LLM] step=33 topId=4218 nPast=467 generated=33
+06-02 18:03:19.140 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=467
+06-02 18:03:19.175 I/LlamaInferenceBridge(32664): [LLM] step=34 topId=4146 nPast=468 generated=34
+06-02 18:03:19.175 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=468
+06-02 18:03:19.210 I/LlamaInferenceBridge(32664): [LLM] step=35 topId=5631 nPast=469 generated=35
+06-02 18:03:19.210 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=469
+06-02 18:03:19.246 I/LlamaInferenceBridge(32664): [LLM] step=36 topId=2715 nPast=470 generated=36
+06-02 18:03:19.246 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=470
+06-02 18:03:19.285 I/LlamaInferenceBridge(32664): [LLM] step=37 topId=4939 nPast=471 generated=37
+06-02 18:03:19.285 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=471
+06-02 18:03:19.321 I/LlamaInferenceBridge(32664): [LLM] step=38 topId=5641 nPast=472 generated=38
+06-02 18:03:19.321 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=472
+06-02 18:03:19.359 I/LlamaInferenceBridge(32664): [LLM] step=39 topId=5640 nPast=473 generated=39
+06-02 18:03:19.359 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=473
+06-02 18:03:19.394 I/LlamaInferenceBridge(32664): [LLM] step=40 topId=5667 nPast=474 generated=40
+06-02 18:03:19.394 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=474
+06-02 18:03:19.427 I/LlamaInferenceBridge(32664): [LLM] step=41 topId=4209 nPast=475 generated=41
+06-02 18:03:19.427 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=475
+06-02 18:03:19.463 I/LlamaInferenceBridge(32664): [LLM] step=42 topId=3453 nPast=476 generated=42
+06-02 18:03:19.463 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=476
+06-02 18:03:19.498 I/LlamaInferenceBridge(32664): [LLM] step=43 topId=3481 nPast=477 generated=43
+06-02 18:03:19.498 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=477
+06-02 18:03:19.534 I/LlamaInferenceBridge(32664): [LLM] step=44 topId=5668 nPast=478 generated=44
+06-02 18:03:19.534 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=478
+06-02 18:03:19.570 I/LlamaInferenceBridge(32664): [LLM] step=45 topId=4938 nPast=479 generated=45
+06-02 18:03:19.570 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=479
+06-02 18:03:19.610 I/LlamaInferenceBridge(32664): [LLM] step=46 topId=4778 nPast=480 generated=46
+06-02 18:03:19.610 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=480
+06-02 18:03:19.648 I/LlamaInferenceBridge(32664): [LLM] step=47 topId=323 nPast=481 generated=47
+06-02 18:03:19.648 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=481
+06-02 18:03:19.682 I/LlamaInferenceBridge(32664): [LLM] step=48 topId=314 nPast=482 generated=48
+06-02 18:03:19.682 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=482
+06-02 18:03:19.716 I/LlamaInferenceBridge(32664): [LLM] step=49 topId=764 nPast=483 generated=49
+06-02 18:03:19.716 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=483
+06-02 18:03:19.752 I/LlamaInferenceBridge(32664): [LLM] step=50 topId=2032 nPast=484 generated=50
+06-02 18:03:19.752 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=484
+06-02 18:03:19.788 I/LlamaInferenceBridge(32664): [LLM] step=51 topId=6405 nPast=485 generated=51
+06-02 18:03:19.788 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=485
+06-02 18:03:19.823 I/LlamaInferenceBridge(32664): [LLM] step=52 topId=6405 nPast=486 generated=52
+06-02 18:03:19.823 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=486
+06-02 18:03:19.860 I/LlamaInferenceBridge(32664): [LLM] step=53 topId=4218 nPast=487 generated=53
+06-02 18:03:19.860 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=487
+06-02 18:03:19.896 I/LlamaInferenceBridge(32664): [LLM] step=54 topId=4218 nPast=488 generated=54
+06-02 18:03:19.896 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=488
+06-02 18:03:19.935 I/LlamaInferenceBridge(32664): [LLM] step=55 topId=4218 nPast=489 generated=55
+06-02 18:03:19.935 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=489
+06-02 18:03:19.970 I/LlamaInferenceBridge(32664): [LLM] step=56 topId=4218 nPast=490 generated=56
+06-02 18:03:19.970 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=490
+06-02 18:03:20.005 I/LlamaInferenceBridge(32664): [LLM] step=57 topId=4218 nPast=491 generated=57
+06-02 18:03:20.005 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=491
+06-02 18:03:20.041 I/LlamaInferenceBridge(32664): [LLM] step=58 topId=3894 nPast=492 generated=58
+06-02 18:03:20.041 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=492
+06-02 18:03:20.077 I/LlamaInferenceBridge(32664): [LLM] step=59 topId=3651 nPast=493 generated=59
+06-02 18:03:20.077 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=493
+06-02 18:03:20.112 I/LlamaInferenceBridge(32664): [LLM] step=60 topId=3732 nPast=494 generated=60
+06-02 18:03:20.112 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=494
+06-02 18:03:20.149 I/LlamaInferenceBridge(32664): [LLM] step=61 topId=4137 nPast=495 generated=61
+06-02 18:03:20.149 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=495
+06-02 18:03:20.185 I/LlamaInferenceBridge(32664): [LLM] step=62 topId=1266 nPast=496 generated=62
+06-02 18:03:20.185 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=496
+06-02 18:03:20.223 I/LlamaInferenceBridge(32664): [LLM] step=63 topId=3481 nPast=497 generated=63
+06-02 18:03:20.223 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=497
+06-02 18:03:20.261 I/LlamaInferenceBridge(32664): [LLM] step=64 topId=1295 nPast=498 generated=64
+06-02 18:03:20.261 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=498
+06-02 18:03:20.296 I/LlamaInferenceBridge(32664): [LLM] step=65 topId=3462 nPast=499 generated=65
+06-02 18:03:20.296 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=499
+06-02 18:03:20.333 I/LlamaInferenceBridge(32664): [LLM] step=66 topId=4218 nPast=500 generated=66
+06-02 18:03:20.333 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=500
+06-02 18:03:20.369 I/LlamaInferenceBridge(32664): [LLM] step=67 topId=3462 nPast=501 generated=67
+06-02 18:03:20.369 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=501
+06-02 18:03:20.406 I/LlamaInferenceBridge(32664): [LLM] step=68 topId=4758 nPast=502 generated=68
+06-02 18:03:20.406 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=502
+06-02 18:03:20.442 I/LlamaInferenceBridge(32664): [LLM] step=69 topId=5322 nPast=503 generated=69
+06-02 18:03:20.442 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=503
+06-02 18:03:20.476 I/LlamaInferenceBridge(32664): [LLM] step=70 topId=5319 nPast=504 generated=70
+06-02 18:03:20.476 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=504
+06-02 18:03:20.512 I/LlamaInferenceBridge(32664): [LLM] step=71 topId=5323 nPast=505 generated=71
+06-02 18:03:20.512 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=505
+06-02 18:03:20.548 I/LlamaInferenceBridge(32664): [LLM] step=72 topId=2382 nPast=506 generated=72
+06-02 18:03:20.548 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=506
+06-02 18:03:20.590 I/LlamaInferenceBridge(32664): [LLM] step=73 topId=1542 nPast=507 generated=73
+06-02 18:03:20.590 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=507
+06-02 18:03:20.625 I/LlamaInferenceBridge(32664): [LLM] step=74 topId=1463 nPast=508 generated=74
+06-02 18:03:20.625 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=508
+06-02 18:03:20.659 I/LlamaInferenceBridge(32664): [LLM] step=75 topId=278 nPast=509 generated=75
+06-02 18:03:20.659 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=509
+06-02 18:03:20.696 I/LlamaInferenceBridge(32664): [LLM] step=76 topId=1258 nPast=510 generated=76
+06-02 18:03:20.696 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=510
+06-02 18:03:20.733 I/LlamaInferenceBridge(32664): [LLM] step=77 topId=3408 nPast=511 generated=77
+06-02 18:03:20.733 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=511
+06-02 18:03:20.770 I/LlamaInferenceBridge(32664): [LLM] step=78 topId=5352 nPast=512 generated=78
+06-02 18:03:20.770 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=512
+06-02 18:03:20.805 I/LlamaInferenceBridge(32664): [LLM] step=79 topId=5622 nPast=513 generated=79
+06-02 18:03:20.805 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=513
+06-02 18:03:20.839 I/LlamaInferenceBridge(32664): [LLM] step=80 topId=5619 nPast=514 generated=80
+06-02 18:03:20.839 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=514
+06-02 18:03:20.876 I/LlamaInferenceBridge(32664): [LLM] step=81 topId=3435 nPast=515 generated=81
+06-02 18:03:20.876 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=515
+06-02 18:03:20.917 I/LlamaInferenceBridge(32664): [LLM] step=82 topId=2031 nPast=516 generated=82
+06-02 18:03:20.917 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=516
+06-02 18:03:20.954 I/LlamaInferenceBridge(32664): [LLM] step=83 topId=4218 nPast=517 generated=83
+06-02 18:03:20.954 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=517
+06-02 18:03:20.990 I/LlamaInferenceBridge(32664): [LLM] step=84 topId=4218 nPast=518 generated=84
+06-02 18:03:20.990 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=518
+06-02 18:03:21.024 I/LlamaInferenceBridge(32664): [LLM] step=85 topId=4218 nPast=519 generated=85
+06-02 18:03:21.024 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=519
+06-02 18:03:21.061 I/LlamaInferenceBridge(32664): [LLM] step=86 topId=6405 nPast=520 generated=86
+06-02 18:03:21.061 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=520
+06-02 18:03:21.097 I/LlamaInferenceBridge(32664): [LLM] step=87 topId=4137 nPast=521 generated=87
+06-02 18:03:21.097 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=521
+06-02 18:03:21.134 I/LlamaInferenceBridge(32664): [LLM] step=88 topId=5832 nPast=522 generated=88
+06-02 18:03:21.134 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=522
+06-02 18:03:21.173 I/LlamaInferenceBridge(32664): [LLM] step=89 topId=3648 nPast=523 generated=89
+06-02 18:03:21.173 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=523
+06-02 18:03:21.207 I/LlamaInferenceBridge(32664): [LLM] step=90 topId=1950 nPast=524 generated=90
+06-02 18:03:21.207 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=524
+06-02 18:03:21.243 I/LlamaInferenceBridge(32664): [LLM] step=91 topId=4012 nPast=525 generated=91
+06-02 18:03:21.243 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=525
+06-02 18:03:21.278 I/LlamaInferenceBridge(32664): [LLM] step=92 topId=4299 nPast=526 generated=92
+06-02 18:03:21.278 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=526
+06-02 18:03:21.314 I/LlamaInferenceBridge(32664): [LLM] step=93 topId=2112 nPast=527 generated=93
+06-02 18:03:21.314 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=527
+06-02 18:03:21.350 I/LlamaInferenceBridge(32664): [LLM] step=94 topId=4191 nPast=528 generated=94
+06-02 18:03:21.350 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=528
+06-02 18:03:21.387 I/LlamaInferenceBridge(32664): [LLM] step=95 topId=6375 nPast=529 generated=95
+06-02 18:03:21.387 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=529
+06-02 18:03:21.423 I/LlamaInferenceBridge(32664): [LLM] step=96 topId=4218 nPast=530 generated=96
+06-02 18:03:21.423 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=530
+06-02 18:03:21.461 I/LlamaInferenceBridge(32664): [LLM] step=97 topId=4218 nPast=531 generated=97
+06-02 18:03:21.461 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=531
+06-02 18:03:21.496 I/LlamaInferenceBridge(32664): [LLM] step=98 topId=6405 nPast=532 generated=98
+06-02 18:03:21.496 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=532
+06-02 18:03:21.530 I/LlamaInferenceBridge(32664): [LLM] step=99 topId=6405 nPast=533 generated=99
+06-02 18:03:21.530 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=533
+06-02 18:03:21.571 I/LlamaInferenceBridge(32664): [LLM] step=100 topId=3213 nPast=534 generated=100
+06-02 18:03:21.571 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=534
+06-02 18:03:21.606 I/LlamaInferenceBridge(32664): [LLM] step=101 topId=2324 nPast=535 generated=101
+06-02 18:03:21.606 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=535
+06-02 18:03:21.643 I/LlamaInferenceBridge(32664): [LLM] step=102 topId=116 nPast=536 generated=102
+06-02 18:03:21.643 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=536
+06-02 18:03:21.680 I/LlamaInferenceBridge(32664): [LLM] step=103 topId=305 nPast=537 generated=103
+06-02 18:03:21.680 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=537
+06-02 18:03:21.717 I/LlamaInferenceBridge(32664): [LLM] step=104 topId=557 nPast=538 generated=104
+06-02 18:03:21.717 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=538
+06-02 18:03:21.755 I/LlamaInferenceBridge(32664): [LLM] step=105 topId=565 nPast=539 generated=105
+06-02 18:03:21.755 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=539
+06-02 18:03:21.790 I/LlamaInferenceBridge(32664): [LLM] step=106 topId=2436 nPast=540 generated=106
+06-02 18:03:21.790 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=540
+06-02 18:03:21.824 I/LlamaInferenceBridge(32664): [LLM] step=107 topId=1707 nPast=541 generated=107
+06-02 18:03:21.824 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=541
+06-02 18:03:21.861 I/LlamaInferenceBridge(32664): [LLM] step=108 topId=2031 nPast=542 generated=108
+06-02 18:03:21.861 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=542
+06-02 18:03:21.898 I/LlamaInferenceBridge(32664): [LLM] step=109 topId=4137 nPast=543 generated=109
+06-02 18:03:21.898 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=543
+06-02 18:03:21.935 I/LlamaInferenceBridge(32664): [LLM] step=110 topId=6324 nPast=544 generated=110
+06-02 18:03:21.935 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=544
+06-02 18:03:21.974 I/LlamaInferenceBridge(32664): [LLM] step=111 topId=6405 nPast=545 generated=111
+06-02 18:03:21.974 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=545
+06-02 18:03:22.010 I/LlamaInferenceBridge(32664): [LLM] step=112 topId=4218 nPast=546 generated=112
+06-02 18:03:22.010 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=546
+06-02 18:03:22.045 I/LlamaInferenceBridge(32664): [LLM] step=113 topId=4218 nPast=547 generated=113
+06-02 18:03:22.045 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=547
+06-02 18:03:22.082 I/LlamaInferenceBridge(32664): [LLM] step=114 topId=6405 nPast=548 generated=114
+06-02 18:03:22.082 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=548
+06-02 18:03:22.119 I/LlamaInferenceBridge(32664): [LLM] step=115 topId=4218 nPast=549 generated=115
+06-02 18:03:22.119 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=549
+06-02 18:03:22.157 I/LlamaInferenceBridge(32664): [LLM] step=116 topId=6405 nPast=550 generated=116
+06-02 18:03:22.157 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=550
+06-02 18:03:22.193 I/LlamaInferenceBridge(32664): [LLM] step=117 topId=6405 nPast=551 generated=117
+06-02 18:03:22.193 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=551
+06-02 18:03:22.232 I/LlamaInferenceBridge(32664): [LLM] step=118 topId=6405 nPast=552 generated=118
+06-02 18:03:22.232 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=552
+06-02 18:03:22.268 I/LlamaInferenceBridge(32664): [LLM] step=119 topId=4218 nPast=553 generated=119
+06-02 18:03:22.268 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=553
+06-02 18:03:22.304 I/LlamaInferenceBridge(32664): [LLM] step=120 topId=2031 nPast=554 generated=120
+06-02 18:03:22.304 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=554
+06-02 18:03:22.342 I/LlamaInferenceBridge(32664): [LLM] step=121 topId=5649 nPast=555 generated=121
+06-02 18:03:22.342 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=555
+06-02 18:03:22.378 I/LlamaInferenceBridge(32664): [LLM] step=122 topId=4675 nPast=556 generated=122
+06-02 18:03:22.378 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=556
+06-02 18:03:22.412 I/LlamaInferenceBridge(32664): [LLM] step=123 topId=4512 nPast=557 generated=123
+06-02 18:03:22.412 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=557
+06-02 18:03:22.449 I/LlamaInferenceBridge(32664): [LLM] step=124 topId=4188 nPast=558 generated=124
+06-02 18:03:22.449 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=558
+06-02 18:03:22.485 I/LlamaInferenceBridge(32664): [LLM] step=125 topId=4520 nPast=559 generated=125
+06-02 18:03:22.486 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=559
+06-02 18:03:22.522 I/LlamaInferenceBridge(32664): [LLM] step=126 topId=2918 nPast=560 generated=126
+06-02 18:03:22.522 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=560
+06-02 18:03:22.562 I/LlamaInferenceBridge(32664): [LLM] step=127 topId=3888 nPast=561 generated=127
+06-02 18:03:22.563 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=561
+06-02 18:03:22.598 I/LlamaInferenceBridge(32664): [LLM] step=128 topId=5835 nPast=562 generated=128
+06-02 18:03:22.598 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=562
+06-02 18:03:22.632 I/LlamaInferenceBridge(32664): [LLM] step=129 topId=5217 nPast=563 generated=129
+06-02 18:03:22.632 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=563
+06-02 18:03:22.670 I/LlamaInferenceBridge(32664): [LLM] step=130 topId=4731 nPast=564 generated=130
+06-02 18:03:22.670 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=564
+06-02 18:03:22.707 I/LlamaInferenceBridge(32664): [LLM] step=131 topId=4137 nPast=565 generated=131
+06-02 18:03:22.707 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=565
+06-02 18:03:22.745 I/LlamaInferenceBridge(32664): [LLM] step=132 topId=4218 nPast=566 generated=132
+06-02 18:03:22.745 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=566
+06-02 18:03:22.783 I/LlamaInferenceBridge(32664): [LLM] step=133 topId=3435 nPast=567 generated=133
+06-02 18:03:22.783 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=567
+06-02 18:03:22.818 I/LlamaInferenceBridge(32664): [LLM] step=134 topId=5668 nPast=568 generated=134
+06-02 18:03:22.818 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=568
+06-02 18:03:22.853 I/LlamaInferenceBridge(32664): [LLM] step=135 topId=3482 nPast=569 generated=135
+06-02 18:03:22.853 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=569
+06-02 18:03:22.894 I/LlamaInferenceBridge(32664): [LLM] step=136 topId=3481 nPast=570 generated=136
+06-02 18:03:22.894 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=570
+06-02 18:03:22.931 I/LlamaInferenceBridge(32664): [LLM] step=137 topId=2031 nPast=571 generated=137
+06-02 18:03:22.931 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=571
+06-02 18:03:22.969 I/LlamaInferenceBridge(32664): [LLM] step=138 topId=5119 nPast=572 generated=138
+06-02 18:03:22.969 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=572
+06-02 18:03:23.004 I/LlamaInferenceBridge(32664): [LLM] step=139 topId=6405 nPast=573 generated=139
+06-02 18:03:23.004 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=573
+06-02 18:03:23.041 I/LlamaInferenceBridge(32664): [LLM] step=140 topId=6405 nPast=574 generated=140
+06-02 18:03:23.041 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=574
+06-02 18:03:23.077 I/LlamaInferenceBridge(32664): [LLM] step=141 topId=1257 nPast=575 generated=141
+06-02 18:03:23.077 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=575
+06-02 18:03:23.114 I/LlamaInferenceBridge(32664): [LLM] step=142 topId=5507 nPast=576 generated=142
+06-02 18:03:23.114 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=576
+06-02 18:03:23.152 I/LlamaInferenceBridge(32664): [LLM] step=143 topId=1052 nPast=577 generated=143
+06-02 18:03:23.152 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=577
+06-02 18:03:23.188 I/LlamaInferenceBridge(32664): [LLM] step=144 topId=2753 nPast=578 generated=144
+06-02 18:03:23.188 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=578
+06-02 18:03:23.225 I/LlamaInferenceBridge(32664): [LLM] step=145 topId=537 nPast=579 generated=145
+06-02 18:03:23.225 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=579
+06-02 18:03:23.262 I/LlamaInferenceBridge(32664): [LLM] step=146 topId=1295 nPast=580 generated=146
+06-02 18:03:23.262 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=580
+06-02 18:03:23.298 I/LlamaInferenceBridge(32664): [LLM] step=147 topId=1267 nPast=581 generated=147
+06-02 18:03:23.299 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=581
+06-02 18:03:23.336 I/LlamaInferenceBridge(32664): [LLM] step=148 topId=3455 nPast=582 generated=148
+06-02 18:03:23.336 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=582
+06-02 18:03:23.374 I/LlamaInferenceBridge(32664): [LLM] step=149 topId=539 nPast=583 generated=149
+06-02 18:03:23.374 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=583
+06-02 18:03:23.409 I/LlamaInferenceBridge(32664): [LLM] step=150 topId=1294 nPast=584 generated=150
+06-02 18:03:23.409 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=584
+06-02 18:03:23.443 I/LlamaInferenceBridge(32664): [LLM] step=151 topId=566 nPast=585 generated=151
+06-02 18:03:23.443 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=585
+06-02 18:03:23.480 I/LlamaInferenceBridge(32664): [LLM] step=152 topId=116 nPast=586 generated=152
+06-02 18:03:23.480 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=586
+06-02 18:03:23.517 I/LlamaInferenceBridge(32664): [LLM] step=153 topId=35 nPast=587 generated=153
+06-02 18:03:23.517 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=587
+06-02 18:03:23.559 I/LlamaInferenceBridge(32664): [LLM] step=154 topId=1087 nPast=588 generated=154
+06-02 18:03:23.559 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=588
+06-02 18:03:23.598 I/LlamaInferenceBridge(32664): [LLM] step=155 topId=6405 nPast=589 generated=155
+06-02 18:03:23.598 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=589
+06-02 18:03:23.633 I/LlamaInferenceBridge(32664): [LLM] step=156 topId=6405 nPast=590 generated=156
+06-02 18:03:23.633 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=590
+06-02 18:03:23.668 I/LlamaInferenceBridge(32664): [LLM] step=157 topId=6405 nPast=591 generated=157
+06-02 18:03:23.668 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=591
+06-02 18:03:23.704 I/LlamaInferenceBridge(32664): [LLM] step=158 topId=6405 nPast=592 generated=158
+06-02 18:03:23.704 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=592
+06-02 18:03:23.741 I/LlamaInferenceBridge(32664): [LLM] step=159 topId=6405 nPast=593 generated=159
+06-02 18:03:23.741 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=593
+06-02 18:03:23.779 I/LlamaInferenceBridge(32664): [LLM] step=160 topId=1959 nPast=594 generated=160
+06-02 18:03:23.779 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=594
+06-02 18:03:23.815 I/LlamaInferenceBridge(32664): [LLM] step=161 topId=3453 nPast=595 generated=161
+06-02 18:03:23.815 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=595
+06-02 18:03:23.850 I/LlamaInferenceBridge(32664): [LLM] step=162 topId=3481 nPast=596 generated=162
+06-02 18:03:23.850 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=596
+06-02 18:03:23.891 I/LlamaInferenceBridge(32664): [LLM] step=163 topId=2753 nPast=597 generated=163
+06-02 18:03:23.891 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=597
+06-02 18:03:23.928 I/LlamaInferenceBridge(32664): [LLM] step=164 topId=2510 nPast=598 generated=164
+06-02 18:03:23.928 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=598
+06-02 18:03:23.965 I/LlamaInferenceBridge(32664): [LLM] step=165 topId=566 nPast=599 generated=165
+06-02 18:03:23.965 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=599
+06-02 18:03:24.002 I/LlamaInferenceBridge(32664): [LLM] step=166 topId=565 nPast=600 generated=166
+06-02 18:03:24.002 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=600
+06-02 18:03:24.036 I/LlamaInferenceBridge(32664): [LLM] step=167 topId=2031 nPast=601 generated=167
+06-02 18:03:24.036 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=601
+06-02 18:03:24.074 I/LlamaInferenceBridge(32664): [LLM] step=168 topId=1267 nPast=602 generated=168
+06-02 18:03:24.074 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=602
+06-02 18:03:24.111 I/LlamaInferenceBridge(32664): [LLM] step=169 topId=6398 nPast=603 generated=169
+06-02 18:03:24.111 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=603
+06-02 18:03:24.149 I/LlamaInferenceBridge(32664): [LLM] step=170 topId=1932 nPast=604 generated=170
+06-02 18:03:24.149 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=604
+06-02 18:03:24.185 I/LlamaInferenceBridge(32664): [LLM] step=171 topId=2058 nPast=605 generated=171
+06-02 18:03:24.185 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=605
+06-02 18:03:24.223 I/LlamaInferenceBridge(32664): [LLM] step=172 topId=6405 nPast=606 generated=172
+06-02 18:03:24.223 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=606
+06-02 18:03:24.259 I/LlamaInferenceBridge(32664): [LLM] step=173 topId=6405 nPast=607 generated=173
+06-02 18:03:24.259 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=607
+06-02 18:03:24.296 I/LlamaInferenceBridge(32664): [LLM] step=174 topId=6405 nPast=608 generated=174
+06-02 18:03:24.296 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=608
+06-02 18:03:24.334 I/LlamaInferenceBridge(32664): [LLM] step=175 topId=6405 nPast=609 generated=175
+06-02 18:03:24.334 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=609
+06-02 18:03:24.372 I/LlamaInferenceBridge(32664): [LLM] step=176 topId=4218 nPast=610 generated=176
+06-02 18:03:24.372 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=610
+06-02 18:03:24.408 I/LlamaInferenceBridge(32664): [LLM] step=177 topId=4218 nPast=611 generated=177
+06-02 18:03:24.408 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=611
+06-02 18:03:24.443 I/LlamaInferenceBridge(32664): [LLM] step=178 topId=4218 nPast=612 generated=178
+06-02 18:03:24.443 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=612
+06-02 18:03:24.479 I/LlamaInferenceBridge(32664): [LLM] step=179 topId=4137 nPast=613 generated=179
+06-02 18:03:24.479 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=613
+06-02 18:03:24.515 I/LlamaInferenceBridge(32664): [LLM] step=180 topId=4137 nPast=614 generated=180
+06-02 18:03:24.515 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=614
+06-02 18:03:24.553 I/LlamaInferenceBridge(32664): [LLM] step=181 topId=1744 nPast=615 generated=181
+06-02 18:03:24.553 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=615
+06-02 18:03:24.590 I/LlamaInferenceBridge(32664): [LLM] step=182 topId=4218 nPast=616 generated=182
+06-02 18:03:24.590 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=616
+06-02 18:03:24.628 I/LlamaInferenceBridge(32664): [LLM] step=183 topId=4137 nPast=617 generated=183
+06-02 18:03:24.628 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=617
+06-02 18:03:24.663 I/LlamaInferenceBridge(32664): [LLM] step=184 topId=1734 nPast=618 generated=184
+06-02 18:03:24.663 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=618
+06-02 18:03:24.698 I/LlamaInferenceBridge(32664): [LLM] step=185 topId=4137 nPast=619 generated=185
+06-02 18:03:24.698 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=619
+06-02 18:03:24.735 I/LlamaInferenceBridge(32664): [LLM] step=186 topId=4137 nPast=620 generated=186
+06-02 18:03:24.735 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=620
+06-02 18:03:24.772 I/LlamaInferenceBridge(32664): [LLM] step=187 topId=4002 nPast=621 generated=187
+06-02 18:03:24.772 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=621
+06-02 18:03:24.810 I/LlamaInferenceBridge(32664): [LLM] step=188 topId=4164 nPast=622 generated=188
+06-02 18:03:24.810 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=622
+06-02 18:03:24.849 I/LlamaInferenceBridge(32664): [LLM] step=189 topId=4191 nPast=623 generated=189
+06-02 18:03:24.849 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=623
+06-02 18:03:24.892 I/LlamaInferenceBridge(32664): [LLM] step=190 topId=5403 nPast=624 generated=190
+06-02 18:03:24.892 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=624
+06-02 18:03:24.928 I/LlamaInferenceBridge(32664): [LLM] step=191 topId=6405 nPast=625 generated=191
+06-02 18:03:24.928 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=625
+06-02 18:03:24.962 I/LlamaInferenceBridge(32664): [LLM] step=192 topId=6324 nPast=626 generated=192
+06-02 18:03:24.962 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=626
+06-02 18:03:24.999 I/LlamaInferenceBridge(32664): [LLM] step=193 topId=3444 nPast=627 generated=193
+06-02 18:03:24.999 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=627
+06-02 18:03:25.036 I/LlamaInferenceBridge(32664): [LLM] step=194 topId=3482 nPast=628 generated=194
+06-02 18:03:25.036 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=628
+06-02 18:03:25.076 I/LlamaInferenceBridge(32664): [LLM] step=195 topId=5669 nPast=629 generated=195
+06-02 18:03:25.076 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=629
+06-02 18:03:25.115 I/LlamaInferenceBridge(32664): [LLM] step=196 topId=483 nPast=630 generated=196
+06-02 18:03:25.115 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=630
+06-02 18:03:25.151 I/LlamaInferenceBridge(32664): [LLM] step=197 topId=2490 nPast=631 generated=197
+06-02 18:03:25.151 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=631
+06-02 18:03:25.186 I/LlamaInferenceBridge(32664): [LLM] step=198 topId=4218 nPast=632 generated=198
+06-02 18:03:25.186 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=632
+06-02 18:03:25.224 I/LlamaInferenceBridge(32664): [LLM] step=199 topId=4218 nPast=633 generated=199
+06-02 18:03:25.224 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=633
+06-02 18:03:25.261 I/LlamaInferenceBridge(32664): [LLM] step=200 topId=1222 nPast=634 generated=200
+06-02 18:03:25.261 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=634
+06-02 18:03:25.299 I/LlamaInferenceBridge(32664): [LLM] step=201 topId=1957 nPast=635 generated=201
+06-02 18:03:25.299 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=635
+06-02 18:03:25.334 I/LlamaInferenceBridge(32664): [LLM] step=202 topId=4218 nPast=636 generated=202
+06-02 18:03:25.334 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=636
+06-02 18:03:25.369 I/LlamaInferenceBridge(32664): [LLM] step=203 topId=6405 nPast=637 generated=203
+06-02 18:03:25.369 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=637
+06-02 18:03:25.406 I/LlamaInferenceBridge(32664): [LLM] step=204 topId=4137 nPast=638 generated=204
+06-02 18:03:25.406 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=638
+06-02 18:03:25.443 I/LlamaInferenceBridge(32664): [LLM] step=205 topId=5667 nPast=639 generated=205
+06-02 18:03:25.444 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=639
+06-02 18:03:25.481 I/LlamaInferenceBridge(32664): [LLM] step=206 topId=3482 nPast=640 generated=206
+06-02 18:03:25.481 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=640
+06-02 18:03:25.520 I/LlamaInferenceBridge(32664): [LLM] step=207 topId=322 nPast=641 generated=207
+06-02 18:03:25.520 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=641
+06-02 18:03:25.560 I/LlamaInferenceBridge(32664): [LLM] step=208 topId=566 nPast=642 generated=208
+06-02 18:03:25.560 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=642
+06-02 18:03:25.594 I/LlamaInferenceBridge(32664): [LLM] step=209 topId=143 nPast=643 generated=209
+06-02 18:03:25.594 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=643
+06-02 18:03:25.631 I/LlamaInferenceBridge(32664): [LLM] step=210 topId=734 nPast=644 generated=210
+06-02 18:03:25.631 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=644
+06-02 18:03:25.668 I/LlamaInferenceBridge(32664): [LLM] step=211 topId=359 nPast=645 generated=211
+06-02 18:03:25.669 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=645
+06-02 18:03:25.706 I/LlamaInferenceBridge(32664): [LLM] step=212 topId=1295 nPast=646 generated=212
+06-02 18:03:25.706 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=646
+06-02 18:03:25.745 I/LlamaInferenceBridge(32664): [LLM] step=213 topId=2031 nPast=647 generated=213
+06-02 18:03:25.745 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=647
+06-02 18:03:25.783 I/LlamaInferenceBridge(32664): [LLM] step=214 topId=4164 nPast=648 generated=214
+06-02 18:03:25.783 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=648
+06-02 18:03:25.818 I/LlamaInferenceBridge(32664): [LLM] step=215 topId=4218 nPast=649 generated=215
+06-02 18:03:25.818 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=649
+06-02 18:03:25.853 I/LlamaInferenceBridge(32664): [LLM] step=216 topId=6324 nPast=650 generated=216
+06-02 18:03:25.853 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=650
+06-02 18:03:25.894 I/LlamaInferenceBridge(32664): [LLM] step=217 topId=6486 nPast=651 generated=217
+06-02 18:03:25.894 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=651
+06-02 18:03:25.931 I/LlamaInferenceBridge(32664): [LLM] step=218 topId=1734 nPast=652 generated=218
+06-02 18:03:25.931 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=652
+06-02 18:03:25.969 I/LlamaInferenceBridge(32664): [LLM] step=219 topId=116 nPast=653 generated=219
+06-02 18:03:25.969 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=653
+06-02 18:03:26.008 I/LlamaInferenceBridge(32664): [LLM] step=220 topId=386 nPast=654 generated=220
+06-02 18:03:26.008 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=654
+06-02 18:03:26.044 I/LlamaInferenceBridge(32664): [LLM] step=221 topId=278 nPast=655 generated=221
+06-02 18:03:26.044 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=655
+06-02 18:03:26.081 I/LlamaInferenceBridge(32664): [LLM] step=222 topId=557 nPast=656 generated=222
+06-02 18:03:26.081 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=656
+06-02 18:03:26.118 I/LlamaInferenceBridge(32664): [LLM] step=223 topId=2753 nPast=657 generated=223
+06-02 18:03:26.118 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=657
+06-02 18:03:26.155 I/LlamaInferenceBridge(32664): [LLM] step=224 topId=566 nPast=658 generated=224
+06-02 18:03:26.155 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=658
+06-02 18:03:26.193 I/LlamaInferenceBridge(32664): [LLM] step=225 topId=395 nPast=659 generated=225
+06-02 18:03:26.193 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=659
+06-02 18:03:26.233 I/LlamaInferenceBridge(32664): [LLM] step=226 topId=305 nPast=660 generated=226
+06-02 18:03:26.233 I/ai-chat-mnn(32664): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=660
+06-02 18:03:26.270 I/LlamaInferenceBridge(32664): [LLM] step=227 topId=6561 nPast=661 generated=227
+06-02 18:03:26.271 I/LlamaInferenceBridge(32664): [HifiGan][MNN] module load begin: /data/user/0/com.example.llama.aichat/files/models/hifigan.mnn (bytes=92858308) backend=CPU
+06-02 18:03:26.271 I/MnnHifiGanRunner(32664): Loaded libMNN.so
+06-02 18:03:26.361 I/ai-chat-mnn(32664): Java_com_example_llama_MnnHifiGanRunner_nativeLoadModel: loaded hifigan model=/data/user/0/com.example.llama.aichat/files/models/hifigan.mnn backend=CPU
+06-02 18:03:26.361 I/MnnHifiGanRunner(32664): MNN hifigan model loaded: /data/user/0/com.example.llama.aichat/files/models/hifigan.mnn
+06-02 18:03:26.361 I/LlamaInferenceBridge(32664): [HifiGan][MNN] module load done in 0.090 s
+06-02 18:03:27.230 I/LlamaInferenceBridge(32664): [FlowHTTP][stream] received chunk=1 totalFrames=56 elapsed=0.868 s
+06-02 18:03:27.231 I/ai-chat-mnn(32664): Java_com_example_llama_MnnHifiGanRunner_nativeForward: input tensor dims=3 dimType=1 shape=1x80x-1
+06-02 18:03:27.530 I/LlamaInferenceBridge(32664): [HifiGan][stream] consumed chunk=1 inputFrames=56 totalInputFrames=56 outputSamples=120978 totalOutputSamples=120978 elapsed=1.168 s
+06-02 18:03:27.867 I/LlamaInferenceBridge(32664): [FlowHTTP][stream] received chunk=2 totalFrames=106 elapsed=1.505 s
+06-02 18:03:27.869 I/ai-chat-mnn(32664): Java_com_example_llama_MnnHifiGanRunner_nativeForward: input tensor dims=3 dimType=1 shape=1x80x56
+06-02 18:03:28.101 I/LlamaInferenceBridge(32664): [HifiGan][stream] consumed chunk=2 inputFrames=50 totalInputFrames=106 outputSamples=108018 totalOutputSamples=228996 elapsed=1.739 s
+06-02 18:03:28.363 I/LlamaInferenceBridge(32664): [FlowHTTP][stream] received chunk=3 totalFrames=156 elapsed=2.001 s
+06-02 18:03:28.363 I/ai-chat-mnn(32664): Java_com_example_llama_MnnHifiGanRunner_nativeForward: input tensor dims=3 dimType=1 shape=1x80x50
+06-02 18:03:28.731 I/LlamaInferenceBridge(32664): [HifiGan][stream] consumed chunk=3 inputFrames=50 totalInputFrames=156 outputSamples=108018 totalOutputSamples=337014 elapsed=2.369 s
+06-02 18:03:29.176 I/LlamaInferenceBridge(32664): [FlowHTTP][stream] received chunk=4 totalFrames=206 elapsed=2.814 s
+06-02 18:03:29.178 I/ai-chat-mnn(32664): Java_com_example_llama_MnnHifiGanRunner_nativeForward: input tensor dims=3 dimType=1 shape=1x80x50
+06-02 18:03:29.404 I/LlamaInferenceBridge(32664): [HifiGan][stream] consumed chunk=4 inputFrames=50 totalInputFrames=206 outputSamples=108018 totalOutputSamples=445032 elapsed=3.042 s
+06-02 18:03:30.035 I/LlamaInferenceBridge(32664): [FlowHTTP][stream] received chunk=5 totalFrames=256 elapsed=3.674 s
+06-02 18:03:30.036 I/ai-chat-mnn(32664): Java_com_example_llama_MnnHifiGanRunner_nativeForward: input tensor dims=3 dimType=1 shape=1x80x50
+06-02 18:03:30.261 I/LlamaInferenceBridge(32664): [HifiGan][stream] consumed chunk=5 inputFrames=50 totalInputFrames=256 outputSamples=108018 totalOutputSamples=553050 elapsed=3.899 s
+06-02 18:03:30.817 I/LlamaInferenceBridge(32664): [FlowHTTP][stream] received chunk=6 totalFrames=306 elapsed=4.455 s
+06-02 18:03:30.819 I/ai-chat-mnn(32664): Java_com_example_llama_MnnHifiGanRunner_nativeForward: input tensor dims=3 dimType=1 shape=1x80x50
+06-02 18:03:31.177 I/LlamaInferenceBridge(32664): [HifiGan][stream] consumed chunk=6 inputFrames=50 totalInputFrames=306 outputSamples=108018 totalOutputSamples=661068 elapsed=4.815 s
+06-02 18:03:31.553 I/LlamaInferenceBridge(32664): [FlowHTTP][stream] received chunk=7 totalFrames=356 elapsed=5.191 s
+06-02 18:03:31.555 I/ai-chat-mnn(32664): Java_com_example_llama_MnnHifiGanRunner_nativeForward: input tensor dims=3 dimType=1 shape=1x80x50
+06-02 18:03:31.906 I/LlamaInferenceBridge(32664): [HifiGan][stream] consumed chunk=7 inputFrames=50 totalInputFrames=356 outputSamples=108018 totalOutputSamples=769086 elapsed=5.544 s
+06-02 18:03:32.654 I/LlamaInferenceBridge(32664): [FlowHTTP][stream] received chunk=8 totalFrames=406 elapsed=6.292 s
+06-02 18:03:32.655 I/ai-chat-mnn(32664): Java_com_example_llama_MnnHifiGanRunner_nativeForward: input tensor dims=3 dimType=1 shape=1x80x50
+06-02 18:03:33.017 I/LlamaInferenceBridge(32664): [HifiGan][stream] consumed chunk=8 inputFrames=50 totalInputFrames=406 outputSamples=108018 totalOutputSamples=877104 elapsed=6.655 s
+06-02 18:03:33.682 I/LlamaInferenceBridge(32664): [FlowHTTP][stream] received chunk=9 totalFrames=454 elapsed=7.320 s
+06-02 18:03:33.683 I/LlamaInferenceBridge(32664): [FlowHTTP][stream] mel stats: totalFrames=454 elapsed=7.321 s
+06-02 18:03:33.683 I/ai-chat-mnn(32664): Java_com_example_llama_MnnHifiGanRunner_nativeForward: input tensor dims=3 dimType=1 shape=1x80x50
+06-02 18:03:33.906 I/LlamaInferenceBridge(32664): [HifiGan][stream] consumed chunk=9 inputFrames=48 totalInputFrames=454 outputSamples=103698 totalOutputSamples=980802 elapsed=7.544 s
+06-02 18:03:33.982 I/LlamaInferenceBridge(32664): runInference finished: stage=voiceGeneration result=/data/user/0/com.example.llama.aichat/files/generated_audio/android_1780394613913.wav total=25.166 s

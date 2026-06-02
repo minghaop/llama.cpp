@@ -20,6 +20,8 @@
 namespace {
 
 constexpr const char *kLogTag = "ai-chat-mnn";
+constexpr bool kHifiGanUseCpuBackend = true;
+constexpr const char *kHifiGanBackendLabel = kHifiGanUseCpuBackend ? "CPU" : "Vulkan";
 
 using MNN::BackendConfig;
 using MNN::Express::Executor;
@@ -48,6 +50,7 @@ struct HifiGanHandle {
         nullptr,
         Interpreter::destroy,
     };
+    BackendConfig backendConfig{};
     Session *session = nullptr;
 };
 
@@ -259,7 +262,7 @@ Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings(
 }
 
 extern "C" JNIEXPORT jlong JNICALL
-Java_com_example_llama_MnnHifiGanRunner_nativeLoadModel(JNIEnv *env, jclass, jstring model_path_, jint) {
+Java_com_example_llama_MnnHifiGanRunner_nativeLoadModel(JNIEnv *env, jclass, jstring model_path_, jint num_threads) {
     const std::string model_path = jstring_to_std(env, model_path_);
     if (model_path.empty()) {
         throw_illegal_state(env, "HifiGan model path is empty");
@@ -274,27 +277,33 @@ Java_com_example_llama_MnnHifiGanRunner_nativeLoadModel(JNIEnv *env, jclass, jst
     }
 
     ScheduleConfig schedule{};
-    schedule.type = MNN_FORWARD_VULKAN;
-    schedule.mode = MNN_GPU_TUNING_WIDE | MNN_GPU_RECORD_BATCH;
+    schedule.numThread = std::max(1, static_cast<int>(num_threads));
+    if (kHifiGanUseCpuBackend) {
+        schedule.type = MNN_FORWARD_CPU;
+        schedule.backupType = MNN_FORWARD_CPU;
+    } else {
+        schedule.type = MNN_FORWARD_VULKAN;
+        schedule.mode = MNN_GPU_TUNING_WIDE;
 
-    BackendConfig backend{};
-    backend.power = BackendConfig::Power_High;
-    backend.memory = BackendConfig::Memory_Normal;
-    backend.precision = BackendConfig::Precision_High;
-    schedule.backendConfig = &backend;
+        handle->backendConfig.power = BackendConfig::Power_High;
+        handle->backendConfig.memory = BackendConfig::Memory_Normal;
+        handle->backendConfig.precision = BackendConfig::Precision_High;
+        schedule.backendConfig = &handle->backendConfig;
+    }
 
     handle->session = handle->interpreter->createSession(schedule);
     if (handle->session == nullptr) {
-        throw_illegal_state(env, "Failed to create Vulkan session for hifigan: " + model_path);
+        throw_illegal_state(env, "Failed to create HifiGan session for hifigan: " + model_path);
         return 0;
     }
 
     __android_log_print(
             ANDROID_LOG_INFO,
             kLogTag,
-            "%s: loaded hifigan model=%s backend=Vulkan",
+            "%s: loaded hifigan model=%s backend=%s",
             __func__,
-            model_path.c_str());
+            model_path.c_str(),
+            kHifiGanBackendLabel);
     return reinterpret_cast<jlong>(handle.release());
 }
 
@@ -352,6 +361,24 @@ Java_com_example_llama_MnnHifiGanRunner_nativeForward(
         return nullptr;
     }
 
+    {
+        std::string input_shape_desc;
+        for (int i = 0; i < input_tensor->dimensions(); ++i) {
+            if (!input_shape_desc.empty()) {
+                input_shape_desc += "x";
+            }
+            input_shape_desc += std::to_string(input_tensor->length(i));
+        }
+        __android_log_print(
+                ANDROID_LOG_INFO,
+                kLogTag,
+                "%s: input tensor dims=%d dimType=%d shape=%s",
+                __func__,
+                input_tensor->dimensions(),
+                static_cast<int>(input_tensor->getDimensionType()),
+                input_shape_desc.c_str());
+    }
+
     runner->interpreter->resizeTensor(input_tensor, shape);
     runner->interpreter->resizeSession(runner->session);
 
@@ -363,7 +390,7 @@ Java_com_example_llama_MnnHifiGanRunner_nativeForward(
 
     const auto run_code = runner->interpreter->runSession(runner->session);
     if (run_code != MNN::NO_ERROR) {
-        throw_illegal_state(env, "HifiGan Vulkan session run failed");
+        throw_illegal_state(env, "HifiGan session run failed");
         return nullptr;
     }
 

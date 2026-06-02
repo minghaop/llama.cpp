@@ -907,11 +907,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         if (FLOW_ONLY_UI_MODE) {
-            val flowSeconds = flowTotalSeconds ?: stageEndedInfo[InferenceStage.flow]?.seconds
+            val flowSeconds = flowStageSeconds()
             val sb = StringBuilder()
             sb.appendLine("Progress")
             sb.appendLine("────────────")
-            sb.appendLine("[FlowTime]        ${flowSeconds?.let { "%.4fs".format(it) } ?: "-"}")
+            sb.appendLine("[Flow]            ${flowSeconds?.let { "%.4fs".format(it) } ?: "-"}")
             sb.appendLine()
             sb.appendLine("Events")
             sb.appendLine("────────────")
@@ -939,14 +939,15 @@ class MainActivity : AppCompatActivity() {
         val frontEndText = stageText(InferenceStage.frontEnd)
         val llmPrepareText = stageText(InferenceStage.llmPrepare)
         val llmText = llmStageText()
+        val flowSeconds = flowStageSeconds()
         val hiftText = stageText(InferenceStage.hift)
-        val hiftSeconds = stageEndedInfo[InferenceStage.hift]?.seconds
         val voiceText = voiceStageText()
 
         val totalTime = listOf(
             stageEndedInfo[InferenceStage.llm]?.seconds,
+            flowSeconds,
             stageEndedInfo[InferenceStage.hift]?.seconds,
-        ).filterNotNull().takeIf { it.size == 2 }?.sum()
+        ).filterNotNull().takeIf { it.size == 3 }?.sum()
 
         val rtf = if (audioDurationSeconds != null && totalTime != null && audioDurationSeconds!! > 0) {
             totalTime / audioDurationSeconds!!
@@ -960,8 +961,8 @@ class MainActivity : AppCompatActivity() {
         sb.appendLine("[FrontEnd]        $frontEndText")
         sb.appendLine("[LLMPrepare]      $llmPrepareText")
         sb.appendLine("[LLM]             $llmText")
+        sb.appendLine("[Flow]            ${flowSeconds?.let { "%.4fs".format(it) } ?: "-"}")
         sb.appendLine("[HifiGan]         $hiftText")
-        sb.appendLine("[hifiganTime]     ${hiftSeconds?.let { "%.4fs".format(it) } ?: "-"}")
         sb.appendLine("[voiceGeneration] $voiceText")
         sb.appendLine("[totalTime]       ${totalTime?.let { "%.4fs".format(it) } ?: "-"}")
         sb.appendLine("[RTF]             ${rtf?.let { "%.4f".format(it) } ?: "-"}")
@@ -1011,6 +1012,9 @@ class MainActivity : AppCompatActivity() {
         if (stageRunning.contains(InferenceStage.voiceGeneration)) return "生成中..."
         return "-"
     }
+
+    private fun flowStageSeconds(): Double? =
+        flowTotalSeconds ?: stageEndedInfo[InferenceStage.flow]?.seconds
 
     private fun stageDisplayName(stage: InferenceStage): String = when (stage) {
         InferenceStage.frontEnd -> "FrontEnd"

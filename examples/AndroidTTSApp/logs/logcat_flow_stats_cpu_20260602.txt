@@ -1,0 +1,1453 @@
+--------- beginning of main
+06-02 16:58:38.680 D/EuiccConnector( 3736): handleMessage: E msg.what=6
+06-02 16:58:38.680 D/EuiccConnector( 3736): processMsg: ConnectedState
+06-02 16:58:38.680 D/EuiccConnector( 3736): handleMessage: X
+06-02 16:58:38.682 D/EuiccConnector( 3736): handleMessage: E msg.what=103
+06-02 16:58:38.682 D/EuiccConnector( 3736): processMsg: ConnectedState
+06-02 16:58:38.683 D/EuiccConnector( 3736): handleMessage: X
+06-02 16:58:38.684 I/EuiccGoogle(17877): [3239] EuiccServiceImpl.onGetEuiccProfileInfoList: onGetEuiccProfileInfoList: slotId = 1
+06-02 16:58:38.686 I/EuiccGoogle(17877): [3239] EuiccServiceImpl.onGetEuiccProfileInfoList: slotId = 1, isRemovable = false
+06-02 16:58:38.686 I/EuiccGoogle(17877): [3239] EuiccServiceImpl.onGetEuiccProfileInfoList: onGetEuiccProfileInfoList: isRemovable = false.
+06-02 16:58:38.686 I/EuiccGoogle(17877): [3239] EuiccServiceImpl.onGetEuiccProfileInfoList: getSimCardState for slotId: 1
+06-02 16:58:38.687 I/EuiccGoogle(17877): [3239] EuiccServiceImpl.onGetEuiccProfileInfoList: GetEuiccProfileInfoListResult: simCardState :11and simCardStateAtTelephony:11 for slot:1
+06-02 16:58:38.688 I/EuiccGoogle(17877): [3239] EuiccServiceImpl.getProfileInfoList: getProfileInfoList: slotId = 1, includeTestProfiles = false
+06-02 16:58:38.688 I/EuiccGoogle(17877): [3239] EuiccServiceImpl.getProfileInfoList: getProfileInfoList: slotId = 1, includeTestProfiles = false.
+06-02 16:58:38.688 I/EuiccGoogle(17877): [3239] EuiccServiceImpl.getEidFromSlotId: getEidFromSlotId: slotId = 1.
+06-02 16:58:38.688 I/EuiccGoogle(17877): [3239] NetworkFetcher.getEidForSlot: getEidForSlot: 1
+06-02 16:58:38.689 I/EuiccGoogle(17877): [3239] BlockingEuiccCardManager.requestAllProfiles: requestAllProfiles: cardId = [OjW2020-cjD9ihvVx940zMFRbYE]
+06-02 16:58:38.691 I/SDM     ( 1442): DisplayBase::CommitThread: Received idle timeout, panel: cmd, timeout: 70000 us
+06-02 16:58:38.758 D/EuiccConnector( 3736): handleMessage: E msg.what=6
+06-02 16:58:38.758 D/EuiccConnector( 3736): processMsg: ConnectedState
+06-02 16:58:38.759 D/EuiccConnector( 3736): handleMessage: X
+--------- beginning of system
+06-02 16:58:38.855 W/ActivityTaskManager( 2026): callingPackage for (uid=2000, pid=31500) has no WPC
+06-02 16:58:38.855 W/OptProp ( 2026): Cannot read opt property android.window.PROPERTY_COMPAT_ALLOW_ORIENTATION_OVERRIDE
+06-02 16:58:38.856 V/GrammaticalInflectionUtils( 2026): AttributionSource: android.content.AttributionSource@914cd22 does not have READ_SYSTEM_GRAMMATICAL_GENDER permission.
+06-02 16:58:38.856 W/OptProp ( 2026): Cannot read opt property android.window.PROPERTY_COMPAT_ALLOW_RESIZEABLE_ACTIVITY_OVERRIDES
+06-02 16:58:38.856 W/OptProp ( 2026): Cannot read opt property android.window.PROPERTY_COMPAT_ALLOW_MIN_ASPECT_RATIO_OVERRIDE
+06-02 16:58:38.859 E/ANDR-PERF-RESOURCEQS( 1500): ANDR-PERF-RESOURCEQS: AddAndApply() 131: Resource value ffffffff is not supported
+06-02 16:58:38.859 E/ANDR-PERF-UTIL( 1500): ANDR-PERF-UTIL: change_node_val() 319: Failed to update node /proc/sys/walt/sched_per_task_boost with value 65535 0
+06-02 16:58:38.859 E/ANDR-PERF-OPTSHANDLER( 1500): ANDR-PERF-OPTSHANDLER: sched_reset_task_boost() 3633: can't reset task 4294967295
+06-02 16:58:38.859 E/ANDR-PERF-RESOURCEQS( 1500): ANDR-PERF-RESOURCEQS: RemoveAndApply() 292: Failed to reset optimization here [3, 32]
+06-02 16:58:38.860 E/ANDR-PERF-UTIL( 1500): ANDR-PERF-UTIL: change_node_val() 319: Failed to update node /proc/sys/walt/sched_per_task_boost with value 0 3
+06-02 16:58:38.860 E/ANDR-PERF-OPTSHANDLER( 1500): ANDR-PERF-OPTSHANDLER: sched_task_boost() 3609: can't boost task 0
+06-02 16:58:38.860 E/ANDR-PERF-RESOURCEQS( 1500): ANDR-PERF-RESOURCEQS: AddAndApply() 167: Failed to apply optimization [3, 32]
+06-02 16:58:38.864 I/ActivityTaskManager( 2026): START u0 {flg=0x10000000 cmp=com.example.llama.aichat/com.example.llama.MainActivity} with LAUNCH_MULTIPLE from uid 2000 (BAL_ALLOW_PERMISSION) result code=0
+06-02 16:58:38.866 W/SplitSelectStateCtor( 4001): Missing session instanceIds
+06-02 16:58:38.866 D/StatsLog( 4001): LAUNCHER_SPLIT_SELECTION_EXIT_INTERRUPTED
+06-02 16:58:38.867 I/AppsFilter( 2026): interaction: PackageSetting{55292c5 com.android.microdroid.empty_payload/10311} -> PackageSetting{f351e0d com.example.llama.aichat/10328} BLOCKED
+06-02 16:58:38.867 I/AppsFilter( 2026): interaction: PackageSetting{9aecb4b com.example.portraitcroppertest/10347} -> PackageSetting{f351e0d com.example.llama.aichat/10328} BLOCKED
+06-02 16:58:38.867 I/AppsFilter( 2026): interaction: PackageSetting{85f9928 com.example.portraitcropperservice/10350} -> PackageSetting{f351e0d com.example.llama.aichat/10328} BLOCKED
+06-02 16:58:38.868 V/WindowManagerShell( 3524): Transition requested (#451): android.os.BinderProxy@91440d2 TransitionRequestInfo { type = OPEN, triggerTask = TaskInfo{userId=0 taskId=1132 displayId=0 isRunning=true baseIntent=Intent { flg=0x10000000 cmp=com.example.llama.aichat/com.example.llama.MainActivity } baseActivity=ComponentInfo{com.example.llama.aichat/com.example.llama.MainActivity} topActivity=ComponentInfo{com.example.llama.aichat/com.example.llama.MainActivity} origActivity=null realActivity=ComponentInfo{com.example.llama.aichat/com.example.llama.MainActivity} numActivities=1 lastActiveTime=614012533 supportsMultiWindow=true resizeMode=1 isResizeable=true minWidth=-1 minHeight=-1 defaultMinSize=220 token=WCT{android.window.IWindowContainerToken$Stub$Proxy@dd1981e} topActivityType=1 pictureInPictureParams=null shouldDockBigOverlays=false launchIntoPipHostTaskId=-1 lastParentTaskIdBeforePip=-1 displayCutoutSafeInsets=Rect(0, 86 - 0, 0) topActivityInfo=ActivityInfo{3cb18ff com.example.llama.MainActivity} launchCookies=[] positionInParent=Point(0, 0) parentTaskId=-1 isFocused=false isVisible=false isVisibleRequested=false isSleeping=false locusId=null displayAreaFeatureId=1 isTopActivityTransparent=false appCompatTaskInfo=AppCompatTaskInfo { topActivityInSizeCompat=false topActivityEligibleForLetterboxEducation= falseisLetterboxEducationEnabled= false isLetterboxDoubleTapEnabled= false topActivityEligibleForUserAspectRatioButton= false topActivityBoundsLetterboxed= false isFromLetterboxDoubleTap= false topActivityLetterboxVerticalPosition= -1 topActivityLetterboxHorizontalPosition= -1 topActivityLetterboxWidth=1080 topActivityLetterboxHeight=2340 isUserFullscreenOverrideEnabled=false isSystemFullscreenOverrideEnabled=false cameraCompatTaskInfo=CameraCompatTaskInfo { cameraCompatControlState=hidden freeformCameraCompatMode=inactive}}}, pipTask = null, remoteTransition = null, displayChange = null, flags = 0, debugId = 451 }
+06-02 16:58:38.869 V/GrammaticalInflectionUtils( 2026): AttributionSource: android.content.AttributionSource@914cd22 does not have READ_SYSTEM_GRAMMATICAL_GENDER permission.
+06-02 16:58:38.871 I/TopTaskTracker( 4001): onTaskMovedToFront: (moved taskInfo to front) taskId=1132, baseIntent=Intent { flg=0x10000000 cmp=com.example.llama.aichat/com.example.llama.MainActivity }
+06-02 16:58:38.872 D/WindowManagerShell( 3524): setLauncherKeepClearAreaHeight: visible=false, height=492
+06-02 16:58:38.876 I/BpBinder( 1608): onLastStrongRef automatically unlinking death recipients: 
+06-02 16:58:38.877 D/InputEventReceiver( 3524): Input log is disabled in InputEventReceiver.
+06-02 16:58:38.878 D/CoreBackPreview( 2026): Window{d228e09 u0 Splash Screen com.example.llama.aichat}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@d10f541, mPriority=0, mIsAnimationCallback=false}
+06-02 16:58:38.879 W/WindowManager( 2026): Changing focus from Window{bfe95a8 u0 jp.co.sharp.android.launcher3/jp.co.sharp.android.launcher3.uioverrides.QuickstepLauncher} to null displayId=0 Callers=com.android.server.wm.RootWindowContainer.updateFocusedWindowLocked:479 com.android.server.wm.WindowManagerService.updateFocusedWindowLocked:6654 com.android.server.wm.WindowManagerService.relayoutWindowInner:2780 com.android.server.wm.WindowManagerService.relayoutWindow:2450 
+06-02 16:58:38.881 W/qdgralloc( 3524): getInterlacedFlag: getMetaData returned 3, defaulting to interlaced_flag = 0
+06-02 16:58:38.882 D/Zygote  ( 1255): Forked child process 31508
+06-02 16:58:38.883 I/ActivityManager( 2026): Start proc 31508:com.example.llama.aichat/u0a328 for next-top-activity {com.example.llama.aichat/com.example.llama.MainActivity}
+06-02 16:58:38.883 W/ContextImpl( 2026): Calling a method in the system process without a qualified user: android.app.ContextImpl.sendBroadcast:1249 com.qualcomm.qti.Performance$SendGameLaunchBroadcast.run:327 java.lang.Thread.run:1564 <bottom of call stack> <bottom of call stack> 
+06-02 16:58:38.885 V/WindowManager( 2026): Sent Transition (#451) createdAt=06-02 16:58:38.857 via request=TransitionRequestInfo { type = OPEN, triggerTask = TaskInfo{userId=0 taskId=1132 displayId=0 isRunning=true baseIntent=Intent { flg=0x10000000 cmp=com.example.llama.aichat/com.example.llama.MainActivity } baseActivity=ComponentInfo{com.example.llama.aichat/com.example.llama.MainActivity} topActivity=ComponentInfo{com.example.llama.aichat/com.example.llama.MainActivity} origActivity=null realActivity=ComponentInfo{com.example.llama.aichat/com.example.llama.MainActivity} numActivities=1 lastActiveTime=614012533 supportsMultiWindow=true resizeMode=1 isResizeable=true minWidth=-1 minHeight=-1 defaultMinSize=220 token=WCT{RemoteToken{8da4ad4 Task{99f8836 #1132 type=standard A=10328:com.example.llama.aichat}}} topActivityType=1 pictureInPictureParams=null shouldDockBigOverlays=false launchIntoPipHostTaskId=-1 lastParentTaskIdBeforePip=-1 displayCutoutSafeInsets=Rect(0, 86 - 0, 0) topActivityInfo=ActivityInfo{bb6a47d com.example.llama.MainActivity} launchCookies=[] positionInParent=Point(0, 0) parentTaskId=-1 isFocused=false isVisible=false isVisibleRequested=false isSleeping=false locusId=null displayAreaFeatureId=1 isTopActivityTransparent=false appCompatTaskInfo=AppCompatTaskInfo { topActivityInSizeCompat=false topActivityEligibleForLetterboxEducation= falseisLetterboxEducationEnabled= false isLetterboxDoubleTapEnabled= false topActivityEligibleForUserAspectRatioButton= false topActivityBoundsLetterboxed= false isFromLetterboxDoubleTap= false topActivityLetterboxVerticalPosition= -1 topActivityLetterboxHorizontalPosition= -1 topActivityLetterboxWidth=1080 topActivityLetterboxHeight=2340 isUserFullscreenOverrideEnabled=false isSystemFullscreenOverrideEnabled=false cameraCompatTaskInfo=CameraCompatTaskInfo { cameraCompatControlState=hidden freeformCameraCompatMode=inactive}}}, pipTask = null, remoteTransition = null, displayChange = null, flags = 0, debugId = 451 }
+06-02 16:58:38.885 V/WindowManager( 2026):     startWCT=WindowContainerTransaction { changes = {} hops = [] errorCallbackToken=null taskFragmentOrganizer=null }
+06-02 16:58:38.885 V/WindowManager( 2026):     info={id=451 t=OPEN f=0x0 trk=0 r=[0@Point(0, 0)] c=[
+06-02 16:58:38.885 V/WindowManager( 2026):         {WCT{RemoteToken{8da4ad4 Task{99f8836 #1132 type=standard A=10328:com.example.llama.aichat}}} m=OPEN f=NONE leash=Surface(name=Task=1132)/@0xc386ae6 sb=Rect(0, 0 - 1080, 2340) eb=Rect(0, 0 - 1080, 2340) d=0 taskParent=-1},
+06-02 16:58:38.885 V/WindowManager( 2026):         {WCT{RemoteToken{7dd01da Task{88acdf9 #1 type=home}}} m=TO_BACK f=SHOW_WALLPAPER leash=Surface(name=Task=1)/@0x75530b4 sb=Rect(0, 0 - 1080, 2340) eb=Rect(0, 0 - 1080, 2340) d=0 taskParent=-1}
+06-02 16:58:38.885 V/WindowManager( 2026):     ]}
+06-02 16:58:38.885 V/WindowManagerShell( 3524): onTransitionReady(transaction=8701603765607)
+06-02 16:58:38.885 V/WindowManagerShell( 3524): onTransitionReady (#451) android.os.BinderProxy@91440d2: {id=451 t=OPEN f=0x0 trk=0 r=[0@Point(0, 0)] c=[{WCT{android.window.IWindowContainerToken$Stub$Proxy@94a8282} m=OPEN f=NONE leash=Surface(name=Task=1132)/@0xa3528f7 sb=Rect(0, 0 - 1080, 2340) eb=Rect(0, 0 - 1080, 2340) d=0 taskParent=-1},{WCT{android.window.IWindowContainerToken$Stub$Proxy@b095d93} m=TO_BACK f=SHOW_WALLPAPER leash=Surface(name=Task=1)/@0x127e364 sb=Rect(0, 0 - 1080, 2340) eb=Rect(0, 0 - 1080, 2340) d=0 taskParent=-1}]}
+06-02 16:58:38.886 V/WindowManagerShell( 3524): Playing animation for (#451) android.os.BinderProxy@91440d2@0
+06-02 16:58:38.886 V/WindowManagerShell( 3524):  try handler com.android.wm.shell.transition.DefaultMixedHandler@bcb2e86
+06-02 16:58:38.886 V/WindowManagerShell( 3524):  try handler com.android.wm.shell.keyguard.KeyguardTransitionHandler@f53d347
+06-02 16:58:38.886 V/WindowManagerShell( 3524):  try handler com.android.wm.shell.pip.PipTransition@503d02c
+06-02 16:58:38.886 V/WindowManagerShell( 3524):  try handler com.android.wm.shell.activityembedding.ActivityEmbeddingController@a153af5
+06-02 16:58:38.886 V/WindowManagerShell( 3524):  try handler com.android.wm.shell.recents.RecentsTransitionHandler@17ef08a
+06-02 16:58:38.886 V/ShellRecents( 3524): RecentsTransitionHandler.startAnimation: no controller found
+06-02 16:58:38.886 V/WindowManagerShell( 3524):  try handler com.android.wm.shell.splitscreen.StageCoordinator@512a6fb
+06-02 16:58:38.886 V/WindowManagerShell( 3524):  try handler com.android.wm.shell.transition.RemoteTransitionHandler@8f3c318
+06-02 16:58:38.886 V/WindowManagerShell( 3524): Transition doesn't have explicit remote, search filters for match for {id=451 t=OPEN f=0x0 trk=0 r=[0@Point(0, 0)] c=[{WCT{android.window.IWindowContainerToken$Stub$Proxy@94a8282} m=OPEN f=NONE leash=Surface(name=Task=1132)/@0xa3528f7 sb=Rect(0, 0 - 1080, 2340) eb=Rect(0, 0 - 1080, 2340) d=0 taskParent=-1},{WCT{android.window.IWindowContainerToken$Stub$Proxy@b095d93} m=TO_BACK f=SHOW_WALLPAPER leash=Surface(name=Task=1)/@0x127e364 sb=Rect(0, 0 - 1080, 2340) eb=Rect(0, 0 - 1080, 2340) d=0 taskParent=-1}]}
+06-02 16:58:38.886 V/WindowManagerShell( 3524):  Checking filter Pair{{types=[] flags=0x0] notFlags=0x100 checks=[{atype=home independent=true modes=[OPEN,TO_FRONT] flags=NONE mustBeTask=false order=TOP topActivity=ComponentInfo{jp.co.sharp.android.launcher3/jp.co.sharp.android.launcher3.uioverrides.QuickstepLauncher} launchCookie=null},{atype=standard independent=true modes=[CLOSE,TO_BACK] flags=NONE mustBeTask=false order=ANY topActivity=null launchCookie=null}]} RemoteTransition { remoteTransition = android.window.IRemoteTransition$Stub$Proxy@1cb9171, appThread = android.app.IApplicationThread$Stub$Proxy@8638b56, debugName = QuickstepLaunchHome }}
+06-02 16:58:38.886 V/WindowManagerShell( 3524):  Delegate animation for (#451) to null
+06-02 16:58:38.886 V/WindowManagerShell( 3524):  try handler com.android.wm.shell.transition.DefaultTransitionHandler@15ab7d7
+06-02 16:58:38.886 V/WindowManagerShell( 3524): start default transition animation, info = {id=451 t=OPEN f=0x0 trk=0 r=[0@Point(0, 0)] c=[{WCT{android.window.IWindowContainerToken$Stub$Proxy@94a8282} m=OPEN f=NONE leash=Surface(name=Task=1132)/@0xa3528f7 sb=Rect(0, 0 - 1080, 2340) eb=Rect(0, 0 - 1080, 2340) d=0 taskParent=-1},{WCT{android.window.IWindowContainerToken$Stub$Proxy@b095d93} m=TO_BACK f=SHOW_WALLPAPER leash=Surface(name=Task=1)/@0x127e364 sb=Rect(0, 0 - 1080, 2340) eb=Rect(0, 0 - 1080, 2340) d=0 taskParent=-1}]}
+06-02 16:58:38.886 V/WindowManagerShell( 3524): loadAnimation: anim=android.view.animation.AnimationSet@a03e5c9 animAttr=0x13 type=OPEN isEntrance=false
+06-02 16:58:38.886 V/WindowManagerShell( 3524): loadAnimation: anim=android.view.animation.AnimationSet@5c1585 animAttr=0x12 type=OPEN isEntrance=true
+06-02 16:58:38.887 V/WindowManagerShell( 3524):  animated by com.android.wm.shell.transition.DefaultTransitionHandler@15ab7d7
+06-02 16:58:38.889 W/UserManagerService( 2026): Requested status bar icon for non-badged user 0
+06-02 16:58:38.890 I/le.llama.aichat(31508): Using CollectorTypeCMC GC.
+06-02 16:58:38.895 D/nativeloader(31508): Load libframework-connectivity-tiramisu-jni.so using APEX ns com_android_tethering for caller /apex/com.android.tethering/javalib/framework-connectivity-t.jar: ok
+06-02 16:58:38.898 V/ActivityManager( 2026): New death recipient com.android.server.am.ActivityManagerService$AppDeathRecipient@b17951f for thread android.os.BinderProxy@d74206c
+06-02 16:58:38.901 I/ekjt    ( 4424): (REDACTED) HDM. appOpsListener %s %s
+06-02 16:58:38.903 I/ekjt    ( 4424): (REDACTED) HDM. Ignoring irrelevant audio permission changes for package %s
+06-02 16:58:38.904 D/MainProcessObserver( 4614): pid:31508 uid:10328 foregroundActivities:true
+06-02 16:58:38.905 W/ActivityTaskManager( 2026): MANAGE_ACTIVITY_STACKS is deprecated, please use alternative permission: MANAGE_ACTIVITY_TASKS
+06-02 16:58:38.905 D/onForegroundChanged( 4614): topActivity:ComponentInfo{com.example.llama.aichat/com.example.llama.MainActivity}, taskId:1132, windowingMode:1
+06-02 16:58:38.905 D/onForegroundChanged( 4614): packageName:com.example.llama.aichat
+06-02 16:58:38.907 D/ActivityManager( 2026): sync unfroze 18191 sharp.jp.android.makersiteappli for 3
+06-02 16:58:38.908 D/nativeloader(31508): Configuring clns-7 for other apk /data/app/~~E7LPiqSNP09rm9XH1nxe9w==/com.example.llama.aichat-7tWWq3KjjHrdot14eV0Yow==/base.apk. target_sdk_version=36, uses_libraries=libOpenCL.so:libcdsprpc.so, library_path=/data/app/~~E7LPiqSNP09rm9XH1nxe9w==/com.example.llama.aichat-7tWWq3KjjHrdot14eV0Yow==/lib/arm64:/data/app/~~E7LPiqSNP09rm9XH1nxe9w==/com.example.llama.aichat-7tWWq3KjjHrdot14eV0Yow==/base.apk!/lib/arm64-v8a, permitted_path=/data:/mnt/expand:/data/user/0/com.example.llama.aichat
+06-02 16:58:38.908 D/ActivityThread(18191): Package [com.example.llama.aichat] reported as REPLACED, but missing application info. Assuming REMOVED.
+06-02 16:58:38.909 D/ActivityThread(18191): Package [com.example.llama.aichat] reported as REPLACED, but missing application info. Assuming REMOVED.
+06-02 16:58:38.911 D/EventRepositoryImpl( 4418): onChangeForeground(com.example.llama.aichat, 1132)
+06-02 16:58:38.912 V/GraphicsEnvironment(31508): Currently set values for:
+06-02 16:58:38.912 V/GraphicsEnvironment(31508):   angle_gl_driver_selection_pkgs=[]
+06-02 16:58:38.912 V/GraphicsEnvironment(31508):   angle_gl_driver_selection_values=[]
+06-02 16:58:38.912 V/GraphicsEnvironment(31508): Global.Settings values are invalid: number of packages: 0, number of values: 0
+06-02 16:58:38.912 V/GraphicsEnvironment(31508): Updatable production driver is not supported on the device.
+06-02 16:58:38.913 W/ResOptExtFactory(31508): ResOptExtFactoryImpl not found
+06-02 16:58:38.913 D/EventRepositoryImpl( 4418): onDeactivatedApplication()
+06-02 16:58:38.915 D/WM-WrkMgrInitializer(31508): Initializing WorkManager with default configuration.
+06-02 16:58:38.916 D/WM-PackageManagerHelper(31508): Skipping component enablement for androidx.work.impl.background.systemjob.SystemJobService
+06-02 16:58:38.916 D/WM-Schedulers(31508): Created SystemJobScheduler and enabled SystemJobService
+06-02 16:58:38.917 D/EventRepositoryImpl( 4418): onActivatedApplication(com.example.llama.aichat)
+06-02 16:58:38.918 D/ScShoCaptureReceirver( 8434): receive ACTION_LOCK_CLIPNOW_FOR_SETTING
+06-02 16:58:38.924 D/vulkan  (31508): searching for layers in '/data/app/~~E7LPiqSNP09rm9XH1nxe9w==/com.example.llama.aichat-7tWWq3KjjHrdot14eV0Yow==/lib/arm64'
+06-02 16:58:38.924 D/vulkan  (31508): searching for layers in '/data/app/~~E7LPiqSNP09rm9XH1nxe9w==/com.example.llama.aichat-7tWWq3KjjHrdot14eV0Yow==/base.apk!/lib/arm64-v8a'
+06-02 16:58:38.929 I/qspmHal ( 1538): enter getGpuProf at: -2020708911
+06-02 16:58:38.929 I/qspmHal ( 1538): Coudn't match the GFX PID 31508 to AT PID 0. Checking in local cache.
+06-02 16:58:38.929 E/qspmHal ( 1538): PID 31508 from GFX didn't match!!
+06-02 16:58:38.929 I/AdrenoVK-0(31508): ===== BEGIN DUMP OF OVERRIDDEN SETTINGS =====
+06-02 16:58:38.929 I/AdrenoVK-0(31508): ===== END DUMP OF OVERRIDDEN SETTINGS =====
+06-02 16:58:38.932 I/AdrenoVK-0(31508): QUALCOMM build          : 43c70540de, Ibee7afe120
+06-02 16:58:38.932 I/AdrenoVK-0(31508): Build Date              : 07/17/24
+06-02 16:58:38.932 I/AdrenoVK-0(31508): Shader Compiler Version : E031.45.02.16
+06-02 16:58:38.932 I/AdrenoVK-0(31508): Local Branch            : 
+06-02 16:58:38.932 I/AdrenoVK-0(31508): Remote Branch           : refs/tags/AU_LINUX_ANDROID_LA.VENDOR.14.3.0.11.00.00.973.576
+06-02 16:58:38.932 I/AdrenoVK-0(31508): Remote Branch           : NONE
+06-02 16:58:38.932 I/AdrenoVK-0(31508): Reconstruct Branch      : NOTHING
+06-02 16:58:38.932 I/AdrenoVK-0(31508): Build Config            : S P 16.1.2 AArch64
+06-02 16:58:38.932 I/AdrenoVK-0(31508): Driver Path             : /vendor/lib64/hw/vulkan.adreno.so
+06-02 16:58:38.932 I/AdrenoVK-0(31508): Driver Version          : 0762.24
+06-02 16:58:38.932 I/AdrenoVK-0(31508): PFP                     : 0x01310168
+06-02 16:58:38.932 I/AdrenoVK-0(31508): ME                      : 0x00000000
+06-02 16:58:38.933 I/AdrenoVK-0(31508): Application Name    : android framework
+06-02 16:58:38.933 I/AdrenoVK-0(31508): Application Version : 0x00000000
+06-02 16:58:38.933 I/AdrenoVK-0(31508): Engine Name         : android framework
+06-02 16:58:38.933 I/AdrenoVK-0(31508): Engine Version      : 0x00000000
+06-02 16:58:38.933 I/AdrenoVK-0(31508): Api Version         : 0x00401000
+06-02 16:58:38.966 D/AppCompatDelegate(31508): Checking for metadata for AppLocalesMetadataHolderService : Service not found
+06-02 16:58:38.966 I/byee    (26853): onPause
+06-02 16:58:38.966 W/dnth    (26853): measuring already stopped.
+06-02 16:58:38.982 W/MaterialButton(31508): MaterialButton manages its own background to control elevation, shape, color and states. Consider using backgroundTint, shapeAppearance and other attributes where available. A custom background will ignore these attributes and you should consider handling interaction states such as pressed, focused and disabled
+06-02 16:58:38.982 W/MaterialButton(31508): MaterialButton manages its own background to control elevation, shape, color and states. Consider using backgroundTint, shapeAppearance and other attributes where available. A custom background will ignore these attributes and you should consider handling interaction states such as pressed, focused and disabled
+06-02 16:58:38.982 W/MaterialButton(31508): MaterialButton manages its own background to control elevation, shape, color and states. Consider using backgroundTint, shapeAppearance and other attributes where available. A custom background will ignore these attributes and you should consider handling interaction states such as pressed, focused and disabled
+06-02 16:58:38.982 W/MaterialButton(31508): MaterialButton manages its own background to control elevation, shape, color and states. Consider using backgroundTint, shapeAppearance and other attributes where available. A custom background will ignore these attributes and you should consider handling interaction states such as pressed, focused and disabled
+06-02 16:58:38.982 W/MaterialButton(31508): MaterialButton manages its own background to control elevation, shape, color and states. Consider using backgroundTint, shapeAppearance and other attributes where available. A custom background will ignore these attributes and you should consider handling interaction states such as pressed, focused and disabled
+06-02 16:58:38.982 W/MaterialButton(31508): MaterialButton manages its own background to control elevation, shape, color and states. Consider using backgroundTint, shapeAppearance and other attributes where available. A custom background will ignore these attributes and you should consider handling interaction states such as pressed, focused and disabled
+06-02 16:58:38.983 W/MaterialButton(31508): MaterialButton manages its own background to control elevation, shape, color and states. Consider using backgroundTint, shapeAppearance and other attributes where available. A custom background will ignore these attributes and you should consider handling interaction states such as pressed, focused and disabled
+06-02 16:58:38.983 W/MaterialButton(31508): MaterialButton manages its own background to control elevation, shape, color and states. Consider using backgroundTint, shapeAppearance and other attributes where available. A custom background will ignore these attributes and you should consider handling interaction states such as pressed, focused and disabled
+06-02 16:58:38.983 W/WindowOnBackDispatcher(31508): OnBackInvokedCallback is not enabled for the application.
+06-02 16:58:38.983 W/WindowOnBackDispatcher(31508): Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+06-02 16:58:38.984 I/ContentCaptureHelper(31508): Setting logging level to OFF
+06-02 16:58:38.989 D/InputEventReceiver(31508): Input log is disabled in InputEventReceiver.
+06-02 16:58:38.994 D/AutofillManager(31508): view not autofillable - has multiline input type
+06-02 16:58:38.994 D/AutofillManager(31508): view not autofillable - has multiline input type
+06-02 16:58:38.994 D/AutofillManager(31508): view not autofillable - has multiline input type
+06-02 16:58:38.994 D/AutofillManager(31508): view not autofillable - has multiline input type
+06-02 16:58:38.995 D/CoreBackPreview( 2026): Window{7946ed2 u0 com.example.llama.aichat/com.example.llama.MainActivity}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@f4bdea0, mPriority=0, mIsAnimationCallback=false}
+06-02 16:58:39.001 W/WindowManager( 2026): Changing focus from null to Window{7946ed2 u0 com.example.llama.aichat/com.example.llama.MainActivity} displayId=0 Callers=com.android.server.wm.RootWindowContainer.updateFocusedWindowLocked:479 com.android.server.wm.WindowManagerService.updateFocusedWindowLocked:6654 com.android.server.wm.WindowManagerService.relayoutWindowInner:2780 com.android.server.wm.WindowManagerService.relayoutWindow:2450 
+06-02 16:58:39.005 I/hwservicemanager(  943): getTransport: Cannot find entry android.hardware.graphics.allocator@4.0::IAllocator/default in either framework or device VINTF manifest.
+06-02 16:58:39.007 I/AdrenoUtils(31508): <ReadGpuID:357>: Reading chip ID through GSL
+06-02 16:58:39.007 W/qdgralloc(31508): getInterlacedFlag: getMetaData returned 3, defaulting to interlaced_flag = 0
+06-02 16:58:39.017 W/qdgralloc(31508): getInterlacedFlag: getMetaData returned 3, defaulting to interlaced_flag = 0
+06-02 16:58:39.023 W/qdgralloc( 3524): getInterlacedFlag: getMetaData returned 3, defaulting to interlaced_flag = 0
+06-02 16:58:39.025 I/System.out( 4614): intent:Intent { act=android.intent.action.PACKAGE_ADDED dat=package: flg=0x4000010 (has extras) }
+06-02 16:58:39.025 I/System.out( 4614): intent:Intent { act=ACTION_SET_GAME_VIEW flg=0x10 (has extras) }
+06-02 16:58:39.025 W/JobInfo ( 2026): Job 'jp.co.sharp.android.gamingbasemodule/.GamingMenuJobIntentService#990' has a deadline with no functional constraints. The deadline won't improve job execution latency. Consider removing the deadline.
+06-02 16:58:39.026 W/MediaProvider( 4515): WorkProfileOwnerApps cache is empty
+06-02 16:58:39.026 D/PickerSyncLockManager( 4515): Trying to acquire lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@6098f39[Unlocked]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = []
+06-02 16:58:39.026 D/CloseableReentrantLock( 4515): Successfully acquired lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@6098f39[Locked by thread main]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = []
+06-02 16:58:39.026 D/CloseableReentrantLock( 4515): Successfully released lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@6098f39[Unlocked]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = []
+06-02 16:58:39.027 E/ANDR-PERF-LM( 1500): FeatureState: deleteRow() 208: Entry not found in db
+06-02 16:58:39.027 W/qdgralloc( 3524): getInterlacedFlag: getMetaData returned 3, defaulting to interlaced_flag = 0
+06-02 16:58:39.027 E/ANDR-PERF-LM( 1500): FeatureState: deleteRow() 208: Entry not found in db
+06-02 16:58:39.026 I/Finsky  (10842): [2] ajol - Received: android.intent.action.PACKAGE_REMOVED, [b87jivnbBQq0atgw1Xf-Ggu1xd0FqUEHy7hWhoHpV4c]
+06-02 16:58:39.028 W/SQLiteLog( 4812): (28) double-quoted string literal: "com.example.llama.aichat"
+06-02 16:58:39.029 D/ControlsListingControllerImpl( 3524): ServiceConfig reloaded, count: 1
+06-02 16:58:39.030 D/ControlsListingControllerImpl( 3524): ServiceConfig reloaded, count: 1
+06-02 16:58:39.030 D/ControlsListingControllerImpl( 3524): ServiceConfig reloaded, count: 1
+06-02 16:58:39.031 I/ImeTracker( 2026): com.example.llama.aichat:f7c9e65e: onRequestHide at ORIGIN_SERVER reason HIDE_UNSPECIFIED_WINDOW fromUser false
+06-02 16:58:39.032 I/ImeTracker( 2026): com.example.llama.aichat:f7c9e65e: onCancelled at PHASE_SERVER_SHOULD_HIDE
+06-02 16:58:39.033 I/ActivityTaskManager( 2026): Displayed com.example.llama.aichat/com.example.llama.MainActivity for user 0: +163ms
+06-02 16:58:39.035 D/InputEventReceiver( 8272): Input log is disabled in InputEventReceiver.
+06-02 16:58:39.036 W/qdgralloc(31508): getInterlacedFlag: getMetaData returned 3, defaulting to interlaced_flag = 0
+06-02 16:58:39.036 W/qdgralloc( 3524): getInterlacedFlag: getMetaData returned 3, defaulting to interlaced_flag = 0
+06-02 16:58:39.037 E/ANDR-PERF-LM( 1500): MetaMeter: handleAsync() 166: LightningLaunches Invalid Async
+06-02 16:58:39.039 I/GoogleInputMethodService( 8272): GoogleInputMethodService.onFinishInput():2259 
+06-02 16:58:39.039 I/Finsky:background(10922): [2] ajob - Received: android.intent.action.PACKAGE_REMOVED, [b87jivnbBQq0atgw1Xf-Ggu1xd0FqUEHy7hWhoHpV4c]
+06-02 16:58:39.039 I/Module  ( 8272): DeviceLockedStatusModuleProvider$Module.updateDeviceLockedStatus():103 repeatCheckTimes = 0, locked = false
+06-02 16:58:39.040 I/GoogleInputMethodService( 8272): GoogleInputMethodService.onStartInput():1446 onStartInput(EditorInfo{EditorInfo{packageName=com.example.llama.aichat, inputType=0, inputTypeString=NULL, enableLearning=false, autoCorrection=false, autoComplete=false, imeOptions=0, privateImeOptions=null, actionName=UNSPECIFIED, actionLabel=null, initialSelStart=-1, initialSelEnd=-1, initialCapsMode=0, label=null, fieldId=0, fieldName=null, extras=null, hintText=null, hintLocales=[]}}, false)
+06-02 16:58:39.040 I/AndroidIME( 8272): LatinIMEBase.updateInputViewCoverNavigation():322 Update input view padding, isNavbarOverInputWindow=false, bottom inset=117
+06-02 16:58:39.040 I/Module  ( 8272): DeviceLockedStatusModuleProvider$Module.updateDeviceLockedStatus():103 repeatCheckTimes = 1, locked = false
+06-02 16:58:39.041 I/dsyd    ( 4424): (REDACTED) maybeUpdateCacheDataForAddedPackage %s
+06-02 16:58:39.045 W/SQLiteLog( 4812): (28) double-quoted string literal: "com.example.llama.aichat"
+06-02 16:58:39.046 W/PackageConfigPersister( 2026): App-specific configuration not found for packageName: com.example.llama.aichat and userId: 0
+06-02 16:58:39.048 I/Finsky  (10842): [2] AIM: AppInfoCacheUpdater -> invalidating apps: [com.example.llama.aichat]
+06-02 16:58:39.048 I/Finsky  (10842): [2] AIM: AppInfoManager-Perf > getApps > called for 1 apps
+06-02 16:58:39.048 I/Finsky  (10842): [1865] [ContentSync] finished, scheduled=false
+06-02 16:58:39.049 I/System.out( 4614): intent:Intent { act=ACTION_SET_NOTIFICATION_SUPPRESSION_TYPE flg=0x10 (has extras) }
+06-02 16:58:39.049 W/JobInfo ( 2026): Job 'jp.co.sharp.android.gamingbasemodule/.GamingMenuJobIntentService#990' has a deadline with no functional constraints. The deadline won't improve job execution latency. Consider removing the deadline.
+06-02 16:58:39.049 I/System.out( 4614): intent:Intent { act=ACTION_SET_FINGERPRINT_SENSOR flg=0x10 (has extras) }
+06-02 16:58:39.049 W/JobInfo ( 2026): Job 'jp.co.sharp.android.gamingbasemodule/.GamingMenuJobIntentService#990' has a deadline with no functional constraints. The deadline won't improve job execution latency. Consider removing the deadline.
+06-02 16:58:39.049 I/System.out( 4614): intent:Intent { act=ACTION_SET_GESTURES flg=0x10 (has extras) }
+06-02 16:58:39.049 W/JobInfo ( 2026): Job 'jp.co.sharp.android.gamingbasemodule/.GamingMenuJobIntentService#990' has a deadline with no functional constraints. The deadline won't improve job execution latency. Consider removing the deadline.
+06-02 16:58:39.050 I/Finsky  (10842): [64] AIM: AppInfoManager-Perf > OnDeviceAppInfo > cacheHitCount=0, cacheMissCount=1. Missed  in cache (limit 10) : [com.example.llama.aichat]
+06-02 16:58:39.051 I/artd    (31146): GetBestInfo: odex next to the dex file (/data/app/~~E7LPiqSNP09rm9XH1nxe9w==/com.example.llama.aichat-7tWWq3KjjHrdot14eV0Yow==/oat/arm64/base.odex) is kOatUpToDate with filter 'verify' executable 'false'
+06-02 16:58:39.053 I/Finsky  (10842): [63] AIM: Got app ownership map. App counts: . Unique apps: 0
+06-02 16:58:39.053 E/Finsky  (10842): [63] [Counters] attempted to use a non-positive increment for: 4752
+06-02 16:58:39.053 E/Finsky  (10842): [63] [Counters] attempted to use a non-positive increment for: 4753
+06-02 16:58:39.052 V/GamingMenuJobIntentService( 4614): GAMING_ACTION_SET_GAME_VIEW: start
+06-02 16:58:39.054 V/GamingMenuJobIntentService( 4614): GAMING_ACTION_SET_GAME_VIEW: end
+06-02 16:58:39.054 V/GamingMenuJobIntentService( 4614): GAMING_ACTION_SET_NOTIFICATION_SUPPRESSION_TYPE: start
+06-02 16:58:39.054 V/setNotificationSuppressionType( 4614): start: type:0
+06-02 16:58:39.054 V/setNotificationSuppressionType( 4614): granted
+06-02 16:58:39.055 V/setNotificationSuppressionType( 4614): end
+06-02 16:58:39.055 V/GamingMenuJobIntentService( 4614): GAMING_ACTION_SET_NOTIFICATION_SUPPRESSION_TYPE: end
+06-02 16:58:39.055 V/GamingMenuJobIntentService( 4614): GAMING_ACTION_SET_FINGERPRINT_SENSOR: start
+06-02 16:58:39.055 V/setFingerprintSensor( 4614): enabled = 1
+06-02 16:58:39.056 V/GamingMenuJobIntentService( 4614): GAMING_ACTION_SET_FINGERPRINT_SENSOR: end
+06-02 16:58:39.056 V/GamingMenuJobIntentService( 4614): GAMING_ACTION_SET_GESTURES: start
+06-02 16:58:39.056 V/GamingMenuJobIntentService( 4614): GAMING_ACTION_SET_GESTURES: end
+06-02 16:58:39.058 I/artd    (31146): GetBestInfo: odex next to the dex file (/data/app/~~E7LPiqSNP09rm9XH1nxe9w==/com.example.llama.aichat-7tWWq3KjjHrdot14eV0Yow==/oat/arm64/base.odex) is kOatUpToDate with filter 'verify' executable 'false'
+06-02 16:58:39.060 I/AiAiVC  ( 4408): Centralized allowlist: requested package com.google.android.apps.messaging is in the allowlist
+06-02 16:58:39.060 I/AiAiVC  ( 4408): Centralized allowlist: requested package com.google.android.gm is in the allowlist
+06-02 16:58:39.062 I/AiAiVC  ( 4408): Centralized allowlist: requested package com.google.android.apps.messaging is in the allowlist
+06-02 16:58:39.062 I/AiAiVC  ( 4408): Centralized allowlist: requested package com.google.android.gm is in the allowlist
+06-02 16:58:39.064 I/AiAiVC  ( 4408): Centralized allowlist: requested package com.google.android.apps.messaging is in the allowlist
+06-02 16:58:39.064 I/AiAiVC  ( 4408): Centralized allowlist: requested package com.google.android.gm is in the allowlist
+06-02 16:58:39.065 I/AiAiVC  ( 4408): Centralized allowlist: requested package com.google.android.apps.messaging is in the allowlist
+06-02 16:58:39.065 I/AiAiVC  ( 4408): Centralized allowlist: requested package com.google.android.gm is in the allowlist
+06-02 16:58:39.065 I/AiAiVC  ( 4408): Centralized allowlist: requested package com.google.android.apps.messaging is in the allowlist
+06-02 16:58:39.065 I/AiAiVC  ( 4408): Centralized allowlist: requested package com.google.android.gm is in the allowlist
+06-02 16:58:39.065 I/AiAiVC  ( 4408): Centralized allowlist: requested package com.google.android.apps.messaging is in the allowlist
+06-02 16:58:39.065 I/AiAiVC  ( 4408): Centralized allowlist: requested package com.google.android.gm is in the allowlist
+06-02 16:58:39.070 I/Finsky  (10842): [2] ajol - Received: android.intent.action.PACKAGE_ADDED, [b87jivnbBQq0atgw1Xf-Ggu1xd0FqUEHy7hWhoHpV4c]
+06-02 16:58:39.070 I/Finsky:background(10922): [992] Wrote row to frosting DB: 7641
+06-02 16:58:39.070 W/SQLiteLog( 4812): (28) double-quoted string literal: "com.example.llama.aichat"
+06-02 16:58:39.072 I/AppBackupStateCleanupIO(29518): Backup state cleanup on uninstall is disabled. [CONTEXT service_id=229 ]
+06-02 16:58:39.072 I/Finsky:background(10922): [2] ajob - Received: android.intent.action.PACKAGE_ADDED, [b87jivnbBQq0atgw1Xf-Ggu1xd0FqUEHy7hWhoHpV4c]
+06-02 16:58:39.073 I/artd    (31146): GetBestInfo: odex next to the dex file (/data/app/~~E7LPiqSNP09rm9XH1nxe9w==/com.example.llama.aichat-7tWWq3KjjHrdot14eV0Yow==/oat/arm64/base.odex) is kOatUpToDate with filter 'verify' executable 'false'
+06-02 16:58:39.073 I/Finsky  (10842): [62] AIM: AppInfoManager-Perf > OnDeviceAppInfo > cacheHitCount=1, cacheMissCount=0. Missed  in cache (limit 10) : []
+06-02 16:58:39.074 I/Finsky  (10842): [62] AIM: Got app ownership map. App counts: . Unique apps: 0
+06-02 16:58:39.074 E/Finsky  (10842): [62] [Counters] attempted to use a non-positive increment for: 4752
+06-02 16:58:39.075 I/FraudProtectUtils(29518): (REDACTED) Latest bank app list size: %d, %s isBankApp: %b
+06-02 16:58:39.075 I/Finsky  (10842): [64] AIM: AppInfoManager-Perf > ItemModel > CacheSize=52, cacheHitCount=0, cacheMissCount=0, total appsWithNoServerDataCount=3. Missed  in cache (limit 10) : []
+06-02 16:58:39.075 I/PackageInstalledIntentO(29518): (REDACTED) Package %s is not a bank app. Skipping updates.
+06-02 16:58:39.075 I/Finsky  (10842): [1865] [ContentSync] finished, scheduled=false
+06-02 16:58:39.079 I/Finsky:background(10922): [56] IQ:PSL: skipping onPackageRemoved(replacing=true) for untracked package=com.example.llama.aichat
+06-02 16:58:39.079 I/Finsky:background(10922): [992] Wrote row to frosting DB: 7642
+06-02 16:58:39.079 E/Finsky  (10842): [62] [Counters] attempted to use a non-positive increment for: 4753
+06-02 16:58:39.081 I/Finsky  (10842): [2] AIM: AppInfoCacheUpdater -> invalidating apps: [com.example.llama.aichat]
+06-02 16:58:39.081 I/Finsky  (10842): [2] AIM: AppInfoManager-Perf > getApps > called for 1 apps
+06-02 16:58:39.082 I/Auth    (29518): (REDACTED) [SupervisedAccountIntentOperation] onHandleIntent: %s
+06-02 16:58:39.082 I/Finsky  (10842): [63] AIM: AppInfoManager-Perf > OnDeviceAppInfo > cacheHitCount=0, cacheMissCount=1. Missed  in cache (limit 10) : [com.example.llama.aichat]
+06-02 16:58:39.082 I/Finsky  (10842): [2] DTU: Received onPackageAdded, replacing: true
+06-02 16:58:39.082 I/ProximityAuth(23528): [RecentAppsMediator] Package added: (user=UserHandle{0}) com.example.llama.aichat
+06-02 16:58:39.083 I/Finsky  (10842): [65] AIM: Got app ownership map. App counts: . Unique apps: 0
+06-02 16:58:39.083 E/Finsky  (10842): [65] [Counters] attempted to use a non-positive increment for: 4752
+06-02 16:58:39.083 E/Finsky  (10842): [65] [Counters] attempted to use a non-positive increment for: 4753
+06-02 16:58:39.084 I/Finsky:background(10922): [2] ajob - Received: android.intent.action.PACKAGE_ADDED, [b87jivnbBQq0atgw1Xf-Ggu1xd0FqUEHy7hWhoHpV4c]
+06-02 16:58:39.084 I/artd    (31146): GetBestInfo: odex next to the dex file (/data/app/~~E7LPiqSNP09rm9XH1nxe9w==/com.example.llama.aichat-7tWWq3KjjHrdot14eV0Yow==/oat/arm64/base.odex) is kOatUpToDate with filter 'verify' executable 'false'
+06-02 16:58:39.086 W/AppInstallOperation(29518): FDL Migration::InstallIntentOperation by FDL Module [CONTEXT service_id=77 ]
+06-02 16:58:39.087 I/Finsky:background(10922): [992] Wrote row to frosting DB: 7643
+06-02 16:58:39.088 I/Fitness (23528): (REDACTED) FitCleanupIntentOperation received Intent %s
+06-02 16:58:39.091 I/Finsky  (10842): [2] ajol - Received: android.intent.action.PACKAGE_ADDED, [b87jivnbBQq0atgw1Xf-Ggu1xd0FqUEHy7hWhoHpV4c]
+06-02 16:58:39.092 I/Finsky:background(10922): [992] Wrote row to frosting DB: 7644
+06-02 16:58:39.093 I/Finsky  (10842): [65] AIM: AppInfoManager-Perf > OnDeviceAppInfo > cacheHitCount=1, cacheMissCount=0. Missed  in cache (limit 10) : []
+06-02 16:58:39.093 I/Finsky  (10842): [65] AIM: Got app ownership map. App counts: . Unique apps: 0
+06-02 16:58:39.095 D/BoundBrokerSvc(29518): onBind: Intent { act=com.google.android.gms.common.BIND_SHARED_PREFS pkg=com.google.android.gms }
+06-02 16:58:39.095 E/Finsky  (10842): [65] [Counters] attempted to use a non-positive increment for: 4752
+06-02 16:58:39.095 D/BoundBrokerSvc(29518): Loading bound service for intent: Intent { act=com.google.android.gms.common.BIND_SHARED_PREFS pkg=com.google.android.gms }
+06-02 16:58:39.095 E/Finsky  (10842): [65] [Counters] attempted to use a non-positive increment for: 4753
+06-02 16:58:39.097 I/Finsky  (10842): [2] ajol - Deduping intent android.intent.action.PACKAGE_ADDED
+06-02 16:58:39.097 I/Finsky:background(10922): [2] ajob - Deduping intent android.intent.action.PACKAGE_ADDED
+06-02 16:58:39.098 I/Finsky  (10842): [2] ajol - Received: android.intent.action.PACKAGE_ADDED, [b87jivnbBQq0atgw1Xf-Ggu1xd0FqUEHy7hWhoHpV4c]
+06-02 16:58:39.098 W/SQLiteLog(29518): (28) double-quoted string literal: "com.example.llama.aichat"
+06-02 16:58:39.099 I/NearbyDiscovery(29518): (REDACTED) processGrantSlicePermission: %s
+06-02 16:58:39.101 I/Finsky  (10842): [2] ajol - Deduping intent android.intent.action.PACKAGE_ADDED
+06-02 16:58:39.101 I/Finsky:background(10922): [2] ajob - Received: android.intent.action.PACKAGE_ADDED, [b87jivnbBQq0atgw1Xf-Ggu1xd0FqUEHy7hWhoHpV4c]
+06-02 16:58:39.103 I/FraudProtectUtils(29518): (REDACTED) Latest bank app list size: %d, %s isBankApp: %b
+06-02 16:58:39.103 I/PackageInstalledIntentO(29518): (REDACTED) Package %s is not a bank app. Skipping updates.
+06-02 16:58:39.104 I/Finsky  (10842): [49] RECEIVER_PACKAGE_MONITOR#logWorkEndAndFinishGoAsync: SUCCESS
+06-02 16:58:39.108 I/Finsky  (10842): [65] AIM: AppInfoManager-Perf > getApps > data collection finished
+06-02 16:58:39.108 I/Finsky  (10842): [65] AIM: AppInfoManager-Perf > maybeDestroyAppInfoManager is called. actives = 3
+06-02 16:58:39.109 I/Finsky:background(10922): [992] Wrote row to frosting DB: 7645
+06-02 16:58:39.110 W/ParceledListSlice( 2026): Element #192 is 16568 bytes.
+06-02 16:58:39.111 I/Finsky:background(10922): [2] ajob - Deduping intent android.intent.action.PACKAGE_ADDED
+06-02 16:58:39.112 I/Finsky:background(10922): [992] Wrote row to frosting DB: 7646
+06-02 16:58:39.114 I/Finsky:background(10922): [64] RECEIVER_PACKAGE_MONITOR_BACKGROUND#logWorkEndAndFinishGoAsync: SUCCESS
+06-02 16:58:39.115 I/Icing   (29518): IndexChimeraService.getServiceInterface callingPackage=com.google.android.gms componentName=AppsCorpus serviceId=36
+06-02 16:58:39.123 W/ContextImpl( 2026): Calling a method in the system process without a qualified user: android.app.ContextImpl.sendBroadcast:1249 android.content.ContextWrapper.sendBroadcast:506 jp.co.sharp.android.brightkeep.BrightKeepService.checkTimerEvent:525 jp.co.sharp.android.brightkeep.BrightKeepService.onSensorHubChanged:1182 jp.co.sharp.android.sensorhub.AccelerometerSHEXConverter.onSensorChanged:102 
+06-02 16:58:39.123 V/BrightKeepService( 2026): getAction: jp.co.sharp.android.intent.action.CLICK_SCREEN_ON isOutOfHand: true
+06-02 16:58:39.125 W/ParceledListSlice( 2026): Element #192 is 16568 bytes.
+06-02 16:58:39.126 D/BoundBrokerSvc(29518): onBind: Intent { act=com.google.android.gms.feedback.internal.IFeedbackService dat=chimera-action:/... cmp=com.google.android.gms/.chimera.GmsBoundBrokerService }
+06-02 16:58:39.126 D/BoundBrokerSvc(29518): Loading bound service for intent: Intent { act=com.google.android.gms.feedback.internal.IFeedbackService dat=chimera-action:/... cmp=com.google.android.gms/.chimera.GmsBoundBrokerService }
+06-02 16:58:39.137 I/Icing   (29518): IndexChimeraService.getServiceInterface callingPackage=com.google.android.gms componentName=null serviceId=30
+06-02 16:58:39.139 I/Finsky  (10842): [64] AIM: AppInfoManager-Perf > ItemModel > CacheSize=52, cacheHitCount=0, cacheMissCount=0, total appsWithNoServerDataCount=3. Missed  in cache (limit 10) : []
+06-02 16:58:39.140 I/Icing   (29518): Usage reports ok 1, Failed Usage reports 0, indexed 0, rejected 0
+06-02 16:58:39.147 I/Finsky  (10842): [65] AIM: AppInfoManager-Perf > ItemModel > CacheSize=52, cacheHitCount=0, cacheMissCount=0, total appsWithNoServerDataCount=3. Missed  in cache (limit 10) : []
+06-02 16:58:39.149 I/Finsky  (10842): [63] AIM: AppInfoManager-Perf > ItemModel > CacheSize=52, cacheHitCount=0, cacheMissCount=0, total appsWithNoServerDataCount=3. Missed  in cache (limit 10) : []
+06-02 16:58:39.151 I/Icing   (29518): Usage reports ok 0, Failed Usage reports 0, indexed 0, rejected 0
+06-02 16:58:39.152 I/Finsky  (10842): [63] AIM: AppInfoManager-Perf > getApps > data collection finished
+06-02 16:58:39.152 I/Finsky  (10842): [63] AIM: AppInfoManager-Perf > maybeDestroyAppInfoManager is called. actives = 2
+06-02 16:58:39.159 I/Icing   (29518): Indexing com.google.android.gms-apps from com.google.android.gms
+06-02 16:58:39.162 V/SafetySourceDataValidat( 2026): Package: com.android.vending has expected signature
+06-02 16:58:39.162 V/SafetySourceDataValidat( 2026): Package: com.android.vending has expected signature
+06-02 16:58:39.169 V/WindowManagerShell( 3524): Transition animation finished (aborted=false), notifying core (#451) android.os.BinderProxy@91440d2@0
+06-02 16:58:39.171 V/WindowManager( 2026): Finish Transition (#451): created at 06-02 16:58:38.857 collect-started=0.022ms request-sent=7.54ms started=15.057ms ready=26.262ms sent=27.347ms finished=314.266ms
+06-02 16:58:39.174 D/VRI[QuickstepLauncher]( 4001): visibilityChanged oldVisibility=true newVisibility=false
+06-02 16:58:39.175 D/VRI[GoogleDiscoverWindow](26853): visibilityChanged oldVisibility=true newVisibility=false
+06-02 16:58:39.175 I/Icing   (29518): Indexing done com.google.android.gms-apps
+06-02 16:58:39.179 V/WindowManagerShell( 3524): Track 0 became idle
+06-02 16:58:39.179 V/WindowManagerShell( 3524): All active transition animations finished
+06-02 16:58:39.187 W/UserManagerService( 2026): Requested status bar icon for non-badged user 0
+06-02 16:58:39.189 W/UserManagerService( 2026): Requested status bar icon for non-badged user 0
+06-02 16:58:39.192 W/System  ( 2026): A resource failed to call release. 
+06-02 16:58:39.198 D/BaseDepthController( 4001): setSurface:
+06-02 16:58:39.198 D/BaseDepthController( 4001): 	mWaitingOnSurfaceValidity: false
+06-02 16:58:39.198 D/BaseDepthController( 4001): 	mSurface: null
+06-02 16:58:39.198 D/BaseDepthController( 4001): mSurface is null and mCurrentBlur is: 0
+06-02 16:58:39.200 D/StateManager( 4001): goToState - fromState: Normal, toState: Normal, partial trace:
+06-02 16:58:39.200 D/StateManager( 4001): 	at com.android.launcher3.statemanager.StateManager.moveToRestState(StateManager.java:458)
+06-02 16:58:39.200 D/StateManager( 4001): 	at com.android.launcher3.statemanager.StateManager.moveToRestState(StateManager.java:449)
+06-02 16:58:39.200 D/StateManager( 4001): 	at com.android.launcher3.statemanager.StatefulActivity.onStop(StatefulActivity.java:122)
+06-02 16:58:39.205 D/StatsLog( 4001): LAUNCHER_ONSTOP
+06-02 16:58:39.205 I/byee    (26853): onStop
+06-02 16:58:39.214 D/MainProcessObserver( 4614): pid:4001 uid:10231 foregroundActivities:false
+06-02 16:58:39.215 W/ActivityTaskManager( 2026): MANAGE_ACTIVITY_STACKS is deprecated, please use alternative permission: MANAGE_ACTIVITY_TASKS
+06-02 16:58:39.215 D/onForegroundChanged( 4614): topActivity:ComponentInfo{com.example.llama.aichat/com.example.llama.MainActivity}, taskId:1132, windowingMode:1
+06-02 16:58:39.215 D/onForegroundChanged( 4614): packageName:com.example.llama.aichat
+06-02 16:58:39.263 W/android.vending(10842): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~E7LPiqSNP09rm9XH1nxe9w==/com.example.llama.aichat-7tWWq3KjjHrdot14eV0Yow==/base.apk' with 1 weak references
+06-02 16:58:39.379 W/WindowOnBackDispatcher( 3524): sendCancelIfRunning: isInProgress=false callback=android.view.ViewRootImpl$$ExternalSyntheticLambda11@7b182a
+06-02 16:58:39.380 D/CoreBackPreview( 2026): Window{d228e09 u0 Splash Screen com.example.llama.aichat EXITING}: Setting back callback null
+06-02 16:58:39.381 W/InputManager-JNI( 2026): Input channel object 'd228e09 Splash Screen com.example.llama.aichat (client)' was disposed without first being removed with the input manager!
+06-02 16:58:39.435 D/ActivityManager( 2026): notifyResumeComponent isGame : false
+06-02 16:58:39.446 I/bte     ( 8321): Handling installed or updated package: com.example.llama.aichat
+06-02 16:58:39.446 I/ckk     ( 8321): Attempting to classify package: com.example.llama.aichat using model: bll_1
+06-02 16:58:39.478 W/ParceledListSlice( 2026): Element #27 is 20064 bytes.
+06-02 16:58:39.478 W/ParceledListSlice( 2026): Element #28 is 21044 bytes.
+06-02 16:58:39.487 W/ParceledListSlice( 2026): Element #237 is 42700 bytes.
+06-02 16:58:39.487 W/ParceledListSlice( 2026): Element #238 is 42744 bytes.
+06-02 16:58:39.487 W/ParceledListSlice( 2026): Overly large reply size: 88192
+06-02 16:58:39.487 W/ParceledListSlice( 2026): Element #239 is 42744 bytes.
+06-02 16:58:39.487 W/ParceledListSlice( 2026): Element #240 is 42748 bytes.
+06-02 16:58:39.487 W/ParceledListSlice( 2026): Overly large reply size: 85508
+06-02 16:58:39.488 W/ParceledListSlice( 2026): Element #241 is 42704 bytes.
+06-02 16:58:39.488 W/ParceledListSlice( 2026): Element #242 is 42704 bytes.
+06-02 16:58:39.488 W/ParceledListSlice( 2026): Overly large reply size: 85424
+06-02 16:58:39.488 W/ParceledListSlice( 2026): Element #243 is 42716 bytes.
+06-02 16:58:39.494 I/FontLog (23528): (REDACTED) Received query %s, URI %s
+06-02 16:58:39.494 I/FontLog (23528): (REDACTED) Query [%s] resolved to %s
+06-02 16:58:39.496 I/FontLog (23528): (REDACTED) Fetch %s end status %s
+06-02 16:58:39.497 I/FontLog (23528): (REDACTED) Pulling font file for id = %d, cache size = %d
+06-02 16:58:39.498 W/le.android.odad( 8321): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~E7LPiqSNP09rm9XH1nxe9w==/com.example.llama.aichat-7tWWq3KjjHrdot14eV0Yow==/base.apk' with 1 weak references
+06-02 16:58:39.499 I/FontLog (23528): (REDACTED) Pulling font file for id = %d, cache size = %d
+06-02 16:58:39.516 I/buj     ( 8321): BLL finished for package: com.example.llama.aichat, score: 6.0, verdict: NOT_HARMFUL
+06-02 16:58:39.516 I/ckk     ( 8321): Finished new classification for package: com.example.llama.aichat, model: bll_1, verdict: NOT_HARMFUL, score: 6.0
+06-02 16:58:39.525 I/bte     ( 8321): Work finished, result: Result(successCount=3, failureCount=0), latency: PT0.896S
+06-02 16:58:39.528 I/btq     ( 8321): Finished work type: HANDLE_PACKAGES_CHANGED, success: true, latency: PT0.9S
+06-02 16:58:39.528 I/WorkService( 8321): Stopping the work service
+06-02 16:58:39.530 D/WindowManager( 2026): setParent old=ActivityRecord{d77f5d1 u0 com.example.llama.aichat/com.example.llama.MainActivity t1132},new=null,this window=Window{d228e09 u0 Splash Screen com.example.llama.aichat},callers=com.android.server.wm.WindowContainer.removeChild:833 com.android.server.wm.ActivityRecord.removeChild:4750 com.android.server.wm.ActivityRecord.removeChild:435 com.android.server.wm.WindowContainer.removeImmediately:891 com.android.server.wm.WindowState.removeImmediately:2391 com.android.server.wm.WindowState.destroySurface:3371 
+06-02 16:58:39.530 W/ForegroundServiceTypeLoggerModule( 2026): FGS stop call for: 10365 has no types!
+06-02 16:58:39.533 I/WorkService( 8321): Work service moved out of the foreground
+06-02 16:58:39.535 I/WorkService( 8321): Work service destroyed
+06-02 16:58:39.535 I/ckq     ( 8321): Stopping watchdog: work-service, completed in time
+06-02 16:58:39.686 E/Diag_Lib( 2200): diag: Diag_LSM_Init: invoked for pid: 2200 with init_count: 0
+06-02 16:58:39.687 E/Diag_Lib( 2200): diag:failed to connect to diag socket
+06-02 16:58:39.687 E/Diag_Lib( 2200):  Diag_LSM_Init: Failed to open handle to diag driver, error = 111
+06-02 16:58:39.915 W/ActivityTaskManager( 2026): MANAGE_ACTIVITY_STACKS is deprecated, please use alternative permission: MANAGE_ACTIVITY_TASKS
+06-02 16:58:40.222 W/ActivityTaskManager( 2026): MANAGE_ACTIVITY_STACKS is deprecated, please use alternative permission: MANAGE_ACTIVITY_TASKS
+06-02 16:58:40.599 W/qdgralloc(31508): getInterlacedFlag: getMetaData returned 3, defaulting to interlaced_flag = 0
+06-02 16:58:40.937 I/SDM     ( 1442): DisplayBase::CommitThread: Received idle timeout, panel: cmd, timeout: 69999 us
+06-02 16:58:41.589 I/ContentProtectionServic( 8321): CP service destroyed
+06-02 16:58:41.593 I/RemoteContentProtectionService( 2026): Connection status for: ComponentInfo{com.google.android.odad/com.google.android.apps.miphone.odad.contentprotection.ContentProtectionService} changed to: disconnected
+06-02 16:58:42.912 D/IpClient/wlan0( 3620): interfaceLinkStateChanged: ifindex 23 up
+06-02 16:58:44.213 D/InetDiagMessage( 2026): Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET, states=14
+06-02 16:58:44.216 D/InetDiagMessage( 2026): Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET6, states=14
+06-02 16:58:44.216 D/InetDiagMessage( 2026): Destroyed live tcp sockets for uids={10303} in 7ms
+06-02 16:58:44.219 D/InetDiagMessage( 2026): Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET, states=14
+06-02 16:58:44.221 D/InetDiagMessage( 2026): Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET6, states=14
+06-02 16:58:44.221 D/InetDiagMessage( 2026): Destroyed live tcp sockets for uids={20303} in 5ms
+06-02 16:58:44.524 D/ProfileInstaller(31508): Installing profile for com.example.llama.aichat
+06-02 16:58:44.687 E/Diag_Lib( 2200): diag: Diag_LSM_Init: invoked for pid: 2200 with init_count: 0
+06-02 16:58:44.688 E/Diag_Lib( 2200): diag:failed to connect to diag socket
+06-02 16:58:44.688 E/Diag_Lib( 2200):  Diag_LSM_Init: Failed to open handle to diag driver, error = 111
+06-02 16:58:46.050 I/SDM     ( 1442): DisplayBase::CommitThread: Received idle timeout, panel: cmd, timeout: 69999 us
+06-02 16:58:47.146 D/InputManager( 2026): injectMotionEvent: 31611-{action=ACTION_DOWN, id[0]=0, x[0]=287.0, y[0]=1453.0, pointerCount=1, eventTime=156046982, deviceId=4}
+06-02 16:58:47.157 D/InputManager( 2026): injectMotionEvent: 31611-{action=ACTION_UP, id[0]=0, x[0]=287.0, y[0]=1453.0, pointerCount=1, eventTime=156046982, deviceId=4}
+06-02 16:58:47.201 I/LlamaInferenceBridge(31508): runInference started, flowStreaming=false, flowFinalize=true
+06-02 16:58:47.214 W/ContextImpl( 2026): Calling a method in the system process without a qualified user: android.app.ContextImpl.sendBroadcast:1249 android.content.ContextWrapper.sendBroadcast:506 jp.co.sharp.android.brightkeep.BrightKeepService.checkTimerEvent:508 jp.co.sharp.android.brightkeep.BrightKeepService.onSensorHubChanged:1182 jp.co.sharp.android.sensorhub.AccelerometerSHEXConverter.onSensorChanged:102 
+06-02 16:58:47.215 V/BrightKeepService( 2026): getAction: jp.co.sharp.android.intent.action.CLICK_SCREEN_ON isOutOfHand: true
+06-02 16:58:47.276 I/SDM     ( 1442): DisplayBase::CommitThread: Received idle timeout, panel: cmd, timeout: 70000 us
+06-02 16:58:48.832 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-02 16:58:48.933 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-02 16:58:48.956 D/ActivityManager( 2026): freezing 18191 sharp.jp.android.makersiteappli
+06-02 16:58:48.960 D/InetDiagMessage( 2026): Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET, states=14
+06-02 16:58:48.963 D/InetDiagMessage( 2026): Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET6, states=14
+06-02 16:58:48.963 D/InetDiagMessage( 2026): Destroyed live tcp sockets for uids={10286} in 5ms
+06-02 16:58:49.015 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-02 16:58:49.065 W/le.llama.aichat(31508): userfaultfd: MOVE ioctl seems unsupported: Connection timed out
+06-02 16:58:49.116 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-02 16:58:49.483 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-02 16:58:49.584 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-02 16:58:49.593 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-02 16:58:49.689 E/Diag_Lib( 2200): diag: Diag_LSM_Init: invoked for pid: 2200 with init_count: 0
+06-02 16:58:49.689 E/Diag_Lib( 2200): diag:failed to connect to diag socket
+06-02 16:58:49.690 E/Diag_Lib( 2200):  Diag_LSM_Init: Failed to open handle to diag driver, error = 111
+06-02 16:58:49.694 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-02 16:58:49.702 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-02 16:58:49.802 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-02 16:58:49.823 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-02 16:58:49.924 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-02 16:58:49.937 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-02 16:58:50.038 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-02 16:58:50.055 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-02 16:58:50.156 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-02 16:58:50.236 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-02 16:58:50.258 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-02 16:58:50.323 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-02 16:58:50.424 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-02 16:58:50.428 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-02 16:58:50.529 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-02 16:58:50.542 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-02 16:58:50.643 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-02 16:58:50.645 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-02 16:58:50.745 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-02 16:58:50.792 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-02 16:58:50.832 D/nativeloader(31508): Load /data/app/~~E7LPiqSNP09rm9XH1nxe9w==/com.example.llama.aichat-7tWWq3KjjHrdot14eV0Yow==/lib/arm64/libonnxruntime4j_jni.so using class loader ns clns-7 (caller=/data/app/~~E7LPiqSNP09rm9XH1nxe9w==/com.example.llama.aichat-7tWWq3KjjHrdot14eV0Yow==/base.apk): ok
+06-02 16:58:50.874 I/SDM     ( 1442): DisplayBase::CommitThread: Received idle timeout, panel: cmd, timeout: 70000 us
+06-02 16:58:51.077 W/libc    (31508): Access denied finding property "ro.hardware.chipname"
+06-02 16:58:51.087 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-02 16:58:51.188 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-02 16:58:51.299 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-02 16:58:51.300 I/Finsky:background(10922): [2] Memory trim requested to level 40
+06-02 16:58:51.301 I/Finsky  (10842): [2] Memory trim requested to level 40
+06-02 16:58:51.301 I/Finsky  (10842): [2] Flushing in-memory image cache
+06-02 16:58:51.301 I/Finsky:quick_launch(10929): [2] Memory trim requested to level 40
+06-02 16:58:51.310 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-02 16:58:51.489 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-02 16:58:51.590 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-02 16:58:51.602 D/ActivityManager( 2026): freezing 8321 com.google.android.odad
+06-02 16:58:51.609 D/InetDiagMessage( 2026): Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET, states=14
+06-02 16:58:51.612 D/InetDiagMessage( 2026): Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET6, states=14
+06-02 16:58:51.612 D/InetDiagMessage( 2026): Destroyed live tcp sockets for uids={10365} in 6ms
+06-02 16:58:51.690 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-02 16:58:51.791 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-02 16:58:51.842 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-02 16:58:51.857 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-02 16:58:51.958 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-02 16:58:52.059 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-02 16:58:52.159 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 4
+06-02 16:58:52.177 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-02 16:58:52.190 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-02 16:58:52.258 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-02 16:58:52.261 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-02 16:58:52.362 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 4
+06-02 16:58:52.378 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-02 16:58:52.391 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-02 16:58:52.492 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-02 16:58:52.593 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-02 16:58:52.694 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 4
+06-02 16:58:52.790 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-02 16:58:52.799 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-02 16:58:52.810 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-02 16:58:52.871 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-02 16:58:52.972 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 4
+06-02 16:58:53.073 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-02 16:58:53.074 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-02 16:58:53.089 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-02 16:58:53.105 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-02 16:58:53.206 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-02 16:58:53.308 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 4
+06-02 16:58:53.409 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-02 16:58:53.510 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 4
+06-02 16:58:53.584 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-02 16:58:53.589 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-02 16:58:53.601 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-02 16:58:53.662 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-02 16:58:53.763 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 4
+06-02 16:58:53.778 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-02 16:58:53.792 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-02 16:58:53.849 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-02 16:58:53.951 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-02 16:58:54.052 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 4
+06-02 16:58:54.085 I/LlamaInferenceBridge(31508): [LLMPrepare] begin, llmBackend=MNN-CPU flowBackend=HTTP hifiganBackend=MNN-Vulkan
+06-02 16:58:54.085 I/LlamaInferenceBridge(31508): [MNN-LLM] load begin: /data/user/0/com.example.llama.aichat/files/models/mnnModels/config.json (bytes=503) backend=CPU
+06-02 16:58:54.086 D/nativeloader(31508): Load /data/app/~~E7LPiqSNP09rm9XH1nxe9w==/com.example.llama.aichat-7tWWq3KjjHrdot14eV0Yow==/lib/arm64/libMNN.so using class loader ns clns-7 (caller=/data/app/~~E7LPiqSNP09rm9XH1nxe9w==/com.example.llama.aichat-7tWWq3KjjHrdot14eV0Yow==/base.apk): ok
+06-02 16:58:54.086 I/MNNJNI  (31508): JNI_OnLoad for MNN main package.
+06-02 16:58:54.086 I/MnnLlmRunner(31508): Loaded libMNN.so
+06-02 16:58:54.089 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-02 16:58:54.095 D/nativeloader(31508): Load /data/app/~~E7LPiqSNP09rm9XH1nxe9w==/com.example.llama.aichat-7tWWq3KjjHrdot14eV0Yow==/lib/arm64/libai-chat.so using class loader ns clns-7 (caller=/data/app/~~E7LPiqSNP09rm9XH1nxe9w==/com.example.llama.aichat-7tWWq3KjjHrdot14eV0Yow==/base.apk): ok
+06-02 16:58:54.095 I/MNNJNI  (31508): JNI_OnLoad for MNN main package.
+06-02 16:58:54.095 E/MNNJNI  (31508): Can't open file:/sys/devices/system/cpu/cpufreq/boost/affected_cpus
+06-02 16:58:54.096 I/MNNJNI  (31508): CPU Group: [ 0  1  2 ], 364800 - 2016000
+06-02 16:58:54.096 I/MNNJNI  (31508): CPU Group: [ 3  4  5  6 ], 480000 - 2803200
+06-02 16:58:54.096 I/MNNJNI  (31508): CPU Group: [ 7 ], 480000 - 3014400
+06-02 16:58:54.096 W/libc    (31508): Access denied finding property "ro.hardware.chipname"
+06-02 16:58:54.096 I/MNNJNI  (31508): (last_midr & (CPUINFO_ARM_MIDR_IMPLEMENTER_MASK | CPUINFO_ARM_MIDR_PART_MASK))=0x 4100d820 in _getInfoArm, 1244 
+06-02 16:58:54.096 I/MNNJNI  (31508): The device supports: i8sdot:1, fp16:1, i8mm: 1, sve2: 0, sme2: 0
+06-02 16:58:54.097 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeLoadModel: config=/data/user/0/com.example.llama.aichat/files/models/mnnModels/config.json override={"thread_num":4,"backend_type":"cpu","hidden_states":true}
+06-02 16:58:54.105 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-02 16:58:54.108 D/DisplayModeController( 1608): setDesiredMode 4630947186934302339 {mode={fps=60.00 Hz, modePtr={id=3, vsyncRate=60.00 Hz, peakRefreshRate=60.00 Hz}}, emitEvent=true, force=false}
+06-02 16:58:54.110 W/SDM     ( 1442): HWDeviceDRM::GetSupportedBitClkRate: Requested rate not supported: 1348000000
+06-02 16:58:54.110 I/SDM     ( 1442): HWDeviceDRM::UpdateMixerAttributes: Mixer WxH 1080x2340-1 for Peripheral
+06-02 16:58:54.110 I/SDM     ( 1442): HWCDisplay::SubmitDisplayConfig: Active configuration changed from config 2 to 3
+06-02 16:58:54.113 I/DisplayDeviceRepository( 2026): Display device changed render timings: "内置屏幕", renderFrameRate=60.000004, presentationDeadlineNanos=18666666, appVsyncOffsetNanos=-1000000
+06-02 16:58:54.115 D/BrightnessThermalClamper( 2026): Thermal status observer already started
+06-02 16:58:54.116 D/DisplayManagerService( 2026): Ignore redundant display event 0/2 to 10259/18618
+06-02 16:58:54.116 D/AudioFlinger( 1591): setParameters(): io 0, keyvalue screen_state=on, calling pid 2026 calling uid 1000
+06-02 16:58:54.116 D/DisplayManagerService( 2026): Ignore redundant display event 0/2 to 10369/26314
+06-02 16:58:54.116 D/DisplayManagerService( 2026): Ignore redundant display event 0/2 to 10369/26600
+06-02 16:58:54.116 D/AHAL: AudioDevice( 1345): SetParameters: 1523: enter: screen_state=on
+06-02 16:58:54.116 D/AHAL: AudioVoice( 1345): VoiceSetParameters: 119: Enter params: screen_state=on
+06-02 16:58:54.116 D/AHAL: AudioVoice( 1345): VoiceSetParameters: 403: Exit ret: 0
+06-02 16:58:54.116 D/AHAL: hfp( 1345): hfp_set_parameters: 444: enter
+06-02 16:58:54.116 D/AHAL: FM( 1345): fm_set_parameters: 261: Enter
+06-02 16:58:54.116 D/AHAL: FM( 1345): fm_set_parameters: 319: exit
+06-02 16:58:54.116 D/AHAL: AudioDevice( 1345): SetParameters: 1640:  - screen = on
+06-02 16:58:54.117 I/PAL: ResourceManager( 1345): setParameter: 10586: Screen State:1
+06-02 16:58:54.117 D/AHAL: AudioDevice( 1345): SetParameters: 2344: exit: screen_state=on
+06-02 16:58:54.188 I/SDM     ( 1442): DisplayBase::CommitThread: Received idle timeout, panel: cmd, timeout: 69999 us
+06-02 16:58:54.206 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-02 16:58:54.212 D/BoundBrokerSvc(29518): onUnbind: Intent { act=com.google.android.gms.feedback.internal.IFeedbackService dat=chimera-action:/... cmp=com.google.android.gms/.chimera.GmsBoundBrokerService }
+06-02 16:58:54.258 D/BoundBrokerSvc(29518): onUnbind: Intent { act=com.google.android.gms.inappreach.service.START dat=chimera-action:/... cmp=com.google.android.gms/.chimera.GmsApiService }
+06-02 16:58:54.306 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-02 16:58:54.354 W/gle.android.gms(29518): ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~E7LPiqSNP09rm9XH1nxe9w==/com.example.llama.aichat-7tWWq3KjjHrdot14eV0Yow==/base.apk' with 1 weak references
+06-02 16:58:54.407 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-02 16:58:54.408 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-02 16:58:54.432 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-02 16:58:54.456 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-02 16:58:54.490 I/MnnLlmRunner(31508): MNN LLM loaded: /data/user/0/com.example.llama.aichat/files/models/mnnModels/config.json
+06-02 16:58:54.490 I/LlamaInferenceBridge(31508): [MNN-LLM] load done in 0.406 s
+06-02 16:58:54.490 I/LlamaInferenceBridge(31508): [LLMPrepare] ensureEngineReady done
+06-02 16:58:54.491 I/LlamaInferenceBridge(31508): [LLMPrepare] tokenizer init begin: /data/user/0/com.example.llama.aichat/files/local_llm_resources/qwen2_tokenizer
+06-02 16:58:54.493 I/le.llama.aichat(31508): Waiting for a blocking GC NativeAlloc
+06-02 16:58:54.556 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-02 16:58:54.599 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-02 16:58:54.604 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-02 16:58:54.615 I/SDM     ( 1442): DisplayBase::CommitThread: Received idle timeout, panel: cmd, timeout: 69999 us
+06-02 16:58:54.690 E/Diag_Lib( 2200): diag: Diag_LSM_Init: invoked for pid: 2200 with init_count: 0
+06-02 16:58:54.690 E/Diag_Lib( 2200): diag:failed to connect to diag socket
+06-02 16:58:54.691 E/Diag_Lib( 2200):  Diag_LSM_Init: Failed to open handle to diag driver, error = 111
+06-02 16:58:54.705 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-02 16:58:54.764 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-02 16:58:54.782 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-02 16:58:54.828 I/LlamaInferenceBridge(31508): [LLMPrepare] tokenizer init done, entries=7
+06-02 16:58:54.828 I/LlamaInferenceBridge(31508): [LLMPrepare] tokenizer encode begin
+06-02 16:58:54.829 I/LlamaInferenceBridge(31508): [LLMPrepare] tokenizer encode done, ttsLen=73, promptLen=37
+06-02 16:58:54.829 I/LlamaInferenceBridge(31508): [LLMPrepare] done in 0.338 s
+06-02 16:58:54.858 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-02 16:58:54.860 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=434 n_past=0
+06-02 16:58:54.872 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-02 16:58:54.909 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-02 16:58:54.943 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-02 16:58:54.948 I/SDM     ( 1442): DisplayBase::CommitThread: Received idle timeout, panel: cmd, timeout: 70000 us
+06-02 16:58:54.967 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 4
+06-02 16:58:54.973 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 5
+06-02 16:58:54.980 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 6
+06-02 16:58:54.998 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 1
+06-02 16:58:55.024 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 0
+06-02 16:58:55.027 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 1
+06-02 16:58:55.088 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 2
+06-02 16:58:55.091 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 3
+06-02 16:58:55.121 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 2
+06-02 16:58:55.134 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 3
+06-02 16:58:55.167 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 2
+06-02 16:58:55.198 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 3
+06-02 16:58:55.231 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 4
+06-02 16:58:55.277 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 0
+06-02 16:58:55.290 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 1
+06-02 16:58:55.296 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 2
+06-02 16:58:55.298 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 3
+06-02 16:58:55.311 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 2
+06-02 16:58:55.329 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 3
+06-02 16:58:55.331 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 4
+06-02 16:58:55.334 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 3
+06-02 16:58:55.364 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 4
+06-02 16:58:55.421 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 0
+06-02 16:58:55.434 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 1
+06-02 16:58:55.441 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 2
+06-02 16:58:55.453 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 3
+06-02 16:58:55.459 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 4
+06-02 16:58:55.549 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 0
+06-02 16:58:55.561 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 1
+06-02 16:58:55.566 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 2
+06-02 16:58:55.590 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 3
+06-02 16:58:55.602 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 4
+06-02 16:58:55.668 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 0
+06-02 16:58:55.703 I/LlamaInferenceBridge(31508): [LLM] step=0 topId=4218 nPast=434 generated=0
+06-02 16:58:55.703 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=434
+06-02 16:58:55.752 I/LlamaInferenceBridge(31508): [LLM] step=1 topId=1950 nPast=435 generated=1
+06-02 16:58:55.753 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=435
+06-02 16:58:55.782 D/PowerUI ( 3524): can't show warning due to - plugged: true status unknown: false
+06-02 16:58:55.784 D/QtiCarrierConfigHelper( 3721): WARNING, no carrier configs on phone Id: 0
+06-02 16:58:55.785 D/QtiCarrierConfigHelper( 3721): WARNING, no carrier configs on phone Id: 1
+06-02 16:58:55.785 D/DeviceStatisticsService( 3684): onReceive: action= android.intent.action.BATTERY_CHANGED
+06-02 16:58:55.786 V/DeviceStatisticsService( 3684): chargerType=1 batteryLevel=100 totalBatteryCapacity=4716000
+06-02 16:58:55.790 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 5
+06-02 16:58:55.794 I/LlamaInferenceBridge(31508): [LLM] step=2 topId=1968 nPast=436 generated=2
+06-02 16:58:55.794 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=436
+06-02 16:58:55.797 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-02 16:58:55.811 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-02 16:58:55.828 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-02 16:58:55.829 I/LlamaInferenceBridge(31508): [LLM] step=3 topId=3481 nPast=437 generated=3
+06-02 16:58:55.829 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=437
+06-02 16:58:55.835 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-02 16:58:55.868 I/LlamaInferenceBridge(31508): [LLM] step=4 topId=1295 nPast=438 generated=4
+06-02 16:58:55.868 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=438
+06-02 16:58:55.903 I/LlamaInferenceBridge(31508): [LLM] step=5 topId=2715 nPast=439 generated=5
+06-02 16:58:55.903 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=439
+06-02 16:58:55.935 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 4
+06-02 16:58:55.939 I/LlamaInferenceBridge(31508): [LLM] step=6 topId=3480 nPast=440 generated=6
+06-02 16:58:55.939 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=440
+06-02 16:58:55.943 I/SDM     ( 1442): DisplayBase::CommitThread: Received idle timeout, panel: cmd, timeout: 70000 us
+06-02 16:58:55.976 I/LlamaInferenceBridge(31508): [LLM] step=7 topId=2024 nPast=441 generated=7
+06-02 16:58:55.976 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=441
+06-02 16:58:56.011 I/LlamaInferenceBridge(31508): [LLM] step=8 topId=1294 nPast=442 generated=8
+06-02 16:58:56.011 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=442
+06-02 16:58:56.036 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 5
+06-02 16:58:56.048 I/LlamaInferenceBridge(31508): [LLM] step=9 topId=1267 nPast=443 generated=9
+06-02 16:58:56.048 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=443
+06-02 16:58:56.085 I/LlamaInferenceBridge(31508): [LLM] step=10 topId=1825 nPast=444 generated=10
+06-02 16:58:56.085 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=444
+06-02 16:58:56.122 I/LlamaInferenceBridge(31508): [LLM] step=11 topId=1707 nPast=445 generated=11
+06-02 16:58:56.122 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=445
+06-02 16:58:56.137 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 4
+06-02 16:58:56.159 I/LlamaInferenceBridge(31508): [LLM] step=12 topId=4218 nPast=446 generated=12
+06-02 16:58:56.159 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=446
+06-02 16:58:56.191 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 5
+06-02 16:58:56.193 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 6
+06-02 16:58:56.194 I/LlamaInferenceBridge(31508): [LLM] step=13 topId=4218 nPast=447 generated=13
+06-02 16:58:56.194 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=447
+06-02 16:58:56.229 I/LlamaInferenceBridge(31508): [LLM] step=14 topId=4218 nPast=448 generated=14
+06-02 16:58:56.229 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=448
+06-02 16:58:56.264 I/LlamaInferenceBridge(31508): [LLM] step=15 topId=4218 nPast=449 generated=15
+06-02 16:58:56.264 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=449
+06-02 16:58:56.291 D/MainJobService( 8384): BATTERY_FULL_CHARGED: start
+06-02 16:58:56.291 D/MainJobService( 8384): BATTERY_FULL_CHARGED: end
+06-02 16:58:56.292 I/WM-WorkerWrapper( 8384): Worker result SUCCESS for Work [ id=708ac6e4-069f-420e-b40c-ef32ed359c94, tags={ jp.co.sharp.android.ichargeservice.MainJobService } ]
+06-02 16:58:56.299 I/LlamaInferenceBridge(31508): [LLM] step=16 topId=4137 nPast=450 generated=16
+06-02 16:58:56.300 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=450
+06-02 16:58:56.335 I/LlamaInferenceBridge(31508): [LLM] step=17 topId=4218 nPast=451 generated=17
+06-02 16:58:56.335 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=451
+06-02 16:58:56.371 I/LlamaInferenceBridge(31508): [LLM] step=18 topId=4218 nPast=452 generated=18
+06-02 16:58:56.372 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=452
+06-02 16:58:56.407 I/LlamaInferenceBridge(31508): [LLM] step=19 topId=4218 nPast=453 generated=19
+06-02 16:58:56.407 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=453
+06-02 16:58:56.448 I/LlamaInferenceBridge(31508): [LLM] step=20 topId=4218 nPast=454 generated=20
+06-02 16:58:56.448 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=454
+06-02 16:58:56.452 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-02 16:58:56.466 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-02 16:58:56.479 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-02 16:58:56.484 I/LlamaInferenceBridge(31508): [LLM] step=21 topId=2031 nPast=455 generated=21
+06-02 16:58:56.484 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=455
+06-02 16:58:56.489 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-02 16:58:56.519 I/LlamaInferenceBridge(31508): [LLM] step=22 topId=4218 nPast=456 generated=22
+06-02 16:58:56.519 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=456
+06-02 16:58:56.555 I/LlamaInferenceBridge(31508): [LLM] step=23 topId=4218 nPast=457 generated=23
+06-02 16:58:56.555 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=457
+06-02 16:58:56.590 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 4
+06-02 16:58:56.590 I/LlamaInferenceBridge(31508): [LLM] step=24 topId=4218 nPast=458 generated=24
+06-02 16:58:56.590 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=458
+06-02 16:58:56.627 I/LlamaInferenceBridge(31508): [LLM] step=25 topId=4218 nPast=459 generated=25
+06-02 16:58:56.627 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=459
+06-02 16:58:56.664 I/LlamaInferenceBridge(31508): [LLM] step=26 topId=3189 nPast=460 generated=26
+06-02 16:58:56.664 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=460
+06-02 16:58:56.690 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-02 16:58:56.702 I/LlamaInferenceBridge(31508): [LLM] step=27 topId=1707 nPast=461 generated=27
+06-02 16:58:56.702 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=461
+06-02 16:58:56.738 I/LlamaInferenceBridge(31508): [LLM] step=28 topId=3648 nPast=462 generated=28
+06-02 16:58:56.738 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=462
+06-02 16:58:56.773 I/LlamaInferenceBridge(31508): [LLM] step=29 topId=3648 nPast=463 generated=29
+06-02 16:58:56.774 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=463
+06-02 16:58:56.791 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 4
+06-02 16:58:56.793 E/iCharge.Receiver( 7333): jp.co.sharp.android.ichargeservice.action.BATTERY_FULL_CHARGED
+06-02 16:58:56.805 D/MainJobService( 7333): ACTION_BATTERY_FULL_CHARGED: start
+06-02 16:58:56.805 D/MainJobService( 7333): ACTION_BATTERY_FULL_CHARGED: end
+06-02 16:58:56.806 I/WM-WorkerWrapper( 7333): Worker result SUCCESS for Work [ id=1ae335ba-f5ca-484a-a6e8-846290c9a46c, tags={ jp.co.sharp.android.icharge.services.MainJobService } ]
+06-02 16:58:56.811 I/LlamaInferenceBridge(31508): [LLM] step=30 topId=4137 nPast=464 generated=30
+06-02 16:58:56.811 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=464
+06-02 16:58:56.823 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-02 16:58:56.829 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-02 16:58:56.846 I/LlamaInferenceBridge(31508): [LLM] step=31 topId=4218 nPast=465 generated=31
+06-02 16:58:56.846 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=465
+06-02 16:58:56.869 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-02 16:58:56.880 I/LlamaInferenceBridge(31508): [LLM] step=32 topId=4137 nPast=466 generated=32
+06-02 16:58:56.880 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=466
+06-02 16:58:56.884 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-02 16:58:56.916 I/LlamaInferenceBridge(31508): [LLM] step=33 topId=4218 nPast=467 generated=33
+06-02 16:58:56.916 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=467
+06-02 16:58:56.945 I/SDM     ( 1442): DisplayBase::CommitThread: Received idle timeout, panel: cmd, timeout: 70000 us
+06-02 16:58:56.952 I/LlamaInferenceBridge(31508): [LLM] step=34 topId=4146 nPast=468 generated=34
+06-02 16:58:56.952 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=468
+06-02 16:58:56.985 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 4
+06-02 16:58:56.988 I/LlamaInferenceBridge(31508): [LLM] step=35 topId=5631 nPast=469 generated=35
+06-02 16:58:56.988 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=469
+06-02 16:58:57.025 I/LlamaInferenceBridge(31508): [LLM] step=36 topId=2715 nPast=470 generated=36
+06-02 16:58:57.025 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=470
+06-02 16:58:57.062 I/LlamaInferenceBridge(31508): [LLM] step=37 topId=4939 nPast=471 generated=37
+06-02 16:58:57.062 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=471
+06-02 16:58:57.072 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-02 16:58:57.079 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-02 16:58:57.097 I/LlamaInferenceBridge(31508): [LLM] step=38 topId=5641 nPast=472 generated=38
+06-02 16:58:57.097 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=472
+06-02 16:58:57.118 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-02 16:58:57.130 I/LlamaInferenceBridge(31508): [LLM] step=39 topId=5640 nPast=473 generated=39
+06-02 16:58:57.130 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=473
+06-02 16:58:57.136 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-02 16:58:57.165 I/LlamaInferenceBridge(31508): [LLM] step=40 topId=5667 nPast=474 generated=40
+06-02 16:58:57.165 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=474
+06-02 16:58:57.201 I/LlamaInferenceBridge(31508): [LLM] step=41 topId=4209 nPast=475 generated=41
+06-02 16:58:57.201 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=475
+06-02 16:58:57.236 I/LlamaInferenceBridge(31508): [LLM] step=42 topId=3453 nPast=476 generated=42
+06-02 16:58:57.236 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=476
+06-02 16:58:57.237 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 4
+06-02 16:58:57.274 I/LlamaInferenceBridge(31508): [LLM] step=43 topId=3481 nPast=477 generated=43
+06-02 16:58:57.274 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=477
+06-02 16:58:57.291 D/ShortcutService( 2026): received package broadcast intent: Intent { act=android.intent.action.PACKAGE_CHANGED dat=package: flg=0x45000010 (has extras) }
+06-02 16:58:57.291 D/ShortcutService( 2026): changing package: jp.co.sharp.android.icharge userId0
+06-02 16:58:57.291 D/ShortcutService( 2026): handlePackageChanged: jp.co.sharp.android.icharge user=0
+06-02 16:58:57.291 D/ShortcutService( 2026): rescanPackageIfNeeded 0@jp.co.sharp.android.icharge, forceRescan=true , isNewApp=true
+06-02 16:58:57.292 D/ShortcutService( 2026): Package jp.co.sharp.android.icharge has 0 manifest shortcut(s), and 0 share target(s)
+06-02 16:58:57.292 D/CarrierSvcBindHelper( 3736): onPackageModified: jp.co.sharp.android.icharge
+06-02 16:58:57.294 D/EuiccConnector( 3736): handleMessage: E msg.what=1
+06-02 16:58:57.294 D/EuiccConnector( 3736): processMsg: ConnectedState
+06-02 16:58:57.294 D/EuiccConnector( 3736): processMsg: DisconnectedState
+06-02 16:58:57.295 I/RegisteredComponentCache( 4705): New Components => 
+06-02 16:58:57.295 I/RegisteredComponentCache( 4705): ComponentInfo: ResolveInfo{72a38f9 com.android.apps.tag/.TagViewer m=0x108000 userHandle=UserHandle{0}}, techs: android.nfc.tech.Ndef, 
+06-02 16:58:57.295 I/RegisteredComponentCache( 4705): Removed Components => 
+06-02 16:58:57.295 I/RegisteredComponentCache( 4705): ComponentInfo: ResolveInfo{2e997a8 com.android.apps.tag/.TagViewer m=0x108000 userHandle=UserHandle{0}}, techs: android.nfc.tech.Ndef, 
+06-02 16:58:57.296 D/CarrierSvcBindHelper( 3736): No carrier app for: 0
+06-02 16:58:57.296 D/CarrierSvcBindHelper( 3736): No carrier app for: 1
+06-02 16:58:57.297 D/EuiccConnector( 3736): handleMessage: X
+06-02 16:58:57.301 I/PermissionControllerServiceImpl( 3862): Updating user sensitive for uid 10250
+06-02 16:58:57.301 D/EuiccConnector( 3736): handleMessage: E msg.what=1
+06-02 16:58:57.301 D/EuiccConnector( 3736): processMsg: ConnectedState
+06-02 16:58:57.301 D/EuiccConnector( 3736): processMsg: DisconnectedState
+06-02 16:58:57.302 D/EuiccConnector( 3736): handleMessage: X
+06-02 16:58:57.303 I/PermissionControllerServiceImpl( 3862): Updating user sensitive for uid 10249
+06-02 16:58:57.304 W/AppOpService( 2026): Ignored setUidMode call for runtime permission app op: uid = 1001, code = READ_SMS, mode = allow, callingUid = 1001, oldMode = allow
+06-02 16:58:57.304 D/ShortcutService( 2026): received package broadcast intent: Intent { act=android.intent.action.PACKAGE_CHANGED dat=package: flg=0x45000010 (has extras) }
+06-02 16:58:57.304 D/ShortcutService( 2026): changing package: jp.co.sharp.android.ichargeservice userId0
+06-02 16:58:57.306 I/RegisteredComponentCache( 4705): New Components => 
+06-02 16:58:57.306 I/RegisteredComponentCache( 4705): ComponentInfo: ResolveInfo{b4a4bec com.android.apps.tag/.TagViewer m=0x108000 userHandle=UserHandle{0}}, techs: android.nfc.tech.Ndef, 
+06-02 16:58:57.306 I/RegisteredComponentCache( 4705): Removed Components => 
+06-02 16:58:57.306 I/RegisteredComponentCache( 4705): ComponentInfo: ResolveInfo{72a38f9 com.android.apps.tag/.TagViewer m=0x108000 userHandle=UserHandle{0}}, techs: android.nfc.tech.Ndef, 
+06-02 16:58:57.307 W/AppOpService( 2026): Ignored setUidMode call for runtime permission app op: uid = 1001, code = RECEIVE_SMS, mode = allow, callingUid = 1001, oldMode = allow
+06-02 16:58:57.307 D/ShortcutService( 2026): handlePackageChanged: jp.co.sharp.android.ichargeservice user=0
+06-02 16:58:57.307 D/ShortcutService( 2026): rescanPackageIfNeeded 0@jp.co.sharp.android.ichargeservice, forceRescan=true , isNewApp=true
+06-02 16:58:57.307 W/AppOpService( 2026): Ignored setUidMode call for runtime permission app op: uid = 1001, code = RECEIVE_WAP_PUSH, mode = allow, callingUid = 1001, oldMode = allow
+06-02 16:58:57.307 D/ShortcutService( 2026): Package jp.co.sharp.android.ichargeservice has 0 manifest shortcut(s), and 0 share target(s)
+06-02 16:58:57.308 W/AppOpService( 2026): Ignored setUidMode call for runtime permission app op: uid = 1001, code = SEND_SMS, mode = allow, callingUid = 1001, oldMode = allow
+06-02 16:58:57.308 W/AppOpService( 2026): Ignored setUidMode call for runtime permission app op: uid = 1001, code = READ_CELL_BROADCASTS, mode = allow, callingUid = 1001, oldMode = allow
+06-02 16:58:57.310 D/ImsResolver( 3736): maybeAddedImsService, packageName: jp.co.sharp.android.icharge
+06-02 16:58:57.311 I/LlamaInferenceBridge(31508): [LLM] step=44 topId=5668 nPast=478 generated=44
+06-02 16:58:57.311 D/CarrierSvcBindHelper( 3736): onPackageModified: jp.co.sharp.android.ichargeservice
+06-02 16:58:57.311 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=478
+06-02 16:58:57.311 D/CarrierSvcBindHelper( 3736): No carrier app for: 0
+06-02 16:58:57.311 D/CarrierSvcBindHelper( 3736): No carrier app for: 1
+06-02 16:58:57.316 W/AppOpService( 2026): Ignored setUidMode call for runtime permission app op: uid = 1001, code = READ_SMS, mode = allow, callingUid = 1001, oldMode = allow
+06-02 16:58:57.316 W/AppOpService( 2026): Ignored setUidMode call for runtime permission app op: uid = 1001, code = RECEIVE_SMS, mode = allow, callingUid = 1001, oldMode = allow
+06-02 16:58:57.317 W/AppOpService( 2026): Ignored setUidMode call for runtime permission app op: uid = 1001, code = RECEIVE_WAP_PUSH, mode = allow, callingUid = 1001, oldMode = allow
+06-02 16:58:57.317 W/AppOpService( 2026): Ignored setUidMode call for runtime permission app op: uid = 1001, code = SEND_SMS, mode = allow, callingUid = 1001, oldMode = allow
+06-02 16:58:57.317 W/AppOpService( 2026): Ignored setUidMode call for runtime permission app op: uid = 1001, code = READ_CELL_BROADCASTS, mode = allow, callingUid = 1001, oldMode = allow
+06-02 16:58:57.318 W/AS.AudioService( 2026): handleMessage({ when=0 what=35 target=com.android.server.audio.AudioService$AudioHandler }) from pid=2026, uid=1000
+06-02 16:58:57.318 W/MagnificationConnectionManager( 2026): requestConnection duplicated request: connect=false, mConnectionState=DISCONNECTED
+06-02 16:58:57.319 D/ImsResolver( 3736): maybeAddedImsService, packageName: jp.co.sharp.android.ichargeservice
+06-02 16:58:57.319 D/PackageUpdatedTask( 4001): Package updated: mOp=UPDATE packages=[jp.co.sharp.android.icharge]
+06-02 16:58:57.320 W/AllAppsList( 4001): updatePromiseInstallInfo: no Activities matched updated package, removing all apps from package=jp.co.sharp.android.icharge
+06-02 16:58:57.320 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-02 16:58:57.320 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-02 16:58:57.320 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-02 16:58:57.320 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-02 16:58:57.320 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-02 16:58:57.320 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-02 16:58:57.320 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-02 16:58:57.320 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-02 16:58:57.320 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-02 16:58:57.320 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-02 16:58:57.320 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-02 16:58:57.320 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-02 16:58:57.320 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-02 16:58:57.320 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-02 16:58:57.320 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-02 16:58:57.320 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-02 16:58:57.320 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-02 16:58:57.320 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-02 16:58:57.320 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-02 16:58:57.320 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-02 16:58:57.320 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-02 16:58:57.320 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-02 16:58:57.332 W/ssioncontroller( 3862): Reducing the number of considered missed Gc histogram windows from 1710 to 100
+06-02 16:58:57.338 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 5
+06-02 16:58:57.351 W/AS.AudioService( 2026): handleMessage({ when=0 what=35 target=com.android.server.audio.AudioService$AudioHandler }) from pid=2026, uid=1000
+06-02 16:58:57.351 W/MagnificationConnectionManager( 2026): requestConnection duplicated request: connect=false, mConnectionState=DISCONNECTED
+06-02 16:58:57.351 D/PackageUpdatedTask( 4001): Package updated: mOp=UPDATE packages=[jp.co.sharp.android.ichargeservice]
+06-02 16:58:57.353 W/AllAppsList( 4001): updatePromiseInstallInfo: no Activities matched updated package, removing all apps from package=jp.co.sharp.android.ichargeservice
+06-02 16:58:57.353 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-02 16:58:57.353 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-02 16:58:57.353 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-02 16:58:57.353 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-02 16:58:57.353 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-02 16:58:57.353 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-02 16:58:57.353 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-02 16:58:57.353 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-02 16:58:57.353 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-02 16:58:57.353 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -102
+06-02 16:58:57.353 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-02 16:58:57.353 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-02 16:58:57.353 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-02 16:58:57.353 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-02 16:58:57.353 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-02 16:58:57.353 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-02 16:58:57.353 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-02 16:58:57.353 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-02 16:58:57.353 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-02 16:58:57.353 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-02 16:58:57.353 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-02 16:58:57.353 D/PackageUpdatedTask( 4001): reject_forAllWorkspaceItemInfos_container = -103
+06-02 16:58:57.355 I/LlamaInferenceBridge(31508): [LLM] step=45 topId=4938 nPast=479 generated=45
+06-02 16:58:57.355 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=479
+06-02 16:58:57.365 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-02 16:58:57.372 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-02 16:58:57.388 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-02 16:58:57.389 I/LlamaInferenceBridge(31508): [LLM] step=46 topId=4778 nPast=480 generated=46
+06-02 16:58:57.389 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=480
+06-02 16:58:57.393 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-02 16:58:57.424 I/LlamaInferenceBridge(31508): [LLM] step=47 topId=323 nPast=481 generated=47
+06-02 16:58:57.424 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=481
+06-02 16:58:57.459 I/LlamaInferenceBridge(31508): [LLM] step=48 topId=314 nPast=482 generated=48
+06-02 16:58:57.459 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=482
+06-02 16:58:57.494 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 4
+06-02 16:58:57.495 I/LlamaInferenceBridge(31508): [LLM] step=49 topId=764 nPast=483 generated=49
+06-02 16:58:57.495 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=483
+06-02 16:58:57.532 I/LlamaInferenceBridge(31508): [LLM] step=50 topId=2032 nPast=484 generated=50
+06-02 16:58:57.532 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=484
+06-02 16:58:57.545 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-02 16:58:57.548 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-02 16:58:57.567 I/LlamaInferenceBridge(31508): [LLM] step=51 topId=6405 nPast=485 generated=51
+06-02 16:58:57.567 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=485
+06-02 16:58:57.589 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-02 16:58:57.600 I/LlamaInferenceBridge(31508): [LLM] step=52 topId=6405 nPast=486 generated=52
+06-02 16:58:57.600 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=486
+06-02 16:58:57.605 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-02 16:58:57.636 I/LlamaInferenceBridge(31508): [LLM] step=53 topId=4218 nPast=487 generated=53
+06-02 16:58:57.636 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=487
+06-02 16:58:57.671 I/LlamaInferenceBridge(31508): [LLM] step=54 topId=4218 nPast=488 generated=54
+06-02 16:58:57.671 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=488
+06-02 16:58:57.706 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 4
+06-02 16:58:57.707 I/LlamaInferenceBridge(31508): [LLM] step=55 topId=4218 nPast=489 generated=55
+06-02 16:58:57.707 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=489
+06-02 16:58:57.745 I/LlamaInferenceBridge(31508): [LLM] step=56 topId=4218 nPast=490 generated=56
+06-02 16:58:57.745 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=490
+06-02 16:58:57.782 I/LlamaInferenceBridge(31508): [LLM] step=57 topId=4218 nPast=491 generated=57
+06-02 16:58:57.782 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=491
+06-02 16:58:57.792 D/ControlsListingControllerImpl( 3524): ServiceConfig reloaded, count: 1
+06-02 16:58:57.793 D/ControlsListingControllerImpl( 3524): ServiceConfig reloaded, count: 1
+06-02 16:58:57.797 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-02 16:58:57.799 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-02 16:58:57.815 I/ComponentChangedIO(29518): Feature is not enabled, skipping component changed intent operation [CONTEXT service_id=469 ]
+06-02 16:58:57.815 I/ComponentChangedIO(29518): Feature is not enabled, skipping component changed intent operation [CONTEXT service_id=469 ]
+06-02 16:58:57.817 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-02 16:58:57.817 I/LlamaInferenceBridge(31508): [LLM] step=58 topId=3894 nPast=492 generated=58
+06-02 16:58:57.817 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=492
+06-02 16:58:57.818 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-02 16:58:57.853 I/LlamaInferenceBridge(31508): [LLM] step=59 topId=3651 nPast=493 generated=59
+06-02 16:58:57.853 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=493
+06-02 16:58:57.889 I/LlamaInferenceBridge(31508): [LLM] step=60 topId=3732 nPast=494 generated=60
+06-02 16:58:57.889 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=494
+06-02 16:58:57.919 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 4
+06-02 16:58:57.924 I/LlamaInferenceBridge(31508): [LLM] step=61 topId=4137 nPast=495 generated=61
+06-02 16:58:57.924 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=495
+06-02 16:58:57.956 I/SDM     ( 1442): DisplayBase::CommitThread: Received idle timeout, panel: cmd, timeout: 69999 us
+06-02 16:58:57.962 I/LlamaInferenceBridge(31508): [LLM] step=62 topId=1266 nPast=496 generated=62
+06-02 16:58:57.962 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=496
+06-02 16:58:58.000 I/LlamaInferenceBridge(31508): [LLM] step=63 topId=3481 nPast=497 generated=63
+06-02 16:58:58.000 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=497
+06-02 16:58:58.007 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-02 16:58:58.016 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-02 16:58:58.034 I/LlamaInferenceBridge(31508): [LLM] step=64 topId=1295 nPast=498 generated=64
+06-02 16:58:58.034 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=498
+06-02 16:58:58.036 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-02 16:58:58.070 I/LlamaInferenceBridge(31508): [LLM] step=65 topId=3462 nPast=499 generated=65
+06-02 16:58:58.070 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=499
+06-02 16:58:58.104 I/LlamaInferenceBridge(31508): [LLM] step=66 topId=4218 nPast=500 generated=66
+06-02 16:58:58.104 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=500
+06-02 16:58:58.137 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-02 16:58:58.140 I/LlamaInferenceBridge(31508): [LLM] step=67 topId=3462 nPast=501 generated=67
+06-02 16:58:58.140 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=501
+06-02 16:58:58.175 I/LlamaInferenceBridge(31508): [LLM] step=68 topId=4758 nPast=502 generated=68
+06-02 16:58:58.175 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=502
+06-02 16:58:58.211 I/LlamaInferenceBridge(31508): [LLM] step=69 topId=5322 nPast=503 generated=69
+06-02 16:58:58.211 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=503
+06-02 16:58:58.238 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 4
+06-02 16:58:58.247 I/LlamaInferenceBridge(31508): [LLM] step=70 topId=5319 nPast=504 generated=70
+06-02 16:58:58.247 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=504
+06-02 16:58:58.284 I/LlamaInferenceBridge(31508): [LLM] step=71 topId=5323 nPast=505 generated=71
+06-02 16:58:58.284 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=505
+06-02 16:58:58.297 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-02 16:58:58.300 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-02 16:58:58.318 I/LlamaInferenceBridge(31508): [LLM] step=72 topId=2382 nPast=506 generated=72
+06-02 16:58:58.318 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=506
+06-02 16:58:58.324 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-02 16:58:58.353 I/LlamaInferenceBridge(31508): [LLM] step=73 topId=1542 nPast=507 generated=73
+06-02 16:58:58.353 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=507
+06-02 16:58:58.387 I/LlamaInferenceBridge(31508): [LLM] step=74 topId=1463 nPast=508 generated=74
+06-02 16:58:58.387 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=508
+06-02 16:58:58.422 I/LlamaInferenceBridge(31508): [LLM] step=75 topId=278 nPast=509 generated=75
+06-02 16:58:58.422 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=509
+06-02 16:58:58.425 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-02 16:58:58.457 I/LlamaInferenceBridge(31508): [LLM] step=76 topId=1258 nPast=510 generated=76
+06-02 16:58:58.457 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=510
+06-02 16:58:58.493 I/LlamaInferenceBridge(31508): [LLM] step=77 topId=3408 nPast=511 generated=77
+06-02 16:58:58.493 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=511
+06-02 16:58:58.526 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 4
+06-02 16:58:58.528 I/LlamaInferenceBridge(31508): [LLM] step=78 topId=5352 nPast=512 generated=78
+06-02 16:58:58.528 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=512
+06-02 16:58:58.565 I/LlamaInferenceBridge(31508): [LLM] step=79 topId=5622 nPast=513 generated=79
+06-02 16:58:58.565 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=513
+06-02 16:58:58.602 I/LlamaInferenceBridge(31508): [LLM] step=80 topId=5619 nPast=514 generated=80
+06-02 16:58:58.602 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=514
+06-02 16:58:58.616 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-02 16:58:58.630 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-02 16:58:58.638 I/LlamaInferenceBridge(31508): [LLM] step=81 topId=3435 nPast=515 generated=81
+06-02 16:58:58.638 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=515
+06-02 16:58:58.662 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-02 16:58:58.672 I/LlamaInferenceBridge(31508): [LLM] step=82 topId=2031 nPast=516 generated=82
+06-02 16:58:58.672 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=516
+06-02 16:58:58.676 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-02 16:58:58.707 I/LlamaInferenceBridge(31508): [LLM] step=83 topId=4218 nPast=517 generated=83
+06-02 16:58:58.707 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=517
+06-02 16:58:58.743 I/LlamaInferenceBridge(31508): [LLM] step=84 topId=4218 nPast=518 generated=84
+06-02 16:58:58.743 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=518
+06-02 16:58:58.778 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 4
+06-02 16:58:58.778 I/LlamaInferenceBridge(31508): [LLM] step=85 topId=4218 nPast=519 generated=85
+06-02 16:58:58.778 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=519
+06-02 16:58:58.816 I/LlamaInferenceBridge(31508): [LLM] step=86 topId=6405 nPast=520 generated=86
+06-02 16:58:58.816 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=520
+06-02 16:58:58.853 I/LlamaInferenceBridge(31508): [LLM] step=87 topId=4137 nPast=521 generated=87
+06-02 16:58:58.853 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=521
+06-02 16:58:58.862 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-02 16:58:58.871 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-02 16:58:58.888 I/LlamaInferenceBridge(31508): [LLM] step=88 topId=5832 nPast=522 generated=88
+06-02 16:58:58.888 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=522
+06-02 16:58:58.889 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-02 16:58:58.923 I/LlamaInferenceBridge(31508): [LLM] step=89 topId=3648 nPast=523 generated=89
+06-02 16:58:58.923 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=523
+06-02 16:58:58.957 I/LlamaInferenceBridge(31508): [LLM] step=90 topId=1950 nPast=524 generated=90
+06-02 16:58:58.957 I/SDM     ( 1442): DisplayBase::CommitThread: Received idle timeout, panel: cmd, timeout: 70000 us
+06-02 16:58:58.957 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=524
+06-02 16:58:58.990 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-02 16:58:58.992 I/LlamaInferenceBridge(31508): [LLM] step=91 topId=4012 nPast=525 generated=91
+06-02 16:58:58.992 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=525
+06-02 16:58:59.027 I/LlamaInferenceBridge(31508): [LLM] step=92 topId=4299 nPast=526 generated=92
+06-02 16:58:59.027 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=526
+06-02 16:58:59.063 I/LlamaInferenceBridge(31508): [LLM] step=93 topId=2112 nPast=527 generated=93
+06-02 16:58:59.063 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=527
+06-02 16:58:59.091 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 4
+06-02 16:58:59.099 I/LlamaInferenceBridge(31508): [LLM] step=94 topId=4191 nPast=528 generated=94
+06-02 16:58:59.099 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=528
+06-02 16:58:59.136 I/LlamaInferenceBridge(31508): [LLM] step=95 topId=6375 nPast=529 generated=95
+06-02 16:58:59.136 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=529
+06-02 16:58:59.175 I/LlamaInferenceBridge(31508): [LLM] step=96 topId=4218 nPast=530 generated=96
+06-02 16:58:59.175 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=530
+06-02 16:58:59.184 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-02 16:58:59.190 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-02 16:58:59.208 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-02 16:58:59.209 I/LlamaInferenceBridge(31508): [LLM] step=97 topId=4218 nPast=531 generated=97
+06-02 16:58:59.209 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=531
+06-02 16:58:59.214 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-02 16:58:59.244 I/LlamaInferenceBridge(31508): [LLM] step=98 topId=6405 nPast=532 generated=98
+06-02 16:58:59.244 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=532
+06-02 16:58:59.280 I/LlamaInferenceBridge(31508): [LLM] step=99 topId=6405 nPast=533 generated=99
+06-02 16:58:59.280 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=533
+06-02 16:58:59.315 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 4
+06-02 16:58:59.315 I/LlamaInferenceBridge(31508): [LLM] step=100 topId=3213 nPast=534 generated=100
+06-02 16:58:59.316 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=534
+06-02 16:58:59.353 I/LlamaInferenceBridge(31508): [LLM] step=101 topId=2324 nPast=535 generated=101
+06-02 16:58:59.353 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=535
+06-02 16:58:59.390 I/LlamaInferenceBridge(31508): [LLM] step=102 topId=116 nPast=536 generated=102
+06-02 16:58:59.390 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=536
+06-02 16:58:59.401 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-02 16:58:59.407 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-02 16:58:59.425 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-02 16:58:59.425 I/LlamaInferenceBridge(31508): [LLM] step=103 topId=305 nPast=537 generated=103
+06-02 16:58:59.425 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=537
+06-02 16:58:59.427 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-02 16:58:59.460 I/LlamaInferenceBridge(31508): [LLM] step=104 topId=557 nPast=538 generated=104
+06-02 16:58:59.460 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=538
+06-02 16:58:59.496 I/LlamaInferenceBridge(31508): [LLM] step=105 topId=565 nPast=539 generated=105
+06-02 16:58:59.496 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=539
+06-02 16:58:59.528 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 4
+06-02 16:58:59.532 I/LlamaInferenceBridge(31508): [LLM] step=106 topId=2436 nPast=540 generated=106
+06-02 16:58:59.532 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=540
+06-02 16:58:59.569 I/LlamaInferenceBridge(31508): [LLM] step=107 topId=1707 nPast=541 generated=107
+06-02 16:58:59.569 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=541
+06-02 16:58:59.607 I/LlamaInferenceBridge(31508): [LLM] step=108 topId=2031 nPast=542 generated=108
+06-02 16:58:59.607 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=542
+06-02 16:58:59.618 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-02 16:58:59.623 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-02 16:58:59.642 I/LlamaInferenceBridge(31508): [LLM] step=109 topId=4137 nPast=543 generated=109
+06-02 16:58:59.642 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=543
+06-02 16:58:59.642 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-02 16:58:59.647 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-02 16:58:59.677 I/LlamaInferenceBridge(31508): [LLM] step=110 topId=6324 nPast=544 generated=110
+06-02 16:58:59.678 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=544
+06-02 16:58:59.691 E/Diag_Lib( 2200): diag: Diag_LSM_Init: invoked for pid: 2200 with init_count: 0
+06-02 16:58:59.691 E/Diag_Lib( 2200): diag:failed to connect to diag socket
+06-02 16:58:59.692 E/Diag_Lib( 2200):  Diag_LSM_Init: Failed to open handle to diag driver, error = 111
+06-02 16:58:59.713 I/LlamaInferenceBridge(31508): [LLM] step=111 topId=6405 nPast=545 generated=111
+06-02 16:58:59.713 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=545
+06-02 16:58:59.748 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 4
+06-02 16:58:59.750 I/LlamaInferenceBridge(31508): [LLM] step=112 topId=4218 nPast=546 generated=112
+06-02 16:58:59.750 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=546
+06-02 16:58:59.787 I/LlamaInferenceBridge(31508): [LLM] step=113 topId=4218 nPast=547 generated=113
+06-02 16:58:59.787 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=547
+06-02 16:58:59.800 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-02 16:58:59.804 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-02 16:58:59.822 I/LlamaInferenceBridge(31508): [LLM] step=114 topId=6405 nPast=548 generated=114
+06-02 16:58:59.822 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=548
+06-02 16:58:59.844 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-02 16:58:59.856 I/LlamaInferenceBridge(31508): [LLM] step=115 topId=4218 nPast=549 generated=115
+06-02 16:58:59.856 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=549
+06-02 16:58:59.862 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-02 16:58:59.894 I/LlamaInferenceBridge(31508): [LLM] step=116 topId=6405 nPast=550 generated=116
+06-02 16:58:59.894 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=550
+06-02 16:58:59.930 I/LlamaInferenceBridge(31508): [LLM] step=117 topId=6405 nPast=551 generated=117
+06-02 16:58:59.930 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=551
+06-02 16:58:59.961 I/SDM     ( 1442): DisplayBase::CommitThread: Received idle timeout, panel: cmd, timeout: 69999 us
+06-02 16:58:59.963 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 4
+06-02 16:58:59.966 I/LlamaInferenceBridge(31508): [LLM] step=118 topId=6405 nPast=552 generated=118
+06-02 16:58:59.966 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=552
+06-02 16:59:00.003 I/LlamaInferenceBridge(31508): [LLM] step=119 topId=4218 nPast=553 generated=119
+06-02 16:59:00.003 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=553
+06-02 16:59:00.017 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-02 16:59:00.020 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-02 16:59:00.038 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-02 16:59:00.039 I/LlamaInferenceBridge(31508): [LLM] step=120 topId=2031 nPast=554 generated=120
+06-02 16:59:00.039 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=554
+06-02 16:59:00.044 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-02 16:59:00.075 I/LlamaInferenceBridge(31508): [LLM] step=121 topId=5649 nPast=555 generated=121
+06-02 16:59:00.075 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=555
+06-02 16:59:00.111 I/LlamaInferenceBridge(31508): [LLM] step=122 topId=4675 nPast=556 generated=122
+06-02 16:59:00.111 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=556
+06-02 16:59:00.111 I/SDM     ( 1442): DisplayBase::CommitThread: Received idle timeout, panel: cmd, timeout: 70000 us
+06-02 16:59:00.145 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 4
+06-02 16:59:00.147 I/LlamaInferenceBridge(31508): [LLM] step=123 topId=4512 nPast=557 generated=123
+06-02 16:59:00.147 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=557
+06-02 16:59:00.184 I/LlamaInferenceBridge(31508): [LLM] step=124 topId=4188 nPast=558 generated=124
+06-02 16:59:00.184 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=558
+06-02 16:59:00.222 I/LlamaInferenceBridge(31508): [LLM] step=125 topId=4520 nPast=559 generated=125
+06-02 16:59:00.222 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=559
+06-02 16:59:00.233 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-02 16:59:00.238 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-02 16:59:00.257 I/LlamaInferenceBridge(31508): [LLM] step=126 topId=2918 nPast=560 generated=126
+06-02 16:59:00.257 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=560
+06-02 16:59:00.277 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-02 16:59:00.291 I/LlamaInferenceBridge(31508): [LLM] step=127 topId=3888 nPast=561 generated=127
+06-02 16:59:00.291 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=561
+06-02 16:59:00.296 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-02 16:59:00.326 I/LlamaInferenceBridge(31508): [LLM] step=128 topId=5835 nPast=562 generated=128
+06-02 16:59:00.326 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=562
+06-02 16:59:00.362 I/LlamaInferenceBridge(31508): [LLM] step=129 topId=5217 nPast=563 generated=129
+06-02 16:59:00.362 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=563
+06-02 16:59:00.397 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 4
+06-02 16:59:00.399 I/LlamaInferenceBridge(31508): [LLM] step=130 topId=4731 nPast=564 generated=130
+06-02 16:59:00.399 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=564
+06-02 16:59:00.436 I/LlamaInferenceBridge(31508): [LLM] step=131 topId=4137 nPast=565 generated=131
+06-02 16:59:00.436 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=565
+06-02 16:59:00.451 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-02 16:59:00.453 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-02 16:59:00.471 I/LlamaInferenceBridge(31508): [LLM] step=132 topId=4218 nPast=566 generated=132
+06-02 16:59:00.471 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=566
+06-02 16:59:00.475 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-02 16:59:00.506 I/LlamaInferenceBridge(31508): [LLM] step=133 topId=3435 nPast=567 generated=133
+06-02 16:59:00.506 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=567
+06-02 16:59:00.541 I/LlamaInferenceBridge(31508): [LLM] step=134 topId=5668 nPast=568 generated=134
+06-02 16:59:00.541 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=568
+06-02 16:59:00.576 I/LlamaInferenceBridge(31508): [LLM] step=135 topId=3482 nPast=569 generated=135
+06-02 16:59:00.576 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=569
+06-02 16:59:00.576 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-02 16:59:00.611 I/LlamaInferenceBridge(31508): [LLM] step=136 topId=3481 nPast=570 generated=136
+06-02 16:59:00.611 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=570
+06-02 16:59:00.647 I/LlamaInferenceBridge(31508): [LLM] step=137 topId=2031 nPast=571 generated=137
+06-02 16:59:00.647 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=571
+06-02 16:59:00.678 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 4
+06-02 16:59:00.683 I/LlamaInferenceBridge(31508): [LLM] step=138 topId=5119 nPast=572 generated=138
+06-02 16:59:00.683 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=572
+06-02 16:59:00.720 I/LlamaInferenceBridge(31508): [LLM] step=139 topId=6405 nPast=573 generated=139
+06-02 16:59:00.720 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=573
+06-02 16:59:00.758 I/LlamaInferenceBridge(31508): [LLM] step=140 topId=6405 nPast=574 generated=140
+06-02 16:59:00.758 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=574
+06-02 16:59:00.779 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 5
+06-02 16:59:00.796 I/LlamaInferenceBridge(31508): [LLM] step=141 topId=1257 nPast=575 generated=141
+06-02 16:59:00.796 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=575
+06-02 16:59:00.802 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-02 16:59:00.813 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-02 16:59:00.831 I/LlamaInferenceBridge(31508): [LLM] step=142 topId=5507 nPast=576 generated=142
+06-02 16:59:00.831 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=576
+06-02 16:59:00.833 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-02 16:59:00.865 I/LlamaInferenceBridge(31508): [LLM] step=143 topId=1052 nPast=577 generated=143
+06-02 16:59:00.866 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=577
+06-02 16:59:00.901 I/LlamaInferenceBridge(31508): [LLM] step=144 topId=2753 nPast=578 generated=144
+06-02 16:59:00.901 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=578
+06-02 16:59:00.934 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-02 16:59:00.936 I/LlamaInferenceBridge(31508): [LLM] step=145 topId=537 nPast=579 generated=145
+06-02 16:59:00.936 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=579
+06-02 16:59:00.971 I/LlamaInferenceBridge(31508): [LLM] step=146 topId=1295 nPast=580 generated=146
+06-02 16:59:00.971 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=580
+06-02 16:59:00.984 I/SDM     ( 1442): DisplayBase::CommitThread: Received idle timeout, panel: cmd, timeout: 70000 us
+06-02 16:59:01.007 I/LlamaInferenceBridge(31508): [LLM] step=147 topId=1267 nPast=581 generated=147
+06-02 16:59:01.007 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=581
+06-02 16:59:01.035 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 4
+06-02 16:59:01.043 I/LlamaInferenceBridge(31508): [LLM] step=148 topId=3455 nPast=582 generated=148
+06-02 16:59:01.043 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=582
+06-02 16:59:01.081 I/LlamaInferenceBridge(31508): [LLM] step=149 topId=539 nPast=583 generated=149
+06-02 16:59:01.081 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=583
+06-02 16:59:01.119 I/LlamaInferenceBridge(31508): [LLM] step=150 topId=1294 nPast=584 generated=150
+06-02 16:59:01.119 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=584
+06-02 16:59:01.136 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 5
+06-02 16:59:01.157 I/LlamaInferenceBridge(31508): [LLM] step=151 topId=566 nPast=585 generated=151
+06-02 16:59:01.157 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=585
+06-02 16:59:01.162 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-02 16:59:01.174 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-02 16:59:01.192 I/LlamaInferenceBridge(31508): [LLM] step=152 topId=116 nPast=586 generated=152
+06-02 16:59:01.192 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=586
+06-02 16:59:01.193 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-02 16:59:01.197 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-02 16:59:01.227 I/LlamaInferenceBridge(31508): [LLM] step=153 topId=35 nPast=587 generated=153
+06-02 16:59:01.227 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=587
+06-02 16:59:01.263 I/LlamaInferenceBridge(31508): [LLM] step=154 topId=1087 nPast=588 generated=154
+06-02 16:59:01.263 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=588
+06-02 16:59:01.298 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 4
+06-02 16:59:01.299 I/LlamaInferenceBridge(31508): [LLM] step=155 topId=6405 nPast=589 generated=155
+06-02 16:59:01.299 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=589
+06-02 16:59:01.331 D/ActivityManager( 2026): freezing 10922 com.android.vending:background
+06-02 16:59:01.334 D/ActivityManager( 2026): freezing 10842 com.android.vending
+06-02 16:59:01.336 D/ActivityManager( 2026): freezing 7340 com.android.vending:instant_app_installer
+06-02 16:59:01.337 D/ActivityManager( 2026): freezing 10929 com.android.vending:quick_launch
+06-02 16:59:01.337 I/LlamaInferenceBridge(31508): [LLM] step=156 topId=6405 nPast=590 generated=156
+06-02 16:59:01.337 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=590
+06-02 16:59:01.374 I/LlamaInferenceBridge(31508): [LLM] step=157 topId=6405 nPast=591 generated=157
+06-02 16:59:01.374 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=591
+06-02 16:59:01.385 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-02 16:59:01.390 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-02 16:59:01.405 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-02 16:59:01.405 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-02 16:59:01.409 I/LlamaInferenceBridge(31508): [LLM] step=158 topId=6405 nPast=592 generated=158
+06-02 16:59:01.409 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=592
+06-02 16:59:01.445 I/LlamaInferenceBridge(31508): [LLM] step=159 topId=6405 nPast=593 generated=159
+06-02 16:59:01.445 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=593
+06-02 16:59:01.481 I/LlamaInferenceBridge(31508): [LLM] step=160 topId=1959 nPast=594 generated=160
+06-02 16:59:01.481 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=594
+06-02 16:59:01.506 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 4
+06-02 16:59:01.518 I/LlamaInferenceBridge(31508): [LLM] step=161 topId=3453 nPast=595 generated=161
+06-02 16:59:01.518 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=595
+06-02 16:59:01.555 I/LlamaInferenceBridge(31508): [LLM] step=162 topId=3481 nPast=596 generated=162
+06-02 16:59:01.555 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=596
+06-02 16:59:01.592 I/LlamaInferenceBridge(31508): [LLM] step=163 topId=2753 nPast=597 generated=163
+06-02 16:59:01.592 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=597
+06-02 16:59:01.606 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-02 16:59:01.628 I/LlamaInferenceBridge(31508): [LLM] step=164 topId=2510 nPast=598 generated=164
+06-02 16:59:01.628 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=598
+06-02 16:59:01.663 I/LlamaInferenceBridge(31508): [LLM] step=165 topId=566 nPast=599 generated=165
+06-02 16:59:01.664 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=599
+06-02 16:59:01.699 I/LlamaInferenceBridge(31508): [LLM] step=166 topId=565 nPast=600 generated=166
+06-02 16:59:01.699 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=600
+06-02 16:59:01.707 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 4
+06-02 16:59:01.737 I/LlamaInferenceBridge(31508): [LLM] step=167 topId=2031 nPast=601 generated=167
+06-02 16:59:01.737 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=601
+06-02 16:59:01.741 D/InetDiagMessage( 2026): Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET, states=14
+06-02 16:59:01.742 D/InetDiagMessage( 2026): Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET6, states=14
+06-02 16:59:01.742 D/InetDiagMessage( 2026): Destroyed live tcp sockets for uids={10186} in 3ms
+06-02 16:59:01.774 I/LlamaInferenceBridge(31508): [LLM] step=168 topId=1267 nPast=602 generated=168
+06-02 16:59:01.774 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=602
+06-02 16:59:01.807 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-02 16:59:01.811 I/LlamaInferenceBridge(31508): [LLM] step=169 topId=6398 nPast=603 generated=169
+06-02 16:59:01.811 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=603
+06-02 16:59:01.847 I/LlamaInferenceBridge(31508): [LLM] step=170 topId=1932 nPast=604 generated=170
+06-02 16:59:01.847 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=604
+06-02 16:59:01.883 I/LlamaInferenceBridge(31508): [LLM] step=171 topId=2058 nPast=605 generated=171
+06-02 16:59:01.883 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=605
+06-02 16:59:01.909 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 4
+06-02 16:59:01.920 I/LlamaInferenceBridge(31508): [LLM] step=172 topId=6405 nPast=606 generated=172
+06-02 16:59:01.920 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=606
+06-02 16:59:01.957 I/LlamaInferenceBridge(31508): [LLM] step=173 topId=6405 nPast=607 generated=173
+06-02 16:59:01.957 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=607
+06-02 16:59:01.980 I/SDM     ( 1442): DisplayBase::CommitThread: Received idle timeout, panel: cmd, timeout: 69999 us
+06-02 16:59:01.995 I/LlamaInferenceBridge(31508): [LLM] step=174 topId=6405 nPast=608 generated=174
+06-02 16:59:01.995 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=608
+06-02 16:59:02.008 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-02 16:59:02.011 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-02 16:59:02.030 I/LlamaInferenceBridge(31508): [LLM] step=175 topId=6405 nPast=609 generated=175
+06-02 16:59:02.031 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=609
+06-02 16:59:02.052 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-02 16:59:02.064 I/LlamaInferenceBridge(31508): [LLM] step=176 topId=4218 nPast=610 generated=176
+06-02 16:59:02.064 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=610
+06-02 16:59:02.070 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-02 16:59:02.100 I/LlamaInferenceBridge(31508): [LLM] step=177 topId=4218 nPast=611 generated=177
+06-02 16:59:02.100 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=611
+06-02 16:59:02.136 I/LlamaInferenceBridge(31508): [LLM] step=178 topId=4218 nPast=612 generated=178
+06-02 16:59:02.136 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=612
+06-02 16:59:02.171 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 4
+06-02 16:59:02.171 I/LlamaInferenceBridge(31508): [LLM] step=179 topId=4137 nPast=613 generated=179
+06-02 16:59:02.172 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=613
+06-02 16:59:02.209 I/LlamaInferenceBridge(31508): [LLM] step=180 topId=4137 nPast=614 generated=180
+06-02 16:59:02.209 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=614
+06-02 16:59:02.246 I/LlamaInferenceBridge(31508): [LLM] step=181 topId=1744 nPast=615 generated=181
+06-02 16:59:02.246 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=615
+06-02 16:59:02.272 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 5
+06-02 16:59:02.284 I/LlamaInferenceBridge(31508): [LLM] step=182 topId=4218 nPast=616 generated=182
+06-02 16:59:02.284 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=616
+06-02 16:59:02.290 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-02 16:59:02.302 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-02 16:59:02.319 I/LlamaInferenceBridge(31508): [LLM] step=183 topId=4137 nPast=617 generated=183
+06-02 16:59:02.319 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=617
+06-02 16:59:02.319 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-02 16:59:02.324 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-02 16:59:02.355 I/LlamaInferenceBridge(31508): [LLM] step=184 topId=1734 nPast=618 generated=184
+06-02 16:59:02.355 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=618
+06-02 16:59:02.390 I/LlamaInferenceBridge(31508): [LLM] step=185 topId=4137 nPast=619 generated=185
+06-02 16:59:02.391 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=619
+06-02 16:59:02.425 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 4
+06-02 16:59:02.427 I/LlamaInferenceBridge(31508): [LLM] step=186 topId=4137 nPast=620 generated=186
+06-02 16:59:02.427 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=620
+06-02 16:59:02.464 I/LlamaInferenceBridge(31508): [LLM] step=187 topId=4002 nPast=621 generated=187
+06-02 16:59:02.464 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=621
+06-02 16:59:02.502 I/LlamaInferenceBridge(31508): [LLM] step=188 topId=4164 nPast=622 generated=188
+06-02 16:59:02.502 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=622
+06-02 16:59:02.526 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 5
+06-02 16:59:02.539 I/LlamaInferenceBridge(31508): [LLM] step=189 topId=4191 nPast=623 generated=189
+06-02 16:59:02.539 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=623
+06-02 16:59:02.545 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-02 16:59:02.556 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-02 16:59:02.573 I/LlamaInferenceBridge(31508): [LLM] step=190 topId=5403 nPast=624 generated=190
+06-02 16:59:02.573 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=624
+06-02 16:59:02.575 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-02 16:59:02.608 I/LlamaInferenceBridge(31508): [LLM] step=191 topId=6405 nPast=625 generated=191
+06-02 16:59:02.608 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=625
+06-02 16:59:02.644 I/LlamaInferenceBridge(31508): [LLM] step=192 topId=6324 nPast=626 generated=192
+06-02 16:59:02.644 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=626
+06-02 16:59:02.676 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-02 16:59:02.678 I/LlamaInferenceBridge(31508): [LLM] step=193 topId=3444 nPast=627 generated=193
+06-02 16:59:02.678 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=627
+06-02 16:59:02.714 I/LlamaInferenceBridge(31508): [LLM] step=194 topId=3482 nPast=628 generated=194
+06-02 16:59:02.714 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=628
+06-02 16:59:02.752 I/LlamaInferenceBridge(31508): [LLM] step=195 topId=5669 nPast=629 generated=195
+06-02 16:59:02.752 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=629
+06-02 16:59:02.777 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 4
+06-02 16:59:02.789 I/LlamaInferenceBridge(31508): [LLM] step=196 topId=483 nPast=630 generated=196
+06-02 16:59:02.789 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=630
+06-02 16:59:02.827 I/LlamaInferenceBridge(31508): [LLM] step=197 topId=2490 nPast=631 generated=197
+06-02 16:59:02.827 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=631
+06-02 16:59:02.864 I/LlamaInferenceBridge(31508): [LLM] step=198 topId=4218 nPast=632 generated=198
+06-02 16:59:02.864 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=632
+06-02 16:59:02.878 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-02 16:59:02.900 I/LlamaInferenceBridge(31508): [LLM] step=199 topId=4218 nPast=633 generated=199
+06-02 16:59:02.900 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=633
+06-02 16:59:02.936 I/LlamaInferenceBridge(31508): [LLM] step=200 topId=1222 nPast=634 generated=200
+06-02 16:59:02.936 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=634
+06-02 16:59:02.972 I/LlamaInferenceBridge(31508): [LLM] step=201 topId=1957 nPast=635 generated=201
+06-02 16:59:02.972 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=635
+06-02 16:59:02.979 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 4
+06-02 16:59:03.007 I/SDM     ( 1442): DisplayBase::CommitThread: Received idle timeout, panel: cmd, timeout: 70000 us
+06-02 16:59:03.010 I/LlamaInferenceBridge(31508): [LLM] step=202 topId=4218 nPast=636 generated=202
+06-02 16:59:03.010 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=636
+06-02 16:59:03.048 I/LlamaInferenceBridge(31508): [LLM] step=203 topId=6405 nPast=637 generated=203
+06-02 16:59:03.048 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=637
+06-02 16:59:03.080 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-02 16:59:03.085 I/LlamaInferenceBridge(31508): [LLM] step=204 topId=4137 nPast=638 generated=204
+06-02 16:59:03.085 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=638
+06-02 16:59:03.122 I/LlamaInferenceBridge(31508): [LLM] step=205 topId=5667 nPast=639 generated=205
+06-02 16:59:03.122 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=639
+06-02 16:59:03.158 I/LlamaInferenceBridge(31508): [LLM] step=206 topId=3482 nPast=640 generated=206
+06-02 16:59:03.158 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=640
+06-02 16:59:03.181 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 4
+06-02 16:59:03.194 I/LlamaInferenceBridge(31508): [LLM] step=207 topId=322 nPast=641 generated=207
+06-02 16:59:03.194 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=641
+06-02 16:59:03.232 I/LlamaInferenceBridge(31508): [LLM] step=208 topId=566 nPast=642 generated=208
+06-02 16:59:03.232 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=642
+06-02 16:59:03.270 I/LlamaInferenceBridge(31508): [LLM] step=209 topId=143 nPast=643 generated=209
+06-02 16:59:03.270 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=643
+06-02 16:59:03.281 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-02 16:59:03.306 I/LlamaInferenceBridge(31508): [LLM] step=210 topId=734 nPast=644 generated=210
+06-02 16:59:03.306 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=644
+06-02 16:59:03.342 I/LlamaInferenceBridge(31508): [LLM] step=211 topId=359 nPast=645 generated=211
+06-02 16:59:03.342 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=645
+06-02 16:59:03.378 I/LlamaInferenceBridge(31508): [LLM] step=212 topId=1295 nPast=646 generated=212
+06-02 16:59:03.378 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=646
+06-02 16:59:03.383 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 4
+06-02 16:59:03.416 I/LlamaInferenceBridge(31508): [LLM] step=213 topId=2031 nPast=647 generated=213
+06-02 16:59:03.416 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=647
+06-02 16:59:03.454 I/LlamaInferenceBridge(31508): [LLM] step=214 topId=4164 nPast=648 generated=214
+06-02 16:59:03.454 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=648
+06-02 16:59:03.483 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-02 16:59:03.492 I/LlamaInferenceBridge(31508): [LLM] step=215 topId=4218 nPast=649 generated=215
+06-02 16:59:03.492 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=649
+06-02 16:59:03.527 I/LlamaInferenceBridge(31508): [LLM] step=216 topId=6324 nPast=650 generated=216
+06-02 16:59:03.527 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=650
+06-02 16:59:03.563 I/LlamaInferenceBridge(31508): [LLM] step=217 topId=6486 nPast=651 generated=217
+06-02 16:59:03.563 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=651
+06-02 16:59:03.584 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 4
+06-02 16:59:03.600 I/LlamaInferenceBridge(31508): [LLM] step=218 topId=1734 nPast=652 generated=218
+06-02 16:59:03.600 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=652
+06-02 16:59:03.638 I/LlamaInferenceBridge(31508): [LLM] step=219 topId=116 nPast=653 generated=219
+06-02 16:59:03.638 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=653
+06-02 16:59:03.675 I/LlamaInferenceBridge(31508): [LLM] step=220 topId=386 nPast=654 generated=220
+06-02 16:59:03.675 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=654
+06-02 16:59:03.685 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-02 16:59:03.686 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-02 16:59:03.692 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-02 16:59:03.710 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-02 16:59:03.710 I/LlamaInferenceBridge(31508): [LLM] step=221 topId=278 nPast=655 generated=221
+06-02 16:59:03.710 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=655
+06-02 16:59:03.715 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-02 16:59:03.746 I/LlamaInferenceBridge(31508): [LLM] step=222 topId=557 nPast=656 generated=222
+06-02 16:59:03.746 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=656
+06-02 16:59:03.782 I/LlamaInferenceBridge(31508): [LLM] step=223 topId=2753 nPast=657 generated=223
+06-02 16:59:03.782 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=657
+06-02 16:59:03.816 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 4
+06-02 16:59:03.818 I/LlamaInferenceBridge(31508): [LLM] step=224 topId=566 nPast=658 generated=224
+06-02 16:59:03.818 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=658
+06-02 16:59:03.856 I/LlamaInferenceBridge(31508): [LLM] step=225 topId=395 nPast=659 generated=225
+06-02 16:59:03.856 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=659
+06-02 16:59:03.893 I/LlamaInferenceBridge(31508): [LLM] step=226 topId=305 nPast=660 generated=226
+06-02 16:59:03.893 I/ai-chat-mnn(31508): Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings: seq_len=1 n_past=660
+06-02 16:59:03.917 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 5
+06-02 16:59:03.931 I/LlamaInferenceBridge(31508): [LLM] step=227 topId=6561 nPast=661 generated=227
+06-02 16:59:03.938 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-02 16:59:04.040 I/SDM     ( 1442): DisplayBase::CommitThread: Received idle timeout, panel: cmd, timeout: 70000 us
+06-02 16:59:04.178 I/SDM     ( 1442): DisplayBase::CommitThread: Received idle timeout, panel: cmd, timeout: 70000 us
+06-02 16:59:04.693 E/Diag_Lib( 2200): diag: Diag_LSM_Init: invoked for pid: 2200 with init_count: 0
+06-02 16:59:04.694 E/Diag_Lib( 2200): diag:failed to connect to diag socket
+06-02 16:59:04.694 E/Diag_Lib( 2200):  Diag_LSM_Init: Failed to open handle to diag driver, error = 111
+06-02 16:59:05.678 I/LlamaInferenceBridge(31508): [FlowHTTP] received chunk=1 totalFrames=454 elapsed=1.747 s
+06-02 16:59:05.680 I/LlamaInferenceBridge(31508): [FlowHTTP] mel stats: frames=454, size=36320, min=-11.731998, max=1.182759, mean=-7.518355, zeroRatio=0.0000, preview=[-5.319786, -5.387275, -5.210121, -4.719221, -4.061148, -3.737915, -3.831443, -3.391765]
+06-02 16:59:05.683 I/LlamaInferenceBridge(31508): [HifiGan][MNN] module load begin: /data/user/0/com.example.llama.aichat/files/models/hifigan.mnn (bytes=92858308) backend=Vulkan
+06-02 16:59:05.684 I/MnnHifiGanRunner(31508): Loaded libMNN.so
+06-02 16:59:05.778 I/ai-chat-mnn(31508): Java_com_example_llama_MnnHifiGanRunner_nativeLoadModel: loaded hifigan model=/data/user/0/com.example.llama.aichat/files/models/hifigan.mnn backend=CPU
+06-02 16:59:05.778 I/MnnHifiGanRunner(31508): MNN hifigan model loaded: /data/user/0/com.example.llama.aichat/files/models/hifigan.mnn
+06-02 16:59:05.778 I/LlamaInferenceBridge(31508): [HifiGan][MNN] module load done in 0.095 s
+06-02 16:59:05.778 I/ai-chat-mnn(31508): Java_com_example_llama_MnnHifiGanRunner_nativeForward: input tensor dims=3 dimType=1 shape=1x80x-1
+06-02 16:59:05.838 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-02 16:59:05.847 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-02 16:59:05.852 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 1
+06-02 16:59:05.887 I/SDM     ( 1442): DisplayBase::CommitThread: Received idle timeout, panel: cmd, timeout: 69999 us
+06-02 16:59:05.943 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 2
+06-02 16:59:05.954 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 3
+06-02 16:59:05.958 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 4
+06-02 16:59:06.037 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 5
+06-02 16:59:06.043 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 6
+06-02 16:59:06.058 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 1
+06-02 16:59:06.159 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 0
+06-02 16:59:06.260 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 1
+06-02 16:59:06.361 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 2
+06-02 16:59:06.446 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 3
+06-02 16:59:06.453 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 2
+06-02 16:59:06.460 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 3
+06-02 16:59:06.486 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 4
+06-02 16:59:06.579 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 0
+06-02 16:59:06.591 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 1
+06-02 16:59:06.593 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 2
+06-02 16:59:06.608 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 1
+06-02 16:59:06.612 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 2
+06-02 16:59:06.640 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 3
+06-02 16:59:06.644 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 4
+06-02 16:59:06.655 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 3
+06-02 16:59:06.668 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 4
+06-02 16:59:06.673 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 3
+06-02 16:59:06.690 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 2
+06-02 16:59:06.699 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 1
+06-02 16:59:06.802 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 2
+06-02 16:59:06.903 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 3
+06-02 16:59:07.004 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 4
+06-02 16:59:07.020 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 3
+06-02 16:59:07.032 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 4
+06-02 16:59:07.064 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 3
+06-02 16:59:07.070 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 4
+06-02 16:59:07.104 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 5
+06-02 16:59:07.206 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 4
+06-02 16:59:07.238 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 0
+06-02 16:59:07.250 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 1
+06-02 16:59:07.352 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 0
+06-02 16:59:07.355 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 1
+06-02 16:59:07.456 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 2
+06-02 16:59:07.557 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 3
+06-02 16:59:07.658 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 4
+06-02 16:59:07.683 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 3
+06-02 16:59:07.695 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 4
+06-02 16:59:07.706 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 5
+06-02 16:59:07.709 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 4
+06-02 16:59:07.741 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 3
+06-02 16:59:07.752 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 4
+06-02 16:59:07.768 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 3
+06-02 16:59:07.773 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 2
+06-02 16:59:07.781 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 3
+06-02 16:59:07.882 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 4
+06-02 16:59:07.895 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 3
+06-02 16:59:07.904 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 4
+06-02 16:59:07.928 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 3
+06-02 16:59:07.930 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 4
+06-02 16:59:07.973 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 3
+06-02 16:59:07.985 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 4
+06-02 16:59:08.008 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 3
+06-02 16:59:08.018 I/le.llama.aichat(31508): Waiting for a blocking GC NativeAlloc
+06-02 16:59:08.019 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[3] to 0
+06-02 16:59:08.107 I/LlamaInferenceBridge(31508): runInference finished: stage=voiceGeneration result=/data/user/0/com.example.llama.aichat/files/generated_audio/android_1780390748018.wav total=20.906 s
+06-02 16:59:08.110 I/ThermalEngine( 4513): ACTION: CPU - Setting CPU[7] to 0
+06-02 16:59:08.133 I/mediaserver64( 2143): MP Control is enabled
+06-02 16:59:08.137 E/ANDR-PERF-CLIENT-SYS( 2143): death recipent object is fine
+06-02 16:59:08.137 W/mediaserver64( 2143): AIBinder_linkToDeath is being called with a non-null cookie and no onUnlink callback set. This might not be intended. AIBinder_DeathRecipient_setOnUnlinked should be called first.
+06-02 16:59:08.138 I/mediaserver64( 2143): HeifPerfBoost Perf Lock acquired for duration [0] ms for perf handle [2645]
+06-02 16:59:08.142 I/SDM     ( 1442): DisplayBase::CommitThread: Received idle timeout, panel: cmd, timeout: 69999 us
+06-02 16:59:08.145 I/ExtendedUtils( 2143): printFileName fd(9) -> /data/data/com.example.llama.aichat/files/generated_audio/android_1780390748018.wav
+06-02 16:59:08.152 E/MediaExtractorFactory( 2137): MediaExtractorFactory::CreateFromService (null)
+06-02 16:59:08.155 E/MediaExtractorFactory( 2137): Created an extractor 'WAVExtractor' with confidence 0.30
+06-02 16:59:08.157 I/mediaserver64( 2143): ~HeifPerfBoost Perf Lock released successfully 
+06-02 16:59:08.186 D/DisplayModeController( 1608): setDesiredMode 4630947186934302339 {mode={fps=120.00 Hz, modePtr={id=2, vsyncRate=120.00 Hz, peakRefreshRate=120.00 Hz}}, emitEvent=true, force=false}
+06-02 16:59:08.189 W/SDM     ( 1442): HWDeviceDRM::GetSupportedBitClkRate: Requested rate not supported: 1348000000
+06-02 16:59:08.190 I/SDM     ( 1442): HWDeviceDRM::UpdateMixerAttributes: Mixer WxH 1080x2340-1 for Peripheral
+06-02 16:59:08.191 I/SDM     ( 1442): HWCDisplay::SubmitDisplayConfig: Active configuration changed from config 3 to 2
+06-02 16:59:08.213 I/DisplayDeviceRepository( 2026): Display device changed render timings: "内置屏幕", renderFrameRate=120.00001, presentationDeadlineNanos=10333333, appVsyncOffsetNanos=-1000000
+06-02 16:59:08.217 D/BrightnessThermalClamper( 2026): Thermal status observer already started
+06-02 16:59:08.218 D/AudioFlinger( 1591): setParameters(): io 0, keyvalue screen_state=on, calling pid 2026 calling uid 1000
+06-02 16:59:08.219 D/DisplayManagerService( 2026): Ignore redundant display event 0/2 to 10186/10842
+06-02 16:59:08.219 D/DisplayManagerService( 2026): Ignore redundant display event 0/2 to 10259/18618
+06-02 16:59:08.219 D/DisplayManagerService( 2026): Ignore redundant display event 0/2 to 10369/26314
+06-02 16:59:08.219 D/DisplayManagerService( 2026): Ignore redundant display event 0/2 to 10369/26600
+06-02 16:59:08.220 D/AHAL: AudioDevice( 1345): SetParameters: 1523: enter: screen_state=on
+06-02 16:59:08.221 D/AHAL: AudioVoice( 1345): VoiceSetParameters: 119: Enter params: screen_state=on
+06-02 16:59:08.221 D/AHAL: AudioVoice( 1345): VoiceSetParameters: 403: Exit ret: 0
+06-02 16:59:08.221 D/AHAL: hfp( 1345): hfp_set_parameters: 444: enter
+06-02 16:59:08.221 D/AHAL: FM( 1345): fm_set_parameters: 261: Enter
+06-02 16:59:08.221 D/AHAL: FM( 1345): fm_set_parameters: 319: exit
+06-02 16:59:08.221 D/AHAL: AudioDevice( 1345): SetParameters: 1640:  - screen = on
+06-02 16:59:08.221 I/PAL: ResourceManager( 1345): setParameter: 10586: Screen State:1
+06-02 16:59:08.221 D/AHAL: AudioDevice( 1345): SetParameters: 2344: exit: screen_state=on
+06-02 16:59:08.283 I/SDM     ( 1442): DisplayBase::CommitThread: Received idle timeout, panel: cmd, timeout: 70000 us
+06-02 16:59:09.695 E/Diag_Lib( 2200): diag: Diag_LSM_Init: invoked for pid: 2200 with init_count: 0
+06-02 16:59:09.696 E/Diag_Lib( 2200): diag:failed to connect to diag socket
+06-02 16:59:09.697 E/Diag_Lib( 2200):  Diag_LSM_Init: Failed to open handle to diag driver, error = 111
+06-02 16:59:10.240 I/SDM     ( 1442): DisplayBase::CommitThread: Received idle timeout, panel: cmd, timeout: 70000 us
+06-02 16:59:13.153 E/statsd  ( 1253): Could not find a broadcast receiver for (10269 987654323)
+06-02 16:59:13.264 I/SDM     ( 1442): DisplayBase::CommitThread: Received idle timeout, panel: cmd, timeout: 70000 us
+06-02 16:59:14.697 E/Diag_Lib( 2200): diag: Diag_LSM_Init: invoked for pid: 2200 with init_count: 0
+06-02 16:59:14.698 E/Diag_Lib( 2200): diag:failed to connect to diag socket
+06-02 16:59:14.698 E/Diag_Lib( 2200):  Diag_LSM_Init: Failed to open handle to diag driver, error = 111
+06-02 16:59:14.884 D/ActivityManager( 2026): freezing 29518 com.google.android.gms
+06-02 16:59:16.295 I/SDM     ( 1442): DisplayBase::CommitThread: Received idle timeout, panel: cmd, timeout: 70000 us
+06-02 16:59:18.551 D/ActivityManager( 2026): freezing 5610 jp.co.sharp.android.usbchargingalart
+06-02 16:59:18.554 D/ActivityManager( 2026): freezing 11040 com.android.keychain
+06-02 16:59:18.555 D/ActivityManager( 2026): freezing 8465 jp.co.sharp.android.shlogdservice
+06-02 16:59:18.557 D/ActivityManager( 2026): freezing 8371 jp.co.sharp.android.bsc
+06-02 16:59:18.558 D/ActivityManager( 2026): freezing 10382 com.android.DeviceAsWebcam
+06-02 16:59:19.699 E/Diag_Lib( 2200): diag: Diag_LSM_Init: invoked for pid: 2200 with init_count: 0
+06-02 16:59:19.701 E/Diag_Lib( 2200): diag:failed to connect to diag socket
+06-02 16:59:19.701 E/Diag_Lib( 2200):  Diag_LSM_Init: Failed to open handle to diag driver, error = 111
+06-02 16:59:24.701 E/Diag_Lib( 2200): diag: Diag_LSM_Init: invoked for pid: 2200 with init_count: 0
+06-02 16:59:24.702 E/Diag_Lib( 2200): diag:failed to connect to diag socket
+06-02 16:59:24.702 E/Diag_Lib( 2200):  Diag_LSM_Init: Failed to open handle to diag driver, error = 111
+06-02 16:59:29.705 E/Diag_Lib( 2200): diag: Diag_LSM_Init: invoked for pid: 2200 with init_count: 0
+06-02 16:59:29.706 E/Diag_Lib( 2200): diag:failed to connect to diag socket
+06-02 16:59:29.706 E/Diag_Lib( 2200):  Diag_LSM_Init: Failed to open handle to diag driver, error = 111
