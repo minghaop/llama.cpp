@@ -184,5 +184,6 @@ examples/AndroidTTSApp/qairt/
 # large archives / inspection outputs
 examples/AndroidTTSApp/*.zip
 examples/AndroidTTSApp/output/
-*.zip
-*.json
+
+examples/AndroidTTSApp/*.zip
+examples/AndroidTTSApp/output/mnn_inspect/
