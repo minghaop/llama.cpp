@@ -1,0 +1,14 @@
+{
+"Inputs" : {
+    "GENIE_NODE_LM_EXECUTOR_TOKEN_INPUT" : {
+        "file-path" : "inputs/tokens.raw",
+            "io-config" : {
+                    "data-type": "uint32_t",
+                    "dimensions": [
+                        1,
+                        18
+                    ]
+            }
+        }
+    }
+}

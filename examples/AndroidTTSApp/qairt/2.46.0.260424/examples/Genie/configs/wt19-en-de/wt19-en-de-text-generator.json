@@ -1,0 +1,53 @@
+{
+  "text-generator": {
+    "version": 1,
+    "type": "basic",
+    "accumulator-size" : 4194304,
+    "embedding": {
+      "version": 1,
+      "type": "lut",
+      "lut-path": "your/path/to/LUT.bin",
+      "size": 1024,
+      "datatype": "float32"
+    },
+    "context": {
+      "version": 1,
+      "size": 1024,
+      "n-vocab": 42024,
+      "bos-token": 2,
+      "eos-token": 2
+    },
+    "tokenizer": {
+      "version": 1,
+      "path": "your/path/to/tokenizer_file.json"
+    },
+    "sampler": {
+      "version": 1,
+      "type": "basic",
+      "seed": 100,
+      "temp": 1.0,
+      "top-k": 1,
+      "top-p": 1.0
+    },
+    "engine": {
+      "version" : 1,
+      "n-threads" : 6,
+      "backend" : {
+        "version" : 1,
+        "type" : "QnnGenAiTransformer",
+        "QnnGenAiTransformer" : {
+          "version" : 1,
+          "model-input": "embeddings"
+        }
+      },
+      "model" : {
+        "version" : 1,
+        "type" : "library",
+        "library" : {
+          "version" : 1,
+          "model-bin" : "your/path/to/model_decoder.bin"
+        }
+      }
+    }
+  }
+}

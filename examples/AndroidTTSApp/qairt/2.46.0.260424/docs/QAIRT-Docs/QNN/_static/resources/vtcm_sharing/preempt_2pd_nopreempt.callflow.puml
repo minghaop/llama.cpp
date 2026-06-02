@@ -1,0 +1,30 @@
+@startuml
+
+autonumber "<b>[#]"
+
+participant "PD1 - C1 [high]"   as cv #royalblue
+participant "PD1 - QNN [low]"  as qnn1 #green
+participant "PD2 [med]"  as pd2 #red
+participant "HAP"  as hap 
+
+qnn1 -[#green]> hap: acquire(6,8)
+cv -[#blue]> hap: acquire(2,1)
+
+pd2 -[#red]> hap: acquire(6,8)
+cv -[#blue]> hap: release()
+
+activate hap
+hap --[#black]> qnn1: release_request
+qnn1 -[#green]> hap: release()
+hap --[#black]> pd2: ok
+deactivate hap
+
+cv -[#blue]> hap: acquire(1,2)
+activate hap
+hap --[#black]> pd2: release_request()
+pd2 -[#red]> hap: release()
+hap --[#black]> cv: ok
+deactivate hap
+
+@enduml
+

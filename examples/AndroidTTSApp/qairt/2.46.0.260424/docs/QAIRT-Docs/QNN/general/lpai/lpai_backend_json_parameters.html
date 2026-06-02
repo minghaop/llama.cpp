@@ -1,0 +1,606 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>QNN LPAI Backend Configuration Guide &mdash; Qualcomm® AI Runtime (QAIRT) SDKs</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/custom_css.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Qualcomm® AI Runtime (QAIRT) SDKs
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v2.46.0.260424121129
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">QAIRT</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../general/overview.html">Overview</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">SDKs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">QNN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../SNPE/index.html">SNPE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Genie/index.html">Genie</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Delegates</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../Delegates/TfLite/index.html">TFLite Delegate</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Qualcomm® AI Runtime (QAIRT) SDKs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>QNN LPAI Backend Configuration Guide</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="qnn-lpai-backend-configuration-guide">
+<span id="qnn-lpai-configuration-guide"></span><h1>QNN LPAI Backend Configuration Guide<a class="headerlink" href="#qnn-lpai-backend-configuration-guide" title="Permalink to this heading">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#overview" id="id1">Overview</a></p></li>
+<li><p><a class="reference internal" href="#configuration-schema" id="id2">Configuration Schema</a></p>
+<ul>
+<li><p><a class="reference internal" href="#lpai-backend" id="id3">lpai_backend</a></p></li>
+<li><p><a class="reference internal" href="#lpai-graph" id="id4">lpai_graph</a></p></li>
+<li><p><a class="reference internal" href="#lpai-profile-optional" id="id5">lpai_profile (Optional)</a></p></li>
+<li><p><a class="reference internal" href="#lpai-debug-optional" id="id6">lpai_debug (Optional)</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#qnn-lpai-backend-configuration-parameters" id="id7">QNN LPAI Backend Configuration Parameters</a></p>
+<ul>
+<li><p><a class="reference internal" href="#fps-and-ftrt-ratio-information" id="id8">Fps and ftrt_ratio information</a></p></li>
+<li><p><a class="reference internal" href="#realtime-vs-non-realtime-client" id="id9">Realtime vs Non-Realtime client</a></p></li>
+<li><p><a class="reference internal" href="#core-selection-affinity" id="id10">Core Selection &amp; Affinity</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#runtime-layout-control-in-lpai" id="id11">Runtime Layout Control in LPAI</a></p>
+<ul>
+<li><p><a class="reference internal" href="#purpose" id="id12">Purpose</a></p></li>
+<li><p><a class="reference internal" href="#why-it-matters" id="id13">Why It Matters</a></p></li>
+<li><p><a class="reference internal" href="#recommended-usage" id="id14">Recommended Usage</a></p></li>
+<li><p><a class="reference internal" href="#limitations" id="id15">Limitations</a></p></li>
+<li><p><a class="reference internal" href="#summary" id="id16">Summary</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#full-json-scheme" id="id17">Full JSON Scheme</a></p>
+<ul>
+<li><p><a class="reference internal" href="#full-json-example" id="id18">Full JSON Example</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#best-practices" id="id19">Best Practices</a></p></li>
+</ul>
+</div>
+<div class="section" id="overview">
+<h2><a class="toc-backref" href="#contents">Overview</a><a class="headerlink" href="#overview" title="Permalink to this heading">¶</a></h2>
+<p>This document outlines the structure and usage of LPAI backend configuration files employed by QNN tools such as <code class="docutils literal notranslate"><span class="pre">qnn-net-run</span></code> and <code class="docutils literal notranslate"><span class="pre">qnn-context-binary-generator</span></code>.
+These JSON-formatted files enable fine-grained control over model preparation, runtime behavior, debugging, profiling, and internal backend features.</p>
+<p>There are two primary JSON configuration files:</p>
+<ol class="arabic">
+<li><p><strong>Backend Extension Configuration File</strong>
+Specifies the path to the LPAI backend extension shared library and the path to the LPAI backend configuration file.</p>
+<p>Example usage:
+<code class="docutils literal notranslate"><span class="pre">--config_file</span> <span class="pre">&lt;path_to_backend_extension_JSON&gt;</span></code></p>
+<p>Example format:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;backend_extensions&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;shared_library_path&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;path_to_Lpai_extension_shared_library&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;config_file_path&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;path_to_Lpai_extension_config_file&quot;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>LPAI Backend Configuration File</strong>
+Defines all configurable parameters for model generation and execution. This file is parsed by the LPAI backend extension library.</p></li>
+</ol>
+</div>
+<div class="section" id="configuration-schema">
+<h2><a class="toc-backref" href="#contents">Configuration Schema</a><a class="headerlink" href="#configuration-schema" title="Permalink to this heading">¶</a></h2>
+<p>The configuration is organized into the following sections:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">lpai_backend</span></code>: Global backend settings.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">lpai_graph</span></code>  : Graph generation and execution parameters.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">lpai_profile</span></code>: Profiling options (optional).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">lpai_debug</span></code>  : Debug options (optional).</p></li>
+</ul>
+<p>Each section and its parameters are described below.</p>
+<div class="section" id="lpai-backend">
+<h3><a class="toc-backref" href="#contents">lpai_backend</a><a class="headerlink" href="#lpai-backend" title="Permalink to this heading">¶</a></h3>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">target_env</span></code> (string):</p>
+<p>Target environment for model execution.</p>
+<p><strong>Options</strong>: <code class="docutils literal notranslate"><span class="pre">arm</span></code>, <code class="docutils literal notranslate"><span class="pre">adsp</span></code>, <code class="docutils literal notranslate"><span class="pre">x86</span></code>
+<strong>Default</strong>: <code class="docutils literal notranslate"><span class="pre">adsp</span></code></p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">enable_hw_ver</span></code> (string):</p>
+<p>Hardware version of target refer to <span class="xref std std-ref">Supported Snapdragon Devices</span>.</p>
+<p><strong>Options</strong>: <code class="docutils literal notranslate"><span class="pre">v5</span></code>, <code class="docutils literal notranslate"><span class="pre">v5_1</span></code>, <code class="docutils literal notranslate"><span class="pre">v6</span></code>
+<strong>Default</strong>: <code class="docutils literal notranslate"><span class="pre">v6</span></code></p>
+</li>
+</ul>
+</div>
+<div class="section" id="lpai-graph">
+<h3><a class="toc-backref" href="#contents">lpai_graph</a><a class="headerlink" href="#lpai-graph" title="Permalink to this heading">¶</a></h3>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">execute</span></code></p>
+<blockquote>
+<div><p>Used by <code class="docutils literal notranslate"><span class="pre">qnn-net-run</span></code> during runtime execution.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">fps</span></code> (integer): <a class="reference internal" href="lpai_backend.html#qnn-lpai-configuration-parameters"><span class="std std-ref">Target frames per second.</span></a> Default: <code class="docutils literal notranslate"><span class="pre">1</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ftrt_ratio</span></code> (integer): <a class="reference internal" href="lpai_backend.html#qnn-lpai-configuration-parameters"><span class="std std-ref">Frame-to-real-time ratio.</span></a> Default: <code class="docutils literal notranslate"><span class="pre">10</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">client_type</span></code> (string): <a class="reference internal" href="lpai_backend.html#qnn-lpai-real-time"><span class="std std-ref">Type of workload.</span></a> Options: <code class="docutils literal notranslate"><span class="pre">real_time</span></code>, <code class="docutils literal notranslate"><span class="pre">non_real_time</span></code>. Default: <code class="docutils literal notranslate"><span class="pre">real_time</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">affinity</span></code> (string): <a class="reference internal" href="lpai_backend.html#qnn-lpai-core-selection"><span class="std std-ref">Core affinity policy.</span></a> Options: <code class="docutils literal notranslate"><span class="pre">soft</span></code>, <code class="docutils literal notranslate"><span class="pre">hard</span></code>. Default: <code class="docutils literal notranslate"><span class="pre">soft</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">core_selection</span></code> (integer): <a class="reference internal" href="lpai_backend.html#qnn-lpai-core-selection"><span class="std std-ref">Specific core number.</span></a> Default: <code class="docutils literal notranslate"><span class="pre">0</span></code></p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div>
+<div class="section" id="lpai-profile-optional">
+<h3><a class="toc-backref" href="#contents">lpai_profile (Optional)</a><a class="headerlink" href="#lpai-profile-optional" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">level</span></code> (string): Profiling level: <code class="docutils literal notranslate"><span class="pre">basic</span></code>, <code class="docutils literal notranslate"><span class="pre">detailed</span></code>. Default: <code class="docutils literal notranslate"><span class="pre">basic</span></code> <a class="reference internal" href="lpai_backend.html#qnn-lpai-profiling"><span class="std std-ref">Lpai Profiling</span></a></p></li>
+</ul>
+</div>
+<div class="section" id="lpai-debug-optional">
+<h3><a class="toc-backref" href="#contents">lpai_debug (Optional)</a><a class="headerlink" href="#lpai-debug-optional" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">force_nhwc</span></code> (bool): <a class="reference internal" href="lpai_backend.html#qnn-lpai-debug-force-nhwc"><span class="std std-ref">Enforce NHWC tensor layout.</span></a> Default: <code class="docutils literal notranslate"><span class="pre">false</span></code></p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="qnn-lpai-backend-configuration-parameters">
+<span id="qnn-lpai-configuration-parameters"></span><h2><a class="toc-backref" href="#contents">QNN LPAI Backend Configuration Parameters</a><a class="headerlink" href="#qnn-lpai-backend-configuration-parameters" title="Permalink to this heading">¶</a></h2>
+<div class="section" id="fps-and-ftrt-ratio-information">
+<span id="qnn-lpai-fps-ftrt-ratio"></span><h3><a class="toc-backref" href="#contents">Fps and ftrt_ratio information</a><a class="headerlink" href="#fps-and-ftrt-ratio-information" title="Permalink to this heading">¶</a></h3>
+<p>These parameters define how a client configures its processing behavior for eNPU hardware.</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt><cite>fps</cite> (Frames Per Second)</dt><dd><ul>
+<li><p>Specifies how frequently inference must be completed.</p></li>
+<li><p>For example, <cite>fps = 10</cite> means the system must process one frame every 100 milliseconds (i.e., 1000 ms / 10).</p></li>
+<li><p>This sets the overall time budget for each frame, including pre-processing, inference, and post-processing.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><cite>ftrt_ratio</cite> (Factor to Real-Time Ratio)</dt><dd><ul>
+<li><p>Determines the hardware configuration to meet the latency requirement for inference.</p></li>
+<li><p>If pre- and post-processing take up most of the frame time (e.g., 80 ms out of 100 ms), only 20 ms remain for inference.</p></li>
+<li><p>To ensure inference completes within this reduced time window, the eNPU must be boosted.</p></li>
+<li><p>Setting <cite>ftrt_ratio = 50</cite> applies a <strong>multiplication factor of 5.0</strong> to the base clock frequency, helping the eNPU meet the tighter latency constraint.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Default Values</dt><dd><ul>
+<li><p><cite>fps = 1</cite> (1 frame per second, allowing 1000 ms per frame)</p></li>
+<li><p><cite>ftrt_ratio = 10</cite> (moderate clock scaling factor)</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<p>These defaults imply a relaxed processing schedule and a balanced performance-power tradeoff.</p>
+</div>
+<div class="section" id="realtime-vs-non-realtime-client">
+<span id="qnn-lpai-real-time"></span><h3><a class="toc-backref" href="#contents">Realtime vs Non-Realtime client</a><a class="headerlink" href="#realtime-vs-non-realtime-client" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Real-time: Indicates that the model is intended for real-time use cases, where a specific performance threshold must be met.
+If the required performance cannot be achieved, the finalize function will return an error.</p></li>
+<li><p>Non-real-time: Refers to models without strict performance requirements.
+In these cases, LPAI will make a best-effort attempt to accommodate the workload, and finalize will not fail due to performance limitations.</p></li>
+</ul>
+</div>
+<div class="section" id="core-selection-affinity">
+<span id="qnn-lpai-core-selection"></span><h3><a class="toc-backref" href="#contents">Core Selection &amp; Affinity</a><a class="headerlink" href="#core-selection-affinity" title="Permalink to this heading">¶</a></h3>
+<p>Clients can configure <strong>core selection</strong> and <strong>affinity settings</strong> for the eAI to control how their model’s offloaded operations (Ops) are assigned to processing cores.</p>
+<p>If no settings are provided:</p>
+<ul class="simple">
+<li><p><strong>Core Selection</strong> defaults to <code class="docutils literal notranslate"><span class="pre">0x00</span></code> (no specific preference — any available core may be selected).</p></li>
+<li><p><strong>Affinity</strong> defaults to <strong>soft affinity</strong>.</p></li>
+</ul>
+<div class="section" id="core-selection">
+<h4>Core Selection<a class="headerlink" href="#core-selection" title="Permalink to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">coreSelection</span></code> is a <strong>bitmask</strong> that specifies which core(s) are eligible for selection.</p></li>
+<li><p>Each bit represents a core:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">0x01</span></code> → selects <strong>core 0</strong></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">0x02</span></code> → selects <strong>core 1</strong></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">0x00</span></code> → no specific preference; any available core may be selected</p></li>
+</ul>
+</li>
+</ul>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<ul class="simple">
+<li><p>Mixed core selection (e.g., <code class="docutils literal notranslate"><span class="pre">0x03</span></code> to select both core 0 and core 1) is <strong>not yet supported</strong>.</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="platform-specific-guidance">
+<h4>Platform-Specific Guidance<a class="headerlink" href="#platform-specific-guidance" title="Permalink to this heading">¶</a></h4>
+<p>For platforms with <strong>only one processing core</strong>, users should configure:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">coreSelection</span> <span class="pre">=</span> <span class="pre">0x00</span></code> (no specific preference), or</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">coreSelection</span> <span class="pre">=</span> <span class="pre">0x01</span></code> (explicitly select core 0)</p></li>
+</ul>
+<p>This ensures compatibility and avoids undefined behavior due to unsupported multi-core selection.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<ul class="simple">
+<li><p>The API does <strong>not expose core characteristics</strong> (e.g., whether a core is “big” or “small”).</p></li>
+<li><p>Users should consult <strong>platform documentation</strong> to determine core capabilities and make informed decisions about core selection and affinity strategy.</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="affinity-strategy">
+<h4>Affinity Strategy<a class="headerlink" href="#affinity-strategy" title="Permalink to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><strong>Hard Affinity</strong>: Forces Ops to run only on the selected core.</p></li>
+<li><p><strong>Soft Affinity</strong>: Prefers the selected core but allows fallback to another if the preferred is busy.</p></li>
+</ul>
+</div>
+<div class="section" id="guidance-based-on-core-behavior">
+<h4>Guidance Based on Core Behavior<a class="headerlink" href="#guidance-based-on-core-behavior" title="Permalink to this heading">¶</a></h4>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 20%" />
+<col style="width: 11%" />
+<col style="width: 46%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Scenario</p></th>
+<th class="head"><p>Recommended coreSelection</p></th>
+<th class="head"><p>Affinity Type</p></th>
+<th class="head"><p>Rationale</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Heavy compute workloads
+(e.g., large convNets)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x02</span></code> (Core 1)</p></td>
+<td><p>Hard or Soft</p></td>
+<td><p>Core 1 is typically a big core, offering better performance</p></td>
+</tr>
+<tr class="row-odd"><td><p>Audio use cases</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x01</span></code> (Core 0)</p></td>
+<td><p>Soft</p></td>
+<td><p>Core 0 (small core) is sufficient and more power-efficient</p></td>
+</tr>
+<tr class="row-even"><td><p>Camera use cases</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x02</span></code> (Core 1)</p></td>
+<td><p>Soft</p></td>
+<td><p>Core 1 provides faster inference for image processing</p></td>
+</tr>
+<tr class="row-odd"><td><p>Shared workloads
+(audio + camera)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x00</span></code> (Any)</p></td>
+<td><p>Soft</p></td>
+<td><p>Allows dynamic load balancing across cores</p></td>
+</tr>
+<tr class="row-even"><td><p>Power-sensitive applications</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x01</span></code> (Core 0)</p></td>
+<td><p>Soft</p></td>
+<td><p>Core 0 consumes less power</p></td>
+</tr>
+<tr class="row-odd"><td><p>Performance-critical apps</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x02</span></code> (Core 1)</p></td>
+<td><p>Hard</p></td>
+<td><p>Ensures consistent execution on the high-performance core</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="system-level-considerations">
+<h4>System-Level Considerations<a class="headerlink" href="#system-level-considerations" title="Permalink to this heading">¶</a></h4>
+<ul class="simple">
+<li><p>Core affinity should be tuned based on:</p>
+<ul>
+<li><p>System concurrency</p></li>
+<li><p>Workload characteristics</p></li>
+<li><p>KPI targets</p></li>
+<li><p>Power budget</p></li>
+<li><p>Profiling results</p></li>
+</ul>
+</li>
+<li><p><strong>Core shutdown is not required</strong>: Idle cores are automatically <strong>power collapsed</strong>, ensuring efficient power management.</p></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="runtime-layout-control-in-lpai">
+<span id="qnn-lpai-debug-force-nhwc"></span><h2><a class="toc-backref" href="#contents">Runtime Layout Control in LPAI</a><a class="headerlink" href="#runtime-layout-control-in-lpai" title="Permalink to this heading">¶</a></h2>
+<div class="section" id="purpose">
+<h3><a class="toc-backref" href="#contents">Purpose</a><a class="headerlink" href="#purpose" title="Permalink to this heading">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">force_nhwc</span></code> option is a runtime configuration setting used in Qualcomm’s LPAI (Low Power AI) backend to enforce NHWC tensor layout during model execution.
+Its primary role is to help avoid automatic layout transformations—specifically <code class="docutils literal notranslate"><span class="pre">TRANSPOSE</span></code> operations—around convolutional layers, which can negatively impact performance and profiling clarity.</p>
+</div>
+<div class="section" id="why-it-matters">
+<h3><a class="toc-backref" href="#contents">Why It Matters</a><a class="headerlink" href="#why-it-matters" title="Permalink to this heading">¶</a></h3>
+<p>When executing models on the eNPU, layout transformations often appear around operations like <code class="docutils literal notranslate"><span class="pre">Conv2D</span></code>, especially at graph boundaries.
+These transformations are inserted to reconcile differences between the model’s tensor layout (e.g., NHWC) and the eNPU’s internal hardware-native layout, which is typically blocked or tiled.</p>
+<p>Even if a model is converted with NHWC input/output layouts and no output layout is explicitly forced, the runtime may still insert <code class="docutils literal notranslate"><span class="pre">TRANSPOSE</span></code> operations unless <code class="docutils literal notranslate"><span class="pre">force_nhwc</span></code> is enabled.
+These transformations can dominate execution time on the DSP and obscure the performance of the actual accelerated operation.</p>
+</div>
+<div class="section" id="recommended-usage">
+<h3><a class="toc-backref" href="#contents">Recommended Usage</a><a class="headerlink" href="#recommended-usage" title="Permalink to this heading">¶</a></h3>
+<p>To minimize or eliminate layout transformations at graph boundaries:</p>
+<ul class="simple">
+<li><p>Set input and output tensor layouts to NHWC during model conversion.</p></li>
+<li><p>Enable <code class="docutils literal notranslate"><span class="pre">force_nhwc</span></code> in the runtime configuration. This instructs the runtime to preserve NHWC layout and avoid inserting layout transforms.</p></li>
+<li><p>Avoid forcing output layout during conversion, which can trigger post-processing transforms.</p></li>
+</ul>
+</div>
+<div class="section" id="limitations">
+<h3><a class="toc-backref" href="#contents">Limitations</a><a class="headerlink" href="#limitations" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>If <code class="docutils literal notranslate"><span class="pre">force_nhwc</span></code> is not enabled, layout transforms will likely appear even if the graph is NHWC.</p></li>
+<li><p>For single operations at graph boundaries, layout transforms may still occur due to the eNPU’s internal layout requirements.</p></li>
+<li><p>To fully avoid layout transforms, it is often necessary to chain multiple eNPU-compatible operations, allowing the internal layout to be reused across ops without conversion.</p></li>
+</ul>
+</div>
+<div class="section" id="summary">
+<h3><a class="toc-backref" href="#contents">Summary</a><a class="headerlink" href="#summary" title="Permalink to this heading">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">force_nhwc</span></code> is a critical setting for developers aiming to optimize LPAI model execution and profiling.
+It ensures that NHWC layouts are respected at runtime, reducing overhead and improving clarity in performance analysis.
+However, due to hardware constraints, some layout transforms may still be unavoidable unless multiple operations are chained together.</p>
+</div>
+</div>
+<div class="section" id="full-json-scheme">
+<h2><a class="toc-backref" href="#contents">Full JSON Scheme</a><a class="headerlink" href="#full-json-scheme" title="Permalink to this heading">¶</a></h2>
+<p>Below is a complete scheme of the LPAI backend configuration file with all supported parameters:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">   </span><span class="nt">&quot;lpai_backend&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">      </span><span class="c1">// Selection of targets [options: arm/adsp/x86] [default: adsp] (Simulator or target)</span>
+<span class="w">      </span><span class="c1">// Used by qnn-context-binary-generator during offline generation</span>
+<span class="w">      </span><span class="nt">&quot;target_env&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;adsp&quot;</span><span class="p">,</span>
+
+<span class="w">      </span><span class="c1">// Corresponds to the LPAI hardware version [options: v5/v5_1/v6] [default: v6]</span>
+<span class="w">      </span><span class="c1">// Used by qnn-context-binary-generator during offline generation</span>
+<span class="w">      </span><span class="nt">&quot;enable_hw_ver&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;v6&quot;</span>
+<span class="w">   </span><span class="p">},</span>
+<span class="w">   </span><span class="nt">&quot;lpai_graph&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;execute&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">         </span><span class="c1">// Specify the fps rate number, used for clock voting [options: number] [default: 1]</span>
+<span class="w">         </span><span class="c1">// Used by qnn-net-run during execution</span>
+<span class="w">         </span><span class="nt">&quot;fps&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;integer&quot;</span><span class="p">},</span>
+
+<span class="w">         </span><span class="c1">// Specify the ftrt_ratio number [options: number] [default: 10]</span>
+<span class="w">         </span><span class="c1">// Used by qnn-net-run during execution</span>
+<span class="w">         </span><span class="nt">&quot;ftrt_ratio&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;integer&quot;</span><span class="p">},</span>
+
+<span class="w">         </span><span class="c1">// Definition of client type [options: real_time/non_real_time] [default: real_time]</span>
+<span class="w">         </span><span class="c1">// Used by qnn-net-run during execution</span>
+<span class="w">         </span><span class="nt">&quot;client_type&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span><span class="p">},</span>
+
+<span class="w">         </span><span class="c1">// Definition of affinity type [options: soft/hard] [default: soft]</span>
+<span class="w">         </span><span class="c1">// Used by qnn-net-run during execution</span>
+<span class="w">         </span><span class="nt">&quot;affinity&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span><span class="p">},</span>
+
+<span class="w">         </span><span class="c1">// Specify the core number [options: number] [default: 0]</span>
+<span class="w">         </span><span class="c1">// Used by qnn-net-run during execution</span>
+<span class="w">         </span><span class="nt">&quot;core_selection&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;integer&quot;</span><span class="p">}</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">   </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="section" id="full-json-example">
+<h3><a class="toc-backref" href="#contents">Full JSON Example</a><a class="headerlink" href="#full-json-example" title="Permalink to this heading">¶</a></h3>
+<p>Below is a complete example of the LPAI backend configuration file with all supported parameters:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">   </span><span class="nt">&quot;lpai_backend&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;target_env&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;adsp&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;enable_hw_ver&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;v6&quot;</span>
+<span class="w">   </span><span class="p">},</span>
+<span class="w">   </span><span class="nt">&quot;lpai_graph&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;execute&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">         </span><span class="nt">&quot;fps&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">         </span><span class="nt">&quot;ftrt_ratio&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span>
+<span class="w">         </span><span class="nt">&quot;client_type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;real_time&quot;</span><span class="p">,</span>
+<span class="w">         </span><span class="nt">&quot;affinity&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;soft&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">   </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="best-practices">
+<h2><a class="toc-backref" href="#contents">Best Practices</a><a class="headerlink" href="#best-practices" title="Permalink to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><strong>Minimal Changes</strong>: Use default values unless specific tuning is required.</p></li>
+<li><p><strong>Validation</strong>: Ensure all values conform to expected types and allowed options.</p></li>
+<li><p><strong>Version Compatibility</strong>: Refer to the <span class="xref std std-ref">Supported Snapdragon Devices</span> for supported LPAI versions.</p></li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020-2025, Qualcomm Technologies, Inc..
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

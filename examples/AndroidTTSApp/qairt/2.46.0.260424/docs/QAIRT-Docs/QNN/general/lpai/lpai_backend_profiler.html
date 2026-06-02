@@ -1,0 +1,389 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>QNN LPAI Profiling &mdash; Qualcomm® AI Runtime (QAIRT) SDKs</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/custom_css.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Qualcomm® AI Runtime (QAIRT) SDKs
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v2.46.0.260424121129
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">QAIRT</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../general/overview.html">Overview</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">SDKs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">QNN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../SNPE/index.html">SNPE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Genie/index.html">Genie</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Delegates</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../Delegates/TfLite/index.html">TFLite Delegate</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Qualcomm® AI Runtime (QAIRT) SDKs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>QNN LPAI Profiling</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="qnn-lpai-profiling">
+<span id="id1"></span><h1>QNN LPAI Profiling<a class="headerlink" href="#qnn-lpai-profiling" title="Permalink to this heading">¶</a></h1>
+<p>QNN supports two profiling modes:</p>
+<ul class="simple">
+<li><p><strong>Per API Profiling</strong>: Captures profiling data for individual QNN API calls. This mode provides fine-grained visibility into the performance of each API invocation.</p></li>
+<li><p><strong>Graph Continuous Profiling</strong>: Captures profiling data across the entire graph execution, offering a holistic view of performance across layers and operations.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <strong>LPAI backend</strong> currently supports only <strong>Per API Profiling</strong>.</p>
+</div>
+<p>Supported profiling modes for LPAI:</p>
+<ul class="simple">
+<li><p>✅ Per API Profiling</p></li>
+<li><p>❌ Graph Continuous Profiling</p></li>
+</ul>
+<p>Refer to the following sections for more details:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="lpai_backend.html#qnn-lpai-basic-profiling"><span class="std std-ref">Basic Profiling</span></a></p></li>
+<li><p><a class="reference internal" href="lpai_backend.html#qnn-lpai-detailed-profiling"><span class="std std-ref">Detailed Profiling</span></a></p></li>
+<li><p><a class="reference internal" href="#enable-profiling-in-qnn-net-run">Enable Profiling in qnn-net-run</a></p></li>
+<li><p><a class="reference internal" href="#visualize-profile-data-with-qnn-profile-viewer">Visualize Profile Data with qnn-profile-viewer</a></p></li>
+</ul>
+</div>
+<div class="section" id="profiling-initialization">
+<h1>Profiling Initialization<a class="headerlink" href="#profiling-initialization" title="Permalink to this heading">¶</a></h1>
+<p>To enable profiling in the QNN runtime, the following steps must be taken during initialization:</p>
+<ol class="arabic">
+<li><p><strong>Set Profiling Level</strong></p>
+<p>Use the <cite>–profiling_level</cite> command-line argument when invoking <cite>qnn-net-run</cite>. Supported values:</p>
+<ul class="simple">
+<li><p><cite>basic</cite>: Enables essential profiling events.</p></li>
+<li><p><cite>detailed</cite>: Enables all available profiling events, including backend-specific metrics.</p></li>
+</ul>
+</li>
+<li><p><strong>Ensure Profiling is Enabled in the Backend Configuration</strong></p>
+<p>The backend configuration file (if applicable) must allow profiling. This may include enabling flags such as:</p>
+<ul class="simple">
+<li><p><cite>enableProfiling: true</cite></p></li>
+<li><p><cite>profilingOutputPath: &lt;directory&gt;</cite></p></li>
+</ul>
+</li>
+<li><p><strong>Initialize QNN Context with Profiling Support</strong></p>
+<p>When creating the QNN context (e.g., via <cite>QnnContext_createFromBinary</cite>), ensure that profiling is not disabled by any runtime flags or environment variables.</p>
+</li>
+<li><p><strong>Execution and Logging</strong></p>
+<p>During graph execution, profiling data is collected and written to log files in the output directory. These logs are automatically named and versioned.</p>
+</li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Profiling introduces some runtime overhead. For performance-sensitive deployments, it is recommended to disable profiling in production environments.</p>
+</div>
+</div>
+<div class="section" id="basic-profiling">
+<span id="qnn-lpai-basic-profiling"></span><h1>Basic Profiling<a class="headerlink" href="#basic-profiling" title="Permalink to this heading">¶</a></h1>
+<p>Basic profiling is designed to provide a lightweight overview of performance-critical operations within the QNN runtime and backend.
+It is ideal for quick diagnostics, regression testing, and high-level performance monitoring with minimal overhead.</p>
+<p><strong>Scope of Basic Profiling:</strong></p>
+<ol class="arabic simple">
+<li><p><strong>QNN API-Level Events:</strong></p>
+<ul class="simple">
+<li><p>Measures the execution time of key QNN API calls:</p>
+<ul>
+<li><p><cite>QnnContext_createFromBinary</cite>: Time taken to deserialize and initialize the context.</p></li>
+<li><p><cite>QnnGraph_finalize</cite>: Time to finalize the graph before execution.</p></li>
+<li><p><cite>QnnGraph_execute</cite>: Time spent executing the graph.</p></li>
+<li><p><cite>QnnContext_free</cite>: Time to release context resources.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>Backend-Specific Events:</strong></p>
+<ul class="simple">
+<li><p><strong>IPC Time</strong>: Time spent in inter-process communication between host and backend.</p></li>
+<li><p><strong>Accelerator Execution Time</strong>: Time taken by the hardware accelerator to execute the graph.</p></li>
+</ul>
+</li>
+</ol>
+<p><strong>Use Case:</strong></p>
+<ul class="simple">
+<li><p>Suitable for developers who want a quick snapshot of performance without deep granularity.</p></li>
+<li><p>Helps identify high-level bottlenecks in API usage or backend execution.</p></li>
+</ul>
+<p class="centered">
+<strong><strong>LPAI Basic Profiler</strong></strong></p><div class="figure align-center">
+<img alt="LPAI Basic Profiler" src="../../_static/resources/lpai_basic_profiler.png" />
+</div>
+</div>
+<div class="section" id="detailed-profiling">
+<span id="qnn-lpai-detailed-profiling"></span><h1>Detailed Profiling<a class="headerlink" href="#detailed-profiling" title="Permalink to this heading">¶</a></h1>
+<p>Detailed profiling provides a comprehensive view of the execution behavior of a QNN graph on the LPAI backend. It includes all events captured in basic profiling, along with a richer set of backend-specific metrics. This mode is intended for advanced performance analysis, debugging, and optimization.</p>
+<p><strong>Includes all events from Basic Profiling</strong>, plus:</p>
+<p><strong>Additional Backend-Specific Events:</strong></p>
+<ul class="simple">
+<li><p><strong>Inference Preparation Time</strong>: Measures the time spent preparing the inference pipeline before actual execution. This includes memory allocation, data layout transformations, and other setup tasks.</p></li>
+<li><p><strong>Per-Layer Execution Time</strong>: Captures the execution time of each individual layer in the graph. This helps identify performance bottlenecks at the layer level and is useful for fine-tuning model performance.</p></li>
+<li><p><strong>Layer Fusion Information</strong>: Indicates which layers were fused together by the backend for optimized execution. Fusion can reduce memory access overhead and improve throughput.</p></li>
+<li><p><strong>Layer Linking Information</strong>: Provides insights into how layers are connected and scheduled for execution. This can help understand execution dependencies and parallelism opportunities.</p></li>
+</ul>
+<p>These detailed metrics are especially useful for:</p>
+<ul class="simple">
+<li><p>Diagnosing performance regressions</p></li>
+<li><p>Understanding backend optimizations</p></li>
+<li><p>Identifying layers with high latency</p></li>
+<li><p>Verifying the effectiveness of layer fusion and scheduling strategies</p></li>
+</ul>
+<p><strong>Use Case:</strong></p>
+<ul class="simple">
+<li><p>Recommended for backend developers and performance engineers.</p></li>
+<li><p>Enables root-cause analysis of latency issues and validation of backend optimizations.</p></li>
+</ul>
+<p class="centered">
+<strong><strong>LPAI Detailed Profiler</strong></strong></p><div class="figure align-center">
+<img alt="LPAI Detailed Profiler" src="../../_static/resources/lpai_detailed_profiler.png" />
+</div>
+</div>
+<div class="section" id="enable-profiling-in-qnn-net-run">
+<h1>Enable Profiling in <cite>qnn-net-run</cite><a class="headerlink" href="#enable-profiling-in-qnn-net-run" title="Permalink to this heading">¶</a></h1>
+<p>To enable profiling, use the <cite>–profiling_level</cite> command-line option:</p>
+<ul class="simple">
+<li><p><cite>–profiling_level basic</cite></p></li>
+<li><p><cite>–profiling_level detailed</cite></p></li>
+</ul>
+<p>A profiling log file will be generated in the output directory:</p>
+<ul class="simple">
+<li><p>The log file is named <cite>qnn-profiling-data_x.log</cite>, where <cite>x</cite> is the execution index.</p></li>
+<li><p>A symbolic link <cite>qnn-profiling-data.log</cite> will point to the latest log file.</p></li>
+</ul>
+<p><strong>Example:</strong></p>
+<p>If the graph is executed three times, the following files will be generated:</p>
+<ul class="simple">
+<li><p><cite>qnn-profiling-data_0.log</cite></p></li>
+<li><p><cite>qnn-profiling-data_1.log</cite></p></li>
+<li><p><cite>qnn-profiling-data_2.log</cite></p></li>
+<li><p><cite>qnn-profiling-data.log</cite> → <cite>qnn-profiling-data_2.log</cite></p></li>
+</ul>
+</div>
+<div class="section" id="visualize-profile-data-with-qnn-profile-viewer">
+<h1>Visualize Profile Data with <cite>qnn-profile-viewer</cite><a class="headerlink" href="#visualize-profile-data-with-qnn-profile-viewer" title="Permalink to this heading">¶</a></h1>
+<p>The <cite>qnn-profile-viewer</cite> tool provides a convenient way to visualize profiling data generated by the LPAI backend.
+To support extended profiling capabilities for LPAI, the tool dynamically loads the <cite>libQnnLpaiProfilingReader.so</cite> library.</p>
+<p>The <cite>libQnnLpaiProfilingReader.so</cite> library parses the LPAI raw profiling output and translates it into a structured, human-readable format.
+This enables developers and performance analysts to gain deeper insights into model execution characteristics, identify bottlenecks, and optimize performance across various stages of the neural network pipeline.</p>
+<p><strong>Usage:</strong></p>
+<div class="section" id="push-the-lpai-profiling-related-library">
+<h2>Push the LPAI profiling related library<a class="headerlink" href="#push-the-lpai-profiling-related-library" title="Permalink to this heading">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>adb<span class="w"> </span>push<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/lib/<span class="si">${</span><span class="nv">QNN_TARGET_ARCH</span><span class="si">}</span>/libQnnLpaiProfilingReader.so<span class="w"> </span>/data/local/tmp/LPAI
+</pre></div>
+</div>
+</div>
+<div class="section" id="push-the-qnn-profile-viewer-tool">
+<h2>Push the qnn-profile-viewer tool<a class="headerlink" href="#push-the-qnn-profile-viewer-tool" title="Permalink to this heading">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>adb<span class="w"> </span>push<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/bin/aarch64-android/qnn-profile-viewer<span class="w"> </span>/data/local/tmp/LPAI
+</pre></div>
+</div>
+</div>
+<div class="section" id="set-up-the-environment-on-the-device">
+<h2>Set up the environment on the device<a class="headerlink" href="#set-up-the-environment-on-the-device" title="Permalink to this heading">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>adb<span class="w"> </span>shell
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>/data/local/tmp/LPAI
+$<span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span>/data/local/tmp/LPAI
+</pre></div>
+</div>
+</div>
+<div class="section" id="execute-the-profiling-viewer-by-using-qnn-profile-viewer">
+<h2>Execute the profiling viewer by using qnn-profile-viewer<a class="headerlink" href="#execute-the-profiling-viewer-by-using-qnn-profile-viewer" title="Permalink to this heading">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>./qnn-profile-viewer<span class="w"> </span>--input_log<span class="w"> </span>PROFILING_LOG1<span class="w"> </span>--output<span class="w"> </span>./out.csv<span class="w"> </span>--reader<span class="w"> </span>./libQnnLpaiProfilingReader.so
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020-2025, Qualcomm Technologies, Inc..
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

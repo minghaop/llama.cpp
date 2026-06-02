@@ -1,0 +1,37 @@
+@startuml
+
+autonumber "<b>[#]"
+
+participant "C1 (CPU Portion)"   as cv_stub #royalblue
+participant "QNN HTP (CPU Portion)"  as qnn_stub #green
+participant "FastRPC"
+participant "C1 (HTP Accelerator)"   as cv_skel #royalblue
+participant "QNN HTP (HTP Accelerator)"  as qnn_skel #green
+participant "HAP"      as hap 
+
+cv_stub -> cv_skel: vtcm setup
+cv_skel --> cv_stub: mapped vtcm_va
+
+cv_stub -> cv_skel: start job
+activate cv_stub
+
+cv_skel -[#blue]> hap: acquire(2,1)
+
+cv_stub -[#black]> qnn_stub: inference(vtcm_va)
+qnn_stub -[#black]> qnn_skel: inference(vtcm_va)
+activate qnn_skel
+
+qnn_skel -[#green]> hap: acquire(6,8)
+qnn_skel -[#black]> qnn_skel: do_work
+qnn_skel -[#green]> hap: release()
+deactivate qnn_skel
+
+qnn_skel --[#black]> qnn_stub: ok
+qnn_stub --[#black]> cv_stub: ok
+
+cv_stub -> cv_skel: end job
+cv_skel -[#blue]> hap: release()
+deactivate cv_stub
+
+@enduml
+

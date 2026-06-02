@@ -1,0 +1,362 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>QNN LPAI Native aDSP Backend Type &mdash; Qualcomm® AI Runtime (QAIRT) SDKs</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/custom_css.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Qualcomm® AI Runtime (QAIRT) SDKs
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v2.46.0.260424121129
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">QAIRT</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../general/overview.html">Overview</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">SDKs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">QNN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../SNPE/index.html">SNPE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Genie/index.html">Genie</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Delegates</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../Delegates/TfLite/index.html">TFLite Delegate</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Qualcomm® AI Runtime (QAIRT) SDKs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>QNN LPAI Native aDSP Backend Type</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="qnn-lpai-native-adsp-backend-type">
+<span id="qnn-lpai-direct-mode-backend-type"></span><h1>QNN LPAI Native aDSP Backend Type<a class="headerlink" href="#qnn-lpai-native-adsp-backend-type" title="Permalink to this heading">¶</a></h1>
+<p class="centered">
+<strong><strong>LPAI Native DSP Backend Type Execution</strong></strong></p><div class="figure align-center">
+<img alt="LPAI Native DSP Backend Type Execution" src="../../_static/resources/qnn-lpai-direct-mode-backend-type.png" />
+</div>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading">¶</a></h2>
+<p>The <strong>QNN LPAI Native aDSP Backend Type</strong> is designed to enable efficient execution of the LPAI backend by providing direct access to the DSP (Digital Signal Processor) hardware.
+This approach eliminates the overhead associated with data and control transfer via the IPC (Inter-Process Communication) mechanism, resulting in significantly reduced latency and improved runtime performance.
+Applications that can access input sources such as audio, camera, or sensors directly on the aDSP can run independently of the main operating system (Linux/Android).
+To use the native aDSP path, these applications must be integrated into either the audio or sensor Process domain (PD).</p>
+<p>Execution on a physical device using the native aDSP target is supported <strong>exclusively</strong> for <strong>offline-prepared graphs</strong>. This mode does <strong>not</strong> support dynamic graph compilation or runtime graph generation.</p>
+<p>To run on a specific target platform, you must use binaries compiled for that platform. The appropriate library can be selected using the <cite>QNN_TARGET_ARCH</cite> environment variable (see more details below).</p>
+</div>
+<div class="section" id="target-platform-configuration">
+<h2>Target Platform Configuration<a class="headerlink" href="#target-platform-configuration" title="Permalink to this heading">¶</a></h2>
+<p>To deploy the LPAI backend on a specific target, configure the environment using the correct architecture-specific binaries. Set the <cite>QNN_TARGET_ARCH</cite> variable as shown below:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">QNN_TARGET_ARCH</span><span class="o">=</span>&lt;target_arch&gt;
+</pre></div>
+</div>
+<p>Supported target architectures include:</p>
+<ul class="simple">
+<li><p><cite>aarch64-android</cite> for Android-based ARM64 platforms</p></li>
+<li><p><cite>aarch64-oe-linux-gcc&lt;your version&gt;</cite> for LE Linux-based ARM64 platforms</p></li>
+<li><p><cite>aarch64-qnx800</cite> for QNX-based ARM64 platforms</p></li>
+<li><p><cite>hexagon-v&lt;version&gt;</cite> for Qualcomm Hexagon DSP platforms</p></li>
+</ul>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p><strong>Not all target architectures are supported for Android.</strong>
+Some platforms are <strong>lack HLOS (High-Level Operating System) support entirely</strong>. In such cases, HLOS deployment instructions do not apply.
+Ensure that your target platform supports the necessary runtime environment for LPAI execution. Refer to the <a class="reference internal" href="../backend.html#qnn-sdk-backends-table"><span class="std std-ref">Available Backend Libraries table</span></a> for platform-specific compatibility and deployment guidance.</p>
+</div>
+</div>
+<div class="section" id="setting-environment-variables-on-hlos-android-linux">
+<h2>Setting Environment Variables on HLOS Android/Linux<a class="headerlink" href="#setting-environment-variables-on-hlos-android-linux" title="Permalink to this heading">¶</a></h2>
+<p>To configure your development or deployment environment on an x86 Linux host, set the following environment variables:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example for Android targets (Not all targets are supported for Android)</span>
+$<span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">QNN_TARGET_ARCH</span><span class="o">=</span>aarch64-android
+
+<span class="c1"># Example for LE Linux targets (If applicable)</span>
+$<span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">QNN_TARGET_ARCH</span><span class="o">=</span>aarch64-oe-linux-gcc&lt;your<span class="w"> </span>version&gt;
+
+<span class="c1"># Example for QNX targets (If applicable)</span>
+$<span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">QNN_TARGET_ARCH</span><span class="o">=</span>aarch64-qnx800
+
+<span class="c1"># For Hexagon versrion</span>
+$<span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">HEX_VER</span><span class="o">=</span><span class="m">81</span>
+$<span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">HEX_ARCH</span><span class="o">=</span>hexagon-v<span class="si">${</span><span class="nv">HEX_VER</span><span class="si">}</span>
+
+<span class="c1"># For LPAI v6 HW version</span>
+$<span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">HW_VER</span><span class="o">=</span>v6
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To execute the LPAI backend on an Android device, the following conditions must be met:</p>
+<ol class="arabic simple">
+<li><p>The following Lpai artifacts in <code class="docutils literal notranslate"><span class="pre">${QNN_SDK_ROOT}/lib/lpai-${HW_VER}/unsigned</span></code> must be signed by the client:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">libQnnLpai.so</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">libQnnLpaiNetRunExtensions.so</span></code></p></li>
+</ul>
+</li>
+<li><p>The following qnn-net-run artifacts in <code class="docutils literal notranslate"><span class="pre">${QNN_SDK_ROOT}/lib/${HEX_ARCH}/unsigned</span></code> must be signed by the client:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">libQnnHexagonSkel_dspApp.so</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">libQnnNetRunDirectV${HEX_VER}Skel.so</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">qnn-net-run</span></code> must be executed with root permissions.</p></li>
+</ol>
+</div>
+<p>Prepare config.json file for direct-mode, where <code class="docutils literal notranslate"><span class="pre">is_persistent_binary</span></code> is required for direct-mode:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">   </span><span class="nt">&quot;backend_extensions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;shared_library_path&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/data/local/tmp/LPAI/adsp/libQnnLpaiNetRunExtensions.so&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;config_file_path&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;./lpaiParams.conf&quot;</span>
+<span class="w">   </span><span class="p">},</span>
+<span class="w">   </span><span class="nt">&quot;context_configs&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="c1">// This parameter should be set for native aDSP LPAI backend</span>
+<span class="w">      </span><span class="nt">&quot;is_persistent_binary&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span>
+<span class="w">   </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="create-test-directory-on-the-device">
+<h2>Create test directory on the device<a class="headerlink" href="#create-test-directory-on-the-device" title="Permalink to this heading">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>adb<span class="w"> </span>shell<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/data/local/tmp/LPAI/adsp
+</pre></div>
+</div>
+</div>
+<div class="section" id="push-the-offline-lpai-generated-model-to-the-device">
+<h2>Push the offline LPAI generated model to the device<a class="headerlink" href="#push-the-offline-lpai-generated-model-to-the-device" title="Permalink to this heading">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>adb<span class="w"> </span>push<span class="w"> </span>./output/qnn_model_8bit_quantized.serialized.bin<span class="w"> </span>/data/local/tmp/LPAI
+</pre></div>
+</div>
+</div>
+<div class="section" id="push-the-lpai-libraries-to-the-device">
+<h2>Push the Lpai libraries to the device<a class="headerlink" href="#push-the-lpai-libraries-to-the-device" title="Permalink to this heading">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>adb<span class="w"> </span>push<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/lib/lpai-<span class="si">${</span><span class="nv">HW_VER</span><span class="si">}</span>/unsigned/libQnnLpai.so<span class="w"> </span>/data/local/tmp/LPAI/adsp
+$<span class="w"> </span>adb<span class="w"> </span>push<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/lib/lpai-<span class="si">${</span><span class="nv">HW_VER</span><span class="si">}</span>/unsigned/libQnnLpaiNetRunExtensions.so<span class="w"> </span>/data/local/tmp/LPAI/adsp
+</pre></div>
+</div>
+</div>
+<div class="section" id="push-the-qnn-net-run-libraries-to-the-device">
+<h2>Push the qnn-net-run libraries to the device<a class="headerlink" href="#push-the-qnn-net-run-libraries-to-the-device" title="Permalink to this heading">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>adb<span class="w"> </span>push<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/lib/<span class="si">${</span><span class="nv">HEX_ARCH</span><span class="si">}</span>/unsigned/libQnnHexagonSkel_dspApp.so<span class="w"> </span>/data/local/tmp/LPAI/adsp
+$<span class="w"> </span>adb<span class="w"> </span>push<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/lib/<span class="si">${</span><span class="nv">HEX_ARCH</span><span class="si">}</span>/unsigned/libQnnNetRunDirectV<span class="si">${</span><span class="nv">HEX_VER</span><span class="si">}</span>Skel.so<span class="w"> </span>/data/local/tmp/LPAI/adsp
+</pre></div>
+</div>
+</div>
+<div class="section" id="push-the-input-data-and-input-lists-to-the-device">
+<h2>Push the input data and input lists to the device<a class="headerlink" href="#push-the-input-data-and-input-lists-to-the-device" title="Permalink to this heading">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>adb<span class="w"> </span>push<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/examples/QNN/converter/models/input_data_float<span class="w"> </span>/data/local/tmp/LPAI
+$<span class="w"> </span>adb<span class="w"> </span>push<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/examples/QNN/converter/models/input_list_float.txt<span class="w"> </span>/data/local/tmp/LPAI
+</pre></div>
+</div>
+</div>
+<div class="section" id="push-the-qnn-net-run-tool-and-its-dependent-libraries">
+<h2>Push the qnn-net-run tool and its dependent libraries<a class="headerlink" href="#push-the-qnn-net-run-tool-and-its-dependent-libraries" title="Permalink to this heading">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>adb<span class="w"> </span>push<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/bin/<span class="si">${</span><span class="nv">QNN_TARGET_ARCH</span><span class="si">}</span>/qnn-net-run<span class="w"> </span>/data/local/tmp/LPAI
+$<span class="w"> </span>adb<span class="w"> </span>push<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/lib/<span class="si">${</span><span class="nv">QNN_TARGET_ARCH</span><span class="si">}</span>/libQnnNetRunDirectV<span class="si">${</span><span class="nv">HEX_VER</span><span class="si">}</span>Stub.so<span class="w"> </span>/data/local/tmp/LPAI
+</pre></div>
+</div>
+</div>
+<div class="section" id="set-up-the-environment-on-the-device">
+<h2>Set up the environment on the device<a class="headerlink" href="#set-up-the-environment-on-the-device" title="Permalink to this heading">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>adb<span class="w"> </span>shell
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>/data/local/tmp/LPAI
+$<span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span>/data/local/tmp/LPAI:/data/local/tmp/LPAI/adsp
+$<span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">ADSP_LIBRARY_PATH</span><span class="o">=</span><span class="s2">&quot;/data/local/tmp/LPAI/adsp&quot;</span>
+$<span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">HW_VER</span><span class="o">=</span>v6
+</pre></div>
+</div>
+</div>
+<div class="section" id="execute-the-lpai-model-using-qnn-net-run">
+<h2>Execute the LPAI model using qnn-net-run<a class="headerlink" href="#execute-the-lpai-model-using-qnn-net-run" title="Permalink to this heading">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>./qnn-net-run<span class="w"> </span>--backend<span class="w"> </span>asdp/libQnnLpai.so<span class="w"> </span>--direct_mode<span class="w"> </span>--retrieve_context<span class="w"> </span>./qnn_model_8bit_quantized.serialized.bin<span class="w"> </span>--input_list<span class="w"> </span>./input_list_float.txt<span class="w"> </span>--config_file<span class="w"> </span>&lt;config.json&gt;
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020-2025, Qualcomm Technologies, Inc..
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

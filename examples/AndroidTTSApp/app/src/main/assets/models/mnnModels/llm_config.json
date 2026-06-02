@@ -1,0 +1,19 @@
+{
+    "model_type": "qwen2",
+    "hidden_size": 896,
+    "layer_nums": 24,
+    "attention_mask": "float",
+    "attention_type": "full",
+    "is_mrope": false,
+    "jinja": {
+        "chat_template": "{% for message in messages %}{% if loop.first and messages[0]['role'] != 'system' %}{{ '<|im_start|>system\nYou are a helpful assistant.<|im_end|>\n' }}{% endif %}{{'<|im_start|>' + message['role'] + '\n' + message['content'] + '<|im_end|>' + '\n'}}{% endfor %}{% if add_generation_prompt %}{{ '<|im_start|>assistant\n' }}{% endif %}",
+        "eos": "<|im_end|>"
+    },
+    "tie_embeddings": [
+        224107146,
+        292174474,
+        17016832,
+        4,
+        64
+    ]
+}

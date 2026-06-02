@@ -1,0 +1,1110 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>QNN HTP Shared Buffer Tutorial &mdash; Qualcomm® AI Runtime (QAIRT) SDKs</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/custom_css.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Tutorial: Executing a shallow model using custom op package" href="../tutorial1.html" />
+    <link rel="prev" title="Saver Tutorial: Save execution sequence with Saver and replay on a backend" href="../saver/saver_tutorial.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Qualcomm® AI Runtime (QAIRT) SDKs
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v2.46.0.260424121129
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">QAIRT</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../general/overview.html">Overview</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">SDKs</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">QNN</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../introduction.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../overview.html">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../setup.html">Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../backend.html">Backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../op_packages.html">Op Packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tools.html">Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../converters.html">Converters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quantization.html">Quantization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../applyencodings.html">QAIRT Quantization Specification</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../tutorials.html">Tutorials</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../tutorial/tutorial_convert_execute_cnn_model.html">Tutorial: Converting and executing a CNN or ONNX model with QNN</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tutorial/tutorial_sample_app_linux.html">How to Use the Sample App</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../sample_app.html">Sample App Tutorial</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../saver/saver_tutorial.html">Saver Tutorial: Save execution sequence with Saver and replay on a backend</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">QNN HTP Shared Buffer Tutorial</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tutorial1.html">Tutorial: Executing a shallow model using custom op package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../dsp/hexnn_migration.html">Migrating from Hexagon-nn</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../benchmarking.html">Benchmarking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../operations.html">Operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html">API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../revision_history.html">Revision History</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../SNPE/index.html">SNPE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Genie/index.html">Genie</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Delegates</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../Delegates/TfLite/index.html">TFLite Delegate</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Qualcomm® AI Runtime (QAIRT) SDKs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">⌂</a> &raquo;</li>
+        
+          <li><a href="../tutorials.html">Tutorials</a> &raquo;</li>
+        
+      <li>QNN HTP Shared Buffer Tutorial</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="qnn-htp-shared-buffer-tutorial">
+<h1>QNN HTP Shared Buffer Tutorial<a class="headerlink" href="#qnn-htp-shared-buffer-tutorial" title="Permalink to this heading">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">¶</a></h2>
+<p>This tutorial describes how to use data buffers for shared access in between
+processing domains in QNN HTP backend. Using shared buffers can eliminate data
+copy in between client code on the host CPU and HTP accelerator.</p>
+<p>The HTP backend supports multiple types of shared memory buffers, as summarized in the table below.
+On Android platforms, these shared memory types are typically used in two use cases:</p>
+<ol class="arabic simple">
+<li><p><strong>FastRPC</strong>: QNN APIs are invoked on the host CPU and executed on the DSP via FastRPC.</p></li>
+<li><p><strong>Non-RPC (Native HTP)</strong>: QNN APIs are invoked natively on the DSP.</p></li>
+</ol>
+<p>The table below indicates which buffer types are supported in each use case.</p>
+<table class="colwidths-auto docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Qnn_MemDescriptor_t Type</p></th>
+<th class="head"><p>QnnMemHtp_Descriptor_t Type</p></th>
+<th class="head"><p>Descriptor</p></th>
+<th class="head"><p>FastRPC</p></th>
+<th class="head"><p>Non-RPC</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><span class="xref std std-ref">QNN_MEM_TYPE_ION</span></p></td>
+<td><p>Not Applicable</p></td>
+<td><ul class="simple">
+<li><p>Each tensor will be mapped to its own shared buffer</p></li>
+<li><p>One-to-one relationship between the file descriptor and memory handle</p></li>
+</ul>
+</td>
+<td><p>Supported</p></td>
+<td><p>Not Supported</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="xref std std-ref">QNN_MEM_TYPE_CUSTOM</span></p></td>
+<td><p><span class="xref std std-ref">QNN_HTP_MEM_SHARED_BUFFER</span></p></td>
+<td><ul class="simple">
+<li><p>Multiple tensors will be mapped to one shared buffer</p></li>
+<li><p>One-to-many relationship between the file descriptor and memory handles</p></li>
+</ul>
+</td>
+<td><p>Supported</p></td>
+<td><p>Not Supported</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="xref std std-ref">QNN_MEM_TYPE_CUSTOM</span></p></td>
+<td><p><span class="xref std std-ref">QNN_HTP_MEM_WEIGHTS_BUFFER</span></p></td>
+<td><ul class="simple">
+<li><p>An empty DMA buffer to store all the weights for the context</p></li>
+</ul>
+</td>
+<td><p>Supported only with sequential execution</p></td>
+<td><p>Not Supported</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="xref std std-ref">QNN_MEM_TYPE_CUSTOM</span></p></td>
+<td><p><span class="xref std std-ref">QNN_HTP_MEM_SHARED_SPILLFILL_BUFFER</span></p></td>
+<td><ul class="simple">
+<li><p>An empty buffer to use as a shared spill-fill buffer for all graphs in the context</p></li>
+</ul>
+</td>
+<td><p>Supported only with sequential execution</p></td>
+<td><p>Supported</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="xref std std-ref">QNN_MEM_TYPE_CUSTOM</span></p></td>
+<td><p><span class="xref std std-ref">QNN_HTP_MEM_SHARED_VTCMBACKUP_BUFFER</span></p></td>
+<td><ul class="simple">
+<li><p>An empty buffer to use as a shared VTCM backup buffer for all graphs in the context</p></li>
+</ul>
+</td>
+<td><p>Not Supported</p></td>
+<td><p>Supported</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This tutorial is only focused on the shared buffer usage. There are some prerequisites in the
+SDK example code not discussed in detail here. Users can refer to the corresponding part in the
+QNN documentation, or refer to the SampleApp.</p>
+<p>SampleApp documentation: <span class="xref std std-ref">general/sample_app:Sample App Tutorial</span></p>
+<p>SampleApp code: ${QNN_SDK_ROOT}/examples/QNN/SampleApp</p>
+</div>
+</div>
+<div class="section" id="loading-prerequisite-shared-libraries-to-use-the-rpcmem-framework">
+<h2>Loading prerequisite shared libraries to use the RPCMem framework<a class="headerlink" href="#loading-prerequisite-shared-libraries-to-use-the-rpcmem-framework" title="Permalink to this heading">¶</a></h2>
+<p>A hardware device equipped with the Qualcomm chipset includes a shared library which provides the
+functions for shared buffer manipulation.</p>
+<div class="section" id="loading-shared-library">
+<h3>Loading shared library<a class="headerlink" href="#loading-shared-library" title="Permalink to this heading">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">libcdsprpc.so</span></code> shared library is available on most mainstream Qualcomm chipset equipped
+devices (SD888 and later).</p>
+<p>We can dynamically load it as shown below:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="w"> </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">libCdspHandle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dlopen</span><span class="p">(</span><span class="s">&quot;libcdsprpc.so&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">RTLD_NOW</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">RTLD_LOCAL</span><span class="p">);</span>
+<span class="linenos">2</span>
+<span class="linenos">3</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">nullptr</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">libCdspHandle</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">4</span><span class="w">   </span><span class="c1">// handle errors</span>
+<span class="linenos">5</span><span class="w"> </span><span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="resolving-symbols">
+<h3>Resolving Symbols<a class="headerlink" href="#resolving-symbols" title="Permalink to this heading">¶</a></h3>
+<p>After the shared library is successfully loaded, we can proceed to resolve all necessary symbols.</p>
+<p>The below code snippet shows a template to resolve a symbol in a shared library:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="cm">/**</span>
+<span class="linenos"> 2</span><span class="cm">* Defination: void* rpcmem_alloc(int heapid, uint32 flags, int size);</span>
+<span class="linenos"> 3</span><span class="cm">* Allocate a buffer via ION and register it with the FastRPC framework.</span>
+<span class="linenos"> 4</span><span class="cm">* @param[in] heapid  Heap ID to use for memory allocation.</span>
+<span class="linenos"> 5</span><span class="cm">* @param[in] flags   ION flags to use for memory allocation.</span>
+<span class="linenos"> 6</span><span class="cm">* @param[in] size    Buffer size to allocate.</span>
+<span class="linenos"> 7</span><span class="cm">* @return            Pointer to the buffer on success; NULL on failure.</span>
+<span class="linenos"> 8</span><span class="cm">*/</span>
+<span class="linenos"> 9</span><span class="k">typedef</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="p">(</span><span class="o">*</span><span class="n">RpcMemAllocFn_t</span><span class="p">)(</span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="p">);</span>
+<span class="linenos">10</span>
+<span class="linenos">11</span><span class="cm">/**</span>
+<span class="linenos">12</span><span class="cm">* Defination: void rpcmem_free(void* po);</span>
+<span class="linenos">13</span><span class="cm">* Free a buffer and ignore invalid buffers.</span>
+<span class="linenos">14</span><span class="cm">*/</span>
+<span class="linenos">15</span><span class="k">typedef</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">RpcMemFreeFn_t</span><span class="p">)(</span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="p">);</span>
+<span class="linenos">16</span>
+<span class="linenos">17</span><span class="cm">/**</span>
+<span class="linenos">18</span><span class="cm">* Defination: int rpcmem_to_fd(void* po);</span>
+<span class="linenos">19</span><span class="cm">* Return an associated file descriptor.</span>
+<span class="linenos">20</span><span class="cm">* @param[in] po  Data pointer for an RPCMEM-allocated buffer.</span>
+<span class="linenos">21</span><span class="cm">* @return        Buffer file descriptor.</span>
+<span class="linenos">22</span><span class="cm">*/</span>
+<span class="linenos">23</span><span class="k">typedef</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">RpcMemToFdFn_t</span><span class="p">)(</span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="p">);</span>
+<span class="linenos">24</span>
+<span class="linenos">25</span><span class="n">RpcMemFreeFn_t</span><span class="w"> </span><span class="n">rpcmem_alloc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">RpcMemAllocFn_t</span><span class="p">)</span><span class="n">dlsym</span><span class="p">(</span><span class="n">libCdspHandle</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;rpcmem_alloc&quot;</span><span class="p">);</span>
+<span class="linenos">26</span><span class="n">RpcMemFreeFn_t</span><span class="w"> </span><span class="n">rpcmem_free</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">RpcMemFreeFn_t</span><span class="p">)</span><span class="n">dlsym</span><span class="p">(</span><span class="n">libCdspHandle</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;rpcmem_free&quot;</span><span class="p">);</span>
+<span class="linenos">27</span><span class="n">RpcMemToFdFn_t</span><span class="w"> </span><span class="n">rpcmem_to_fd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">RpcMemToFdFn_t</span><span class="p">)</span><span class="n">dlsym</span><span class="p">(</span><span class="n">libCdspHandle</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;rpcmem_to_fd&quot;</span><span class="p">);</span>
+<span class="linenos">28</span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">nullptr</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">rpcmem_alloc</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">nullptr</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">rpcmem_free</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">nullptr</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">rpcmem_to_fd</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">29</span><span class="w">    </span><span class="n">dlclose</span><span class="p">(</span><span class="n">libCdspHandle</span><span class="p">);</span>
+<span class="linenos">30</span><span class="w">    </span><span class="c1">// handle errors</span>
+<span class="linenos">31</span><span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="using-qnn-mem-type-ion-with-qnn-api">
+<h2>Using QNN_MEM_TYPE_ION with QNN API<a class="headerlink" href="#using-qnn-mem-type-ion-with-qnn-api" title="Permalink to this heading">¶</a></h2>
+<p>The following is the representation of ION shared buffers, where each tensor has its own shared buffer
+with its own unique memory pointer, file descriptor, and memory handle.</p>
+<div class="figure align-default">
+<img alt="../../_static/resources/htp_shared_buffer/ION_Shared_Buffer.png" src="../../_static/resources/htp_shared_buffer/ION_Shared_Buffer.png" />
+</div>
+<p>An example is shown below:</p>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-text">HTP Shared Buffer Example</span><a class="headerlink" href="#id4" title="Permalink to this code">¶</a></div>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c1">// QnnInterface_t is defined in ${QNN_SDK_ROOT}/include/QNN/QnnInterface.h</span>
+<span class="linenos"> 2</span><span class="n">QnnInterface_t</span><span class="w"> </span><span class="n">qnnInterface</span><span class="p">;</span>
+<span class="linenos"> 3</span><span class="c1">// Init qnn interface ......</span>
+<span class="linenos"> 4</span><span class="c1">// See ${QNN_SDK_ROOT}/examples/QNN/SampleApp code</span>
+<span class="linenos"> 5</span>
+<span class="linenos"> 6</span><span class="c1">// Qnn_Tensor_t is defined in ${QNN_SDK_ROOT}/include/QNN/QnnTypes.h</span>
+<span class="linenos"> 7</span><span class="n">Qnn_Tensor_t</span><span class="w"> </span><span class="n">inputTensor</span><span class="p">;</span>
+<span class="linenos"> 8</span><span class="c1">// Set up common setting for inputTensor ......</span>
+<span class="linenos"> 9</span><span class="cm">/* There are 2 specific settings for shared buffer:</span>
+<span class="linenos">10</span><span class="cm">*  1. memType should be QNN_TENSORMEMTYPE_MEMHANDLE; (line 40)</span>
+<span class="linenos">11</span><span class="cm">*  2. union member memHandle should be used instead of clientBuf, and it</span>
+<span class="linenos">12</span><span class="cm">*     should be set to nullptr. (line 41)</span>
+<span class="linenos">13</span><span class="cm">*/</span>
+<span class="linenos">14</span>
+<span class="linenos">15</span>
+<span class="linenos">16</span><span class="kt">size_t</span><span class="w"> </span><span class="n">bufSize</span><span class="p">;</span>
+<span class="linenos">17</span><span class="c1">// Calculate the bufSize base on tensor dimensions and data type ......</span>
+<span class="linenos">18</span>
+<span class="linenos">19</span><span class="cp">#define RPCMEM_HEAP_ID_SYSTEM 25</span>
+<span class="linenos">20</span><span class="cp">#define RPCMEM_DEFAULT_FLAGS 1</span>
+<span class="linenos">21</span>
+<span class="linenos">22</span><span class="c1">// Allocate the shared buffer</span>
+<span class="hll"><span class="linenos">23</span><span class="kt">uint8_t</span><span class="o">*</span><span class="w"> </span><span class="n">memPointer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">uint8_t</span><span class="o">*</span><span class="p">)</span><span class="n">rpcmem_alloc</span><span class="p">(</span><span class="n">RPCMEM_HEAP_ID_SYSTEM</span><span class="p">,</span><span class="w"> </span><span class="n">RPCMEM_DEFAULT_FLAGS</span><span class="p">,</span><span class="w"> </span><span class="n">bufSize</span><span class="p">);</span>
+</span><span class="linenos">24</span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">nullptr</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">memPointer</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">25</span><span class="w">    </span><span class="c1">// handle errors</span>
+<span class="linenos">26</span><span class="p">}</span>
+<span class="linenos">27</span>
+<span class="hll"><span class="linenos">28</span><span class="kt">int</span><span class="w"> </span><span class="n">memFd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rpcmem_to_fd</span><span class="p">(</span><span class="n">memPointer</span><span class="p">);</span>
+</span><span class="linenos">29</span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="mi">-1</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">memfd</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">30</span><span class="w">    </span><span class="c1">// handle errors</span>
+<span class="linenos">31</span><span class="p">}</span>
+<span class="linenos">32</span>
+<span class="linenos">33</span><span class="c1">// Fill the info of Qnn_MemDescriptor_t and regist the buffer to QNN</span>
+<span class="linenos">34</span><span class="c1">// Qnn_MemDescriptor_t is defined in ${QNN_SDK_ROOT}/include/QNN/QnnMem.h</span>
+<span class="linenos">35</span><span class="n">Qnn_MemDescriptor_t</span><span class="w"> </span><span class="n">memDescriptor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">QNN_MEM_DESCRIPTOR_INIT</span><span class="p">;</span>
+<span class="linenos">36</span><span class="n">memDescriptor</span><span class="p">.</span><span class="n">memShape</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">inputTensor</span><span class="p">.</span><span class="n">rank</span><span class="p">,</span><span class="w"> </span><span class="n">inputTensor</span><span class="p">.</span><span class="n">dimensions</span><span class="p">,</span><span class="w"> </span><span class="n">nullptr</span><span class="p">};</span>
+<span class="linenos">37</span><span class="n">memDescriptor</span><span class="p">.</span><span class="n">dataType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">inputTensor</span><span class="p">.</span><span class="n">dataType</span><span class="p">;</span>
+<span class="hll"><span class="linenos">38</span><span class="n">memDescriptor</span><span class="p">.</span><span class="n">memType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">QNN_MEM_TYPE_ION</span><span class="p">;</span>
+</span><span class="linenos">39</span><span class="n">memDescriptor</span><span class="p">.</span><span class="n">ionInfo</span><span class="p">.</span><span class="n">fd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">memfd</span><span class="p">;</span>
+<span class="linenos">40</span><span class="n">inputTensor</span><span class="p">.</span><span class="n">memType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">QNN_TENSORMEMTYPE_MEMHANDLE</span><span class="p">;</span>
+<span class="linenos">41</span><span class="n">inputTensor</span><span class="p">.</span><span class="n">memHandle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">nullptr</span><span class="p">;</span>
+<span class="linenos">42</span><span class="n">Qnn_ContextHandle_t</span><span class="w"> </span><span class="n">context</span><span class="p">;</span><span class="w"> </span><span class="c1">// Must obtain a QNN context handle before memRegister()</span>
+<span class="linenos">43</span><span class="c1">// To obtain QNN context handle:</span>
+<span class="linenos">44</span><span class="c1">// For online prepare, refer to ${QNN_SDK_ROOT}/docs/general/sample_app.html#create-context</span>
+<span class="linenos">45</span><span class="c1">// For offline prepare, refer to ${QNN_SDK_ROOT}/docs/general/sample_app.html#load-context-from-a-cached-binary</span>
+<span class="hll"><span class="linenos">46</span><span class="n">Qnn_ErrorHandle_t</span><span class="w"> </span><span class="n">registRet</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">qnnInterface</span><span class="o">-&gt;</span><span class="n">memRegister</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">memDescriptor</span><span class="p">,</span><span class="w"> </span><span class="mi">1u</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="p">(</span><span class="n">inputTensor</span><span class="p">.</span><span class="n">memHandle</span><span class="p">));</span>
+</span><span class="linenos">47</span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">QNN_SUCCESS</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">registRet</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">48</span><span class="w">    </span><span class="n">rpcmem_free</span><span class="p">(</span><span class="n">memPointer</span><span class="p">);</span>
+<span class="linenos">49</span><span class="w">    </span><span class="c1">// handle errors</span>
+<span class="linenos">50</span><span class="p">}</span>
+<span class="linenos">51</span>
+<span class="linenos">52</span><span class="cm">/**</span>
+<span class="linenos">53</span><span class="cm">* At this place, the allocation and registration of the shared buffer has been complete.</span>
+<span class="linenos">54</span><span class="cm">* On QNN side, the buffer has been bound by memfd</span>
+<span class="linenos">55</span><span class="cm">* On user side, this buffer can be manipulated through memPointer.</span>
+<span class="linenos">56</span><span class="cm">*/</span>
+<span class="linenos">57</span>
+<span class="linenos">58</span><span class="cm">/**</span>
+<span class="linenos">59</span><span class="cm">* Optionally, user can also allocate and register shared buffer for output as adove codes (lines 7-46).</span>
+<span class="linenos">60</span><span class="cm">* And if so the output buffer also should be deregistered and freed as below codes (lines 66-70).</span>
+<span class="linenos">61</span><span class="cm">*/</span>
+<span class="linenos">62</span>
+<span class="linenos">63</span><span class="c1">// Load the input data to memPointer ......</span>
+<span class="linenos">64</span>
+<span class="linenos">65</span><span class="c1">// Execute QNN graph with input tensor and output tensor ......</span>
+<span class="linenos">66</span>
+<span class="linenos">67</span><span class="c1">// Get output data ......</span>
+<span class="linenos">68</span>
+<span class="linenos">69</span><span class="c1">// Deregister and free all buffers if it&#39;s not being used</span>
+<span class="hll"><span class="linenos">70</span><span class="n">Qnn_ErrorHandle_t</span><span class="w"> </span><span class="n">deregisterRet</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">qnnInterface</span><span class="o">-&gt;</span><span class="n">memDeRegister</span><span class="p">(</span><span class="o">&amp;</span><span class="n">tensors</span><span class="p">.</span><span class="n">memHandle</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+</span><span class="linenos">71</span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">QNN_SUCCESS</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">registRet</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">72</span><span class="w">    </span><span class="c1">// handle errors</span>
+<span class="linenos">73</span><span class="p">}</span>
+<span class="linenos">74</span><span class="n">rpcmem_free</span><span class="p">(</span><span class="n">memPointer</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="using-qnn-htp-mem-shared-buffer-with-qnn-api">
+<h2>Using QNN_HTP_MEM_SHARED_BUFFER with QNN API<a class="headerlink" href="#using-qnn-htp-mem-shared-buffer-with-qnn-api" title="Permalink to this heading">¶</a></h2>
+<p>The following is the representation of a Multi-Tensor shared buffer where a group of
+tensors is mapped to single shared buffer. This single shared buffer has one memory
+pointer and a file descriptor, however each tensor has its own memory pointer offset and
+memory handle.</p>
+<div class="figure align-default">
+<img alt="../../_static/resources/htp_shared_buffer/Multi_Tensor_Shared_Buffer.png" src="../../_static/resources/htp_shared_buffer/Multi_Tensor_Shared_Buffer.png" />
+</div>
+<p>An example is shown below:</p>
+<div class="literal-block-wrapper docutils container" id="id5">
+<div class="code-block-caption"><span class="caption-text">HTP Multi-Tensor Shared Buffer Example</span><a class="headerlink" href="#id5" title="Permalink to this code">¶</a></div>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="linenos">  1</span><span class="c1">// QnnInterface_t is defined in ${QNN_SDK_ROOT}/include/QNN/QnnInterface.h</span>
+<span class="linenos">  2</span><span class="n">QnnInterface_t</span><span class="w"> </span><span class="n">qnnInterface</span><span class="p">;</span>
+<span class="linenos">  3</span><span class="c1">// Init qnn interface ......</span>
+<span class="linenos">  4</span><span class="c1">// See ${QNN_SDK_ROOT}/examples/QNN/SampleApp code</span>
+<span class="linenos">  5</span>
+<span class="linenos">  6</span><span class="c1">// Total number of input tensors</span>
+<span class="linenos">  7</span><span class="kt">size_t</span><span class="w"> </span><span class="n">numTensors</span><span class="p">;</span>
+<span class="linenos">  8</span>
+<span class="linenos">  9</span><span class="c1">// Qnn_Tensor_t is defined in ${QNN_SDK_ROOT}/include/QNN/QnnTypes.h</span>
+<span class="linenos"> 10</span><span class="n">Qnn_Tensor_t</span><span class="w"> </span><span class="n">inputTensors</span><span class="p">[</span><span class="n">numTensors</span><span class="p">];</span>
+<span class="linenos"> 11</span><span class="c1">// Set up common setting for inputTensor ......</span>
+<span class="linenos"> 12</span><span class="cm">/* There are 2 specific settings for shared buffer:</span>
+<span class="linenos"> 13</span><span class="cm">*  1. memType should be QNN_TENSORMEMTYPE_MEMHANDLE; (line 40)</span>
+<span class="linenos"> 14</span><span class="cm">*  2. union member memHandle should be used instead of clientBuf, and it</span>
+<span class="linenos"> 15</span><span class="cm">*     should be set to nullptr. (line 41)</span>
+<span class="linenos"> 16</span><span class="cm">*/</span>
+<span class="linenos"> 17</span>
+<span class="linenos"> 18</span><span class="c1">// Calculate the shared buffer size</span>
+<span class="linenos"> 19</span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">totalBufferSize</span><span class="p">;</span>
+<span class="linenos"> 20</span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">tensorIdx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">tensorIdx</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">numTensors</span><span class="p">;</span><span class="w"> </span><span class="n">tensorIdx</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos"> 21</span><span class="w">   </span><span class="c1">// Calculate the tensorSize based on tensor dimensions and data type</span>
+<span class="linenos"> 22</span><span class="w">   </span><span class="n">totalBufferSize</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">tensorSize</span><span class="p">;</span>
+<span class="linenos"> 23</span><span class="p">}</span>
+<span class="linenos"> 24</span>
+<span class="linenos"> 25</span><span class="cp">#define RPCMEM_HEAP_ID_SYSTEM 25</span>
+<span class="linenos"> 26</span><span class="cp">#define RPCMEM_DEFAULT_FLAGS 1</span>
+<span class="linenos"> 27</span>
+<span class="linenos"> 28</span><span class="c1">// Allocate the shard buffer</span>
+<span class="hll"><span class="linenos"> 29</span><span class="kt">uint8_t</span><span class="o">*</span><span class="w"> </span><span class="n">memPointer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">uint8_t</span><span class="o">*</span><span class="p">)</span><span class="n">rpcmem_alloc</span><span class="p">(</span><span class="n">RPCMEM_HEAP_ID_SYSTEM</span><span class="p">,</span><span class="w"> </span><span class="n">RPCMEM_DEFAULT_FLAGS</span><span class="p">,</span><span class="w"> </span><span class="n">totalBufferSize</span><span class="p">);</span>
+</span><span class="linenos"> 30</span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">nullptr</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">memPointer</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos"> 31</span><span class="w">    </span><span class="c1">// handle errors</span>
+<span class="linenos"> 32</span><span class="p">}</span>
+<span class="linenos"> 33</span>
+<span class="linenos"> 34</span><span class="c1">// Get a file descriptor for the buffer</span>
+<span class="hll"><span class="linenos"> 35</span><span class="kt">int</span><span class="w"> </span><span class="n">memFd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rpcmem_to_fd</span><span class="p">(</span><span class="n">memPointer</span><span class="p">);</span>
+</span><span class="linenos"> 36</span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="mi">-1</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">memfd</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos"> 37</span><span class="w">    </span><span class="c1">// handle errors</span>
+<span class="linenos"> 38</span><span class="p">}</span>
+<span class="linenos"> 39</span>
+<span class="linenos"> 40</span><span class="c1">// Regiter the memory handles using memory descriptors</span>
+<span class="linenos"> 41</span><span class="c1">// This is the offset of the tensor location in the shared buffer</span>
+<span class="linenos"> 42</span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">offset</span><span class="p">;</span>
+<span class="linenos"> 43</span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">tensorIdx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">tensorIdx</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">numTensors</span><span class="p">;</span><span class="w"> </span><span class="n">tensorIdx</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos"> 44</span><span class="w">   </span><span class="c1">// Fill the info of Qnn_MemDescriptor_t and register the descriptor to QNN</span>
+<span class="linenos"> 45</span><span class="w">   </span><span class="c1">// Qnn_MemDescriptor_t is defined in ${QNN_SDK_ROOT}/include/QNN/QnnMem.h</span>
+<span class="linenos"> 46</span><span class="w">   </span><span class="n">Qnn_MemDescriptor_t</span><span class="w"> </span><span class="n">memDescriptor</span><span class="p">;</span>
+<span class="linenos"> 47</span><span class="w">   </span><span class="n">memDescriptor</span><span class="p">.</span><span class="n">memShape</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">inputTensors</span><span class="p">[</span><span class="n">tensorIdx</span><span class="p">].</span><span class="n">rank</span><span class="p">,</span><span class="w"> </span><span class="n">inputTensors</span><span class="p">[</span><span class="n">tensorIdx</span><span class="p">].</span><span class="n">dimensions</span><span class="p">,</span><span class="w"> </span><span class="n">nullptr</span><span class="p">};</span>
+<span class="linenos"> 48</span><span class="w">   </span><span class="n">memDescriptor</span><span class="p">.</span><span class="n">dataType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">inputTensors</span><span class="p">[</span><span class="n">tensorIdx</span><span class="p">].</span><span class="n">dataType</span><span class="p">;</span>
+<span class="hll"><span class="linenos"> 49</span><span class="w">   </span><span class="n">memDescriptor</span><span class="p">.</span><span class="n">memType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">QNN_MEM_TYPE_CUSTOM</span><span class="p">;</span>
+</span><span class="linenos"> 50</span><span class="w">   </span><span class="n">inputTensor</span><span class="p">[</span><span class="n">tensorIdx</span><span class="p">].</span><span class="n">memType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">QNN_TENSORMEMTYPE_MEMHANDLE</span><span class="p">;</span>
+<span class="linenos"> 51</span><span class="w">   </span><span class="n">inputTensor</span><span class="p">[</span><span class="n">tensorIdx</span><span class="p">].</span><span class="n">memHandle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">nullptr</span><span class="p">;</span>
+<span class="linenos"> 52</span>
+<span class="linenos"> 53</span><span class="w">   </span><span class="c1">// Fill the info of QnnMemHtp_Descriptor_t and set as custom info</span>
+<span class="linenos"> 54</span><span class="w">   </span><span class="c1">// QnnMemHtp_Descriptor_t is defined in ${QNN_SDK_ROOT}/include/QNN/HTP/QnnHtpMem.h</span>
+<span class="linenos"> 55</span><span class="w">   </span><span class="n">QnnMemHtp_Descriptor_t</span><span class="w"> </span><span class="n">htpMemDescriptor</span><span class="p">;</span>
+<span class="hll"><span class="linenos"> 56</span><span class="w">   </span><span class="n">htpMemDescriptor</span><span class="p">.</span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">QNN_HTP_MEM_SHARED_BUFFER</span><span class="p">;</span>
+</span><span class="linenos"> 57</span><span class="w">   </span><span class="n">htpMemDescriptor</span><span class="p">.</span><span class="n">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">totalBufferSize</span><span class="p">;</span><span class="w"> </span><span class="c1">//Note: it&#39;s total buffer size</span>
+<span class="linenos"> 58</span>
+<span class="linenos"> 59</span><span class="w">   </span><span class="n">QnnHtpMem_SharedBufferConfig_t</span><span class="w"> </span><span class="n">htpSharedBuffConfig</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">memFd</span><span class="p">,</span><span class="w"> </span><span class="n">offset</span><span class="p">};</span>
+<span class="linenos"> 60</span><span class="w">   </span><span class="n">htpMemDescriptor</span><span class="p">.</span><span class="n">sharedBufferConfig</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">htpSharedBuffConfig</span><span class="p">;</span>
+<span class="linenos"> 61</span>
+<span class="linenos"> 62</span><span class="w">   </span><span class="n">memDescriptor</span><span class="p">.</span><span class="n">customInfo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">htpMemDescriptor</span><span class="p">;</span>
+<span class="linenos"> 63</span>
+<span class="linenos"> 64</span><span class="w">   </span><span class="n">Qnn_ContextHandle_t</span><span class="w"> </span><span class="n">context</span><span class="p">;</span><span class="w"> </span><span class="c1">// Must obtain a QNN context handle before memRegister()</span>
+<span class="linenos"> 65</span><span class="w">   </span><span class="c1">// To obtain QNN context handle:</span>
+<span class="linenos"> 66</span><span class="w">   </span><span class="c1">// For online prepare, refer to ${QNN_SDK_ROOT}/docs/general/sample_app.html#create-context</span>
+<span class="linenos"> 67</span><span class="w">   </span><span class="c1">// For offline prepare, refer to ${QNN_SDK_ROOT}/docs/general/sample_app.html#load-context-from-a-cached-binary</span>
+<span class="linenos"> 68</span>
+<span class="hll"><span class="linenos"> 69</span><span class="w">   </span><span class="n">Qnn_ErrorHandle_t</span><span class="w"> </span><span class="n">registRet</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">qnnInterface</span><span class="o">-&gt;</span><span class="n">memRegister</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">memDescriptor</span><span class="p">,</span><span class="w"> </span><span class="mi">1u</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="p">(</span><span class="n">inputTensor</span><span class="p">[</span><span class="n">tensorIdx</span><span class="p">].</span><span class="n">memHandle</span><span class="p">));</span>
+</span><span class="linenos"> 70</span><span class="w">   </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">QNN_SUCCESS</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">registRet</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos"> 71</span><span class="w">      </span><span class="c1">// Deregister already created memory handles</span>
+<span class="linenos"> 72</span><span class="w">      </span><span class="n">rpcmem_free</span><span class="p">(</span><span class="n">memPointer</span><span class="p">);</span>
+<span class="linenos"> 73</span><span class="w">      </span><span class="c1">// handle errors</span>
+<span class="linenos"> 74</span><span class="w">   </span><span class="p">}</span>
+<span class="linenos"> 75</span>
+<span class="linenos"> 76</span><span class="w">   </span><span class="c1">// move offset by the tensor size</span>
+<span class="linenos"> 77</span><span class="w">   </span><span class="n">offset</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">offset</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">tensorSize</span><span class="p">;</span>
+<span class="linenos"> 78</span><span class="p">}</span>
+<span class="linenos"> 79</span>
+<span class="linenos"> 80</span><span class="cm">/**</span>
+<span class="linenos"> 81</span><span class="cm">* At this place, the allocation and registration of the shared buffer has been complete.</span>
+<span class="linenos"> 82</span><span class="cm">* On QNN side, the buffer has been bound by memfd</span>
+<span class="linenos"> 83</span><span class="cm">* On user side, this buffer can be manipulated through memPointer and offset.</span>
+<span class="linenos"> 84</span><span class="cm">*/</span>
+<span class="linenos"> 85</span>
+<span class="linenos"> 86</span><span class="cm">/**</span>
+<span class="linenos"> 87</span><span class="cm">* Optionally, user can also allocate and register shared buffer for output as adove codes (lines 7-78).</span>
+<span class="linenos"> 88</span><span class="cm">* And if so the output buffer also should be deregistered and freed as below codes (lines 98-104).</span>
+<span class="linenos"> 89</span><span class="cm">*/</span>
+<span class="linenos"> 90</span>
+<span class="linenos"> 91</span><span class="c1">// Load the input data to memPointer with respecitve offsets ......</span>
+<span class="linenos"> 92</span>
+<span class="linenos"> 93</span><span class="c1">// Execute QNN graph with input tensors and output tensors ......</span>
+<span class="linenos"> 94</span>
+<span class="linenos"> 95</span><span class="c1">// Get output data from the memPointer and offset combination ......</span>
+<span class="linenos"> 96</span>
+<span class="linenos"> 97</span><span class="c1">// Deregister all mem handles the buffer if it&#39;s not being used</span>
+<span class="linenos"> 98</span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">tensorIdx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">tensorIdx</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">numTensors</span><span class="p">;</span><span class="w"> </span><span class="n">tensorIdx</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="hll"><span class="linenos"> 99</span><span class="w">   </span><span class="n">Qnn_ErrorHandle_t</span><span class="w"> </span><span class="n">deregisterRet</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">qnnInterface</span><span class="o">-&gt;</span><span class="n">memDeRegister</span><span class="p">(</span><span class="o">&amp;</span><span class="p">(</span><span class="n">inputTensors</span><span class="p">[</span><span class="n">tensorIdx</span><span class="p">].</span><span class="n">memHandle</span><span class="p">),</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+</span><span class="linenos">100</span><span class="w">   </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">QNN_SUCCESS</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">registRet</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">101</span><span class="w">    </span><span class="c1">// handle errors</span>
+<span class="linenos">102</span><span class="w">   </span><span class="p">}</span>
+<span class="linenos">103</span><span class="p">}</span>
+<span class="linenos">104</span><span class="n">rpcmem_free</span><span class="p">(</span><span class="n">memPointer</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="fastrpc-use-case-using-qnn-htp-mem-weights-buffer-and-qnn-htp-mem-shared-spillfill-buffer-with-qnn-api">
+<h2>FastRPC Use Case: Using QNN_HTP_MEM_WEIGHTS_BUFFER and QNN_HTP_MEM_SHARED_SPILLFILL_BUFFER with QNN API<a class="headerlink" href="#fastrpc-use-case-using-qnn-htp-mem-weights-buffer-and-qnn-htp-mem-shared-spillfill-buffer-with-qnn-api" title="Permalink to this heading">¶</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<dl class="simple">
+<dt>Currently the external weights and spill-fill buffers feature has the following limitations:</dt><dd><ul class="simple">
+<li><p>It is supported on Android platforms in FastRPC use cases.</p></li>
+<li><p>It is only supported when the context is created using the <code class="docutils literal notranslate"><span class="pre">QnnContext_createFromBinary</span></code> API.
+For example, it is not supported with other APIs such as <code class="docutils literal notranslate"><span class="pre">QnnContext_createFromBinaryListAsync</span></code>.</p></li>
+<li><p>It is not supported together with the <code class="docutils literal notranslate"><span class="pre">QNN_HTP_CONTEXT_CONFIG_OPTION_REGISTER_MULTI_CONTEXTS</span></code> and <code class="docutils literal notranslate"><span class="pre">QNN_HTP_CONTEXT_CONFIG_OPTION_REGISTER_CONCURRENT_RESOURCE_SHARING</span></code> context configurations.</p></li>
+<li><p>It is not supported together with the graph switching feature.</p></li>
+<li><p>It is not supported together with the udma64 feature. The udma64 feature can be turned off during the graph prepare phase.</p></li>
+<li><p>It is not supported together with the securepd model protection feature.</p></li>
+</ul>
+</dd>
+</dl>
+</div>
+<p>Steps to use external weights and spill-fill buffer feature:</p>
+<div class="section" id="create-context">
+<h3>1. Create context<a class="headerlink" href="#create-context" title="Permalink to this heading">¶</a></h3>
+<p>Context has to be created using the <code class="docutils literal notranslate"><span class="pre">QnnContext_createFromBinary</span></code> API with the <code class="docutils literal notranslate"><span class="pre">DEFER_GRAPH_INIT</span></code> config option enabled.
+In this step the context will not yet be deserialized, only a context handle will be created to enable buffer registration.</p>
+</div>
+<div class="section" id="retrieve-context-properties">
+<h3>2. Retrieve context properties<a class="headerlink" href="#retrieve-context-properties" title="Permalink to this heading">¶</a></h3>
+<p>Context properties can be used to retrieve buffer sizes and alignment requirements.</p>
+</div>
+<div class="section" id="allocate-external-buffer">
+<h3>3. Allocate external buffer<a class="headerlink" href="#allocate-external-buffer" title="Permalink to this heading">¶</a></h3>
+<dl class="simple">
+<dt>Users have to ensure that the following requirements are met for external weights and spill-fill buffers:</dt><dd><ul class="simple">
+<li><p>They have to be DMA buffers.</p></li>
+<li><p>Their start addresses - determined by the fd and the offset together - must be aligned according to the <code class="docutils literal notranslate"><span class="pre">BUFFER_START_ALIGNMENT</span></code> context property (to e.g. 4KB).</p></li>
+<li><p>They must be at least the required size determined by context properties.</p></li>
+<li><p>File descriptors must not be registered with fastrpc (using <code class="docutils literal notranslate"><span class="pre">fastrpc_mmap</span></code>).</p></li>
+<li><p>Modification to their contents should only be induced by QNN, otherwise behavior is undefined.</p></li>
+<li><p>They must not be deallocated while registered with QNN.</p></li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="register-external-buffer-with-qnn">
+<h3>4. Register external buffer with QNN<a class="headerlink" href="#register-external-buffer-with-qnn" title="Permalink to this heading">¶</a></h3>
+<p>External buffers can be registered with QNN for storing weights or as a spill-fill buffer. It is possible to register only one, both, or neither of these.
+If no buffer is registered for a certain purpose, QNN will allocate it internally.</p>
+<p>The external weights buffer will be used by QNN to store all the weights for the given context including shared and graph weights.
+Each context has to have its own external weights buffer, meaning that multiple contexts cannot share the same external weights buffer.</p>
+<p>The external spill-fill buffer will be shared between all graphs of a given context. Accordingly, the required size for this buffer is the largest out of
+all the spill-fill buffers for all the graphs of a given context.
+External spill-fill buffers can also be shared between graphs of multiple contexts by registering the same external spill-fill buffer with multiple contexts.</p>
+<dl class="simple">
+<dt>Users have to make sure that the following requirements are for external weights and spill-fill buffers:</dt><dd><ul class="simple">
+<li><p>File descriptors registered for <code class="docutils literal notranslate"><span class="pre">QNN_HTP_MEM_WEIGHTS_BUFFER</span></code> or <code class="docutils literal notranslate"><span class="pre">QNN_HTP_MEM_SHARED_SPILLFILL_BUFFER</span></code> buffer types cannot be used for other buffer
+types (like <code class="docutils literal notranslate"><span class="pre">QNN_MEM_TYPE_ION</span></code> or <code class="docutils literal notranslate"><span class="pre">QNN_HTP_MEM_SHARED_BUFFER</span></code>).</p></li>
+<li><p>External weights buffers are unique for each context.</p></li>
+<li><p>Graphs sharing the same external spill-fill buffer cannot be executed in parallel.</p></li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="finalize-context">
+<h3>5. Finalize context<a class="headerlink" href="#finalize-context" title="Permalink to this heading">¶</a></h3>
+<p>In this step the context will be deserialized and its weights will be copied to the external weights buffer - if registered - by QNN.
+Users have to make sure that the <code class="docutils literal notranslate"><span class="pre">binaryBuffer</span></code> and <code class="docutils literal notranslate"><span class="pre">config</span></code> pointers provided as arguments during context creation are still valid until the end of context finalization.</p>
+<p>After this step, external weights and spill-fill buffers registered with the context cannot be deregistered because they are in use by the context. These buffers
+will be automatically deregistered by QNN when the context is freed.</p>
+</div>
+<div class="section" id="code-example">
+<h3>Code example<a class="headerlink" href="#code-example" title="Permalink to this heading">¶</a></h3>
+<div class="literal-block-wrapper docutils container" id="id6">
+<div class="code-block-caption"><span class="caption-text">FastRPC Use Case: HTP External weights and spill-fill buffer example</span><a class="headerlink" href="#id6" title="Permalink to this code">¶</a></div>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="linenos">  1</span><span class="w"> </span><span class="c1">// QnnInterface_t is defined in ${QNN_SDK_ROOT}/include/QNN/QnnInterface.h</span>
+<span class="linenos">  2</span><span class="w"> </span><span class="n">QnnInterface_t</span><span class="w"> </span><span class="n">qnnInterface</span><span class="p">;</span>
+<span class="linenos">  3</span><span class="w"> </span><span class="c1">// Init qnn interface ......</span>
+<span class="linenos">  4</span><span class="w"> </span><span class="c1">// See ${QNN_SDK_ROOT}/examples/QNN/SampleApp code</span>
+<span class="linenos">  5</span>
+<span class="hll"><span class="linenos">  6</span><span class="w"> </span><span class="c1">// Step 1. Create context using DEFER_GRAPH_INIT config option</span>
+</span><span class="linenos">  7</span><span class="w"> </span><span class="c1">// See ${QNN_SDK_ROOT}/examples/QNN/SampleApp code for details on loading context</span>
+<span class="linenos">  8</span><span class="w"> </span><span class="n">Qnn_ContextHandle_t</span><span class="w"> </span><span class="n">context</span><span class="p">;</span>
+<span class="linenos">  9</span><span class="w"> </span><span class="n">QnnContext_Config_t</span><span class="w"> </span><span class="n">contextConfig</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">QNN_CONTEXT_CONFIG_INIT</span><span class="p">;</span>
+<span class="linenos"> 10</span><span class="w"> </span><span class="n">contextConfig</span><span class="p">.</span><span class="n">option</span><span class="w">              </span><span class="o">=</span><span class="w"> </span><span class="n">QNN_CONTEXT_CONFIG_OPTION_DEFER_GRAPH_INIT</span><span class="p">;</span>
+<span class="linenos"> 11</span><span class="w"> </span><span class="n">contextConfig</span><span class="p">.</span><span class="n">isGraphInitDeferred</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="linenos"> 12</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">QnnContext_Config_t</span><span class="o">*</span><span class="w"> </span><span class="n">pContextConfig</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="o">&amp;</span><span class="n">contextConfig</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">};</span>
+<span class="linenos"> 13</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">Qnn_ErrorHandle_t</span><span class="w"> </span><span class="n">contextCreateReturn</span><span class="w"> </span><span class="o">=</span>
+<span class="linenos"> 14</span><span class="w">     </span><span class="n">m_qnnFunctionPointers</span><span class="p">.</span><span class="n">qnnInterface</span><span class="p">.</span><span class="n">contextCreateFromBinary</span><span class="p">(</span><span class="n">backendHandle</span><span class="p">,</span>
+<span class="linenos"> 15</span><span class="w">                                                                </span><span class="n">deviceHandle</span><span class="p">,</span>
+<span class="linenos"> 16</span><span class="w">                                                                </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">QnnContext_Config_t</span><span class="o">**</span><span class="p">)</span><span class="o">&amp;</span><span class="n">pContextConfig</span><span class="p">,</span>
+<span class="linenos"> 17</span><span class="w">                                                                </span><span class="n">reinterpret_cast</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">readBuffer</span><span class="p">),</span>
+<span class="linenos"> 18</span><span class="w">                                                                </span><span class="n">bufferSize</span><span class="p">,</span>
+<span class="linenos"> 19</span><span class="w">                                                                </span><span class="o">&amp;</span><span class="n">context</span><span class="p">,</span>
+<span class="linenos"> 20</span><span class="w">                                                                </span><span class="n">profileBackendHandle</span><span class="p">);</span>
+<span class="linenos"> 21</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">contextCreateReturn</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">QNN_SUCCESS</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos"> 22</span><span class="w">     </span><span class="c1">// handle error</span>
+<span class="linenos"> 23</span><span class="w"> </span><span class="p">}</span>
+<span class="linenos"> 24</span>
+<span class="hll"><span class="linenos"> 25</span><span class="w"> </span><span class="c1">// Step 2. Retrieve context properties</span>
+</span><span class="linenos"> 26</span>
+<span class="linenos"> 27</span><span class="w"> </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">weightsBufferSize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">-1</span><span class="p">,</span><span class="w"> </span><span class="n">spillfillBufferSize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="linenos"> 28</span><span class="w"> </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">bufferStartAlignmentBytes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="linenos"> 29</span><span class="w"> </span><span class="n">QnnContext_Property_t</span><span class="w"> </span><span class="n">contextProperty</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">QNN_CONTEXT_PROPERTY_INIT</span><span class="p">;</span>
+<span class="linenos"> 30</span><span class="w"> </span><span class="n">contextProperty</span><span class="p">.</span><span class="n">option</span><span class="w">                </span><span class="o">=</span><span class="w"> </span><span class="n">QNN_CONTEXT_PROPERTY_OPTION_CUSTOM</span><span class="p">;</span>
+<span class="linenos"> 31</span><span class="w"> </span><span class="n">QnnContext_Property_t</span><span class="o">*</span><span class="w"> </span><span class="n">contextProperties</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="o">&amp;</span><span class="n">contextProperty</span><span class="p">,</span><span class="w"> </span><span class="n">nullptr</span><span class="p">};</span>
+<span class="linenos"> 32</span>
+<span class="linenos"> 33</span><span class="w"> </span><span class="c1">// Retrieve required external weights buffer size</span>
+<span class="linenos"> 34</span><span class="w"> </span><span class="n">QnnHtpContext_CustomProperty_t</span><span class="w"> </span><span class="n">weightsCustomProperty</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">QNN_HTP_CONTEXT_CUSTOM_PROPERTY_INIT</span><span class="p">;</span>
+<span class="linenos"> 35</span><span class="w"> </span><span class="n">weightsCustomProperty</span><span class="p">.</span><span class="n">option</span><span class="w">                         </span><span class="o">=</span><span class="w"> </span><span class="n">QNN_HTP_CONTEXT_GET_PROP_WEIGHTS_BUFFER_SIZE</span><span class="p">;</span>
+<span class="linenos"> 36</span><span class="w"> </span><span class="n">weightsCustomProperty</span><span class="p">.</span><span class="n">weightsBufferSize</span><span class="w">              </span><span class="o">=</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="linenos"> 37</span><span class="w"> </span><span class="n">contextProperty</span><span class="p">.</span><span class="n">customProperty</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">weightsCustomProperty</span><span class="p">;</span>
+<span class="linenos"> 38</span>
+<span class="linenos"> 39</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">Qnn_ErrorHandle_t</span><span class="w"> </span><span class="n">weightsPropertyError</span><span class="w"> </span><span class="o">=</span>
+<span class="linenos"> 40</span><span class="w">   </span><span class="n">m_qnnFunctionPointers</span><span class="p">.</span><span class="n">qnnInterface</span><span class="p">.</span><span class="n">contextGetProperty</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">contextProperties</span><span class="p">);</span>
+<span class="linenos"> 41</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">weightsPropertyError</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">QNN_SUCCESS</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos"> 42</span><span class="w">     </span><span class="c1">// handle error</span>
+<span class="linenos"> 43</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos"> 44</span><span class="w">     </span><span class="n">weightsBufferSize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">weightsCustomProperty</span><span class="p">.</span><span class="n">weightsBufferSize</span><span class="p">;</span>
+<span class="linenos"> 45</span><span class="w"> </span><span class="p">}</span>
+<span class="linenos"> 46</span>
+<span class="linenos"> 47</span><span class="w"> </span><span class="c1">// Retrieve required external spill-fill buffer size</span>
+<span class="linenos"> 48</span><span class="w"> </span><span class="n">QnnHtpContext_CustomProperty_t</span><span class="w"> </span><span class="n">spillfillCustomProperty</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">QNN_HTP_CONTEXT_CUSTOM_PROPERTY_INIT</span><span class="p">;</span>
+<span class="linenos"> 49</span><span class="w"> </span><span class="n">spillfillCustomProperty</span><span class="p">.</span><span class="n">option</span><span class="w">                         </span><span class="o">=</span><span class="w"> </span><span class="n">QNN_HTP_CONTEXT_GET_PROP_MAX_SPILLFILL_BUFFER_SIZE</span><span class="p">;</span>
+<span class="linenos"> 50</span><span class="w"> </span><span class="n">spillfillCustomProperty</span><span class="p">.</span><span class="n">spillfillBufferSize</span><span class="w">            </span><span class="o">=</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="linenos"> 51</span><span class="w"> </span><span class="n">contextProperty</span><span class="p">.</span><span class="n">customProperty</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">spillfillCustomProperty</span><span class="p">;</span>
+<span class="linenos"> 52</span>
+<span class="linenos"> 53</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">Qnn_ErrorHandle_t</span><span class="w"> </span><span class="n">spillfillPropertyError</span><span class="w"> </span><span class="o">=</span>
+<span class="linenos"> 54</span><span class="w">   </span><span class="n">m_qnnFunctionPointers</span><span class="p">.</span><span class="n">qnnInterface</span><span class="p">.</span><span class="n">contextGetProperty</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">contextProperties</span><span class="p">);</span>
+<span class="linenos"> 55</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">spillfillPropertyError</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">QNN_SUCCESS</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos"> 56</span><span class="w">     </span><span class="c1">// handle error</span>
+<span class="linenos"> 57</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos"> 58</span><span class="w">    </span><span class="n">spillfillBufferSize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spillfillCustomProperty</span><span class="p">.</span><span class="n">spillfillBufferSize</span><span class="p">;</span>
+<span class="linenos"> 59</span><span class="w"> </span><span class="p">}</span>
+<span class="linenos"> 60</span>
+<span class="linenos"> 61</span><span class="w"> </span><span class="c1">// Retrieve alignment requirement for external buffers</span>
+<span class="linenos"> 62</span><span class="w"> </span><span class="n">QnnHtpContext_CustomProperty_t</span><span class="w"> </span><span class="n">alignmentCustomProperty</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">QNN_HTP_CONTEXT_CUSTOM_PROPERTY_INIT</span><span class="p">;</span>
+<span class="linenos"> 63</span><span class="w"> </span><span class="n">alignmentCustomProperty</span><span class="p">.</span><span class="n">option</span><span class="w">                         </span><span class="o">=</span><span class="w"> </span><span class="n">QNN_HTP_CONTEXT_GET_PROP_BUFFER_START_ALIGNMENT</span><span class="p">;</span>
+<span class="linenos"> 64</span><span class="w"> </span><span class="n">alignmentCustomProperty</span><span class="p">.</span><span class="n">bufferStartAlignment</span><span class="w">            </span><span class="o">=</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="linenos"> 65</span><span class="w"> </span><span class="n">contextProperty</span><span class="p">.</span><span class="n">customProperty</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">alignmentCustomProperty</span><span class="p">;</span>
+<span class="linenos"> 66</span>
+<span class="linenos"> 67</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">Qnn_ErrorHandle_t</span><span class="w"> </span><span class="n">alignmentPropertyError</span><span class="w"> </span><span class="o">=</span>
+<span class="linenos"> 68</span><span class="w">   </span><span class="n">m_qnnFunctionPointers</span><span class="p">.</span><span class="n">qnnInterface</span><span class="p">.</span><span class="n">contextGetProperty</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">contextProperties</span><span class="p">);</span>
+<span class="linenos"> 69</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">alignmentPropertyError</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">QNN_SUCCESS</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos"> 70</span><span class="w">     </span><span class="c1">// handle error</span>
+<span class="linenos"> 71</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos"> 72</span><span class="w">    </span><span class="n">bufferStartAlignmentBytes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">alignmentCustomProperty</span><span class="p">.</span><span class="n">bufferStartAlignment</span><span class="p">;</span>
+<span class="linenos"> 73</span><span class="w"> </span><span class="p">}</span>
+<span class="linenos"> 74</span>
+<span class="hll"><span class="linenos"> 75</span><span class="w"> </span><span class="c1">// Step 3. Allocate external buffers</span>
+</span><span class="linenos"> 76</span><span class="w"> </span><span class="c1">// DMA buffers can be allocated using custom allocator or rpcmem_alloc</span>
+<span class="linenos"> 77</span><span class="w"> </span><span class="c1">// The start addresses - determined by the fd and the offset together - must be aligned to bufferStartAlignmentBytes</span>
+<span class="linenos"> 78</span><span class="w"> </span><span class="kt">uint8_t</span><span class="o">*</span><span class="w"> </span><span class="n">weightsBufferPointer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">nullptr</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">spillfillBufferPointer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">nullptr</span><span class="p">;</span>
+<span class="linenos"> 79</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">weightsBufferMemFd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">-1</span><span class="p">,</span><span class="w"> </span><span class="n">spillfillBufferMemFd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="linenos"> 80</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">weightsBufferOffset</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">spillfillBufferOffset</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="linenos"> 81</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">weightsBufferSize</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos"> 82</span><span class="w">         </span><span class="n">weightsBufferPointer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">uint8_t</span><span class="o">*</span><span class="p">)</span><span class="n">rpcmem_alloc</span><span class="p">(</span><span class="n">RPCMEM_HEAP_ID_SYSTEM</span><span class="p">,</span><span class="w"> </span><span class="n">RPCMEM_DEFAULT_FLAGS</span><span class="p">,</span><span class="w"> </span><span class="n">weightsBufferSize</span><span class="p">);</span>
+<span class="linenos"> 83</span><span class="w">         </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">nullptr</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">weightsBufferPointer</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos"> 84</span><span class="w">             </span><span class="c1">// handle errors</span>
+<span class="linenos"> 85</span><span class="w">         </span><span class="p">}</span>
+<span class="linenos"> 86</span><span class="w">         </span><span class="n">weightsBufferMemFd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rpcmem_to_fd</span><span class="p">(</span><span class="n">weightsBufferPointer</span><span class="p">);</span>
+<span class="linenos"> 87</span><span class="w">         </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="mi">-1</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">weightsBufferMemFd</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos"> 88</span><span class="w">             </span><span class="c1">// handle errors</span>
+<span class="linenos"> 89</span><span class="w">         </span><span class="p">}</span>
+<span class="linenos"> 90</span><span class="w"> </span><span class="p">}</span>
+<span class="linenos"> 91</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">spillfillBufferSize</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos"> 92</span><span class="w">         </span><span class="n">spillfillBufferPointer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">uint8_t</span><span class="o">*</span><span class="p">)</span><span class="n">rpcmem_alloc</span><span class="p">(</span><span class="n">RPCMEM_HEAP_ID_SYSTEM</span><span class="p">,</span><span class="w"> </span><span class="n">RPCMEM_DEFAULT_FLAGS</span><span class="p">,</span><span class="w"> </span><span class="n">spillfillBufferSize</span><span class="p">);</span>
+<span class="linenos"> 93</span><span class="w">         </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">nullptr</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">spillfillBufferPointer</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos"> 94</span><span class="w">             </span><span class="c1">// handle errors</span>
+<span class="linenos"> 95</span><span class="w">         </span><span class="p">}</span>
+<span class="linenos"> 96</span><span class="w">         </span><span class="n">spillfillBufferMemFd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rpcmem_to_fd</span><span class="p">(</span><span class="n">spillfillBufferPointer</span><span class="p">);</span>
+<span class="linenos"> 97</span><span class="w">         </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="mi">-1</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">spillfillBufferMemFd</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos"> 98</span><span class="w">             </span><span class="c1">// handle errors</span>
+<span class="linenos"> 99</span><span class="w">         </span><span class="p">}</span>
+<span class="linenos">100</span><span class="w"> </span><span class="p">}</span>
+<span class="linenos">101</span>
+<span class="hll"><span class="linenos">102</span><span class="w"> </span><span class="c1">// Step 4. Register external buffers with QNN</span>
+</span><span class="linenos">103</span><span class="w"> </span><span class="c1">// Since these buffers are empty, memShape and dataType are not applicable</span>
+<span class="linenos">104</span><span class="w"> </span><span class="n">Qnn_MemHandle_t</span><span class="w"> </span><span class="n">weightsMemHandle</span><span class="p">,</span><span class="w"> </span><span class="n">spillfillMemHandle</span><span class="p">;</span>
+<span class="linenos">105</span><span class="w"> </span><span class="n">Qnn_MemDescriptor_t</span><span class="w"> </span><span class="n">memDescriptor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">QNN_MEM_DESCRIPTOR_INIT</span><span class="p">;</span>
+<span class="linenos">106</span><span class="w"> </span><span class="n">memDescriptor</span><span class="p">.</span><span class="n">memType</span><span class="w">             </span><span class="o">=</span><span class="w"> </span><span class="n">QNN_MEM_TYPE_CUSTOM</span><span class="p">;</span>
+<span class="linenos">107</span>
+<span class="linenos">108</span><span class="w"> </span><span class="n">QnnMemHtp_Descriptor_t</span><span class="w"> </span><span class="n">weightsHtpMemDescriptor</span><span class="p">;</span>
+<span class="linenos">109</span><span class="w"> </span><span class="n">weightsHtpMemDescriptor</span><span class="p">.</span><span class="n">type</span><span class="w">               </span><span class="o">=</span><span class="w"> </span><span class="n">QNN_HTP_MEM_WEIGHTS_BUFFER</span><span class="p">;</span>
+<span class="linenos">110</span><span class="w"> </span><span class="n">weightsHtpMemDescriptor</span><span class="p">.</span><span class="n">size</span><span class="w">               </span><span class="o">=</span><span class="w"> </span><span class="n">weightsBufferSize</span><span class="p">;</span>
+<span class="linenos">111</span><span class="w"> </span><span class="n">QnnHtpMem_SharedBufferConfig_t</span><span class="w"> </span><span class="n">weightsSharedBuffConfig</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">weightsBufferMemFd</span><span class="p">,</span><span class="w"> </span><span class="n">weightsBufferOffset</span><span class="p">};</span>
+<span class="linenos">112</span><span class="w"> </span><span class="n">weightsHtpMemDescriptor</span><span class="p">.</span><span class="n">weightsBufferConfig</span><span class="w">               </span><span class="o">=</span><span class="w"> </span><span class="n">weightsSharedBuffConfig</span><span class="p">;</span>
+<span class="linenos">113</span>
+<span class="linenos">114</span><span class="w"> </span><span class="n">memDescriptor</span><span class="p">.</span><span class="n">customInfo</span><span class="w">          </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">weightsHtpMemDescriptor</span><span class="p">;</span>
+<span class="linenos">115</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">Qnn_ErrorHandle_t</span><span class="w"> </span><span class="n">weightsBufferError</span><span class="w"> </span><span class="o">=</span>
+<span class="linenos">116</span><span class="w">     </span><span class="n">m_qnnFunctionPointers</span><span class="p">.</span><span class="n">qnnInterface</span><span class="p">.</span><span class="n">memRegister</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">memDescriptor</span><span class="p">,</span><span class="w"> </span><span class="mi">1u</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">weightsMemHandle</span><span class="p">);</span>
+<span class="linenos">117</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">weightsBufferError</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">QNN_SUCCESS</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">118</span><span class="w">     </span><span class="c1">// handle error</span>
+<span class="linenos">119</span><span class="w"> </span><span class="p">}</span>
+<span class="linenos">120</span>
+<span class="linenos">121</span><span class="w"> </span><span class="n">QnnMemHtp_Descriptor_t</span><span class="w"> </span><span class="n">spillfillHtpMemDescriptor</span><span class="p">;</span>
+<span class="linenos">122</span><span class="w"> </span><span class="n">spillfillHtpMemDescriptor</span><span class="p">.</span><span class="n">type</span><span class="w">               </span><span class="o">=</span><span class="w"> </span><span class="n">QNN_HTP_MEM_SHARED_SPILLFILL_BUFFER</span><span class="p">;</span>
+<span class="linenos">123</span><span class="w"> </span><span class="n">spillfillHtpMemDescriptor</span><span class="p">.</span><span class="n">size</span><span class="w">               </span><span class="o">=</span><span class="w"> </span><span class="n">spillfillBufferSize</span><span class="p">;</span>
+<span class="linenos">124</span><span class="w"> </span><span class="n">QnnHtpMem_SharedBufferConfig_t</span><span class="w"> </span><span class="n">spillfillSharedBuffConfig</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">spillfillBufferMemFd</span><span class="p">,</span><span class="w"> </span><span class="n">spillfillBufferOffset</span><span class="p">};</span>
+<span class="linenos">125</span><span class="w"> </span><span class="n">spillfillHtpMemDescriptor</span><span class="p">.</span><span class="n">spillfillBufferConfig</span><span class="w">               </span><span class="o">=</span><span class="w"> </span><span class="n">spillfillSharedBuffConfig</span><span class="p">;</span>
+<span class="linenos">126</span>
+<span class="linenos">127</span><span class="w"> </span><span class="n">memDescriptor</span><span class="p">.</span><span class="n">customInfo</span><span class="w">          </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">spillfillHtpMemDescriptor</span><span class="p">;</span>
+<span class="linenos">128</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">Qnn_ErrorHandle_t</span><span class="w"> </span><span class="n">spillfillBufferError</span><span class="w"> </span><span class="o">=</span>
+<span class="linenos">129</span><span class="w">     </span><span class="n">m_qnnFunctionPointers</span><span class="p">.</span><span class="n">qnnInterface</span><span class="p">.</span><span class="n">memRegister</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">memDescriptor</span><span class="p">,</span><span class="w"> </span><span class="mi">1u</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">spillfillMemHandle</span><span class="p">);</span>
+<span class="linenos">130</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">spillfillBufferError</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">QNN_SUCCESS</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">131</span><span class="w">     </span><span class="c1">// handle error</span>
+<span class="linenos">132</span><span class="w"> </span><span class="p">}</span>
+<span class="linenos">133</span>
+<span class="hll"><span class="linenos">134</span><span class="w"> </span><span class="c1">// Step 5. Finalize context</span>
+</span><span class="linenos">135</span><span class="w"> </span><span class="c1">// pContextConfig and readBuffer arguments used to create the context still have to be valid at this point</span>
+<span class="linenos">136</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">Qnn_ErrorHandle_t</span><span class="w"> </span><span class="n">contextFinalizeError</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_qnnFunctionPointers</span><span class="p">.</span><span class="n">qnnInterface</span><span class="p">.</span><span class="n">contextFinalize</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">profileBackendHandle</span><span class="p">);</span>
+<span class="linenos">137</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">contextFinalizeError</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">QNN_SUCCESS</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">138</span><span class="w">     </span><span class="c1">// handle error</span>
+<span class="linenos">139</span><span class="w"> </span><span class="p">}</span>
+<span class="linenos">140</span>
+<span class="linenos">141</span><span class="w"> </span><span class="c1">// Obtain and save graph handles for each graph present in the context</span>
+<span class="linenos">142</span><span class="w"> </span><span class="c1">// See ${QNN_SDK_ROOT}/examples/QNN/SampleApp code for details</span>
+<span class="linenos">143</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">graphIdx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">graphIdx</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">m_graphsCount</span><span class="p">;</span><span class="w"> </span><span class="n">graphIdx</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">144</span><span class="w">     </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">QNN_SUCCESS</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">m_qnnFunctionPointers</span><span class="p">.</span><span class="n">qnnInterface</span><span class="p">.</span><span class="n">graphRetrieve</span><span class="p">(</span>
+<span class="linenos">145</span><span class="w">             </span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">graphsInfo</span><span class="p">)[</span><span class="n">graphIdx</span><span class="p">].</span><span class="n">graphName</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="p">((</span><span class="o">*</span><span class="n">graphsInfo</span><span class="p">)[</span><span class="n">graphIdx</span><span class="p">].</span><span class="n">graph</span><span class="p">)))</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">146</span><span class="w">         </span><span class="c1">// handle error</span>
+<span class="linenos">147</span><span class="w">     </span><span class="p">}</span>
+<span class="linenos">148</span><span class="w"> </span><span class="p">}</span>
+<span class="linenos">149</span>
+<span class="linenos">150</span><span class="w"> </span><span class="c1">// Execute graphs ...</span>
+<span class="linenos">151</span><span class="w"> </span><span class="c1">// See ${QNN_SDK_ROOT}/examples/QNN/SampleApp code</span>
+<span class="linenos">152</span>
+<span class="linenos">153</span><span class="w"> </span><span class="c1">// Free context</span>
+<span class="linenos">154</span><span class="w"> </span><span class="c1">// See ${QNN_SDK_ROOT}/examples/QNN/SampleApp code for details</span>
+<span class="linenos">155</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">QNN_CONTEXT_NO_ERROR</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">m_qnnFunctionPointers</span><span class="p">.</span><span class="n">qnnInterface</span><span class="p">.</span><span class="n">contextFree</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">profileBackendHandle</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">156</span><span class="w">     </span><span class="c1">// hadle error</span>
+<span class="linenos">157</span><span class="w"> </span><span class="p">}</span>
+<span class="linenos">158</span>
+<span class="linenos">159</span><span class="w"> </span><span class="c1">// Free DMA buffers</span>
+<span class="linenos">160</span><span class="w"> </span><span class="n">rpcmem_free</span><span class="p">(</span><span class="n">weightsBufferPointer</span><span class="p">);</span>
+<span class="linenos">161</span><span class="w"> </span><span class="n">rpcmem_free</span><span class="p">(</span><span class="n">spillfillBufferPointer</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="non-rpc-use-case-using-qnn-htp-mem-shared-spillfill-buffer-and-qnn-htp-mem-shared-vtcmbackup-buffer-with-qnn-api">
+<h2>Non-RPC Use Case: Using QNN_HTP_MEM_SHARED_SPILLFILL_BUFFER and QNN_HTP_MEM_SHARED_VTCMBACKUP_BUFFER with QNN API<a class="headerlink" href="#non-rpc-use-case-using-qnn-htp-mem-shared-spillfill-buffer-and-qnn-htp-mem-shared-vtcmbackup-buffer-with-qnn-api" title="Permalink to this heading">¶</a></h2>
+<p>This section describes how to use external spill-fill and VTCM backup buffers in Non-RPC use cases with concurrent buffer sharing.
+This feature enables multiple contexts to share the same external buffers while executing graphs in parallel, providing efficient memory utilization.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><strong>Platform Support and Limitations:</strong></p>
+<p>The concurrent external spill-fill and VTCM backup buffers sharing feature has the following limitations:</p>
+<ul class="simple">
+<li><p>Supported on Android platforms in Non-RPC use cases</p></li>
+<li><p>Buffers must be allocated in DSP address space</p></li>
+<li><p>Only supported when context is created using <code class="docutils literal notranslate"><span class="pre">QnnContext_createFromBinary</span></code> API
+(not supported with <code class="docutils literal notranslate"><span class="pre">QnnContext_createFromBinaryListAsync</span></code>)</p></li>
+<li><p>Not supported with <code class="docutils literal notranslate"><span class="pre">QNN_HTP_CONTEXT_CONFIG_OPTION_REGISTER_MULTI_CONTEXTS</span></code> context config option</p></li>
+<li><p>Not supported with graph switching feature</p></li>
+<li><p>Not supported with udma64 feature (can be disabled during graph prepare phase)</p></li>
+<li><p>Not supported with securepd model protection feature</p></li>
+</ul>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><strong>Concurrent Buffer Sharing Requirements:</strong></p>
+<p>To enable concurrent external buffer sharing:</p>
+<ul class="simple">
+<li><p>Enable <code class="docutils literal notranslate"><span class="pre">QNN_HTP_CONTEXT_CONFIG_OPTION_REGISTER_CONCURRENT_RESOURCE_SHARING</span></code> config option in addition to <code class="docutils literal notranslate"><span class="pre">QNN_CONTEXT_CONFIG_OPTION_DEFER_GRAPH_INIT</span></code></p></li>
+<li><p>All contexts sharing the same buffers must have the same priority levels</p></li>
+<li><p>Both external spill-fill and VTCM backup buffers must be registered for each context</p></li>
+</ul>
+</div>
+<p>Steps to use concurrent external spill-fill and VTCM backup buffers in Non-RPC:</p>
+<div class="section" id="create-context-with-concurrent-resource-sharing">
+<h3>1. Create context with concurrent resource sharing<a class="headerlink" href="#create-context-with-concurrent-resource-sharing" title="Permalink to this heading">¶</a></h3>
+<p>Context must be created using the <code class="docutils literal notranslate"><span class="pre">QnnContext_createFromBinary</span></code> API with both the <code class="docutils literal notranslate"><span class="pre">QNN_CONTEXT_CONFIG_OPTION_DEFER_GRAPH_INIT</span></code> and
+<code class="docutils literal notranslate"><span class="pre">QNN_HTP_CONTEXT_CONFIG_OPTION_REGISTER_CONCURRENT_RESOURCE_SHARING</span></code> config options enabled.</p>
+</div>
+<div class="section" id="id1">
+<h3>2. Retrieve context properties<a class="headerlink" href="#id1" title="Permalink to this heading">¶</a></h3>
+<p>Context properties can be passed in the <code class="docutils literal notranslate"><span class="pre">QnnContext_getProperty</span></code> API to retrieve buffer sizes for spill-fill buffers using <code class="docutils literal notranslate"><span class="pre">QNN_HTP_CONTEXT_GET_PROP_MAX_SPILLFILL_BUFFER_SIZE</span></code>
+and VTCM backup buffers using <code class="docutils literal notranslate"><span class="pre">QNN_HTP_CONTEXT_GET_PROP_MAX_VTCMBACKUP_BUFFER_SIZE</span></code>.
+These sizes are calculated based on HTP internal optimizations and are recommended to be used directly for buffer allocation.</p>
+</div>
+<div class="section" id="allocate-external-buffers-in-dsp-address-space">
+<h3>3. Allocate external buffers in DSP address space<a class="headerlink" href="#allocate-external-buffers-in-dsp-address-space" title="Permalink to this heading">¶</a></h3>
+<p>Allocate buffers in the DSP address space with at least the required size determined from context properties.</p>
+<p><strong>Buffer Requirements:</strong></p>
+<ul class="simple">
+<li><p>Buffers must be allocated in DSP address space</p></li>
+<li><p>Minimum size must match the value retrieved from context properties</p></li>
+<li><p>Buffer contents should only be modified by QNN (user modifications result in undefined behavior)</p></li>
+<li><p>Buffers must remain allocated while registered with QNN</p></li>
+</ul>
+</div>
+<div class="section" id="register-external-buffers-with-qnn">
+<h3>4. Register external buffers with QNN<a class="headerlink" href="#register-external-buffers-with-qnn" title="Permalink to this heading">¶</a></h3>
+<p>External spill-fill and VTCM backup buffers can be shared between graphs of multiple contexts by registering the same
+external buffer address using the <code class="docutils literal notranslate"><span class="pre">QnnMem_register</span></code> API.</p>
+<p>For concurrent execution, all contexts sharing the same buffers must have the same priority levels, and both external spill-fill
+and VTCM backup buffers must be registered for each context.</p>
+</div>
+<div class="section" id="id2">
+<h3>5. Finalize context<a class="headerlink" href="#id2" title="Permalink to this heading">¶</a></h3>
+<p>After buffer registration, finalize the context to complete deserialization.
+Users have to make sure that the <code class="docutils literal notranslate"><span class="pre">binaryBuffer</span></code> and <code class="docutils literal notranslate"><span class="pre">config</span></code> pointers provided as arguments during context creation are still valid until the end of context finalization.</p>
+<p>After this step, external spill-fill and VTCM backup buffers registered with the context cannot be deregistered because they are in use by the context. These buffers
+will be automatically deregistered by QNN when the context is freed.</p>
+</div>
+<div class="section" id="id3">
+<h3>Code example<a class="headerlink" href="#id3" title="Permalink to this heading">¶</a></h3>
+<div class="literal-block-wrapper docutils container" id="id7">
+<div class="code-block-caption"><span class="caption-text">Non-RPC Use Case: HTP concurrent External spill-fill and VTCM backup buffer sharing example</span><a class="headerlink" href="#id7" title="Permalink to this code">¶</a></div>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="linenos">  1</span><span class="w"> </span><span class="c1">// QnnInterface_t is defined in ${QNN_SDK_ROOT}/include/QNN/QnnInterface.h</span>
+<span class="linenos">  2</span><span class="w"> </span><span class="n">QnnInterface_t</span><span class="w"> </span><span class="n">qnnInterface</span><span class="p">;</span>
+<span class="linenos">  3</span><span class="w"> </span><span class="c1">// Init qnn interface ......</span>
+<span class="linenos">  4</span><span class="w"> </span><span class="c1">// See ${QNN_SDK_ROOT}/examples/QNN/SampleApp code</span>
+<span class="linenos">  5</span>
+<span class="hll"><span class="linenos">  6</span><span class="w"> </span><span class="c1">// Step 1. Create contexts with config options:</span>
+</span><span class="linenos">  7</span><span class="w"> </span><span class="c1">// 1) REGISTER_CONCURRENT_RESOURCE_SHARING: enable concurrent buffer sharing</span>
+<span class="linenos">  8</span><span class="w"> </span><span class="c1">// 2) DEFER_GRAPH_INIT: enable external buffer</span>
+<span class="linenos">  9</span><span class="w"> </span><span class="c1">// See ${QNN_SDK_ROOT}/examples/QNN/SampleApp code for details on loading context</span>
+<span class="linenos"> 10</span><span class="w"> </span><span class="n">Qnn_ContextHandle_t</span><span class="w"> </span><span class="n">context1</span><span class="p">,</span><span class="w"> </span><span class="n">context2</span><span class="p">;</span>
+<span class="linenos"> 11</span>
+<span class="linenos"> 12</span><span class="w"> </span><span class="c1">// Create the first context</span>
+<span class="linenos"> 13</span><span class="w"> </span><span class="n">QnnHtpContext_GroupRegistration_t</span><span class="w"> </span><span class="n">concurrentGroupRegistrationCfg1</span><span class="p">;</span>
+<span class="linenos"> 14</span><span class="w"> </span><span class="c1">// When DEFER_GRAPH_INIT is enabled, valid firstGroupHandle and maxSpillFillBuffer</span>
+<span class="linenos"> 15</span><span class="w"> </span><span class="c1">// values are not required for external buffers</span>
+<span class="linenos"> 16</span><span class="w"> </span><span class="n">concurrentGroupRegistrationCfg1</span><span class="p">.</span><span class="n">firstGroupHandle</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="linenos"> 17</span><span class="w"> </span><span class="n">concurrentGroupRegistrationCfg1</span><span class="p">.</span><span class="n">maxSpillFillBuffer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="linenos"> 18</span>
+<span class="linenos"> 19</span><span class="w"> </span><span class="n">QnnHtpContext_CustomConfig_t</span><span class="w"> </span><span class="n">htpCustomConfig1</span><span class="p">;</span>
+<span class="linenos"> 20</span><span class="w"> </span><span class="n">htpCustomConfig1</span><span class="p">.</span><span class="n">option</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">QNN_HTP_CONTEXT_CONFIG_OPTION_REGISTER_CONCURRENT_RESOURCE_SHARING</span><span class="p">;</span>
+<span class="linenos"> 21</span><span class="w"> </span><span class="n">htpCustomConfig1</span><span class="p">.</span><span class="n">concurrentGroupRegistration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">concurrentGroupRegistrationCfg1</span><span class="p">;</span>
+<span class="linenos"> 22</span>
+<span class="linenos"> 23</span><span class="w"> </span><span class="n">QnnContext_Config_t</span><span class="w"> </span><span class="n">contextCustomConfig1</span><span class="p">;</span>
+<span class="linenos"> 24</span><span class="w"> </span><span class="n">contextCustomConfig1</span><span class="p">.</span><span class="n">option</span><span class="w">       </span><span class="o">=</span><span class="w"> </span><span class="n">QNN_CONTEXT_CONFIG_OPTION_CUSTOM</span><span class="p">;</span>
+<span class="hll"><span class="linenos"> 25</span><span class="w"> </span><span class="n">contextCustomConfig1</span><span class="p">.</span><span class="n">customConfig</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">htpCustomConfig1</span><span class="p">;</span>
+</span><span class="linenos"> 26</span>
+<span class="linenos"> 27</span><span class="w"> </span><span class="n">QnnContext_Config_t</span><span class="w"> </span><span class="n">contextExtBufferCustomConfig</span><span class="p">;</span>
+<span class="linenos"> 28</span><span class="w"> </span><span class="n">contextExtBufferCustomConfig</span><span class="p">.</span><span class="n">option</span><span class="w">              </span><span class="o">=</span><span class="w"> </span><span class="n">QNN_CONTEXT_CONFIG_OPTION_DEFER_GRAPH_INIT</span><span class="p">;</span>
+<span class="linenos"> 29</span><span class="w"> </span><span class="n">contextExtBufferCustomConfig</span><span class="p">.</span><span class="n">isGraphInitDeferred</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="linenos"> 30</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">QnnContext_Config_t</span><span class="o">*</span><span class="w"> </span><span class="n">contextConfig1</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos"> 31</span><span class="w">     </span><span class="o">&amp;</span><span class="n">contextCustomConfig1</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">contextExtBufferCustomConfig</span><span class="p">,</span><span class="w"> </span><span class="n">nullptr</span><span class="p">};</span>
+<span class="linenos"> 32</span>
+<span class="linenos"> 33</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">Qnn_ErrorHandle_t</span><span class="w"> </span><span class="n">contextCreateReturn1</span><span class="w"> </span><span class="o">=</span>
+<span class="linenos"> 34</span><span class="w">     </span><span class="n">qnnInterface</span><span class="p">.</span><span class="n">contextCreateFromBinary</span><span class="p">(</span><span class="n">backendHandle</span><span class="p">,</span>
+<span class="linenos"> 35</span><span class="w">                                         </span><span class="n">deviceHandle</span><span class="p">,</span>
+<span class="linenos"> 36</span><span class="w">                                         </span><span class="n">contextConfig1</span><span class="p">,</span>
+<span class="linenos"> 37</span><span class="w">                                         </span><span class="n">reinterpret_cast</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">readBuffer</span><span class="p">),</span>
+<span class="linenos"> 38</span><span class="w">                                         </span><span class="n">bufferSize</span><span class="p">,</span>
+<span class="linenos"> 39</span><span class="w">                                         </span><span class="o">&amp;</span><span class="n">context1</span><span class="p">,</span>
+<span class="linenos"> 40</span><span class="w">                                         </span><span class="n">profileBackendHandle</span><span class="p">);</span>
+<span class="linenos"> 41</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">contextCreateReturn1</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">QNN_SUCCESS</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos"> 42</span><span class="w">     </span><span class="c1">// handle error</span>
+<span class="linenos"> 43</span><span class="w"> </span><span class="p">}</span>
+<span class="linenos"> 44</span>
+<span class="linenos"> 45</span><span class="w"> </span><span class="c1">// Create the second context</span>
+<span class="linenos"> 46</span><span class="w"> </span><span class="n">QnnHtpContext_GroupRegistration_t</span><span class="w"> </span><span class="n">concurrentGroupRegistrationCfg2</span><span class="p">;</span>
+<span class="linenos"> 47</span><span class="w"> </span><span class="c1">// When DEFER_GRAPH_INIT is enabled, valid firstGroupHandle and maxSpillFillBuffer</span>
+<span class="hll"><span class="linenos"> 48</span><span class="w"> </span><span class="c1">// values are not required for external buffers</span>
+</span><span class="linenos"> 49</span><span class="w"> </span><span class="n">concurrentGroupRegistrationCfg2</span><span class="p">.</span><span class="n">firstGroupHandle</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="linenos"> 50</span><span class="w"> </span><span class="n">concurrentGroupRegistrationCfg2</span><span class="p">.</span><span class="n">maxSpillFillBuffer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="linenos"> 51</span>
+<span class="linenos"> 52</span><span class="w"> </span><span class="n">QnnHtpContext_CustomConfig_t</span><span class="w"> </span><span class="n">htpCustomConfig2</span><span class="p">;</span>
+<span class="linenos"> 53</span><span class="w"> </span><span class="n">htpCustomConfig2</span><span class="p">.</span><span class="n">option</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">QNN_HTP_CONTEXT_CONFIG_OPTION_REGISTER_CONCURRENT_RESOURCE_SHARING</span><span class="p">;</span>
+<span class="linenos"> 54</span><span class="w"> </span><span class="n">htpCustomConfig2</span><span class="p">.</span><span class="n">concurrentGroupRegistration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">concurrentGroupRegistrationCfg2</span><span class="p">;</span>
+<span class="linenos"> 55</span>
+<span class="linenos"> 56</span><span class="w"> </span><span class="n">QnnContext_Config_t</span><span class="w"> </span><span class="n">contextCustomConfig2</span><span class="p">;</span>
+<span class="linenos"> 57</span><span class="w"> </span><span class="n">contextCustomConfig2</span><span class="p">.</span><span class="n">option</span><span class="w">       </span><span class="o">=</span><span class="w"> </span><span class="n">QNN_CONTEXT_CONFIG_OPTION_CUSTOM</span><span class="p">;</span>
+<span class="linenos"> 58</span><span class="w"> </span><span class="n">contextCustomConfig2</span><span class="p">.</span><span class="n">customConfig</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">htpCustomConfig2</span><span class="p">;</span>
+<span class="linenos"> 59</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">QnnContext_Config_t</span><span class="o">*</span><span class="w"> </span><span class="n">contextConfig2</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos"> 60</span><span class="w">     </span><span class="o">&amp;</span><span class="n">contextCustomConfig2</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">contextExtBufferCustomConfig</span><span class="p">,</span><span class="w"> </span><span class="n">nullptr</span><span class="p">};</span>
+<span class="linenos"> 61</span>
+<span class="linenos"> 62</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">Qnn_ErrorHandle_t</span><span class="w"> </span><span class="n">contextCreateReturn2</span><span class="w"> </span><span class="o">=</span>
+<span class="linenos"> 63</span><span class="w">     </span><span class="n">qnnInterface</span><span class="p">.</span><span class="n">contextCreateFromBinary</span><span class="p">(</span><span class="n">backendHandle</span><span class="p">,</span>
+<span class="linenos"> 64</span><span class="w">                                         </span><span class="n">deviceHandle</span><span class="p">,</span>
+<span class="linenos"> 65</span><span class="w">                                         </span><span class="n">contextConfig2</span><span class="p">,</span>
+<span class="linenos"> 66</span><span class="w">                                         </span><span class="n">reinterpret_cast</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">readBuffer</span><span class="p">),</span>
+<span class="linenos"> 67</span><span class="w">                                         </span><span class="n">bufferSize</span><span class="p">,</span>
+<span class="linenos"> 68</span><span class="w">                                         </span><span class="o">&amp;</span><span class="n">context2</span><span class="p">,</span>
+<span class="linenos"> 69</span><span class="w">                                         </span><span class="n">profileBackendHandle</span><span class="p">);</span>
+<span class="linenos"> 70</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">contextCreateReturn2</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">QNN_SUCCESS</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos"> 71</span><span class="w">     </span><span class="c1">// handle error</span>
+<span class="linenos"> 72</span><span class="w"> </span><span class="p">}</span>
+<span class="linenos"> 73</span>
+<span class="linenos"> 74</span><span class="w"> </span><span class="c1">// Step 2. Retrieve context properties for buffer sizes, this step should be done for</span>
+<span class="hll"><span class="linenos"> 75</span><span class="w"> </span><span class="c1">// each context individually</span>
+</span><span class="linenos"> 76</span><span class="w"> </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">requiredSpillFillBufferSize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">requiredVtcmBackupBufferSize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="linenos"> 77</span>
+<span class="linenos"> 78</span><span class="w"> </span><span class="n">QnnContext_Property_t</span><span class="w"> </span><span class="n">spillfillProperty</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
+<span class="linenos"> 79</span><span class="w"> </span><span class="n">spillfillProperty</span><span class="p">.</span><span class="n">option</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">QNN_CONTEXT_PROPERTY_OPTION_CUSTOM</span><span class="p">;</span>
+<span class="linenos"> 80</span><span class="w"> </span><span class="n">QnnHtpContext_CustomProperty_t</span><span class="w"> </span><span class="n">spillfillCustomProp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">QNN_HTP_CONTEXT_CUSTOM_PROPERTY_INIT</span><span class="p">;</span>
+<span class="linenos"> 81</span><span class="w"> </span><span class="n">spillfillCustomProp</span><span class="p">.</span><span class="n">option</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">QNN_HTP_CONTEXT_GET_PROP_MAX_SPILLFILL_BUFFER_SIZE</span><span class="p">;</span>
+<span class="linenos"> 82</span><span class="w"> </span><span class="n">spillfillCustomProp</span><span class="p">.</span><span class="n">spillfillBufferSize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="linenos"> 83</span><span class="w"> </span><span class="n">spillfillProperty</span><span class="p">.</span><span class="n">customProperty</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">spillfillCustomProp</span><span class="p">;</span>
+<span class="linenos"> 84</span>
+<span class="linenos"> 85</span><span class="w"> </span><span class="n">QnnContext_Property_t</span><span class="w"> </span><span class="n">vtcmProperty</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
+<span class="linenos"> 86</span><span class="w"> </span><span class="n">vtcmProperty</span><span class="p">.</span><span class="n">option</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">QNN_CONTEXT_PROPERTY_OPTION_CUSTOM</span><span class="p">;</span>
+<span class="linenos"> 87</span><span class="w"> </span><span class="n">QnnHtpContext_CustomProperty_t</span><span class="w"> </span><span class="n">vtcmCustomProp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">QNN_HTP_CONTEXT_CUSTOM_PROPERTY_INIT</span><span class="p">;</span>
+<span class="linenos"> 88</span><span class="w"> </span><span class="n">vtcmCustomProp</span><span class="p">.</span><span class="n">option</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">QNN_HTP_CONTEXT_GET_PROP_MAX_VTCMBACKUP_BUFFER_SIZE</span><span class="p">;</span>
+<span class="linenos"> 89</span><span class="w"> </span><span class="n">vtcmCustomProp</span><span class="p">.</span><span class="n">vtcmBackupBufferSize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="linenos"> 90</span><span class="w"> </span><span class="n">vtcmProperty</span><span class="p">.</span><span class="n">customProperty</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">vtcmCustomProp</span><span class="p">;</span>
+<span class="linenos"> 91</span>
+<span class="linenos"> 92</span><span class="w"> </span><span class="n">QnnContext_Property_t</span><span class="o">*</span><span class="w"> </span><span class="n">properties</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="o">&amp;</span><span class="n">spillfillProperty</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">vtcmProperty</span><span class="p">,</span><span class="w"> </span><span class="n">nullptr</span><span class="p">};</span>
+<span class="linenos"> 93</span>
+<span class="linenos"> 94</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">Qnn_ErrorHandle_t</span><span class="w"> </span><span class="n">propertyError</span><span class="w"> </span><span class="o">=</span>
+<span class="linenos"> 95</span><span class="w">     </span><span class="n">qnnInterface</span><span class="p">.</span><span class="n">contextGetProperty</span><span class="p">(</span><span class="n">context1</span><span class="p">,</span><span class="w"> </span><span class="n">properties</span><span class="p">);</span>
+<span class="linenos"> 96</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">propertyError</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">QNN_SUCCESS</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos"> 97</span><span class="w">     </span><span class="c1">// handle error</span>
+<span class="linenos"> 98</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos"> 99</span><span class="w">     </span><span class="n">requiredSpillFillBufferSize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spillfillCustomProp</span><span class="p">.</span><span class="n">spillfillBufferSize</span><span class="p">;</span>
+<span class="linenos">100</span><span class="w">     </span><span class="n">requiredVtcmBackupBufferSize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vtcmCustomProp</span><span class="p">.</span><span class="n">vtcmBackupBufferSize</span><span class="p">;</span>
+<span class="linenos">101</span><span class="w"> </span><span class="p">}</span>
+<span class="hll"><span class="linenos">102</span>
+</span><span class="linenos">103</span><span class="w"> </span><span class="c1">// Step 3. Allocate external buffers in DSP address space</span>
+<span class="linenos">104</span><span class="w"> </span><span class="c1">// Allocate spill-fill buffer for the context group</span>
+<span class="linenos">105</span><span class="w"> </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">spillFillQurtVAPtr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="n">requiredSpillFillBufferSize</span><span class="p">);</span>
+<span class="linenos">106</span><span class="w"> </span><span class="n">QnnHtpMem_QurtAddress_t</span><span class="w"> </span><span class="n">spillFillQurtVA</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">reinterpret_cast</span><span class="o">&lt;</span><span class="kt">uint32_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">spillFillQurtVAPtr</span><span class="p">);</span>
+<span class="linenos">107</span>
+<span class="linenos">108</span><span class="w"> </span><span class="c1">// Allocate VTCM backup buffer for the context group</span>
+<span class="linenos">109</span><span class="w"> </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">vtcmBackupQurtVAPtr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="n">requiredVtcmBackupBufferSize</span><span class="p">);</span>
+<span class="linenos">110</span><span class="w"> </span><span class="n">QnnHtpMem_QurtAddress_t</span><span class="w"> </span><span class="n">vtcmBackupQurtVA</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">reinterpret_cast</span><span class="o">&lt;</span><span class="kt">uint32_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">vtcmBackupQurtVAPtr</span><span class="p">);</span>
+<span class="linenos">111</span>
+<span class="linenos">112</span><span class="w"> </span><span class="c1">// Step 4. Register external buffers with QNN</span>
+<span class="linenos">113</span><span class="w"> </span><span class="c1">// Setup spill-fill buffer descriptor</span>
+<span class="linenos">114</span><span class="w"> </span><span class="n">QnnMemHtp_Descriptor_t</span><span class="w"> </span><span class="n">spillFillHtpDescriptor</span><span class="p">;</span>
+<span class="linenos">115</span><span class="w"> </span><span class="n">spillFillHtpDescriptor</span><span class="p">.</span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">QNN_HTP_MEM_SHARED_SPILLFILL_BUFFER</span><span class="p">;</span>
+<span class="linenos">116</span><span class="w"> </span><span class="n">spillFillHtpDescriptor</span><span class="p">.</span><span class="n">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">requiredSpillFillBufferSize</span><span class="p">;</span>
+<span class="linenos">117</span><span class="w"> </span><span class="n">spillFillHtpDescriptor</span><span class="p">.</span><span class="n">sharedSpillfillBufferQurtAddress</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spillFillQurtVA</span><span class="p">;</span>
+<span class="linenos">118</span>
+<span class="linenos">119</span><span class="w"> </span><span class="n">Qnn_MemDescriptor_t</span><span class="w"> </span><span class="n">spillFillMemDescriptor</span><span class="p">;</span>
+<span class="linenos">120</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">dims</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="linenos">121</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">rank</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="linenos">122</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">Qnn_MemShape_t</span><span class="w"> </span><span class="n">qnnMemShapeInput</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">rank</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">dims</span><span class="p">,</span><span class="w"> </span><span class="n">nullptr</span><span class="p">};</span>
+<span class="linenos">123</span><span class="w"> </span><span class="n">spillFillMemDescriptor</span><span class="p">.</span><span class="n">memShape</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">qnnMemShapeInput</span><span class="p">;</span>
+<span class="linenos">124</span><span class="w"> </span><span class="n">spillFillMemDescriptor</span><span class="p">.</span><span class="n">dataType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">QNN_DATATYPE_UINT_8</span><span class="p">;</span>
+<span class="linenos">125</span><span class="w"> </span><span class="n">spillFillMemDescriptor</span><span class="p">.</span><span class="n">memType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">QNN_MEM_TYPE_CUSTOM</span><span class="p">;</span>
+<span class="linenos">126</span><span class="w"> </span><span class="n">spillFillMemDescriptor</span><span class="p">.</span><span class="n">customInfo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">spillFillHtpDescriptor</span><span class="p">;</span>
+<span class="linenos">127</span><span class="w"> </span><span class="n">Qnn_MemHandle_t</span><span class="w"> </span><span class="n">spillFillMemHandle1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">nullptr</span><span class="p">;</span>
+<span class="linenos">128</span><span class="w"> </span><span class="n">Qnn_MemHandle_t</span><span class="w"> </span><span class="n">spillFillMemHandle2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">nullptr</span><span class="p">;</span>
+<span class="linenos">129</span>
+<span class="linenos">130</span><span class="w"> </span><span class="c1">// Setup VTCM backup buffer descriptor</span>
+<span class="linenos">131</span><span class="w"> </span><span class="n">QnnMemHtp_Descriptor_t</span><span class="w"> </span><span class="n">vtcmBackupHtpDescriptor</span><span class="p">;</span>
+<span class="linenos">132</span><span class="w"> </span><span class="n">vtcmBackupHtpDescriptor</span><span class="p">.</span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">QNN_HTP_MEM_SHARED_VTCMBACKUP_BUFFER</span><span class="p">;</span>
+<span class="linenos">133</span><span class="w"> </span><span class="n">vtcmBackupHtpDescriptor</span><span class="p">.</span><span class="n">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">requiredVtcmBackupBufferSize</span><span class="p">;</span>
+<span class="hll"><span class="linenos">134</span><span class="w"> </span><span class="n">vtcmBackupHtpDescriptor</span><span class="p">.</span><span class="n">sharedVTCMBackupBufferQurtAddress</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vtcmBackupQurtVA</span><span class="p">;</span>
+</span><span class="linenos">135</span>
+<span class="linenos">136</span><span class="w"> </span><span class="n">Qnn_MemDescriptor_t</span><span class="w"> </span><span class="n">vtcmBackupMemDescriptor</span><span class="p">;</span>
+<span class="linenos">137</span><span class="w"> </span><span class="n">vtcmBackupMemDescriptor</span><span class="p">.</span><span class="n">memShape</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">qnnMemShapeInput</span><span class="p">;</span>
+<span class="linenos">138</span><span class="w"> </span><span class="n">vtcmBackupMemDescriptor</span><span class="p">.</span><span class="n">dataType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">QNN_DATATYPE_UINT_8</span><span class="p">;</span>
+<span class="linenos">139</span><span class="w"> </span><span class="n">vtcmBackupMemDescriptor</span><span class="p">.</span><span class="n">memType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">QNN_MEM_TYPE_CUSTOM</span><span class="p">;</span>
+<span class="linenos">140</span><span class="w"> </span><span class="n">vtcmBackupMemDescriptor</span><span class="p">.</span><span class="n">customInfo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">vtcmBackupHtpDescriptor</span><span class="p">;</span>
+<span class="linenos">141</span><span class="w"> </span><span class="n">Qnn_MemHandle_t</span><span class="w"> </span><span class="n">vtcmBackupMemHandle1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">nullptr</span><span class="p">;</span>
+<span class="linenos">142</span><span class="w"> </span><span class="n">Qnn_MemHandle_t</span><span class="w"> </span><span class="n">vtcmBackupMemHandle2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">nullptr</span><span class="p">;</span>
+<span class="linenos">143</span>
+<span class="linenos">144</span><span class="w"> </span><span class="c1">// Register buffers for context1</span>
+<span class="linenos">145</span><span class="w"> </span><span class="n">Qnn_MemDescriptor_t</span><span class="w"> </span><span class="n">memDescriptors</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">spillFillMemDescriptor</span><span class="p">,</span><span class="w"> </span><span class="n">vtcmBackupMemDescriptor</span><span class="p">};</span>
+<span class="linenos">146</span><span class="w"> </span><span class="n">Qnn_MemHandle_t</span><span class="w"> </span><span class="n">memHandles1</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">spillFillMemHandle1</span><span class="p">,</span><span class="w"> </span><span class="n">vtcmBackupMemHandle1</span><span class="p">};</span>
+<span class="linenos">147</span><span class="w"> </span><span class="n">Qnn_MemHandle_t</span><span class="w"> </span><span class="n">memHandles2</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">spillFillMemHandle2</span><span class="p">,</span><span class="w"> </span><span class="n">vtcmBackupMemHandle2</span><span class="p">};</span>
+<span class="linenos">148</span>
+<span class="linenos">149</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">Qnn_ErrorHandle_t</span><span class="w"> </span><span class="n">memRegisterError1</span><span class="w"> </span><span class="o">=</span>
+<span class="linenos">150</span><span class="w">     </span><span class="n">qnnInterface</span><span class="p">.</span><span class="n">memRegister</span><span class="p">(</span><span class="n">context1</span><span class="p">,</span><span class="w"> </span><span class="n">memDescriptors</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">memHandles1</span><span class="p">);</span>
+<span class="linenos">151</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">memRegisterError1</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">QNN_SUCCESS</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">152</span><span class="w">     </span><span class="c1">// handle error</span>
+<span class="linenos">153</span><span class="w"> </span><span class="p">}</span>
+<span class="linenos">154</span>
+<span class="linenos">155</span><span class="w"> </span><span class="c1">// Register same buffers for context2 (sharing with context1)</span>
+<span class="linenos">156</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">Qnn_ErrorHandle_t</span><span class="w"> </span><span class="n">memRegisterError2</span><span class="w"> </span><span class="o">=</span>
+<span class="linenos">157</span><span class="w">     </span><span class="n">qnnInterface</span><span class="p">.</span><span class="n">memRegister</span><span class="p">(</span><span class="n">context2</span><span class="p">,</span><span class="w"> </span><span class="n">memDescriptors</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">memHandles2</span><span class="p">);</span>
+<span class="linenos">158</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">memRegisterError2</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">QNN_SUCCESS</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">159</span><span class="w">     </span><span class="c1">// handle error</span>
+<span class="linenos">160</span><span class="w"> </span><span class="p">}</span>
+<span class="hll"><span class="linenos">161</span>
+</span><span class="linenos">162</span><span class="w"> </span><span class="c1">// Step 5. Finalize contexts</span>
+<span class="linenos">163</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">Qnn_ErrorHandle_t</span><span class="w"> </span><span class="n">contextFinalizeError1</span><span class="w"> </span><span class="o">=</span>
+<span class="linenos">164</span><span class="w">     </span><span class="n">qnnInterface</span><span class="p">.</span><span class="n">contextFinalize</span><span class="p">(</span><span class="n">context1</span><span class="p">,</span><span class="w"> </span><span class="n">profileBackendHandle</span><span class="p">);</span>
+<span class="linenos">165</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">contextFinalizeError1</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">QNN_SUCCESS</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">166</span><span class="w">     </span><span class="c1">// handle error</span>
+<span class="linenos">167</span><span class="w"> </span><span class="p">}</span>
+<span class="linenos">168</span>
+<span class="linenos">169</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">Qnn_ErrorHandle_t</span><span class="w"> </span><span class="n">contextFinalizeError2</span><span class="w"> </span><span class="o">=</span>
+<span class="linenos">170</span><span class="w">     </span><span class="n">qnnInterface</span><span class="p">.</span><span class="n">contextFinalize</span><span class="p">(</span><span class="n">context2</span><span class="p">,</span><span class="w"> </span><span class="n">profileBackendHandle</span><span class="p">);</span>
+<span class="linenos">171</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">contextFinalizeError2</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">QNN_SUCCESS</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">172</span><span class="w">     </span><span class="c1">// handle error</span>
+<span class="linenos">173</span><span class="w"> </span><span class="p">}</span>
+<span class="linenos">174</span>
+<span class="linenos">175</span><span class="w"> </span><span class="c1">// Obtain and save graph handles for each graph present in the context1</span>
+<span class="linenos">176</span><span class="w"> </span><span class="c1">// See ${QNN_SDK_ROOT}/examples/QNN/SampleApp code for details</span>
+<span class="linenos">177</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">graphIdx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">graphIdx</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">m_graphsCount</span><span class="p">;</span><span class="w"> </span><span class="n">graphIdx</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">178</span><span class="w">     </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">QNN_SUCCESS</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">m_qnnFunctionPointers</span><span class="p">.</span><span class="n">qnnInterface</span><span class="p">.</span><span class="n">graphRetrieve</span><span class="p">(</span>
+<span class="linenos">179</span><span class="w">             </span><span class="n">context1</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">graphsInfo</span><span class="p">)[</span><span class="n">graphIdx</span><span class="p">].</span><span class="n">graphName</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="p">((</span><span class="o">*</span><span class="n">graphsInfo</span><span class="p">)[</span><span class="n">graphIdx</span><span class="p">].</span><span class="n">graph</span><span class="p">)))</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">180</span><span class="w">         </span><span class="c1">// handle error</span>
+<span class="linenos">181</span><span class="w">     </span><span class="p">}</span>
+<span class="linenos">182</span><span class="w"> </span><span class="p">}</span>
+<span class="linenos">183</span>
+<span class="linenos">184</span><span class="w"> </span><span class="c1">// Execute graphs ...</span>
+<span class="linenos">185</span><span class="w"> </span><span class="c1">// See ${QNN_SDK_ROOT}/examples/QNN/SampleApp code</span>
+<span class="linenos">186</span>
+<span class="linenos">187</span><span class="w"> </span><span class="c1">// Free contexts</span>
+<span class="linenos">188</span><span class="w"> </span><span class="c1">// See ${QNN_SDK_ROOT}/examples/QNN/SampleApp code for details</span>
+<span class="linenos">189</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">QNN_CONTEXT_NO_ERROR</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">qnnInterface</span><span class="p">.</span><span class="n">contextFree</span><span class="p">(</span><span class="n">context1</span><span class="p">,</span><span class="w"> </span><span class="n">profileBackendHandle</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">190</span><span class="w">     </span><span class="c1">// handle error</span>
+<span class="linenos">191</span><span class="w"> </span><span class="p">}</span>
+<span class="linenos">192</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">QNN_CONTEXT_NO_ERROR</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">qnnInterface</span><span class="p">.</span><span class="n">contextFree</span><span class="p">(</span><span class="n">context2</span><span class="p">,</span><span class="w"> </span><span class="n">profileBackendHandle</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">193</span><span class="w">     </span><span class="c1">// handle error</span>
+<span class="linenos">194</span><span class="w"> </span><span class="p">}</span>
+<span class="linenos">195</span>
+<span class="linenos">196</span><span class="w"> </span><span class="c1">// Free DSP buffers</span>
+<span class="linenos">197</span><span class="w"> </span><span class="n">free</span><span class="p">(</span><span class="n">spillFillQurtVAPtr</span><span class="p">);</span>
+<span class="linenos">198</span><span class="w"> </span><span class="n">free</span><span class="p">(</span><span class="n">vtcmBackupQurtVAPtr</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="../tutorial1.html" class="btn btn-neutral float-right" title="Tutorial: Executing a shallow model using custom op package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../saver/saver_tutorial.html" class="btn btn-neutral float-left" title="Saver Tutorial: Save execution sequence with Saver and replay on a backend" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020-2025, Qualcomm Technologies, Inc..
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

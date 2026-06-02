@@ -1,0 +1,620 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Tutorial: Turning on various optimization on HTP and HTP MCP Backends &mdash; Qualcomm® AI Runtime (QAIRT) SDKs</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/custom_css.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Qualcomm® AI Runtime (QAIRT) SDKs
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v2.46.0.260424121129
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">QAIRT</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../general/overview.html">Overview</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">SDKs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">QNN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../SNPE/index.html">SNPE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Genie/index.html">Genie</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Delegates</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../Delegates/TfLite/index.html">TFLite Delegate</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Qualcomm® AI Runtime (QAIRT) SDKs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Tutorial: Turning on various optimization on HTP and HTP MCP Backends</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="tutorial-turning-on-various-optimization-on-htp-and-htp-mcp-backends">
+<h1>Tutorial: Turning on various optimization on HTP and HTP MCP Backends<a class="headerlink" href="#tutorial-turning-on-various-optimization-on-htp-and-htp-mcp-backends" title="Permalink to this heading">¶</a></h1>
+<p>The following tutorial will explain how to turn on and prepare optimized graphs on HTP and HTP MCP Backends.</p>
+<p>The sections of the tutorial are as follows:</p>
+<ol class="arabic simple">
+<li><p><a class="reference internal" href="#optimization-levels">Optimization levels</a></p></li>
+<li><p><a class="reference internal" href="#p-points">P points</a></p></li>
+<li><p><a class="reference internal" href="#htp-performance-estimates">HTP Performance Estimates</a></p></li>
+</ol>
+<div class="section" id="optimization-levels">
+<h2>Optimization levels<a class="headerlink" href="#optimization-levels" title="Permalink to this heading">¶</a></h2>
+<p>For automotive, HTP supports different graph optimization levels. Level 3 optimization (O=3) <em>may</em> yield the most optimal graph. However, experimentation is required as the highest level of optimization
+is not always guaranteed to give the best performance.</p>
+<p>When creating serialized context binary with qnn-context-binary-generator, backend extension
+parameters can be specified using in the “–config_file” argument.  Its full documentation can
+be found in <a class="reference internal" href="htp_backend.html#qnn-htp-backend-extensions"><span class="std std-ref">QNN HTP Backend Extensions</span></a> section.</p>
+<p>As shown in the sample HTP backend JSON config below, to enable a graph for O=3, specify the
+optimization “O” value as 3:</p>
+<p><strong>htp_context.json</strong></p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;graphs&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">          </span><span class="p">{</span>
+<span class="w">              </span><span class="nt">&quot;vtcm_mb&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span>
+<span class="w">              </span><span class="nt">&quot;O&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span>
+<span class="w">              </span><span class="nt">&quot;graph_names&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                  </span><span class="s2">&quot;qnn_model&quot;</span>
+<span class="w">                  </span><span class="p">]</span>
+<span class="w">          </span><span class="p">},</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;devices&quot;</span><span class="p">:[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;dsp_arch&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;v68&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;soc_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">62</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;pd_session&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;unsigned&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;device_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>When preparing a graph using O=3, specifying the correct device “soc_id” matching the target to use could turn on additional
+algorithm(s) which may further improve inference performance. Please consult the above <a class="reference internal" href="htp_auto_single_nsp.html#htp-target-table"><span class="std std-ref">QNN HTP TARGET CONFIG TABLE</span></a> to select the appropriate DSP architecture (“dsp_arch”) value and SoC ID (“soc_id”) value.</p>
+<p>In terms of C API, the value 3 for “O” is from QNN_HTP_GRAPH_OPTIMIZATION_TYPE_FINALIZE_OPTIMIZATION_FLAG field of <span class="xref std std-ref">exhale_struct_structQnnHtpGraph__OptimizationOption__t</span>. More details can be found in <a class="reference internal" href="htp_backend.html#qnn-htp-backend-api"><span class="std std-ref">QNN HTP Backend API</span></a> section.</p>
+<p>To prepare a context binary with HTP optimization related parameters, use qnn-context-binary-generator with –config_file argument and give path to htp_context.json.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/bin/x86_64-linux-clang/qnn-context-binary-generator
+<span class="w">    </span>--backend<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/lib/x86_64-linux-clang/libQnnHtp.so
+<span class="w">    </span>--model<span class="w"> </span>model.so
+<span class="w">    </span>--binary_file<span class="w"> </span>model.serialized
+<span class="w">    </span>--profiling_level<span class="w"> </span>basic
+<span class="w">    </span>--config_file<span class="w"> </span>htp_context.json
+</pre></div>
+</div>
+<p>Similarly for HTP MCP backend, to enable a graph for O=3, specify the optimization “O” value as 3:</p>
+<p><strong>graph_prepare (2 files)</strong></p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>graph_prepare.json:</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;backend_extensions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;shared_library_path&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;libQnnHtpMcpNetRunExtensions.so&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;config_file_path&quot;</span><span class="w">   </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;graph_prepare.conf&quot;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>graph_prepare.conf (linked to from graph_prepare.json above):</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;graphs&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;graph_names&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                </span><span class="s2">&quot;qnn_model&quot;</span>
+<span class="w">            </span><span class="p">],</span>
+<span class="w">            </span><span class="nt">&quot;O&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+</div></blockquote>
+<p>Next, to generate the serialized context binary, specify the <strong>graph_prepare.json</strong> file using the –config_file flag as follows:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/examples/Models/InceptionV3
+$<span class="w"> </span>cp<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/lib/hexagon-v68/unsigned/libQnnHtpMcpV68.elf<span class="w"> </span>network.elf
+$<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/bin/x86_64-linux-clang/qnn-context-binary-generator<span class="w"> </span><span class="se">\</span>
+<span class="w">              </span>--backend<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/lib/x86_64-linux-clang/libQnnHtpMcp.so<span class="w"> </span><span class="se">\</span>
+<span class="w">              </span>--model<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/examples/Models/InceptionV3/model_libs/x86_64-linux-clang/libInception_v3_quantized.so<span class="w"> </span><span class="se">\</span>
+<span class="w">              </span>--config_file<span class="w"> </span>graph_prepare.json<span class="w"> </span><span class="se">\</span>
+<span class="w">              </span>--binary_file<span class="w"> </span>Inception_v3_quantized_qpc.serialized
+</pre></div>
+</div>
+</div>
+<div class="section" id="p-points">
+<h2>P points<a class="headerlink" href="#p-points" title="Permalink to this heading">¶</a></h2>
+<div class="section" id="overview">
+<h3>Overview<a class="headerlink" href="#overview" title="Permalink to this heading">¶</a></h3>
+<p>P points are an advanced O=3 optimization feature that may yield better
+performance for your model. They are available exclusively when <code class="docutils literal notranslate"><span class="pre">O=3</span></code>
+(optimization level 3) is enabled and give you a way to experiment with
+non-default compiler configurations when preparing a context binary.</p>
+<p>Each P value selects a different pre-defined point in the compiler’s
+internal configuration space, adjusting parameters that affect how the
+HTP executes operations — for example, tradeoffs between latency and
+DRAM bandwidth.</p>
+<p>The best P point for a given model would depend on your latency requirements
+and DDR bandwidth and can be chosen by experimenting across all
+possible P points. There is no universal “best” P value, as the right choice
+depends on the characteristics of your network.</p>
+<p>Once a graph compiles successfully with a P point, the execution output
+is bit-accurate with a graph compiled without P points.</p>
+</div>
+<div class="section" id="valid-values">
+<h3>Valid values<a class="headerlink" href="#valid-values" title="Permalink to this heading">¶</a></h3>
+<p>Valid values for P point are: 0 (default value that does not change any
+parameters), 1, 2, 3, 4, 5, 6, 8, 13, 15, 16, 17, 19, 20, 21, 22, 23.</p>
+<p>In other words, the valid values are 0 to 23 with the following values
+<strong>excluded</strong>: 7, 9, 10, 11, 12, 14, 18.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The set of valid P point values and the behavior of each value may
+change from release to release. Always re-validate your chosen P value
+when upgrading to a new SDK version.</p>
+</div>
+</div>
+<div class="section" id="workflow-where-p-points-fit-in-the-lifecycle">
+<h3>Workflow: where P points fit in the lifecycle<a class="headerlink" href="#workflow-where-p-points-fit-in-the-lifecycle" title="Permalink to this heading">¶</a></h3>
+<p>P points affect the <strong>offline graph preparation</strong> step only. The
+workflow is:</p>
+<ol class="arabic simple">
+<li><p><strong>Convert your model</strong> to a QNN model (<code class="docutils literal notranslate"><span class="pre">.so</span></code> or <code class="docutils literal notranslate"><span class="pre">.bin</span></code>) using
+<code class="docutils literal notranslate"><span class="pre">qnn-tensorflow-converter</span></code>, <code class="docutils literal notranslate"><span class="pre">qnn-onnx-converter</span></code>, or equivalent.
+<em>(P points have no effect at this stage.)</em></p></li>
+<li><p><strong>Prepare the context binary</strong> using <code class="docutils literal notranslate"><span class="pre">qnn-context-binary-generator</span></code>
+on x86, with <code class="docutils literal notranslate"><span class="pre">O=3</span></code> and your chosen <code class="docutils literal notranslate"><span class="pre">P</span></code> value in the HTP backend
+extensions config. This is where P points take effect — they change
+how the compiler generates the serialized context binary.</p></li>
+<li><p><strong>Test the prepared graph</strong> on your target hardware before deploying
+to production. Because P point behavior can vary by network, always
+validate functional correctness and performance after changing P.</p></li>
+<li><p><strong>Deploy</strong> the context binary to the target device. At runtime, the
+P value has already been baked into the binary — no runtime flag is
+needed.</p></li>
+</ol>
+</div>
+<div class="section" id="caveats-and-warnings">
+<h3>Caveats and warnings<a class="headerlink" href="#caveats-and-warnings" title="Permalink to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Always test before deploying.</strong> When a model is prepared using a
+P point, the prepared graph must be validated for both performance and
+functional correctness before production deployment.</p>
+<ul class="simple">
+<li><p>The supported set of P point values may change from release to
+release.</p></li>
+<li><p>The behavior of a given P point value may change from release to
+release.</p></li>
+<li><p>A given network may fail to prepare or execute correctly for a
+given P point value.</p></li>
+</ul>
+</li>
+<li><p><strong>P points are independent.</strong> Unlike O levels, where higher values
+generally yield better performance at the cost of longer compile time,
+there is no ordering or relationship between P point values. P=2 is
+not “better” or “worse” than P=1 in any general sense.</p></li>
+<li><p><strong>P only takes effect when O=3.</strong> Setting <code class="docutils literal notranslate"><span class="pre">P</span></code> without <code class="docutils literal notranslate"><span class="pre">O=3</span></code> has
+no effect.</p></li>
+<li><p><strong>Specifying more than one P point results in undefined behavior.</strong>
+The outcome is not guaranteed and may change across releases.</p></li>
+<li><p><strong>Performance varies by network.</strong> A P value that improves one model
+may have no effect or degrade performance on another. See
+<a class="reference internal" href="#htp-p-points-optimization-figure"><span class="std std-ref">Sample performance difference between two networks</span></a>
+as reference.</p></li>
+</ol>
+<p class="centered" id="htp-p-points-optimization-figure">
+<strong><strong>Sample performance difference between two networks</strong></strong></p><div class="figure align-center">
+<img alt="Sample performance difference between two networks" src="../../_static/resources/htp_p_points_optimization.png" />
+</div>
+</div>
+<div class="section" id="setting-p-points-htp-backend">
+<h3>Setting P points (HTP backend)<a class="headerlink" href="#setting-p-points-htp-backend" title="Permalink to this heading">¶</a></h3>
+<p>P points are set via the <code class="docutils literal notranslate"><span class="pre">finalize_config</span></code> option in the HTP backend
+extensions config, which corresponds to
+<code class="docutils literal notranslate"><span class="pre">QNN_HTP_GRAPH_CONFIG_OPTION_FINALIZE_CONFIG</span></code> in
+<code class="docutils literal notranslate"><span class="pre">QnnHtpGraph_CustomConfig_t</span></code>.</p>
+<p>The following example enables <code class="docutils literal notranslate"><span class="pre">P=1</span></code> with <code class="docutils literal notranslate"><span class="pre">O=3</span></code> on the HTP backend:</p>
+<p><strong>htp_context.json</strong></p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;graphs&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;graph_names&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">            </span><span class="s2">&quot;&lt;network-name&gt;&quot;</span>
+<span class="w">        </span><span class="p">],</span>
+<span class="w">        </span><span class="nt">&quot;O&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;vtcm_mb&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;hvx_threads&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;finalize_config&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;P&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;devices&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;device_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;soc_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">62</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;dsp_arch&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;v68&quot;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>To prepare a context binary with HTP optimization related parameters, use qnn-context-binary-generator with –config_file argument and give path to htp_context.json.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/bin/x86_64-linux-clang/qnn-context-binary-generator<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--backend<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/lib/x86_64-linux-clang/libQnnHtp.so<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--model<span class="w"> </span>model.so<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--binary_file<span class="w"> </span>model.serialized<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--profiling_level<span class="w"> </span>basic<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--config_file<span class="w"> </span>htp_context.json
+</pre></div>
+</div>
+</div>
+<div class="section" id="setting-p-points-htp-mcp-backend">
+<h3>Setting P points (HTP MCP backend)<a class="headerlink" href="#setting-p-points-htp-mcp-backend" title="Permalink to this heading">¶</a></h3>
+<p>For the HTP MCP (multicore) backend, <code class="docutils literal notranslate"><span class="pre">finalize_config</span></code> is passed
+through the <code class="docutils literal notranslate"><span class="pre">graph_prepare.conf</span></code> file and corresponds to
+<code class="docutils literal notranslate"><span class="pre">QNN_HTP_MCP_GRAPH_CONFIG_OPTION_FINALIZE_CONFIG</span></code> in
+<code class="docutils literal notranslate"><span class="pre">QnnHtpMcpGraph_CustomConfig_t</span></code>.</p>
+<p><strong>graph_prepare.json</strong></p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>graph_prepare.json:</p></li>
+</ol>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;backend_extensions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;shared_library_path&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;libQnnHtpMcpNetRunExtensions.so&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;config_file_path&quot;</span><span class="w">   </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;graph_prepare.conf&quot;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>graph_prepare.conf:</p></li>
+</ol>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;graphs&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;graph_names&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                </span><span class="s2">&quot;qnn_model&quot;</span>
+<span class="w">            </span><span class="p">],</span>
+<span class="w">            </span><span class="nt">&quot;O&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;finalize_config&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;P&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Next, to generate the serialized context binary, specify the <strong>graph_prepare.json</strong> file using the –config_file flag as follows:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/examples/Models/InceptionV3
+$<span class="w"> </span>cp<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/lib/hexagon-v68/unsigned/libQnnHtpMcpV68.elf<span class="w"> </span>network.elf
+$<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/bin/x86_64-linux-clang/qnn-context-binary-generator<span class="w"> </span><span class="se">\</span>
+<span class="w">              </span>--backend<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/lib/x86_64-linux-clang/libQnnHtpMcp.so<span class="w"> </span><span class="se">\</span>
+<span class="w">              </span>--model<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/examples/Models/InceptionV3/model_libs/x86_64-linux-clang/libInception_v3_quantized.so<span class="w"> </span><span class="se">\</span>
+<span class="w">              </span>--config_file<span class="w"> </span>graph_prepare.json<span class="w"> </span><span class="se">\</span>
+<span class="w">              </span>--binary_file<span class="w"> </span>Inception_v3_quantized_qpc.serialized
+</pre></div>
+</div>
+</div>
+<div class="section" id="htp-performance-estimates">
+<h3>HTP Performance Estimates<a class="headerlink" href="#htp-performance-estimates" title="Permalink to this heading">¶</a></h3>
+<p>QNN can provide performance estimates for a graph using operator costs (i.e. execution cycle
+predictions) to simulate the target hardware. These estimates project the HTP performance
+and a confidence level for a graph. The information provided by the estimates is provided
+“as is” with no warranty of any kind. Every effort has been made to ensure the accuracy of
+the information provided by the estimates.</p>
+<p>However, there are no representations being made regarding the use of the estimates provided in terms of its correctness, accuracy vs. silicon,
+reliability, or otherwise. The estimates may vary and even show regressions on a per-graph
+basis across QNN releases. The information provided by the estimates is provided for
+informational purposes only and should not be relied upon for any other purpose.</p>
+<p>The following is a non-exhaustive list of assumptions and approximations made for the
+performance estimates:</p>
+<ol class="arabic">
+<li><p>Performance estimates may vary across SDK versions for a graph.</p></li>
+<li><p>Each execution cycle prediction of an op is perturbed by an amount that is reflective of
+the actual errors we see while training models used for calculating the estimates. The
+whole graph is then simulated using the lower and upper execution cycles estimate for
+each op to produce the overall lower and upper estimates respectively. The lower and
+upper estimates provided by these performance estimates are approximations of the
+simulation accuracy vs. target silicon; they are not accuracy error bounds.</p></li>
+<li><p>Performance estimates may assume kernel operator costs for operators which it currently
+does not model, which includes all operators derived from ‘custom ops’.</p></li>
+<li><p>Performance estimates assumes burst performance mode, the HTP has full bandwidth to the
+DDR and that no other cores are using the DDR during the execution of the graph being
+simulated.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>This is may not be true in reality, as the HTP has to share the DDR with other cores and other devices on the SoC (e.g. CPU, GPU, camera, etc.), which may or may not be active during the execution of the graph.</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ol>
+<p><strong>Generating performance estimates:</strong></p>
+<p>Generation of performance estimates requires the correct soc_id in the HTP backend extensions config.
+For e.g., the following json file has soc_id = 52 which is the soc_id for either the SA8650 or the SA8775 target:</p>
+<p><strong>htp_context.json</strong></p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;graphs&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;graph_names&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                </span><span class="s2">&quot;graph1_name&quot;</span>
+<span class="w">            </span><span class="p">],</span>
+<span class="w">            </span><span class="nt">&quot;vtcm_mb&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;hvx_threads&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;devices&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;device_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;soc_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">52</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;dsp_arch&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;v73&quot;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>When running the qnn-context-binary-generator on HTP backend, specify the profiling level parameter and the htp_context.json (containing the right soc_id).</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/bin/x86_64-linux-clang/qnn-context-binary-generator<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--backend<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/lib/x86_64-linux-clang/libQnnHtp.so<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--model<span class="w"> </span>model.so<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--binary_file<span class="w"> </span>model.serialized<span class="w"> </span><span class="se">\</span>
+<span class="w">     </span>--profiling_level<span class="w"> </span>basic<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--config_file<span class="w"> </span>htp_context.json
+</pre></div>
+</div>
+<p>Passing the HTP profiling reader (–reader libQnnHtpProfilingReader.so) to qnn-profile-viewer is important to
+get the correct layout of the performance estimates.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/bin/x86_64-linux-clang/qnn-profile-viewer<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--input_log<span class="w"> </span>output/qnn-profiling-data.log<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--reader<span class="w"> </span>libQnnHtpProfilingReader.so
+</pre></div>
+</div>
+<p>Similarly, use the following commands for HTP MCP backend:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/bin/x86_64-linux-clang/qnn-context-binary-generator<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--backend<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/lib/x86_64-linux-clang/libQnnHtpMcp.so<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--model<span class="w"> </span>model.so<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--binary_file<span class="w"> </span>model.serialized<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--profiling_level<span class="w"> </span>basic
+
+$<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/bin/x86_64-linux-clang/qnn-profile-viewer<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--input_log<span class="w"> </span>output/qnn-profiling-data.log<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--reader<span class="w"> </span>libQnnHtpMcpProfilingReader.so
+</pre></div>
+</div>
+<p><strong>Performance estimate output:</strong></p>
+<ul>
+<li><p>Simulated (Accelerator exec cycles): Simulated execution cycles.</p></li>
+<li><p>Simulated (Accelerator exec cycles (lower estimate)): Lower estimate of the simulated execution cycles.</p></li>
+<li><p>Simulated (Accelerator exec cycles (upper estimate)): Upper estimate of the simulated execution cycles.</p></li>
+<li><p>Bandwidth Stats per HTP in bytes:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Input Fill: Total reads from DDR for graph input related tensors (weights, bias, activations). This value counts all bytes of operators which do not have predecessors.</p></li>
+<li><p>Intermediate Fill : Total reads from DDR for compiler generated data transfer to satisfy VTCM size constraints. This value counts all bytes of compiler generated fill operators which have predecessors and successors and originate on the same HTP.</p></li>
+<li><p>Intermediate Spill : Total writes to DDR for compiler generated data transfer to satisfy VTCM size constraints. This value counts all bytes of compiler generated spill operators which have predecessors and successors and originate on the same HTP.</p></li>
+<li><p>Inter HTP Fill : Total reads from DDR for fills which were generated by a different HTP core. This value counts all bytes of compiler generated fill operators which do not have a predecessor, but have a successor.</p></li>
+<li><p>Inter HTP Spill : Total reads from DDR for spills which were generated by a different HTP core. This value counts all bytes of compiler generated spill operators which do not have a successor, but have a predecessor.</p></li>
+<li><p>Output Spill : Total writes to DDR for graph output related tensors. This value counts all bytes of operators which do not have successors.</p></li>
+</ol>
+</div></blockquote>
+</li>
+</ul>
+<p><strong>Sample profiler output Finalize Stats:</strong></p>
+<ol class="arabic simple">
+<li><p>With performance estimates:</p></li>
+</ol>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Finalize Stats:
+Accelerator (finalize) time : 193364  us
+Performance Estimates :
+    Mode : Burst
+    Simulated (Accelerator exec cycles) : 991608  cycles
+    Simulated (Accelerator exec cycles (lower estimate)) : 921188  cycles
+    Simulated (Accelerator exec cycles (upper estimate)) : 1094620  cycles
+    Bandwidth Stats :
+        HTP ID : 0
+            Input Fill : 24524800  bytes
+            Intermediate Fill : 0  bytes
+            Intermediate Spill : 0  bytes
+            Inter HTP Fill : 0  bytes
+            Inter HTP Spill : 0  bytes
+            Output Spill : 2048  bytes
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>Without performance estimates:</p></li>
+</ol>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Finalize Stats:
+Accelerator (finalize) time : 193364  us
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020-2025, Qualcomm Technologies, Inc..
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,26 @@
+@startuml
+concise    "Client A" as A
+concise    "Client B" as B
+
+@0
+A is running #ef7b6c
+B is {hidden}
+
+
+@10
+B is waiting
+
+@30
+A is pending
+B is running #adf7ff
+
+@60
+A is resume #ef7b6c
+B is {hidden}
+
+@80
+A is {hidden}
+
+' EVENTS
+B@10 -> A@30 : pre-empt
+@enduml

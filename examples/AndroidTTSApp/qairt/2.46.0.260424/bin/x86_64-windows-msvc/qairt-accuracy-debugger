@@ -1,0 +1,60 @@
+#!/usr/bin/env python3
+# =============================================================================
+#
+# Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
+# All rights reserved.
+# Confidential and Proprietary - Qualcomm Technologies, Inc.
+#
+# =============================================================================
+
+import sys
+
+import onnx  # noqa
+from qti.aisw.accuracy_debugger.argparser.constants import COMPONENT
+from qti.aisw.accuracy_debugger.argparser.debugger_parser import AccuracyDebuggerParser
+
+
+def main():
+    """This method parses system arguments for accuracy component and invokes component handler"""
+    sys_args = sys.argv[1:]
+    parser = AccuracyDebuggerParser()
+    parsed_args, unknown_args = parser.parse(sys_args)
+
+    if parsed_args.component == COMPONENT.FRAMEWORK_RUNNER.value:
+        from qti.aisw.accuracy_debugger.component_runner import execute_framework_runner
+
+        execute_framework_runner(unknown_args)
+    elif parsed_args.component == COMPONENT.INFERENCE_ENGINE.value:
+        from qti.aisw.accuracy_debugger.component_runner import execute_inference_engine
+
+        execute_inference_engine(unknown_args)
+    elif parsed_args.component == COMPONENT.VERIFICATION.value:
+        from qti.aisw.accuracy_debugger.component_runner import execute_verification
+
+        execute_verification(unknown_args)
+    elif parsed_args.component == COMPONENT.COMPARE_ENCODINGS.value:
+        from qti.aisw.accuracy_debugger.component_runner import execute_compare_encodings
+
+        execute_compare_encodings(unknown_args)
+    elif parsed_args.component == COMPONENT.TENSOR_VISUALIZER.value:
+        from qti.aisw.accuracy_debugger.component_runner import execute_tensor_visualizer
+
+        execute_tensor_visualizer(unknown_args)
+    elif parsed_args.component == COMPONENT.SNOOPING.value:
+        from qti.aisw.accuracy_debugger.component_runner import execute_model_snooper
+
+        execute_model_snooper(unknown_args)
+    elif parsed_args.component == COMPONENT.SNOOPING_ORT_QNN.value:
+        from qti.aisw.accuracy_debugger.snooping.ort_qnn_snooper import execute_ort_qnn_snooper
+
+        execute_ort_qnn_snooper(unknown_args)
+    elif parsed_args.component == COMPONENT.VALIDATE_ENCODING.value:
+        from qti.aisw.accuracy_debugger.component_runner import execute_validate_encoding
+
+        execute_validate_encoding(unknown_args)
+    else:
+        ValueError("No valid component selected")
+
+
+if __name__ == "__main__":
+    main()

@@ -34,6 +34,8 @@ llm_build_flow::llm_build_flow(const llama_model & model, const llm_graph_params
     // ggml_tensor * token_mask = ggml_mul(ctx0, token, mask);
     // ggml_set_name(token_mask, "flow_embd_token");                 //✅
 
+    
+
     // encoder
     // const int B  = token_mask->ne[2];
     // const int T  = token_mask->ne[1];

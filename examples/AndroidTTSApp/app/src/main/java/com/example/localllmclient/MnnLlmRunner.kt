@@ -44,6 +44,9 @@ class MnnLlmRunner private constructor(
         private const val TAG = "MnnLlmRunner"
 
         init {
+            runCatching { System.loadLibrary("MNN") }
+                .onSuccess { Log.i(TAG, "Loaded libMNN.so") }
+                .onFailure { Log.w(TAG, "Unable to preload libMNN.so: ${it.message}") }
             System.loadLibrary("ai-chat")
         }
 

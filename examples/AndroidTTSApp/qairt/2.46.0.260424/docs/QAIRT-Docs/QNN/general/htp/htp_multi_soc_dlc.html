@@ -1,0 +1,700 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Multi-SoC DLC with Reference Weight Sharing &mdash; Qualcomm® AI Runtime (QAIRT) SDKs</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/custom_css.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="HTA" href="../hta/hta_backend.html" />
+    <link rel="prev" title="QNN HTP Qmem Graph" href="htp_qmem_graph.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Qualcomm® AI Runtime (QAIRT) SDKs
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v2.46.0.260424121129
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">QAIRT</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../general/overview.html">Overview</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">SDKs</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">QNN</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../introduction.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../overview.html">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../setup.html">Setup</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../backend.html">Backend</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../dsp/dsp_backend.html">DSP</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="htp_backend.html">HTP</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="htp_qhpi.html">Qualcomm Hexagon Plugin Interface</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/common_default_package_ops_usage_examples.html">QNN HTP Op Package - Common Default Package Ops Usage Examples</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/common_optimization_utility_funcs_usage_examples.html">QNN HTP Optimization Utility Functions Usage Examples</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/htp_core_headers.html">HTP Core Headers for Op Packages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/implementing_ops.html">Implementing Ops</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/opPackage_API_version_guide.html">QNN HTP Op Package API Revision History</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/optimization_grammar.html">Optimization Grammar</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/relu_example.html">QNN HTP Op Package - Relu Op Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/relu_fp16_example.html">QNN HTP-FP16 Op Package - Relu Op Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/scheduling_and_allocation.html">Scheduling and Allocation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/scratch_buffer.html">Allocate Memory for Scratch Buffers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/tensors_and_memory_layout.html">Tensors and Memory Layout</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/writing_op_package.html">Writing QNN HTP Op Package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/migration/central_migration_guidance.html">General OpPackage Central Migration Guidance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/migration/writing_opPackage_migration_guide.html">Op Package Migration Guide</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/htp-network-design-recommendations/htp_guidelines_low_depth_activations.html">Avoid Low Depth Activations</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/htp-network-design-recommendations/htp_guidelines_low_depth_activation_more_examples.html">Avoid Low Depth Activations (more examples)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/htp-network-design-recommendations/htp_guidelines_space_to_depth.html">Use Space-to-depth Transformation where possible</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/htp-network-design-recommendations/htp_guidelines_tcm_requirements.html">Reducing TCM Requirements for Performance and Functionality</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/htp-network-design-recommendations/htp_guidelines_activation_functions.html">Choice of Activation Functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/htp-network-design-recommendations/htp_guidelines_channels.html">Number of Channels</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/htp-network-design-recommendations/htp_guidelines_a16_vs_fp16.html">Quantized 16 bit activations (A16) vs FP16 and Activation Fusion: Performance and power differences</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/htp-network-design-recommendations/htp_guidelines_int4_weights.html">INT4 encodings for weights</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/htp-network-design-recommendations/htp_guidelines_other_perf.html">Other Performance and Energy Guidelines</a></li>
+<li class="toctree-l4"><a class="reference internal" href="htp_yielding.html">HTP Yielding</a></li>
+<li class="toctree-l4"><a class="reference internal" href="htp_vtcm_sharing.html">HTP VTCM Sharing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="htp_vtcm_sharing.html#vtcm-windowing">VTCM Windowing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="htp_ssr.html">QNN HTP SSR</a></li>
+<li class="toctree-l4"><a class="reference internal" href="htp_qmem_graph.html">QNN HTP Qmem Graph</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Multi-SoC DLC with Reference Weight Sharing</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../hta/hta_backend.html">HTA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../lpai/lpai_backend.html">LPAI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../cpu/cpu_backend.html">CPU</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../gpu/gpu_backend.html">GPU</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../saver/saver_backend.html">Saver</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../op_packages.html">Op Packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tools.html">Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../converters.html">Converters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quantization.html">Quantization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../applyencodings.html">QAIRT Quantization Specification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials.html">Tutorials</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../benchmarking.html">Benchmarking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../operations.html">Operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html">API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../revision_history.html">Revision History</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../SNPE/index.html">SNPE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Genie/index.html">Genie</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Delegates</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../Delegates/TfLite/index.html">TFLite Delegate</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Qualcomm® AI Runtime (QAIRT) SDKs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">⌂</a> &raquo;</li>
+        
+          <li><a href="../backend.html">Backend</a> &raquo;</li>
+        
+          <li><a href="htp_backend.html">HTP</a> &raquo;</li>
+        
+      <li>Multi-SoC DLC with Reference Weight Sharing</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="multi-soc-dlc-with-reference-weight-sharing">
+<span id="htp-multi-soc-dlc"></span><h1>Multi-SoC DLC with Reference Weight Sharing<a class="headerlink" href="#multi-soc-dlc-with-reference-weight-sharing" title="Permalink to this heading">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#overview" id="id1">Overview</a></p>
+<ul>
+<li><p><a class="reference internal" href="#key-terms" id="id2">Key Terms</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#reference-weight-sharing" id="id3">Reference Weight Sharing</a></p>
+<ul>
+<li><p><a class="reference internal" href="#limitations" id="id4">Limitations</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#api-and-configuration-reference" id="id5">API and Configuration Reference</a></p>
+<ul>
+<li><p><a class="reference internal" href="#qnn-htp-context-config-option-reference-weight-sharing-enabled" id="id6">QNN_HTP_CONTEXT_CONFIG_OPTION_REFERENCE_WEIGHT_SHARING_ENABLED</a></p></li>
+<li><p><a class="reference internal" href="#qnncontext-addtodlc" id="id7">QnnContext_addToDlc()</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#generating-a-multi-soc-dlc" id="id8">Generating a Multi-SoC DLC</a></p>
+<ul>
+<li><p><a class="reference internal" href="#step-1-create-per-soc-backend-config-files" id="id9">Step 1: Create Per-SoC Backend Config Files</a></p></li>
+<li><p><a class="reference internal" href="#step-2-create-the-main-config-file" id="id10">Step 2: Create the Main Config File</a></p></li>
+<li><p><a class="reference internal" href="#step-3-run-qnn-context-binary-generator" id="id11">Step 3: Run qnn-context-binary-generator</a></p></li>
+<li><p><a class="reference internal" href="#step-4-strip-the-output-dlc-for-deployment-optional" id="id12">Step 4: Strip the Output DLC for Deployment (Optional)</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#loading-a-multi-soc-dlc-at-runtime" id="id13">Loading a Multi-SoC DLC at Runtime</a></p></li>
+</ul>
+</div>
+<div class="section" id="overview">
+<h2><a class="toc-backref" href="#id1">Overview</a><a class="headerlink" href="#overview" title="Permalink to this heading">¶</a></h2>
+<p>A context binary prepared through the standard offline workflow is tied to a single SoC.
+This limits deployment flexibility for clients who need to support multiple target platforms
+from a single artifact.</p>
+<p>This feature enables clients to prepare context binaries for multiple SoCs in a single
+offline pass on x86. All resulting context binaries are embedded into a single
+Deep Learning Container (DLC), producing one portable artifact that can be deployed across
+different target platforms. At runtime, the HTP backend automatically detects the DLC
+format and loads the context binary that is compatible with the target SoC.</p>
+<p>To minimize ROM size, reference weight sharing can optionally be enabled. When active,
+the weights from the first prepared context binary serve as a shared reference for all
+subsequent context binaries, eliminating weight duplication across SoCs.</p>
+<p>The DLC also supports incremental extension — new context binaries prepared with a newer
+SDK or for additional SoCs can be appended to an existing DLC at any time.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ol class="arabic simple">
+<li><p>Multi-SoC context binary generation and reference weight sharing are supported
+exclusively through the DLC workflow. The traditional context binary format
+supports only a single SoC per binary and doesn’t support these capabilities.</p></li>
+<li><p>The DLC serialization workflow is not limited to multi-SoC use cases — it can also
+be used to serialize a single SoC context binary into a DLC.</p></li>
+<li><p>When targeting multiple SoCs, if the source model is quantized (e.g., using AIMET),
+it should be quantized with a common denominator architecture — one that is forward
+compatible with all target architectures. This ensures the same quantized model can
+be used to prepare context binaries for the targeted SoCs.</p></li>
+</ol>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">libQnnSystem.so</span></code> (or <code class="docutils literal notranslate"><span class="pre">QnnSystem.dll</span></code> on Windows) is required only during offline
+context binary preparation. Both the client and the HTP backend dynamically load this
+library to read and write DLC records at preparation time. This library is not required
+on the target device for inference.</p>
+</div>
+<div class="section" id="key-terms">
+<h3><a class="toc-backref" href="#id2">Key Terms</a><a class="headerlink" href="#key-terms" title="Permalink to this heading">¶</a></h3>
+<ul>
+<li><p><strong>DLC (Deep Learning Container)</strong></p>
+<p>The Qualcomm representation of a neural network, packaging its topology, weights, and
+parameters into a single portable file. A DLC is produced by QAIRT converters and
+consumed by QAIRT SDKs. In the context of this feature, a DLC also serves as the
+container for one or more SoC-specific context binaries, along with their associated
+shared weight blobs and metadata, all stored as separate records within the file.</p>
+</li>
+<li><p><strong>Reference Weight Sharing</strong></p>
+<p>An optimization where the weight blob from the first prepared context binary is stored
+once in the DLC as a shared reference. All subsequent context binaries reference this
+shared blob rather than storing their own copy, reducing overall DLC ROM size.</p>
+</li>
+<li><p><strong>Multi-SoC DLC</strong></p>
+<p>A DLC containing context binaries for more than one target SoC. It can be extended at
+any time by appending context binaries prepared for additional SoCs or with newer SDKs.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="reference-weight-sharing">
+<h2><a class="toc-backref" href="#id3">Reference Weight Sharing</a><a class="headerlink" href="#reference-weight-sharing" title="Permalink to this heading">¶</a></h2>
+<p>Without reference weight sharing, each SoC’s context binary carries its own independent
+weight blob. A DLC targeting N SoCs therefore contains N weight blobs. With reference
+weight sharing, a single shared weight blob is stored in the DLC and referenced by all
+subsequent SoC context binaries, significantly reducing overall ROM size.</p>
+<p>If weight sharing is less than 100%, the unshared portion of weights contributes
+proportionally to the DLC’s ROM size regardless of DLC stripping.</p>
+<p>For optimal weight sharing, prepare the same set of graphs for all target SoCs.
+Preparing a different set of graphs across SoCs reduces the effectiveness of weight sharing.</p>
+<div class="section" id="limitations">
+<h3><a class="toc-backref" href="#id4">Limitations</a><a class="headerlink" href="#limitations" title="Permalink to this heading">¶</a></h3>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 35%" />
+<col style="width: 65%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Scenario</p></th>
+<th class="head"><p>Behavior</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>64-bit UDMA context binaries</p></td>
+<td><p>Fully supported. Far and near shared blobs from the first context serve as the
+shared reference for subsequent context binaries.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Mixed uDMA and non-uDMA context binaries</p></td>
+<td><p>Not optimal. Weight sharing effectiveness may be reduced, which can increase ROM
+size compared to the fully shared case.</p></td>
+</tr>
+<tr class="row-even"><td><p>DLBC (Deep Learning Bandwidth Compression)</p></td>
+<td><p>Not supported. When DLBC is enabled for a context, reference weight sharing is
+not applied for that context.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Multicore binaries</p></td>
+<td><p>Not supported across multicore binaries, or between single-core and multicore
+binaries.</p></td>
+</tr>
+<tr class="row-even"><td><p>LoRA weight sharing</p></td>
+<td><p>Not supported alongside reference weight sharing.</p></td>
+</tr>
+<tr class="row-odd"><td><p>One context binary per SoC</p></td>
+<td><p>A DLC can contain only one context binary per SoC. Calling <code class="docutils literal notranslate"><span class="pre">QnnContext_addToDlc()</span></code>
+for a SoC that already has a binary in the DLC will fail. To update the binary for a
+specific SoC — for example, when preparing with a newer SDK — the existing binary
+for that SoC must first be stripped using <code class="docutils literal notranslate"><span class="pre">qairt-dlc-deploy</span></code>, after which the
+model can be re-prepared and the new binary appended.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="api-and-configuration-reference">
+<h2><a class="toc-backref" href="#id5">API and Configuration Reference</a><a class="headerlink" href="#api-and-configuration-reference" title="Permalink to this heading">¶</a></h2>
+<div class="section" id="qnn-htp-context-config-option-reference-weight-sharing-enabled">
+<h3><a class="toc-backref" href="#id6">QNN_HTP_CONTEXT_CONFIG_OPTION_REFERENCE_WEIGHT_SHARING_ENABLED</a><a class="headerlink" href="#qnn-htp-context-config-option-reference-weight-sharing-enabled" title="Permalink to this heading">¶</a></h3>
+<p>There is a new HTP context configuration option that enables reference weight sharing across
+context binaries embedded in a DLC. This option is disabled by default and is only
+applicable to the DLC workflow.</p>
+<p>The corresponding field in <code class="docutils literal notranslate"><span class="pre">QnnHtpContext_CustomConfig_t</span></code> is <code class="docutils literal notranslate"><span class="pre">referenceWeightSharingEnabled</span></code>.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">QnnHtpContext_CustomConfig_t</span><span class="w"> </span><span class="n">customConfig</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">QNN_HTP_CONTEXT_CUSTOM_CONFIG_INIT</span><span class="p">;</span>
+<span class="n">customConfig</span><span class="p">.</span><span class="n">option</span><span class="w">                       </span><span class="o">=</span><span class="w"> </span><span class="n">QNN_HTP_CONTEXT_CONFIG_OPTION_REFERENCE_WEIGHT_SHARING_ENABLED</span><span class="p">;</span>
+<span class="n">customConfig</span><span class="p">.</span><span class="n">referenceWeightSharingEnabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+
+<span class="n">QnnContext_Config_t</span><span class="w"> </span><span class="n">config</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">QNN_CONTEXT_CONFIG_INIT</span><span class="p">;</span>
+<span class="n">config</span><span class="p">.</span><span class="n">option</span><span class="w">       </span><span class="o">=</span><span class="w"> </span><span class="n">QNN_CONTEXT_CONFIG_OPTION_CUSTOM</span><span class="p">;</span>
+<span class="n">config</span><span class="p">.</span><span class="n">customConfig</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">customConfig</span><span class="p">;</span>
+
+<span class="k">const</span><span class="w"> </span><span class="n">QnnContext_Config_t</span><span class="w"> </span><span class="o">*</span><span class="n">configs</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="o">&amp;</span><span class="n">config</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">};</span>
+</pre></div>
+</div>
+<p>When this option is enabled:</p>
+<ul class="simple">
+<li><p>If the DLC doesn’t yet contain a shared weight blob, the backend generates one
+along with associated metadata and stores them as separate records in the DLC.</p></li>
+<li><p>If the DLC already contains a shared weight blob, the backend reads and reuses it
+to deduplicate weights for the new context binary being appended.</p></li>
+</ul>
+</div>
+<div class="section" id="qnncontext-addtodlc">
+<h3><a class="toc-backref" href="#id7">QnnContext_addToDlc()</a><a class="headerlink" href="#qnncontext-addtodlc" title="Permalink to this heading">¶</a></h3>
+<p>There is a new context-level API that serializes a finalized context binary into a DLC. This API
+must be called after all graphs in the context have been finalized. It is used internally
+by <code class="docutils literal notranslate"><span class="pre">qnn-context-binary-generator</span></code> as part of the DLC workflow, but can also be called
+directly for custom workflows.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">Qnn_ErrorHandle_t</span><span class="w"> </span><span class="nf">QnnContext_addToDlc</span><span class="p">(</span><span class="n">Qnn_ContextHandle_t</span><span class="w">   </span><span class="n">context</span><span class="p">,</span>
+<span class="w">                                      </span><span class="n">QnnSystemDlc_Handle_t</span><span class="w"> </span><span class="n">dlcHandle</span><span class="p">);</span>
+</pre></div>
+</div>
+<p><strong>Parameters</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">context</span></code> — Handle to a finalized context whose binary is to be saved.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dlcHandle</span></code> — Handle to an existing DLC, created via <code class="docutils literal notranslate"><span class="pre">QnnSystemDlc_createFromFile()</span></code>
+or <code class="docutils literal notranslate"><span class="pre">QnnSystemDlc_createFromBinary()</span></code>.</p></li>
+</ul>
+<p><strong>Return codes</strong></p>
+<p>The following are common return codes. Other error codes may be returned depending on
+internal state and backend implementation.</p>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 45%" />
+<col style="width: 55%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Error Code</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">QNN_SUCCESS</span></code></p></td>
+<td><p>Context binary successfully written to the DLC.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">QNN_CONTEXT_ERROR_UNSUPPORTED_FEATURE</span></code></p></td>
+<td><p>Feature is not supported by the backend.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">QNN_CONTEXT_ERROR_INVALID_HANDLE</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">context</span></code> is NULL, not registered, or otherwise invalid; or <code class="docutils literal notranslate"><span class="pre">dlcHandle</span></code> is NULL
+or not a valid DLC handle.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">QNN_COMMON_ERROR_OPERATION_NOT_PERMITTED</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">context</span></code> was created via <code class="docutils literal notranslate"><span class="pre">QnnContext_createFromBinary()</span></code> or a related
+deserialization API. Serializing a deserialized context is not permitted.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">QNN_CONTEXT_ERROR_GET_BINARY_FAILED</span></code></p></td>
+<td><p>Serialization of the context binary failed internally.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">QNN_COMMON_ERROR_GENERAL</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">QnnSystem</span></code> library could not be loaded or initialized. Ensure <code class="docutils literal notranslate"><span class="pre">libQnnSystem.so</span></code>
+(or <code class="docutils literal notranslate"><span class="pre">QnnSystem.dll</span></code> on Windows) is accessible at preparation time.</p></td>
+</tr>
+</tbody>
+</table>
+<p>After calling <code class="docutils literal notranslate"><span class="pre">QnnContext_addToDlc()</span></code>, the client serializes the DLC to the output
+location using <code class="docutils literal notranslate"><span class="pre">QnnSystemDlc_save()</span></code> and releases the handle with <code class="docutils literal notranslate"><span class="pre">QnnSystemDlc_free()</span></code>.</p>
+</div>
+</div>
+<div class="section" id="generating-a-multi-soc-dlc">
+<h2><a class="toc-backref" href="#id8">Generating a Multi-SoC DLC</a><a class="headerlink" href="#generating-a-multi-soc-dlc" title="Permalink to this heading">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">qnn-context-binary-generator</span></code> tool supports multi-SoC DLC generation in a single
+invocation. The tool iterates over each per-SoC config, prepares the corresponding context
+binary, and appends it to the output DLC. The output DLC retains the original source model
+and accumulates all prepared context binaries.</p>
+<div class="section" id="step-1-create-per-soc-backend-config-files">
+<h3><a class="toc-backref" href="#id9">Step 1: Create Per-SoC Backend Config Files</a><a class="headerlink" href="#step-1-create-per-soc-backend-config-files" title="Permalink to this heading">¶</a></h3>
+<p>Create one backend extension config file per target SoC. Set
+<code class="docutils literal notranslate"><span class="pre">reference_weight_sharing_enabled</span></code> to <code class="docutils literal notranslate"><span class="pre">true</span></code> in the <code class="docutils literal notranslate"><span class="pre">context</span></code> section of each file.</p>
+<p><strong>soc1_config.json</strong></p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>{
+    &quot;graphs&quot;: [
+        {
+            &quot;graph_names&quot;: [&quot;qnn_model&quot;],
+            ...
+        }
+    ],
+    &quot;devices&quot;: [
+        {
+            ...
+            &quot;dsp_arch&quot;: &quot;v79&quot;,
+            &quot;soc_id&quot;: 69
+        }
+    ],
+    &quot;context&quot;: {
+        &quot;reference_weight_sharing_enabled&quot;: true
+    }
+}
+</pre></div>
+</div>
+<p><strong>soc2_config.json</strong></p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>{
+    &quot;graphs&quot;: [
+        {
+            &quot;graph_names&quot;: [&quot;qnn_model&quot;],
+            ...
+        }
+    ],
+    &quot;devices&quot;: [
+        {
+            ...
+            &quot;dsp_arch&quot;: &quot;v81&quot;,
+            &quot;soc_id&quot;: 87
+        }
+    ],
+    &quot;context&quot;: {
+        &quot;reference_weight_sharing_enabled&quot;: true
+    }
+}
+</pre></div>
+</div>
+</div>
+<div class="section" id="step-2-create-the-main-config-file">
+<h3><a class="toc-backref" href="#id10">Step 2: Create the Main Config File</a><a class="headerlink" href="#step-2-create-the-main-config-file" title="Permalink to this heading">¶</a></h3>
+<p>Create a top-level config file that points to each per-SoC config via the
+<code class="docutils literal notranslate"><span class="pre">per_soc_config_file_path</span></code> array under <code class="docutils literal notranslate"><span class="pre">backend_extensions</span></code>. The tool processes the
+SoC configs in the order they are listed. The first entry becomes the reference context
+binary for weight sharing.</p>
+<p><strong>multi_soc_config.json</strong></p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;backend_extensions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;shared_library_path&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;lib/x86_64-linux-clang/libQnnHtpNetRunExtensions.so&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;per_soc_config_file_path&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">            </span><span class="s2">&quot;soc1_config.json&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;soc2_config.json&quot;</span>
+<span class="w">        </span><span class="p">]</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">per_soc_config_file_path</span></code> and the <code class="docutils literal notranslate"><span class="pre">--htp_socs</span></code> command-line flag are mutually
+exclusive. Use <code class="docutils literal notranslate"><span class="pre">per_soc_config_file_path</span></code> when per-SoC configuration is required,
+such as enabling reference weight sharing.</p>
+</div>
+<p>Alternatively, reference weight sharing can be enabled for all contexts via the
+<code class="docutils literal notranslate"><span class="pre">--reference_weight_sharing_enabled_override</span></code> flag, which takes precedence over the
+per-SoC config files:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>--reference_weight_sharing_enabled_override<span class="w"> </span><span class="nb">true</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="step-3-run-qnn-context-binary-generator">
+<h3><a class="toc-backref" href="#id11">Step 3: Run qnn-context-binary-generator</a><a class="headerlink" href="#step-3-run-qnn-context-binary-generator" title="Permalink to this heading">¶</a></h3>
+<p>Provide the input DLC (converter output), the main config file, and the output DLC path.
+The tool prepares a context binary for each SoC listed in the config and appends it to
+the output DLC.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/bin/x86_64-linux-clang/qnn-context-binary-generator<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--backend<span class="w">    </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/lib/x86_64-linux-clang/libQnnHtp.so<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--model<span class="w">      </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/lib/x86_64-linux-clang/libQnnModelDlc.so<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--dlc_path<span class="w">   </span>model.dlc<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--output_dlc<span class="w"> </span>model_multi_soc.dlc<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--output_dir<span class="w"> </span>output/<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--config_file<span class="w"> </span>multi_soc_config.json<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--log_level<span class="w">  </span>warn
+</pre></div>
+</div>
+<p>The resulting <code class="docutils literal notranslate"><span class="pre">model_multi_soc.dlc</span></code> contains:</p>
+<ul class="simple">
+<li><p>The QNN source model (QNN graph and weights from the converter)</p></li>
+<li><p>A context binary for each target SoC</p></li>
+<li><p>Weights shared across context binaries (when reference weight sharing is enabled)</p></li>
+</ul>
+<p>The <code class="docutils literal notranslate"><span class="pre">qairt-dlc-info</span></code> tool can be used to inspect the contents of the generated DLC,
+including all embedded context binaries and their associated metadata. This is useful
+for verifying the output before proceeding to deployment.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>qairt-dlc-info<span class="w"> </span>-i<span class="w"> </span>model_multi_soc.dlc
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ol class="arabic simple">
+<li><p>See the <code class="docutils literal notranslate"><span class="pre">qairt-dlc-info</span></code> tool documentation for the full list of available
+options and output details.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">qnn-context-binary-utility</span></code> tool doesn’t support DLC inspection. Use
+<code class="docutils literal notranslate"><span class="pre">qairt-dlc-info</span></code> to inspect the contents of a DLC.</p></li>
+</ol>
+</div>
+</div>
+<div class="section" id="step-4-strip-the-output-dlc-for-deployment-optional">
+<h3><a class="toc-backref" href="#id12">Step 4: Strip the Output DLC for Deployment (Optional)</a><a class="headerlink" href="#step-4-strip-the-output-dlc-for-deployment-optional" title="Permalink to this heading">¶</a></h3>
+<p>The output DLC contains the QNN graph and raw weights, as well
+as context binaries for all prepared SoCs. Stripping is optional but recommended before
+deployment to reduce ROM size. The <code class="docutils literal notranslate"><span class="pre">qairt-dlc-deploy</span></code> tool can be used to selectively
+remove artifacts that are not needed on the target device, such as the QNN graph and
+raw weights, and context binaries intended for other SoCs.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>qairt-dlc-deploy<span class="w"> </span>--input<span class="w"> </span>model_multi_soc.dlc<span class="w"> </span>--output<span class="w"> </span>model_deploy.dlc<span class="w"> </span>&lt;strip_options&gt;
+</pre></div>
+</div>
+<p>Alternatively, the <code class="docutils literal notranslate"><span class="pre">qnn-context-binary-generator</span></code> tool provides the
+<code class="docutils literal notranslate"><span class="pre">--strip_output_dlc</span></code> flag to remove the original raw weights from the DLC immediately
+after the context binary is generated, as part of the same invocation:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/bin/x86_64-linux-clang/qnn-context-binary-generator<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--backend<span class="w">    </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/lib/x86_64-linux-clang/libQnnHtp.so<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--model<span class="w">      </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/lib/x86_64-linux-clang/libQnnModelDlc.so<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--dlc_path<span class="w">   </span>model.dlc<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--output_dlc<span class="w"> </span>model_multi_soc.dlc<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--output_dir<span class="w"> </span>output/<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--config_file<span class="w"> </span>multi_soc_config.json<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--strip_output_dlc
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ol class="arabic simple">
+<li><p>A DLC that has had its raw weights stripped via <code class="docutils literal notranslate"><span class="pre">--strip_output_dlc</span></code> can no longer
+be used for further graph composition. It can only be used to load the prepared
+context binary.</p></li>
+<li><p>See the <code class="docutils literal notranslate"><span class="pre">qairt-dlc-deploy</span></code> tool documentation for the full list of additional
+stripping options.</p></li>
+</ol>
+</div>
+</div>
+</div>
+<div class="section" id="loading-a-multi-soc-dlc-at-runtime">
+<h2><a class="toc-backref" href="#id13">Loading a Multi-SoC DLC at Runtime</a><a class="headerlink" href="#loading-a-multi-soc-dlc-at-runtime" title="Permalink to this heading">¶</a></h2>
+<p>The HTP backend is DLC-aware at runtime. A multi-SoC DLC can be passed directly to any
+of the standard context loading APIs in the same way as a traditional context binary.
+The backend automatically detects the DLC format, selects the context binary
+compatible with the target SoC, and loads it. No changes to the loading call are required.</p>
+<p>The following APIs all support DLC input transparently:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">QnnContext_createFromBinary()</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">QnnContext_createFromBinaryWithSignal()</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">QnnContext_createFromBinaryWithCallback()</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">QnnContext_createFromBinaryListAsync()</span></code></p></li>
+</ul>
+<p><strong>Example</strong></p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">// Load the DLC buffer (same as loading a traditional context binary)</span>
+<span class="kt">void</span><span class="w">  </span><span class="o">*</span><span class="n">dlcBuffer</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="cm">/* pointer to DLC data */</span><span class="p">;</span>
+<span class="kt">size_t</span><span class="w"> </span><span class="n">dlcBufferSize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="cm">/* size of DLC data in bytes */</span><span class="p">;</span>
+
+<span class="n">Qnn_ContextHandle_t</span><span class="w"> </span><span class="n">context</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span>
+<span class="n">Qnn_ErrorHandle_t</span><span class="w"> </span><span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">QnnContext_createFromBinary</span><span class="p">(</span>
+<span class="w">    </span><span class="n">backendHandle</span><span class="p">,</span>
+<span class="w">    </span><span class="n">deviceHandle</span><span class="p">,</span>
+<span class="w">    </span><span class="n">contextConfigs</span><span class="p">,</span>
+<span class="w">    </span><span class="n">dlcBuffer</span><span class="p">,</span>
+<span class="w">    </span><span class="n">dlcBufferSize</span><span class="p">,</span>
+<span class="w">    </span><span class="o">&amp;</span><span class="n">context</span><span class="p">,</span>
+<span class="w">    </span><span class="n">profileHandle</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="../hta/hta_backend.html" class="btn btn-neutral float-right" title="HTA" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="htp_qmem_graph.html" class="btn btn-neutral float-left" title="QNN HTP Qmem Graph" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020-2025, Qualcomm Technologies, Inc..
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

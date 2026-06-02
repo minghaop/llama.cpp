@@ -1,0 +1,6 @@
+<map id="QHPI_OpInfo_v1" name="QHPI_OpInfo_v1">
+<area shape="rect" id="node1" title="Description of a plugin operator, including all kernel implementations and optimization callbacks." alt="" coords="61,228,187,255"/>
+<area shape="rect" id="node2" href="$structQHPI__Shape.html" title="A small fixed&#45;capacity vector of dimension sizes." alt="" coords="5,109,107,136"/>
+<area shape="rect" id="node3" href="$structQHPI__Kernel__v1.html" title="Description of a single kernel implementation for an operator." alt="" coords="131,109,256,136"/>
+<area shape="rect" id="node4" href="$structQHPI__Tensor__Signature__v1.html" title="Tensor signature describing the expected properties of one input or output parameter of a kernel." alt="" coords="96,5,291,32"/>
+</map>

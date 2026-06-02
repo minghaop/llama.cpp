@@ -1,0 +1,617 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Convert to QNN for Linux Host on LPAI Backend &mdash; Qualcomm® AI Runtime (QAIRT) SDKs</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/custom_css.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="CNN to QNN for Linux Host on Windows Target" href="../qnn_tutorial_linux_host_windows_target.html" />
+    <link rel="prev" title="Convert to QNN for Linux Host on HTP Backend" href="htp.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> Qualcomm® AI Runtime (QAIRT) SDKs
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v2.46.0.260424121129
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">QAIRT</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../general/overview.html">Overview</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">SDKs</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../../index.html">QNN</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../introduction.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../overview.html">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../setup.html">Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../backend.html">Backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../op_packages.html">Op Packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tools.html">Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../converters.html">Converters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../quantization.html">Quantization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../applyencodings.html">QAIRT Quantization Specification</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../tutorials.html">Tutorials</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../tutorial_convert_execute_cnn_model.html">Tutorial: Converting and executing a CNN or ONNX model with QNN</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="../qnn_tutorial_linux_host.html">CNN to QNN for Linux Host</a><ul class="current">
+<li class="toctree-l5 current"><a class="reference internal" href="../qnn_tutorial_linux_host_linux_target.html">Convert to QNN for Linux Host on Linux / Android / QNX Target</a><ul class="current">
+<li class="toctree-l6"><a class="reference internal" href="cpu.html">Convert to QNN for Linux Host on CPU Backend</a></li>
+<li class="toctree-l6"><a class="reference internal" href="gpu.html">Convert to QNN for Linux Host on GPU Backend</a></li>
+<li class="toctree-l6"><a class="reference internal" href="dsp.html">Convert to QNN for Linux Host on DSP Backend</a></li>
+<li class="toctree-l6"><a class="reference internal" href="htp.html">Convert to QNN for Linux Host on HTP Backend</a></li>
+<li class="toctree-l6 current"><a class="current reference internal" href="#">Convert to QNN for Linux Host on LPAI Backend</a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="../qnn_tutorial_linux_host_windows_target.html">CNN to QNN for Linux Host on Windows Target</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="../onnx_to_qnn_tutorial_linux_host.html">ONNX to QNN for Linux Host</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../qnn_tutorial_windows_host.html">CNN to QNN for Windows Host</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../tutorial_sample_app_linux.html">How to Use the Sample App</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../sample_app.html">Sample App Tutorial</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../saver/saver_tutorial.html">Saver Tutorial: Save execution sequence with Saver and replay on a backend</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../htp/htp_shared_buffer_tutorial.html">QNN HTP Shared Buffer Tutorial</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorial1.html">Tutorial: Executing a shallow model using custom op package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dsp/hexnn_migration.html">Migrating from Hexagon-nn</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../benchmarking.html">Benchmarking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../operations.html">Operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api.html">API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../revision_history.html">Revision History</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../SNPE/index.html">SNPE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../Genie/index.html">Genie</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Delegates</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../Delegates/TfLite/index.html">TFLite Delegate</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Qualcomm® AI Runtime (QAIRT) SDKs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">⌂</a> &raquo;</li>
+        
+          <li><a href="../../tutorials.html">Tutorials</a> &raquo;</li>
+        
+          <li><a href="../tutorial_convert_execute_cnn_model.html">Tutorial: Converting and executing a CNN or ONNX model with QNN</a> &raquo;</li>
+        
+          <li><a href="../qnn_tutorial_linux_host.html">CNN to QNN for Linux Host</a> &raquo;</li>
+        
+          <li><a href="../qnn_tutorial_linux_host_linux_target.html">Convert to QNN for Linux Host on Linux / Android / QNX Target</a> &raquo;</li>
+        
+      <li>Convert to QNN for Linux Host on LPAI Backend</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="convert-to-qnn-for-linux-host-on-lpai-backend">
+<h1>Convert to QNN for Linux Host on LPAI Backend<a class="headerlink" href="#convert-to-qnn-for-linux-host-on-lpai-backend" title="Permalink to this heading">¶</a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is <strong>Part 3</strong> of the Convert to QNN tutorial for Linux host machines. If you have not completed Part 2, please do so <a class="reference internal" href="../tutorial_convert_execute_cnn_model.html"><span class="doc">here</span></a>.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>LPAI Backend for model offline preparation was introduced at the time of v4 (<strong>eNPU hardware version 4</strong>).
+This means you must build the model first, then transfer it to the target device.
+The offline prepared model was executed by LPAI SDK released separatelly, but starting v5 (<strong>eNPU hardware version 5</strong>)
+the execution of serialized model is supported by QNN SDK and additional LPAI SDK is not required.</p>
+</div>
+<p>The offline generated model for v4 must be executed via the <a class="reference external" href="https://qpm.qualcomm.com/#/main/tools/details/LPAI">LPAI SDK</a>. You will have to sign in to access the LPAI SDK, and it may be dependent on filling out specific paperwork for your account to access the SDK.</p>
+<div class="section" id="preparing-lpai-configuration-files-for-model-preparation">
+<h2>Preparing LPAI Configuration Files for Model Preparation<a class="headerlink" href="#preparing-lpai-configuration-files-for-model-preparation" title="Permalink to this heading">¶</a></h2>
+<p>EXAMPLE of <code class="docutils literal notranslate"><span class="pre">config.json</span></code> file:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="o">{</span>
+<span class="w">   </span><span class="s2">&quot;backend_extensions&quot;</span>:<span class="w"> </span><span class="o">{</span>
+<span class="w">      </span><span class="s2">&quot;shared_library_path&quot;</span>:<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span><span class="s2">/lib/x86_64-linux-clang/libQnnLpaiNetRunExtensions.so&quot;</span>,
+<span class="w">      </span><span class="s2">&quot;config_file_path&quot;</span>:<span class="w"> </span><span class="s2">&quot;./lpaiParams.conf&quot;</span>
+<span class="w">   </span><span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>EXAMPLE of <code class="docutils literal notranslate"><span class="pre">lpaiParams.conf</span></code> file that includes only preparation parameters:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="o">{</span>
+<span class="w">   </span><span class="s2">&quot;lpai_backend&quot;</span>:<span class="w"> </span><span class="o">{</span>
+<span class="w">      </span><span class="s2">&quot;target_env&quot;</span>:<span class="w"> </span><span class="s2">&quot;adsp&quot;</span>,
+<span class="w">      </span><span class="s2">&quot;enable_hw_ver&quot;</span>:<span class="w"> </span><span class="s2">&quot;v5&quot;</span>
+<span class="w">   </span><span class="o">}</span>,
+<span class="w">   </span><span class="s2">&quot;lpai_graph&quot;</span>:<span class="w"> </span><span class="o">{</span>
+<span class="w">      </span><span class="s2">&quot;prepare&quot;</span>:<span class="w"> </span><span class="o">{</span>
+<span class="w">         </span><span class="s2">&quot;enable_batchnorm_fold&quot;</span>:<span class="w"> </span>true,
+<span class="w">         </span><span class="s2">&quot;exclude_io&quot;</span>:<span class="w"> </span><span class="nb">false</span>
+<span class="w">      </span><span class="o">}</span>
+<span class="w">   </span><span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>To configure <code class="docutils literal notranslate"><span class="pre">lpaiParams.conf</span></code>, consider using the following optional settings:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>lpai_backend
+<span class="w">   </span><span class="s2">&quot;target_env&quot;</span><span class="w">              </span><span class="s2">&quot;arm/adsp/x86/tensilica, default adsp&quot;</span>
+<span class="w">   </span><span class="s2">&quot;enable_hw_ver&quot;</span><span class="w">           </span><span class="s2">&quot;v4,v5 default v5&quot;</span>
+lpai_graph
+<span class="w">   </span>prepare
+<span class="w">      </span><span class="s2">&quot;enable_batchnorm_fold&quot;</span><span class="w">   </span><span class="s2">&quot;true/false,     default false&quot;</span>
+<span class="w">      </span><span class="s2">&quot;exclude_io&quot;</span><span class="w">              </span><span class="s2">&quot;true/false,     default false&quot;</span>
+</pre></div>
+</div>
+<p>Using the above <code class="docutils literal notranslate"><span class="pre">config.json</span></code> and <code class="docutils literal notranslate"><span class="pre">lpaiParams.conf</span></code> you can use <code class="docutils literal notranslate"><span class="pre">qnn-context-binary-generator</span></code> to build the LPAI offline model.</p>
+<p>When files are mentioned, ensure that they have the relative or absolute path to that value.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/examples/QNN/converter/models
+<span class="nv">$LD_LIBRARY_PATH</span><span class="o">=</span><span class="nv">$LD_LIBRARY_PATH</span>:<span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/lib/x86_64-linux-clang<span class="w"> </span><span class="se">\</span>
+<span class="p">&amp;</span><span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/bin/x86_64-linux-clang/qnn-context-binary-generator<span class="w"> </span><span class="se">\</span>
+<span class="w">              </span>--backend<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/lib/x86_64-linux-clang/libQnnLpai.so<span class="w"> </span><span class="se">\</span>
+<span class="w">              </span>--model<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/examples/Models/InceptionV3/model_libs/x86_64-linux-clang/&lt;libQnnModel.so&gt;<span class="w"> </span><span class="se">\</span>
+<span class="w">              </span>--config_file<span class="w"> </span>&lt;config.json&gt;<span class="w"> </span><span class="se">\</span>
+<span class="w">              </span>--log_level<span class="w"> </span>verbose<span class="w"> </span><span class="se">\</span>
+<span class="w">              </span>--backend_binary<span class="w"> </span>&lt;output_graph.eai&gt;<span class="w"> </span><span class="se">\</span>
+<span class="w">              </span>--binary_file<span class="w"> </span>&lt;lpai_graph_serialized&gt;
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>Use generated <strong>output_graph.eai</strong> file in the format of eai model to be executed by LPAI SDK for <strong>v4</strong> version only.</p></li>
+<li><p>Use generated <strong>lpai_graph_serialized.bin</strong> file in QNN format to be executed directly by QNN SDK for <strong>v5 and higher</strong> versions.</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="running-lpai-emulation-backend-on-linux-x86">
+<h2>Running LPAI Emulation Backend on Linux x86<a class="headerlink" href="#running-lpai-emulation-backend-on-linux-x86" title="Permalink to this heading">¶</a></h2>
+<p>While LPAI Backend on x86_64 Linux CPU is designed for offline model generation as described above,
+it still can run in HW simulation mode where internally it executes prepare and execution steps together.</p>
+<p>EXAMPLE of <code class="docutils literal notranslate"><span class="pre">config.json</span></code> file for ARM:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="o">{</span>
+<span class="w">   </span><span class="s2">&quot;backend_extensions&quot;</span>:<span class="w"> </span><span class="o">{</span>
+<span class="w">      </span><span class="s2">&quot;shared_library_path&quot;</span>:<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span><span class="s2">/lib/x86_64-linux-clang/libQnnLpaiNetRunExtensions.so&quot;</span>,
+<span class="w">      </span><span class="s2">&quot;config_file_path&quot;</span>:<span class="w"> </span><span class="s2">&quot;./lpaiParams.conf&quot;</span>
+<span class="w">   </span><span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>EXAMPLE of <code class="docutils literal notranslate"><span class="pre">lpaiParams.conf</span></code> file that includes preparation and execution parameters:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="o">{</span>
+<span class="w">   </span><span class="s2">&quot;lpai_backend&quot;</span>:<span class="w"> </span><span class="o">{</span>
+<span class="w">      </span><span class="s2">&quot;target_env&quot;</span>:<span class="w"> </span><span class="s2">&quot;x86&quot;</span>,
+<span class="w">      </span><span class="s2">&quot;enable_hw_ver&quot;</span>:<span class="w"> </span><span class="s2">&quot;v5&quot;</span>
+<span class="w">   </span><span class="o">}</span>,
+<span class="w">   </span><span class="s2">&quot;lpai_graph&quot;</span>:<span class="w"> </span><span class="o">{</span>
+<span class="w">      </span><span class="s2">&quot;prepare&quot;</span>:<span class="w"> </span><span class="o">{</span>
+<span class="w">         </span><span class="s2">&quot;enable_batchnorm_fold&quot;</span>:<span class="w"> </span>false,
+<span class="w">         </span><span class="s2">&quot;exclude_io&quot;</span>:<span class="w"> </span><span class="nb">false</span>
+<span class="w">      </span><span class="o">}</span>,
+<span class="w">      </span><span class="s2">&quot;execute&quot;</span>:<span class="w"> </span><span class="o">{</span>
+<span class="w">         </span><span class="s2">&quot;fps&quot;</span>:<span class="w"> </span><span class="m">1</span>,
+<span class="w">         </span><span class="s2">&quot;ftrt_ratio&quot;</span>:<span class="w"> </span><span class="m">10</span>,
+<span class="w">         </span><span class="s2">&quot;client_type&quot;</span>:<span class="w"> </span><span class="s2">&quot;real_time&quot;</span>,
+<span class="w">         </span><span class="s2">&quot;affinity&quot;</span>:<span class="w"> </span><span class="s2">&quot;soft&quot;</span>,
+<span class="w">         </span><span class="s2">&quot;core_selection&quot;</span>:<span class="w"> </span><span class="m">0</span>
+<span class="w">      </span><span class="o">}</span>
+<span class="w">   </span><span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>To configure <code class="docutils literal notranslate"><span class="pre">lpaiParams.conf</span></code>, consider using the following optional settings:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>lpai_backend
+<span class="w">   </span><span class="s2">&quot;target_env&quot;</span><span class="w">              </span><span class="s2">&quot;arm/adsp/x86/tensilica, default adsp&quot;</span>
+<span class="w">   </span><span class="s2">&quot;enable_hw_ver&quot;</span><span class="w">           </span><span class="s2">&quot;v4,v5 default v5&quot;</span>
+lpai_graph
+<span class="w">   </span>prepare
+<span class="w">      </span><span class="s2">&quot;enable_batchnorm_fold&quot;</span><span class="w">   </span><span class="s2">&quot;true/false,     default false&quot;</span>
+<span class="w">      </span><span class="s2">&quot;exclude_io&quot;</span><span class="w">              </span><span class="s2">&quot;true/false,     default false&quot;</span>
+<span class="w">   </span>execute
+<span class="w">      </span><span class="s2">&quot;fps&quot;</span><span class="w">                     </span><span class="s2">&quot;Specify the fps rate number, used for clock voting, default 1&quot;</span>
+<span class="w">      </span><span class="s2">&quot;ftrt_ratio&quot;</span><span class="w">              </span><span class="s2">&quot;Specify the ftrt_ratio number, default 10&quot;</span>
+<span class="w">      </span><span class="s2">&quot;client_type&quot;</span><span class="w">             </span><span class="s2">&quot;real_time/non_real_time, defult real_time&quot;</span>
+<span class="w">      </span><span class="s2">&quot;affinity&quot;</span><span class="w">                </span><span class="s2">&quot;soft/hard, default soft&quot;</span>
+<span class="w">      </span><span class="s2">&quot;core_selection&quot;</span><span class="w">          </span><span class="s2">&quot;Specify the core number, default 0&quot;</span>
+</pre></div>
+</div>
+<p>Using the above <code class="docutils literal notranslate"><span class="pre">config.json</span></code> and <code class="docutils literal notranslate"><span class="pre">lpaiParams.conf</span></code> you can use <code class="docutils literal notranslate"><span class="pre">qnn-net-run</span></code> to directly execute LPAI backend in simulation mode.</p>
+<p>With the appropriate libraries compiled, <code class="docutils literal notranslate"><span class="pre">qnn-net-run</span></code> is used with the following:</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If full paths are not given to <code class="docutils literal notranslate"><span class="pre">qnn-net-run</span></code>, all libraries must be added to
+LD_LIBRARY_PATH and be discoverable by the system library loader.</p>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cd ${QNN_SDK_ROOT}/examples/QNN/converter/models
+$ ${QNN_SDK_ROOT}/bin/x86_64-linux-clang/qnn-net-run \
+              --backend ${QNN_SDK_ROOT}/lib/x86_64-linux-clang/libQnnLpai.so \
+              --model ${QNN_SDK_ROOT}/examples/QNN/example_libs/x86_64-linux-clang/libqnn_model_8bit_quantized.so \
+              --input_list ${QNN_SDK_ROOT}/examples/QNN/converter/models/input_list_float.txt \
+              --config_file &lt;config.json&gt;
+</pre></div>
+</div>
+<p>Outputs from the run will be located at the default ./output directory.</p>
+</div>
+<div class="section" id="running-lpai-on-target-platform-via-arm-backend-using-offline-prepared-graph">
+<h2>Running LPAI on Target Platform via ARM Backend using offline prepared graph<a class="headerlink" href="#running-lpai-on-target-platform-via-arm-backend-using-offline-prepared-graph" title="Permalink to this heading">¶</a></h2>
+<p>While graph prepare is predefined by offline generation step the Execution paramaters still can be changed at the execution time.</p>
+<p>EXAMPLE of <code class="docutils literal notranslate"><span class="pre">config.json</span></code> file:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="o">{</span>
+<span class="w">   </span><span class="s2">&quot;backend_extensions&quot;</span>:<span class="w"> </span><span class="o">{</span>
+<span class="w">      </span><span class="s2">&quot;shared_library_path&quot;</span>:<span class="w"> </span><span class="s2">&quot;./libQnnLpaiNetRunExtensions.so&quot;</span>,
+<span class="w">      </span><span class="s2">&quot;config_file_path&quot;</span>:<span class="w"> </span><span class="s2">&quot;./lpaiParams.conf&quot;</span>
+<span class="w">   </span><span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>EXAMPLE of <code class="docutils literal notranslate"><span class="pre">lpaiParams.conf</span></code> file that includes only execution parameters:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="o">{</span>
+<span class="w">   </span><span class="s2">&quot;lpai_backend&quot;</span>:<span class="w"> </span><span class="o">{</span>
+<span class="w">      </span><span class="s2">&quot;target_env&quot;</span>:<span class="w"> </span><span class="s2">&quot;adsp&quot;</span>,
+<span class="w">      </span><span class="s2">&quot;enable_hw_ver&quot;</span>:<span class="w"> </span><span class="s2">&quot;v5&quot;</span>
+<span class="w">   </span><span class="o">}</span>,
+<span class="w">   </span><span class="s2">&quot;lpai_graph&quot;</span>:<span class="w"> </span><span class="o">{</span>
+<span class="w">      </span><span class="s2">&quot;execute&quot;</span>:<span class="w"> </span><span class="o">{</span>
+<span class="w">         </span><span class="s2">&quot;fps&quot;</span>:<span class="w"> </span><span class="m">1</span>,
+<span class="w">         </span><span class="s2">&quot;ftrt_ratio&quot;</span>:<span class="w"> </span><span class="m">10</span>,
+<span class="w">         </span><span class="s2">&quot;client_type&quot;</span>:<span class="w"> </span><span class="s2">&quot;real_time&quot;</span>,
+<span class="w">         </span><span class="s2">&quot;affinity&quot;</span>:<span class="w"> </span><span class="s2">&quot;soft&quot;</span>,
+<span class="w">         </span><span class="s2">&quot;core_selection&quot;</span>:<span class="w"> </span><span class="m">0</span>
+<span class="w">      </span><span class="o">}</span>
+<span class="w">   </span><span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>To configure <code class="docutils literal notranslate"><span class="pre">lpaiParams.conf</span></code>, consider using the following optional settings:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>lpai_graph
+<span class="w">   </span>execute
+<span class="w">      </span><span class="s2">&quot;fps&quot;</span><span class="w">                     </span><span class="s2">&quot;Specify the fps rate number, used for clock voting, default 1&quot;</span>
+<span class="w">      </span><span class="s2">&quot;ftrt_ratio&quot;</span><span class="w">              </span><span class="s2">&quot;Specify the ftrt_ratio number, default 10&quot;</span>
+<span class="w">      </span><span class="s2">&quot;client_type&quot;</span><span class="w">             </span><span class="s2">&quot;real_time/non_real_time, defult real_time&quot;</span>
+<span class="w">      </span><span class="s2">&quot;affinity&quot;</span><span class="w">                </span><span class="s2">&quot;soft/hard, default soft&quot;</span>
+<span class="w">      </span><span class="s2">&quot;core_selection&quot;</span><span class="w">          </span><span class="s2">&quot;Specify the core number, default 0&quot;</span>
+</pre></div>
+</div>
+<p>Using the above <code class="docutils literal notranslate"><span class="pre">config.json</span></code> and <code class="docutils literal notranslate"><span class="pre">lpaiParams.conf</span></code> you can use by <code class="docutils literal notranslate"><span class="pre">qnn-net-run</span></code> to directly execute LPAI backend on target.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Running the LPAI Backend on an Android via ARM target is supported only for <strong>offline prepared graphs</strong>.
+Follow <strong>“Preparing LPAI Configuration Files Model Preparation”</strong> paragraph first to prepare the graph on x86_64 host and then push the serialized context binary to the device.</p>
+</div>
+<p>In order to run on a particular target platform, the libraries compiled for that target must be used.
+Below are examples. The QNN_TARGET_ARCH variable can be used to specify the appropriate library for the target.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ export QNN_TARGET_ARCH=aarch64-android
+$ export DSP_ARCH=hexagon-v79
+$ export DSP_VER=V79
+$ export HW_VER=v5
+</pre></div>
+</div>
+<p><strong>To execute the LPAI backend on Android device the following conditions must be met:</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>1. ${QNN_SDK_ROOT}/lib/lpai-${HW_VER}/unsigned/libQnnLpaiSkel.so has to be signed by client
+2. qnn-net-run to be executed with root permissions
+</pre></div>
+</div>
+<p>After offline model preparation of <code class="docutils literal notranslate"><span class="pre">./output/lpai_graph_serialized.bin</span></code> push the serialized model to device:
+.. code-block:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ adb push ./output/lpai_graph_serialized.bin /data/local/tmp/LPAI
+</pre></div>
+</div>
+<p>Push configuration files to device:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ adb push ./config.json /data/local/tmp/LPAI
+$ adb push ./lpaiParams.conf /data/local/tmp/LPAI
+</pre></div>
+</div>
+<p>Push LPAI artifacts to device:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>$ adb push ${QNN_SDK_ROOT}/lib/lpai-${HW_VER}/libQnnLpai.so /data/local/tmp/LPAI
+$ adb push ${QNN_SDK_ROOT}/lib/lpai-${HW_VER}/libQnnLpaiNetRunExtensions.so /data/local/tmp/LPAI
+$ adb push ${QNN_SDK_ROOT}/lib/lpai-${HW_VER}/libQnnLpaiStub.so /data/local/tmp/LPAI
+$ # Additionally, the LPAI requires Hexagon specific libraries
+$ adb push ${QNN_SDK_ROOT}/lib/lpai-${HW_VER}/unsigned/libQnnLpaiSkel.so /data/local/tmp/LPAI
+</pre></div>
+</div>
+<p>Push the input data and input lists to device:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ adb push ${QNN_SDK_ROOT}/examples/QNN/converter/models/input_data_float /data/local/tmp/LPAI
+$ adb push ${QNN_SDK_ROOT}/examples/QNN/converter/models/input_list_float.txt /data/local/tmp/LPAI
+</pre></div>
+</div>
+<p>Push the <code class="docutils literal notranslate"><span class="pre">qnn-net-run</span></code> tool:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ adb push ${QNN_SDK_ROOT}/bin/aarch64-android/qnn-net-run /data/local/tmp/LPAI
+</pre></div>
+</div>
+<p>Setup the environment on device:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ adb shell
+$ cd /data/local/tmp/LPAI
+$ export LD_LIBRARY_PATH=/data/local/tmp/LPAI
+$ export ADSP_LIBRARY_PATH=&quot;/data/local/tmp/LPAI&quot;
+</pre></div>
+</div>
+<p>Finally, use <code class="docutils literal notranslate"><span class="pre">qnn-net-run</span></code> for execution with the following:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ./qnn-net-run --backend libQnnLpai.so --retrieve_context lpai_graph_serialized.bin --input_list input_list_float.txt --config_file &lt;config.json&gt;
+</pre></div>
+</div>
+</div>
+<div class="section" id="running-lpai-on-target-platform-via-native-adsp-backend-using-offline-prepared-graph">
+<h2>Running LPAI on Target Platform via Native aDSP Backend using offline prepared graph<a class="headerlink" href="#running-lpai-on-target-platform-via-native-adsp-backend-using-offline-prepared-graph" title="Permalink to this heading">¶</a></h2>
+<p>While graph prepare is predefined by offline generation step the Execution paramaters still can be changed at the execution time.</p>
+<p>EXAMPLE of <code class="docutils literal notranslate"><span class="pre">config.json</span></code> file:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="o">{</span>
+<span class="w">   </span><span class="s2">&quot;backend_extensions&quot;</span>:<span class="w"> </span><span class="o">{</span>
+<span class="w">      </span><span class="s2">&quot;shared_library_path&quot;</span>:<span class="w"> </span><span class="s2">&quot;./libQnnLpaiNetRunExtensions.so&quot;</span>,
+<span class="w">      </span><span class="s2">&quot;config_file_path&quot;</span>:<span class="w"> </span><span class="s2">&quot;./lpaiParams.conf&quot;</span>
+<span class="w">   </span><span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>EXAMPLE of <code class="docutils literal notranslate"><span class="pre">lpaiParams.conf</span></code> file that includes only execution parameters:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="o">{</span>
+<span class="w">   </span><span class="s2">&quot;lpai_backend&quot;</span>:<span class="w"> </span><span class="o">{</span>
+<span class="w">      </span><span class="s2">&quot;target_env&quot;</span>:<span class="w"> </span><span class="s2">&quot;adsp&quot;</span>,
+<span class="w">      </span><span class="s2">&quot;enable_hw_ver&quot;</span>:<span class="w"> </span><span class="s2">&quot;v5&quot;</span>
+<span class="w">   </span><span class="o">}</span>,
+<span class="w">   </span><span class="s2">&quot;lpai_graph&quot;</span>:<span class="w"> </span><span class="o">{</span>
+<span class="w">      </span><span class="s2">&quot;execute&quot;</span>:<span class="w"> </span><span class="o">{</span>
+<span class="w">         </span><span class="s2">&quot;fps&quot;</span>:<span class="w"> </span><span class="m">1</span>,
+<span class="w">         </span><span class="s2">&quot;ftrt_ratio&quot;</span>:<span class="w"> </span><span class="m">10</span>,
+<span class="w">         </span><span class="s2">&quot;client_type&quot;</span>:<span class="w"> </span><span class="s2">&quot;real_time&quot;</span>,
+<span class="w">         </span><span class="s2">&quot;affinity&quot;</span>:<span class="w"> </span><span class="s2">&quot;soft&quot;</span>,
+<span class="w">         </span><span class="s2">&quot;core_selection&quot;</span>:<span class="w"> </span><span class="m">0</span>
+<span class="w">      </span><span class="o">}</span>
+<span class="w">   </span><span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>To configure <code class="docutils literal notranslate"><span class="pre">lpaiParams.conf</span></code>, consider using the following optional settings:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>lpai_graph
+<span class="w">   </span>execute
+<span class="w">      </span><span class="s2">&quot;fps&quot;</span><span class="w">                     </span><span class="s2">&quot;Specify the fps rate number, used for clock voting, default 1&quot;</span>
+<span class="w">      </span><span class="s2">&quot;ftrt_ratio&quot;</span><span class="w">              </span><span class="s2">&quot;Specify the ftrt_ratio number, default 10&quot;</span>
+<span class="w">      </span><span class="s2">&quot;client_type&quot;</span><span class="w">             </span><span class="s2">&quot;real_time/non_real_time, defult real_time&quot;</span>
+<span class="w">      </span><span class="s2">&quot;affinity&quot;</span><span class="w">                </span><span class="s2">&quot;soft/hard, default soft&quot;</span>
+<span class="w">      </span><span class="s2">&quot;core_selection&quot;</span><span class="w">          </span><span class="s2">&quot;Specify the core number, default 0&quot;</span>
+</pre></div>
+</div>
+<p>Using the above <code class="docutils literal notranslate"><span class="pre">config.json</span></code> and <code class="docutils literal notranslate"><span class="pre">lpaiParams.conf</span></code> you can use by <code class="docutils literal notranslate"><span class="pre">qnn-net-run</span></code> to directly execute LPAI backend on target.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Running the LPAI Backend on an Android via native aDSP target is supported only for <strong>offline prepared graphs</strong>.
+Follow <strong>“Preparing LPAI Configuration Files Model Preparation”</strong> paragraph first to prepare the graph on x86_64 host and then push the serialized context binary to the device.</p>
+</div>
+<p>In order to run on a particular target platform, the libraries compiled for that target must be used.
+Below are examples. The QNN_TARGET_ARCH variable can be used to specify the appropriate library for the target.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ export QNN_TARGET_ARCH=aarch64-android
+$ export DSP_ARCH=hexagon-v79
+$ export DSP_VER=V79
+$ export HW_VER=v5
+</pre></div>
+</div>
+<p><strong>To execute the LPAI backend on Android device the following conditions must be met:</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>1. The following artifacts in ${QNN_SDK_ROOT}/lib/lpai-${HW_VER}/unsigned  has to be signed by client
+   a. libQnnLpai.so
+   b. libQnnLpaiNetRunExtensions.so
+2. The following artifacts in ${QNN_SDK_ROOT}/lib/${DSP_ARCH}/unsigned  has to be signed by client
+   a. libQnnHexagonSkel_dspApp.so
+   b. libQnnNetRunDirect${DSP_VER}Skel.so
+2. qnn-net-run to be executed with root permissions
+</pre></div>
+</div>
+<p>After offline model preparation of <code class="docutils literal notranslate"><span class="pre">./output/lpai_graph_serialized.bin</span></code> push the serialized model to device:
+.. code-block:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ adb push ./output/lpai_graph_serialized.bin /data/local/tmp/LPAI
+</pre></div>
+</div>
+<p>Push configuration files to device:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ adb push ./config.json /data/local/tmp/LPAI
+$ adb push ./lpaiParams.conf /data/local/tmp/LPAI
+</pre></div>
+</div>
+<p>Push the necessary libraries to device:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>$ adb push ${QNN_SDK_ROOT}/lib/lpai-${HW_VER}/unsigned/libQnnLpai.so /data/local/tmp/LPAI
+$ adb push ${QNN_SDK_ROOT}/lib/lpai-${HW_VER}/unsigned/libQnnLpaiNetRunExtensions.so /data/local/tmp/LPAI
+$ adb push ${QNN_SDK_ROOT}/lib/${DSP_ARCH}/unsigned/libQnnHexagonSkel_dspApp.so /data/local/tmp/LPAI
+$ adb push ${QNN_SDK_ROOT}/lib/${DSP_ARCH}/unsigned/libQnnNetRunDirect${DSP_VER}Skel.so /data/local/tmp/LPAI
+</pre></div>
+</div>
+<p>Push the input data and input lists to device:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ adb push ${QNN_SDK_ROOT}/examples/QNN/converter/models/input_data_float /data/local/tmp/LPAI
+$ adb push ${QNN_SDK_ROOT}/examples/QNN/converter/models/input_list_float.txt /data/local/tmp/LPAI
+</pre></div>
+</div>
+<p>Push the <code class="docutils literal notranslate"><span class="pre">qnn-net-run</span></code> tool and its dependent libraries:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ adb push ${QNN_SDK_ROOT}/bin/${QNN_TARGET_ARCH}/qnn-net-run /data/local/tmp/LPAI
+$ adb push ${QNN_SDK_ROOT}/lib/${QNN_TARGET_ARCH}/libQnnNetRunDirect${DSP_VER}Stub.so /data/local/tmp/LPAI
+</pre></div>
+</div>
+<p>Setup the environment on device:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ adb shell
+$ cd /data/local/tmp/LPAI
+$ export LD_LIBRARY_PATH=/data/local/tmp/LPAI
+$ export ADSP_LIBRARY_PATH=&quot;/data/local/tmp/LPAI&quot;
+$ export DSP_VER=V79
+</pre></div>
+</div>
+<p>Finally, use <code class="docutils literal notranslate"><span class="pre">qnn-net-run</span></code> for execution with the following:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ./qnn-net-run --backend libQnnLpai.so --retrieve_context qnn_model_8bit_quantized.serialized.bin --input_list input_list_float.txt --config_file &lt;config.json&gt;
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="../qnn_tutorial_linux_host_windows_target.html" class="btn btn-neutral float-right" title="CNN to QNN for Linux Host on Windows Target" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="htp.html" class="btn btn-neutral float-left" title="Convert to QNN for Linux Host on HTP Backend" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020-2025, Qualcomm Technologies, Inc..
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

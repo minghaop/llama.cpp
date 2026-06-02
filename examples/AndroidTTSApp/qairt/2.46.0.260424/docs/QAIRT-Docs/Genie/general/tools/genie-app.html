@@ -1,0 +1,671 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>genie-app &mdash; Qualcomm® AI Runtime (QAIRT) SDKs</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/custom_css.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="qnn-genai-transformer-composer" href="qnn-genai-transformer-composer.html" />
+    <link rel="prev" title="genie-t2e-run" href="genie-t2e-run.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Qualcomm® AI Runtime (QAIRT) SDKs
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v2.46.0.260424121129
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">QAIRT</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../general/overview.html">Overview</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">SDKs</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../QNN/index.html">QNN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../SNPE/index.html">SNPE</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">Genie</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../introduction/introduction.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/tutorials.html">Tutorials</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/library.html">Library</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="tools.html">Tools</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="genie-t2t-run.html">genie-t2t-run</a></li>
+<li class="toctree-l3"><a class="reference internal" href="genie-t2e-run.html">genie-t2e-run</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">genie-app</a></li>
+<li class="toctree-l3"><a class="reference internal" href="qnn-genai-transformer-composer.html">qnn-genai-transformer-composer</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Delegates</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../Delegates/TfLite/index.html">TFLite Delegate</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Qualcomm® AI Runtime (QAIRT) SDKs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">⌂</a> &raquo;</li>
+        
+          <li><a href="tools.html">Tools</a> &raquo;</li>
+        
+      <li>genie-app</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="genie-app">
+<span id="id1"></span><h1>genie-app<a class="headerlink" href="#genie-app" title="Permalink to this heading">¶</a></h1>
+<p>The <code class="docutils literal notranslate"><span class="pre">genie-app</span></code> tool is a robust test application that allows for general usage of the Genie library.
+This tool exposes API-level commands and related utilities to enable a wide range of various configurations that more
+closely emulates developers’ Genie SDK use cases.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>DESCRIPTION:
+------------
+Tool for text to text inference of LLMs using Genie.
+
+
+REQUIRED ARGUMENTS:
+-------------------
+-s or --script                        &lt;FILE&gt;      Script file that contains chronological sequence of script commands
+
+OPTIONAL ARGUMENTS:
+-------------------
+-h or --help                                      Show this help message and exit. Help message contains all currently supported script commands
+
+SCRIPT COMMANDS:
+----------------
+
+dialog config create       CONFIG_NAME FILE.json
+dialog config bind profile CONFIG_NAME PROFILE_NAME
+dialog config bind log     CONFIG_NAME LOG_NAME
+dialog config free         CONFIG_NAME
+dialog create              DIALOG_NAME CONFIG_NAME
+dialog query               DIALOG_NAME [&quot;PROMPT_STR&quot;/PROMPT_FILE] [OUTPUT_FILE]
+dialog rewindQuery         DIALOG_NAME [&quot;PROMPT_STR&quot;/PROMPT_FILE] [OUTPUT_FILE]
+dialog embeddingQuery      DIALOG_NAME EMBEDDINGS_PATH EMBEDDINGS_TABLE_PATH [OUTPUT_FILE]
+dialog embeddingTokenQuery DIALOG_NAME EMBEDDINGS_PATH EMBEDDINGS_TABLE_PATH [OUTPUT_FILE]
+dialog tokenQuery          DIALOG_NAME TOKENS_PATH [OUTPUT_FILE]
+dialog batchQuery          DIALOG_NAME [&quot;PROMPT_STR&quot;/PROMPT_FILE] [&quot;PROMPT_STR&quot;/PROMPT_FILE]... [OUTPUT_DIR]
+dialog applyLora           DIALOG_NAME ENGINE_NAME ADAPTER_NAME
+dialog setLoraStrength     DIALOG_NAME ENGINE_NAME TENSOR_NAME_1 ALPHA_1 ...
+dialog reset               DIALOG_NAME
+dialog save                DIALOG_NAME PATH
+dialog restore             DIALOG_NAME PATH
+dialog setPerformance      DIALOG_NAME PERFORMANCE_MODE
+dialog free                DIALOG_NAME
+dialog getValue            DIALOG_NAME GENIE_DIALOG_PARAM
+dialog getTokenizer        DIALOG_NAME TOKENIZER_NAME
+dialog getSampler          DIALOG_NAME SAMPLER_NAME
+dialog setMaxNumTokens     DIALOG_NAME MAX_NUM_TOKENS
+dialog setStopSequence     DIALOG_NAME [&quot;STOP_SEQUENCE_JSON_STR&quot;/STOP_SEQUENCE_JSON_FILE]
+dialog setOemKey           DIALOG_NAME OEM_KEY
+dialog setPriority         DIALOG_NAME ENGINE_ROLE PRIORITY
+
+embedding config create       CONFIG_NAME FILE.json
+embedding config bind profile CONFIG_NAME PROFILE_NAME
+embedding config bind log     CONFIG_NAME LOG_NAME
+embedding config free         CONFIG_NAME
+embedding create              EMBEDDING_NAME CONFIG_NAME
+embedding generate            EMBEDDING_NAME [&quot;PROMPT_STR&quot;/PROMPT_FILE] [OUTPUT_FILE]
+embedding setPerformance      EMBEDDING_NAME PERFORMANCE_MODE
+embedding free                EMBEDDING_NAME
+
+log create LOG_NAME LEVEL [OUTPUT_FILE.txt]
+log free   LOG_NAME
+
+node config create         CONFIG_NAME FILE.json
+node config free           CONFIG_NAME
+node config bind profile   CONFIG_NAME PROFILE_NAME
+node config bind log       CONFIG_NAME LOG_NAME
+node create                NODE_NAME CONFIG_NAME
+node set text              NODE_NAME NODE_IO TEXT_PROMPT
+node set textFile          NODE_NAME NODE_IO TEXT_PROMPT_FILE_PATH
+node set image             NODE_NAME NODE_IO IMAGE_PATH
+node set embedding         NODE_NAME NODE_IO EMBEDDING_PATH
+node set textCallback      NODE_NAME NODE_IO
+node set embeddingCallback NODE_NAME
+node getSampler            NODE_NAME SAMPLER_NAME
+node applyLora             NODE_NAME ENGINE_NAME ADAPTER_NAME
+node setLoraStrength       NODE_NAME ENGINE_NAME TENSOR_NAME_1 ALPHA_1 ...
+node free                  NODE_NAME
+
+pipeline config create       CONFIG_NAME FILE.json
+pipeline config bind profile CONFIG_NAME PROFILE_NAME
+pipeline config bind log     CONFIG_NAME LOG_NAME
+pipeline config free         CONFIG_NAME
+pipeline create              PIPELINE_NAME CONFIG_NAME
+pipeline add                 PIPELINE_NAME NODE_NAME
+pipeline connect             PIPELINE_NAME PRODUCER_NODE_NAME PRODUCER_NODE_IO CONSUMER_NODE_NAME CONSUMER_NODE_IO
+pipeline execute             PIPELINE_NAME [OUTPUT_FILE]
+pipeline reset               PIPELINE_NAME
+pipeline save                PIPELINE_NAME PATH
+pipeline restore             PIPELINE_NAME PATH
+pipeline free                PIPELINE_NAME
+pipeline setOemKey           PIPELINE_NAME OEM_KEY
+pipeline setPriority         PIPELINE_NAME ENGINE_ROLE PRIORITY
+
+profile config create CONFIG_NAME FILE.json
+profile config free   CONFIG_NAME
+profile create        PROFILE_NAME [CONFIG_NAME]
+profile save          PROFILE_NAME [OUTPUT_FILE.json]
+profile free          PROFILE_NAME
+
+tokenizer encode         TOKENIZER_NAME INPUT_STRING [OUTPUT_FILE]
+tokenizer encodeFromFile TOKENIZER_NAME INPUT_FILE [OUTPUT_FILE]
+tokenizer decode         TOKENIZER_NAME TOKEN_SIZE TOKEN_ID_1 ... [OUTPUT_FILE]
+tokenizer decodeFromFile TOKENIZER_NAME TOKENS_FILE [OUTPUT_FILE]
+
+accuracy config create CONFIG_NAME FILE.json
+accuracy config free   CONFIG_NAME
+accuracy create        ACCURACY_NAME CONFIG_NAME [dialog/node] DIALOG_NAME
+accuracy compute       ACCURACY_NAME OUTPUT_FILE.json
+accuracy free          ACCURACY_NAME
+
+sampler config create   CONFIG_NAME FILE.json
+sampler config setParam CONFIG_NAME KEY VALUE
+sampler config free     CONFIG_NAME
+sampler create          SAMPLER_NAME CONFIG_NAME
+sampler applyConfig     SAMPLER_NAME CONFIG_NAME
+sampler sampleData      SAMPLER_NAME DATA.raw DATA_CONFIG.json [OUTPUT_FILE]
+sampler free            SAMPLER_NAME
+
+history
+history clear
+history save FILE
+
+version
+help
+script FILE
+loop [NUMBER OF ITERATIONS]
+endloop
+sleep [DURATION in ms]
+ls
+exit
+</pre></div>
+</div>
+<p>See <a class="reference internal" href="../tutorials/tutorials.html#genie-tutorials"><span class="std std-ref">Tutorials</span></a> for a reference example on how to use the <code class="docutils literal notranslate"><span class="pre">genie-app</span></code> tool.</p>
+<div class="section" id="script-statement-to-c-api-mapping">
+<h2>Script Statement to C API Mapping<a class="headerlink" href="#script-statement-to-c-api-mapping" title="Permalink to this heading">¶</a></h2>
+<p>In genie-app scripts, names are used to represent Genie C API handles. Generally, DIALOG_NAME translates to a
+GenieDialog_Handle_t, PIPELINE_NAME to a GeniePipeline_Handle_t, and so on. If there is a CONFIG_NAME argument, it would
+correspond to a configuration handle to the respective API component. For example, the “dialog create” CONFIG_NAME would
+refer to a GenieDialogConfig_Handle_t.</p>
+<p>The following genie-app script statements do not have a corresponding Genie C API function:</p>
+<ul class="simple">
+<li><p>help</p></li>
+<li><p>ls</p></li>
+<li><p>history</p></li>
+<li><p>script</p></li>
+<li><p>loop/endloop</p></li>
+<li><p>sleep</p></li>
+<li><p>exit</p></li>
+</ul>
+<p>The following Genie C APIs are not yet supported in genie-app:</p>
+<ul class="simple">
+<li><p>GenieDialog_signal</p></li>
+<li><p>GenieDialog_setPriority</p></li>
+<li><p>GenieDialog_setOemKey</p></li>
+<li><p>GenieDialog_bindEngine</p></li>
+<li><p>GenieDialog_getEngine</p></li>
+<li><p>GenieDialog_getPerformancePolicy</p></li>
+<li><p>GenieEmbedding_getPerformancePolicy</p></li>
+<li><p>GenieNode_bindEngine</p></li>
+<li><p>GenieNode_getEngine</p></li>
+<li><p>GenieNode_getTokenizer</p></li>
+<li><p>GeniePipeline_setPriority</p></li>
+<li><p>GeniePipeline_setOemKey</p></li>
+<li><p>GenieSampler_registerCallback</p></li>
+<li><p>GenieSampler_registerUserDataCallback</p></li>
+<li><p>GenieEngineConfig_createFromJson</p></li>
+<li><p>GenieEngineConfig_bindProfiler</p></li>
+<li><p>GenieEngineConfig_bindLogger</p></li>
+<li><p>GenieEngineConfig_free</p></li>
+<li><p>GenieEngine_create</p></li>
+<li><p>GenieEngine_free</p></li>
+</ul>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 77%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Statement</p></th>
+<th class="head"><p>Genie C API</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>dialog config create</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieDialog_8h_1a3c66d3491d44d1f93c98eb7af294b140.html#exhale-function-geniedialog-8h-1a3c66d3491d44d1f93c98eb7af294b140"><span class="std std-ref">GenieDialogConfig_createFromJson</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>dialog config bind profile</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieDialog_8h_1acd04d699356e5bc83dd2acc6e0ea18f0.html#exhale-function-geniedialog-8h-1acd04d699356e5bc83dd2acc6e0ea18f0"><span class="std std-ref">GenieDialogConfig_bindProfiler</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>dialog config bind log</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieDialog_8h_1a5e98a421e7f997eba72fdd5610398587.html#exhale-function-geniedialog-8h-1a5e98a421e7f997eba72fdd5610398587"><span class="std std-ref">GenieDialogConfig_bindLogger</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>dialog config free</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieDialog_8h_1a12f0f8a9498298b77c1d251372e8d525.html#exhale-function-geniedialog-8h-1a12f0f8a9498298b77c1d251372e8d525"><span class="std std-ref">GenieDialogConfig_free</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>dialog create</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieDialog_8h_1a7ed8b75b55a1d483cf9d5e5bf9027d24.html#exhale-function-geniedialog-8h-1a7ed8b75b55a1d483cf9d5e5bf9027d24"><span class="std std-ref">GenieDialog_create</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>dialog query</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieDialog_8h_1a7b2d4bf78e184fe81e81d089719f3733.html#exhale-function-geniedialog-8h-1a7b2d4bf78e184fe81e81d089719f3733"><span class="std std-ref">GenieDialog_query</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>dialog rewindQuery</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieDialog_8h_1a7b2d4bf78e184fe81e81d089719f3733.html#exhale-function-geniedialog-8h-1a7b2d4bf78e184fe81e81d089719f3733"><span class="std std-ref">GenieDialog_query</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>dialog embeddingQuery</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieDialog_8h_1af3958d9748026304886d367e1726dd79.html#exhale-function-geniedialog-8h-1af3958d9748026304886d367e1726dd79"><span class="std std-ref">GenieDialog_embeddingQuery</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>dialog embeddingTokenQuery</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieDialog_8h_1a058c388ffeea103835a44f7a78075522.html#exhale-function-geniedialog-8h-1a058c388ffeea103835a44f7a78075522"><span class="std std-ref">GenieDialog_embeddingTokenQuery</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>dialog tokenQuery</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieDialog_8h_1a1a6b960cdbf972832662d87190657326.html#exhale-function-geniedialog-8h-1a1a6b960cdbf972832662d87190657326"><span class="std std-ref">GenieDialog_tokenQuery</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>dialog applyLora</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieDialog_8h_1acc98f3fcd54d970ac84b17c4da3a25c6.html#exhale-function-geniedialog-8h-1acc98f3fcd54d970ac84b17c4da3a25c6"><span class="std std-ref">GenieDialog_applyLora</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>dialog setLoraStrength</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieDialog_8h_1ad2604075973d7f9911df4387c7a37148.html#exhale-function-geniedialog-8h-1ad2604075973d7f9911df4387c7a37148"><span class="std std-ref">GenieDialog_setLoraStrength</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>dialog reset</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieDialog_8h_1a4547984d74b50386a3d1f90d7389933c.html#exhale-function-geniedialog-8h-1a4547984d74b50386a3d1f90d7389933c"><span class="std std-ref">GenieDialog_reset</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>dialog save</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieDialog_8h_1af80e3d66851c0ab1ebab0771455a8590.html#exhale-function-geniedialog-8h-1af80e3d66851c0ab1ebab0771455a8590"><span class="std std-ref">GenieDialog_save</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>dialog restore</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieDialog_8h_1a2bb4dbeddd258e63162b8e5a219b3e3c.html#exhale-function-geniedialog-8h-1a2bb4dbeddd258e63162b8e5a219b3e3c"><span class="std std-ref">GenieDialog_restore</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>dialog setPerformance</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieDialog_8h_1a788b23dde09d0526dce5d6d32040d119.html#exhale-function-geniedialog-8h-1a788b23dde09d0526dce5d6d32040d119"><span class="std std-ref">GenieDialog_setPerformancePolicy</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>dialog free</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieDialog_8h_1a1493e65680af274eea84347f88d90899.html#exhale-function-geniedialog-8h-1a1493e65680af274eea84347f88d90899"><span class="std std-ref">GenieDialog_free</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>dialog getTokenizer</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieDialog_8h_1a2c779262cd3539c815ed66a48335c53a.html#exhale-function-geniedialog-8h-1a2c779262cd3539c815ed66a48335c53a"><span class="std std-ref">GenieDialog_getTokenizer</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>dialog getSampler</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieDialog_8h_1a0e4b39749e037211d0c00bf5b1f71afe.html#exhale-function-geniedialog-8h-1a0e4b39749e037211d0c00bf5b1f71afe"><span class="std std-ref">GenieDialog_getSampler</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>dialog getValue</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieDialog_8h_1ae9fd3d2263e0b8f616b35ca8811eabc9.html#exhale-function-geniedialog-8h-1ae9fd3d2263e0b8f616b35ca8811eabc9"><span class="std std-ref">GenieDialog_getValue</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>dialog setMaxNumTokens</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieDialog_8h_1aa4f3c843de2abdc513e73f2db3c8df36.html#exhale-function-geniedialog-8h-1aa4f3c843de2abdc513e73f2db3c8df36"><span class="std std-ref">GenieDialog_setMaxNumTokens</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>dialog setStopSequence</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieDialog_8h_1aa03534e4394558e02fd2ab65d59767d3.html#exhale-function-geniedialog-8h-1aa03534e4394558e02fd2ab65d59767d3"><span class="std std-ref">GenieDialog_setStopSequence</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>embedding config create</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieEmbedding_8h_1a3d4da392995015a54825196b20318a26.html#exhale-function-genieembedding-8h-1a3d4da392995015a54825196b20318a26"><span class="std std-ref">GenieEmbeddingConfig_createFromJson</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>embedding config bind profile</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieEmbedding_8h_1a9f2cb87a9c6e80039b9dafaf147c8bc3.html#exhale-function-genieembedding-8h-1a9f2cb87a9c6e80039b9dafaf147c8bc3"><span class="std std-ref">GenieEmbeddingConfig_bindProfiler</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>embedding config bind log</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieEmbedding_8h_1aa4485392f121c4d91a75b36e723d4cb8.html#exhale-function-genieembedding-8h-1aa4485392f121c4d91a75b36e723d4cb8"><span class="std std-ref">GenieEmbeddingConfig_bindLogger</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>embedding config free</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieEmbedding_8h_1ae5a91c61cd91d23c0b26825cad3afc06.html#exhale-function-genieembedding-8h-1ae5a91c61cd91d23c0b26825cad3afc06"><span class="std std-ref">GenieEmbeddingConfig_free</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>embedding create</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieEmbedding_8h_1a48f60dcc012c75d19c950824a00ba40c.html#exhale-function-genieembedding-8h-1a48f60dcc012c75d19c950824a00ba40c"><span class="std std-ref">GenieEmbedding_create</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>embedding generate</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieEmbedding_8h_1a1bdaa2c863abca12b8b6f445f56dd985.html#exhale-function-genieembedding-8h-1a1bdaa2c863abca12b8b6f445f56dd985"><span class="std std-ref">GenieEmbedding_generate</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>embedding setPerformance</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieEmbedding_8h_1ad436b0efa397319fe0757623bb183377.html#exhale-function-genieembedding-8h-1ad436b0efa397319fe0757623bb183377"><span class="std std-ref">GenieEmbedding_setPerformancePolicy</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>embedding free</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieEmbedding_8h_1a8d37516400c2b5b0f00d859170c748a7.html#exhale-function-genieembedding-8h-1a8d37516400c2b5b0f00d859170c748a7"><span class="std std-ref">GenieEmbedding_free</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>log create</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieLog_8h_1afcf4417c1026fd4657092cbac9d1cd01.html#exhale-function-genielog-8h-1afcf4417c1026fd4657092cbac9d1cd01"><span class="std std-ref">GenieLog_create</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>log free</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieLog_8h_1a6539606b0ded59dccde5204d1c85d325.html#exhale-function-genielog-8h-1a6539606b0ded59dccde5204d1c85d325"><span class="std std-ref">GenieLog_free</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>node config create</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieNode_8h_1a16fbd1acc54ebfaf18dbef41bc56483c.html#exhale-function-genienode-8h-1a16fbd1acc54ebfaf18dbef41bc56483c"><span class="std std-ref">GenieNodeConfig_createFromJson</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>node config bind profile</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieNode_8h_1a2cc127e8199cecc6c1e4d6bba2df4895.html#exhale-function-genienode-8h-1a2cc127e8199cecc6c1e4d6bba2df4895"><span class="std std-ref">GenieNodeConfig_bindProfiler</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>node config bind log</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieNode_8h_1ad744d5c3dbb87c33edf452bc5b8672f8.html#exhale-function-genienode-8h-1ad744d5c3dbb87c33edf452bc5b8672f8"><span class="std std-ref">GenieNodeConfig_bindLogger</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>node config free</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieNode_8h_1a2c64ec143da2dbbd2241854833e86c41.html#exhale-function-genienode-8h-1a2c64ec143da2dbbd2241854833e86c41"><span class="std std-ref">GenieNodeConfig_free</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>node create</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieNode_8h_1a67b4122c281f82cc01a814d5dc075c14.html#exhale-function-genienode-8h-1a67b4122c281f82cc01a814d5dc075c14"><span class="std std-ref">GenieNode_create</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>node set text</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieNode_8h_1a7a0a965290ea5a8208b67d9e5c35a3d4.html#exhale-function-genienode-8h-1a7a0a965290ea5a8208b67d9e5c35a3d4"><span class="std std-ref">GenieNode_setData</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>node set textFile</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieNode_8h_1a7a0a965290ea5a8208b67d9e5c35a3d4.html#exhale-function-genienode-8h-1a7a0a965290ea5a8208b67d9e5c35a3d4"><span class="std std-ref">GenieNode_setData</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>node set image</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieNode_8h_1a7a0a965290ea5a8208b67d9e5c35a3d4.html#exhale-function-genienode-8h-1a7a0a965290ea5a8208b67d9e5c35a3d4"><span class="std std-ref">GenieNode_setData</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>node set embedding</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieNode_8h_1a7a0a965290ea5a8208b67d9e5c35a3d4.html#exhale-function-genienode-8h-1a7a0a965290ea5a8208b67d9e5c35a3d4"><span class="std std-ref">GenieNode_setData</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>node set textCallback</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieNode_8h_1af8f0d565296cbad72a4f896f6e2c16f8.html#exhale-function-genienode-8h-1af8f0d565296cbad72a4f896f6e2c16f8"><span class="std std-ref">GenieNode_setTextCallback</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>node set embeddingCallback</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieNode_8h_1a134378aa01d6c5fdfc30632841f531af.html#exhale-function-genienode-8h-1a134378aa01d6c5fdfc30632841f531af"><span class="std std-ref">GenieNode_setEmbeddingCallback</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>node getSampler</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieNode_8h_1a4964027b18520f0981b54442ab72cc39.html#exhale-function-genienode-8h-1a4964027b18520f0981b54442ab72cc39"><span class="std std-ref">GenieNode_getSampler</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>node applyLora</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieNode_8h_1a7816a2b9da5d947efd895e958a815924.html#exhale-function-genienode-8h-1a7816a2b9da5d947efd895e958a815924"><span class="std std-ref">GenieNode_applyLora</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>node setLoraStrength</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieNode_8h_1a56de1f9fc21d9c0f0beea26cce541628.html#exhale-function-genienode-8h-1a56de1f9fc21d9c0f0beea26cce541628"><span class="std std-ref">GenieNode_setLoraStrength</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>node free</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieNode_8h_1a2d497783a5360b22dcf3dee7f978b06d.html#exhale-function-genienode-8h-1a2d497783a5360b22dcf3dee7f978b06d"><span class="std std-ref">GenieNode_free</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>pipeline config create</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GeniePipeline_8h_1a04f86679b871ab65e1250168af937019.html#exhale-function-geniepipeline-8h-1a04f86679b871ab65e1250168af937019"><span class="std std-ref">GeniePipelineConfig_createFromJson</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>pipeline config bind profile</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GeniePipeline_8h_1a5b7a49cd794f84c4a4826f36f8cfa9f2.html#exhale-function-geniepipeline-8h-1a5b7a49cd794f84c4a4826f36f8cfa9f2"><span class="std std-ref">GeniePipelineConfig_bindProfiler</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>pipeline config bind log</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GeniePipeline_8h_1a9f002fdaf20b3749a3811e9381d376ee.html#exhale-function-geniepipeline-8h-1a9f002fdaf20b3749a3811e9381d376ee"><span class="std std-ref">GeniePipelineConfig_bindLogger</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>pipeline config free</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GeniePipeline_8h_1a3ced9bca8da96551f1c539f95aa1efb2.html#exhale-function-geniepipeline-8h-1a3ced9bca8da96551f1c539f95aa1efb2"><span class="std std-ref">GeniePipelineConfig_free</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>pipeline create</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GeniePipeline_8h_1a554b5fa1d6fb5b909203948bd23c925c.html#exhale-function-geniepipeline-8h-1a554b5fa1d6fb5b909203948bd23c925c"><span class="std std-ref">GeniePipeline_create</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>pipeline add</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GeniePipeline_8h_1af386f926e4b13c5989fab6fc299fc851.html#exhale-function-geniepipeline-8h-1af386f926e4b13c5989fab6fc299fc851"><span class="std std-ref">GeniePipeline_addNode</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>pipeline connect</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GeniePipeline_8h_1a0fbe83759a3b8a89f19a6be86c1162ff.html#exhale-function-geniepipeline-8h-1a0fbe83759a3b8a89f19a6be86c1162ff"><span class="std std-ref">GeniePipeline_connect</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>pipeline execute</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GeniePipeline_8h_1aee7b965e566b9821c521f15b4b360f91.html#exhale-function-geniepipeline-8h-1aee7b965e566b9821c521f15b4b360f91"><span class="std std-ref">GeniePipeline_execute</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>pipeline reset</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GeniePipeline_8h_1a6f7cdbafba8125265975db618a01b797.html#exhale-function-geniepipeline-8h-1a6f7cdbafba8125265975db618a01b797"><span class="std std-ref">GeniePipeline_reset</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>pipeline save</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GeniePipeline_8h_1ad2d26087c33b4087324c3d24423b3fbf.html#exhale-function-geniepipeline-8h-1ad2d26087c33b4087324c3d24423b3fbf"><span class="std std-ref">GeniePipeline_save</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>pipeline restore</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GeniePipeline_8h_1ac988a3584d2ca06617fd15005bf9d9b5.html#exhale-function-geniepipeline-8h-1ac988a3584d2ca06617fd15005bf9d9b5"><span class="std std-ref">GeniePipeline_restore</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>pipeline free</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GeniePipeline_8h_1abe14ba3191aafd7a22bb16dc49bc04b7.html#exhale-function-geniepipeline-8h-1abe14ba3191aafd7a22bb16dc49bc04b7"><span class="std std-ref">GeniePipeline_free</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>profile config create</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieProfile_8h_1a70e275bd2c70b9f0f0567f079c4f2056.html#exhale-function-genieprofile-8h-1a70e275bd2c70b9f0f0567f079c4f2056"><span class="std std-ref">GenieProfileConfig_createFromJson</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>profile config free</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieProfile_8h_1a271345aca2161efa7db492213b22bde5.html#exhale-function-genieprofile-8h-1a271345aca2161efa7db492213b22bde5"><span class="std std-ref">GenieProfileConfig_free</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>profile create</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieProfile_8h_1aaf95ae962651f7fd045335886ed38a66.html#exhale-function-genieprofile-8h-1aaf95ae962651f7fd045335886ed38a66"><span class="std std-ref">GenieProfile_create</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>profile save</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieProfile_8h_1af16af81be1483300a7a121cfaebaab09.html#exhale-function-genieprofile-8h-1af16af81be1483300a7a121cfaebaab09"><span class="std std-ref">GenieProfile_getJsonData</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>profile free</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieProfile_8h_1a25c13e097323d87caa0fbeb61c973db1.html#exhale-function-genieprofile-8h-1a25c13e097323d87caa0fbeb61c973db1"><span class="std std-ref">GenieProfile_free</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>tokenizer encode</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieTokenizer_8h_1a0ae23b699b098076f18b7c27011c8a65.html#exhale-function-genietokenizer-8h-1a0ae23b699b098076f18b7c27011c8a65"><span class="std std-ref">GenieTokenizer_encode</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>tokenizer encodeFromFile</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieTokenizer_8h_1a0ae23b699b098076f18b7c27011c8a65.html#exhale-function-genietokenizer-8h-1a0ae23b699b098076f18b7c27011c8a65"><span class="std std-ref">GenieTokenizer_encode</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>tokenizer decode</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieTokenizer_8h_1a78df4f45c5196dd88ec7d42e9fef80a5.html#exhale-function-genietokenizer-8h-1a78df4f45c5196dd88ec7d42e9fef80a5"><span class="std std-ref">GenieTokenizer_decode</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>tokenizer decodeFromFile</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieTokenizer_8h_1a78df4f45c5196dd88ec7d42e9fef80a5.html#exhale-function-genietokenizer-8h-1a78df4f45c5196dd88ec7d42e9fef80a5"><span class="std std-ref">GenieTokenizer_decode</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>accuracy config create</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieAccuracy_8h_1a5992783f95a32247d7c9ced4b7379ce1.html#exhale-function-genieaccuracy-8h-1a5992783f95a32247d7c9ced4b7379ce1"><span class="std std-ref">GenieAccuracyConfig_createFromJson</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>accuracy config free</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieAccuracy_8h_1a75113f69237d0cc6ad9b702e35b475f3.html#exhale-function-genieaccuracy-8h-1a75113f69237d0cc6ad9b702e35b475f3"><span class="std std-ref">GenieAccuracyConfig_free</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>accuracy create</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieAccuracy_8h_1a67ed98eec0ba08be79623c4cb96b9c26.html#exhale-function-genieaccuracy-8h-1a67ed98eec0ba08be79623c4cb96b9c26"><span class="std std-ref">GenieAccuracy_createFromDialog</span></a></p>
+<p><a class="reference internal" href="../../api-rst/function_GenieAccuracy_8h_1a89af8b4c4d354fbc787b47bd7001ea65.html#exhale-function-genieaccuracy-8h-1a89af8b4c4d354fbc787b47bd7001ea65"><span class="std std-ref">GenieAccuracy_createFromNode</span></a></p>
+</td>
+</tr>
+<tr class="row-odd"><td><p>accuracy compute</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieAccuracy_8h_1a691683c949d730d06593d53423422d85.html#exhale-function-genieaccuracy-8h-1a691683c949d730d06593d53423422d85"><span class="std std-ref">GenieAccuracy_compute</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>accuracy free</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieAccuracy_8h_1a6f30a3be3209ef79aec5c55f17ce6f30.html#exhale-function-genieaccuracy-8h-1a6f30a3be3209ef79aec5c55f17ce6f30"><span class="std std-ref">GenieAccuracy_free</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>sampler config create</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieSampler_8h_1a2ace87fa3f10b77e38c701b357af07fa.html#exhale-function-geniesampler-8h-1a2ace87fa3f10b77e38c701b357af07fa"><span class="std std-ref">GenieSamplerConfig_createFromJson</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>sampler config setParam</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieSampler_8h_1aaff7bb2ad2731bed8d52b57961156b52.html#exhale-function-geniesampler-8h-1aaff7bb2ad2731bed8d52b57961156b52"><span class="std std-ref">GenieSamplerConfig_setParam</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>sampler config free</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieSampler_8h_1af22e7696884a30247a226ccbfabe3a16.html#exhale-function-geniesampler-8h-1af22e7696884a30247a226ccbfabe3a16"><span class="std std-ref">GenieSamplerConfig_free</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>sampler create</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieSampler_8h_1a8f92f9527fe1a3724ed11f0deb2994ba.html#exhale-function-geniesampler-8h-1a8f92f9527fe1a3724ed11f0deb2994ba"><span class="std std-ref">GenieSampler_create</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>sampler applyConfig</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieSampler_8h_1a32113d7ff630e244c328b4c023247c51.html#exhale-function-geniesampler-8h-1a32113d7ff630e244c328b4c023247c51"><span class="std std-ref">GenieSampler_applyConfig</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>sampler sampleData</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieSampler_8h_1a1e528d7c49258c0eaa16c765127ce93c.html#exhale-function-geniesampler-8h-1a1e528d7c49258c0eaa16c765127ce93c"><span class="std std-ref">GenieSampler_sampleData</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>sampler free</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieSampler_8h_1a3530af15b325dbe2edcfce5bc1698869.html#exhale-function-geniesampler-8h-1a3530af15b325dbe2edcfce5bc1698869"><span class="std std-ref">GenieSampler_free</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>version</p></td>
+<td><p><a class="reference internal" href="../../api-rst/function_GenieCommon_8h_1aa728c0da14fe36e15a85f31837357ff8.html#exhale-function-geniecommon-8h-1aa728c0da14fe36e15a85f31837357ff8"><span class="std std-ref">Genie_getApiMajorVersion</span></a></p>
+<p><a class="reference internal" href="../../api-rst/function_GenieCommon_8h_1a88cb2c2e754e10c15f69e0d244c8a0eb.html#exhale-function-geniecommon-8h-1a88cb2c2e754e10c15f69e0d244c8a0eb"><span class="std std-ref">Genie_getApiMinorVersion</span></a></p>
+<p><a class="reference internal" href="../../api-rst/function_GenieCommon_8h_1a3a619e02e24d1dcbd51b24d53d3b63e5.html#exhale-function-geniecommon-8h-1a3a619e02e24d1dcbd51b24d53d3b63e5"><span class="std std-ref">Genie_getApiPatchVersion</span></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="qnn-genai-transformer-composer.html" class="btn btn-neutral float-right" title="qnn-genai-transformer-composer" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="genie-t2e-run.html" class="btn btn-neutral float-left" title="genie-t2e-run" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020-2025, Qualcomm Technologies, Inc..
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

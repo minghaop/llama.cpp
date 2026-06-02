@@ -1,0 +1,504 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>LoRA v3 &mdash; Qualcomm® AI Runtime (QAIRT) SDKs</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/custom_css.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Qualcomm® AI Runtime (QAIRT) SDKs
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v2.46.0.260424121129
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">QAIRT</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../general/overview.html">Overview</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">SDKs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">QNN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../SNPE/index.html">SNPE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Genie/index.html">Genie</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Delegates</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../Delegates/TfLite/index.html">TFLite Delegate</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Qualcomm® AI Runtime (QAIRT) SDKs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>LoRA v3</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="lora-v3">
+<h1>LoRA v3<a class="headerlink" href="#lora-v3" title="Permalink to this heading">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#lorav3-high-level-user-workflow" id="id1">LoRAv3 High-level User Workflow</a></p></li>
+<li><p><a class="reference internal" href="#offline-graph-preparation-flow" id="id2">Offline Graph Preparation Flow</a></p>
+<ul>
+<li><p><a class="reference internal" href="#command-templates-for-offline-preparation-tools" id="id3">Command templates for offline preparation tools</a></p>
+<ul>
+<li><p><a class="reference internal" href="#qairt-lora-mapper" id="id4">qairt-lora-mapper</a></p></li>
+<li><p><a class="reference internal" href="#qairt-lora-model-creator" id="id5">qairt-lora-model-creator</a></p></li>
+<li><p><a class="reference internal" href="#qairt-converter" id="id6">qairt-converter</a></p></li>
+<li><p><a class="reference internal" href="#qairt-quantizer" id="id7">qairt-quantizer</a></p></li>
+<li><p><a class="reference internal" href="#qairt-lora-importer" id="id8">qairt-lora-importer</a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#context-binary-generation" id="id9">Context Binary Generation</a></p></li>
+<li><p><a class="reference internal" href="#command-template-for-context-binary-generation" id="id10">Command template for context binary generation</a></p></li>
+<li><p><a class="reference internal" href="#on-target-qnn-call-flow" id="id11">On-target QNN Call Flow</a></p></li>
+<li><p><a class="reference internal" href="#on-target-genie-execution-flow" id="id12">On-target Genie Execution Flow</a></p></li>
+<li><p><a class="reference internal" href="#command-template-for-genie-t2t-cli-tool" id="id13">Command template for Genie T2T CLI tool</a></p></li>
+</ul>
+</div>
+<div class="section" id="lorav3-high-level-user-workflow">
+<h2><a class="toc-backref" href="#id1">LoRAv3 High-level User Workflow</a><a class="headerlink" href="#lorav3-high-level-user-workflow" title="Permalink to this heading">¶</a></h2>
+<p>The user workflow can be broken into 3 broad steps defined in the notebooks</p>
+<img alt="../../_static/resources/lora/loraV3_high_level_user_workflow.png" class="align-left" src="../../_static/resources/lora/loraV3_high_level_user_workflow.png" />
+<br clear="all"><p><strong>Step1:</strong></p>
+<ul class="simple">
+<li><p>Currently, only the PEFT library is supported for LoRAv3 fine-tuned adapter weights.</p></li>
+<li><p>Optional Quantization Aware Training (QAT) can be utilized to enhance accuracy if the <strong>adapter-only-updatable</strong> scheme does not meet the required accuracy for a given model. QAT can be achieved using either the Quantization Weight of LoRA (QW-LoRA) or the Quantization Weight and Activation of LoRA (QWA-LoRA) method. Please note that QAT is not included in Notebook Step 1.</p></li>
+</ul>
+<p><strong>Step2:</strong></p>
+<ul class="simple">
+<li><p>Step 2 involves the preparation of the max-rank concatenated graph (ONNX), concurrency weights (Safetensors), followed by ARn conversion, splitting the graph, MHA2SHA conversion, and finally converting the max-rank concatenated graph to a QNN graph. It is important to note that the qairt-quantizer does not quantize the full model; instead, it fills up the missed tensors’ encoding (from AIMET).</p></li>
+<li><p>The output of Step 2 is the context binary (binaries based on model split) and adapter binaries per supported concurrency.</p></li>
+</ul>
+<p><strong>Step3:</strong></p>
+<ul class="simple">
+<li><p>Step 3 involves preparing the Snapdragon device, creating Genie configurations, pushing the binaries into the device, and executing them using Genie.</p></li>
+</ul>
+</div>
+<div class="section" id="offline-graph-preparation-flow">
+<h2><a class="toc-backref" href="#id2">Offline Graph Preparation Flow</a><a class="headerlink" href="#offline-graph-preparation-flow" title="Permalink to this heading">¶</a></h2>
+<p>High-Level Offline Graph Preparation Flow Diagram</p>
+<blockquote>
+<div><img alt="../../_static/resources/lora/loraV3_offline_prep_high_level_flow.png" class="align-left" src="../../_static/resources/lora/loraV3_offline_prep_high_level_flow.png" />
+</div></blockquote>
+<br clear="all"><p>To effectively prepare input artifacts for LoRAv3 QAIRT, it is essential to follow the guidelines outlined in Notebook Step 1.</p>
+<p>Here are some key points to consider:</p>
+<ol class="arabic">
+<li><p>N + 1 ONNX models are needed. This includes one base model (without any LoRA branches) and N ONNX graphs for each concurrency. For example, if there are three adapters (A, B, and C) and the expected concurrencies are A, B, C, and A+C, then N equals 4.</p></li>
+<li><p>For multiple adapter concurrency, the input ONNX graphs must be the sum of rank concatenated (PEFT style).</p></li>
+<li><p>The N concurrency graphs must be derived from the base graph. So the base branch in the N graphs must be the same and same-as the base graph. Ensure that the op and tensor names in the base model are consistent across all N + 1 ONNX graphs.</p></li>
+<li><p>The lora attach-point must be Conv operator and the lora branch in concurrency graphs must be defined as Conv-&gt;Mul-&gt;Conv. Mul’s 2nd input is interpreted as lora-alpha scale for that concurrency. For a given concurrency, the same lora-alpha value should be passed to all attach-points.</p></li>
+<li><p>Each adapter requires a separate LoRA Adapter Config (JSON) file, following the PEFT style LoRA Config. The “target_modules” in these files should be present as a “key” in the pytorch2onnx_map (JSON) file. The corresponding “value” in this map is the complete ONNX attach-point name. The corresponding “value” in pytorch2onnx_map (JSON) is the complete ONNX attach-point name. For instance, if the model Llama-3.2-3B has three adapters (elementary, long, and function) and the supported concurrencies are (elementary, long, function, and elementary+long), the export will include three Adapter Config JSON files and one pytorch2onnx_map (JSON) file.</p>
+<p>Below are example snippets of adapter configs and the pytorch2onnx_map:</p>
+</li>
+</ol>
+<p>Elementary Adapter Config</p>
+<blockquote>
+<div><img alt="../../_static/resources/lora/loraV3_lora_offline_prep_example1.png" class="align-left" src="../../_static/resources/lora/loraV3_lora_offline_prep_example1.png" />
+</div></blockquote>
+<br clear="all"><p>Long Adapter Config</p>
+<blockquote>
+<div><img alt="../../_static/resources/lora/loraV3_lora_offline_prep_example2.png" class="align-left" src="../../_static/resources/lora/loraV3_lora_offline_prep_example2.png" />
+</div></blockquote>
+<br clear="all"><p>pytorch2onnx_Map</p>
+<blockquote>
+<div><img alt="../../_static/resources/lora/loraV3_lora_offline_prep_example3.png" class="align-left" src="../../_static/resources/lora/loraV3_lora_offline_prep_example3.png" />
+</div></blockquote>
+<br clear="all"><ol class="arabic simple" start="6">
+<li><p>The <em>qairt-lora-model-creator</em> tool generates a single ONNX graph that supports all specified concurrencies. Additionally, it creates a lora-alpha vector as an input tensor to the graph.</p></li>
+<li><p>The LoRA Config YAML file serves as a top-level configuration, containing paths for adapter config JSON files, the pytorch2onnx_map (JSON) file, and concurrency information. Below is an example for the Llama3.2-3B model:</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">adapter</span><span class="p">:</span>
+<span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">elementary</span>
+  <span class="n">lora_config</span><span class="p">:</span> <span class="n">elementary</span><span class="o">/</span><span class="n">elementary</span><span class="o">.</span><span class="n">json</span>
+<span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">long</span>
+  <span class="n">lora_config</span><span class="p">:</span> <span class="n">long</span><span class="o">/</span><span class="n">long</span><span class="o">.</span><span class="n">json</span>
+<span class="n">attach_point_onnx_mapping</span><span class="p">:</span> <span class="n">base</span><span class="o">/</span><span class="n">llama3_2_base_node_mapping</span><span class="o">.</span><span class="n">json</span>
+<span class="n">use</span><span class="o">-</span><span class="n">case</span><span class="p">:</span>
+  <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">base</span>
+    <span class="n">adapter_names</span><span class="p">:</span> <span class="p">[]</span>
+    <span class="n">model_name</span><span class="p">:</span> <span class="n">base</span><span class="o">/</span><span class="n">ar73_base_2_of_3</span><span class="o">.</span><span class="n">onnx</span>
+    <span class="n">quant_overrides</span><span class="p">:</span> <span class="n">base</span><span class="o">/</span><span class="n">ar73_base_2_of_3</span><span class="o">.</span><span class="n">encodings</span>
+  <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">elementary_long</span>
+    <span class="n">adapter_names</span><span class="p">:</span>
+    <span class="o">-</span> <span class="n">elementary</span>
+    <span class="o">-</span> <span class="n">long</span>
+    <span class="n">model_name</span><span class="p">:</span> <span class="n">elementary_long</span><span class="o">/</span><span class="n">ar73_el_2_of_3</span><span class="o">.</span><span class="n">onnx</span>
+    <span class="n">adapter_alphas</span><span class="p">:</span>
+    <span class="o">-</span> <span class="mf">1.0</span>
+    <span class="o">-</span> <span class="mf">1.0</span>
+    <span class="n">quant_overrides</span><span class="p">:</span> <span class="n">elementary_long</span><span class="o">/</span><span class="n">ar73_el_2_of_3</span><span class="o">.</span><span class="n">encodings</span>
+  <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">elementary</span>
+    <span class="n">adapter_names</span><span class="p">:</span>
+    <span class="o">-</span> <span class="n">elementary</span>
+    <span class="n">model_name</span><span class="p">:</span> <span class="n">elementary</span><span class="o">/</span><span class="n">ar73_ele_2_of_3</span><span class="o">.</span><span class="n">onnx</span>
+    <span class="n">adapter_alphas</span><span class="p">:</span>
+    <span class="o">-</span> <span class="mf">1.0</span>
+    <span class="n">quant_overrides</span><span class="p">:</span> <span class="n">elementary</span><span class="o">/</span><span class="n">ar73_ele_2_of_3</span><span class="o">.</span><span class="n">encodings</span>
+  <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">long</span>
+    <span class="n">adapter_names</span><span class="p">:</span>
+    <span class="o">-</span> <span class="n">long</span>
+    <span class="n">model_name</span><span class="p">:</span> <span class="n">long</span><span class="o">/</span><span class="n">ar73_ln_2_of_3</span><span class="o">.</span><span class="n">onnx</span>
+    <span class="n">adapter_alphas</span><span class="p">:</span>
+    <span class="o">-</span> <span class="mf">1.0</span>
+    <span class="n">quant_overrides</span><span class="p">:</span> <span class="n">long</span><span class="o">/</span><span class="n">ar73_ln_2_of_3</span><span class="o">.</span><span class="n">encodings</span>
+</pre></div>
+</div>
+<br clear="all"><ol class="arabic simple" start="8">
+<li><p>An encoding override file can be provided for each ONNX file, corresponding to each concurrency. These files contain quantization parameters such as bit-width, datatype, offset, scale, etc., for all weight and activation tensors present in the ONNX file. For more detailed information, refer to the <a class="reference external" href="https://docs.qualcomm.com/bundle/publicresource/topics/80-63442-10/quantization.html">Quantization Overrides Section</a> in the SDK document.</p></li>
+</ol>
+<img alt="../../_static/resources/lora/loraV3_lora_conversion_quantization.png" class="align-left" src="../../_static/resources/lora/loraV3_lora_conversion_quantization.png" />
+<br clear="all"><p>The output of <em>qairt-lora-model-creator</em> becomes the input for the <em>qairt-converter</em> tool. The Floating Point DLC then goes through the <em>qairt-quantizer</em> tool to determine quantization parameters for any missing tensors in the graph.</p>
+<p><strong>Note</strong>:</p>
+<ul class="simple">
+<li><p>To effectively utilize the <em>qairt-quantizer</em> tool, it is recommended to invoke it with the “–float_fallback” option. This ensures that tensors without quantization parameters in the encoding override file remain in floating point format.</p></li>
+<li><p>Alternatively, the <em>qairt-quantizer</em> tool can be invoked using the “–input_list” option. This requires the user to provide their own calibration data (in raw format) for the input tensors in the graph.</p>
+<ul>
+<li><p>When using the “–input_list” option, it is essential to pass the <em>lora_alpha</em> vector with all alpha values correctly specified.</p></li>
+</ul>
+</li>
+</ul>
+<p>The following example Python script demonstrates how to create the lora_alpha raw input:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># python gen_alpha_list.py &lt;alpha_list&gt; comma separated</span>
+
+<span class="c1">#  e.g. python gen_alpha_list 0.7,0.5</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="n">alpha_list_str</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="c1"># Convert the string to a list of floats</span>
+
+<span class="n">alpha_list</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span> <span class="k">for</span> <span class="n">alpha</span> <span class="ow">in</span> <span class="n">alpha_list_str</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)]</span>
+
+<span class="c1"># Convert the list to a numpy array of type float32</span>
+
+<span class="n">alpha_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">alpha_list</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+
+<span class="c1"># Save the numpy array to a binary file</span>
+
+<span class="n">alpha_array</span><span class="o">.</span><span class="n">tofile</span><span class="p">(</span><span class="s2">&quot;lora_alpha.raw&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Raw data file &#39;alpha_list.raw&#39; has been created successfully.&quot;</span><span class="p">)</span>
+
+<span class="c1"># Open the file</span>
+
+<span class="n">alpha_list_from_file</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fromfile</span><span class="p">(</span><span class="s2">&quot;lora_alpha.raw&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">alpha_list_from_file</span><span class="p">)</span>
+</pre></div>
+</div>
+<br clear="all"><p>Finally, the shown artifacts can be passed to the qairt-lora-importer, which will generate the encoding JSON files and updateable static weights (Safetensors format) per supported concurrency. The tensor names present in these encoding JSON and Safetensors files are compliant with the converted QNN graph.</p>
+<img alt="../../_static/resources/lora/loraV3_lora_importer.png" class="align-left" src="../../_static/resources/lora/loraV3_lora_importer.png" />
+<br clear="all"><div class="section" id="command-templates-for-offline-preparation-tools">
+<h3><a class="toc-backref" href="#id3">Command templates for offline preparation tools</a><a class="headerlink" href="#command-templates-for-offline-preparation-tools" title="Permalink to this heading">¶</a></h3>
+<div class="section" id="qairt-lora-mapper">
+<h4><a class="toc-backref" href="#id4">qairt-lora-mapper</a><a class="headerlink" href="#qairt-lora-mapper" title="Permalink to this heading">¶</a></h4>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">qairt</span><span class="o">-</span><span class="n">lora</span><span class="o">-</span><span class="n">mapper</span> <span class="o">--</span><span class="n">lora_config</span> <span class="o">&lt;</span><span class="n">lora_config_yaml_file</span><span class="o">&gt;</span> <span class="o">--</span><span class="n">output_dir</span> <span class="o">&lt;</span><span class="n">output</span> <span class="n">directory</span> <span class="n">path</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="qairt-lora-model-creator">
+<h4><a class="toc-backref" href="#id5">qairt-lora-model-creator</a><a class="headerlink" href="#qairt-lora-model-creator" title="Permalink to this heading">¶</a></h4>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">qairt</span><span class="o">-</span><span class="n">lora</span><span class="o">-</span><span class="n">model</span><span class="o">-</span><span class="n">creator</span> <span class="o">--</span><span class="n">lora_config</span> <span class="o">&lt;</span><span class="n">updated_lora_config_yaml</span><span class="o">&gt;</span> <span class="o">--</span><span class="n">output_dir</span> <span class="o">&lt;</span><span class="n">output</span> <span class="n">directory</span> <span class="n">path</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="qairt-converter">
+<h4><a class="toc-backref" href="#id6">qairt-converter</a><a class="headerlink" href="#qairt-converter" title="Permalink to this heading">¶</a></h4>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">qairt</span><span class="o">-</span><span class="n">converter</span> <span class="o">-</span><span class="n">i</span> <span class="o">&lt;</span><span class="n">concatenated</span><span class="o">-</span><span class="n">model</span><span class="o">-</span><span class="n">onnx</span><span class="o">&gt;</span> <span class="o">--</span><span class="n">quantization_overrides</span> <span class="o">&lt;</span><span class="n">base</span><span class="o">-</span><span class="n">case</span><span class="o">-</span><span class="n">encodings</span><span class="o">&gt;</span> <span class="o">--</span><span class="n">lora_weight_list</span> <span class="o">&lt;</span><span class="n">tensor</span><span class="o">-</span><span class="n">name</span><span class="o">-</span><span class="nb">list</span><span class="o">-</span><span class="n">from</span><span class="o">-</span><span class="n">model</span><span class="o">-</span><span class="n">creator</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="qairt-quantizer">
+<h4><a class="toc-backref" href="#id7">qairt-quantizer</a><a class="headerlink" href="#qairt-quantizer" title="Permalink to this heading">¶</a></h4>
+<p id="section-1">Option 1 with float_fallback:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">qairt</span><span class="o">-</span><span class="n">quantizer</span> <span class="o">-</span><span class="n">input_dlc</span> <span class="o">&lt;</span><span class="nb">float</span><span class="o">-</span><span class="n">dlc</span><span class="o">-</span><span class="n">produced</span><span class="o">-</span><span class="n">by</span><span class="o">-</span><span class="n">converter</span><span class="o">&gt;</span> <span class="o">--</span><span class="n">float_fallback</span> \
+<span class="o">--</span><span class="n">act_bitwidth</span> <span class="mi">16</span> <span class="o">--</span><span class="n">bias_bitwidth</span> <span class="mi">32</span>
+</pre></div>
+</div>
+<p>Option 2 with input_list:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">qairt</span><span class="o">-</span><span class="n">quantizer</span> <span class="o">-</span><span class="n">input_dlc</span> <span class="o">&lt;</span><span class="nb">float</span><span class="o">-</span><span class="n">dlc</span><span class="o">-</span><span class="n">produced</span><span class="o">-</span><span class="n">by</span><span class="o">-</span><span class="n">converter</span><span class="o">&gt;</span> <span class="o">--</span><span class="n">input_list</span> <span class="o">&lt;</span><span class="nb">input</span><span class="o">-</span><span class="nb">list</span><span class="o">-</span><span class="n">file</span><span class="o">&gt;</span> \
+<span class="o">--</span><span class="n">act_bitwidth</span> <span class="mi">16</span> <span class="o">--</span><span class="n">bias_bitwidth</span> <span class="mi">32</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="qairt-lora-importer">
+<span id="section-2"></span><h4><a class="toc-backref" href="#id8">qairt-lora-importer</a><a class="headerlink" href="#qairt-lora-importer" title="Permalink to this heading">¶</a></h4>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">qairt</span><span class="o">-</span><span class="n">lora</span><span class="o">-</span><span class="n">importer</span> <span class="o">-</span><span class="n">i</span> <span class="o">&lt;</span><span class="n">concatenated</span><span class="o">-</span><span class="n">model</span><span class="o">-</span><span class="n">onnx</span><span class="o">&gt;</span> \
+<span class="o">--</span><span class="n">lora_config</span> <span class="o">&lt;</span><span class="n">lora</span><span class="o">-</span><span class="n">config</span><span class="o">-</span><span class="n">yaml</span><span class="o">-</span><span class="n">produced</span><span class="o">-</span><span class="n">by</span><span class="o">-</span><span class="n">model</span><span class="o">-</span><span class="n">creator</span><span class="o">&gt;</span> \
+<span class="o">--</span><span class="n">input_dlc</span> <span class="o">&lt;</span><span class="n">quantized</span><span class="o">-</span><span class="n">dlc</span><span class="o">&gt;</span> <span class="o">--</span><span class="n">input_list</span> <span class="o">&lt;</span><span class="nb">input</span><span class="o">-</span><span class="nb">list</span><span class="o">&gt;</span> <span class="o">--</span><span class="n">output_dir</span> <span class="o">&lt;</span><span class="n">output</span><span class="o">-</span><span class="n">directory</span><span class="o">-</span><span class="n">path</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="context-binary-generation">
+<h2><a class="toc-backref" href="#id9">Context Binary Generation</a><a class="headerlink" href="#context-binary-generation" title="Permalink to this heading">¶</a></h2>
+<img alt="../../_static/resources/lora/loraV3_context_bin_generation.png" class="align-left" src="../../_static/resources/lora/loraV3_context_bin_generation.png" />
+<br clear="all"><p>The <em>qnn-context-binary-generator</em> receives “–adapter_weight_config” option along with YAML config (produced by the <em>qairt-lora-importer</em>).</p>
+<img alt="../../_static/resources/lora/loraV3_cbg_config.png" class="align-left" src="../../_static/resources/lora/loraV3_cbg_config.png" />
+<br clear="all"></div>
+<div class="section" id="command-template-for-context-binary-generation">
+<h2><a class="toc-backref" href="#id10">Command template for context binary generation</a><a class="headerlink" href="#command-template-for-context-binary-generation" title="Permalink to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">qnn</span><span class="o">-</span><span class="n">context</span><span class="o">-</span><span class="n">binary</span><span class="o">-</span><span class="n">generator</span> <span class="o">--</span><span class="n">backend</span> <span class="n">libQnnHtp</span><span class="o">.</span><span class="n">so</span> <span class="o">--</span><span class="n">dlc_path</span> <span class="o">&lt;</span><span class="n">quantized</span><span class="o">-</span><span class="n">dlc</span><span class="o">&gt;</span> \
+<span class="o">--</span><span class="n">binary_file</span> <span class="o">&lt;</span><span class="n">context</span><span class="o">-</span><span class="nb">bin</span><span class="o">&gt;</span> <span class="o">--</span><span class="n">config_file</span> <span class="o">&lt;</span><span class="n">htp</span><span class="o">-</span><span class="n">config</span><span class="o">-</span><span class="n">json</span><span class="o">&gt;</span> \
+<span class="o">--</span><span class="n">adapter_weight_config</span> <span class="o">&lt;</span><span class="n">lora</span><span class="o">-</span><span class="n">cbg</span><span class="o">-</span><span class="n">config</span><span class="o">-</span><span class="n">yaml</span><span class="o">&gt;</span> <span class="o">--</span><span class="n">output_dir</span> <span class="o">&lt;</span><span class="n">output</span><span class="o">-</span><span class="n">path</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="on-target-qnn-call-flow">
+<h2><a class="toc-backref" href="#id11">On-target QNN Call Flow</a><a class="headerlink" href="#on-target-qnn-call-flow" title="Permalink to this heading">¶</a></h2>
+<p>At the end of the offline flow, a serialized context binary file (for the base model) and a set of patch binary files (for each LoRA Concurrency including the Base use-case) will be available. To apply the LoRA Adapter on-target, the <em>QnnContext_applyBinarySection( )</em> API should be used, similar to the LoRAv2 workflow.</p>
+<p>The on-target flow is as follows:</p>
+<ul class="simple">
+<li><p>Create Context by calling <em>QnnContext_createFromBinary( ).</em></p></li>
+<li><p>Apply the adapter by calling <em>QnnContext_applyBinarySection( ).</em></p></li>
+<li><p>Update I/O tensors using adapter binary compatible quantization encodings.</p></li>
+<li><p>Obtain adequately quantized inputs and call <em>QnnGraph_execute( )</em>.</p></li>
+</ul>
+<a class="reference internal image-reference" href="../../_static/resources/lora/loraV3_qnn_online_flow.png"><img alt="../../_static/resources/lora/loraV3_qnn_online_flow.png" class="align-left" src="../../_static/resources/lora/loraV3_qnn_online_flow.png" style="width: 1200px;" /></a>
+<br clear="all"></div>
+<div class="section" id="on-target-genie-execution-flow">
+<h2><a class="toc-backref" href="#id12">On-target Genie Execution Flow</a><a class="headerlink" href="#on-target-genie-execution-flow" title="Permalink to this heading">¶</a></h2>
+<p>User needs to create a Genie Config JSON file before using the <em>genie-t2t-run</em> tool. Refer to Notebook Step-3 for examples.</p>
+<p>A typical example of Genie config is as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;lora&quot;</span><span class="p">:</span>
+<span class="p">{</span>
+  <span class="s2">&quot;version&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+  <span class="s2">&quot;alpha-tensor-name&quot;</span><span class="p">:</span> <span class="s2">&quot;lora_alpha&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;adapters&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;version&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+      <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;ar73_cl4096_2_of_3_default_adapter&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;bin-sections&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;ar73_cl4096_2_of_3_default_adapter.bin&quot;</span>
+      <span class="p">]</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;version&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+      <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;ar73_cl4096_2_of_3_elementary&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;alphas&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;alpha-elem&quot;</span>
+      <span class="p">],</span>
+      <span class="s2">&quot;bin-sections&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;ar73_cl4096_2_of_3_elementary.bin&quot;</span>
+      <span class="p">]</span>
+    <span class="p">}</span>
+<span class="p">{</span>
+      <span class="s2">&quot;version&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+      <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;ar73_cl4096_2_of_3_elementary+long&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;alphas&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;alpha-elem&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;alpha-long&quot;</span>
+      <span class="p">],</span>
+      <span class="s2">&quot;bin-sections&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;ar73_cl4096_2_of_3_elementary+long.bin&quot;</span>
+      <span class="p">]</span>
+    <span class="p">}</span>
+  <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>The alpha names can be assigned by the user in the config under “alphas” key</p></li>
+<li><p>The alpha values will be provided by the user using <em>genie-t2t-run</em> CLI or using <em>GenieDialog_setLoraStrength()</em> API</p></li>
+</ul>
+</div>
+<div class="section" id="command-template-for-genie-t2t-cli-tool">
+<h2><a class="toc-backref" href="#id13">Command template for Genie T2T CLI tool</a><a class="headerlink" href="#command-template-for-genie-t2t-cli-tool" title="Permalink to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">genie</span><span class="o">-</span><span class="n">t2t</span><span class="o">-</span><span class="n">run</span> <span class="o">-</span><span class="n">c</span> <span class="o">&lt;</span><span class="n">genie</span><span class="o">-</span><span class="n">config</span><span class="o">.</span><span class="n">json</span><span class="o">&gt;</span> <span class="o">-</span><span class="n">p</span> <span class="o">&lt;</span><span class="n">prompt</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>The following flow diagram shows how to use Genie APIs programmatically:</p>
+<a class="reference internal image-reference" href="../../_static/resources/lora/LoraV3_genie_online_flow.png"><img alt="../../_static/resources/lora/LoraV3_genie_online_flow.png" class="align-left" src="../../_static/resources/lora/LoraV3_genie_online_flow.png" style="width: 1200px;" /></a>
+<br clear="all"></div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020-2025, Qualcomm Technologies, Inc..
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

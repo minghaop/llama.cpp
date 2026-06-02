@@ -1,0 +1,746 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Windows Setup &mdash; Qualcomm® AI Runtime (QAIRT) SDKs</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/custom_css.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Tutorials and Examples" href="usergroup6.html" />
+    <link rel="prev" title="Linux Setup" href="setup_linux.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Qualcomm® AI Runtime (QAIRT) SDKs
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v2.46.0.260424121129
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">QAIRT</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../general/overview.html">Overview</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">SDKs</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../QNN/index.html">QNN</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">SNPE</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="setup.html">Setup</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="setup_linux.html">Linux Setup</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Windows Setup</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="usergroup6.html">Tutorials and Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usergroup1.html">Network Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usergroup5.html">Input Data and Preprocessing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usergroup10.html">Benchmarking and Accuracy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tools.html">Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usergroup11.html">Debug Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html">API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="limitations.html">Limitations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="revision_history.html">Revision History</a></li>
+<li class="toctree-l2"><a class="reference internal" href="appx_ref.html">References</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../Genie/index.html">Genie</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Delegates</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../Delegates/TfLite/index.html">TFLite Delegate</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Qualcomm® AI Runtime (QAIRT) SDKs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">⌂</a> &raquo;</li>
+        
+          <li><a href="setup.html">Setup</a> &raquo;</li>
+        
+      <li>Windows Setup</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="windows-setup">
+<h1>Windows Setup<a class="headerlink" href="#windows-setup" title="Permalink to this heading">¶</a></h1>
+<div class="section" id="instructions-for-windows-host-10-11-and-snapdragon">
+<h2><strong>Instructions for Windows Host (10, 11, and Snapdragon)</strong><a class="headerlink" href="#instructions-for-windows-host-10-11-and-snapdragon" title="Permalink to this heading">¶</a></h2>
+<p>Follow these instructions to install the Qualcomm Neural Processing SDK <strong>(commonly referred to as SNPE)</strong> and all necessary dependencies.</p>
+<p>SNPE allows you to convert an AI model (e.g., a <code class="docutils literal notranslate"><span class="pre">.pt</span></code> model from PyTorch) into instructions that can be run on a target device’s various processing units (CPU, GPU, DSP).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This guide is for a host machine running Windows 10, 11, or Windows on Snapdragon. If you are using a Linux machine or a WSL environment, follow the instructions <a class="reference external" href="setup_linux.html">here</a>.</p>
+</div>
+<p>There are several parts to this guide to install SNPE and all its corresponding dependencies:</p>
+<ul class="simple">
+<li><p>Part 1: Install the SNPE SDK.</p></li>
+<li><p>Part 2: Install SNPE dependencies.</p></li>
+<li><p>Part 3: Install model frameworks to interpret your AI model files. (e.g., <code class="docutils literal notranslate"><span class="pre">PyTorch</span></code>).</p></li>
+<li><p>Part 4: Install Target Device OS-Specific Toolchain Code.</p></li>
+<li><p>Part 5: Install Dependencies for Target Hardware Processors.</p></li>
+</ul>
+<p>These steps will require admin access in order to run some of the installation commands.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To learn about acronyms which are new to you, see the <a class="reference external" href="appx_ref.html">glossary</a>.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This guide contains many recommendations about specific versions of code to use that have been verified to work. Other versions of those dependencies may or may not work, so use them at your own risk.</p>
+</div>
+</div>
+<div class="section" id="part-1-install-the-qualcomm-neural-processing-engine-aka-snpe">
+<h2>Part 1: Install the <strong>Qualcomm Neural Processing Engine (aka “SNPE”)</strong><a class="headerlink" href="#part-1-install-the-qualcomm-neural-processing-engine-aka-snpe" title="Permalink to this heading">¶</a></h2>
+<ol class="arabic">
+<li><p>Go to the <a class="reference external" href="https://www.qualcomm.com/developer/software/neural-processing-sdk-for-ai">SNPE product page</a>.</p></li>
+<li><p>Click “Get Software” to download the QAIRT SDK (which contains SNPE).</p>
+<ol class="loweralpha simple">
+<li><p>The zipped file should have a name like <code class="docutils literal notranslate"><span class="pre">v2.32.0.250228</span></code>.</p></li>
+<li><p><strong>Note:</strong> the QAIRT SDK is ~1.1GB when zipped and ~2.5GB when unzipped.</p></li>
+</ol>
+</li>
+<li><p>Open File Explorer.</p></li>
+<li><p>In File Explorer, go to the Downloads folder.</p></li>
+<li><p>Unzip the downloaded SDK into the folder where you want the SDK to live.</p></li>
+<li><p>In File Explorer, navigate to the <code class="docutils literal notranslate"><span class="pre">bin</span></code> folder inside your unzipped SDK directory.</p>
+<ol class="loweralpha simple">
+<li><p>The full path will look something like <code class="docutils literal notranslate"><span class="pre">\path\to\unzipped\folder\v2.32.0.250228\qairt\2.32.0.250228\bin</span></code>.</p></li>
+<li><p>The numbers will correspond to your release of the SDK.</p></li>
+</ol>
+</li>
+<li><p>Click the address bar at the top to reveal the full path.</p></li>
+<li><p>Copy the complete path to the <code class="docutils literal notranslate"><span class="pre">bin</span></code> folder for later.</p>
+<ol class="loweralpha simple">
+<li><p>Click the address bar in File Explorer and press Ctrl + C. For example: <code class="docutils literal notranslate"><span class="pre">C:\Users\UserName\Downloads\v2.32.0.250228\qairt\2.32.0.250228\bin</span></code>.</p></li>
+</ol>
+</li>
+<li><p>Open an admin Powershell session by:</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Please keep this terminal open, as it will contain environment variables you’ll need in later steps and tutorials.</p>
+</div>
+<ol class="loweralpha simple">
+<li><p>Pressing the “Windows” key to search for applications.</p></li>
+<li><p>Searching for “Powershell”.</p></li>
+<li><p>Right-clicking “Windows Powershell” and selecting “Run as Administrator”.</p></li>
+<li><p>If a pop-up appears asking for permission, select “Yes”.</p></li>
+</ol>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cd</span></code> to the <code class="docutils literal notranslate"><span class="pre">bin</span></code> folder using the path you copied earlier, for example:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>C:<span class="se">\U</span>sers<span class="se">\U</span>serName<span class="se">\D</span>ownloads<span class="se">\v</span><span class="m">2</span>.32.0.250228<span class="se">\q</span>airt<span class="se">\2</span>.32.0.250228<span class="se">\b</span>in
+</pre></div>
+</div>
+</li>
+<li><p>Allow execution of scripts on this system by running:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>Set-ExecutionPolicy<span class="w"> </span>-Scope<span class="w"> </span>Process<span class="w"> </span>-ExecutionPolicy<span class="w"> </span>Bypass
+</pre></div>
+</div>
+</li>
+<li><p>Type <code class="docutils literal notranslate"><span class="pre">y</span></code> to accept the risk.</p></li>
+<li><p>Run the following commands to set <code class="docutils literal notranslate"><span class="pre">QAIRT_SDK_ROOT</span></code> and other useful variables:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>Unblock-File<span class="w"> </span>.<span class="se">\e</span>nvsetup.ps1
+.<span class="se">\e</span>nvsetup.ps1
+</pre></div>
+</div>
+<p>On some systems, the <code class="docutils literal notranslate"><span class="pre">Unblock-File</span></code> command is needed to have permission to execute scripts from the internet.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">envsetup.ps1</span></code> script only updates environment variables for this Powershell session. If you need to set <code class="docutils literal notranslate"><span class="pre">QAIRT_SDK_ROOT</span></code> again, re-run <code class="docutils literal notranslate"><span class="pre">\bin\envsetup.ps1</span></code>.</p>
+</div>
+</li>
+<li><p>Run the following command to install the core Windows build tools:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="p">&amp;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$env</span><span class="s2">:QAIRT_SDK_ROOT\bin\check-windows-dependency.ps1&quot;</span>
+</pre></div>
+</div>
+<ol class="loweralpha simple">
+<li><p>You may be asked to install Visual Studio 2022 Community Edition. Press <code class="docutils literal notranslate"><span class="pre">y</span></code> to accept.</p></li>
+<li><p>Click the “Modify” button in the lower right corner of the Visual Studio Installer to continue the process.</p></li>
+<li><p>When you have installed all the necessary dependencies, the script will say “All Done”.</p></li>
+<li><p>If you don’t see “All Done”, you may have to re-run the command.</p></li>
+</ol>
+</li>
+<li><p>Verify that you have installed the Microsoft Visual Studio C++ (MSVC) toolchain successfully.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>Unblock-File<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$env</span><span class="s2">:QAIRT_SDK_ROOT\bin\envcheck.ps1&quot;</span>
+<span class="p">&amp;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$env</span><span class="s2">:QAIRT_SDK_ROOT\bin\envcheck.ps1&quot;</span><span class="w"> </span>-m
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>It’s normal to see that only one of “Visual C++(x86)” and “Visual C++(arm64)” is installed. The installed version should match the hardware of your host machine.</p>
+</div>
+<p>You should see an output like this:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>Checking<span class="w"> </span>MSVC<span class="w"> </span>Toolchain
+--------------------------------------------------------------
+WARNING:<span class="w"> </span>The<span class="w"> </span>version<span class="w"> </span>of<span class="w"> </span>VS<span class="w"> </span>BuildTools<span class="w"> </span><span class="m">14</span>.40.33807<span class="w"> </span>found<span class="w"> </span>has<span class="w"> </span>not<span class="w"> </span>been<span class="w"> </span>validated.<span class="w"> </span>Recommended<span class="w"> </span>to<span class="w"> </span>use<span class="w"> </span>known<span class="w"> </span>stable<span class="w"> </span>VS
+BuildTools<span class="w"> </span>version<span class="w"> </span><span class="m">14</span>.34
+WARNING:<span class="w"> </span>The<span class="w"> </span>version<span class="w"> </span>of<span class="w"> </span>Visual<span class="w"> </span>C++<span class="o">(</span>x64<span class="o">)</span><span class="w"> </span><span class="m">19</span>.40.33812<span class="w"> </span>found<span class="w"> </span>has<span class="w"> </span>not<span class="w"> </span>been<span class="w"> </span>validated.<span class="w"> </span>Recommended<span class="w"> </span>to<span class="w"> </span>use<span class="w"> </span>known<span class="w"> </span>stable
+Visual<span class="w"> </span>C++<span class="o">(</span>x64<span class="o">)</span><span class="w"> </span>version<span class="w"> </span><span class="m">19</span>.34
+WARNING:<span class="w"> </span>The<span class="w"> </span>version<span class="w"> </span>of<span class="w"> </span>CMake<span class="w"> </span><span class="m">3</span>.28.3<span class="w"> </span>found<span class="w"> </span>has<span class="w"> </span>not<span class="w"> </span>been<span class="w"> </span>validated.<span class="w"> </span>Recommended<span class="w"> </span>to<span class="w"> </span>use<span class="w"> </span>known<span class="w"> </span>stable<span class="w"> </span>CMake<span class="w"> </span>version<span class="w"> </span><span class="m">3</span>.21
+WARNING:<span class="w"> </span>The<span class="w"> </span>version<span class="w"> </span>of<span class="w"> </span>clang-cl<span class="w"> </span><span class="m">17</span>.0.3<span class="w"> </span>found<span class="w"> </span>has<span class="w"> </span>not<span class="w"> </span>been<span class="w"> </span>validated.<span class="w"> </span>Recommended<span class="w"> </span>to<span class="w"> </span>use<span class="w"> </span>known<span class="w"> </span>stable<span class="w"> </span>clang-cl<span class="w"> </span>version
+<span class="m">15</span>.0.1
+Name<span class="w">              </span>Version
+----<span class="w">              </span>-------
+Visual<span class="w"> </span>Studio<span class="w">     </span><span class="m">17</span>.13.35931.197
+VS<span class="w"> </span>Build<span class="w"> </span>Tools<span class="w">    </span><span class="m">14</span>.43.34808
+Visual<span class="w"> </span>C++<span class="o">(</span>x86<span class="o">)</span><span class="w">   </span><span class="m">19</span>.40.33812
+Visual<span class="w"> </span>C++<span class="o">(</span>arm64<span class="o">)</span><span class="w"> </span>Not<span class="w"> </span>Installed
+Windows<span class="w"> </span>SDK<span class="w">       </span><span class="m">10</span>.0.22621
+CMake<span class="w">             </span><span class="m">3</span>.30.5
+clang-cl<span class="w">          </span><span class="m">19</span>.1.1
+--------------------------------------------------------------
+</pre></div>
+</div>
+</li>
+</ol>
+</div>
+<div class="section" id="part-2-install-snpe-sdk-dependencies">
+<h2>Part 2: <strong>Install SNPE SDK dependencies</strong><a class="headerlink" href="#part-2-install-snpe-sdk-dependencies" title="Permalink to this heading">¶</a></h2>
+<ol class="arabic">
+<li><p>Check whether you have Python 3.10 installed by running:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>py<span class="w"> </span>--list
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>SNPE distributions are only supported on Python3, and has been tested with Python 3.10. Other releases may not work as expected. By default, use Python 3.10.</p>
+</div>
+</li>
+<li><p><strong>If you do not have Python 3.10</strong>, you can install it by running:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>winget<span class="w"> </span>install<span class="w"> </span>--id<span class="w"> </span>Python.Python.3.10<span class="w"> </span>-e
+</pre></div>
+</div>
+</li>
+<li><p>Verify the installation worked by running:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>py<span class="w"> </span>--list
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>You should see an entry that starts with <code class="docutils literal notranslate"><span class="pre">-V:3.10</span></code> or <code class="docutils literal notranslate"><span class="pre">Python</span> <span class="pre">3.10</span></code> as one of the options.</p></li>
+</ul>
+</li>
+<li><p>Run the following commands to initialize a virtual environment using Python <code class="docutils literal notranslate"><span class="pre">3.10</span></code> and install SNPE’s dependencies.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set up your virtual environment with Python 3.10</span>
+py<span class="w"> </span>-3.10<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span><span class="s2">&quot;venv&quot;</span>
+<span class="p">&amp;</span><span class="w"> </span><span class="s2">&quot;venv\Scripts\Activate.ps1&quot;</span>
+python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>--upgrade<span class="w"> </span>pip
+
+<span class="c1"># Install dependencies</span>
+python<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$env</span><span class="s2">:QAIRT_SDK_ROOT\bin\check-python-dependency&quot;</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</div>
+<div class="section" id="part-3-install-model-frameworks">
+<h2>Part 3: Install Model Frameworks<a class="headerlink" href="#part-3-install-model-frameworks" title="Permalink to this heading">¶</a></h2>
+<p>SNPE supports the following model frameworks.</p>
+<ol class="arabic">
+<li><p>Install the ones that are relevant for the AI model files you want to use.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>You do not need to install <strong>all</strong> packages here.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You can install a package by running <code class="docutils literal notranslate"><span class="pre">pip3</span> <span class="pre">install</span> <span class="pre">package==version</span></code>. e.g., <code class="docutils literal notranslate"><span class="pre">pip3</span> <span class="pre">install</span> <span class="pre">torch==2.4.1</span></code>. This may update some of the dependency packages installed earlier via check-python-dependency script.</p>
+</div>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 18%" />
+<col style="width: 18%" />
+<col style="width: 18%" />
+<col style="width: 46%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Framework</p></th>
+<th class="head"><p><strong>Package</strong></p></th>
+<th class="head"><p><strong>Version</strong></p></th>
+<th class="head"><p><strong>Description</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>PyTorch</p></td>
+<td><p><a class="reference external" href="https://pypi.org/project/torch/">torch</a></p></td>
+<td><p>2.4.1</p></td>
+<td><p>PyTorch is used for building and training deep learning models with a focus on flexibility and speed. Used with .pt files. Install by downloading the proper binary from <a class="reference external" href="https://pytorch.org/get-started/previous-versions/#v1130">PyTorch previous versions</a> if pip install does not work. <strong>THIS REQUIRES INSTALLING ONNX 1.19.1.</strong></p></td>
+</tr>
+<tr class="row-odd"><td><p>TensorFlow</p></td>
+<td><p><a class="reference external" href="https://pypi.org/project/tensorflow/">tensorflow</a></p></td>
+<td><p>2.10.1</p></td>
+<td><p>TensorFlow is used for building and training machine learning models, particularly deep learning models. Used with .pb files.
+⚠️ The envcheck script may incorrectly say this file is not installed on Ubuntu. If you would like to use <code class="docutils literal notranslate"><span class="pre">tensorflow</span> <span class="pre">1.15.1</span></code>, you must install Python 3.6.8 by rerunning the Python installation steps above with that version.</p></td>
+</tr>
+<tr class="row-even"><td><p>TFLite</p></td>
+<td><p><a class="reference external" href="https://pypi.org/project/tflite/">tflite</a></p></td>
+<td><p>2.18.0</p></td>
+<td><p>TFLite is used for running TensorFlow models on mobile and edge devices with optimized performance. Used with .tflite files.</p></td>
+</tr>
+<tr class="row-odd"><td><p>ONNX</p></td>
+<td><p><a class="reference external" href="https://pypi.org/project/onnx/">onnx</a></p></td>
+<td><p>1.19.1</p></td>
+<td><p>ONNX stands for Open Neural Network Exchange. It is used for defining and exchanging deep learning models between different frameworks. Used with .onnx files.</p></td>
+</tr>
+<tr class="row-even"><td><p>ONNX Runtime</p></td>
+<td><p><a class="reference external" href="https://pypi.org/project/onnxruntime/">onnxruntime</a></p></td>
+<td><p>1.23.2</p></td>
+<td><p>ONNX stands for Open Neural Network Exchange. It is used for running ONNX models with high performance across various hardware platforms. Used with .onnx files.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You can verify your installation by running <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-c</span> <span class="pre">&quot;import</span> <span class="pre">&lt;model&gt;&quot;</span></code> (replacing <code class="docutils literal notranslate"><span class="pre">&lt;model&gt;</span></code> with the import you downloaded above). If the script executes without any errors, that means it was installed correctly.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>If you see the error <code class="docutils literal notranslate"><span class="pre">Missing</span> <span class="pre">cudart64_110.dll</span></code> that error <strong>is safe to ignore.</strong> It means that the library tried to find GPU support (CUDA 11.0), but was unable to find it. This only matters if it shows up on the target device and you are trying to use the GPU processor.</p>
+</div>
+</li>
+</ol>
+</div>
+<div class="section" id="part-4-install-target-device-os-specific-toolchain-code">
+<h2>Part 4: Install Target Device OS-Specific Toolchain Code<a class="headerlink" href="#part-4-install-target-device-os-specific-toolchain-code" title="Permalink to this heading">¶</a></h2>
+<p>Depending on the target device’s operating system there may be additional installation requirements. These dependencies are mostly used for cross-compilation.</p>
+<p>You only need to read the section that corresponds to your target device OS. SNPE supports versions of Android, Linux, OE Linux, and Windows target devices.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For Windows target devices, you do not need to do any additional installations, you can skip to Part 5.</p>
+</div>
+<div class="section" id="working-with-an-android-target-device">
+<h3>Working with an Android Target Device<a class="headerlink" href="#working-with-an-android-target-device" title="Permalink to this heading">¶</a></h3>
+<p>For working with Android devices, you will need to install a corresponding Android NDK (Native Developer Kit). You can install the recommended version (Android NDK version <code class="docutils literal notranslate"><span class="pre">r26c</span></code>) by following these steps:</p>
+<ol class="arabic">
+<li><p>Download the Android NDK: <a class="reference external" href="https://dl.google.com/android/repository/android-ndk-r26c-linux.zip">Android NDK r26c</a></p></li>
+<li><p>Unzip the file.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>If your environment is in WSL, the Android NDK must be unzipped under <code class="docutils literal notranslate"><span class="pre">$HOME</span></code> with the WSL <code class="docutils literal notranslate"><span class="pre">unzip</span></code> command.</p>
+</div>
+</li>
+<li><p>Copy the path to your unzipped Android NDK root (the folder should be named <code class="docutils literal notranslate"><span class="pre">android-ndk-r26c</span></code>).</p></li>
+<li><p>Go to your Powershell session.</p></li>
+<li><p>Set the path to the Android NDK root as an environment variable:</p>
+<ol class="loweralpha">
+<li><p>Replace the text in “&lt;…&gt;”. For example, <code class="docutils literal notranslate"><span class="pre">/home/usr/Documents/android-ndk-r26c</span></code>.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nv">$env</span>:ANDROID_NDK_ROOT<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;&lt;path-to-your-android-ndk-root-folder&gt;&quot;</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</li>
+<li><p>Add the location of the unzipped file to your PATH by running:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="o">[</span>System.Environment<span class="o">]</span>::SetEnvironmentVariable<span class="o">(</span><span class="s2">&quot;ANDROID_NDK_ROOT&quot;</span>,<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$env</span><span class="s2">:ANDROID_NDK_ROOT&quot;</span>,<span class="w"> </span><span class="s2">&quot;User&quot;</span><span class="o">)</span>
+<span class="nv">$env</span>:PATH<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$env</span><span class="s2">:ANDROID_NDK_ROOT;</span><span class="nv">$env</span><span class="s2">:PATH&quot;</span>
+<span class="o">[</span>System.Environment<span class="o">]</span>::SetEnvironmentVariable<span class="o">(</span><span class="s2">&quot;PATH&quot;</span>,<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$env</span><span class="s2">:ANDROID_NDK_ROOT;</span><span class="nv">$env</span><span class="s2">:PATH&quot;</span>,<span class="w"> </span><span class="s2">&quot;User&quot;</span><span class="o">)</span>
+</pre></div>
+</div>
+</li>
+<li><p>You can verify the PATH has been updated by running <code class="docutils literal notranslate"><span class="pre">$env:PATH</span> <span class="pre">-split</span> <span class="pre">';'</span></code> and checking the top of the list to see if the path to the Android NDK is in the list.</p>
+<ol class="loweralpha simple">
+<li><p>If the output does not have <code class="docutils literal notranslate"><span class="pre">ANDROID_NDK_ROOT</span></code> specified, replace <code class="docutils literal notranslate"><span class="pre">$env:ANDROID_NDK_ROOT</span></code> in Step 6 with the path to your Android NDK folder (in all 3 sub-commands) and re-run them.</p></li>
+</ol>
+</li>
+<li><p>Install Java 8 by running:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>winget<span class="w"> </span>install<span class="w"> </span>--id<span class="w"> </span>EclipseAdoptium.Temurin.8.JDK
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Java 8 has been verified with SNPE, other versions may not work as expected. Java is essential if you want to use SNPE with an Android application.</p>
+</div>
+</li>
+</ol>
+</div>
+<div class="section" id="working-with-a-linux-target-device">
+<h3>Working with a Linux Target Device<a class="headerlink" href="#working-with-a-linux-target-device" title="Permalink to this heading">¶</a></h3>
+<p>When building models for Linux target devices with SNPE, you need a compatible <code class="docutils literal notranslate"><span class="pre">clang++</span></code> version. Using an unvalidated version may cause build errors.</p>
+<ol class="arabic">
+<li><p>Check your environment toolchain by running the SNPE environment check script:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>Unblock-File<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$env</span><span class="s2">:QAIRT_SDK_ROOT\bin\envcheck.ps1&quot;</span>
+<span class="p">&amp;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$env</span><span class="s2">:QAIRT_SDK_ROOT\bin\envcheck.ps1&quot;</span><span class="w"> </span>-m
+</pre></div>
+</div>
+</li>
+<li><p>Review the <code class="docutils literal notranslate"><span class="pre">clang-v1</span></code> version in the output:</p>
+<ol class="loweralpha">
+<li><p>You should see something like this (with no errors):</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>Name<span class="w">              </span>Version
+----<span class="w">              </span>-------
+Visual<span class="w"> </span>Studio<span class="w">     </span><span class="m">17</span>.13.35931.197
+VS<span class="w"> </span>Build<span class="w"> </span>Tools<span class="w">    </span><span class="m">14</span>.43.34808
+Visual<span class="w"> </span>C++<span class="o">(</span>x86<span class="o">)</span><span class="w">   </span><span class="m">19</span>.43.34810
+Visual<span class="w"> </span>C++<span class="o">(</span>arm64<span class="o">)</span><span class="w"> </span><span class="m">19</span>.43.34810
+Windows<span class="w"> </span>SDK<span class="w">       </span><span class="m">10</span>.0.22621
+CMake<span class="w">             </span><span class="m">3</span>.30.5
+clang-cl<span class="w">          </span><span class="m">15</span>.0.1
+</pre></div>
+</div>
+</li>
+<li><p>If you see an error, please install the recommended version following the “(Optional) How to install clang++” steps below.</p></li>
+</ol>
+</li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">make</span></code> is not already installed on your system, install it by running:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>winget<span class="w"> </span>install<span class="w"> </span>--id<span class="o">=</span>GnuWin32.Make
+</pre></div>
+</div>
+</li>
+<li><p>(Optional) You can update your Visual Studio to use a specific version of <code class="docutils literal notranslate"><span class="pre">clang++</span></code> by following <a class="reference external" href="https://learn.microsoft.com/en-us/cpp/build/clang-support-msbuild?view=msvc-170">these instructions</a>.</p></li>
+</ol>
+<div class="section" id="optional-how-to-install-clang">
+<h4>(Optional) How to install clang++<a class="headerlink" href="#optional-how-to-install-clang" title="Permalink to this heading">¶</a></h4>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>You only need to follow these steps if you saw errors/warnings for <code class="docutils literal notranslate"><span class="pre">clang-c1</span></code> from the steps above.</p>
+</div>
+<p>Download and install the recommended version of <code class="docutils literal notranslate"><span class="pre">clang++</span></code> from the official <a class="reference external" href="https://releases.llvm.org/download.html">LLVM site</a>:</p>
+<ol class="arabic">
+<li><p>Find the LLVM version that matches the recommended version (ex: 15.0.1).</p></li>
+<li><p>Click on the link to the GitHub release page.</p></li>
+<li><p>Press <code class="docutils literal notranslate"><span class="pre">Ctrl</span> <span class="pre">+</span> <span class="pre">F</span></code> and search for either <code class="docutils literal notranslate"><span class="pre">win32</span></code> or <code class="docutils literal notranslate"><span class="pre">win64</span></code>, depending on your system’s architecture.</p></li>
+<li><p>Click on the <code class="docutils literal notranslate"><span class="pre">.exe</span></code> file that matches your system’s architecture above (ex: <code class="docutils literal notranslate"><span class="pre">LLVM-15.0.1-win64.exe</span></code>), and it will automatically download the LLVM installer.</p></li>
+<li><p>Open the downloaded <code class="docutils literal notranslate"><span class="pre">.exe</span></code> file and follow the setup instructions.</p></li>
+<li><p>Select “Add LLVM to the system PATH for all users” when prompted.</p></li>
+<li><p>Open a new PowerShell instance and run:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>clang++<span class="w"> </span>--version
+</pre></div>
+</div>
+<p>You should see something like:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>clang<span class="w"> </span>version<span class="w"> </span><span class="m">15</span>.0.1
+Target:<span class="w"> </span>x86_64-pc-windows-msvc
+Thread<span class="w"> </span>model:<span class="w"> </span>posix
+InstalledDir:<span class="w"> </span>C:<span class="se">\P</span>rogram<span class="w"> </span>Files<span class="se">\L</span>LVM<span class="se">\b</span>in
+</pre></div>
+</div>
+<p>If <code class="docutils literal notranslate"><span class="pre">clang</span> <span class="pre">version</span></code> matches your installed version, you’ve succeeded!</p>
+</li>
+<li><p>Copy the <code class="docutils literal notranslate"><span class="pre">InstalledDir</span></code> path.</p></li>
+<li><p>In your original PowerShell instance, manually update the current session’s <code class="docutils literal notranslate"><span class="pre">PATH</span></code> variable by running:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nv">$env</span>:PATH<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;path\to\LLVM\bin;</span><span class="nv">$env</span><span class="s2">:PATH&quot;</span>
+</pre></div>
+</div>
+<p>Where <code class="docutils literal notranslate"><span class="pre">path\to\LLVM\bin</span></code> can be found at <code class="docutils literal notranslate"><span class="pre">InstalledDir</span></code> in the previous Powershell output.</p>
+<p>For example:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nv">$env</span>:PATH<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;C:\Program Files\LLVM\bin;</span><span class="nv">$env</span><span class="s2">:PATH&quot;</span>
+</pre></div>
+</div>
+<p>This makes sure that your Powershell session can see the right version of <code class="docutils literal notranslate"><span class="pre">clang++</span></code> that you just installed.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="section" id="working-with-an-oe-linux-target-device">
+<h3>Working with an OE Linux Target Device<a class="headerlink" href="#working-with-an-oe-linux-target-device" title="Permalink to this heading">¶</a></h3>
+<p>Some Linux target devices, such as those based on <strong>Yocto Kirkstone</strong>, require cross-compilation using a GCC-based toolchain. The Qualcomm Neural Processing SDK has been verified to work with <strong>GCC 11.2</strong> for these systems.</p>
+<p>If you do not already have the required toolchain installed or available in your system <code class="docutils literal notranslate"><span class="pre">PATH</span></code>, follow these steps to download and install the cross-compiler using Qualcomm’s eSDK:</p>
+<ol class="arabic">
+<li><p>Download the <a class="reference external" href="https://artifacts.codelinaro.org/artifactory/qli-ci/flashable-binaries/qimpsdk/qcm6490/x86/qcom-6.6.28-QLI.1.1-Ver.1.1_qim-product-sdk-1.1.3.zip">SDK package</a>.</p></li>
+<li><p>Extract the ZIP file.</p></li>
+<li><p>Install Windows Subsystem for Linux (WSL) by following the instructions <a class="reference external" href="https://learn.microsoft.com/en-us/windows/wsl/install">here</a>.</p>
+<ol class="loweralpha simple">
+<li><p>The eSDK can only be extracted with Linux-like systems since it only comes with a <code class="docutils literal notranslate"><span class="pre">.sh</span></code> installer.</p></li>
+</ol>
+</li>
+<li><p>Run the toolchain installer script within WSL:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>/mnt/c/Users/Username/Downloads/qcom-6.6.28-QLI.1.1-Ver.1.1_qim-product-sdk-1.1.3
+sh<span class="w"> </span>qcom-wayland-x86_64-qcom-multimedia-image-armv8-2a-qcm6490-toolchain-ext-1.0.sh
+</pre></div>
+</div>
+</li>
+<li><p>Set your eSDK root and source the toolchain environment using WSL:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">ESDK_ROOT</span><span class="o">=</span>&lt;path-to-installed-esdk&gt;
+<span class="nb">cd</span><span class="w"> </span><span class="nv">$ESDK_ROOT</span>
+<span class="nb">source</span><span class="w"> </span>environment-setup-armv8-2a-qcom-linux
+</pre></div>
+</div>
+</li>
+</ol>
+<p>This sets up the correct cross-compilation environment to build and deploy models for Yocto-based Linux targets.</p>
+</div>
+<div class="section" id="working-with-a-windows-target-device">
+<h3>Working with a Windows Target Device<a class="headerlink" href="#working-with-a-windows-target-device" title="Permalink to this heading">¶</a></h3>
+<p>For Windows target devices, you do not need to do any additional installation.</p>
+</div>
+</div>
+<div class="section" id="part-5-install-dependencies-for-target-hardware-processors">
+<h2>Part 5: Install <strong>Dependencies for Target Hardware Processors</strong><a class="headerlink" href="#part-5-install-dependencies-for-target-hardware-processors" title="Permalink to this heading">¶</a></h2>
+<p>Some of the target processors (CPU, GPU, or DSP) require additional dependencies to build models.</p>
+<div class="section" id="cpu-central-processing-unit">
+<h3>CPU (Central Processing Unit)<a class="headerlink" href="#cpu-central-processing-unit" title="Permalink to this heading">¶</a></h3>
+<p>The x86_64 targets are built using <code class="docutils literal notranslate"><span class="pre">clang-14</span></code>. You can update your Visual Studio to use a specific version of <code class="docutils literal notranslate"><span class="pre">clang++</span></code> by following <a class="reference external" href="https://learn.microsoft.com/en-us/cpp/build/clang-support-msbuild?view=msvc-170">these instructions</a>.</p>
+<ol class="arabic simple">
+<li><p>To install <code class="docutils literal notranslate"><span class="pre">clang++14</span></code>, follow the <strong>“(Optional) How to install clang++14”</strong> steps in the <strong>“Linux”</strong> section of Part 4 above.</p></li>
+<li><p>The ARM CPU targets are built using the Android NDK (see the Working with an Android Target Device section above).</p></li>
+</ol>
+</div>
+<div class="section" id="gpu-graphics-processing-unit">
+<h3>GPU (Graphics Processing Unit)<a class="headerlink" href="#gpu-graphics-processing-unit" title="Permalink to this heading">¶</a></h3>
+<p>The GPU backend kernels are written based on OpenCL. The GPU operations must be implemented based on OpenCL headers with minimum version OpenCL 1.2.</p>
+</div>
+<div class="section" id="dsp">
+<h3>DSP<a class="headerlink" href="#dsp" title="Permalink to this heading">¶</a></h3>
+<p>Compiling for DSP hardware requires the use of the Qualcomm Hexagon SDK and Hexagon SDK Tools which you can install by following these steps:</p>
+<ol class="arabic">
+<li><p>If you do not already have Qualcomm Package Manager 3 (QPM3) installed, install it by following the steps below:</p>
+<ol class="loweralpha simple">
+<li><p>Sign into <a class="reference external" href="https://qpm.qualcomm.com/#/main/tools/details/QPM3">Qualcomm Package Manager 3</a></p></li>
+</ol>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>You may have to click the link again after logging in to have it load properly.</p>
+</div>
+<ol class="loweralpha simple" start="2">
+<li><p>Download the Windows version of Qualcomm Package Manager 3 (QPM3).</p></li>
+</ol>
+</li>
+<li><p>Start QPM3 by running the QPM3 executable. It should have a similar name to <code class="docutils literal notranslate"><span class="pre">QPM.3.0.92.3.Windows-AnyCPU.exe</span></code>.</p></li>
+<li><p>Log in with your Qualcomm ID within the QPM 3 app when prompted.</p></li>
+<li><p>Once logged in to QPM3, click on “Tools.”</p></li>
+<li><p>Look up which “Hexagon Architecture” your chip supports in the <a class="reference external" href="https://docs.qualcomm.com/bundle/publicresource/topics/80-63442-10/QNN_general_overview.html#tbl-supported-snapdragon-devices">supported Snapdragon devices table</a> (it should look like “V00”).</p></li>
+<li><p>Use the Hexagon Architecture you just looked up to determine which version of the “Hexagon SDK” you need from this table:</p>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Hexagon Architecture</strong></p></th>
+<th class="head"><p><strong>Hexagon SDK Version</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>V81</p></td>
+<td><p>6.2.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>V79</p></td>
+<td><p>6.0.0</p></td>
+</tr>
+<tr class="row-even"><td><p>V75</p></td>
+<td><p>5.4.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>V73</p></td>
+<td><p>5.4.0</p></td>
+</tr>
+<tr class="row-even"><td><p>V69</p></td>
+<td><p>4.3.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>v68</p></td>
+<td><p>4.2.0</p></td>
+</tr>
+<tr class="row-even"><td><p>v66</p></td>
+<td><p>4.1.0</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p>Search for “Hexagon SDK” in QPM3.</p></li>
+<li><p>Download the proper version for your target device based on the above table.</p>
+<ol class="loweralpha simple">
+<li><p>You will have to accept terms and conditions to use the downloaded files.</p></li>
+<li><p>You will likely want to leave the files in the default location.</p></li>
+<li><p>The download should pre-select which add-ons are relevant. You may download the “Full NDK” as an alternative to the “Minimal NDK” depending on your use case.</p></li>
+</ol>
+</li>
+<li><p>Write down the path to the Hexagon SDK, you will need it later.</p></li>
+<li><p>In QPM3, go back to the search bar and search for “Hexagon Toolchain”.</p></li>
+<li><p>Based on your Hexagon Architecture, choose the corresponding version of the Hexagon Toolchain to click into:</p></li>
+</ol>
+<blockquote>
+<div><div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Hexagon SDK tools version 8.7.03/8.6.02/8.5.03/8.4.09/8.4.06 is <strong>not</strong> currently pre-packaged into Hexagon SDK version 5.4.0/4.3.0/4.2.0/4.1.0 respectively. It needs to be downloaded separately and placed at the location <code class="docutils literal notranslate"><span class="pre">$HEXAGON_SDK_ROOT/tools/HEXAGON_Tools/</span></code>.</p>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="12">
+<li><p>Download the corresponding version of the “Hexagon Toolchain”.</p></li>
+<li><p>Ensure you have installed <code class="docutils literal notranslate"><span class="pre">clang++</span></code> so you can compile code for DSP hardware (see <strong>“Working with a Linux Target”</strong>).</p></li>
+<li><p>Follow the rest of the instructions at <code class="docutils literal notranslate"><span class="pre">$HEXAGON_SDK_ROOT/docs/readme.html</span></code> (where <code class="docutils literal notranslate"><span class="pre">$HEXAGON_SDK_ROOT</span></code> is the location of the Hexagon SDK installation) to complete the installation.</p></li>
+</ol>
+</div>
+</div>
+<div class="section" id="next-steps">
+<h2>Next Steps<a class="headerlink" href="#next-steps" title="Permalink to this heading">¶</a></h2>
+<p>Now that you have finished setting up SNPE and its dependencies, you can start using SNPE. Follow the <a class="reference external" href="building_and_executing_tutorial.html">“Building and Executing a Model” Tutorial</a> to learn how to transform your AI models  build them for your target device, and use them to generate inferences on the information processing cores you choose. Use SNPE to allow your AI models to execute on your specific target device’s cores.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="usergroup6.html" class="btn btn-neutral float-right" title="Tutorials and Examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="setup_linux.html" class="btn btn-neutral float-left" title="Linux Setup" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020-2025, Qualcomm Technologies, Inc..
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

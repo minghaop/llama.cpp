@@ -1,0 +1,27 @@
+version
+pipeline config create pipelineConfig
+pipeline create GeniePipeline pipelineConfig
+
+#LUT Encoder
+node config create textEncoderConfig mx-translation-text-encoder.json
+node create textEncoder textEncoderConfig
+
+#Text Generator
+node config create textGeneratorConfig mx-translation-text-generator.json
+node create textGenerator textGeneratorConfig
+node set textCallback textGenerator GENIE_NODE_TEXT_GENERATOR_TEXT_OUTPUT
+
+#Pipeline add and connect calls
+pipeline add GeniePipeline textEncoder
+pipeline add GeniePipeline textGenerator
+
+pipeline connect GeniePipeline textEncoder GENIE_NODE_TEXT_ENCODER_EMBEDDING_OUTPUT textGenerator GENIE_NODE_TEXT_GENERATOR_EMBEDDING_INPUT
+
+node set text textEncoder GENIE_NODE_TEXT_ENCODER_TEXT_INPUT "Tell me about Qualcomm<\s>"
+
+pipeline execute GeniePipeline
+
+pipeline reset GeniePipeline
+node free textEncoder
+node free textGenerator
+pipeline free GeniePipeline

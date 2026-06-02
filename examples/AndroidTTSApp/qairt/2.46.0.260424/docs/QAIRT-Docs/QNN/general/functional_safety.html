@@ -1,0 +1,1487 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Functional Safety &mdash; Qualcomm® AI Runtime (QAIRT) SDKs</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/custom_css.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Qualcomm® AI Runtime (QAIRT) SDKs
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v2.46.0.260424121129
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">QAIRT</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../general/overview.html">Overview</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">SDKs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">QNN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../SNPE/index.html">SNPE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Genie/index.html">Genie</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Delegates</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../Delegates/TfLite/index.html">TFLite Delegate</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Qualcomm® AI Runtime (QAIRT) SDKs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Functional Safety</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="functional-safety">
+<h1>Functional Safety<a class="headerlink" href="#functional-safety" title="Permalink to this heading">¶</a></h1>
+<p>This page provides an overview the Qualcomm® <span class="xref std std-ref">AI Engine Direct</span> SDK usage for functional safety use cases.</p>
+<p>This document lists all supported QNN backends, APIs, tools, and operations. Where applicable, all supported parameters and limitations are also listed here.
+SDK components not listed in this document are unsupported for functional safety use cases.</p>
+<div class="section" id="asil">
+<h2>ASIL<a class="headerlink" href="#asil" title="Permalink to this heading">¶</a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 32%" />
+<col style="width: 30%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Components</p></th>
+<th class="head"><p>ASIL (or equivalent)</p></th>
+<th class="head"><p>Supported Platforms</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td rowspan="4"><p>SDK - HTP BE runtime
+(Target Device)</p></td>
+<td rowspan="4"><p>ASIL-B</p></td>
+<td><p>SA8295 (V68)</p></td>
+</tr>
+<tr class="row-odd"><td><p>SA8540 (V68)</p></td>
+</tr>
+<tr class="row-even"><td><p>SA8650 (V73)</p></td>
+</tr>
+<tr class="row-odd"><td><p>SA8620 (V75)</p></td>
+</tr>
+<tr class="row-even"><td><p>SDK - Tools (Host Machine)</p></td>
+<td><p>TCL2</p></td>
+<td><p>N/A</p></td>
+</tr>
+</tbody>
+</table>
+<p>Note: For supported tools host platform, refer to Supported Host Operating Systems section below.</p>
+</div>
+<div class="section" id="assumptions-of-use">
+<h2>Assumptions of Use<a class="headerlink" href="#assumptions-of-use" title="Permalink to this heading">¶</a></h2>
+<p>SWAOU: Software Assumption of Use.</p>
+<p><strong>QNN-SWAOU-1: All QNN libraries and artifacts must be obtained from a single SDK version.</strong></p>
+<p>SDK libraries are not backwards compatible with older SDK versions.</p>
+<p><strong>QNN-SWAOU-2: QNN Graph Contexts shall be created and prepared off-target.</strong></p>
+<p>All QNN graph contexts associated with safety critical use cases and targeting the HTP backend shall be created and prepared off-target. On-target graph preparation is not supported.</p>
+<p><strong>QNN-SWAOU-3: QNN Graph Contexts shall be re-generated to match the QNN release running on target.</strong></p>
+<p>Graph contexts must be regenerated to the match SDK version running on the device, even if there are no changes to the network definition. Graph contexts are also not transferable between device model types and must be regenerated.</p>
+<p><strong>QNN-SWAOU-4: Graphs prepared offline shall be verified by the client.</strong></p>
+<p>The Qualcomm AI Engine Direct SDK client, associated tools, and runtime are required to perform final verification of the network models on their platforms. Verification must include performance and accuracy KPI checks.</p>
+<p><strong>QNN-SWAOU-5: Users must validate inference results and delays in getting those results.</strong></p>
+<p>The inference inputs and outputs of any network must be verified by the user. The effect of delays in obtaining inference results must also be evaluated by the user.</p>
+<p><strong>QNN-SWAOU-6: Users shall transfer context binaries generated off-target onto the device.</strong></p>
+<p>Developers use tools listed in the <a class="reference internal" href="#supported-tools-summary"><span class="std std-ref">Supported Tools Summary</span></a> table to generate off-target context binaries (representations of their model). Once a developer is satisfied with their model conversion and context binary generation, they are responsible for transferring the context binary onto the device to the location of their choosing.</p>
+<p><strong>QNN-SWAOU-7: Only unsigned Process Domain (PD) shall be used.</strong></p>
+<p>QNN libraries are unsigned by default. Running on Signed PD is not supported.</p>
+<p><strong>QNN-SWAOU-8: Custom Op Package implementations shall be certified for Functional Safety by the supplier.</strong></p>
+<p>The Qualcomm AI Engine Direct SDK does not guarantee functional safety compliance for user implementations in custom operations.</p>
+<p><strong>QNN-SWAOU-9: Custom Op Package libraries shall be verified for integrity when loaded.</strong></p>
+<p>The user is responsible for <span class="xref std std-ref">adding a CRC to any Custom Op Package libraries</span> by using the Software Image Integrity Verification (SWIV) tool.</p>
+<p><strong>QNN-SWAOU-10: Only Functional Safety compliant QNN APIs shall be used.</strong></p>
+<p>Only safe QNN APIs and their supported parameters shall be used, as detailed in this document.</p>
+<p><strong>QNN-SWAOU-11: APIs shall be called in the correct sequence according to the SDK documentation.</strong></p>
+<p>QNN APIs must be called in the correct order. Refer to <a class="reference internal" href="#fusa-qnn-execution-call-flow"><span class="std std-ref">Functionally Safe QNN Execution Call Flow</span></a>.</p>
+<p><strong>QNN-SWAOU-12: Only Functional Safety compliant QNN operators shall be used.</strong></p>
+<p>Only supported QNN operators with any applicable restrictions shall be used, as detailed in this document.</p>
+<p><strong>QNN-SWAOU-13: Preemption shall not be expected for HMX and vTCM in SDK versions prior to QNN 2.26.</strong></p>
+<p>(Applicable to SDK versions prior to QNN 2.26. For QNN 2.26 and newer refer to QNN-SWAOU-15.) Preemption is not supported for any operations using HMX/vTCM. Only one operation shall execute at a time within the NSP.</p>
+<p><strong>QNN-SWAOU-14: Applications shall have deadline monitoring.</strong></p>
+<p>For all QNN API calls, applications shall have deadline monitoring as per the System Safety Concept.</p>
+<p><strong>QNN-SWAOU-15: Each application shall only use a single QNN priority for all graphs.</strong></p>
+<p>(Applicable to QNN 2.26 and newer SDK versions for V73 and newer architectures.) Only the deterministic preemption NSP scheduling mechanism is supported. User shall not mix QNN graph priorities within the same application (process).</p>
+<p><strong>QNN-SWAOU-16: An application shall not utilize QnnGraph_execute and QnnGraph_executeAsync APIs concurrently with the same graphHandle.</strong></p>
+<p>The unique Qnn_GraphHandle_t graphHandle returned from QnnGraph_retrieve for a single graphName shall not be used to invoke QnnGraph_execute and QnnGraph_executeAsync APIs concurrently within the same application (process).</p>
+<p><strong>QNN-SWAOU-17: Users are responsible for ensuring Freedom from Interference (FFI) in concurrent mixed backend criticality use cases.</strong></p>
+<p>If users’ applications utilize mixed backends concurrently, such as a GPU with shared memory, they must ensure the non-safe backend does not interfere with the safe HTP operations.</p>
+</div>
+<div class="section" id="tools">
+<h2>Tools<a class="headerlink" href="#tools" title="Permalink to this heading">¶</a></h2>
+<div class="section" id="supported-host-operating-systems">
+<h3>Supported Host Operating Systems<a class="headerlink" href="#supported-host-operating-systems" title="Permalink to this heading">¶</a></h3>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Supported Host OS</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Linux Ubuntu 22.04</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="supported-tools-summary">
+<span id="id1"></span><h3>Supported Tools Summary<a class="headerlink" href="#supported-tools-summary" title="Permalink to this heading">¶</a></h3>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 62%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Category</p></th>
+<th class="head"><p>Tool</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td rowspan="5"><p>Model Conversion</p></td>
+<td><p>qnn-tensorflow-converter</p></td>
+</tr>
+<tr class="row-odd"><td><p>qnn-tflite-converter</p></td>
+</tr>
+<tr class="row-even"><td><p>qnn-pytorch-converter</p></td>
+</tr>
+<tr class="row-odd"><td><p>qnn-onnx-converter</p></td>
+</tr>
+<tr class="row-even"><td><p>qairt-converter</p></td>
+</tr>
+<tr class="row-odd"><td rowspan="4"><p>Model Preparation</p></td>
+<td><p>qairt-quantizer</p></td>
+</tr>
+<tr class="row-even"><td><p>qnn-model-lib-generator</p></td>
+</tr>
+<tr class="row-odd"><td><p>qnn-context-binary-generator</p></td>
+</tr>
+<tr class="row-even"><td><p>qnn-op-package-generator</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="detailed-tools-parameters">
+<h3>Detailed Tools Parameters<a class="headerlink" href="#detailed-tools-parameters" title="Permalink to this heading">¶</a></h3>
+<div class="section" id="qnn-tensorflow-converter">
+<h4>qnn-tensorflow-converter<a class="headerlink" href="#qnn-tensorflow-converter" title="Permalink to this heading">¶</a></h4>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 62%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Supported Values / Limitations</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>input_network</p></td>
+<td><p>Valid path to the tensorflow model</p></td>
+</tr>
+<tr class="row-odd"><td><p>out_node</p></td>
+<td><p>Name of output tensor</p></td>
+</tr>
+<tr class="row-even"><td><p>input_dtype</p></td>
+<td><p>“float32”</p></td>
+</tr>
+<tr class="row-odd"><td><p>input_layout</p></td>
+<td><p>[“NCDHW”, “NDHWC”, “NCHW”, “NHWC”, “NFC”, “NCF”,</p>
+<blockquote>
+<div><p>“NTF”, “TNF”, “NF”, “NC”, “F”, “NONTRIVIAL”]</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="row-even"><td><p>input_dim</p></td>
+<td><p>&lt;name&gt; &lt;comma separated ints&gt; e.g. “data” “1,256,256,3”</p></td>
+</tr>
+<tr class="row-odd"><td><p>output_path</p></td>
+<td><p>Valid path for output file</p></td>
+</tr>
+<tr class="row-even"><td><p>float_bw</p></td>
+<td><p>[16, 32]</p></td>
+</tr>
+<tr class="row-odd"><td><p>quantization_overrides</p></td>
+<td><p>Valid path to parameters JSON file</p></td>
+</tr>
+<tr class="row-even"><td><p>input_list</p></td>
+<td><p>Valid path to input data file</p></td>
+</tr>
+<tr class="row-odd"><td><p>param_quantizer</p></td>
+<td><p>[“tf” (default), “enhanced”, “symmetric”]</p></td>
+</tr>
+<tr class="row-even"><td><p>act_quantizer</p></td>
+<td><p>[“tf” (default), “enhanced”, “symmetric”]</p></td>
+</tr>
+<tr class="row-odd"><td><p>algorithms</p></td>
+<td><p>Valid algorithm name e.g. “cle”</p></td>
+</tr>
+<tr class="row-even"><td><p>bias_bw</p></td>
+<td><p>[8, 32]</p></td>
+</tr>
+<tr class="row-odd"><td><p>act_bw</p></td>
+<td><p>[8, 16]</p></td>
+</tr>
+<tr class="row-even"><td><p>weight_bw</p></td>
+<td><p>8</p></td>
+</tr>
+<tr class="row-odd"><td><p>float_bias_bw</p></td>
+<td><p>[16, 32]</p></td>
+</tr>
+<tr class="row-even"><td><p>use_per_channel_quantization</p></td>
+<td><p>N/A (include –use_per_channel_quantization to enable)</p></td>
+</tr>
+<tr class="row-odd"><td><p>use_native_input_files</p></td>
+<td><p>N/A (include –use_native_input_files to enable)</p></td>
+</tr>
+<tr class="row-even"><td><p>use_native_output_files</p></td>
+<td><p>N/A (include –use_native_output_files to enable)</p></td>
+</tr>
+<tr class="row-odd"><td><p>op_package_lib</p></td>
+<td><p>Valid path to op package .so file</p></td>
+</tr>
+<tr class="row-even"><td><p>op_package_config</p></td>
+<td><p>Valid path to QNN op package config XML</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="qnn-tflite-converter">
+<h4>qnn-tflite-converter<a class="headerlink" href="#qnn-tflite-converter" title="Permalink to this heading">¶</a></h4>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 62%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Supported Values / Limitations</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>input_network</p></td>
+<td><p>Valid path to the tensorflow model</p></td>
+</tr>
+<tr class="row-odd"><td><p>out_node</p></td>
+<td><p>Name of output tensor</p></td>
+</tr>
+<tr class="row-even"><td><p>input_dtype</p></td>
+<td><p>“float32”</p></td>
+</tr>
+<tr class="row-odd"><td><p>input_layout</p></td>
+<td><p>[“NCDHW”, “NDHWC”, “NCHW”, “NHWC”, “NFC”, “NCF”,</p>
+<blockquote>
+<div><p>“NTF”, “TNF”, “NF”, “NC”, “F”, “NONTRIVIAL”]</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="row-even"><td><p>input_dim</p></td>
+<td><p>&lt;name&gt; &lt;comma separated ints&gt; e.g. “data” “1,256,256,3”</p></td>
+</tr>
+<tr class="row-odd"><td><p>output_path</p></td>
+<td><p>Valid path for output file</p></td>
+</tr>
+<tr class="row-even"><td><p>float_bw</p></td>
+<td><p>[16, 32]</p></td>
+</tr>
+<tr class="row-odd"><td><p>input_list</p></td>
+<td><p>Valid path to input data file</p></td>
+</tr>
+<tr class="row-even"><td><p>param_quantizer</p></td>
+<td><p>[“tf” (default), “enhanced”, “symmetric”]</p></td>
+</tr>
+<tr class="row-odd"><td><p>act_quantizer</p></td>
+<td><p>[“tf” (default), “enhanced”, “symmetric”]</p></td>
+</tr>
+<tr class="row-even"><td><p>bias_bw</p></td>
+<td><p>[8, 32]</p></td>
+</tr>
+<tr class="row-odd"><td><p>act_bw</p></td>
+<td><p>[8, 16]</p></td>
+</tr>
+<tr class="row-even"><td><p>weight_bw</p></td>
+<td><p>8</p></td>
+</tr>
+<tr class="row-odd"><td><p>float_bias_bw</p></td>
+<td><p>[16, 32]</p></td>
+</tr>
+<tr class="row-even"><td><p>use_per_channel_quantization</p></td>
+<td><p>N/A (include –use_per_channel_quantization to enable)</p></td>
+</tr>
+<tr class="row-odd"><td><p>use_native_input_files</p></td>
+<td><p>N/A (include –use_native_input_files to enable)</p></td>
+</tr>
+<tr class="row-even"><td><p>use_native_output_files</p></td>
+<td><p>N/A (include –use_native_output_files to enable)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="qnn-pytorch-converter">
+<h4>qnn-pytorch-converter<a class="headerlink" href="#qnn-pytorch-converter" title="Permalink to this heading">¶</a></h4>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 62%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Supported Values / Limitations</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>input_network</p></td>
+<td><p>Valid path to the tensorflow model</p></td>
+</tr>
+<tr class="row-odd"><td><p>out_node</p></td>
+<td><p>Name of output tensor</p></td>
+</tr>
+<tr class="row-even"><td><p>input_dtype</p></td>
+<td><p>“float32”</p></td>
+</tr>
+<tr class="row-odd"><td><p>input_layout</p></td>
+<td><p>[“NCDHW”, “NDHWC”, “NCHW”, “NHWC”, “NFC”, “NCF”,</p>
+<blockquote>
+<div><p>“NTF”, “TNF”, “NF”, “NC”, “F”, “NONTRIVIAL”]</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="row-even"><td><p>input_dim</p></td>
+<td><p>&lt;name&gt; &lt;comma separated ints&gt; e.g. “data” “1,256,256,3”</p></td>
+</tr>
+<tr class="row-odd"><td><p>output_path</p></td>
+<td><p>Valid path for output file</p></td>
+</tr>
+<tr class="row-even"><td><p>float_bw</p></td>
+<td><p>[16, 32]</p></td>
+</tr>
+<tr class="row-odd"><td><p>input_list</p></td>
+<td><p>Valid path to input data file</p></td>
+</tr>
+<tr class="row-even"><td><p>param_quantizer</p></td>
+<td><p>[“tf” (default), “enhanced”, “symmetric”]</p></td>
+</tr>
+<tr class="row-odd"><td><p>act_quantizer</p></td>
+<td><p>[“tf” (default), “enhanced”, “symmetric”]</p></td>
+</tr>
+<tr class="row-even"><td><p>bias_bw</p></td>
+<td><p>[8, 32]</p></td>
+</tr>
+<tr class="row-odd"><td><p>act_bw</p></td>
+<td><p>[8, 16]</p></td>
+</tr>
+<tr class="row-even"><td><p>weight_bw</p></td>
+<td><p>8</p></td>
+</tr>
+<tr class="row-odd"><td><p>float_bias_bw</p></td>
+<td><p>[16, 32]</p></td>
+</tr>
+<tr class="row-even"><td><p>use_per_channel_quantization</p></td>
+<td><p>N/A (include –use_per_channel_quantization to enable)</p></td>
+</tr>
+<tr class="row-odd"><td><p>use_native_input_files</p></td>
+<td><p>N/A (include –use_native_input_files to enable)</p></td>
+</tr>
+<tr class="row-even"><td><p>use_native_output_files</p></td>
+<td><p>N/A (include –use_native_output_files to enable)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="qnn-onnx-converter">
+<h4>qnn-onnx-converter<a class="headerlink" href="#qnn-onnx-converter" title="Permalink to this heading">¶</a></h4>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 62%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Supported Values / Limitations</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>input_network</p></td>
+<td><p>Valid path to the ONNX model</p></td>
+</tr>
+<tr class="row-odd"><td><p>out_node</p></td>
+<td><p>Name of output tensor</p></td>
+</tr>
+<tr class="row-even"><td><p>input_dtype</p></td>
+<td><p>“float32”</p></td>
+</tr>
+<tr class="row-odd"><td><p>input_layout</p></td>
+<td><p>[“NCDHW”, “NDHWC”, “NCHW”, “NHWC”, “NFC”, “NCF”,</p>
+<blockquote>
+<div><p>“NTF”, “TNF”, “NF”, “NC”, “F”, “NONTRIVIAL”]</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="row-even"><td><p>custom_io</p></td>
+<td><p>Valid path to custom IO YAML file</p></td>
+</tr>
+<tr class="row-odd"><td><p>preserve_io</p></td>
+<td><p>&lt;”layout” or “datatype”&gt; &lt;space separated names&gt;</p></td>
+</tr>
+<tr class="row-even"><td><p>input_dim</p></td>
+<td><p>&lt;name&gt; &lt;comma separated ints&gt; e.g. “data” “1,256,256,3”</p></td>
+</tr>
+<tr class="row-odd"><td><p>no_simplification</p></td>
+<td><p>N/A (include –no_simplification to enable)</p></td>
+</tr>
+<tr class="row-even"><td><p>batch</p></td>
+<td><p>&lt;int&gt;</p></td>
+</tr>
+<tr class="row-odd"><td><p>output_path</p></td>
+<td><p>Valid path for output file</p></td>
+</tr>
+<tr class="row-even"><td><p>float_bw</p></td>
+<td><p>[16, 32, bf16]</p></td>
+</tr>
+<tr class="row-odd"><td><p>quantization_overrides</p></td>
+<td><p>Valid path to parameters JSON file</p></td>
+</tr>
+<tr class="row-even"><td><p>input_list</p></td>
+<td><p>Valid path to input data file</p></td>
+</tr>
+<tr class="row-odd"><td><p>param_quantizer</p></td>
+<td><p>[“tf” (default), “enhanced”, “symmetric”]</p></td>
+</tr>
+<tr class="row-even"><td><p>act_quantizer</p></td>
+<td><p>[“tf” (default), “enhanced”, “symmetric”]</p></td>
+</tr>
+<tr class="row-odd"><td><p>algorithms</p></td>
+<td><p>Valid algorithm name e.g. “cle”</p></td>
+</tr>
+<tr class="row-even"><td><p>bias_bw</p></td>
+<td><p>[8, 32]</p></td>
+</tr>
+<tr class="row-odd"><td><p>act_bw</p></td>
+<td><p>[8, 16]</p></td>
+</tr>
+<tr class="row-even"><td><p>weight_bw</p></td>
+<td><p>8</p></td>
+</tr>
+<tr class="row-odd"><td><p>float_bias_bw</p></td>
+<td><p>[16, 32]</p></td>
+</tr>
+<tr class="row-even"><td><p>use_per_channel_quantization</p></td>
+<td><p>N/A (include –use_per_channel_quantization to enable)</p></td>
+</tr>
+<tr class="row-odd"><td><p>use_native_input_files</p></td>
+<td><p>N/A (include –use_native_input_files to enable)</p></td>
+</tr>
+<tr class="row-even"><td><p>use_native_output_files</p></td>
+<td><p>N/A (include –use_native_output_files to enable)</p></td>
+</tr>
+<tr class="row-odd"><td><p>op_package_lib</p></td>
+<td><p>Valid path to op package .so file</p></td>
+</tr>
+<tr class="row-even"><td><p>converter_op_package_lib</p></td>
+<td><p>Valid path to convert op package .so file</p></td>
+</tr>
+<tr class="row-odd"><td><p>op_package_config</p></td>
+<td><p>Valid path to QNN op package config XML</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="qairt-converter">
+<h4>qairt-converter<a class="headerlink" href="#qairt-converter" title="Permalink to this heading">¶</a></h4>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 62%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Supported Values / Limitations</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>input_network</p></td>
+<td><p>Path to the source framework model</p></td>
+</tr>
+<tr class="row-odd"><td><p>out_tensor_node</p></td>
+<td><p>Name of output tensor</p></td>
+</tr>
+<tr class="row-even"><td><p>source_model_input_shape</p></td>
+<td><p>&lt;name&gt; &lt;comma separated ints&gt; eg. “data” “1,256,256,3”</p></td>
+</tr>
+<tr class="row-odd"><td><p>source_model_input_datatype</p></td>
+<td><p>Names and datatype of input layers specified in format</p>
+<blockquote>
+<div><p>[input_name datatype] for example: data1 float32</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="row-even"><td><p>source_model_input_layout</p></td>
+<td><p>Layout of each input tensor. eg. “data1” NCHW</p>
+<p>[“NCDHW”, “NDHWC”, “NCHW”, “NHWC”, “HWIO”, “OIHW”</p>
+<blockquote>
+<div><p>“NFC”, “NCF”, “NTF”, “TNF”, “NF”, “NC”, “F”]</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="row-odd"><td><p>preserve_io_datatype</p></td>
+<td><p>&lt;space separated list of inputs and outputs of the graph&gt;</p></td>
+</tr>
+<tr class="row-even"><td><p>output_path</p></td>
+<td><p>Valid path for output file</p></td>
+</tr>
+<tr class="row-odd"><td><p>float_bitwidth</p></td>
+<td><p>[16, 32]  default ‘32’</p></td>
+</tr>
+<tr class="row-even"><td><p>float_bias_bitwidth</p></td>
+<td><p>[16, 32]  default ‘0’</p></td>
+</tr>
+<tr class="row-odd"><td><p>export_format</p></td>
+<td><p>[“DLC_DEFAULT” (default), “DLC_STRIP_QUANT”]</p></td>
+</tr>
+<tr class="row-even"><td><p>op_package_config</p></td>
+<td><p>Valid path to QNN op package config XML</p></td>
+</tr>
+<tr class="row-odd"><td><p>quantization_overrides</p></td>
+<td><p>Valid path to parameters JSON file</p></td>
+</tr>
+<tr class="row-even"><td><p>onnx_skip_simplification</p></td>
+<td><p>N/A (include –onnx_skip_simplification to enable)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="qairt-quantizer">
+<h4>qairt-quantizer<a class="headerlink" href="#qairt-quantizer" title="Permalink to this heading">¶</a></h4>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 62%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Supported Values / Limitations</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>input_dlc</p></td>
+<td><p>Path to the dlc container containing the model</p></td>
+</tr>
+<tr class="row-odd"><td><p>output_dlc</p></td>
+<td><p>Valid path for output dlc</p></td>
+</tr>
+<tr class="row-even"><td><p>input_list</p></td>
+<td><p>Valid path to input data file</p></td>
+</tr>
+<tr class="row-odd"><td><p>bias_bitwidth</p></td>
+<td><p>[8, 32]  default ‘8’</p></td>
+</tr>
+<tr class="row-even"><td><p>act_bitwidth</p></td>
+<td><p>[8, 16]  default ‘16’</p></td>
+</tr>
+<tr class="row-odd"><td><p>weights_bitwidth</p></td>
+<td><p>[4, 8, 16]  default ‘8’</p></td>
+</tr>
+<tr class="row-even"><td><p>use_per_channel_quantization</p></td>
+<td><p>N/A (include –use_per_channel_quantization to enable)</p></td>
+</tr>
+<tr class="row-odd"><td><p>preserve_io_datatype</p></td>
+<td><p>&lt;space separated list of inputs and outputs of the graph&gt;</p></td>
+</tr>
+<tr class="row-even"><td><p>use_native_input_files</p></td>
+<td><p>N/A (include –use_native_input_files to enable)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="qnn-model-lib-generator">
+<h4>qnn-model-lib-generator<a class="headerlink" href="#qnn-model-lib-generator" title="Permalink to this heading">¶</a></h4>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 39%" />
+<col style="width: 9%" />
+<col style="width: 4%" />
+<col style="width: 47%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Description</p></th>
+<th class="head"><p>Flag</p></th>
+<th class="head" colspan="2"><p>Supported Values / Limitations</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>QNN Model Source</p></td>
+<td><p>-c</p></td>
+<td colspan="2"><p>Valid file path to model .cpp</p></td>
+</tr>
+<tr class="row-odd"><td><p>QNN Model Binary</p></td>
+<td><p>-b</p></td>
+<td colspan="2"><p>Valid file path to model .bin (if required)</p></td>
+</tr>
+<tr class="row-even"><td><p>Build Target</p></td>
+<td><p>-t</p></td>
+<td colspan="2"><p>“x86_64-linux-clang”</p></td>
+</tr>
+<tr class="row-odd"><td><p>Output Directory</p></td>
+<td><p>-o</p></td>
+<td colspan="2"><p>Valid directory path</p></td>
+</tr>
+<tr class="row-even"><td><p>Library Name</p></td>
+<td><p>-l</p></td>
+<td colspan="2"><p>Valid .so filename (Optional)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="qnn-context-binary-generator">
+<h4>qnn-context-binary-generator<a class="headerlink" href="#qnn-context-binary-generator" title="Permalink to this heading">¶</a></h4>
+<p><strong>Supported Config JSON Schema Parameters</strong></p>
+<p><strong>config_file</strong>: The config file path is passed to <strong>qnn-context-binary-generator</strong> via the parameter <strong>–config_file</strong>.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 31%" />
+<col style="width: 31%" />
+<col style="width: 38%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Section</p></th>
+<th class="head"><p>Parameter</p></th>
+<th class="head"><p>Supported Values / Limitations</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>context_configs</p></td>
+<td><p>context_priority</p></td>
+<td><p>[“low”, “normal”, “normal_high”, “high”]</p></td>
+</tr>
+<tr class="row-odd"><td rowspan="3"><p>backend_extensions</p></td>
+<td><p>shared_library_path</p></td>
+<td><p>Valid file path</p></td>
+</tr>
+<tr class="row-even"><td><p>config_file_path</p></td>
+<td><p>Valid path to backend configuration file</p></td>
+</tr>
+<tr class="row-odd"><td><p>per_soc_config_file_path</p></td>
+<td><p>Array of valid backend configuration file
+paths for multi-SOC scenarios</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>backend_config</strong>: The backend config file path is specified in the main config file above, in the <strong>backend_extensions</strong> section using the <strong>config_file_path</strong> key.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 22%" />
+<col style="width: 25%" />
+<col style="width: 53%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Section</p></th>
+<th class="head"><p>Parameter</p></th>
+<th class="head"><p>Supported Values / Limitations</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td rowspan="7"><p>graphs</p></td>
+<td><p>dlbc</p></td>
+<td><p>[0, 1]</p></td>
+</tr>
+<tr class="row-odd"><td><p>fp16_relaxed_precision</p></td>
+<td><p>[0, 1]</p></td>
+</tr>
+<tr class="row-even"><td><p>graph_names</p></td>
+<td><p>Array of graph names (corresponding to QnnGraph_create)</p></td>
+</tr>
+<tr class="row-odd"><td><p>hvx_threads</p></td>
+<td><p>&lt;int&gt;</p></td>
+</tr>
+<tr class="row-even"><td><p>O</p></td>
+<td><p>[2, 3]</p></td>
+</tr>
+<tr class="row-odd"><td><p>finalize_config</p></td>
+<td><p><strong>P</strong> : [0, 1, 2, 3, 4, 5, 6, 8, 13, 15, 16, 17, 19, 20,
+21, 22, 23]</p>
+<p><strong>P Point is only supported when O=3 and dsp_arch is</strong>
+<strong>v73.</strong></p>
+</td>
+</tr>
+<tr class="row-even"><td><p>vtcm_mb</p></td>
+<td><p>8</p></td>
+</tr>
+<tr class="row-odd"><td rowspan="3"><p>devices</p></td>
+<td><p>dsp_arch</p></td>
+<td><p>[“v68”, “v73”, “v75”]</p></td>
+</tr>
+<tr class="row-even"><td><p>pd_session</p></td>
+<td><p>“unsigned”</p></td>
+</tr>
+<tr class="row-odd"><td><p>soc_id</p></td>
+<td><p>[39, 52, 62, 67] (39 for SA8295, 52 for SA8650,
+62 for SA8540, and 67 for SA8620)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="qnn-op-package-generator">
+<h4>qnn-op-package-generator<a class="headerlink" href="#qnn-op-package-generator" title="Permalink to this heading">¶</a></h4>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 39%" />
+<col style="width: 9%" />
+<col style="width: 4%" />
+<col style="width: 47%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Flag</p></th>
+<th class="head" colspan="2"><p>Supported Values / Limitations</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>config_path</p></td>
+<td><p>-p</p></td>
+<td colspan="2"><p>Valid file path to op package config</p></td>
+</tr>
+<tr class="row-odd"><td><p>output_path</p></td>
+<td><p>-o</p></td>
+<td colspan="2"><p>Valid directory path</p></td>
+</tr>
+<tr class="row-even"><td><p>force-generation</p></td>
+<td><p>-f</p></td>
+<td colspan="2"><p>N/A (include -f to enable)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="section" id="supported-runtime-apis-and-backends">
+<h2>Supported Runtime APIs and Backends<a class="headerlink" href="#supported-runtime-apis-and-backends" title="Permalink to this heading">¶</a></h2>
+<div class="section" id="supported-backends">
+<h3>Supported Backends<a class="headerlink" href="#supported-backends" title="Permalink to this heading">¶</a></h3>
+<p>Only the HTP Backend is supported for functional safety. All other backends are unsupported.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 29%" />
+<col style="width: 33%" />
+<col style="width: 38%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Backend</p></th>
+<th class="head"><p>Architecture</p></th>
+<th class="head"><p>Operating System</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>HTP</p></td>
+<td><p>V68</p></td>
+<td><p>QNX</p></td>
+</tr>
+<tr class="row-odd"><td><p>HTP</p></td>
+<td><p>V73</p></td>
+<td><p>QNX</p></td>
+</tr>
+<tr class="row-even"><td><p>HTP</p></td>
+<td><p>V75</p></td>
+<td><p>QNX</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="supported-backend-libraries">
+<h3>Supported Backend Libraries<a class="headerlink" href="#supported-backend-libraries" title="Permalink to this heading">¶</a></h3>
+<p>For V73, the HTP native backend library libQnnHtpV73Skel.so can be loaded via the corresponding libQnnHtpV73Stub.so on the device’s CPU side to execute graphs on the HTP accelerator via RPC channel.
+Alternatively, the libQnnHtpV73.so library supports direct graph execution on HTP without RPC, a mode referred to as Non-RPC execution.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 24%" />
+<col style="width: 43%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Architecture</p></th>
+<th class="head"><p>Target Platform</p></th>
+<th class="head"><p>Library</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td rowspan="5"><p>SA8295 (V68)</p></td>
+<td><p>ARM: aarch64-qhs225</p></td>
+<td><p>libQnnHtp.so</p></td>
+</tr>
+<tr class="row-odd"><td><p>ARM: aarch64-qhs225</p></td>
+<td><p>libQnnSystem.so</p></td>
+</tr>
+<tr class="row-even"><td><p>ARM: aarch64-qhs225</p></td>
+<td><p>libQnnHtpV68Stub.so</p></td>
+</tr>
+<tr class="row-odd"><td><p>NSP: hexagon-v68</p></td>
+<td><p>libQnnHtpV68Skel.so</p></td>
+</tr>
+<tr class="row-even"><td><p>NSP: hexagon-v68</p></td>
+<td><p>libQnnSystem.so</p></td>
+</tr>
+<tr class="row-odd"><td rowspan="5"><p>SA8540 (V68)</p></td>
+<td><p>ARM: aarch64-qos226</p></td>
+<td><p>libQnnHtp.so</p></td>
+</tr>
+<tr class="row-even"><td><p>ARM: aarch64-qos226</p></td>
+<td><p>libQnnSystem.so</p></td>
+</tr>
+<tr class="row-odd"><td><p>ARM: aarch64-qos226</p></td>
+<td><p>libQnnHtpV68Stub.so</p></td>
+</tr>
+<tr class="row-even"><td><p>NSP: hexagon-v68</p></td>
+<td><p>libQnnHtpV68Skel.so</p></td>
+</tr>
+<tr class="row-odd"><td><p>NSP: hexagon-v68</p></td>
+<td><p>libQnnSystem.so</p></td>
+</tr>
+<tr class="row-even"><td rowspan="6"><p>SA8650 (V73)</p></td>
+<td><p>ARM: aarch64-qos227</p></td>
+<td><p>libQnnHtp.so</p></td>
+</tr>
+<tr class="row-odd"><td><p>ARM: aarch64-qos227</p></td>
+<td><p>libQnnSystem.so</p></td>
+</tr>
+<tr class="row-even"><td><p>ARM: aarch64-qos227</p></td>
+<td><p>libQnnHtpV73Stub.so</p></td>
+</tr>
+<tr class="row-odd"><td><p>NSP: hexagon-v73</p></td>
+<td><p>libQnnHtpV73Skel.so</p></td>
+</tr>
+<tr class="row-even"><td><p>NSP: hexagon-v73</p></td>
+<td><p>libQnnHtpV73.so</p></td>
+</tr>
+<tr class="row-odd"><td><p>NSP: hexagon-v73</p></td>
+<td><p>libQnnSystem.so</p></td>
+</tr>
+<tr class="row-even"><td rowspan="5"><p>SA8620 (V75)</p></td>
+<td><p>ARM: aarch64-qhs227</p></td>
+<td><p>libQnnHtp.so</p></td>
+</tr>
+<tr class="row-odd"><td><p>ARM: aarch64-qhs227</p></td>
+<td><p>libQnnSystem.so</p></td>
+</tr>
+<tr class="row-even"><td><p>ARM: aarch64-qhs227</p></td>
+<td><p>libQnnHtpV75Stub.so</p></td>
+</tr>
+<tr class="row-odd"><td><p>NSP: hexagon-v75</p></td>
+<td><p>libQnnHtpV75Skel.so</p></td>
+</tr>
+<tr class="row-even"><td><p>NSP: hexagon-v75</p></td>
+<td><p>libQnnSystem.so</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="supported-apis">
+<h3>Supported APIs<a class="headerlink" href="#supported-apis" title="Permalink to this heading">¶</a></h3>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 24%" />
+<col style="width: 12%" />
+<col style="width: 31%" />
+<col style="width: 16%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Component</p></th>
+<th class="head"><p>API</p></th>
+<th class="head"><p>SA8295 (V68)</p></th>
+<th class="head"><p>SA8540 (V68) / SA8650 (V73) / SA8620 (V75)</p></th>
+<th class="head"><p>SA8650 (V73) Non-RPC</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td rowspan="4"><p>QnnBackend</p></td>
+<td><p>QnnBackend_create</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+</tr>
+<tr class="row-odd"><td><p>QnnBackend_free</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+</tr>
+<tr class="row-even"><td><p>QnnBackend_getBuildId</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+</tr>
+<tr class="row-odd"><td><p>QnnBackend_registerOpPackage</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+</tr>
+<tr class="row-even"><td rowspan="4"><p>QnnDevice</p></td>
+<td><p>QnnDevice_create</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+</tr>
+<tr class="row-odd"><td><p>QnnDevice_free</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+</tr>
+<tr class="row-even"><td><p>QnnDevice_getPlatformInfo</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+</tr>
+<tr class="row-odd"><td><p>QnnDevice_freePlatformInfo</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+</tr>
+<tr class="row-even"><td rowspan="2"><p>QnnContext</p></td>
+<td><p>QnnContext_createFromBinary</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+</tr>
+<tr class="row-odd"><td><p>QnnContext_free</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+</tr>
+<tr class="row-even"><td rowspan="3"><p>QnnGraph</p></td>
+<td><p>QnnGraph_execute</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+</tr>
+<tr class="row-odd"><td><p>QnnGraph_executeAsync</p></td>
+<td><p><strong>No</strong></p></td>
+<td><p>Yes</p></td>
+<td><p><strong>No</strong></p></td>
+</tr>
+<tr class="row-even"><td><p>QnnGraph_retrieve</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+</tr>
+<tr class="row-odd"><td rowspan="2"><p>QnnMem</p></td>
+<td><p>QnnMem_register</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p><strong>No</strong></p></td>
+</tr>
+<tr class="row-even"><td><p>QnnMem_deRegister</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p><strong>No</strong></p></td>
+</tr>
+<tr class="row-odd"><td rowspan="3"><p>QnnSignal</p></td>
+<td><p>QnnSignal_create</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+</tr>
+<tr class="row-even"><td><p>QnnSignal_free</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+</tr>
+<tr class="row-odd"><td><p>QnnSignal_trigger</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+</tr>
+<tr class="row-even"><td rowspan="4"><p>QnnSystemContext</p></td>
+<td><p>QnnSystemContext_create</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+</tr>
+<tr class="row-odd"><td><p>QnnSystemContext_free</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+</tr>
+<tr class="row-even"><td><p>QnnSystemContext_getMetadata</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+</tr>
+<tr class="row-odd"><td><p>QnnSystemContext_getBinaryInfo</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="functionally-safe-qnn-execution-call-flow">
+<span id="fusa-qnn-execution-call-flow"></span><h3>Functionally Safe QNN Execution Call Flow<a class="headerlink" href="#functionally-safe-qnn-execution-call-flow" title="Permalink to this heading">¶</a></h3>
+<p>The sequence below represents a sample recommended functionally safe QNN execution call flow.</p>
+<ul class="simple">
+<li><p>QnnBackend_create</p></li>
+<li><p>QnnDevice_create</p></li>
+<li><p>QnnBackend_registerOpPackage</p></li>
+<li><p>QnnSystemContext_create</p></li>
+<li><p>QnnSystemContext_getMetadata</p></li>
+<li><p>QnnSystemContext_free</p></li>
+<li><p>QnnContext_createFromBinary</p></li>
+<li><p>QnnGraph_retrieve</p></li>
+<li><p>QnnGraph_execute/QnnGraph_executeAsync</p></li>
+<li><p>QnnContext_free</p></li>
+<li><p>QnnDevice_free</p></li>
+<li><p>QnnBackend_free</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="supported-htp-operations-and-limitations">
+<h2>Supported HTP Operations and Limitations<a class="headerlink" href="#supported-htp-operations-and-limitations" title="Permalink to this heading">¶</a></h2>
+<p>The following sections list supported and restricted operations for functional safety applications using the HTP backend.</p>
+<p>See <span class="xref std std-ref">OpDef/MasterOpDef:QNN Operation Definitions</span> for details about each operation.</p>
+<p>All constraints listed in <span class="xref std std-ref">OpDef/HtpOpDefSupplement:HTP Backend Op Definition Supplement</span> are still applicable.</p>
+<div class="section" id="supported-htp-operations">
+<h3>Supported HTP Operations<a class="headerlink" href="#supported-htp-operations" title="Permalink to this heading">¶</a></h3>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Operation</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Argmax</p></td>
+</tr>
+<tr class="row-odd"><td><p>Argmin</p></td>
+</tr>
+<tr class="row-even"><td><p>Batchnorm</p></td>
+</tr>
+<tr class="row-odd"><td><p>BatchToSpace</p></td>
+</tr>
+<tr class="row-even"><td><p>Cast</p></td>
+</tr>
+<tr class="row-odd"><td><p>ChannelShuffle</p></td>
+</tr>
+<tr class="row-even"><td><p>Concat</p></td>
+</tr>
+<tr class="row-odd"><td><p>Conv2d</p></td>
+</tr>
+<tr class="row-even"><td><p>Conv3d</p></td>
+</tr>
+<tr class="row-odd"><td><p>Convert</p></td>
+</tr>
+<tr class="row-even"><td><p>CreateSparse</p></td>
+</tr>
+<tr class="row-odd"><td><p>CumulativeSum</p></td>
+</tr>
+<tr class="row-even"><td><p>DepthToSpace</p></td>
+</tr>
+<tr class="row-odd"><td><p>DepthWiseConv2d</p></td>
+</tr>
+<tr class="row-even"><td><p>Dequantize</p></td>
+</tr>
+<tr class="row-odd"><td><p>DetectionOutput</p></td>
+</tr>
+<tr class="row-even"><td><p>ElementWiseAbs</p></td>
+</tr>
+<tr class="row-odd"><td><p>ElementWiseAdd</p></td>
+</tr>
+<tr class="row-even"><td><p>ElementWiseAnd</p></td>
+</tr>
+<tr class="row-odd"><td><p>ElementWiseAsin</p></td>
+</tr>
+<tr class="row-even"><td><p>ElementWiseAtan</p></td>
+</tr>
+<tr class="row-odd"><td><p>ElementWiseBinary</p></td>
+</tr>
+<tr class="row-even"><td><p>ElementWiseCeil</p></td>
+</tr>
+<tr class="row-odd"><td><p>ElementWiseCos</p></td>
+</tr>
+<tr class="row-even"><td><p>ElementWiseDivide</p></td>
+</tr>
+<tr class="row-odd"><td><p>ElementWiseEqual</p></td>
+</tr>
+<tr class="row-even"><td><p>ElementWiseExp</p></td>
+</tr>
+<tr class="row-odd"><td><p>ElementWiseFloor</p></td>
+</tr>
+<tr class="row-even"><td><p>ElementWiseFloorDiv</p></td>
+</tr>
+<tr class="row-odd"><td><p>ElementWiseGreater</p></td>
+</tr>
+<tr class="row-even"><td><p>ElementWiseGreaterEqual</p></td>
+</tr>
+<tr class="row-odd"><td><p>ElementWiseLess</p></td>
+</tr>
+<tr class="row-even"><td><p>ElementWiseLessEqual</p></td>
+</tr>
+<tr class="row-odd"><td><p>ElementWiseLog</p></td>
+</tr>
+<tr class="row-even"><td><p>ElementWiseMaximum</p></td>
+</tr>
+<tr class="row-odd"><td><p>ElementWiseMinimum</p></td>
+</tr>
+<tr class="row-even"><td><p>ElementWiseMultiply</p></td>
+</tr>
+<tr class="row-odd"><td><p>ElementWiseNeg</p></td>
+</tr>
+<tr class="row-even"><td><p>ElementWiseNeuron</p></td>
+</tr>
+<tr class="row-odd"><td><p>ElementWiseNot</p></td>
+</tr>
+<tr class="row-even"><td><p>ElementWiseNotEqual</p></td>
+</tr>
+<tr class="row-odd"><td><p>ElementWiseOr</p></td>
+</tr>
+<tr class="row-even"><td><p>ElementWisePower</p></td>
+</tr>
+<tr class="row-odd"><td><p>ElementWiseRound</p></td>
+</tr>
+<tr class="row-even"><td><p>ElementWiseRsqrt</p></td>
+</tr>
+<tr class="row-odd"><td><p>ElementWiseSelect</p></td>
+</tr>
+<tr class="row-even"><td><p>ElementWiseSign</p></td>
+</tr>
+<tr class="row-odd"><td><p>ElementWiseSin</p></td>
+</tr>
+<tr class="row-even"><td><p>ElementWiseSquaredDifference</p></td>
+</tr>
+<tr class="row-odd"><td><p>ElementWiseSquareRoot</p></td>
+</tr>
+<tr class="row-even"><td><p>ElementWiseSubtract</p></td>
+</tr>
+<tr class="row-odd"><td><p>ElementWiseUnary</p></td>
+</tr>
+<tr class="row-even"><td><p>ElementWiseXor</p></td>
+</tr>
+<tr class="row-odd"><td><p>Elu</p></td>
+</tr>
+<tr class="row-even"><td><p>ExpandDims</p></td>
+</tr>
+<tr class="row-odd"><td><p>ExtractGlimpse</p></td>
+</tr>
+<tr class="row-even"><td><p>ExtractPatches</p></td>
+</tr>
+<tr class="row-odd"><td><p>FullyConnected</p></td>
+</tr>
+<tr class="row-even"><td><p>Gather</p></td>
+</tr>
+<tr class="row-odd"><td><p>GatherElements</p></td>
+</tr>
+<tr class="row-even"><td><p>GatherNd</p></td>
+</tr>
+<tr class="row-odd"><td><p>Gelu</p></td>
+</tr>
+<tr class="row-even"><td><p>GetSparseIndices</p></td>
+</tr>
+<tr class="row-odd"><td><p>GetSparseValues</p></td>
+</tr>
+<tr class="row-even"><td><p>GridSample</p></td>
+</tr>
+<tr class="row-odd"><td><p>GroupNorm</p></td>
+</tr>
+<tr class="row-even"><td><p>HardSwish</p></td>
+</tr>
+<tr class="row-odd"><td><p>InstanceNorm</p></td>
+</tr>
+<tr class="row-even"><td><p>L2Norm</p></td>
+</tr>
+<tr class="row-odd"><td><p>LayerNorm</p></td>
+</tr>
+<tr class="row-even"><td><p>LogSoftmax</p></td>
+</tr>
+<tr class="row-odd"><td><p>Lrn</p></td>
+</tr>
+<tr class="row-even"><td><p>MatMul</p></td>
+</tr>
+<tr class="row-odd"><td><p>MultiClassNms</p></td>
+</tr>
+<tr class="row-even"><td><p>NonMaxSuppression</p></td>
+</tr>
+<tr class="row-odd"><td><p>NonZero</p></td>
+</tr>
+<tr class="row-even"><td><p>OneHot</p></td>
+</tr>
+<tr class="row-odd"><td><p>Pack</p></td>
+</tr>
+<tr class="row-even"><td><p>Pad</p></td>
+</tr>
+<tr class="row-odd"><td><p>PoolAvg2d</p></td>
+</tr>
+<tr class="row-even"><td><p>PoolAvg3d</p></td>
+</tr>
+<tr class="row-odd"><td><p>PoolMax2d</p></td>
+</tr>
+<tr class="row-even"><td><p>Prelu</p></td>
+</tr>
+<tr class="row-odd"><td><p>Quantize</p></td>
+</tr>
+<tr class="row-even"><td><p>ReduceMax</p></td>
+</tr>
+<tr class="row-odd"><td><p>ReduceMean</p></td>
+</tr>
+<tr class="row-even"><td><p>ReduceMin</p></td>
+</tr>
+<tr class="row-odd"><td><p>ReduceSum</p></td>
+</tr>
+<tr class="row-even"><td><p>Relu</p></td>
+</tr>
+<tr class="row-odd"><td><p>Relu1</p></td>
+</tr>
+<tr class="row-even"><td><p>Relu6</p></td>
+</tr>
+<tr class="row-odd"><td><p>ReluMinMax</p></td>
+</tr>
+<tr class="row-even"><td><p>Reshape</p></td>
+</tr>
+<tr class="row-odd"><td><p>Resize</p></td>
+</tr>
+<tr class="row-even"><td><p>ResizeBilinear</p></td>
+</tr>
+<tr class="row-odd"><td><p>ResizeNearestNeighbor</p></td>
+</tr>
+<tr class="row-even"><td><p>RoiAlign</p></td>
+</tr>
+<tr class="row-odd"><td><p>ScatterElements</p></td>
+</tr>
+<tr class="row-even"><td><p>ScatterNd</p></td>
+</tr>
+<tr class="row-odd"><td><p>Sigmoid</p></td>
+</tr>
+<tr class="row-even"><td><p>Softmax</p></td>
+</tr>
+<tr class="row-odd"><td><p>SpaceToBatch</p></td>
+</tr>
+<tr class="row-even"><td><p>SpaceToDepth</p></td>
+</tr>
+<tr class="row-odd"><td><p>SparseToDense</p></td>
+</tr>
+<tr class="row-even"><td><p>Split</p></td>
+</tr>
+<tr class="row-odd"><td><p>Squeeze</p></td>
+</tr>
+<tr class="row-even"><td><p>StridedSlice</p></td>
+</tr>
+<tr class="row-odd"><td><p>Tanh</p></td>
+</tr>
+<tr class="row-even"><td><p>Tile</p></td>
+</tr>
+<tr class="row-odd"><td><p>TopK</p></td>
+</tr>
+<tr class="row-even"><td><p>Transpose</p></td>
+</tr>
+<tr class="row-odd"><td><p>TransposeConv2d</p></td>
+</tr>
+<tr class="row-even"><td><p>TransposeConv3d</p></td>
+</tr>
+<tr class="row-odd"><td><p>UnPack</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="restricted-operations">
+<h3>Restricted Operations<a class="headerlink" href="#restricted-operations" title="Permalink to this heading">¶</a></h3>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 62%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Operation</p></th>
+<th class="head"><p>Additional Constraints and Limitations</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Lstm</p></td>
+<td><p><strong>–expand_lstm_op_structure</strong> parameter shall be used
+during model conversion if the model contains Lstm</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020-2025, Qualcomm Technologies, Inc..
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

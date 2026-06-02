@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en"><head>
+  <meta charset="utf-8"/>
+  
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  
+  <title>Enum QnnSystemDlc_RecordType_t — Qualcomm® AI Engine Direct</title>
+  
+
+  
+  <link href="../../_static/css/theme.css" rel="stylesheet" type="text/css"/>
+  <link href="../../_static/pygments.css" rel="stylesheet" type="text/css"/>
+  <link href="../../_static/pygments.css" rel="stylesheet" type="text/css"/>
+  <link href="../../_static/css/theme.css" rel="stylesheet" type="text/css"/>
+  <link href="../../_static/custom_css.css" rel="stylesheet" type="text/css"/>
+  <link href="../../_static/collapsible-lists/css/tree_view.css" rel="stylesheet" type="text/css"/>
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js" type="text/javascript"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+        <script src="../../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    
+    <script src="../../_static/js/theme.js" type="text/javascript"></script>
+
+    
+    <link href="../../genindex.html" rel="index" title="Index"/>
+    <link href="../../search.html" rel="search" title="Search"/>
+    <link href="enum_QnnSystemInterface_8h_1a2c6d03b1216c79cf2fad5e1edb33365b.html" rel="next" title="Enum QnnSystemInterface_Error_t"/>
+    <link href="enum_QnnSystemDlc_8h_1aebf96d4a484876d75251968563c58b00.html" rel="prev" title="Enum QnnSystemDlc_Error_t"/> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav class="wy-nav-side" data-toggle="wy-nav-shift">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a class="icon icon-home" href="../../index.html"> Qualcomm® AI Runtime (QAIRT) SDKs
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v2.46.0.260424121129
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form action="../../search.html" class="wy-form" id="rtd-search-form" method="get">
+    <input name="q" placeholder="Search docs" type="text"/>
+    <input name="check_keywords" type="hidden" value="yes"/>
+    <input name="area" type="hidden" value="default"/>
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">QAIRT</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../general/overview.html">Overview</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">SDKs</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">QNN</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../general/introduction.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general/overview.html">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general/setup.html">Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general/backend.html">Backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general/op_packages.html">Op Packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general/tools.html">Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general/converters.html">Converters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general/quantization.html">Quantization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general/applyencodings.html">QAIRT Quantization Specification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general/tutorials.html">Tutorials</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general/benchmarking.html">Benchmarking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general/operations.html">Operations</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="../general/api.html">API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../general/api_overview.html">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../general/api_usage_guidelines.html">Usage Guidelines</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../general/api_version_history.html">QNN API Revision History</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../general/api_version_history.html#backend-specific-revision-history">Backend Specific Revision History</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../general/api_version_history.html#qnn-system-api-revision-history">QNN System API Revision History</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../general/supported_api.html">Supported APIs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../general/supported_capabilities.html">Supported Capabilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../general/api_error_codes.html">Error codes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../general/glossary.html">Glossary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general/revision_history.html">Revision History</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../SNPE/index.html">SNPE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Genie/index.html">Genie</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Delegates</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../Delegates/TfLite/index.html">TFLite Delegate</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+
+      
+      <nav aria-label="top navigation" class="wy-nav-top">
+        
+          <i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+          <a href="../../index.html">Qualcomm® AI Runtime (QAIRT) SDKs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div aria-label="breadcrumbs navigation" role="navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a class="icon icon-home" href="../../index.html"></a> »</li>
+        
+          <li><a href="../index.html">⌂</a> »</li>
+        
+      <li>Enum QnnSystemDlc_RecordType_t</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="enum-qnnsystemdlc-recordtype-t">
+<span id="exhale-enum-qnnsystemdlc-8h-1adc24dc14188a86645707584b09d12909"></span><h1>Enum QnnSystemDlc_RecordType_t<a class="headerlink" href="#enum-qnnsystemdlc-recordtype-t" title="Permalink to this heading">¶</a></h1>
+<ul class="simple">
+<li><p>Defined in <a class="reference internal" href="file_include_QNN_System_QnnSystemDlc.h.html#file-include-qnn-system-qnnsystemdlc-h"><span class="std std-ref">File QnnSystemDlc.h</span></a></p></li>
+</ul>
+<div class="section" id="enum-documentation">
+<h2>Enum Documentation<a class="headerlink" href="#enum-documentation" title="Permalink to this heading">¶</a></h2>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv425QnnSystemDlc_RecordType_t">
+<span id="_CPPv325QnnSystemDlc_RecordType_t"></span><span id="_CPPv225QnnSystemDlc_RecordType_t"></span><span class="target" id="QnnSystemDlc_8h_1adc24dc14188a86645707584b09d12909"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QnnSystemDlc_RecordType_t</span></span></span><a class="headerlink" href="#_CPPv425QnnSystemDlc_RecordType_t" title="Permalink to this definition">¶</a><br/></dt>
+<dd><p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N25QnnSystemDlc_RecordType_t39QNN_SYSTEM_DLC_RECORD_TYPE_DLC_METADATAE">
+<span id="_CPPv3N25QnnSystemDlc_RecordType_t39QNN_SYSTEM_DLC_RECORD_TYPE_DLC_METADATAE"></span><span id="_CPPv2N25QnnSystemDlc_RecordType_t39QNN_SYSTEM_DLC_RECORD_TYPE_DLC_METADATAE"></span><span class="target" id="QnnSystemDlc_8h_1adc24dc14188a86645707584b09d12909a92a299e92ab1310838372de12653b7ec"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SYSTEM_DLC_RECORD_TYPE_DLC_METADATA</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x01</span></span><a class="headerlink" href="#_CPPv4N25QnnSystemDlc_RecordType_t39QNN_SYSTEM_DLC_RECORD_TYPE_DLC_METADATAE" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N25QnnSystemDlc_RecordType_t41QNN_SYSTEM_DLC_RECORD_TYPE_MODEL_TOPOLOGYE">
+<span id="_CPPv3N25QnnSystemDlc_RecordType_t41QNN_SYSTEM_DLC_RECORD_TYPE_MODEL_TOPOLOGYE"></span><span id="_CPPv2N25QnnSystemDlc_RecordType_t41QNN_SYSTEM_DLC_RECORD_TYPE_MODEL_TOPOLOGYE"></span><span class="target" id="QnnSystemDlc_8h_1adc24dc14188a86645707584b09d12909ac556f6794c39efb44ec5525aefccac0d"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SYSTEM_DLC_RECORD_TYPE_MODEL_TOPOLOGY</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x02</span></span><a class="headerlink" href="#_CPPv4N25QnnSystemDlc_RecordType_t41QNN_SYSTEM_DLC_RECORD_TYPE_MODEL_TOPOLOGYE" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N25QnnSystemDlc_RecordType_t39QNN_SYSTEM_DLC_RECORD_TYPE_MODEL_PARAMSE">
+<span id="_CPPv3N25QnnSystemDlc_RecordType_t39QNN_SYSTEM_DLC_RECORD_TYPE_MODEL_PARAMSE"></span><span id="_CPPv2N25QnnSystemDlc_RecordType_t39QNN_SYSTEM_DLC_RECORD_TYPE_MODEL_PARAMSE"></span><span class="target" id="QnnSystemDlc_8h_1adc24dc14188a86645707584b09d12909a845e72f46305da06afbdf237fb7680c5"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SYSTEM_DLC_RECORD_TYPE_MODEL_PARAMS</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x03</span></span><a class="headerlink" href="#_CPPv4N25QnnSystemDlc_RecordType_t39QNN_SYSTEM_DLC_RECORD_TYPE_MODEL_PARAMSE" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N25QnnSystemDlc_RecordType_t44QNN_SYSTEM_DLC_RECORD_TYPE_MODEL_RAW_WIEGHTSE">
+<span id="_CPPv3N25QnnSystemDlc_RecordType_t44QNN_SYSTEM_DLC_RECORD_TYPE_MODEL_RAW_WIEGHTSE"></span><span id="_CPPv2N25QnnSystemDlc_RecordType_t44QNN_SYSTEM_DLC_RECORD_TYPE_MODEL_RAW_WIEGHTSE"></span><span class="target" id="QnnSystemDlc_8h_1adc24dc14188a86645707584b09d12909a05cdf1033698cd727b19be1ecfcfa4ae"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SYSTEM_DLC_RECORD_TYPE_MODEL_RAW_WIEGHTS</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x04</span></span><a class="headerlink" href="#_CPPv4N25QnnSystemDlc_RecordType_t44QNN_SYSTEM_DLC_RECORD_TYPE_MODEL_RAW_WIEGHTSE" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N25QnnSystemDlc_RecordType_t42QNN_SYSTEM_DLC_RECORD_TYPE_MODEL_ENCODINGSE">
+<span id="_CPPv3N25QnnSystemDlc_RecordType_t42QNN_SYSTEM_DLC_RECORD_TYPE_MODEL_ENCODINGSE"></span><span id="_CPPv2N25QnnSystemDlc_RecordType_t42QNN_SYSTEM_DLC_RECORD_TYPE_MODEL_ENCODINGSE"></span><span class="target" id="QnnSystemDlc_8h_1adc24dc14188a86645707584b09d12909afbc6a5862f3d4a32828eb8ffd239ad28"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SYSTEM_DLC_RECORD_TYPE_MODEL_ENCODINGS</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x05</span></span><a class="headerlink" href="#_CPPv4N25QnnSystemDlc_RecordType_t42QNN_SYSTEM_DLC_RECORD_TYPE_MODEL_ENCODINGSE" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N25QnnSystemDlc_RecordType_t50QNN_SYSTEM_DLC_RECORD_TYPE_LORA_CONVERTER_METADATAE">
+<span id="_CPPv3N25QnnSystemDlc_RecordType_t50QNN_SYSTEM_DLC_RECORD_TYPE_LORA_CONVERTER_METADATAE"></span><span id="_CPPv2N25QnnSystemDlc_RecordType_t50QNN_SYSTEM_DLC_RECORD_TYPE_LORA_CONVERTER_METADATAE"></span><span class="target" id="QnnSystemDlc_8h_1adc24dc14188a86645707584b09d12909af8ff17a81220eb4e5f9ab62f0d1303d3"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SYSTEM_DLC_RECORD_TYPE_LORA_CONVERTER_METADATA</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x06</span></span><a class="headerlink" href="#_CPPv4N25QnnSystemDlc_RecordType_t50QNN_SYSTEM_DLC_RECORD_TYPE_LORA_CONVERTER_METADATAE" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N25QnnSystemDlc_RecordType_t45QNN_SYSTEM_DLC_RECORD_PREFIX_HTP_CACHE_RECORDE">
+<span id="_CPPv3N25QnnSystemDlc_RecordType_t45QNN_SYSTEM_DLC_RECORD_PREFIX_HTP_CACHE_RECORDE"></span><span id="_CPPv2N25QnnSystemDlc_RecordType_t45QNN_SYSTEM_DLC_RECORD_PREFIX_HTP_CACHE_RECORDE"></span><span class="target" id="QnnSystemDlc_8h_1adc24dc14188a86645707584b09d12909a416a6c7b2ea13885c407999af0fc9b17"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SYSTEM_DLC_RECORD_PREFIX_HTP_CACHE_RECORD</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x07</span></span><a class="headerlink" href="#_CPPv4N25QnnSystemDlc_RecordType_t45QNN_SYSTEM_DLC_RECORD_PREFIX_HTP_CACHE_RECORDE" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N25QnnSystemDlc_RecordType_t45QNN_SYSTEM_DLC_RECORD_PREFIX_AIP_CACHE_RECORDE">
+<span id="_CPPv3N25QnnSystemDlc_RecordType_t45QNN_SYSTEM_DLC_RECORD_PREFIX_AIP_CACHE_RECORDE"></span><span id="_CPPv2N25QnnSystemDlc_RecordType_t45QNN_SYSTEM_DLC_RECORD_PREFIX_AIP_CACHE_RECORDE"></span><span class="target" id="QnnSystemDlc_8h_1adc24dc14188a86645707584b09d12909a1358a37878797620c8e90cddcb1d8deb"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SYSTEM_DLC_RECORD_PREFIX_AIP_CACHE_RECORD</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x08</span></span><a class="headerlink" href="#_CPPv4N25QnnSystemDlc_RecordType_t45QNN_SYSTEM_DLC_RECORD_PREFIX_AIP_CACHE_RECORDE" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N25QnnSystemDlc_RecordType_t45QNN_SYSTEM_DLC_RECORD_PREFIX_HTA_CACHE_RECORDE">
+<span id="_CPPv3N25QnnSystemDlc_RecordType_t45QNN_SYSTEM_DLC_RECORD_PREFIX_HTA_CACHE_RECORDE"></span><span id="_CPPv2N25QnnSystemDlc_RecordType_t45QNN_SYSTEM_DLC_RECORD_PREFIX_HTA_CACHE_RECORDE"></span><span class="target" id="QnnSystemDlc_8h_1adc24dc14188a86645707584b09d12909a8a50d6f3601a87e49e81183433864b49"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SYSTEM_DLC_RECORD_PREFIX_HTA_CACHE_RECORD</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x09</span></span><a class="headerlink" href="#_CPPv4N25QnnSystemDlc_RecordType_t45QNN_SYSTEM_DLC_RECORD_PREFIX_HTA_CACHE_RECORDE" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N25QnnSystemDlc_RecordType_t45QNN_SYSTEM_DLC_RECORD_PREFIX_AIX_CACHE_RECORDE">
+<span id="_CPPv3N25QnnSystemDlc_RecordType_t45QNN_SYSTEM_DLC_RECORD_PREFIX_AIX_CACHE_RECORDE"></span><span id="_CPPv2N25QnnSystemDlc_RecordType_t45QNN_SYSTEM_DLC_RECORD_PREFIX_AIX_CACHE_RECORDE"></span><span class="target" id="QnnSystemDlc_8h_1adc24dc14188a86645707584b09d12909ad9a7f9bdae3bb46bf3c1344dab7eb22c"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SYSTEM_DLC_RECORD_PREFIX_AIX_CACHE_RECORD</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x0A</span></span><a class="headerlink" href="#_CPPv4N25QnnSystemDlc_RecordType_t45QNN_SYSTEM_DLC_RECORD_PREFIX_AIX_CACHE_RECORDE" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N25QnnSystemDlc_RecordType_t45QNN_SYSTEM_DLC_RECORD_PREFIX_GPU_CACHE_RECORDE">
+<span id="_CPPv3N25QnnSystemDlc_RecordType_t45QNN_SYSTEM_DLC_RECORD_PREFIX_GPU_CACHE_RECORDE"></span><span id="_CPPv2N25QnnSystemDlc_RecordType_t45QNN_SYSTEM_DLC_RECORD_PREFIX_GPU_CACHE_RECORDE"></span><span class="target" id="QnnSystemDlc_8h_1adc24dc14188a86645707584b09d12909aafa1b65fbbbe645654af2b47916a497a"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SYSTEM_DLC_RECORD_PREFIX_GPU_CACHE_RECORD</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x0B</span></span><a class="headerlink" href="#_CPPv4N25QnnSystemDlc_RecordType_t45QNN_SYSTEM_DLC_RECORD_PREFIX_GPU_CACHE_RECORDE" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N25QnnSystemDlc_RecordType_t49QNN_SYSTEM_DLC_RECORD_PREFIX_HEXNNV2_CACHE_RECORDE">
+<span id="_CPPv3N25QnnSystemDlc_RecordType_t49QNN_SYSTEM_DLC_RECORD_PREFIX_HEXNNV2_CACHE_RECORDE"></span><span id="_CPPv2N25QnnSystemDlc_RecordType_t49QNN_SYSTEM_DLC_RECORD_PREFIX_HEXNNV2_CACHE_RECORDE"></span><span class="target" id="QnnSystemDlc_8h_1adc24dc14188a86645707584b09d12909a1e136f0f8bf74061377d49180cfb2743"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SYSTEM_DLC_RECORD_PREFIX_HEXNNV2_CACHE_RECORD</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x0C</span></span><a class="headerlink" href="#_CPPv4N25QnnSystemDlc_RecordType_t49QNN_SYSTEM_DLC_RECORD_PREFIX_HEXNNV2_CACHE_RECORDE" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N25QnnSystemDlc_RecordType_t41QNN_SYSTEM_DLC_RECORD_TYPE_SOURCE_MAPPINGE">
+<span id="_CPPv3N25QnnSystemDlc_RecordType_t41QNN_SYSTEM_DLC_RECORD_TYPE_SOURCE_MAPPINGE"></span><span id="_CPPv2N25QnnSystemDlc_RecordType_t41QNN_SYSTEM_DLC_RECORD_TYPE_SOURCE_MAPPINGE"></span><span class="target" id="QnnSystemDlc_8h_1adc24dc14188a86645707584b09d12909a4163eebb3b829b05517cb24502abaab2"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SYSTEM_DLC_RECORD_TYPE_SOURCE_MAPPING</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x0D</span></span><a class="headerlink" href="#_CPPv4N25QnnSystemDlc_RecordType_t41QNN_SYSTEM_DLC_RECORD_TYPE_SOURCE_MAPPINGE" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N25QnnSystemDlc_RecordType_t42QNN_SYSTEM_DLC_RECORD_TYPE_SOURCE_TOPOLOGYE">
+<span id="_CPPv3N25QnnSystemDlc_RecordType_t42QNN_SYSTEM_DLC_RECORD_TYPE_SOURCE_TOPOLOGYE"></span><span id="_CPPv2N25QnnSystemDlc_RecordType_t42QNN_SYSTEM_DLC_RECORD_TYPE_SOURCE_TOPOLOGYE"></span><span class="target" id="QnnSystemDlc_8h_1adc24dc14188a86645707584b09d12909a15a9ac1f4d542c782909c5a9467a95fa"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SYSTEM_DLC_RECORD_TYPE_SOURCE_TOPOLOGY</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x0E</span></span><a class="headerlink" href="#_CPPv4N25QnnSystemDlc_RecordType_t42QNN_SYSTEM_DLC_RECORD_TYPE_SOURCE_TOPOLOGYE" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N25QnnSystemDlc_RecordType_t44QNN_SYSTEM_DLC_RECORD_TYPE_HTP_SCHEMATIC_BINE">
+<span id="_CPPv3N25QnnSystemDlc_RecordType_t44QNN_SYSTEM_DLC_RECORD_TYPE_HTP_SCHEMATIC_BINE"></span><span id="_CPPv2N25QnnSystemDlc_RecordType_t44QNN_SYSTEM_DLC_RECORD_TYPE_HTP_SCHEMATIC_BINE"></span><span class="target" id="QnnSystemDlc_8h_1adc24dc14188a86645707584b09d12909a91c8d7a99588cdc9d60584e4c3ad01d8"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SYSTEM_DLC_RECORD_TYPE_HTP_SCHEMATIC_BIN</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x0F</span></span><a class="headerlink" href="#_CPPv4N25QnnSystemDlc_RecordType_t44QNN_SYSTEM_DLC_RECORD_TYPE_HTP_SCHEMATIC_BINE" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N25QnnSystemDlc_RecordType_t44QNN_SYSTEM_DLC_RECORD_TYPE_HTP_GRAPH_MAPPINGE">
+<span id="_CPPv3N25QnnSystemDlc_RecordType_t44QNN_SYSTEM_DLC_RECORD_TYPE_HTP_GRAPH_MAPPINGE"></span><span id="_CPPv2N25QnnSystemDlc_RecordType_t44QNN_SYSTEM_DLC_RECORD_TYPE_HTP_GRAPH_MAPPINGE"></span><span class="target" id="QnnSystemDlc_8h_1adc24dc14188a86645707584b09d12909a2bdb3d6a8c564b65088e5ceddbd0c26b"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SYSTEM_DLC_RECORD_TYPE_HTP_GRAPH_MAPPING</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x10</span></span><a class="headerlink" href="#_CPPv4N25QnnSystemDlc_RecordType_t44QNN_SYSTEM_DLC_RECORD_TYPE_HTP_GRAPH_MAPPINGE" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N25QnnSystemDlc_RecordType_t41QNN_SYSTEM_DLC_RECORD_TYPE_GENAI_METADATAE">
+<span id="_CPPv3N25QnnSystemDlc_RecordType_t41QNN_SYSTEM_DLC_RECORD_TYPE_GENAI_METADATAE"></span><span id="_CPPv2N25QnnSystemDlc_RecordType_t41QNN_SYSTEM_DLC_RECORD_TYPE_GENAI_METADATAE"></span><span class="target" id="QnnSystemDlc_8h_1adc24dc14188a86645707584b09d12909afec27a90ba9006f4c360d3a65250942d"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SYSTEM_DLC_RECORD_TYPE_GENAI_METADATA</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x11</span></span><a class="headerlink" href="#_CPPv4N25QnnSystemDlc_RecordType_t41QNN_SYSTEM_DLC_RECORD_TYPE_GENAI_METADATAE" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N25QnnSystemDlc_RecordType_t41QNN_SYSTEM_DLC_RECORD_TYPE_GENAI_ARTIFACTE">
+<span id="_CPPv3N25QnnSystemDlc_RecordType_t41QNN_SYSTEM_DLC_RECORD_TYPE_GENAI_ARTIFACTE"></span><span id="_CPPv2N25QnnSystemDlc_RecordType_t41QNN_SYSTEM_DLC_RECORD_TYPE_GENAI_ARTIFACTE"></span><span class="target" id="QnnSystemDlc_8h_1adc24dc14188a86645707584b09d12909afbae8279db126e396a241dfbab52fa40"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SYSTEM_DLC_RECORD_TYPE_GENAI_ARTIFACT</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x12</span></span><a class="headerlink" href="#_CPPv4N25QnnSystemDlc_RecordType_t41QNN_SYSTEM_DLC_RECORD_TYPE_GENAI_ARTIFACTE" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N25QnnSystemDlc_RecordType_t52QNN_SYSTEM_DLC_RECORD_TYPE_HTP_SHARED_WEIGHTS_RECORDE">
+<span id="_CPPv3N25QnnSystemDlc_RecordType_t52QNN_SYSTEM_DLC_RECORD_TYPE_HTP_SHARED_WEIGHTS_RECORDE"></span><span id="_CPPv2N25QnnSystemDlc_RecordType_t52QNN_SYSTEM_DLC_RECORD_TYPE_HTP_SHARED_WEIGHTS_RECORDE"></span><span class="target" id="QnnSystemDlc_8h_1adc24dc14188a86645707584b09d12909ae44031a7c15acd46655fb5e677963b8c"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SYSTEM_DLC_RECORD_TYPE_HTP_SHARED_WEIGHTS_RECORD</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x13</span></span><a class="headerlink" href="#_CPPv4N25QnnSystemDlc_RecordType_t52QNN_SYSTEM_DLC_RECORD_TYPE_HTP_SHARED_WEIGHTS_RECORDE" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N25QnnSystemDlc_RecordType_t61QNN_SYSTEM_DLC_RECORD_TYPE_HTP_SHARED_WEIGHTS_METADATA_RECORDE">
+<span id="_CPPv3N25QnnSystemDlc_RecordType_t61QNN_SYSTEM_DLC_RECORD_TYPE_HTP_SHARED_WEIGHTS_METADATA_RECORDE"></span><span id="_CPPv2N25QnnSystemDlc_RecordType_t61QNN_SYSTEM_DLC_RECORD_TYPE_HTP_SHARED_WEIGHTS_METADATA_RECORDE"></span><span class="target" id="QnnSystemDlc_8h_1adc24dc14188a86645707584b09d12909a96ede6f3ebf5c750e1a8fe8303a62f81"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SYSTEM_DLC_RECORD_TYPE_HTP_SHARED_WEIGHTS_METADATA_RECORD</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x14</span></span><a class="headerlink" href="#_CPPv4N25QnnSystemDlc_RecordType_t61QNN_SYSTEM_DLC_RECORD_TYPE_HTP_SHARED_WEIGHTS_METADATA_RECORDE" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N25QnnSystemDlc_RecordType_t34QNN_SYSTEM_DLC_RECORD_NAME_UNKNOWNE">
+<span id="_CPPv3N25QnnSystemDlc_RecordType_t34QNN_SYSTEM_DLC_RECORD_NAME_UNKNOWNE"></span><span id="_CPPv2N25QnnSystemDlc_RecordType_t34QNN_SYSTEM_DLC_RECORD_NAME_UNKNOWNE"></span><span class="target" id="QnnSystemDlc_8h_1adc24dc14188a86645707584b09d12909af9ea9bf88cbf1389fd775c0d0af23fa2"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SYSTEM_DLC_RECORD_NAME_UNKNOWN</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x7FFFFFFF</span></span><a class="headerlink" href="#_CPPv4N25QnnSystemDlc_RecordType_t34QNN_SYSTEM_DLC_RECORD_NAME_UNKNOWNE" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
+        <a accesskey="n" class="btn btn-neutral float-right" href="enum_QnnSystemInterface_8h_1a2c6d03b1216c79cf2fad5e1edb33365b.html" rel="next" title="Enum QnnSystemInterface_Error_t">Next <span aria-hidden="true" class="fa fa-arrow-circle-right"></span></a>
+        <a accesskey="p" class="btn btn-neutral float-left" href="enum_QnnSystemDlc_8h_1aebf96d4a484876d75251968563c58b00.html" rel="prev" title="Enum QnnSystemDlc_Error_t"><span aria-hidden="true" class="fa fa-arrow-circle-left"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        © Copyright 2020-2026, Qualcomm Technologies, Inc..
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+
+</body></html>

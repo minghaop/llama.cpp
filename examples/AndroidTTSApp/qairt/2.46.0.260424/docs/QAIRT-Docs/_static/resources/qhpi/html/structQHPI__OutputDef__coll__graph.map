@@ -1,0 +1,5 @@
+<map id="QHPI_OutputDef" name="QHPI_OutputDef">
+<area shape="rect" id="node1" title="Properties of an output tensor for an operator." alt="" coords="115,95,243,121"/>
+<area shape="rect" id="node2" href="$structQHPI__Quant__Parameters.html" title="Quantization parameters mapping stored integers to real values." alt="" coords="5,5,187,32"/>
+<area shape="rect" id="node3" href="$structQHPI__Shape.html" title="A small fixed&#45;capacity vector of dimension sizes." alt="" coords="211,5,312,32"/>
+</map>

@@ -1,0 +1,262 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Preparing LPAI Param Config File &mdash; Qualcomm® AI Runtime (QAIRT) SDKs</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/custom_css.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Qualcomm® AI Runtime (QAIRT) SDKs
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v2.46.0.260424121129
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">QAIRT</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../general/overview.html">Overview</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">SDKs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">QNN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../SNPE/index.html">SNPE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Genie/index.html">Genie</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Delegates</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../Delegates/TfLite/index.html">TFLite Delegate</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Qualcomm® AI Runtime (QAIRT) SDKs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Preparing LPAI Param Config File</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="preparing-lpai-param-config-file">
+<h1>Preparing LPAI Param Config File<a class="headerlink" href="#preparing-lpai-param-config-file" title="Permalink to this heading">¶</a></h1>
+<p>Prepare Json file with appropriate parameters to generate model for appropriate hardware</p>
+<p>EXAMPLE of <code class="docutils literal notranslate"><span class="pre">lpaiParams.conf</span></code> file for v6 hardware:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">   </span><span class="nt">&quot;lpai_backend&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;target_env&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;x86&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;enable_hw_ver&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;v6&quot;</span>
+<span class="w">   </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="section" id="compile-lpai-graph-on-x86-linux-os">
+<h2>Compile LPAI Graph on x86 Linux OS<a class="headerlink" href="#compile-lpai-graph-on-x86-linux-os" title="Permalink to this heading">¶</a></h2>
+<p>EXAMPLE of <code class="docutils literal notranslate"><span class="pre">config.json</span></code> file:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">   </span><span class="nt">&quot;backend_extensions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">   </span><span class="nt">&quot;shared_library_path&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;${QNN_SDK_ROOT}/lib/x86_64-linux-clang/libQnnLpaiNetRunExtensions.so&quot;</span><span class="p">,</span>
+<span class="w">   </span><span class="nt">&quot;config_file_path&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;./lpaiParams.conf&quot;</span>
+<span class="w">   </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Use context binary generator to generate offline LPAI model.</p>
+<p>The qnn-context-binary-generator utility is backend-agnostic, meaning it can only utilize generic QNN APIs.
+The backend extension feature allows for the use of backend-specific APIs, such as custom configurations.
+More documentation on context binary generator can be found under <span class="xref std std-ref">qnn-context-binary-generator</span>
+Please note that the scope of QNN backend extensions is limited to qnn-context-binary-generator and qnn-net-run.</p>
+<p>LPAI Backend Extensions serve as an interface to offer custom options to the LPAI Backend.
+To enable hardware versions, it is necessary to provide an extension shared library
+<code class="docutils literal notranslate"><span class="pre">libQnnLpaiNetRunExtensions.so</span></code> and a configuration file, if required.</p>
+<p>To use backend extension-related parameters with qnn-net-run and qnn-context-binary-generator, use the <code class="docutils literal notranslate"><span class="pre">--config_file</span></code> argument and provide the path to the JSON file.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/examples/QNN/converter/models
+$<span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="nv">$LD_LIBRARY_PATH</span>:<span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/lib/x86_64-linux-clang
+$<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/bin/x86_64-linux-clang/qnn-context-binary-generator<span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>--backend<span class="w"> </span>&lt;path_to_x86_library&gt;/libQnnLpai.so<span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>--model<span class="w"> </span>&lt;qnn_x86_model_name.so&gt;<span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>--log_level<span class="w"> </span>verbose<span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>--binary_file<span class="w"> </span>&lt;qnn_model_name.bin&gt;<span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>--config_file<span class="w"> </span>&lt;path<span class="w"> </span>to<span class="w"> </span>JSON<span class="w"> </span>of<span class="w"> </span>backend<span class="w"> </span>extensions&gt;
+</pre></div>
+</div>
+<p>To configure LPAI JSON configuration refer to <a href="#id1"><span class="problematic" id="id2">`QNN LPAI Backend Configuration Guide`_</span></a></p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020-2025, Qualcomm Technologies, Inc..
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

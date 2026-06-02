@@ -54,6 +54,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var ttsHistoryButton: Button
     private lateinit var ttsTextInput: EditText
     private lateinit var generateButton: Button
+    private lateinit var streamGenerateButton: Button
     private lateinit var generatedHistoryButton: Button
     private lateinit var playHistoryButton: Button
 
@@ -98,6 +99,13 @@ class MainActivity : AppCompatActivity() {
         LLM_ONLY_UI_MODE -> listOf(InferenceStage.llm)
         FLOW_ONLY_UI_MODE -> listOf(InferenceStage.flow)
         HIFIGAN_ONLY_UI_MODE -> listOf(InferenceStage.hift)
+        SKIP_FLOW_UI_STAGE -> listOf(
+            InferenceStage.frontEnd,
+            InferenceStage.llmPrepare,
+            InferenceStage.llm,
+            InferenceStage.hift,
+            InferenceStage.voiceGeneration,
+        )
         else -> listOf(
             InferenceStage.frontEnd,
             InferenceStage.llmPrepare,
@@ -161,6 +169,7 @@ class MainActivity : AppCompatActivity() {
         ttsHistoryButton = findViewById(R.id.tts_history_button)
         ttsTextInput = findViewById(R.id.tts_text_input)
         generateButton = findViewById(R.id.generate_button)
+        streamGenerateButton = findViewById(R.id.stream_generate_button)
         generatedHistoryButton = findViewById(R.id.generated_history_button)
         playHistoryButton = findViewById(R.id.play_history_button)
     }
@@ -199,6 +208,7 @@ class MainActivity : AppCompatActivity() {
         styleNeutralButton(promptHistoryButton)
         styleNeutralButton(ttsHistoryButton)
         stylePrimaryButton(generateButton)
+        stylePrimaryButton(streamGenerateButton)
         styleNeutralButton(generatedHistoryButton)
         stylePlayButton()
 
@@ -235,7 +245,8 @@ class MainActivity : AppCompatActivity() {
         promptHistoryButton.setOnClickListener { showPromptHistoryMenu() }
         ttsHistoryButton.setOnClickListener { showTTSTextHistoryMenu() }
         generatedHistoryButton.setOnClickListener { showGeneratedHistoryMenu() }
-        generateButton.setOnClickListener { generateTapped() }
+        generateButton.setOnClickListener { generateTapped(streaming = false, finalize = true) }
+        streamGenerateButton.setOnClickListener { generateTapped(streaming = true, finalize = false) }
         playHistoryButton.setOnClickListener { historyPlayTapped() }
     }
 
@@ -564,7 +575,7 @@ class MainActivity : AppCompatActivity() {
         popup.show()
     }
 
-    private fun generateTapped() {
+    private fun generateTapped(streaming: Boolean, finalize: Boolean) {
         hideKeyboardAndClearFocus(currentFocus)
         if (isGenerating) return
         if (captureState != CaptureState.Idle) {
@@ -584,7 +595,7 @@ class MainActivity : AppCompatActivity() {
                     text = "",
                     audioPath = null,
                 )
-            startGeneration(promptItem = fallbackPrompt, promptText = "", ttsText = "")
+                startGeneration(promptItem = fallbackPrompt, promptText = "", ttsText = "", streaming = streaming, finalize = finalize)
             return
         }
 
@@ -616,15 +627,17 @@ class MainActivity : AppCompatActivity() {
             addTTSTextHistoryIfNeeded(ttsText, select = true)
         }
 
-        startGeneration(promptItem = promptItem, promptText = promptText, ttsText = ttsText)
+        startGeneration(promptItem = promptItem, promptText = promptText, ttsText = ttsText, streaming = streaming, finalize = finalize)
     }
 
-    private fun startGeneration(promptItem: PromptHistoryItem, promptText: String, ttsText: String) {
+    private fun startGeneration(promptItem: PromptHistoryItem, promptText: String, ttsText: String, streaming: Boolean, finalize: Boolean) {
         resetInferenceInfo(
             if (LLM_ONLY_UI_MODE) {
                 "开始 LLM 推理"
             } else if (HIFIGAN_ONLY_UI_MODE) {
                 "开始 HifiGan 推理"
+            } else if (streaming) {
+                "开始流式生成：PR${promptItem.index}"
             } else {
                 "开始生成：PR${promptItem.index}"
             },
@@ -657,6 +670,8 @@ class MainActivity : AppCompatActivity() {
                     promptText = promptText,
                     promptAudio = promptAudio,
                     promptSampleRate = promptSampleRate,
+                    flowStreaming = streaming,
+                    flowFinalize = finalize,
                     onEvent = { event -> handleInferenceEvent(event) },
                 )
             }.getOrElse { t ->
@@ -924,16 +939,14 @@ class MainActivity : AppCompatActivity() {
         val frontEndText = stageText(InferenceStage.frontEnd)
         val llmPrepareText = stageText(InferenceStage.llmPrepare)
         val llmText = llmStageText()
-        val flowSeconds = flowTotalSeconds ?: stageEndedInfo[InferenceStage.flow]?.seconds
         val hiftText = stageText(InferenceStage.hift)
         val hiftSeconds = stageEndedInfo[InferenceStage.hift]?.seconds
         val voiceText = voiceStageText()
 
         val totalTime = listOf(
             stageEndedInfo[InferenceStage.llm]?.seconds,
-            stageEndedInfo[InferenceStage.flow]?.seconds,
             stageEndedInfo[InferenceStage.hift]?.seconds,
-        ).filterNotNull().takeIf { it.size == 3 }?.sum()
+        ).filterNotNull().takeIf { it.size == 2 }?.sum()
 
         val rtf = if (audioDurationSeconds != null && totalTime != null && audioDurationSeconds!! > 0) {
             totalTime / audioDurationSeconds!!
@@ -947,9 +960,6 @@ class MainActivity : AppCompatActivity() {
         sb.appendLine("[FrontEnd]        $frontEndText")
         sb.appendLine("[LLMPrepare]      $llmPrepareText")
         sb.appendLine("[LLM]             $llmText")
-        sb.appendLine("[flowEncoderTime] ${flowEncoderSeconds?.let { "%.4fs".format(it) } ?: "-"}")
-        sb.appendLine("[flowDecoderTime] ${flowDecoderSeconds?.let { "%.4fs".format(it) } ?: "-"}")
-        sb.appendLine("[flowTime]        ${flowSeconds?.let { "%.4fs".format(it) } ?: "-"}")
         sb.appendLine("[HifiGan]         $hiftText")
         sb.appendLine("[hifiganTime]     ${hiftSeconds?.let { "%.4fs".format(it) } ?: "-"}")
         sb.appendLine("[voiceGeneration] $voiceText")
@@ -1017,7 +1027,9 @@ class MainActivity : AppCompatActivity() {
         val captureBusy = currentState != CaptureState.Idle
         val isPlaying = historyPlaybackState == HistoryPlaybackState.Playing
 
-        generateButton.isEnabled = !isGenerating && !captureBusy && !isPlaying
+        val canGenerate = !isGenerating && !captureBusy && !isPlaying
+        generateButton.isEnabled = canGenerate
+        streamGenerateButton.isEnabled = canGenerate
 
         promptRecordButton.isEnabled = hasMic && !isGenerating && !isPlaying &&
             (currentState == CaptureState.Idle ||
@@ -1075,6 +1087,7 @@ class MainActivity : AppCompatActivity() {
         styleNeutralButton(ttsHistoryButton)
         styleNeutralButton(generatedHistoryButton)
         if (generateButton.isEnabled) stylePrimaryButton(generateButton) else styleDisabledButton(generateButton)
+        if (streamGenerateButton.isEnabled) stylePrimaryButton(streamGenerateButton) else styleDisabledButton(streamGenerateButton)
 
         when (historyPlaybackState) {
             HistoryPlaybackState.Stopped -> {
@@ -1449,8 +1462,9 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         private const val LLM_ONLY_UI_MODE = false
-        private const val FLOW_ONLY_UI_MODE = true
+        private const val FLOW_ONLY_UI_MODE = false
         private const val HIFIGAN_ONLY_UI_MODE = false
+        private const val SKIP_FLOW_UI_STAGE = true
         private const val MAX_PROMPT_HISTORY = 30
         private const val MAX_TTS_HISTORY = 30
         private const val MAX_GENERATED_HISTORY = 30

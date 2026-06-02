@@ -1,0 +1,22 @@
+@startuml
+concise    "Client A" as A
+concise    "Client B" as B
+
+@0
+A is running #ef7b6c
+B is {hidden}
+
+
+@10
+B is waiting
+
+@30
+A is {hidden}
+B is running #adf7ff
+
+@60
+B is {hidden}
+
+' EVENTS
+B@10 <-> @30 : wait for A to finish
+@enduml

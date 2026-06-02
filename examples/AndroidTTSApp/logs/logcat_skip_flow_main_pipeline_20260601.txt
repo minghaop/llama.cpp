@@ -1,0 +1,1085 @@
+--------- beginning of main
+06-01 17:27:54.661  8321  8321 I WorkService: Work service created
+06-01 17:27:54.661  8321  9461 I ckq     : Started coroutine watchdog: work-service, duration: PT3M
+06-01 17:27:54.664  8321  8321 I WorkService: Moved work service to foreground
+06-01 17:27:54.664  8321  8321 I btq     : Starting the handler for work type: HANDLE_PACKAGES_CHANGED
+06-01 17:27:54.665  8321  8321 I WorkService: Work service returning from onStartCommand, work count: 1
+06-01 17:27:54.669  8321 20804 I bte     : No reboot detected, boot count: 8
+06-01 17:27:54.669  7894  7898 W ndroid.settings: Reducing the number of considered missed Gc histogram windows from 527 to 100
+06-01 17:27:54.673  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/base.apk' with 1 weak references
+06-01 17:27:54.673  8321 20804 I bte     : Found: 3 changed packages for sequence number: 5171, new sequence number: 5324
+06-01 17:27:54.674  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_config.arm64_v8a.apk' with 1 weak references
+06-01 17:27:54.674  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_config.en.apk' with 1 weak references
+06-01 17:27:54.675  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_config.xxhdpi.apk' with 1 weak references
+06-01 17:27:54.675  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_config.zh.apk' with 1 weak references
+06-01 17:27:54.675  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_g_biglib.apk' with 1 weak references
+06-01 17:27:54.676  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_g_biglib.config.arm64_v8a.apk' with 1 weak references
+06-01 17:27:54.676  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_g_biglib.config.en.apk' with 1 weak references
+06-01 17:27:54.676  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_g_biglib.config.zh.apk' with 1 weak references
+06-01 17:27:54.676  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_g_flutter.apk' with 1 weak references
+06-01 17:27:54.677  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_g_flutter.config.arm64_v8a.apk' with 1 weak references
+06-01 17:27:54.677  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_g_flutter.config.en.apk' with 1 weak references
+06-01 17:27:54.677  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_g_flutter.config.xxhdpi.apk' with 1 weak references
+06-01 17:27:54.677  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_g_flutter.config.zh.apk' with 1 weak references
+06-01 17:27:54.677  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_g_voipengine.apk' with 1 weak references
+06-01 17:27:54.678  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_g_voipengine.config.arm64_v8a.apk' with 1 weak references
+06-01 17:27:54.678  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_g_voipengine.config.xxhdpi.apk' with 1 weak references
+06-01 17:27:54.678  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_g_voipengine.config.zh.apk' with 1 weak references
+06-01 17:27:54.678  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_m_cloud_live.apk' with 1 weak references
+06-01 17:27:54.678  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_m_cloud_live.config.arm64_v8a.apk' with 1 weak references
+06-01 17:27:54.678  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_m_cloud_live.config.en.apk' with 1 weak references
+06-01 17:27:54.678  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_m_cloud_live.config.xxhdpi.apk' with 1 weak references
+06-01 17:27:54.679  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_m_cloud_live.config.zh.apk' with 1 weak references
+06-01 17:27:54.679  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_m_filescan.apk' with 1 weak references
+06-01 17:27:54.679  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_m_filescan.config.arm64_v8a.apk' with 1 weak references
+06-01 17:27:54.679  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_m_filescan.config.en.apk' with 1 weak references
+06-01 17:27:54.679  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_m_filescan.config.xxhdpi.apk' with 1 weak references
+06-01 17:27:54.679  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_m_filescan.config.zh.apk' with 1 weak references
+06-01 17:27:54.680  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_m_mailplugin.apk' with 1 weak references
+06-01 17:27:54.680  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_m_mailplugin.config.arm64_v8a.apk' with 1 weak references
+06-01 17:27:54.680  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_m_mailplugin.config.en.apk' with 1 weak references
+06-01 17:27:54.680  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_m_mailplugin.config.xxhdpi.apk' with 1 weak references
+06-01 17:27:54.680  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_m_mailplugin.config.zh.apk' with 1 weak references
+06-01 17:27:54.681  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_m_tencent_meeting.apk' with 1 weak references
+06-01 17:27:54.681  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_m_tencent_meeting.config.arm64_v8a.apk' with 1 weak references
+06-01 17:27:54.681  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_m_tencent_meeting.config.en.apk' with 1 weak references
+06-01 17:27:54.682  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_m_tencent_meeting.config.xxhdpi.apk' with 1 weak references
+06-01 17:27:54.682  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_m_tencent_meeting.config.zh.apk' with 1 weak references
+06-01 17:27:54.682  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_plugin_wxapp.apk' with 1 weak references
+06-01 17:27:54.682  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_plugin_wxapp.config.arm64_v8a.apk' with 1 weak references
+06-01 17:27:54.682  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_plugin_wxapp.config.en.apk' with 1 weak references
+06-01 17:27:54.682  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_plugin_wxapp.config.xxhdpi.apk' with 1 weak references
+06-01 17:27:54.682  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~LDUlz7lmTip0NFB-oK-Yjw==/com.tencent.wework-JpdfaLoPMun7AnQlSBywiw==/split_plugin_wxapp.config.zh.apk' with 1 weak references
+06-01 17:27:54.685  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /system_ext/priv-app/FeliCaLockControl_gp/FeliCaLockControl_gp.apk' with 1 weak references
+06-01 17:27:54.685  8321 20804 I bte     : Handling installed or updated package: jp.co.sharp.android.ichargeservice
+06-01 17:27:54.685  8321 20804 I ckk     : Attempting to classify package: jp.co.sharp.android.ichargeservice using model: bll_1
+06-01 17:27:54.685  8321 20804 I ckk     : Skipping package: jp.co.sharp.android.ichargeservice, it is not a potential package
+06-01 17:27:54.686  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~iOYUjsaIpNJLamCX25MXaw==/com.google.android.odad-MBa7IROJWEF-Ji0Fl754XQ==/base.apk' with 1 weak references
+06-01 17:27:54.687  8321 20804 I bte     : Handling installed or updated package: jp.co.sharp.android.icharge
+06-01 17:27:54.687  8321 20804 I ckk     : Attempting to classify package: jp.co.sharp.android.icharge using model: bll_1
+06-01 17:27:54.687  8321 20804 I ckk     : Skipping package: jp.co.sharp.android.icharge, it is not a potential package
+06-01 17:27:54.687  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~4QbnfKKUreso5xxv06-cuw==/ccc71.at.free-8oU-ZH6M3Pt30_4M1bL3QA==/base.apk' with 1 weak references
+06-01 17:27:54.688  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~4QbnfKKUreso5xxv06-cuw==/ccc71.at.free-8oU-ZH6M3Pt30_4M1bL3QA==/split_config.arm64_v8a.apk' with 1 weak references
+06-01 17:27:54.688  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~4QbnfKKUreso5xxv06-cuw==/ccc71.at.free-8oU-ZH6M3Pt30_4M1bL3QA==/split_config.xxhdpi.apk' with 1 weak references
+06-01 17:27:54.688  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~4QbnfKKUreso5xxv06-cuw==/ccc71.at.free-8oU-ZH6M3Pt30_4M1bL3QA==/split_config.zh.apk' with 1 weak references
+06-01 17:27:54.689  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~1q2Lr_CLtMZq5B6C6xMSRA==/com.duolingo-RBCI7-W9jkWHP5uxt0-TZA==/base.apk' with 1 weak references
+06-01 17:27:54.689  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~1q2Lr_CLtMZq5B6C6xMSRA==/com.duolingo-RBCI7-W9jkWHP5uxt0-TZA==/split_config.arm64_v8a.apk' with 1 weak references
+06-01 17:27:54.690  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~1q2Lr_CLtMZq5B6C6xMSRA==/com.duolingo-RBCI7-W9jkWHP5uxt0-TZA==/split_config.xxhdpi.apk' with 1 weak references
+06-01 17:27:54.691  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~i3v0pzR0F5P5SaE_qJaX4Q==/com.google.android.contactkeys-AJMmjjfCkfFTmBtUGh4L0A==/base.apk' with 1 weak references
+06-01 17:27:54.691  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~i3v0pzR0F5P5SaE_qJaX4Q==/com.google.android.contactkeys-AJMmjjfCkfFTmBtUGh4L0A==/split_config.arm64_v8a.apk' with 1 weak references
+06-01 17:27:54.691  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~i3v0pzR0F5P5SaE_qJaX4Q==/com.google.android.contactkeys-AJMmjjfCkfFTmBtUGh4L0A==/split_config.xxhdpi.apk' with 1 weak references
+06-01 17:27:54.691  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~i3v0pzR0F5P5SaE_qJaX4Q==/com.google.android.contactkeys-AJMmjjfCkfFTmBtUGh4L0A==/split_config.zh.apk' with 1 weak references
+06-01 17:27:54.692  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~JfqGfVYn-mOc6_ygvMHpQA==/com.google.android.safetycore-vqLr-zuDQ7Pluv0qzEhidQ==/base.apk' with 1 weak references
+06-01 17:27:54.692  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~JfqGfVYn-mOc6_ygvMHpQA==/com.google.android.safetycore-vqLr-zuDQ7Pluv0qzEhidQ==/split_config.arm64_v8a.apk' with 1 weak references
+06-01 17:27:54.692  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~JfqGfVYn-mOc6_ygvMHpQA==/com.google.android.safetycore-vqLr-zuDQ7Pluv0qzEhidQ==/split_config.en.apk' with 1 weak references
+06-01 17:27:54.692  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~JfqGfVYn-mOc6_ygvMHpQA==/com.google.android.safetycore-vqLr-zuDQ7Pluv0qzEhidQ==/split_config.xxhdpi.apk' with 1 weak references
+06-01 17:27:54.693  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~JfqGfVYn-mOc6_ygvMHpQA==/com.google.android.safetycore-vqLr-zuDQ7Pluv0qzEhidQ==/split_config.zh.apk' with 1 weak references
+06-01 17:27:54.694  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~d6IPFuCbqvUxGNt8b6zfsg==/com.google.android.apps.chromecast.app-Ip4do-WuVeKwdjskmZZJPg==/base.apk' with 1 weak references
+06-01 17:27:54.694  3736  3910 D EuiccConnector: handleMessage: E msg.what=6
+06-01 17:27:54.694  3736  3910 D EuiccConnector: processMsg: ConnectedState
+06-01 17:27:54.694  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~d6IPFuCbqvUxGNt8b6zfsg==/com.google.android.apps.chromecast.app-Ip4do-WuVeKwdjskmZZJPg==/split_config.arm64_v8a.apk' with 1 weak references
+06-01 17:27:54.694  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~d6IPFuCbqvUxGNt8b6zfsg==/com.google.android.apps.chromecast.app-Ip4do-WuVeKwdjskmZZJPg==/split_config.xxhdpi.apk' with 1 weak references
+06-01 17:27:54.694  3736  3910 D EuiccConnector: handleMessage: X
+06-01 17:27:54.694  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~d6IPFuCbqvUxGNt8b6zfsg==/com.google.android.apps.chromecast.app-Ip4do-WuVeKwdjskmZZJPg==/split_config.zh.apk' with 1 weak references
+06-01 17:27:54.695  3736  3910 D EuiccConnector: handleMessage: E msg.what=103
+06-01 17:27:54.695  3736  3910 D EuiccConnector: processMsg: ConnectedState
+06-01 17:27:54.695  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~mrbQqZURNh9oFVWHBhX9Dw==/org.fdroid.fdroid-p9Mpc2yeQx-XQbSqoTiQfw==/base.apk' with 1 weak references
+06-01 17:27:54.696  3736  3910 D EuiccConnector: handleMessage: X
+06-01 17:27:54.697  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~FcNrUWRz4duLMk9tW_3KNw==/com.github.kr328.clash-tBNLMaW9TEBYJ6j6OmGG2g==/base.apk' with 1 weak references
+06-01 17:27:54.697 17877 20805 I EuiccGoogle: [2815] EuiccServiceImpl.onGetEuiccProfileInfoList: onGetEuiccProfileInfoList: slotId = 1
+06-01 17:27:54.698  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~9iVJnP4oi_8fUt887hjGqg==/com.example.llama.aichat-he0ivuf2p1ley4mmxRRHPw==/base.apk' with 1 weak references
+06-01 17:27:54.699  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /apex/com.android.permission/priv-app/GooglePermissionController@361524160/GooglePermissionController.apk' with 1 weak references
+06-01 17:27:54.699 17877 20805 I EuiccGoogle: [2815] EuiccServiceImpl.onGetEuiccProfileInfoList: slotId = 1, isRemovable = false
+06-01 17:27:54.699 17877 20805 I EuiccGoogle: [2815] EuiccServiceImpl.onGetEuiccProfileInfoList: onGetEuiccProfileInfoList: isRemovable = false.
+06-01 17:27:54.699 17877 20805 I EuiccGoogle: [2815] EuiccServiceImpl.onGetEuiccProfileInfoList: getSimCardState for slotId: 1
+06-01 17:27:54.700  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '/product/overlay/GooglePermissionControllerOverlay.apk' with 1 weak references
+06-01 17:27:54.700  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /apex/com.android.rkpd/priv-app/rkpdapp.google@361420880/rkpdapp.google.apk' with 1 weak references
+06-01 17:27:54.701 17877 20805 I EuiccGoogle: [2815] EuiccServiceImpl.onGetEuiccProfileInfoList: GetEuiccProfileInfoListResult: simCardState :11and simCardStateAtTelephony:11 for slot:1
+06-01 17:27:54.701 17877 20805 I EuiccGoogle: [2815] EuiccServiceImpl.getProfileInfoList: getProfileInfoList: slotId = 1, includeTestProfiles = false
+06-01 17:27:54.701  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /apex/com.android.extservices/priv-app/GoogleExtServices@361153320/GoogleExtServices.apk' with 1 weak references
+06-01 17:27:54.701 17877 20805 I EuiccGoogle: [2815] EuiccServiceImpl.getProfileInfoList: getProfileInfoList: slotId = 1, includeTestProfiles = false.
+06-01 17:27:54.701 17877 20805 I EuiccGoogle: [2815] EuiccServiceImpl.getEidFromSlotId: getEidFromSlotId: slotId = 1.
+06-01 17:27:54.701 17877 20805 I EuiccGoogle: [2815] NetworkFetcher.getEidForSlot: getEidForSlot: 1
+06-01 17:27:54.697  2026  2026 W pool-53-thread-: type=1400 audit(0.0:26456): avc:  denied  { read } for  name="u:object_r:build_bootimage_prop:s0" dev="tmpfs" ino=150 scontext=u:r:system_server:s0 tcontext=u:object_r:build_bootimage_prop:s0 tclass=file permissive=0
+06-01 17:27:54.701  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /apex/com.android.cellbroadcast/priv-app/GoogleCellBroadcastApp@361524280/GoogleCellBroadcastApp.apk' with 1 weak references
+06-01 17:27:54.702  2026  4417 W libc    : Access denied finding property "ro.bootimage.build.fingerprint"
+06-01 17:27:54.702 17877 20805 I EuiccGoogle: [2815] BlockingEuiccCardManager.requestAllProfiles: requestAllProfiles: cardId = [OjW2020-cjD9ihvVx940zMFRbYE]
+06-01 17:27:54.703  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '/product/overlay/CellBroadcastReceiver-mvno/CellBroadcastReceiver-mvno.apk' with 1 weak references
+06-01 17:27:54.704  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /apex/com.android.healthfitness/priv-app/HealthConnectControllerGoogle@361420700/HealthConnectControllerGoogle.apk' with 1 weak references
+06-01 17:27:54.705  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /apex/com.android.mediaprovider/priv-app/MediaProviderGoogle@361521100/MediaProviderGoogle.apk' with 1 weak references
+06-01 17:27:54.705  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '/product/overlay/MediaProviderOverlay.apk' with 1 weak references
+06-01 17:27:54.706  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /apex/com.android.mediaprovider/priv-app/PhotopickerGoogle@361521100/PhotopickerGoogle.apk' with 1 weak references
+06-01 17:27:54.707  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /apex/com.android.adservices/priv-app/AdServicesApkGoogle@361153320/AdServicesApkGoogle.apk' with 1 weak references
+06-01 17:27:54.707  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /system_ext/app/StsPermission2/StsPermission2.apk' with 1 weak references
+06-01 17:27:54.708  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /system_ext/app/SHWallpaper_Material/SHWallpaper_Material.apk' with 1 weak references
+06-01 17:27:54.708  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '/product/overlay/Wallpaper-mikazuki/Wallpaper-mikazuki.apk' with 1 weak references
+06-01 17:27:54.708  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '/product/overlay/Wallpaper-ma2/Wallpaper-ma2.apk' with 1 weak references
+06-01 17:27:54.709  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /system_ext/app/Sgsc/Sgsc.apk' with 1 weak references
+06-01 17:27:54.709  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /system_ext/app/RestoreGuide-forMaterial/RestoreGuide-forMaterial.apk' with 1 weak references
+06-01 17:27:54.710  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /system_ext/app/LockWallpaperChanger_UIver5/LockWallpaperChanger_UIver5.apk' with 1 weak references
+06-01 17:27:54.710  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '/product/overlay/LockWallpaperChanger-mikazuki/LockWallpaperChanger-mikazuki.apk' with 1 weak references
+06-01 17:27:54.711  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /system_ext/app/QCC/QCC.apk' with 1 weak references
+06-01 17:27:54.711  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /system_ext/app/KittingSetupWizard/KittingSetupWizard.apk' with 1 weak references
+06-01 17:27:54.712  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~AtsIqdNCqCKYV1U2rZFvDQ==/sharp.jp.android.makersiteappli-SFdtvywFlzs29SRBPs4c0A==/base.apk' with 1 weak references
+06-01 17:27:54.712  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~AtsIqdNCqCKYV1U2rZFvDQ==/sharp.jp.android.makersiteappli-SFdtvywFlzs29SRBPs4c0A==/split_config.arm64_v8a.apk' with 1 weak references
+06-01 17:27:54.712  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~AtsIqdNCqCKYV1U2rZFvDQ==/sharp.jp.android.makersiteappli-SFdtvywFlzs29SRBPs4c0A==/split_config.xxhdpi.apk' with 1 weak references
+06-01 17:27:54.712  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~AtsIqdNCqCKYV1U2rZFvDQ==/sharp.jp.android.makersiteappli-SFdtvywFlzs29SRBPs4c0A==/split_config.zh.apk' with 1 weak references
+06-01 17:27:54.713  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /system_ext/priv-app/pedometersettingapp/pedometersettingapp.apk' with 1 weak references
+06-01 17:27:54.713  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /system_ext/priv-app/daxService/daxService.apk' with 1 weak references
+06-01 17:27:54.714  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /system_ext/priv-app/aptxui/aptxui.apk' with 1 weak references
+06-01 17:27:54.714  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '/product/overlay/aptxui-mikazuki/aptxui-mikazuki.apk' with 1 weak references
+06-01 17:27:54.714  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /system_ext/priv-app/SystemUI/SystemUI.apk' with 1 weak references
+06-01 17:27:54.715  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '/product/overlay/SystemUIResCommon_Sys.apk' with 1 weak references
+06-01 17:27:54.715  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '/product/overlay/SystemUI__Aquos_MA2__auto_generated_rro_product.apk' with 1 weak references
+06-01 17:27:54.715  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '/product/overlay/SystemUI-common/SystemUI-common.apk' with 1 weak references
+06-01 17:27:54.715  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '/product/overlay/SystemUI-mikazuki/SystemUI-mikazuki.apk' with 1 weak references
+06-01 17:27:54.715  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '/product/overlay/SystemUI-mvno/SystemUI-mvno.apk' with 1 weak references
+06-01 17:27:54.715  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '/product/overlay/SystemUI-tw-ma2/SystemUI-tw-ma2.apk' with 1 weak references
+06-01 17:27:54.716  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /system_ext/priv-app/aptxals/aptxals.apk' with 1 weak references
+06-01 17:27:54.717  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /system_ext/priv-app/SpecialTypesProvider/SpecialTypesProvider.apk' with 1 weak references
+06-01 17:27:54.718  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /system_ext/priv-app/SetupWizard/SetupWizard.apk' with 1 weak references
+06-01 17:27:54.718  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/SoundMemoProvider_pai/SoundMemoProvider_pai.apk' with 1 weak references
+06-01 17:27:54.719  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /system_ext/priv-app/SHSelfCheckATOKApp_P9/SHSelfCheckATOKApp_P9.apk' with 1 weak references
+06-01 17:27:54.719  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '/product/overlay/SHSelfCheckATOKApp_P9-mikazuki/SHSelfCheckATOKApp_P9-mikazuki.apk' with 1 weak references
+06-01 17:27:54.719  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '/product/overlay/SHSelfCheckATOKApp_P9-taa2/SHSelfCheckATOKApp_P9-taa2.apk' with 1 weak references
+06-01 17:27:54.720  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /system_ext/priv-app/SHTutorialApp/SHTutorialApp.apk' with 1 weak references
+06-01 17:27:54.721  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /system_ext/priv-app/SHCamera_Mikazuki/SHCamera_Mikazuki.apk' with 1 weak references
+06-01 17:27:54.721  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /system_ext/priv-app/QiReverseChargeApp/QiReverseChargeApp.apk' with 1 weak references
+06-01 17:27:54.722  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /system_ext/priv-app/IntelligentCharge2/IntelligentCharge2.apk' with 1 weak references
+06-01 17:27:54.722  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /system_ext/priv-app/IntelligentChargeService/IntelligentChargeService.apk' with 1 weak references
+06-01 17:27:54.723  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /system_ext/priv-app/PayTriggerW/PayTriggerW.apk' with 1 weak references
+06-01 17:27:54.723  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '/product/overlay/PayTriggerW-mikazuki/PayTriggerW-mikazuki.apk' with 1 weak references
+06-01 17:27:54.724  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /system_ext/priv-app/GamingBaseModule/GamingBaseModule.apk' with 1 weak references
+06-01 17:27:54.724  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /system_ext/priv-app/Gaming2/Gaming2.apk' with 1 weak references
+06-01 17:27:54.725  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /system_ext/priv-app/FaceControlApp_Material/FaceControlApp_Material.apk' with 1 weak references
+06-01 17:27:54.725  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '/product/overlay/FaceControlApp-common/FaceControlApp-common.apk' with 1 weak references
+06-01 17:27:54.725  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /system_ext/priv-app/AQUOSSimpleHomeRSEXT/AQUOSSimpleHomeRSEXT.apk' with 1 weak references
+06-01 17:27:54.725  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '/product/overlay/AQUOSSimpleHomeRSEXT-mikazuki/AQUOSSimpleHomeRSEXT-mikazuki.apk' with 1 weak references
+06-01 17:27:54.726  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /system_ext/priv-app/AQUOSHomeQSCtSEXT/AQUOSHomeQSCtSEXT.apk' with 1 weak references
+06-01 17:27:54.726  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '/product/overlay/AQUOSHomeQSCtSEXT-mikazuki/AQUOSHomeQSCtSEXT-mikazuki.apk' with 1 weak references
+06-01 17:27:54.726  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /system_ext/priv-app/AQUOSJuniorHomeEXT/AQUOSJuniorHomeEXT.apk' with 1 weak references
+06-01 17:27:54.727  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '/product/overlay/AQUOSJuniorHomeEXT-mikazuki/AQUOSJuniorHomeEXT-mikazuki.apk' with 1 weak references
+06-01 17:27:54.727  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~by5Tw3Equ6abuF7vDWhDlw==/com.google.android.apps.photos-5dIi3gcwZNBuCUzWYc2klg==/base.apk' with 1 weak references
+06-01 17:27:54.727  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~by5Tw3Equ6abuF7vDWhDlw==/com.google.android.apps.photos-5dIi3gcwZNBuCUzWYc2klg==/split_config.arm64_v8a.apk' with 1 weak references
+06-01 17:27:54.727  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~by5Tw3Equ6abuF7vDWhDlw==/com.google.android.apps.photos-5dIi3gcwZNBuCUzWYc2klg==/split_config.xxhdpi.apk' with 1 weak references
+06-01 17:27:54.728  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~by5Tw3Equ6abuF7vDWhDlw==/com.google.android.apps.photos-5dIi3gcwZNBuCUzWYc2klg==/split_config.zh.apk' with 1 weak references
+06-01 17:27:54.728  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~emEfkT9XNWV97RR-zsFVmg==/com.google.android.youtube-XuFNulSQHxzE0G9LbzwJ5A==/base.apk' with 1 weak references
+06-01 17:27:54.728  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~emEfkT9XNWV97RR-zsFVmg==/com.google.android.youtube-XuFNulSQHxzE0G9LbzwJ5A==/split_config.arm64_v8a.apk' with 1 weak references
+06-01 17:27:54.728  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~emEfkT9XNWV97RR-zsFVmg==/com.google.android.youtube-XuFNulSQHxzE0G9LbzwJ5A==/split_config.xxhdpi.apk' with 1 weak references
+06-01 17:27:54.729  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~emEfkT9XNWV97RR-zsFVmg==/com.google.android.youtube-XuFNulSQHxzE0G9LbzwJ5A==/split_config.zh.apk' with 1 weak references
+06-01 17:27:54.729  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~nzQLFffGbmtVE3KZQIWWeg==/com.google.android.tts-Eig0ALBo7Uchl7QqXV_FRQ==/base.apk' with 1 weak references
+06-01 17:27:54.729  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~nzQLFffGbmtVE3KZQIWWeg==/com.google.android.tts-Eig0ALBo7Uchl7QqXV_FRQ==/split_config.arm64_v8a.apk' with 1 weak references
+06-01 17:27:54.729  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~nzQLFffGbmtVE3KZQIWWeg==/com.google.android.tts-Eig0ALBo7Uchl7QqXV_FRQ==/split_config.xxhdpi.apk' with 1 weak references
+06-01 17:27:54.729  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~nzQLFffGbmtVE3KZQIWWeg==/com.google.android.tts-Eig0ALBo7Uchl7QqXV_FRQ==/split_config.zh.apk' with 1 weak references
+06-01 17:27:54.730  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~Gw5F0Jnpkuajo2S4P0BviA==/com.google.android.apps.maps-zA348ekkR7vjGyvAXUpquA==/base.apk' with 1 weak references
+06-01 17:27:54.730  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~Gw5F0Jnpkuajo2S4P0BviA==/com.google.android.apps.maps-zA348ekkR7vjGyvAXUpquA==/split_config.arm64_v8a.apk' with 1 weak references
+06-01 17:27:54.730  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~Gw5F0Jnpkuajo2S4P0BviA==/com.google.android.apps.maps-zA348ekkR7vjGyvAXUpquA==/split_config.xxhdpi.apk' with 1 weak references
+06-01 17:27:54.730  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~Gw5F0Jnpkuajo2S4P0BviA==/com.google.android.apps.maps-zA348ekkR7vjGyvAXUpquA==/split_config.zh.apk' with 1 weak references
+06-01 17:27:54.731  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~DIkj-4wAOdXAOKmSWexsJw==/jp.co.sharp.android.soundmemo-o1yM1s9crae31BCkCOf02A==/base.apk' with 1 weak references
+06-01 17:27:54.731  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~DIkj-4wAOdXAOKmSWexsJw==/jp.co.sharp.android.soundmemo-o1yM1s9crae31BCkCOf02A==/split_config.arm64_v8a.apk' with 1 weak references
+06-01 17:27:54.731  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~DIkj-4wAOdXAOKmSWexsJw==/jp.co.sharp.android.soundmemo-o1yM1s9crae31BCkCOf02A==/split_config.xxhdpi.apk' with 1 weak references
+06-01 17:27:54.731  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~DIkj-4wAOdXAOKmSWexsJw==/jp.co.sharp.android.soundmemo-o1yM1s9crae31BCkCOf02A==/split_config.zh.apk' with 1 weak references
+06-01 17:27:54.731  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '/product/overlay/SoundMemo-mikazuki/SoundMemo-mikazuki.apk' with 1 weak references
+06-01 17:27:54.732  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~8XJQ8Oi-PQuHM37Asu0I6g==/com.google.android.gm-C0RgPL-y19RWnJrMomVk6w==/base.apk' with 1 weak references
+06-01 17:27:54.732  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~8XJQ8Oi-PQuHM37Asu0I6g==/com.google.android.gm-C0RgPL-y19RWnJrMomVk6w==/split_config.arm64_v8a.apk' with 1 weak references
+06-01 17:27:54.732  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~8XJQ8Oi-PQuHM37Asu0I6g==/com.google.android.gm-C0RgPL-y19RWnJrMomVk6w==/split_config.xxhdpi.apk' with 1 weak references
+06-01 17:27:54.732  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~8XJQ8Oi-PQuHM37Asu0I6g==/com.google.android.gm-C0RgPL-y19RWnJrMomVk6w==/split_config.zh.apk' with 1 weak references
+06-01 17:27:54.733  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~5qwS9seE_cVETlH84H9rlQ==/com.google.android.apps.tachyon-yyuUZpNQOBzfbRWnYwgByA==/base.apk' with 1 weak references
+06-01 17:27:54.733  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~5qwS9seE_cVETlH84H9rlQ==/com.google.android.apps.tachyon-yyuUZpNQOBzfbRWnYwgByA==/split_config.arm64_v8a.apk' with 1 weak references
+06-01 17:27:54.733  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~5qwS9seE_cVETlH84H9rlQ==/com.google.android.apps.tachyon-yyuUZpNQOBzfbRWnYwgByA==/split_config.xxhdpi.apk' with 1 weak references
+06-01 17:27:54.733  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~5qwS9seE_cVETlH84H9rlQ==/com.google.android.apps.tachyon-yyuUZpNQOBzfbRWnYwgByA==/split_config.zh.apk' with 1 weak references
+06-01 17:27:54.734  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~xp08ZQ0iXv9AQ7UE7yi6Fw==/com.google.android.inputmethod.latin-yXNNCUWliU86Mnro58AU_A==/base.apk' with 1 weak references
+06-01 17:27:54.734  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~xp08ZQ0iXv9AQ7UE7yi6Fw==/com.google.android.inputmethod.latin-yXNNCUWliU86Mnro58AU_A==/split_brella_feature_split.apk' with 1 weak references
+06-01 17:27:54.734  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~xp08ZQ0iXv9AQ7UE7yi6Fw==/com.google.android.inputmethod.latin-yXNNCUWliU86Mnro58AU_A==/split_config.xxhdpi.apk' with 1 weak references
+06-01 17:27:54.734  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~xp08ZQ0iXv9AQ7UE7yi6Fw==/com.google.android.inputmethod.latin-yXNNCUWliU86Mnro58AU_A==/split_tenoranimation_feature_split.apk' with 1 weak references
+06-01 17:27:54.735  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~0b8P8TAnHjlsz9cdm6CATQ==/com.google.android.contacts-xRVtCnn0j_mPJNatUrxI4Q==/base.apk' with 1 weak references
+06-01 17:27:54.735  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~0b8P8TAnHjlsz9cdm6CATQ==/com.google.android.contacts-xRVtCnn0j_mPJNatUrxI4Q==/split_config.arm64_v8a.apk' with 1 weak references
+06-01 17:27:54.735  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~0b8P8TAnHjlsz9cdm6CATQ==/com.google.android.contacts-xRVtCnn0j_mPJNatUrxI4Q==/split_config.xxhdpi.apk' with 1 weak references
+06-01 17:27:54.735  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~0b8P8TAnHjlsz9cdm6CATQ==/com.google.android.contacts-xRVtCnn0j_mPJNatUrxI4Q==/split_config.zh.apk' with 1 weak references
+06-01 17:27:54.735  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '/product/overlay/GmsContactsRRO-mikazuki/GmsContactsRRO-mikazuki.apk' with 1 weak references
+06-01 17:27:54.736  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~M-S2CsQOGFRkj1zweAQGmQ==/com.android.chrome-TG_fCt3n88ONQj2pVsJL3Q==/base.apk' with 1 weak references
+06-01 17:27:54.736  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~M-S2CsQOGFRkj1zweAQGmQ==/com.android.chrome-TG_fCt3n88ONQj2pVsJL3Q==/split_chrome.apk' with 1 weak references
+06-01 17:27:54.736  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~M-S2CsQOGFRkj1zweAQGmQ==/com.android.chrome-TG_fCt3n88ONQj2pVsJL3Q==/split_config.zh.apk' with 1 weak references
+06-01 17:27:54.736  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~M-S2CsQOGFRkj1zweAQGmQ==/com.android.chrome-TG_fCt3n88ONQj2pVsJL3Q==/split_dev_ui.apk' with 1 weak references
+06-01 17:27:54.736  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~M-S2CsQOGFRkj1zweAQGmQ==/com.android.chrome-TG_fCt3n88ONQj2pVsJL3Q==/split_on_demand.apk' with 1 weak references
+06-01 17:27:54.736  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~M-S2CsQOGFRkj1zweAQGmQ==/com.android.chrome-TG_fCt3n88ONQj2pVsJL3Q==/split_stack_unwinder.apk' with 1 weak references
+06-01 17:27:54.736  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~M-S2CsQOGFRkj1zweAQGmQ==/com.android.chrome-TG_fCt3n88ONQj2pVsJL3Q==/split_test_dummy.apk' with 1 weak references
+06-01 17:27:54.736  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~jvWFHmSZ2Iz1WMmGPdSQ2Q==/com.google.android.trichromelibrary_777817833-XQRuwK_fmY19nLHiS3xQ-g==/base.apk' with 1 weak references
+06-01 17:27:54.737  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~xv1gZ1ZVx9qHm6TUA3fp7w==/com.google.android.calendar-fqHqMcVIXzcyw3BC1R8aQg==/base.apk' with 1 weak references
+06-01 17:27:54.737  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~xv1gZ1ZVx9qHm6TUA3fp7w==/com.google.android.calendar-fqHqMcVIXzcyw3BC1R8aQg==/split_config.arm64_v8a.apk' with 1 weak references
+06-01 17:27:54.737  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~xv1gZ1ZVx9qHm6TUA3fp7w==/com.google.android.calendar-fqHqMcVIXzcyw3BC1R8aQg==/split_config.xxhdpi.apk' with 1 weak references
+06-01 17:27:54.737  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~xv1gZ1ZVx9qHm6TUA3fp7w==/com.google.android.calendar-fqHqMcVIXzcyw3BC1R8aQg==/split_config.zh.apk' with 1 weak references
+06-01 17:27:54.737  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~fcq554F_hW12fjxzU2svew==/com.google.android.deskclock-MLEYKo1l-AqVLKD29H-_yg==/base.apk' with 1 weak references
+06-01 17:27:54.738  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~fcq554F_hW12fjxzU2svew==/com.google.android.deskclock-MLEYKo1l-AqVLKD29H-_yg==/split_config.xxhdpi.apk' with 1 weak references
+06-01 17:27:54.738  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~5DksSdgMDW-jzXDcDMpkcQ==/com.google.ar.core-3uQbDm8-g2RT1cw2FfsBGg==/base.apk' with 1 weak references
+06-01 17:27:54.738  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~5DksSdgMDW-jzXDcDMpkcQ==/com.google.ar.core-3uQbDm8-g2RT1cw2FfsBGg==/split_config.xxhdpi.apk' with 1 weak references
+06-01 17:27:54.738  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~5DksSdgMDW-jzXDcDMpkcQ==/com.google.ar.core-3uQbDm8-g2RT1cw2FfsBGg==/split_config.zh.apk' with 1 weak references
+06-01 17:27:54.739  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~tFZz7io6toNjA_rqmpR2Pw==/com.google.android.googlequicksearchbox-G1eJ1rM5AzusYiObXsoDrQ==/base.apk' with 1 weak references
+06-01 17:27:54.739  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~tFZz7io6toNjA_rqmpR2Pw==/com.google.android.googlequicksearchbox-G1eJ1rM5AzusYiObXsoDrQ==/split_config.xxhdpi.apk' with 1 weak references
+06-01 17:27:54.739  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~tFZz7io6toNjA_rqmpR2Pw==/com.google.android.googlequicksearchbox-G1eJ1rM5AzusYiObXsoDrQ==/split_lens_ondevice_engine_play_ml_module.apk' with 1 weak references
+06-01 17:27:54.739  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~tFZz7io6toNjA_rqmpR2Pw==/com.google.android.googlequicksearchbox-G1eJ1rM5AzusYiObXsoDrQ==/split_tclib_native_feature_module.apk' with 1 weak references
+06-01 17:27:54.740  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~s1O-nock3GymLnh03npT4g==/com.google.android.apps.wellbeing-Q7cXemj205Gb2FTzd0uq5g==/base.apk' with 1 weak references
+06-01 17:27:54.740  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~s1O-nock3GymLnh03npT4g==/com.google.android.apps.wellbeing-Q7cXemj205Gb2FTzd0uq5g==/split_config.xxhdpi.apk' with 1 weak references
+06-01 17:27:54.741  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /product/priv-app/Turbo/Turbo.apk' with 1 weak references
+06-01 17:27:54.741  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /product/priv-app/ShFaceIDxiii/ShFaceIDxiii.apk' with 1 weak references
+06-01 17:27:54.742  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /product/priv-app/TetheringAuto_awareness/TetheringAuto_awareness.apk' with 1 weak references
+06-01 17:27:54.743  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~s7DvvkdzdjPWHu1NKLFqUg==/com.android.vending-WCTnVxaDvgAtiTCeFxmRMg==/base.apk' with 1 weak references
+06-01 17:27:54.743  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~s7DvvkdzdjPWHu1NKLFqUg==/com.android.vending-WCTnVxaDvgAtiTCeFxmRMg==/split_config.arm64_v8a.apk' with 1 weak references
+06-01 17:27:54.743  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~s7DvvkdzdjPWHu1NKLFqUg==/com.android.vending-WCTnVxaDvgAtiTCeFxmRMg==/split_config.zh.apk' with 1 weak references
+06-01 17:27:54.743  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~s7DvvkdzdjPWHu1NKLFqUg==/com.android.vending-WCTnVxaDvgAtiTCeFxmRMg==/split_phonesky_data_loader.apk' with 1 weak references
+06-01 17:27:54.743  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~s7DvvkdzdjPWHu1NKLFqUg==/com.android.vending-WCTnVxaDvgAtiTCeFxmRMg==/split_phonesky_data_loader.config.arm64_v8a.apk' with 1 weak references
+06-01 17:27:54.743  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~s7DvvkdzdjPWHu1NKLFqUg==/com.android.vending-WCTnVxaDvgAtiTCeFxmRMg==/split_phonesky_webrtc_native_lib.apk' with 1 weak references
+06-01 17:27:54.743  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~s7DvvkdzdjPWHu1NKLFqUg==/com.android.vending-WCTnVxaDvgAtiTCeFxmRMg==/split_phonesky_webrtc_native_lib.config.arm64_v8a.apk' with 1 weak references
+06-01 17:27:54.743  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~Q9E7a_06Zv69N1QPJ6eoxA==/com.google.android.apps.messaging-gom04izlebM0xaFkf-sLNg==/base.apk' with 1 weak references
+06-01 17:27:54.744  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~Q9E7a_06Zv69N1QPJ6eoxA==/com.google.android.apps.messaging-gom04izlebM0xaFkf-sLNg==/split_config.arm64_v8a.apk' with 1 weak references
+06-01 17:27:54.744  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~Q9E7a_06Zv69N1QPJ6eoxA==/com.google.android.apps.messaging-gom04izlebM0xaFkf-sLNg==/split_config.xxhdpi.apk' with 1 weak references
+06-01 17:27:54.744  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~Q9E7a_06Zv69N1QPJ6eoxA==/com.google.android.apps.messaging-gom04izlebM0xaFkf-sLNg==/split_config.zh.apk' with 1 weak references
+06-01 17:27:54.744  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~rf-IQ7oQ1vw7_cBHZSvNjQ==/com.google.android.apps.safetyhub-CRN76vBpohB-muXBbMBY3Q==/base.apk' with 1 weak references
+06-01 17:27:54.745  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~rf-IQ7oQ1vw7_cBHZSvNjQ==/com.google.android.apps.safetyhub-CRN76vBpohB-muXBbMBY3Q==/split_config.arm64_v8a.apk' with 1 weak references
+06-01 17:27:54.745  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~rf-IQ7oQ1vw7_cBHZSvNjQ==/com.google.android.apps.safetyhub-CRN76vBpohB-muXBbMBY3Q==/split_config.xxhdpi.apk' with 1 weak references
+06-01 17:27:54.745  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~7OkhZEhc7qTvgKxB9Sib8g==/com.google.android.as.oss-0N6PiLbYMRtJewpgUUXRKg==/base.apk' with 1 weak references
+06-01 17:27:54.745  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~7OkhZEhc7qTvgKxB9Sib8g==/com.google.android.as.oss-0N6PiLbYMRtJewpgUUXRKg==/split_config.arm64_v8a.apk' with 1 weak references
+06-01 17:27:54.745  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~7OkhZEhc7qTvgKxB9Sib8g==/com.google.android.as.oss-0N6PiLbYMRtJewpgUUXRKg==/split_config.xxhdpi.apk' with 1 weak references
+06-01 17:27:54.746  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~7OkhZEhc7qTvgKxB9Sib8g==/com.google.android.as.oss-0N6PiLbYMRtJewpgUUXRKg==/split_config.zh.apk' with 1 weak references
+06-01 17:27:54.746  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /product/priv-app/LockWeatherWidget_Material/LockWeatherWidget_Material.apk' with 1 weak references
+06-01 17:27:54.747  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~jyIXXmv-jJ4NNLdqbwx2YA==/jp.co.sharp.android.karadamate-dCy-UyCtYZPmnKKe1cVp6g==/base.apk' with 1 weak references
+06-01 17:27:54.747  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '/product/overlay/KaradaMate-mikazuki/KaradaMate-mikazuki.apk' with 1 weak references
+06-01 17:27:54.748  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~gyUzgC1LncdRi_i-7Vqwxg==/com.google.android.dialer-8CN_Usfgs6tztL3VdgK_qw==/base.apk' with 1 weak references
+06-01 17:27:54.749  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /product/priv-app/HotwordEnrollmentXGoogleHEXAGON_WIDEBAND/HotwordEnrollmentXGoogleHEXAGON_WIDEBAND.apk' with 1 weak references
+06-01 17:27:54.749  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /product/priv-app/HotwordEnrollmentYGoogleHEXAGON_WIDEBAND/HotwordEnrollmentYGoogleHEXAGON_WIDEBAND.apk' with 1 weak references
+06-01 17:27:54.750  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~4169aeGgPY91Qxl8cliSFQ==/com.google.android.apps.restore-ynMPQWNQnjjF5uTJCdXBxA==/base.apk' with 1 weak references
+06-01 17:27:54.750  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~4169aeGgPY91Qxl8cliSFQ==/com.google.android.apps.restore-ynMPQWNQnjjF5uTJCdXBxA==/split_config.xxhdpi.apk' with 1 weak references
+06-01 17:27:54.751  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~GEFjfNsubaeQmRuvi7Y_eA==/com.google.android.partnersetup-tQmxHs-vWlYed5SdtjwsGQ==/base.apk' with 1 weak references
+06-01 17:27:54.751  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~GEFjfNsubaeQmRuvi7Y_eA==/com.google.android.partnersetup-tQmxHs-vWlYed5SdtjwsGQ==/split_config.en.apk' with 1 weak references
+06-01 17:27:54.751  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~GEFjfNsubaeQmRuvi7Y_eA==/com.google.android.partnersetup-tQmxHs-vWlYed5SdtjwsGQ==/split_config.xxhdpi.apk' with 1 weak references
+06-01 17:27:54.751  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~GEFjfNsubaeQmRuvi7Y_eA==/com.google.android.partnersetup-tQmxHs-vWlYed5SdtjwsGQ==/split_config.zh.apk' with 1 weak references
+06-01 17:27:54.751  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /product/priv-app/GoogleOneTimeInitializer/GoogleOneTimeInitializer.apk' with 1 weak references
+06-01 17:27:54.752  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~r_pEbBTVppxExiBNj1xWZw==/com.google.android.apps.nbu.files-S5Gyyng6GBXaO4NPwq9U3g==/base.apk' with 1 weak references
+06-01 17:27:54.752  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~r_pEbBTVppxExiBNj1xWZw==/com.google.android.apps.nbu.files-S5Gyyng6GBXaO4NPwq9U3g==/split_config.arm64_v8a.apk' with 1 weak references
+06-01 17:27:54.752  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~r_pEbBTVppxExiBNj1xWZw==/com.google.android.apps.nbu.files-S5Gyyng6GBXaO4NPwq9U3g==/split_config.xxhdpi.apk' with 1 weak references
+06-01 17:27:54.752  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~r_pEbBTVppxExiBNj1xWZw==/com.google.android.apps.nbu.files-S5Gyyng6GBXaO4NPwq9U3g==/split_config.zh.apk' with 1 weak references
+06-01 17:27:54.753  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~qtJ9uCUEXW_BHR2SwiX_Mg==/com.google.android.apps.carrier.carrierwifi-gN7o9uX2dPwtCZ3SeYKpbA==/base.apk' with 1 weak references
+06-01 17:27:54.753  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~M57PgGmAcE2NMNQ9SieN5Q==/com.google.android.euicc-qePgA58bD9dTbYJMP461VQ==/base.apk' with 1 weak references
+06-01 17:27:54.754  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~D3WaZTOk4kN5pkZjyz7ZOQ==/com.google.android.as-j6zw5gNoyB3UKtZVLewSlw==/base.apk' with 1 weak references
+06-01 17:27:54.754  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /product/priv-app/EmopaOverlayService/EmopaOverlayService.apk' with 1 weak references
+06-01 17:27:54.755  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~DJaG1_89srzstytdC0az-g==/com.google.android.projection.gearhead-q8C6B4IEQxr-75RCtbQg3g==/base.apk' with 1 weak references
+06-01 17:27:54.755  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~DJaG1_89srzstytdC0az-g==/com.google.android.projection.gearhead-q8C6B4IEQxr-75RCtbQg3g==/split_config.arm64_v8a.apk' with 1 weak references
+06-01 17:27:54.755  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~DJaG1_89srzstytdC0az-g==/com.google.android.projection.gearhead-q8C6B4IEQxr-75RCtbQg3g==/split_config.xxhdpi.apk' with 1 weak references
+06-01 17:27:54.755  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~DJaG1_89srzstytdC0az-g==/com.google.android.projection.gearhead-q8C6B4IEQxr-75RCtbQg3g==/split_config.zh.apk' with 1 weak references
+06-01 17:27:54.755  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /vendor/app/QCC-TR-UI/QCC-TR-UI.apk' with 1 weak references
+06-01 17:27:54.756  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /system/app/Traceur/Traceur.apk' with 1 weak references
+06-01 17:27:54.756  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /system/app/PrintSpooler/PrintSpooler.apk' with 1 weak references
+06-01 17:27:54.756  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /system/priv-app/ManagedProvisioning/ManagedProvisioning.apk' with 1 weak references
+06-01 17:27:54.757  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /system/priv-app/GooglePackageInstaller/GooglePackageInstaller.apk' with 1 weak references
+06-01 17:27:54.757  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /system/priv-app/ExternalStorageProvider/ExternalStorageProvider.apk' with 1 weak references
+06-01 17:27:54.758  7894  7901 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /system/priv-app/CalendarProvider/CalendarProvider.apk' with 1 weak references
+06-01 17:27:54.762  3736  3910 D EuiccConnector: handleMessage: E msg.what=6
+06-01 17:27:54.762  3736  3910 D EuiccConnector: processMsg: ConnectedState
+06-01 17:27:54.762  3736  3910 D EuiccConnector: handleMessage: X
+--------- beginning of system
+06-01 17:27:54.833  2026  3396 I ActivityManager: Force stopping com.example.llama.aichat appid=10328 user=0: from pid 20808
+06-01 17:27:54.842  2026  3396 I AppsFilter: interaction: PackageSetting{55292c5 com.android.microdroid.empty_payload/10311} -> PackageSetting{b3f7e53 com.example.llama.aichat/10328} BLOCKED
+06-01 17:27:54.842  2026  3396 I AppsFilter: interaction: PackageSetting{9aecb4b com.example.portraitcroppertest/10347} -> PackageSetting{b3f7e53 com.example.llama.aichat/10328} BLOCKED
+06-01 17:27:54.842  2026  3396 I AppsFilter: interaction: PackageSetting{85f9928 com.example.portraitcropperservice/10350} -> PackageSetting{b3f7e53 com.example.llama.aichat/10328} BLOCKED
+06-01 17:27:54.845  3736  3736 D CarrierSvcBindHelper: onHandleForceStop: [com.example.llama.aichat]
+06-01 17:27:54.846  3736  3910 D EuiccConnector: handleMessage: E msg.what=1
+06-01 17:27:54.846  3736  3910 D EuiccConnector: processMsg: ConnectedState
+06-01 17:27:54.846  3736  3910 D EuiccConnector: processMsg: DisconnectedState
+06-01 17:27:54.847  3736  3910 D EuiccConnector: handleMessage: X
+06-01 17:27:54.847  3736  3736 D CarrierSvcBindHelper: No carrier app for: 0
+06-01 17:27:54.848  3736  3736 D CarrierSvcBindHelper: No carrier app for: 1
+06-01 17:27:54.936  2026  4002 W ActivityTaskManager: callingPackage for (uid=2000, pid=20813) has no WPC
+06-01 17:27:54.936  2026  4002 W OptProp : Cannot read opt property android.window.PROPERTY_COMPAT_ALLOW_ORIENTATION_OVERRIDE
+06-01 17:27:54.937  2026  4002 V GrammaticalInflectionUtils: AttributionSource: android.content.AttributionSource@914cd22 does not have READ_SYSTEM_GRAMMATICAL_GENDER permission.
+06-01 17:27:54.937  2026  4002 W OptProp : Cannot read opt property android.window.PROPERTY_COMPAT_ALLOW_RESIZEABLE_ACTIVITY_OVERRIDES
+06-01 17:27:54.937  2026  4002 W OptProp : Cannot read opt property android.window.PROPERTY_COMPAT_ALLOW_MIN_ASPECT_RATIO_OVERRIDE
+06-01 17:27:54.941  1500  1565 E ANDR-PERF-RESOURCEQS: ANDR-PERF-RESOURCEQS: AddAndApply() 131: Resource value ffffffff is not supported
+06-01 17:27:54.941  1500  1565 E ANDR-PERF-UTIL: ANDR-PERF-UTIL: change_node_val() 319: Failed to update node /proc/sys/walt/sched_per_task_boost with value 65535 0
+06-01 17:27:54.941  1500  1565 E ANDR-PERF-OPTSHANDLER: ANDR-PERF-OPTSHANDLER: sched_reset_task_boost() 3633: can't reset task 4294967295
+06-01 17:27:54.941  1500  1565 E ANDR-PERF-RESOURCEQS: ANDR-PERF-RESOURCEQS: RemoveAndApply() 292: Failed to reset optimization here [3, 32]
+06-01 17:27:54.941  1500  1565 E ANDR-PERF-UTIL: ANDR-PERF-UTIL: change_node_val() 319: Failed to update node /proc/sys/walt/sched_per_task_boost with value 0 3
+06-01 17:27:54.941  1500  1565 E ANDR-PERF-OPTSHANDLER: ANDR-PERF-OPTSHANDLER: sched_task_boost() 3609: can't boost task 0
+06-01 17:27:54.941  1500  1565 E ANDR-PERF-RESOURCEQS: ANDR-PERF-RESOURCEQS: AddAndApply() 167: Failed to apply optimization [3, 32]
+06-01 17:27:54.944  2026  4002 I ActivityTaskManager: START u0 {flg=0x10000000 cmp=com.example.llama.aichat/com.example.llama.MainActivity} with LAUNCH_MULTIPLE from uid 2000 (BAL_ALLOW_PERMISSION) result code=0
+06-01 17:27:54.945  2026  2068 V GrammaticalInflectionUtils: AttributionSource: android.content.AttributionSource@914cd22 does not have READ_SYSTEM_GRAMMATICAL_GENDER permission.
+06-01 17:27:54.949  3524  3586 V WindowManagerShell: Transition requested (#396): android.os.BinderProxy@63e72b4 TransitionRequestInfo { type = OPEN, triggerTask = TaskInfo{userId=0 taskId=1110 displayId=0 isRunning=true baseIntent=Intent { flg=0x10000000 cmp=com.example.llama.aichat/com.example.llama.MainActivity } baseActivity=ComponentInfo{com.example.llama.aichat/com.example.llama.MainActivity} topActivity=ComponentInfo{com.example.llama.aichat/com.example.llama.MainActivity} origActivity=null realActivity=ComponentInfo{com.example.llama.aichat/com.example.llama.MainActivity} numActivities=1 lastActiveTime=529368613 supportsMultiWindow=true resizeMode=1 isResizeable=true minWidth=-1 minHeight=-1 defaultMinSize=220 token=WCT{android.window.IWindowContainerToken$Stub$Proxy@ac1dedd} topActivityType=1 pictureInPictureParams=null shouldDockBigOverlays=false launchIntoPipHostTaskId=-1 lastParentTaskIdBeforePip=-1 displayCutoutSafeInsets=Rect(0, 86 - 0, 0) topActivityInfo=ActivityInfo{2616a52 com.example.llama.MainActivity} launchCookies=[] positionInParent=Point(0, 0) parentTaskId=-1 isFocused=false isVisible=false isVisibleRequested=false isSleeping=false locusId=null displayAreaFeatureId=1 isTopActivityTransparent=false appCompatTaskInfo=AppCompatTaskInfo { topActivityInSizeCompat=false topActivityEligibleForLetterboxEducation= falseisLetterboxEducationEnabled= false isLetterboxDoubleTapEnabled= false topActivityEligibleForUserAspectRatioButton= false topActivityBoundsLetterboxed= false isFromLetterboxDoubleTap= false topActivityLetterboxVerticalPosition= -1 topActivityLetterboxHorizontalPosition= -1 topActivityLetterboxWidth=1080 topActivityLetterboxHeight=2340 isUserFullscreenOverrideEnabled=false isSystemFullscreenOverrideEnabled=false cameraCompatTaskInfo=CameraCompatTaskInfo { cameraCompatControlState=hidden freeformCameraCompatMode=inactive}}}, pipTask = null, remoteTransition = null, displayChange = null, flags = 0, debugId = 396 }
+06-01 17:27:54.949  4001  4001 W SplitSelectStateCtor: Missing session instanceIds
+06-01 17:27:54.949  4001  4001 D StatsLog: LAUNCHER_SPLIT_SELECTION_EXIT_INTERRUPTED
+06-01 17:27:54.951  3524  3586 D WindowManagerShell: setLauncherKeepClearAreaHeight: visible=false, height=492
+06-01 17:27:54.953  2026  4438 I AppsFilter: interaction: PackageSetting{55292c5 com.android.microdroid.empty_payload/10311} -> PackageSetting{5c9b4b5 com.example.llama.aichat/10328} BLOCKED
+06-01 17:27:54.953  2026  4438 I AppsFilter: interaction: PackageSetting{9aecb4b com.example.portraitcroppertest/10347} -> PackageSetting{5c9b4b5 com.example.llama.aichat/10328} BLOCKED
+06-01 17:27:54.953  2026  4438 I AppsFilter: interaction: PackageSetting{85f9928 com.example.portraitcropperservice/10350} -> PackageSetting{5c9b4b5 com.example.llama.aichat/10328} BLOCKED
+06-01 17:27:54.957  4001  4001 I TopTaskTracker: onTaskMovedToFront: (moved taskInfo to front) taskId=1110, baseIntent=Intent { flg=0x10000000 cmp=com.example.llama.aichat/com.example.llama.MainActivity }
+06-01 17:27:54.957  1255  1255 D Zygote  : Forked child process 20820
+06-01 17:27:54.957  2026  2119 I ActivityManager: Start proc 20820:com.example.llama.aichat/u0a328 for next-top-activity {com.example.llama.aichat/com.example.llama.MainActivity}
+06-01 17:27:54.958  1608  1608 I BpBinder: onLastStrongRef automatically unlinking death recipients: 
+06-01 17:27:54.959  3524  3624 D InputEventReceiver: Input log is disabled in InputEventReceiver.
+06-01 17:27:54.959  2026 20821 W ContextImpl: Calling a method in the system process without a qualified user: android.app.ContextImpl.sendBroadcast:1249 com.qualcomm.qti.Performance$SendGameLaunchBroadcast.run:327 java.lang.Thread.run:1564 <bottom of call stack> <bottom of call stack> 
+06-01 17:27:54.962  2026  3396 W WindowManager: Changing focus from Window{bfe95a8 u0 jp.co.sharp.android.launcher3/jp.co.sharp.android.launcher3.uioverrides.QuickstepLauncher} to null displayId=0 Callers=com.android.server.wm.RootWindowContainer.updateFocusedWindowLocked:479 com.android.server.wm.WindowManagerService.updateFocusedWindowLocked:6654 com.android.server.wm.WindowManagerService.relayoutWindowInner:2780 com.android.server.wm.WindowManagerService.relayoutWindow:2450 
+06-01 17:27:54.963  2026  4440 D CoreBackPreview: Window{ff175a2 u0 Splash Screen com.example.llama.aichat}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@f394b69, mPriority=0, mIsAnimationCallback=false}
+06-01 17:27:54.964 20820 20820 I le.llama.aichat: Using CollectorTypeCMC GC.
+06-01 17:27:54.966  3524  3658 W qdgralloc: getInterlacedFlag: getMetaData returned 3, defaulting to interlaced_flag = 0
+06-01 17:27:54.970 20820 20820 D nativeloader: Load libframework-connectivity-tiramisu-jni.so using APEX ns com_android_tethering for caller /apex/com.android.tethering/javalib/framework-connectivity-t.jar: ok
+06-01 17:27:54.972  2026  2064 V WindowManager: Sent Transition (#396) createdAt=06-01 17:27:54.938 via request=TransitionRequestInfo { type = OPEN, triggerTask = TaskInfo{userId=0 taskId=1110 displayId=0 isRunning=true baseIntent=Intent { flg=0x10000000 cmp=com.example.llama.aichat/com.example.llama.MainActivity } baseActivity=ComponentInfo{com.example.llama.aichat/com.example.llama.MainActivity} topActivity=ComponentInfo{com.example.llama.aichat/com.example.llama.MainActivity} origActivity=null realActivity=ComponentInfo{com.example.llama.aichat/com.example.llama.MainActivity} numActivities=1 lastActiveTime=529368613 supportsMultiWindow=true resizeMode=1 isResizeable=true minWidth=-1 minHeight=-1 defaultMinSize=220 token=WCT{RemoteToken{b9016fa Task{e34f1f9 #1110 type=standard A=10328:com.example.llama.aichat}}} topActivityType=1 pictureInPictureParams=null shouldDockBigOverlays=false launchIntoPipHostTaskId=-1 lastParentTaskIdBeforePip=-1 displayCutoutSafeInsets=Rect(0, 86 - 0, 0) topActivityInfo=ActivityInfo{2b624ab com.example.llama.MainActivity} launchCookies=[] positionInParent=Point(0, 0) parentTaskId=-1 isFocused=false isVisible=false isVisibleRequested=false isSleeping=false locusId=null displayAreaFeatureId=1 isTopActivityTransparent=false appCompatTaskInfo=AppCompatTaskInfo { topActivityInSizeCompat=false topActivityEligibleForLetterboxEducation= falseisLetterboxEducationEnabled= false isLetterboxDoubleTapEnabled= false topActivityEligibleForUserAspectRatioButton= false topActivityBoundsLetterboxed= false isFromLetterboxDoubleTap= false topActivityLetterboxVerticalPosition= -1 topActivityLetterboxHorizontalPosition= -1 topActivityLetterboxWidth=1080 topActivityLetterboxHeight=2340 isUserFullscreenOverrideEnabled=false isSystemFullscreenOverrideEnabled=false cameraCompatTaskInfo=CameraCompatTaskInfo { cameraCompatControlState=hidden freeformCameraCompatMode=inactive}}}, pipTask = null, remoteTransition = null, displayChange = null, flags = 0, debugId = 396 }
+06-01 17:27:54.972  2026  2064 V WindowManager:     startWCT=WindowContainerTransaction { changes = {} hops = [] errorCallbackToken=null taskFragmentOrganizer=null }
+06-01 17:27:54.973  2026  2064 V WindowManager:     info={id=396 t=OPEN f=0x0 trk=0 r=[0@Point(0, 0)] c=[
+06-01 17:27:54.973  2026  2064 V WindowManager:         {WCT{RemoteToken{b9016fa Task{e34f1f9 #1110 type=standard A=10328:com.example.llama.aichat}}} m=OPEN f=NONE leash=Surface(name=Task=1110)/@0xc9549ee sb=Rect(0, 0 - 1080, 2340) eb=Rect(0, 0 - 1080, 2340) d=0 taskParent=-1},
+06-01 17:27:54.973  2026  2064 V WindowManager:         {WCT{RemoteToken{7dd01da Task{88acdf9 #1 type=home}}} m=TO_BACK f=SHOW_WALLPAPER leash=Surface(name=Task=1)/@0x75530b4 sb=Rect(0, 0 - 1080, 2340) eb=Rect(0, 0 - 1080, 2340) d=0 taskParent=-1}
+06-01 17:27:54.973  2026  2064 V WindowManager:     ]}
+06-01 17:27:54.973  3524  4109 V WindowManagerShell: onTransitionReady(transaction=8701603761658)
+06-01 17:27:54.973  3524  3586 V WindowManagerShell: onTransitionReady (#396) android.os.BinderProxy@63e72b4: {id=396 t=OPEN f=0x0 trk=0 r=[0@Point(0, 0)] c=[{WCT{android.window.IWindowContainerToken$Stub$Proxy@98dd11} m=OPEN f=NONE leash=Surface(name=Task=1110)/@0xe13f1aa sb=Rect(0, 0 - 1080, 2340) eb=Rect(0, 0 - 1080, 2340) d=0 taskParent=-1},{WCT{android.window.IWindowContainerToken$Stub$Proxy@977e76} m=TO_BACK f=SHOW_WALLPAPER leash=Surface(name=Task=1)/@0x59be19b sb=Rect(0, 0 - 1080, 2340) eb=Rect(0, 0 - 1080, 2340) d=0 taskParent=-1}]}
+06-01 17:27:54.973  3524  3586 V WindowManagerShell: Playing animation for (#396) android.os.BinderProxy@63e72b4@0
+06-01 17:27:54.974  3524  3586 V WindowManagerShell:  try handler com.android.wm.shell.transition.DefaultMixedHandler@bcb2e86
+06-01 17:27:54.974  3524  3586 V WindowManagerShell:  try handler com.android.wm.shell.keyguard.KeyguardTransitionHandler@f53d347
+06-01 17:27:54.974  3524  3586 V WindowManagerShell:  try handler com.android.wm.shell.pip.PipTransition@503d02c
+06-01 17:27:54.974  3524  3586 V WindowManagerShell:  try handler com.android.wm.shell.activityembedding.ActivityEmbeddingController@a153af5
+06-01 17:27:54.974  3524  3586 V WindowManagerShell:  try handler com.android.wm.shell.recents.RecentsTransitionHandler@17ef08a
+06-01 17:27:54.974  3524  3586 V ShellRecents: RecentsTransitionHandler.startAnimation: no controller found
+06-01 17:27:54.974  3524  3586 V WindowManagerShell:  try handler com.android.wm.shell.splitscreen.StageCoordinator@512a6fb
+06-01 17:27:54.974  3524  3586 V WindowManagerShell:  try handler com.android.wm.shell.transition.RemoteTransitionHandler@8f3c318
+06-01 17:27:54.974  3524  3586 V WindowManagerShell: Transition doesn't have explicit remote, search filters for match for {id=396 t=OPEN f=0x0 trk=0 r=[0@Point(0, 0)] c=[{WCT{android.window.IWindowContainerToken$Stub$Proxy@98dd11} m=OPEN f=NONE leash=Surface(name=Task=1110)/@0xe13f1aa sb=Rect(0, 0 - 1080, 2340) eb=Rect(0, 0 - 1080, 2340) d=0 taskParent=-1},{WCT{android.window.IWindowContainerToken$Stub$Proxy@977e76} m=TO_BACK f=SHOW_WALLPAPER leash=Surface(name=Task=1)/@0x59be19b sb=Rect(0, 0 - 1080, 2340) eb=Rect(0, 0 - 1080, 2340) d=0 taskParent=-1}]}
+06-01 17:27:54.974  3524  3586 V WindowManagerShell:  Checking filter Pair{{types=[] flags=0x0] notFlags=0x100 checks=[{atype=home independent=true modes=[OPEN,TO_FRONT] flags=NONE mustBeTask=false order=TOP topActivity=ComponentInfo{jp.co.sharp.android.launcher3/jp.co.sharp.android.launcher3.uioverrides.QuickstepLauncher} launchCookie=null},{atype=standard independent=true modes=[CLOSE,TO_BACK] flags=NONE mustBeTask=false order=ANY topActivity=null launchCookie=null}]} RemoteTransition { remoteTransition = android.window.IRemoteTransition$Stub$Proxy@1cb9171, appThread = android.app.IApplicationThread$Stub$Proxy@8638b56, debugName = QuickstepLaunchHome }}
+06-01 17:27:54.974  3524  3586 V WindowManagerShell:  Delegate animation for (#396) to null
+06-01 17:27:54.974  3524  3586 V WindowManagerShell:  try handler com.android.wm.shell.transition.DefaultTransitionHandler@15ab7d7
+06-01 17:27:54.974  3524  3586 V WindowManagerShell: start default transition animation, info = {id=396 t=OPEN f=0x0 trk=0 r=[0@Point(0, 0)] c=[{WCT{android.window.IWindowContainerToken$Stub$Proxy@98dd11} m=OPEN f=NONE leash=Surface(name=Task=1110)/@0xe13f1aa sb=Rect(0, 0 - 1080, 2340) eb=Rect(0, 0 - 1080, 2340) d=0 taskParent=-1},{WCT{android.window.IWindowContainerToken$Stub$Proxy@977e76} m=TO_BACK f=SHOW_WALLPAPER leash=Surface(name=Task=1)/@0x59be19b sb=Rect(0, 0 - 1080, 2340) eb=Rect(0, 0 - 1080, 2340) d=0 taskParent=-1}]}
+06-01 17:27:54.974  2026  3396 V ActivityManager: New death recipient com.android.server.am.ActivityManagerService$AppDeathRecipient@c38a8c6 for thread android.os.BinderProxy@6b06087
+06-01 17:27:54.974  3524  3586 V WindowManagerShell: loadAnimation: anim=android.view.animation.AnimationSet@29d394d animAttr=0x13 type=OPEN isEntrance=false
+06-01 17:27:54.975  3524  3586 V WindowManagerShell: loadAnimation: anim=android.view.animation.AnimationSet@111d49 animAttr=0x12 type=OPEN isEntrance=true
+06-01 17:27:54.975  3524  3586 V WindowManagerShell:  animated by com.android.wm.shell.transition.DefaultTransitionHandler@15ab7d7
+06-01 17:27:54.977  2026  4438 W UserManagerService: Requested status bar icon for non-badged user 0
+06-01 17:27:54.978  4614 15095 D MainProcessObserver: pid:20820 uid:10328 foregroundActivities:true
+06-01 17:27:54.979  4424  4478 I ekjt    : (REDACTED) HDM. appOpsListener %s %s
+06-01 17:27:54.979  4424  4478 I ekjt    : (REDACTED) HDM. Ignoring irrelevant audio permission changes for package %s
+06-01 17:27:54.981  2026  4438 W ActivityTaskManager: MANAGE_ACTIVITY_STACKS is deprecated, please use alternative permission: MANAGE_ACTIVITY_TASKS
+06-01 17:27:54.981  4614 15095 D onForegroundChanged: topActivity:ComponentInfo{com.example.llama.aichat/com.example.llama.MainActivity}, taskId:1110, windowingMode:1
+06-01 17:27:54.981  4614 15095 D onForegroundChanged: packageName:com.example.llama.aichat
+06-01 17:27:54.983  2026  2118 D ActivityManager: sync unfroze 18191 sharp.jp.android.makersiteappli for 3
+06-01 17:27:54.984 20820 20820 D nativeloader: Configuring clns-7 for other apk /data/app/~~dxkKc2KHRHXjbL__2FZ5PQ==/com.example.llama.aichat-afoGPdpVwpIqG6VlUXZs5Q==/base.apk. target_sdk_version=36, uses_libraries=libOpenCL.so:libcdsprpc.so, library_path=/data/app/~~dxkKc2KHRHXjbL__2FZ5PQ==/com.example.llama.aichat-afoGPdpVwpIqG6VlUXZs5Q==/lib/arm64:/data/app/~~dxkKc2KHRHXjbL__2FZ5PQ==/com.example.llama.aichat-afoGPdpVwpIqG6VlUXZs5Q==/base.apk!/lib/arm64-v8a, permitted_path=/data:/mnt/expand:/data/user/0/com.example.llama.aichat
+06-01 17:27:54.985 18191 18191 D ActivityThread: Package [com.example.llama.aichat] reported as REPLACED, but missing application info. Assuming REMOVED.
+06-01 17:27:54.985 18191 18191 D ActivityThread: Package [com.example.llama.aichat] reported as REPLACED, but missing application info. Assuming REMOVED.
+06-01 17:27:54.987 20820 20820 V GraphicsEnvironment: Currently set values for:
+06-01 17:27:54.987 20820 20820 V GraphicsEnvironment:   angle_gl_driver_selection_pkgs=[]
+06-01 17:27:54.987 20820 20820 V GraphicsEnvironment:   angle_gl_driver_selection_values=[]
+06-01 17:27:54.987 20820 20820 V GraphicsEnvironment: Global.Settings values are invalid: number of packages: 0, number of values: 0
+06-01 17:27:54.987 20820 20820 V GraphicsEnvironment: Updatable production driver is not supported on the device.
+06-01 17:27:54.988  4418  9696 D EventRepositoryImpl: onChangeForeground(com.example.llama.aichat, 1110)
+06-01 17:27:54.988 20820 20820 W ResOptExtFactory: ResOptExtFactoryImpl not found
+06-01 17:27:54.990 20820 20820 D WM-WrkMgrInitializer: Initializing WorkManager with default configuration.
+06-01 17:27:54.990  4418  9696 D EventRepositoryImpl: onDeactivatedApplication()
+06-01 17:27:54.991 20820 20820 D WM-PackageManagerHelper: Skipping component enablement for androidx.work.impl.background.systemjob.SystemJobService
+06-01 17:27:54.991 20820 20820 D WM-Schedulers: Created SystemJobScheduler and enabled SystemJobService
+06-01 17:27:54.995  1500  7318 E ANDR-PERF-LM: PrefAppsDB: get_total_pkg_bindapp_count() 663: App = (com.example.llama.aichat) not found in LatData DB.
+06-01 17:27:54.996  4418  4451 W android.gaming2: Reducing the number of considered missed Gc histogram windows from 1953 to 100
+06-01 17:27:54.996  4418  9696 D EventRepositoryImpl: onActivatedApplication(com.example.llama.aichat)
+06-01 17:27:54.997 20820 20838 D vulkan  : searching for layers in '/data/app/~~dxkKc2KHRHXjbL__2FZ5PQ==/com.example.llama.aichat-afoGPdpVwpIqG6VlUXZs5Q==/lib/arm64'
+06-01 17:27:54.997 20820 20838 D vulkan  : searching for layers in '/data/app/~~dxkKc2KHRHXjbL__2FZ5PQ==/com.example.llama.aichat-afoGPdpVwpIqG6VlUXZs5Q==/base.apk!/lib/arm64-v8a'
+06-01 17:27:54.997  8434  8434 D ScShoCaptureReceirver: receive ACTION_LOCK_CLIPNOW_FOR_SETTING
+06-01 17:27:55.002  1538  1538 I qspmHal : enter getGpuProf at: -2105352838
+06-01 17:27:55.002  1538  1538 I qspmHal : Coudn't match the GFX PID 20820 to AT PID 0. Checking in local cache.
+06-01 17:27:55.002  1538  1538 E qspmHal : PID 20820 from GFX didn't match!!
+06-01 17:27:55.003 20820 20838 I AdrenoVK-0: ===== BEGIN DUMP OF OVERRIDDEN SETTINGS =====
+06-01 17:27:55.003 20820 20838 I AdrenoVK-0: ===== END DUMP OF OVERRIDDEN SETTINGS =====
+06-01 17:27:55.007 20820 20838 I AdrenoVK-0: QUALCOMM build          : 43c70540de, Ibee7afe120
+06-01 17:27:55.007 20820 20838 I AdrenoVK-0: Build Date              : 07/17/24
+06-01 17:27:55.007 20820 20838 I AdrenoVK-0: Shader Compiler Version : E031.45.02.16
+06-01 17:27:55.007 20820 20838 I AdrenoVK-0: Local Branch            : 
+06-01 17:27:55.007 20820 20838 I AdrenoVK-0: Remote Branch           : refs/tags/AU_LINUX_ANDROID_LA.VENDOR.14.3.0.11.00.00.973.576
+06-01 17:27:55.007 20820 20838 I AdrenoVK-0: Remote Branch           : NONE
+06-01 17:27:55.007 20820 20838 I AdrenoVK-0: Reconstruct Branch      : NOTHING
+06-01 17:27:55.007 20820 20838 I AdrenoVK-0: Build Config            : S P 16.1.2 AArch64
+06-01 17:27:55.007 20820 20838 I AdrenoVK-0: Driver Path             : /vendor/lib64/hw/vulkan.adreno.so
+06-01 17:27:55.007 20820 20838 I AdrenoVK-0: Driver Version          : 0762.24
+06-01 17:27:55.007 20820 20838 I AdrenoVK-0: PFP                     : 0x01310168
+06-01 17:27:55.007 20820 20838 I AdrenoVK-0: ME                      : 0x00000000
+06-01 17:27:55.007 20820 20838 I AdrenoVK-0: Application Name    : android framework
+06-01 17:27:55.007 20820 20838 I AdrenoVK-0: Application Version : 0x00000000
+06-01 17:27:55.007 20820 20838 I AdrenoVK-0: Engine Name         : android framework
+06-01 17:27:55.007 20820 20838 I AdrenoVK-0: Engine Version      : 0x00000000
+06-01 17:27:55.007 20820 20838 I AdrenoVK-0: Api Version         : 0x00401000
+06-01 17:27:55.029 20820 20820 D AppCompatDelegate: Checking for metadata for AppLocalesMetadataHolderService : Service not found
+06-01 17:27:55.041  4515  4515 W MediaProvider: WorkProfileOwnerApps cache is empty
+06-01 17:27:55.041  4515  4515 D PickerSyncLockManager: Trying to acquire lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@6098f39[Unlocked]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = []
+06-01 17:27:55.041  4515  4515 D CloseableReentrantLock: Successfully acquired lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@6098f39[Locked by thread main]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = []
+06-01 17:27:55.041  4515  4515 D CloseableReentrantLock: Successfully released lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@6098f39[Unlocked]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = []
+06-01 17:27:55.044  1500  7381 E ANDR-PERF-LM: FeatureState: deleteRow() 208: Entry not found in db
+06-01 17:27:55.044  1500  7373 E ANDR-PERF-LM: FeatureState: deleteRow() 208: Entry not found in db
+06-01 17:27:55.044 10842 10842 I Finsky  : [2] ajol - Received: android.intent.action.PACKAGE_REMOVED, [b87jivnbBQq0atgw1Xf-Ggu1xd0FqUEHy7hWhoHpV4c]
+06-01 17:27:55.044  3524  3524 D ControlsListingControllerImpl: ServiceConfig reloaded, count: 1
+06-01 17:27:55.045 20820 20820 W MaterialButton: MaterialButton manages its own background to control elevation, shape, color and states. Consider using backgroundTint, shapeAppearance and other attributes where available. A custom background will ignore these attributes and you should consider handling interaction states such as pressed, focused and disabled
+06-01 17:27:55.045 20820 20820 W MaterialButton: MaterialButton manages its own background to control elevation, shape, color and states. Consider using backgroundTint, shapeAppearance and other attributes where available. A custom background will ignore these attributes and you should consider handling interaction states such as pressed, focused and disabled
+06-01 17:27:55.045 20820 20820 W MaterialButton: MaterialButton manages its own background to control elevation, shape, color and states. Consider using backgroundTint, shapeAppearance and other attributes where available. A custom background will ignore these attributes and you should consider handling interaction states such as pressed, focused and disabled
+06-01 17:27:55.045 20820 20820 W MaterialButton: MaterialButton manages its own background to control elevation, shape, color and states. Consider using backgroundTint, shapeAppearance and other attributes where available. A custom background will ignore these attributes and you should consider handling interaction states such as pressed, focused and disabled
+06-01 17:27:55.045 20820 20820 W MaterialButton: MaterialButton manages its own background to control elevation, shape, color and states. Consider using backgroundTint, shapeAppearance and other attributes where available. A custom background will ignore these attributes and you should consider handling interaction states such as pressed, focused and disabled
+06-01 17:27:55.045 20820 20820 W MaterialButton: MaterialButton manages its own background to control elevation, shape, color and states. Consider using backgroundTint, shapeAppearance and other attributes where available. A custom background will ignore these attributes and you should consider handling interaction states such as pressed, focused and disabled
+06-01 17:27:55.045  4614  4614 I System.out: intent:Intent { act=android.intent.action.PACKAGE_ADDED dat=package: flg=0x4000010 (has extras) }
+06-01 17:27:55.045  4614  4614 I System.out: intent:Intent { act=ACTION_SET_GAME_VIEW flg=0x10 (has extras) }
+06-01 17:27:55.045  3524  3524 D ControlsListingControllerImpl: ServiceConfig reloaded, count: 1
+06-01 17:27:55.046  2026  3396 W JobInfo : Job 'jp.co.sharp.android.gamingbasemodule/.GamingMenuJobIntentService#990' has a deadline with no functional constraints. The deadline won't improve job execution latency. Consider removing the deadline.
+06-01 17:27:55.046  4812  7185 W SQLiteLog: (28) double-quoted string literal: "com.example.llama.aichat"
+06-01 17:27:55.046  3524  3524 D ControlsListingControllerImpl: ServiceConfig reloaded, count: 1
+06-01 17:27:55.048 20820 20820 W MaterialButton: MaterialButton manages its own background to control elevation, shape, color and states. Consider using backgroundTint, shapeAppearance and other attributes where available. A custom background will ignore these attributes and you should consider handling interaction states such as pressed, focused and disabled
+06-01 17:27:55.048 20820 20820 W MaterialButton: MaterialButton manages its own background to control elevation, shape, color and states. Consider using backgroundTint, shapeAppearance and other attributes where available. A custom background will ignore these attributes and you should consider handling interaction states such as pressed, focused and disabled
+06-01 17:27:55.048 20820 20820 W WindowOnBackDispatcher: OnBackInvokedCallback is not enabled for the application.
+06-01 17:27:55.048 20820 20820 W WindowOnBackDispatcher: Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+06-01 17:27:55.048 10922 10922 I Finsky:background: [2] ajob - Received: android.intent.action.PACKAGE_REMOVED, [b87jivnbBQq0atgw1Xf-Ggu1xd0FqUEHy7hWhoHpV4c]
+06-01 17:27:55.049  4424  5060 I dsyd    : (REDACTED) maybeUpdateCacheDataForAddedPackage %s
+06-01 17:27:55.050 20820 20820 I ContentCaptureHelper: Setting logging level to OFF
+06-01 17:27:55.050 26853 26853 I byee    : onPause
+06-01 17:27:55.050 26853 26853 W dnth    : measuring already stopped.
+06-01 17:27:55.055  4614  4614 I System.out: intent:Intent { act=ACTION_SET_NOTIFICATION_SUPPRESSION_TYPE flg=0x10 (has extras) }
+06-01 17:27:55.055  2026  4440 W JobInfo : Job 'jp.co.sharp.android.gamingbasemodule/.GamingMenuJobIntentService#990' has a deadline with no functional constraints. The deadline won't improve job execution latency. Consider removing the deadline.
+06-01 17:27:55.055  4614  4614 I System.out: intent:Intent { act=ACTION_SET_FINGERPRINT_SENSOR flg=0x10 (has extras) }
+06-01 17:27:55.055 10842 10842 I Finsky  : [2] AIM: AppInfoCacheUpdater -> invalidating apps: [com.example.llama.aichat]
+06-01 17:27:55.055 10842 10842 I Finsky  : [2] AIM: AppInfoManager-Perf > getApps > called for 1 apps
+06-01 17:27:55.055  2026  9439 W JobInfo : Job 'jp.co.sharp.android.gamingbasemodule/.GamingMenuJobIntentService#990' has a deadline with no functional constraints. The deadline won't improve job execution latency. Consider removing the deadline.
+06-01 17:27:55.056  4614  4614 I System.out: intent:Intent { act=ACTION_SET_GESTURES flg=0x10 (has extras) }
+06-01 17:27:55.057  2026  8956 W JobInfo : Job 'jp.co.sharp.android.gamingbasemodule/.GamingMenuJobIntentService#990' has a deadline with no functional constraints. The deadline won't improve job execution latency. Consider removing the deadline.
+06-01 17:27:55.057 10842 10872 I Finsky  : [63] AIM: AppInfoManager-Perf > OnDeviceAppInfo > cacheHitCount=0, cacheMissCount=1. Missed  in cache (limit 10) : [com.example.llama.aichat]
+06-01 17:27:55.057 10842 10872 I Finsky  : [63] AIM: Got app ownership map. App counts: . Unique apps: 0
+06-01 17:27:55.057 10842 10872 E Finsky  : [63] [Counters] attempted to use a non-positive increment for: 4752
+06-01 17:27:55.057 20820 20820 D InputEventReceiver: Input log is disabled in InputEventReceiver.
+06-01 17:27:55.058 10842 10872 E Finsky  : [63] [Counters] attempted to use a non-positive increment for: 4753
+06-01 17:27:55.059 20820 20820 D AutofillManager: view not autofillable - has multiline input type
+06-01 17:27:55.060 20820 20820 D AutofillManager: view not autofillable - has multiline input type
+06-01 17:27:55.060 20820 20820 D AutofillManager: view not autofillable - has multiline input type
+06-01 17:27:55.060 20820 20820 D AutofillManager: view not autofillable - has multiline input type
+06-01 17:27:55.063  2026  8956 D CoreBackPreview: Window{3741c98 u0 com.example.llama.aichat/com.example.llama.MainActivity}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@bf8272d, mPriority=0, mIsAnimationCallback=false}
+06-01 17:27:55.064  1500  7373 E ANDR-PERF-LM: MetaMeter: handleAsync() 166: LightningLaunches Invalid Async
+06-01 17:27:55.066 20777 20779 I artd    : GetBestInfo: odex next to the dex file (/data/app/~~dxkKc2KHRHXjbL__2FZ5PQ==/com.example.llama.aichat-afoGPdpVwpIqG6VlUXZs5Q==/oat/arm64/base.odex) is kOatUpToDate with filter 'verify' executable 'false'
+06-01 17:27:55.066 10842 10842 I Finsky  : [2] ajol - Received: android.intent.action.PACKAGE_ADDED, [b87jivnbBQq0atgw1Xf-Ggu1xd0FqUEHy7hWhoHpV4c]
+06-01 17:27:55.067  2026  4438 W WindowManager: Changing focus from null to Window{3741c98 u0 com.example.llama.aichat/com.example.llama.MainActivity} displayId=0 Callers=com.android.server.wm.RootWindowContainer.updateFocusedWindowLocked:479 com.android.server.wm.WindowManagerService.updateFocusedWindowLocked:6654 com.android.server.wm.WindowManagerService.relayoutWindowInner:2780 com.android.server.wm.WindowManagerService.relayoutWindow:2450 
+06-01 17:27:55.067  4614  6557 V GamingMenuJobIntentService: GAMING_ACTION_SET_GAME_VIEW: start
+06-01 17:27:55.068  4614  6557 V GamingMenuJobIntentService: GAMING_ACTION_SET_GAME_VIEW: end
+06-01 17:27:55.068  4812  7185 W SQLiteLog: (28) double-quoted string literal: "com.example.llama.aichat"
+06-01 17:27:55.070 10842 10872 I Finsky  : [63] AIM: AppInfoManager-Perf > OnDeviceAppInfo > cacheHitCount=1, cacheMissCount=0. Missed  in cache (limit 10) : []
+06-01 17:27:55.070  4614  6557 V GamingMenuJobIntentService: GAMING_ACTION_SET_NOTIFICATION_SUPPRESSION_TYPE: start
+06-01 17:27:55.070  4614  6557 V setNotificationSuppressionType: start: type:0
+06-01 17:27:55.070  4614  6557 V setNotificationSuppressionType: granted
+06-01 17:27:55.071  4614  6557 V setNotificationSuppressionType: end
+06-01 17:27:55.071  4614  6557 V GamingMenuJobIntentService: GAMING_ACTION_SET_NOTIFICATION_SUPPRESSION_TYPE: end
+06-01 17:27:55.072 20777 20781 I artd    : GetBestInfo: odex next to the dex file (/data/app/~~dxkKc2KHRHXjbL__2FZ5PQ==/com.example.llama.aichat-afoGPdpVwpIqG6VlUXZs5Q==/oat/arm64/base.odex) is kOatUpToDate with filter 'verify' executable 'false'
+06-01 17:27:55.073 10842 20844 I Finsky  : [1683] [ContentSync] finished, scheduled=false
+06-01 17:27:55.073 10842 20844 I Finsky  : [1683] [ContentSync] finished, scheduled=false
+06-01 17:27:55.076 10842 10874 I Finsky  : [65] AIM: Got app ownership map. App counts: . Unique apps: 0
+06-01 17:27:55.077 10842 10874 E Finsky  : [65] [Counters] attempted to use a non-positive increment for: 4752
+06-01 17:27:55.077  4614  6557 V GamingMenuJobIntentService: GAMING_ACTION_SET_FINGERPRINT_SENSOR: start
+06-01 17:27:55.077 10842 10874 E Finsky  : [65] [Counters] attempted to use a non-positive increment for: 4753
+06-01 17:27:55.077  4614  6557 V setFingerprintSensor: enabled = 1
+06-01 17:27:55.077  4408  4968 I AiAiVC  : Centralized allowlist: requested package com.google.android.apps.messaging is in the allowlist
+06-01 17:27:55.077  4408  4968 I AiAiVC  : Centralized allowlist: requested package com.google.android.gm is in the allowlist
+06-01 17:27:55.079  4614  6557 V GamingMenuJobIntentService: GAMING_ACTION_SET_FINGERPRINT_SENSOR: end
+06-01 17:27:55.079  4614  6557 V GamingMenuJobIntentService: GAMING_ACTION_SET_GESTURES: start
+06-01 17:27:55.080  4614  6557 V GamingMenuJobIntentService: GAMING_ACTION_SET_GESTURES: end
+06-01 17:27:55.080 10922 10922 I Finsky:background: [2] ajob - Received: android.intent.action.PACKAGE_ADDED, [b87jivnbBQq0atgw1Xf-Ggu1xd0FqUEHy7hWhoHpV4c]
+06-01 17:27:55.081 10922 20845 I Finsky:background: [902] Wrote row to frosting DB: 7569
+06-01 17:27:55.083 10842 10842 I Finsky  : [2] AIM: AppInfoCacheUpdater -> invalidating apps: [com.example.llama.aichat]
+06-01 17:27:55.083 10842 10842 I Finsky  : [2] AIM: AppInfoManager-Perf > getApps > called for 1 apps
+06-01 17:27:55.085 10842 10842 I Finsky  : [2] DTU: Received onPackageAdded, replacing: true
+06-01 17:27:55.086   943   943 I hwservicemanager: getTransport: Cannot find entry android.hardware.graphics.allocator@4.0::IAllocator/default in either framework or device VINTF manifest.
+06-01 17:27:55.086 10842 10871 I Finsky  : [62] AIM: AppInfoManager-Perf > OnDeviceAppInfo > cacheHitCount=0, cacheMissCount=1. Missed  in cache (limit 10) : [com.example.llama.aichat]
+06-01 17:27:55.087  4812  7185 W SQLiteLog: (28) double-quoted string literal: "com.example.llama.aichat"
+06-01 17:27:55.088 20777 20781 I artd    : GetBestInfo: odex next to the dex file (/data/app/~~dxkKc2KHRHXjbL__2FZ5PQ==/com.example.llama.aichat-afoGPdpVwpIqG6VlUXZs5Q==/oat/arm64/base.odex) is kOatUpToDate with filter 'verify' executable 'false'
+06-01 17:27:55.089 20777 20779 I artd    : GetBestInfo: odex next to the dex file (/data/app/~~dxkKc2KHRHXjbL__2FZ5PQ==/com.example.llama.aichat-afoGPdpVwpIqG6VlUXZs5Q==/oat/arm64/base.odex) is kOatUpToDate with filter 'verify' executable 'false'
+06-01 17:27:55.090 20820 20838 I AdrenoUtils: <ReadGpuID:357>: Reading chip ID through GSL
+06-01 17:27:55.090 20820 20838 W qdgralloc: getInterlacedFlag: getMetaData returned 3, defaulting to interlaced_flag = 0
+06-01 17:27:55.090 10842 10872 I Finsky  : [63] AIM: Got app ownership map. App counts: . Unique apps: 0
+06-01 17:27:55.090 10842 10872 E Finsky  : [63] [Counters] attempted to use a non-positive increment for: 4752
+06-01 17:27:55.091 10842 10872 E Finsky  : [63] [Counters] attempted to use a non-positive increment for: 4753
+06-01 17:27:55.091 10842 10842 I Finsky  : [2] ajol - Received: android.intent.action.PACKAGE_ADDED, [b87jivnbBQq0atgw1Xf-Ggu1xd0FqUEHy7hWhoHpV4c]
+06-01 17:27:55.091 10842 10872 I Finsky  : [63] AIM: AppInfoManager-Perf > OnDeviceAppInfo > cacheHitCount=1, cacheMissCount=0. Missed  in cache (limit 10) : []
+06-01 17:27:55.092 10842 10873 I Finsky  : [64] AIM: AppInfoManager-Perf > ItemModel > CacheSize=53, cacheHitCount=0, cacheMissCount=0, total appsWithNoServerDataCount=4. Missed  in cache (limit 10) : []
+06-01 17:27:55.093 10842 10874 I Finsky  : [65] AIM: Got app ownership map. App counts: . Unique apps: 0
+06-01 17:27:55.093 10842 10874 E Finsky  : [65] [Counters] attempted to use a non-positive increment for: 4752
+06-01 17:27:55.093 10842 10873 E Finsky  : [64] [Counters] attempted to use a non-positive increment for: 4753
+06-01 17:27:55.093 10842 10874 I Finsky  : [65] AIM: AppInfoManager-Perf > ItemModel > CacheSize=53, cacheHitCount=0, cacheMissCount=0, total appsWithNoServerDataCount=4. Missed  in cache (limit 10) : []
+06-01 17:27:55.096 10922 10922 I Finsky:background: [2] ajob - Received: android.intent.action.PACKAGE_ADDED, [b87jivnbBQq0atgw1Xf-Ggu1xd0FqUEHy7hWhoHpV4c]
+06-01 17:27:55.096 10842 10842 I Finsky  : [2] ajol - Deduping intent android.intent.action.PACKAGE_ADDED
+06-01 17:27:55.097 10922 10968 I Finsky:background: [58] IQ:PSL: skipping onPackageRemoved(replacing=true) for untracked package=com.example.llama.aichat
+06-01 17:27:55.098 10842 10842 I Finsky  : [2] ajol - Received: android.intent.action.PACKAGE_ADDED, [b87jivnbBQq0atgw1Xf-Ggu1xd0FqUEHy7hWhoHpV4c]
+06-01 17:27:55.100 10922 20845 I Finsky:background: [902] Wrote row to frosting DB: 7570
+06-01 17:27:55.101  4408  4968 I AiAiVC  : Centralized allowlist: requested package com.google.android.apps.messaging is in the allowlist
+06-01 17:27:55.101  4408  4968 I AiAiVC  : Centralized allowlist: requested package com.google.android.gm is in the allowlist
+06-01 17:27:55.102  4408  4968 I AiAiVC  : Centralized allowlist: requested package com.google.android.apps.messaging is in the allowlist
+06-01 17:27:55.102  4408  4968 I AiAiVC  : Centralized allowlist: requested package com.google.android.gm is in the allowlist
+06-01 17:27:55.102  4408  4968 I AiAiVC  : Centralized allowlist: requested package com.google.android.apps.messaging is in the allowlist
+06-01 17:27:55.102  4408  4968 I AiAiVC  : Centralized allowlist: requested package com.google.android.gm is in the allowlist
+06-01 17:27:55.102 20820 20838 W qdgralloc: getInterlacedFlag: getMetaData returned 3, defaulting to interlaced_flag = 0
+06-01 17:27:55.104 10922 10922 I Finsky:background: [2] ajob - Deduping intent android.intent.action.PACKAGE_ADDED
+06-01 17:27:55.104  4408  4968 I AiAiVC  : Centralized allowlist: requested package com.google.android.apps.messaging is in the allowlist
+06-01 17:27:55.104  4408  4968 I AiAiVC  : Centralized allowlist: requested package com.google.android.gm is in the allowlist
+06-01 17:27:55.104  4408  4968 I AiAiVC  : Centralized allowlist: requested package com.google.android.apps.messaging is in the allowlist
+06-01 17:27:55.104  4408  4968 I AiAiVC  : Centralized allowlist: requested package com.google.android.gm is in the allowlist
+06-01 17:27:55.106 10922 10922 I Finsky:background: [2] ajob - Received: android.intent.action.PACKAGE_ADDED, [b87jivnbBQq0atgw1Xf-Ggu1xd0FqUEHy7hWhoHpV4c]
+06-01 17:27:55.108 17810 20853 I AppBackupStateCleanupIO: Backup state cleanup on uninstall is disabled. [CONTEXT service_id=229 ]
+06-01 17:27:55.109 17810 20861 I FraudProtectUtils: (REDACTED) Latest bank app list size: %d, %s isBankApp: %b
+06-01 17:27:55.109 17810 20861 I PackageInstalledIntentO: (REDACTED) Package %s is not a bank app. Skipping updates.
+06-01 17:27:55.110 15496 20862 I Fitness : (REDACTED) FitCleanupIntentOperation received Intent %s
+06-01 17:27:55.111  3524  3658 W qdgralloc: getInterlacedFlag: getMetaData returned 3, defaulting to interlaced_flag = 0
+06-01 17:27:55.112 10842 10842 I Finsky  : [2] ajol - Deduping intent android.intent.action.PACKAGE_ADDED
+06-01 17:27:55.112 10842 10857 I Finsky  : [48] RECEIVER_PACKAGE_MONITOR#logWorkEndAndFinishGoAsync: SUCCESS
+06-01 17:27:55.113 10922 10922 I Finsky:background: [2] ajob - Deduping intent android.intent.action.PACKAGE_ADDED
+06-01 17:27:55.114 10922 20845 I Finsky:background: [902] Wrote row to frosting DB: 7571
+06-01 17:27:55.114 15496 15623 W Auth    : [TokenResponseCallback] TokenResponse failed with exception [CONTEXT service_id=343 ]
+06-01 17:27:55.114 15496 15623 W Auth    : dalz: Failed to process request
+06-01 17:27:55.114 15496 15623 W Auth    : 	at damg.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):23)
+06-01 17:27:55.114 15496 15623 W Auth    : 	at daqd.b(:com.google.android.gms@261833035@26.18.33 (260400-913931251):15)
+06-01 17:27:55.114 15496 15623 W Auth    : 	at dapc.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):82)
+06-01 17:27:55.114 15496 15623 W Auth    : 	at ljg.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):19)
+06-01 17:27:55.114 15496 15623 W Auth    : 	at dapj.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):6)
+06-01 17:27:55.114 15496 15623 W Auth    : 	at cbsz.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):9)
+06-01 17:27:55.114 15496 15623 W Auth    : 	at ahaq.b(:com.google.android.gms@261833035@26.18.33 (260400-913931251):13)
+06-01 17:27:55.114 15496 15623 W Auth    : 	at ahaq.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):130)
+06-01 17:27:55.114 15496 15623 W Auth    : 	at apib.b(:com.google.android.gms@261833035@26.18.33 (260400-913931251):28)
+06-01 17:27:55.114 15496 15623 W Auth    : 	at ahwj.d(:com.google.android.gms@261833035@26.18.33 (260400-913931251):170)
+06-01 17:27:55.114 15496 15623 W Auth    : 	at ahwj.b(:com.google.android.gms@261833035@26.18.33 (260400-913931251):47)
+06-01 17:27:55.114 15496 15623 W Auth    : 	at ahwh.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):745)
+06-01 17:27:55.114 15496 15623 W Auth    : 	at ahga.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):82)
+06-01 17:27:55.114 15496 15623 W Auth    : 	at aavt.d(:com.google.android.gms@261833035@26.18.33 (260400-913931251):40)
+06-01 17:27:55.114 15496 15623 W Auth    : 	at aavt.dispatchTransaction(:com.google.android.gms@261833035@26.18.33 (260400-913931251):153)
+06-01 17:27:55.114 15496 15623 W Auth    : 	at cbwg.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):64)
+06-01 17:27:55.114 15496 15623 W Auth    : 	at aaac.onTransact(:com.google.android.gms@261833035@26.18.33 (260400-913931251):23)
+06-01 17:27:55.114 15496 15623 W Auth    : 	at android.os.Binder.transact(Binder.java:1345)
+06-01 17:27:55.114 15496 15623 W Auth    : 	at cpzs.onTransact(:com.google.android.gms@261833035@26.18.33 (260400-913931251):12)
+06-01 17:27:55.114 15496 15623 W Auth    : 	at android.os.Binder.transact(Binder.java:1345)
+06-01 17:27:55.114 15496 15623 W Auth    : 	at cbwu.onTransact(:com.google.android.gms@261833035@26.18.33 (260400-913931251):169)
+06-01 17:27:55.114 15496 15623 W Auth    : 	at android.os.Binder.execTransactInternal(Binder.java:1500)
+06-01 17:27:55.114 15496 15623 W Auth    : 	at android.os.Binder.execTransact(Binder.java:1444)
+06-01 17:27:55.114 15496 15623 W Auth    : Caused by: dapf: Connectivity error
+06-01 17:27:55.114 15496 15623 W Auth    : 	at dapc.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):76)
+06-01 17:27:55.114 15496 15623 W Auth    : 	... 20 more
+06-01 17:27:55.114 15496 15623 W Auth    : Caused by: java.io.IOException
+06-01 17:27:55.114 15496 15623 W Auth    : 	at dapc.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):73)
+06-01 17:27:55.114 15496 15623 W Auth    : 	... 20 more
+06-01 17:27:55.114 10922 10970 I Finsky:background: [59] RECEIVER_PACKAGE_MONITOR_BACKGROUND#logWorkEndAndFinishGoAsync: SUCCESS
+06-01 17:27:55.116 15496 15623 E AuthPII : [RequestTokenManager] getToken() -> NETWORK_ERROR. App: com.google.android.gms, Service: oauth2:https://www.googleapis.com/auth/plus.me
+06-01 17:27:55.116 15496 15623 E AuthPII : bjco: Error when calling server using GmsNetworkStack.
+06-01 17:27:55.116 15496 15623 E AuthPII : 	at ahwj.b(:com.google.android.gms@261833035@26.18.33 (260400-913931251):1542)
+06-01 17:27:55.116 15496 15623 E AuthPII : 	at ahwh.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):745)
+06-01 17:27:55.116 15496 15623 E AuthPII : 	at ahga.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):82)
+06-01 17:27:55.116 15496 15623 E AuthPII : 	at aavt.d(:com.google.android.gms@261833035@26.18.33 (260400-913931251):40)
+06-01 17:27:55.116 15496 15623 E AuthPII : 	at aavt.dispatchTransaction(:com.google.android.gms@261833035@26.18.33 (260400-913931251):153)
+06-01 17:27:55.116 15496 15623 E AuthPII : 	at cbwg.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):64)
+06-01 17:27:55.116 15496 15623 E AuthPII : 	at aaac.onTransact(:com.google.android.gms@261833035@26.18.33 (260400-913931251):23)
+06-01 17:27:55.116 15496 15623 E AuthPII : 	at android.os.Binder.transact(Binder.java:1345)
+06-01 17:27:55.116 15496 15623 E AuthPII : 	at cpzs.onTransact(:com.google.android.gms@261833035@26.18.33 (260400-913931251):12)
+06-01 17:27:55.116 15496 15623 E AuthPII : 	at android.os.Binder.transact(Binder.java:1345)
+06-01 17:27:55.116 15496 15623 E AuthPII : 	at cbwu.onTransact(:com.google.android.gms@261833035@26.18.33 (260400-913931251):169)
+06-01 17:27:55.116 15496 15623 E AuthPII : 	at android.os.Binder.execTransactInternal(Binder.java:1500)
+06-01 17:27:55.116 15496 15623 E AuthPII : 	at android.os.Binder.execTransact(Binder.java:1444)
+06-01 17:27:55.116 15496 15623 E AuthPII : Caused by: bjco: Error requesting token.
+06-01 17:27:55.116 15496 15623 E AuthPII : 	at ahwj.d(:com.google.android.gms@261833035@26.18.33 (260400-913931251):212)
+06-01 17:27:55.116 15496 15623 E AuthPII : 	at ahwj.b(:com.google.android.gms@261833035@26.18.33 (260400-913931251):47)
+06-01 17:27:55.116 15496 15623 E AuthPII : 	... 12 more
+06-01 17:27:55.116 15496 15623 E AuthPII : Caused by: java.util.concurrent.ExecutionException: dalz: Failed to process request
+06-01 17:27:55.116 15496 15623 E AuthPII : 	at hmmz.j(:com.google.android.gms@261833035@26.18.33 (260400-913931251):21)
+06-01 17:27:55.116 15496 15623 E AuthPII : 	at hmni.u(:com.google.android.gms@261833035@26.18.33 (260400-913931251):110)
+06-01 17:27:55.116 15496 15623 E AuthPII : 	at ahwj.d(:com.google.android.gms@261833035@26.18.33 (260400-913931251):197)
+06-01 17:27:55.116 15496 15623 E AuthPII : 	... 13 more
+06-01 17:27:55.116 15496 15623 E AuthPII : Caused by: dalz: Failed to process request
+06-01 17:27:55.116 15496 15623 E AuthPII : 	at damg.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):23)
+06-01 17:27:55.116 15496 15623 E AuthPII : 	at daqd.b(:com.google.android.gms@261833035@26.18.33 (260400-913931251):15)
+06-01 17:27:55.116 15496 15623 E AuthPII : 	at dapc.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):82)
+06-01 17:27:55.116 15496 15623 E AuthPII : 	at ljg.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):19)
+06-01 17:27:55.116 15496 15623 E AuthPII : 	at dapj.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):6)
+06-01 17:27:55.116 15496 15623 E AuthPII : 	at cbsz.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):9)
+06-01 17:27:55.116 15496 15623 E AuthPII : 	at ahaq.b(:com.google.android.gms@261833035@26.18.33 (260400-913931251):13)
+06-01 17:27:55.116 15496 15623 E AuthPII : 	at ahaq.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):130)
+06-01 17:27:55.116 15496 15623 E AuthPII : 	at apib.b(:com.google.android.gms@261833035@26.18.33 (260400-913931251):28)
+06-01 17:27:55.116 15496 15623 E AuthPII : 	at ahwj.d(:com.google.android.gms@261833035@26.18.33 (260400-913931251):170)
+06-01 17:27:55.116 15496 15623 E AuthPII : 	... 13 more
+06-01 17:27:55.116 15496 15623 E AuthPII : Caused by: dapf: Connectivity error
+06-01 17:27:55.116 15496 15623 E AuthPII : 	at dapc.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):76)
+06-01 17:27:55.116 15496 15623 E AuthPII : 	... 20 more
+06-01 17:27:55.116 15496 15623 E AuthPII : Caused by: java.io.IOException
+06-01 17:27:55.116 15496 15623 E AuthPII : 	at dapc.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):73)
+06-01 17:27:55.116 15496 15623 E AuthPII : 	... 20 more
+06-01 17:27:55.116 15496 15623 E AuthPII : Message is Error when calling server using GmsNetworkStack.
+06-01 17:27:55.116 15496 15623 E AuthPII : bjco: Error when calling server using GmsNetworkStack.
+06-01 17:27:55.116 15496 15623 E AuthPII : 	at ahwj.b(:com.google.android.gms@261833035@26.18.33 (260400-913931251):1542)
+06-01 17:27:55.116 15496 15623 E AuthPII : 	at ahwh.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):745)
+06-01 17:27:55.116 15496 15623 E AuthPII : 	at ahga.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):82)
+06-01 17:27:55.116 15496 15623 E AuthPII : 	at aavt.d(:com.google.android.gms@261833035@26.18.33 (260400-913931251):40)
+06-01 17:27:55.116 15496 15623 E AuthPII : 	at aavt.dispatchTransaction(:com.google.android.gms@261833035@26.18.33 (260400-913931251):153)
+06-01 17:27:55.116 15496 15623 E AuthPII : 	at cbwg.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):64)
+06-01 17:27:55.116 15496 15623 E AuthPII : 	at aaac.onTransact(:com.google.android.gms@261833035@26.18.33 (260400-913931251):23)
+06-01 17:27:55.116 15496 15623 E AuthPII : 	at android.os.Binder.transact(Binder.java:1345)
+06-01 17:27:55.116 15496 15623 E AuthPII : 	at cpzs.onTransact(:com.google.android.gms@261833035@26.18.33 (260400-913931251):12)
+06-01 17:27:55.116 15496 15623 E AuthPII : 	at android.os.Binder.transact(Binder.java:1345)
+06-01 17:27:55.116 15496 15623 E AuthPII : 	at cbwu.onTransact(:com.google.android.gms@261833035@26.18.33 (260400-913931251):169)
+06-01 17:27:55.116 15496 15623 E AuthPII : 	at android.os.Binder.execTransactInternal(Binder.java:1500)
+06-01 17:27:55.116 15496 15623 E AuthPII : 	at android.os.Binder.execTransact(Binder.java:1444)
+06-01 17:27:55.116 15496 15623 E AuthPII : Caused by: bjco: Error requesting token.
+06-01 17:27:55.116 15496 15623 E AuthPII : 	at ahwj.d(:com.google.android.gms@261833035@26.18.33 (260400-913931251):212)
+06-01 17:27:55.116 15496 15623 E AuthPII : 	at ahwj.b(:com.google.android.gms@261833035@26.18.33 (260400-913931251):47)
+06-01 17:27:55.116 15496 15623 E AuthPII : 	... 12 more
+06-01 17:27:55.116 15496 15623 E AuthPII : Caused by: java.util.concurrent.ExecutionException: dalz: Failed to process request
+06-01 17:27:55.116 15496 15623 E AuthPII : 	at hmmz.j(:com.google.android.gms@261833035@26.18.33 (260400-913931251):21)
+06-01 17:27:55.116 15496 15623 E AuthPII : 	at hmni.u(:com.google.android.gms@261833035@26.18.33 (260400-913931251):110)
+06-01 17:27:55.116 15496 15623 E AuthPII : 	at ahwj.d(:com.google.android.gms@261833035@26.18.33 (260400-913931251):197)
+06-01 17:27:55.116 15496 15623 E AuthPII : 	... 13 more
+06-01 17:27:55.116 15496 15623 E AuthPII : Caused by: dalz: Failed to process request
+06-01 17:27:55.116 15496 15623 E AuthPII : 	at damg.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):23)
+06-01 17:27:55.116 15496 15623 E AuthPII : 	at daqd.b(:com.google.android.gms@261833035@26.18.33 (260400-913931251):15)
+06-01 17:27:55.116 15496 15623 E AuthPII : 	at dapc.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):82)
+06-01 17:27:55.116 15496 15623 E AuthPII : 	at ljg.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):19)
+06-01 17:27:55.116 15496 15623 E AuthPII : 	at dapj.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):6)
+06-01 17:27:55.116 15496 15623 E AuthPII : 	at cbsz.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):9)
+06-01 17:27:55.116 15496 15623 E AuthPII : 	at ahaq.b(:com.google.android.gms@261833035@26.18.33 (260400-913931251):13)
+06-01 17:27:55.116 15496 15623 E AuthPII : 	at ahaq.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):130)
+06-01 17:27:55.116 15496 15623 E AuthPII : 	at apib.b(:com.google.android.gms@261833035@26.18.33 (260400-913931251):28)
+06-01 17:27:55.116 15496 15623 E AuthPII : 	at ahwj.d(:com.google.android.gms@261833035@26.18.33 (260400-913931251):170)
+06-01 17:27:55.116 15496 15623 E AuthPII : 	... 13 more
+06-01 17:27:55.116 15496 15623 E AuthPII : Caused by: dapf: Connectivity error
+06-01 17:27:55.116 15496 15623 E AuthPII : 	at dapc.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):76)
+06-01 17:27:55.116 15496 15623 E AuthPII : 	... 20 more
+06-01 17:27:55.116 15496 15623 E AuthPII : Caused by: java.io.IOException
+06-01 17:27:55.116 15496 15623 E AuthPII : 	at dapc.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):73)
+06-01 17:27:55.116 15496 15623 E AuthPII : 	... 20 more
+06-01 17:27:55.116 15496 15623 I Auth    : (REDACTED) [AccountIdManager] Token response failed with status=%s
+06-01 17:27:55.117  3524  3658 W qdgralloc: getInterlacedFlag: getMetaData returned 3, defaulting to interlaced_flag = 0
+06-01 17:27:55.119 15496 20857 I ProximityAuth: [RecentAppsMediator] Package added: (user=UserHandle{0}) com.example.llama.aichat
+06-01 17:27:55.121  2026  2064 I ActivityTaskManager: Displayed com.example.llama.aichat/com.example.llama.MainActivity for user 0: +169ms
+06-01 17:27:55.122  2026  3325 I ImeTracker: com.example.llama.aichat:968d5df8: onRequestHide at ORIGIN_SERVER reason HIDE_UNSPECIFIED_WINDOW fromUser false
+06-01 17:27:55.122  2026  3325 I ImeTracker: com.example.llama.aichat:968d5df8: onCancelled at PHASE_SERVER_SHOULD_HIDE
+06-01 17:27:55.123 10922 20845 I Finsky:background: [902] Wrote row to frosting DB: 7572
+06-01 17:27:55.124  8272  8272 D InputEventReceiver: Input log is disabled in InputEventReceiver.
+06-01 17:27:55.126 10842 10871 I Finsky  : [62] AIM: AppInfoManager-Perf > getApps > data collection finished
+06-01 17:27:55.126 10842 10871 I Finsky  : [62] AIM: AppInfoManager-Perf > maybeDestroyAppInfoManager is called. actives = 2
+06-01 17:27:55.126 20820 20838 W qdgralloc: getInterlacedFlag: getMetaData returned 3, defaulting to interlaced_flag = 0
+06-01 17:27:55.126  3524  3658 W qdgralloc: getInterlacedFlag: getMetaData returned 3, defaulting to interlaced_flag = 0
+06-01 17:27:55.132  8272  8272 I GoogleInputMethodService: GoogleInputMethodService.onFinishInput():2259 
+06-01 17:27:55.133  8272  8272 I Module  : DeviceLockedStatusModuleProvider$Module.updateDeviceLockedStatus():103 repeatCheckTimes = 0, locked = false
+06-01 17:27:55.133  8272  8272 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1446 onStartInput(EditorInfo{EditorInfo{packageName=com.example.llama.aichat, inputType=0, inputTypeString=NULL, enableLearning=false, autoCorrection=false, autoComplete=false, imeOptions=0, privateImeOptions=null, actionName=UNSPECIFIED, actionLabel=null, initialSelStart=-1, initialSelEnd=-1, initialCapsMode=0, label=null, fieldId=0, fieldName=null, extras=null, hintText=null, hintLocales=[]}}, false)
+06-01 17:27:55.133  8272  8272 W AndroidIME: LatinIMEBase.updateInputViewCoverNavigation():327 Null input view, cannot update padding!
+06-01 17:27:55.134  8272  8272 I Module  : DeviceLockedStatusModuleProvider$Module.updateDeviceLockedStatus():103 repeatCheckTimes = 1, locked = false
+06-01 17:27:55.136 17810 20870 I Auth    : (REDACTED) [SupervisedAccountIntentOperation] onHandleIntent: %s
+06-01 17:27:55.136  2026  8956 W PackageConfigPersister: App-specific configuration not found for packageName: com.example.llama.aichat and userId: 0
+06-01 17:27:55.137 17810 20885 W AppInstallOperation: FDL Migration::InstallIntentOperation by FDL Module [CONTEXT service_id=77 ]
+06-01 17:27:55.138 17810 20870 I FraudProtectUtils: (REDACTED) Latest bank app list size: %d, %s isBankApp: %b
+06-01 17:27:55.138 17810 20870 I PackageInstalledIntentO: (REDACTED) Package %s is not a bank app. Skipping updates.
+06-01 17:27:55.144 10922 20845 I Finsky:background: [902] Wrote row to frosting DB: 7573
+06-01 17:27:55.150 17810 20853 I NearbyDiscovery: (REDACTED) processGrantSlicePermission: %s
+06-01 17:27:55.155 15496 15623 W Auth    : [TokenResponseCallback] TokenResponse failed with exception [CONTEXT service_id=343 ]
+06-01 17:27:55.155 15496 15623 W Auth    : dalz: Failed to process request
+06-01 17:27:55.155 15496 15623 W Auth    : 	at damg.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):23)
+06-01 17:27:55.155 15496 15623 W Auth    : 	at daqd.b(:com.google.android.gms@261833035@26.18.33 (260400-913931251):15)
+06-01 17:27:55.155 15496 15623 W Auth    : 	at dapc.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):82)
+06-01 17:27:55.155 15496 15623 W Auth    : 	at ljg.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):19)
+06-01 17:27:55.155 15496 15623 W Auth    : 	at dapj.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):6)
+06-01 17:27:55.155 15496 15623 W Auth    : 	at cbsz.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):9)
+06-01 17:27:55.155 15496 15623 W Auth    : 	at ahaq.b(:com.google.android.gms@261833035@26.18.33 (260400-913931251):13)
+06-01 17:27:55.155 15496 15623 W Auth    : 	at ahaq.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):130)
+06-01 17:27:55.155 15496 15623 W Auth    : 	at apib.b(:com.google.android.gms@261833035@26.18.33 (260400-913931251):28)
+06-01 17:27:55.155 15496 15623 W Auth    : 	at ahwj.d(:com.google.android.gms@261833035@26.18.33 (260400-913931251):170)
+06-01 17:27:55.155 15496 15623 W Auth    : 	at ahwj.b(:com.google.android.gms@261833035@26.18.33 (260400-913931251):47)
+06-01 17:27:55.155 15496 15623 W Auth    : 	at ahwh.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):745)
+06-01 17:27:55.155 15496 15623 W Auth    : 	at ahgg.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):55)
+06-01 17:27:55.155 15496 15623 W Auth    : 	at ahgg.h(:com.google.android.gms@261833035@26.18.33 (260400-913931251):108)
+06-01 17:27:55.155 15496 15623 W Auth    : 	at ahgg.b(:com.google.android.gms@261833035@26.18.33 (260400-913931251):817)
+06-01 17:27:55.155 15496 15623 W Auth    : 	at ahgg.c(:com.google.android.gms@261833035@26.18.33 (260400-913931251):5)
+06-01 17:27:55.155 15496 15623 W Auth    : 	at aavt.d(:com.google.android.gms@261833035@26.18.33 (260400-913931251):65)
+06-01 17:27:55.155 15496 15623 W Auth    : 	at aavt.dispatchTransaction(:com.google.android.gms@261833035@26.18.33 (260400-913931251):153)
+06-01 17:27:55.155 15496 15623 W Auth    : 	at cbwg.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):64)
+06-01 17:27:55.155 15496 15623 W Auth    : 	at aaac.onTransact(:com.google.android.gms@261833035@26.18.33 (260400-913931251):23)
+06-01 17:27:55.155 15496 15623 W Auth    : 	at android.os.Binder.transact(Binder.java:1345)
+06-01 17:27:55.155 15496 15623 W Auth    : 	at cpzs.onTransact(:com.google.android.gms@261833035@26.18.33 (260400-913931251):12)
+06-01 17:27:55.155 15496 15623 W Auth    : 	at android.os.Binder.transact(Binder.java:1345)
+06-01 17:27:55.155 15496 15623 W Auth    : 	at cbwu.onTransact(:com.google.android.gms@261833035@26.18.33 (260400-913931251):169)
+06-01 17:27:55.155 15496 15623 W Auth    : 	at android.os.Binder.execTransactInternal(Binder.java:1500)
+06-01 17:27:55.155 15496 15623 W Auth    : 	at android.os.Binder.execTransact(Binder.java:1444)
+06-01 17:27:55.155 15496 15623 W Auth    : Caused by: dapf: Connectivity error
+06-01 17:27:55.155 15496 15623 W Auth    : 	at dapc.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):76)
+06-01 17:27:55.155 15496 15623 W Auth    : 	... 23 more
+06-01 17:27:55.155 15496 15623 W Auth    : Caused by: java.io.IOException
+06-01 17:27:55.155 15496 15623 W Auth    : 	at dapc.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):73)
+06-01 17:27:55.155 15496 15623 W Auth    : 	... 23 more
+06-01 17:27:55.156 17810 20870 W SQLiteLog: (28) double-quoted string literal: "com.example.llama.aichat"
+06-01 17:27:55.158 10922 20845 I Finsky:background: [902] Wrote row to frosting DB: 7574
+06-01 17:27:55.162 17810 17810 D BoundBrokerSvc: onBind: Intent { act=com.google.android.gms.common.BIND_SHARED_PREFS pkg=com.google.android.gms }
+06-01 17:27:55.162 17810 17810 D BoundBrokerSvc: Loading bound service for intent: Intent { act=com.google.android.gms.common.BIND_SHARED_PREFS pkg=com.google.android.gms }
+06-01 17:27:55.171 15496 15623 E AuthPII : [RequestTokenManager] getToken() -> NETWORK_ERROR. App: com.google.android.gms, Service: oauth2:https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/account.capabilities https://www.googleapis.com/auth/account.service_flags
+06-01 17:27:55.171 15496 15623 E AuthPII : bjco: Error when calling server using GmsNetworkStack.
+06-01 17:27:55.171 15496 15623 E AuthPII : 	at ahwj.b(:com.google.android.gms@261833035@26.18.33 (260400-913931251):1542)
+06-01 17:27:55.171 15496 15623 E AuthPII : 	at ahwh.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):745)
+06-01 17:27:55.171 15496 15623 E AuthPII : 	at ahgg.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):55)
+06-01 17:27:55.171 15496 15623 E AuthPII : 	at ahgg.h(:com.google.android.gms@261833035@26.18.33 (260400-913931251):108)
+06-01 17:27:55.171 15496 15623 E AuthPII : 	at ahgg.b(:com.google.android.gms@261833035@26.18.33 (260400-913931251):817)
+06-01 17:27:55.171 15496 15623 E AuthPII : 	at ahgg.c(:com.google.android.gms@261833035@26.18.33 (260400-913931251):5)
+06-01 17:27:55.171 15496 15623 E AuthPII : 	at aavt.d(:com.google.android.gms@261833035@26.18.33 (260400-913931251):65)
+06-01 17:27:55.171 15496 15623 E AuthPII : 	at aavt.dispatchTransaction(:com.google.android.gms@261833035@26.18.33 (260400-913931251):153)
+06-01 17:27:55.171 15496 15623 E AuthPII : 	at cbwg.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):64)
+06-01 17:27:55.171 15496 15623 E AuthPII : 	at aaac.onTransact(:com.google.android.gms@261833035@26.18.33 (260400-913931251):23)
+06-01 17:27:55.171 15496 15623 E AuthPII : 	at android.os.Binder.transact(Binder.java:1345)
+06-01 17:27:55.171 15496 15623 E AuthPII : 	at cpzs.onTransact(:com.google.android.gms@261833035@26.18.33 (260400-913931251):12)
+06-01 17:27:55.171 15496 15623 E AuthPII : 	at android.os.Binder.transact(Binder.java:1345)
+06-01 17:27:55.171 15496 15623 E AuthPII : 	at cbwu.onTransact(:com.google.android.gms@261833035@26.18.33 (260400-913931251):169)
+06-01 17:27:55.171 15496 15623 E AuthPII : 	at android.os.Binder.execTransactInternal(Binder.java:1500)
+06-01 17:27:55.171 15496 15623 E AuthPII : 	at android.os.Binder.execTransact(Binder.java:1444)
+06-01 17:27:55.171 15496 15623 E AuthPII : Caused by: bjco: Error requesting token.
+06-01 17:27:55.171 15496 15623 E AuthPII : 	at ahwj.d(:com.google.android.gms@261833035@26.18.33 (260400-913931251):212)
+06-01 17:27:55.171 15496 15623 E AuthPII : 	at ahwj.b(:com.google.android.gms@261833035@26.18.33 (260400-913931251):47)
+06-01 17:27:55.171 15496 15623 E AuthPII : 	... 15 more
+06-01 17:27:55.171 15496 15623 E AuthPII : Caused by: java.util.concurrent.ExecutionException: dalz: Failed to process request
+06-01 17:27:55.171 15496 15623 E AuthPII : 	at hmmz.j(:com.google.android.gms@261833035@26.18.33 (260400-913931251):21)
+06-01 17:27:55.171 15496 15623 E AuthPII : 	at hmni.u(:com.google.android.gms@261833035@26.18.33 (260400-913931251):110)
+06-01 17:27:55.171 15496 15623 E AuthPII : 	at ahwj.d(:com.google.android.gms@261833035@26.18.33 (260400-913931251):197)
+06-01 17:27:55.171 15496 15623 E AuthPII : 	... 16 more
+06-01 17:27:55.171 15496 15623 E AuthPII : Caused by: dalz: Failed to process request
+06-01 17:27:55.171 15496 15623 E AuthPII : 	at damg.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):23)
+06-01 17:27:55.171 15496 15623 E AuthPII : 	at daqd.b(:com.google.android.gms@261833035@26.18.33 (260400-913931251):15)
+06-01 17:27:55.171 15496 15623 E AuthPII : 	at dapc.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):82)
+06-01 17:27:55.171 15496 15623 E AuthPII : 	at ljg.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):19)
+06-01 17:27:55.171 15496 15623 E AuthPII : 	at dapj.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):6)
+06-01 17:27:55.171 15496 15623 E AuthPII : 	at cbsz.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):9)
+06-01 17:27:55.171 15496 15623 E AuthPII : 	at ahaq.b(:com.google.android.gms@261833035@26.18.33 (260400-913931251):13)
+06-01 17:27:55.171 15496 15623 E AuthPII : 	at ahaq.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):130)
+06-01 17:27:55.171 15496 15623 E AuthPII : 	at apib.b(:com.google.android.gms@261833035@26.18.33 (260400-913931251):28)
+06-01 17:27:55.171 15496 15623 E AuthPII : 	at ahwj.d(:com.google.android.gms@261833035@26.18.33 (260400-913931251):170)
+06-01 17:27:55.171 15496 15623 E AuthPII : 	... 16 more
+06-01 17:27:55.171 15496 15623 E AuthPII : Caused by: dapf: Connectivity error
+06-01 17:27:55.171 15496 15623 E AuthPII : 	at dapc.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):76)
+06-01 17:27:55.171 15496 15623 E AuthPII : 	... 23 more
+06-01 17:27:55.171 15496 15623 E AuthPII : Caused by: java.io.IOException
+06-01 17:27:55.171 15496 15623 E AuthPII : 	at dapc.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):73)
+06-01 17:27:55.171 15496 15623 E AuthPII : 	... 23 more
+06-01 17:27:55.171 15496 15623 E AuthPII : Message is Error when calling server using GmsNetworkStack.
+06-01 17:27:55.171 15496 15623 E AuthPII : bjco: Error when calling server using GmsNetworkStack.
+06-01 17:27:55.171 15496 15623 E AuthPII : 	at ahwj.b(:com.google.android.gms@261833035@26.18.33 (260400-913931251):1542)
+06-01 17:27:55.171 15496 15623 E AuthPII : 	at ahwh.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):745)
+06-01 17:27:55.171 15496 15623 E AuthPII : 	at ahgg.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):55)
+06-01 17:27:55.171 15496 15623 E AuthPII : 	at ahgg.h(:com.google.android.gms@261833035@26.18.33 (260400-913931251):108)
+06-01 17:27:55.171 15496 15623 E AuthPII : 	at ahgg.b(:com.google.android.gms@261833035@26.18.33 (260400-913931251):817)
+06-01 17:27:55.171 15496 15623 E AuthPII : 	at ahgg.c(:com.google.android.gms@261833035@26.18.33 (260400-913931251):5)
+06-01 17:27:55.171 15496 15623 E AuthPII : 	at aavt.d(:com.google.android.gms@261833035@26.18.33 (260400-913931251):65)
+06-01 17:27:55.171 15496 15623 E AuthPII : 	at aavt.dispatchTransaction(:com.google.android.gms@261833035@26.18.33 (260400-913931251):153)
+06-01 17:27:55.171 15496 15623 E AuthPII : 	at cbwg.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):64)
+06-01 17:27:55.171 15496 15623 E AuthPII : 	at aaac.onTransact(:com.google.android.gms@261833035@26.18.33 (260400-913931251):23)
+06-01 17:27:55.171 15496 15623 E AuthPII : 	at android.os.Binder.transact(Binder.java:1345)
+06-01 17:27:55.171 15496 15623 E AuthPII : 	at cpzs.onTransact(:com.google.android.gms@261833035@26.18.33 (260400-913931251):12)
+06-01 17:27:55.171 15496 15623 E AuthPII : 	at android.os.Binder.transact(Binder.java:1345)
+06-01 17:27:55.171 15496 15623 E AuthPII : 	at cbwu.onTransact(:com.google.android.gms@261833035@26.18.33 (260400-913931251):169)
+06-01 17:27:55.171 15496 15623 E AuthPII : 	at android.os.Binder.execTransactInternal(Binder.java:1500)
+06-01 17:27:55.171 15496 15623 E AuthPII : 	at android.os.Binder.execTransact(Binder.java:1444)
+06-01 17:27:55.171 15496 15623 E AuthPII : Caused by: bjco: Error requesting token.
+06-01 17:27:55.171 15496 15623 E AuthPII : 	at ahwj.d(:com.google.android.gms@261833035@26.18.33 (260400-913931251):212)
+06-01 17:27:55.171 15496 15623 E AuthPII : 	at ahwj.b(:com.google.android.gms@261833035@26.18.33 (260400-913931251):47)
+06-01 17:27:55.171 15496 15623 E AuthPII : 	... 15 more
+06-01 17:27:55.171 15496 15623 E AuthPII : Caused by: java.util.concurrent.ExecutionException: dalz: Failed to process request
+06-01 17:27:55.171 15496 15623 E AuthPII : 	at hmmz.j(:com.google.android.gms@261833035@26.18.33 (260400-913931251):21)
+06-01 17:27:55.171 15496 15623 E AuthPII : 	at hmni.u(:com.google.android.gms@261833035@26.18.33 (260400-913931251):110)
+06-01 17:27:55.171 15496 15623 E AuthPII : 	at ahwj.d(:com.google.android.gms@261833035@26.18.33 (260400-913931251):197)
+06-01 17:27:55.171 15496 15623 E AuthPII : 	... 16 more
+06-01 17:27:55.171 15496 15623 E AuthPII : Caused by: dalz: Failed to process request
+06-01 17:27:55.171 15496 15623 E AuthPII : 	at damg.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):23)
+06-01 17:27:55.171 15496 15623 E AuthPII : 	at daqd.b(:com.google.android.gms@261833035@26.18.33 (260400-913931251):15)
+06-01 17:27:55.171 15496 15623 E AuthPII : 	at dapc.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):82)
+06-01 17:27:55.171 15496 15623 E AuthPII : 	at ljg.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):19)
+06-01 17:27:55.171 15496 15623 E AuthPII : 	at dapj.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):6)
+06-01 17:27:55.171 15496 15623 E AuthPII : 	at cbsz.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):9)
+06-01 17:27:55.171 15496 15623 E AuthPII : 	at ahaq.b(:com.google.android.gms@261833035@26.18.33 (260400-913931251):13)
+06-01 17:27:55.171 15496 15623 E AuthPII : 	at ahaq.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):130)
+06-01 17:27:55.171 15496 15623 E AuthPII : 	at apib.b(:com.google.android.gms@261833035@26.18.33 (260400-913931251):28)
+06-01 17:27:55.171 15496 15623 E AuthPII : 	at ahwj.d(:com.google.android.gms@261833035@26.18.33 (260400-913931251):170)
+06-01 17:27:55.171 15496 15623 E AuthPII : 	... 16 more
+06-01 17:27:55.171 15496 15623 E AuthPII : Caused by: dapf: Connectivity error
+06-01 17:27:55.171 15496 15623 E AuthPII : 	at dapc.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):76)
+06-01 17:27:55.171 15496 15623 E AuthPII : 	... 23 more
+06-01 17:27:55.171 15496 15623 E AuthPII : Caused by: java.io.IOException
+06-01 17:27:55.171 15496 15623 E AuthPII : 	at dapc.a(:com.google.android.gms@261833035@26.18.33 (260400-913931251):73)
+06-01 17:27:55.171 15496 15623 E AuthPII : 	... 23 more
+06-01 17:27:55.174 15496 15623 W Auth    : [AccountStateDownloader] Unable to look up account state from server: couldn't fetch accessToken [CONTEXT service_id=343 ]
+06-01 17:27:55.174 15496 15623 W Auth    : [GaiaIdSync] Empty email. Not updating db. [CONTEXT service_id=153 ]
+06-01 17:27:55.181   958   958 E KeymasterUtils: IKMHal_sendCmd failed with rsp_header->status: -28
+06-01 17:27:55.181   958   958 E KeyMasterHalDevice: abort_operation
+06-01 17:27:55.181   958   958 E KeyMasterHalDevice: ret: -28
+06-01 17:27:55.187 10842 10874 I Finsky  : [65] AIM: AppInfoManager-Perf > ItemModel > CacheSize=53, cacheHitCount=0, cacheMissCount=0, total appsWithNoServerDataCount=4. Missed  in cache (limit 10) : []
+06-01 17:27:55.188  2026  9439 W ParceledListSlice: Element #192 is 16568 bytes.
+06-01 17:27:55.207 10842 10871 I Finsky  : [62] AIM: AppInfoManager-Perf > ItemModel > CacheSize=53, cacheHitCount=0, cacheMissCount=0, total appsWithNoServerDataCount=4. Missed  in cache (limit 10) : []
+06-01 17:27:55.208 10842 10871 I Finsky  : [62] AIM: AppInfoManager-Perf > getApps > data collection finished
+06-01 17:27:55.208 10842 10871 I Finsky  : [62] AIM: AppInfoManager-Perf > maybeDestroyAppInfoManager is called. actives = 1
+06-01 17:27:55.213  2026  4043 W ParceledListSlice: Element #192 is 16568 bytes.
+06-01 17:27:55.216  3620  4241 D IpClient/wlan0: interfaceLinkStateChanged: ifindex 23 up
+06-01 17:27:55.218   958   958 E KeymasterUtils: IKMHal_sendCmd failed with rsp_header->status: -28
+06-01 17:27:55.218   958   958 E KeyMasterHalDevice: abort_operation
+06-01 17:27:55.218   958   958 E KeyMasterHalDevice: ret: -28
+06-01 17:27:55.221 17810 18132 I Icing   : IndexChimeraService.getServiceInterface callingPackage=com.google.android.gms componentName=AppsCorpus serviceId=36
+06-01 17:27:55.221  2026  2050 W System  : A resource failed to call release. 
+06-01 17:27:55.222  2026  4043 V SafetySourceDataValidat: Package: com.android.vending has expected signature
+06-01 17:27:55.222  2026  4043 V SafetySourceDataValidat: Package: com.android.vending has expected signature
+06-01 17:27:55.238 17810 20459 I Icing   : Usage reports ok 1, Failed Usage reports 0, indexed 0, rejected 0
+06-01 17:27:55.239 17810 18132 I Icing   : IndexChimeraService.getServiceInterface callingPackage=com.google.android.gms componentName=null serviceId=30
+06-01 17:27:55.250 17810 20459 I Icing   : Usage reports ok 0, Failed Usage reports 0, indexed 0, rejected 0
+06-01 17:27:55.250 17810 20459 I Icing   : Indexing com.google.android.gms-apps from com.google.android.gms
+06-01 17:27:55.258 17810 20459 I Icing   : Indexing done com.google.android.gms-apps
+06-01 17:27:55.258 17810 20459 I Icing   : Indexing com.google.android.gms-apps from com.google.android.gms
+06-01 17:27:55.258 17810 20459 I Icing   : Indexing done com.google.android.gms-apps
+06-01 17:27:55.261  3524  3586 V WindowManagerShell: Transition animation finished (aborted=false), notifying core (#396) android.os.BinderProxy@63e72b4@0
+06-01 17:27:55.262  2026  2064 V WindowManager: Finish Transition (#396): created at 06-01 17:27:54.938 collect-started=0.023ms request-sent=6.198ms started=12.516ms ready=31.631ms sent=33.299ms finished=324.301ms
+06-01 17:27:55.263 26853 26853 D VRI[GoogleDiscoverWindow]: visibilityChanged oldVisibility=true newVisibility=false
+06-01 17:27:55.264  3524  3586 V WindowManagerShell: Track 0 became idle
+06-01 17:27:55.264  3524  3586 V WindowManagerShell: All active transition animations finished
+06-01 17:27:55.263  4001  4001 D VRI[QuickstepLauncher]: visibilityChanged oldVisibility=true newVisibility=false
+06-01 17:27:55.264  2026  4043 W UserManagerService: Requested status bar icon for non-badged user 0
+06-01 17:27:55.264  2026  4043 W UserManagerService: Requested status bar icon for non-badged user 0
+06-01 17:27:55.283  4001  4001 D BaseDepthController: setSurface:
+06-01 17:27:55.283  4001  4001 D BaseDepthController: 	mWaitingOnSurfaceValidity: false
+06-01 17:27:55.283  4001  4001 D BaseDepthController: 	mSurface: null
+06-01 17:27:55.284  4001  4001 D BaseDepthController: mSurface is null and mCurrentBlur is: 0
+06-01 17:27:55.285  4001  4001 D StateManager: goToState - fromState: Normal, toState: Normal, partial trace:
+06-01 17:27:55.285  4001  4001 D StateManager: 	at com.android.launcher3.statemanager.StateManager.moveToRestState(StateManager.java:458)
+06-01 17:27:55.285  4001  4001 D StateManager: 	at com.android.launcher3.statemanager.StateManager.moveToRestState(StateManager.java:449)
+06-01 17:27:55.285  4001  4001 D StateManager: 	at com.android.launcher3.statemanager.StatefulActivity.onStop(StatefulActivity.java:122)
+06-01 17:27:55.288  4001  4001 D StatsLog: LAUNCHER_ONSTOP
+06-01 17:27:55.289 26853 26853 I byee    : onStop
+06-01 17:27:55.290 10842 10848 W android.vending: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~dxkKc2KHRHXjbL__2FZ5PQ==/com.example.llama.aichat-afoGPdpVwpIqG6VlUXZs5Q==/base.apk' with 1 weak references
+06-01 17:27:55.295  4614 10608 D MainProcessObserver: pid:4001 uid:10231 foregroundActivities:false
+06-01 17:27:55.295  2026  4018 W ActivityTaskManager: MANAGE_ACTIVITY_STACKS is deprecated, please use alternative permission: MANAGE_ACTIVITY_TASKS
+06-01 17:27:55.295  4614 10608 D onForegroundChanged: topActivity:ComponentInfo{com.example.llama.aichat/com.example.llama.MainActivity}, taskId:1110, windowingMode:1
+06-01 17:27:55.295  4614 10608 D onForegroundChanged: packageName:com.example.llama.aichat
+06-01 17:27:55.323 10922 10926 W ding:background: Reducing the number of considered missed Gc histogram windows from 863 to 100
+06-01 17:27:55.467  3524  3624 W WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=android.view.ViewRootImpl$$ExternalSyntheticLambda11@a028bd9
+06-01 17:27:55.467  2026  9440 D CoreBackPreview: Window{ff175a2 u0 Splash Screen com.example.llama.aichat EXITING}: Setting back callback null
+06-01 17:27:55.468  2026  4018 W InputManager-JNI: Input channel object 'ff175a2 Splash Screen com.example.llama.aichat (client)' was disposed without first being removed with the input manager!
+06-01 17:27:55.474  2200  3058 E Diag_Lib: diag: Diag_LSM_Init: invoked for pid: 2200 with init_count: 0
+06-01 17:27:55.475  2200  3058 E Diag_Lib: diag:failed to connect to diag socket
+06-01 17:27:55.475  2200  3058 E Diag_Lib:  Diag_LSM_Init: Failed to open handle to diag driver, error = 111
+06-01 17:27:55.523  2026  2118 D ActivityManager: notifyResumeComponent isGame : false
+06-01 17:27:55.569 15496 15623 I FontLog : (REDACTED) Received query %s, URI %s
+06-01 17:27:55.569 15496 15623 I FontLog : (REDACTED) Query [%s] resolved to %s
+06-01 17:27:55.572 15496 15623 I FontLog : (REDACTED) Fetch %s end status %s
+06-01 17:27:55.575 15496 15620 I FontLog : (REDACTED) Pulling font file for id = %d, cache size = %d
+06-01 17:27:55.580 15496 15620 I FontLog : (REDACTED) Pulling font file for id = %d, cache size = %d
+06-01 17:27:55.619  2026  2069 D WindowManager: setParent old=ActivityRecord{c6bb0c0 u0 com.example.llama.aichat/com.example.llama.MainActivity t1110},new=null,this window=Window{ff175a2 u0 Splash Screen com.example.llama.aichat},callers=com.android.server.wm.WindowContainer.removeChild:833 com.android.server.wm.ActivityRecord.removeChild:4750 com.android.server.wm.ActivityRecord.removeChild:435 com.android.server.wm.WindowContainer.removeImmediately:891 com.android.server.wm.WindowState.removeImmediately:2391 com.android.server.wm.WindowState.destroySurface:3371 
+06-01 17:27:55.649  8321 20804 I bte     : Handling installed or updated package: com.example.llama.aichat
+06-01 17:27:55.650  8321 20804 I ckk     : Attempting to classify package: com.example.llama.aichat using model: bll_1
+06-01 17:27:55.675  2026  4043 W ParceledListSlice: Element #27 is 20064 bytes.
+06-01 17:27:55.676  2026  4043 W ParceledListSlice: Element #28 is 21044 bytes.
+06-01 17:27:55.680  8321  8327 W le.android.odad: Reducing the number of considered missed Gc histogram windows from 863 to 100
+06-01 17:27:55.695  2026  4043 W ParceledListSlice: Element #237 is 42700 bytes.
+06-01 17:27:55.695  2026  4043 W ParceledListSlice: Element #238 is 42744 bytes.
+06-01 17:27:55.696  2026  4043 W ParceledListSlice: Overly large reply size: 88192
+06-01 17:27:55.696  2026  4043 W ParceledListSlice: Element #239 is 42744 bytes.
+06-01 17:27:55.697  2026  4043 W ParceledListSlice: Element #240 is 42748 bytes.
+06-01 17:27:55.697  2026  4043 W ParceledListSlice: Overly large reply size: 85508
+06-01 17:27:55.697  2026  4043 W ParceledListSlice: Element #241 is 42704 bytes.
+06-01 17:27:55.698  2026  4043 W ParceledListSlice: Element #242 is 42704 bytes.
+06-01 17:27:55.698  2026  4043 W ParceledListSlice: Overly large reply size: 85424
+06-01 17:27:55.699  2026  4043 W ParceledListSlice: Element #243 is 42716 bytes.
+06-01 17:27:55.715  8321 20804 I buj     : BLL finished for package: com.example.llama.aichat, score: 6.0, verdict: NOT_HARMFUL
+06-01 17:27:55.715  8321 20804 I ckk     : Finished new classification for package: com.example.llama.aichat, model: bll_1, verdict: NOT_HARMFUL, score: 6.0
+06-01 17:27:55.721  8321 20804 I bte     : Work finished, result: Result(successCount=3, failureCount=0), latency: PT1.051S
+06-01 17:27:55.723  8321  9481 I btq     : Finished work type: HANDLE_PACKAGES_CHANGED, success: true, latency: PT1.057S
+06-01 17:27:55.723  8321  8321 I WorkService: Stopping the work service
+06-01 17:27:55.724  2026  4043 W ForegroundServiceTypeLoggerModule: FGS stop call for: 10365 has no types!
+06-01 17:27:55.725  8321  8321 I WorkService: Work service moved out of the foreground
+06-01 17:27:55.725  8321  8321 I WorkService: Work service destroyed
+06-01 17:27:55.726  8321  8321 I ckq     : Stopping watchdog: work-service, completed in time
+06-01 17:27:55.990  2026  4018 W ActivityTaskManager: MANAGE_ACTIVITY_STACKS is deprecated, please use alternative permission: MANAGE_ACTIVITY_TASKS
+06-01 17:27:56.015  2026 20750 W ContextImpl: Calling a method in the system process without a qualified user: android.app.ContextImpl.sendBroadcast:1249 android.content.ContextWrapper.sendBroadcast:506 jp.co.sharp.android.brightkeep.BrightKeepService.checkTimerEvent:525 jp.co.sharp.android.brightkeep.BrightKeepService.access$000:83 jp.co.sharp.android.brightkeep.BrightKeepService$TouchCheckTask.run:671 
+06-01 17:27:56.017  2026  2026 V BrightKeepService: getAction: jp.co.sharp.android.intent.action.CLICK_SCREEN_ON isOutOfHand: false
+06-01 17:27:56.300  2026  4018 W ActivityTaskManager: MANAGE_ACTIVITY_STACKS is deprecated, please use alternative permission: MANAGE_ACTIVITY_TASKS
+06-01 17:27:56.664 20820 20838 W qdgralloc: getInterlacedFlag: getMetaData returned 3, defaulting to interlaced_flag = 0
+06-01 17:27:57.001  1442  1628 I SDM     : DisplayBase::CommitThread: Received idle timeout, panel: cmd, timeout: 70000 us
+06-01 17:27:57.365  1442  1628 I SDM     : DisplayBase::CommitThread: Received idle timeout, panel: cmd, timeout: 70000 us
+06-01 17:27:57.633  8321  8321 I ContentProtectionServic: CP service destroyed
+06-01 17:27:57.635  2026  2026 I RemoteContentProtectionService: Connection status for: ComponentInfo{com.google.android.odad/com.google.android.apps.miphone.odad.contentprotection.ContentProtectionService} changed to: disconnected
+06-01 17:27:57.651  3716  3732 W esdk.sysservice: Reducing the number of considered missed Gc histogram windows from 778 to 100
+06-01 17:27:57.666  8321  8329 W le.android.odad: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~dxkKc2KHRHXjbL__2FZ5PQ==/com.example.llama.aichat-afoGPdpVwpIqG6VlUXZs5Q==/base.apk' with 1 weak references
+06-01 17:27:58.998 15496 15496 D BoundBrokerSvc: onRebind: Intent { act=com.google.android.gms.common.telemetry.service.START dat=chimera-action:/... cmp=com.google.android.gms/.chimera.PersistentApiService }
+06-01 17:27:59.057  2026  4043 D InputManager: injectMotionEvent: 20893-{action=ACTION_DOWN, id[0]=0, x[0]=540.0, y[0]=1453.0, pointerCount=1, eventTime=131380992, deviceId=4}
+06-01 17:27:59.065  2026  4043 D InputManager: injectMotionEvent: 20893-{action=ACTION_UP, id[0]=0, x[0]=540.0, y[0]=1453.0, pointerCount=1, eventTime=131380992, deviceId=4}
+06-01 17:28:00.118  1442  1628 I SDM     : DisplayBase::CommitThread: Received idle timeout, panel: cmd, timeout: 69999 us
+06-01 17:28:00.292  2026  3382 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET, states=14
+06-01 17:28:00.294  2026  3382 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET6, states=14
+06-01 17:28:00.294  2026  3382 D InetDiagMessage: Destroyed live tcp sockets for uids={10303} in 5ms
+06-01 17:28:00.296  2026  3382 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET, states=14
+06-01 17:28:00.298  2026  3382 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET6, states=14
+06-01 17:28:00.298  2026  3382 D InetDiagMessage: Destroyed live tcp sockets for uids={20303} in 5ms
+06-01 17:28:00.375  1442  1628 I SDM     : DisplayBase::CommitThread: Received idle timeout, panel: cmd, timeout: 70000 us
+06-01 17:28:00.477  2200  3058 E Diag_Lib: diag: Diag_LSM_Init: invoked for pid: 2200 with init_count: 0
+06-01 17:28:00.478  2200  3058 E Diag_Lib: diag:failed to connect to diag socket
+06-01 17:28:00.478  2200  3058 E Diag_Lib:  Diag_LSM_Init: Failed to open handle to diag driver, error = 111
+06-01 17:28:00.628 20820 20898 D ProfileInstaller: Installing profile for com.example.llama.aichat
+06-01 17:28:01.016  2026 20750 W ContextImpl: Calling a method in the system process without a qualified user: android.app.ContextImpl.sendBroadcast:1249 android.content.ContextWrapper.sendBroadcast:506 jp.co.sharp.android.brightkeep.BrightKeepService.checkTimerEvent:508 jp.co.sharp.android.brightkeep.BrightKeepService.access$000:83 jp.co.sharp.android.brightkeep.BrightKeepService$TouchCheckTask.run:671 
+06-01 17:28:01.017  2026 20750 V BrightKeepService: changeCurrentStatus old=NoTouchTimeOutState new=NormalState
+06-01 17:28:01.018  2026 20750 D [SensorHub][Manager2]: registerSensorHubListener
+06-01 17:28:01.018  2026 20750 D SensorService: enable start. handle=11
+06-01 17:28:01.019  2026  2026 V BrightKeepService: getAction: jp.co.sharp.android.intent.action.CLICK_SCREEN_ON isOutOfHand: false
+06-01 17:28:01.019  2026 20750 D SensorService: called from jp.co.sharp.android.sensorhub.AccelerometerSHEXConverter.
+06-01 17:28:01.020  2026 20750 D SensorService: connection info count:1
+06-01 17:28:01.020  2026 20750 D SensorService: 	 lsm6dso Accelerometer Non-wakeup [0x0000000b] 
+06-01 17:28:01.020  2026 20750 D SensorService: request senosor type:1
+06-01 17:28:01.021  1356  1356 I sensors-hal: batch:167, android.sensor.accelerometer/11, period=240000000, max_latency=0
+06-01 17:28:01.021  1356  1356 I sensors-hal: set_config:75, sample_period_ns is adjusted to 240000000 based on min/max delay_ns
+06-01 17:28:01.021  1356  1356 I sensors-hal: batch:176, android.sensor.accelerometer/11, period=240000000, max_latency=0 request completed
+06-01 17:28:01.022  1356  1356 I sensors-hal: activate:134, android.sensor.accelerometer/11 en=1
+06-01 17:28:01.022  1356  1356 I sensors-hal: acquire_qsh_interface:117, acquire_qsh_interface with sensor_id 31 , conn_type 2 
+06-01 17:28:01.024  1342  1476 I minksocket: MinkIPC MESSAGE: ( 1342:1476 ) MinkIPC_QRTR_Service:351 minkipc = 0xb4000075d7c45b10 sock = 24, client with node 1 port 5110 went down
+06-01 17:28:01.024  1342  1474 I minksocket: MinkIPC MESSAGE: ( 1342:1474 ) MinkIPC_QRTR_Service:351 minkipc = 0xb4000075d7c46b90 sock = 18, client with node 1 port 5110 went down
+06-01 17:28:01.025  1342  1474 I minksocket: MinkIPC MESSAGE: ( 1342:1474 ) MinkIPC_QRTR_Service:351 minkipc = 0xb4000075d7c46b90 sock = 18, client with node 1 port 5111 went down
+06-01 17:28:01.025  1342  1476 I minksocket: MinkIPC MESSAGE: ( 1342:1476 ) MinkIPC_QRTR_Service:351 minkipc = 0xb4000075d7c45b10 sock = 24, client with node 1 port 5111 went down
+06-01 17:28:01.027  1342  1474 I minksocket: MinkIPC MESSAGE: ( 1342:1474 ) MinkIPC_QRTR_Service:351 minkipc = 0xb4000075d7c46b90 sock = 18, client with node 1 port 5112 went down
+06-01 17:28:01.027  1342  1476 I minksocket: MinkIPC MESSAGE: ( 1342:1476 ) MinkIPC_QRTR_Service:351 minkipc = 0xb4000075d7c45b10 sock = 24, client with node 1 port 5112 went down
+06-01 17:28:01.028  1356  1356 I sensors-hal: qsh_qmi:35, qsh_qmi
+06-01 17:28:01.028  1356  1356 I sensors-hal: register_cb:309, suid(low=11115320498015681092,high=2286538866409242278) is new. register callbacks
+06-01 17:28:01.028  1342  1476 I minksocket: MinkIPC MESSAGE: ( 1342:1476 ) MinkIPC_QRTR_Service:351 minkipc = 0xb4000075d7c45b10 sock = 24, client with node 1 port 5113 went down
+06-01 17:28:01.028  1356  1356 I sensors-hal: send_sensor_config_request:492, resampler is used, set resampler config
+06-01 17:28:01.029  1342  1474 I minksocket: MinkIPC MESSAGE: ( 1342:1474 ) MinkIPC_QRTR_Service:351 minkipc = 0xb4000075d7c46b90 sock = 18, client with node 1 port 5113 went down
+06-01 17:28:01.029  1356  1356 I sensors-hal: send_sync_sensor_request:435, send sync request
+06-01 17:28:01.029  1356  1356 I sensors-hal: send_sync_sensor_request:445, send_sync_sensor_request before send_request for accel with SUID low=11115320498015681092 high=2286538866409242278
+06-01 17:28:01.029  1356  1356 I sensors-hal: send_sync_sensor_request:464, wait for notification of response
+06-01 17:28:01.030  1356 20900 I sensors-hal: qsh_conn_resp_cb:745, resp_value = 0 for accel 
+06-01 17:28:01.031  1356  1356 I sensors-hal: send_sync_sensor_request:470, takes 1 ms to receive the response with 0
+06-01 17:28:01.031  1356  1356 I sensors-hal: activate:145, android.sensor.accelerometer/11 en=1 completed
+06-01 17:28:01.031  2026 20750 D SensorService: enable end. 
+06-01 17:28:01.031  2026 20750 D BrightKeepService: registerAccelerometerListener ret : 0
+06-01 17:28:05.000  2026  3295 D ActivityManager: freezing 18191 sharp.jp.android.makersiteappli
+06-01 17:28:05.007  2026  3382 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET, states=14
+06-01 17:28:05.009  2026  3382 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET6, states=14
+06-01 17:28:05.010  2026  3382 D InetDiagMessage: Destroyed live tcp sockets for uids={10286} in 7ms
+06-01 17:28:05.220  1033 20771 I keystore2: system/security/keystore2/watchdog/src/lib.rs:319 - Watchdog thread idle -> terminating. Have a great day.
+06-01 17:28:05.341 15496 15496 D BoundBrokerSvc: onUnbind: Intent { act=com.google.android.gms.common.telemetry.service.START dat=chimera-action:/... cmp=com.google.android.gms/.chimera.PersistentApiService }
+06-01 17:28:05.478  2200  3058 E Diag_Lib: diag: Diag_LSM_Init: invoked for pid: 2200 with init_count: 0
+06-01 17:28:05.479  2200  3058 E Diag_Lib: diag:failed to connect to diag socket
+06-01 17:28:05.479  2200  3058 E Diag_Lib:  Diag_LSM_Init: Failed to open handle to diag driver, error = 111
+06-01 17:28:06.938 10922 10922 I Finsky:background: [2] Memory trim requested to level 40
+06-01 17:28:06.939 10842 10842 I Finsky  : [2] Memory trim requested to level 40
+06-01 17:28:06.940 10842 10842 I Finsky  : [2] Flushing in-memory image cache
+06-01 17:28:06.939 10929 10929 I Finsky:quick_launch: [2] Memory trim requested to level 40
+06-01 17:28:07.650  2026  3295 D ActivityManager: freezing 8321 com.google.android.odad
+06-01 17:28:07.655  2026  3382 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET, states=14
+06-01 17:28:07.656  2026  3382 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET6, states=14
+06-01 17:28:07.657  2026  3382 D InetDiagMessage: Destroyed live tcp sockets for uids={10365} in 4ms
+06-01 17:28:09.326  3721  3721 D QtiCarrierConfigHelper: WARNING, no carrier configs on phone Id: 0
+06-01 17:28:09.327  3721  3721 D QtiCarrierConfigHelper: WARNING, no carrier configs on phone Id: 1
+06-01 17:28:09.328  3524  9116 D PowerUI : can't show warning due to - plugged: true status unknown: false
+06-01 17:28:09.330  3684  3684 D DeviceStatisticsService: onReceive: action= android.intent.action.BATTERY_CHANGED
+06-01 17:28:09.332  3684  3684 V DeviceStatisticsService: chargerType=1 batteryLevel=100 totalBatteryCapacity=4716000
+06-01 17:28:09.425  1442  1628 I SDM     : DisplayBase::CommitThread: Received idle timeout, panel: cmd, timeout: 70000 us
+06-01 17:28:09.849  8384  8744 D MainJobService: BATTERY_FULL_CHARGED: start
+06-01 17:28:09.850  8384  8744 D MainJobService: BATTERY_FULL_CHARGED: end
+06-01 17:28:09.851  8384  8522 I WM-WorkerWrapper: Worker result SUCCESS for Work [ id=8c4fa23a-7e01-458f-85b4-3f7422eb8b86, tags={ jp.co.sharp.android.ichargeservice.MainJobService } ]
+06-01 17:28:10.323 17810 17810 D BoundBrokerSvc: onUnbind: Intent { act=com.google.android.gms.inappreach.service.START dat=chimera-action:/... cmp=com.google.android.gms/.chimera.GmsApiService }
+06-01 17:28:10.352  7333  7333 E iCharge.Receiver: jp.co.sharp.android.ichargeservice.action.BATTERY_FULL_CHARGED
+06-01 17:28:10.366  7333  8694 D MainJobService: ACTION_BATTERY_FULL_CHARGED: start
+06-01 17:28:10.366  7333  8694 D MainJobService: ACTION_BATTERY_FULL_CHARGED: end
+06-01 17:28:10.366  7333  8689 I WM-WorkerWrapper: Worker result SUCCESS for Work [ id=351965d9-92e4-4fe8-b175-504e4a51cc82, tags={ jp.co.sharp.android.icharge.services.MainJobService } ]
+06-01 17:28:10.426 17810 17816 W gle.android.gms: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~dxkKc2KHRHXjbL__2FZ5PQ==/com.example.llama.aichat-afoGPdpVwpIqG6VlUXZs5Q==/base.apk' with 1 weak references
+06-01 17:28:10.479  2200  3058 E Diag_Lib: diag: Diag_LSM_Init: invoked for pid: 2200 with init_count: 0
+06-01 17:28:10.480  2200  3058 E Diag_Lib: diag:failed to connect to diag socket
+06-01 17:28:10.480  2200  3058 E Diag_Lib:  Diag_LSM_Init: Failed to open handle to diag driver, error = 111
+06-01 17:28:10.848  2026  3448 D ShortcutService: received package broadcast intent: Intent { act=android.intent.action.PACKAGE_CHANGED dat=package: flg=0x45000010 (has extras) }
+06-01 17:28:10.852  3736  3736 D CarrierSvcBindHelper: onPackageModified: jp.co.sharp.android.icharge
+06-01 17:28:10.853  3736  3910 D EuiccConnector: handleMessage: E msg.what=1
+06-01 17:28:10.853  3736  3910 D EuiccConnector: processMsg: ConnectedState
+06-01 17:28:10.853  3736  3910 D EuiccConnector: processMsg: DisconnectedState
+06-01 17:28:10.854  2026  3448 D ShortcutService: changing package: jp.co.sharp.android.icharge userId0
+06-01 17:28:10.854  2026  3448 D ShortcutService: handlePackageChanged: jp.co.sharp.android.icharge user=0
+06-01 17:28:10.854  3736  3910 D EuiccConnector: handleMessage: X
+06-01 17:28:10.854  2026  3448 D ShortcutService: rescanPackageIfNeeded 0@jp.co.sharp.android.icharge, forceRescan=true , isNewApp=true
+06-01 17:28:10.855  4705  4705 I RegisteredComponentCache: New Components => 
+06-01 17:28:10.855  2026  3448 D ShortcutService: Package jp.co.sharp.android.icharge has 0 manifest shortcut(s), and 0 share target(s)
+06-01 17:28:10.855  4705  4705 I RegisteredComponentCache: ComponentInfo: ResolveInfo{26e6d60 com.android.apps.tag/.TagViewer m=0x108000 userHandle=UserHandle{0}}, techs: android.nfc.tech.Ndef, 
+06-01 17:28:10.855  4705  4705 I RegisteredComponentCache: Removed Components => 
+06-01 17:28:10.855  4705  4705 I RegisteredComponentCache: ComponentInfo: ResolveInfo{9d3ebeb com.android.apps.tag/.TagViewer m=0x108000 userHandle=UserHandle{0}}, techs: android.nfc.tech.Ndef, 
+06-01 17:28:10.855  3736  3736 D CarrierSvcBindHelper: No carrier app for: 0
+06-01 17:28:10.855  3736  3736 D CarrierSvcBindHelper: No carrier app for: 1
+06-01 17:28:10.860  2026  3448 D ShortcutService: received package broadcast intent: Intent { act=android.intent.action.PACKAGE_CHANGED dat=package: flg=0x45000010 (has extras) }
+06-01 17:28:10.860  2026  3448 D ShortcutService: changing package: jp.co.sharp.android.ichargeservice userId0
+06-01 17:28:10.860  2026  3448 D ShortcutService: handlePackageChanged: jp.co.sharp.android.ichargeservice user=0
+06-01 17:28:10.860  2026  3448 D ShortcutService: rescanPackageIfNeeded 0@jp.co.sharp.android.ichargeservice, forceRescan=true , isNewApp=true
+06-01 17:28:10.862  3862  9365 I PermissionControllerServiceImpl: Updating user sensitive for uid 10250
+06-01 17:28:10.864  3862  9365 I PermissionControllerServiceImpl: Updating user sensitive for uid 10249
+06-01 17:28:10.864  4705  4705 I RegisteredComponentCache: New Components => 
+06-01 17:28:10.864  3736  3910 D EuiccConnector: handleMessage: E msg.what=1
+06-01 17:28:10.864  4705  4705 I RegisteredComponentCache: ComponentInfo: ResolveInfo{f49fcbf com.android.apps.tag/.TagViewer m=0x108000 userHandle=UserHandle{0}}, techs: android.nfc.tech.Ndef, 
+06-01 17:28:10.864  4705  4705 I RegisteredComponentCache: Removed Components => 
+06-01 17:28:10.864  4705  4705 I RegisteredComponentCache: ComponentInfo: ResolveInfo{26e6d60 com.android.apps.tag/.TagViewer m=0x108000 userHandle=UserHandle{0}}, techs: android.nfc.tech.Ndef, 
+06-01 17:28:10.864  3736  3910 D EuiccConnector: processMsg: ConnectedState
+06-01 17:28:10.864  3736  3910 D EuiccConnector: processMsg: DisconnectedState
+06-01 17:28:10.865  2026  3448 D ShortcutService: Package jp.co.sharp.android.ichargeservice has 0 manifest shortcut(s), and 0 share target(s)
+06-01 17:28:10.865  3736  3910 D EuiccConnector: handleMessage: X
+06-01 17:28:10.865  2026  9643 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = READ_SMS, mode = allow, callingUid = 1001, oldMode = allow
+06-01 17:28:10.865  2026  9643 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = RECEIVE_SMS, mode = allow, callingUid = 1001, oldMode = allow
+06-01 17:28:10.865  2026  9643 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = RECEIVE_WAP_PUSH, mode = allow, callingUid = 1001, oldMode = allow
+06-01 17:28:10.865  2026  9643 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = SEND_SMS, mode = allow, callingUid = 1001, oldMode = allow
+06-01 17:28:10.866  2026  9643 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = READ_CELL_BROADCASTS, mode = allow, callingUid = 1001, oldMode = allow
+06-01 17:28:10.868  3736  4019 D ImsResolver: maybeAddedImsService, packageName: jp.co.sharp.android.icharge
+06-01 17:28:10.870  3736  3736 D CarrierSvcBindHelper: onPackageModified: jp.co.sharp.android.ichargeservice
+06-01 17:28:10.870  3736  3736 D CarrierSvcBindHelper: No carrier app for: 0
+06-01 17:28:10.870  3736  3736 D CarrierSvcBindHelper: No carrier app for: 1
+06-01 17:28:10.874  2026  3399 W AS.AudioService: handleMessage({ when=-1ms what=35 target=com.android.server.audio.AudioService$AudioHandler }) from pid=2026, uid=1000
+06-01 17:28:10.874  2026  9440 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = READ_SMS, mode = allow, callingUid = 1001, oldMode = allow
+06-01 17:28:10.874  2026  2104 W MagnificationConnectionManager: requestConnection duplicated request: connect=false, mConnectionState=DISCONNECTED
+06-01 17:28:10.874  2026  9440 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = RECEIVE_SMS, mode = allow, callingUid = 1001, oldMode = allow
+06-01 17:28:10.875  2026  4002 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = RECEIVE_WAP_PUSH, mode = allow, callingUid = 1001, oldMode = allow
+06-01 17:28:10.875  2026  9440 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = SEND_SMS, mode = allow, callingUid = 1001, oldMode = allow
+06-01 17:28:10.875  2026  9440 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = READ_CELL_BROADCASTS, mode = allow, callingUid = 1001, oldMode = allow
+06-01 17:28:10.876  4001  4038 D PackageUpdatedTask: Package updated: mOp=UPDATE packages=[jp.co.sharp.android.icharge]
+06-01 17:28:10.877  3736  4019 D ImsResolver: maybeAddedImsService, packageName: jp.co.sharp.android.ichargeservice
+06-01 17:28:10.878  4001  4038 W AllAppsList: updatePromiseInstallInfo: no Activities matched updated package, removing all apps from package=jp.co.sharp.android.icharge
+06-01 17:28:10.878  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -102
+06-01 17:28:10.879  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -102
+06-01 17:28:10.879  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -102
+06-01 17:28:10.879  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -102
+06-01 17:28:10.879  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -102
+06-01 17:28:10.879  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -102
+06-01 17:28:10.879  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -102
+06-01 17:28:10.879  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -102
+06-01 17:28:10.879  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -102
+06-01 17:28:10.879  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -102
+06-01 17:28:10.879  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -103
+06-01 17:28:10.879  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -103
+06-01 17:28:10.879  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -103
+06-01 17:28:10.879  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -103
+06-01 17:28:10.879  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -103
+06-01 17:28:10.879  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -103
+06-01 17:28:10.879  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -103
+06-01 17:28:10.879  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -103
+06-01 17:28:10.879  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -103
+06-01 17:28:10.879  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -103
+06-01 17:28:10.905  2026  3399 W AS.AudioService: handleMessage({ when=-1ms what=35 target=com.android.server.audio.AudioService$AudioHandler }) from pid=2026, uid=1000
+06-01 17:28:10.905  2026  2104 W MagnificationConnectionManager: requestConnection duplicated request: connect=false, mConnectionState=DISCONNECTED
+06-01 17:28:10.908  4001  4038 D PackageUpdatedTask: Package updated: mOp=UPDATE packages=[jp.co.sharp.android.ichargeservice]
+06-01 17:28:10.910  4001  4038 W AllAppsList: updatePromiseInstallInfo: no Activities matched updated package, removing all apps from package=jp.co.sharp.android.ichargeservice
+06-01 17:28:10.910  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -102
+06-01 17:28:10.910  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -102
+06-01 17:28:10.910  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -102
+06-01 17:28:10.910  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -102
+06-01 17:28:10.910  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -102
+06-01 17:28:10.910  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -102
+06-01 17:28:10.910  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -102
+06-01 17:28:10.910  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -102
+06-01 17:28:10.910  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -102
+06-01 17:28:10.910  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -102
+06-01 17:28:10.910  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -103
+06-01 17:28:10.910  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -103
+06-01 17:28:10.910  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -103
+06-01 17:28:10.910  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -103
+06-01 17:28:10.910  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -103
+06-01 17:28:10.910  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -103
+06-01 17:28:10.910  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -103
+06-01 17:28:10.910  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -103
+06-01 17:28:10.910  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -103
+06-01 17:28:10.910  4001  4038 D PackageUpdatedTask: reject_forAllWorkspaceItemInfos_container = -103
+06-01 17:28:11.345  3524  3524 D ControlsListingControllerImpl: ServiceConfig reloaded, count: 1
+06-01 17:28:11.347  3524  3524 D ControlsListingControllerImpl: ServiceConfig reloaded, count: 1
+06-01 17:28:11.374 17810 20906 I ComponentChangedIO: Feature is not enabled, skipping component changed intent operation [CONTEXT service_id=469 ]
+06-01 17:28:11.375 17810 20906 I ComponentChangedIO: Feature is not enabled, skipping component changed intent operation [CONTEXT service_id=469 ]
+06-01 17:28:12.370  1253  1266 E statsd  : Could not find a broadcast receiver for (10269 987654323)
+06-01 17:28:15.483  2200  3058 E Diag_Lib: diag: Diag_LSM_Init: invoked for pid: 2200 with init_count: 0
+06-01 17:28:15.485  2200  3058 E Diag_Lib: diag:failed to connect to diag socket
+06-01 17:28:15.485  2200  3058 E Diag_Lib:  Diag_LSM_Init: Failed to open handle to diag driver, error = 111
+06-01 17:28:16.979  2026  3295 D ActivityManager: freezing 10922 com.android.vending:background
+06-01 17:28:16.982  2026  3295 D ActivityManager: freezing 10842 com.android.vending
+06-01 17:28:16.986  2026  3295 D ActivityManager: freezing 10929 com.android.vending:quick_launch
+06-01 17:28:16.988  2026  3295 D ActivityManager: freezing 7340 com.android.vending:instant_app_installer
+06-01 17:28:17.488  2026  3382 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET, states=14
+06-01 17:28:17.489  2026  3382 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET6, states=14
+06-01 17:28:17.489  2026  3382 D InetDiagMessage: Destroyed live tcp sockets for uids={10186} in 2ms
+06-01 17:28:18.329  2026  2452 W BatteryExternalStatsWorker: error reading Bluetooth stats: 9
+06-01 17:28:18.341  2026  3867 D TelephonyManager: requestModemActivityInfo: Sending result to app: ModemActivityInfo{ mTimestamp=529392010 mSleepTimeMs=510861407 mIdleTimeMs=1488919 mActivityStatsTechSpecificInfo=[{mRat=UNKNOWN,mFrequencyRange=UNKNOWN,mTxTimeMs[]=[0, 0, 0, 0, 0],mRxTimeMs=17026925}]}
+06-01 17:28:20.489  2200  3058 E Diag_Lib: diag: Diag_LSM_Init: invoked for pid: 2200 with init_count: 0
+06-01 17:28:20.490  2200  3058 E Diag_Lib: diag:failed to connect to diag socket
+06-01 17:28:20.491  2200  3058 E Diag_Lib:  Diag_LSM_Init: Failed to open handle to diag driver, error = 111
+06-01 17:28:23.527 20820 20827 W le.llama.aichat: userfaultfd: MOVE ioctl seems unsupported: Connection timed out

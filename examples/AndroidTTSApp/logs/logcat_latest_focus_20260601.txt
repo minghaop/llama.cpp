@@ -1,0 +1,14 @@
+8021:06-01 11:28:19.685 I/LlamaInferenceBridge(12498): runInference started
+8073:06-01 11:28:21.896 I/LlamaInferenceBridge(12498): [FlowOnly][llama.cpp] flowModel=/data/user/0/com.example.llama.aichat/files/models/flow_fp32.gguf
+8809:06-01 11:28:44.588 E/ai-chat (12498): load_backend: failed to find ggml_backend_init in libggml-hexagon.so
+8830:06-01 11:28:44.588 I/ai-chat (12498): Java_com_arm_aichat_internal_InferenceEngineImpl_init: explicit load libggml-hexagon.so => failed
+8839:06-01 11:28:44.588 E/ai-chat (12498): load_aux_model: flow requested pure HTP inference but no HTP device is available. Ensure libggml-hexagon.so and libggml-htp-v*.so are packaged.
+8841:06-01 11:28:44.589 E/LlamaInferenceBridge(12498): java.io.IOException: native loadFlowModel failed with code=-5, path=/data/user/0/com.example.llama.aichat/files/models/flow_fp32.gguf, bytes=450294560
+8848:06-01 11:28:44.589 I/LlamaInferenceBridge(12498): runInference finished: stage=flow result=false total=24.904 s
+11091:06-01 11:31:47.827 I/LlamaInferenceBridge(12777): runInference started
+11133:06-01 11:31:50.082 I/LlamaInferenceBridge(12777): [FlowOnly][llama.cpp] flowModel=/data/user/0/com.example.llama.aichat/files/models/flow_fp32.gguf
+11827:06-01 11:32:12.895 E/ai-chat (12777): load_backend: failed to find ggml_backend_init in libggml-hexagon.so
+11849:06-01 11:32:12.895 I/ai-chat (12777): Java_com_arm_aichat_internal_InferenceEngineImpl_init: explicit load libggml-hexagon.so => failed
+11858:06-01 11:32:12.895 E/ai-chat (12777): load_aux_model: flow requested pure HTP inference but no HTP device is available. Ensure libggml-hexagon.so and libggml-htp-v*.so are packaged.
+11860:06-01 11:32:12.895 E/LlamaInferenceBridge(12777): java.io.IOException: native loadFlowModel failed with code=-5, path=/data/user/0/com.example.llama.aichat/files/models/flow_fp32.gguf, bytes=450294560
+11867:06-01 11:32:12.895 I/LlamaInferenceBridge(12777): runInference finished: stage=flow result=false total=25.068 s

@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en"><head>
+  <meta charset="utf-8"/>
+  
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  
+  <title>Class RuntimeConfigList — Snapdragon Neural Processing Engine SDK</title>
+  
+
+  
+  <link href="../../_static/css/theme.css" rel="stylesheet" type="text/css"/>
+  <link href="../../_static/pygments.css" rel="stylesheet" type="text/css"/>
+  <link href="../../_static/pygments.css" rel="stylesheet" type="text/css"/>
+  <link href="../../_static/css/theme.css" rel="stylesheet" type="text/css"/>
+  <link href="../../_static/custom_css.css" rel="stylesheet" type="text/css"/>
+  <link href="../../_static/collapsible-lists/css/tree_view.css" rel="stylesheet" type="text/css"/>
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js" type="text/javascript"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+        <script src="../../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    
+    <script src="../../_static/js/theme.js" type="text/javascript"></script>
+
+    
+    <link href="../../genindex.html" rel="index" title="Index"/>
+    <link href="../../search.html" rel="search" title="Search"/> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav class="wy-nav-side" data-toggle="wy-nav-shift">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a class="icon icon-home" href="../../index.html"> Qualcomm® AI Runtime (QAIRT) SDKs
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v2.46.0.260424121129
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form action="../../search.html" class="wy-form" id="rtd-search-form" method="get">
+    <input name="q" placeholder="Search docs" type="text"/>
+    <input name="check_keywords" type="hidden" value="yes"/>
+    <input name="area" type="hidden" value="default"/>
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">QAIRT</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../general/overview.html">Overview</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">SDKs</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../QNN/index.html">QNN</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">SNPE</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../general/overview.html">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general/setup.html">Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general/usergroup6.html">Tutorials and Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general/usergroup1.html">Network Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general/usergroup5.html">Input Data and Preprocessing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general/usergroup10.html">Benchmarking and Accuracy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general/tools.html">Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general/usergroup11.html">Debug Tools</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="../general/api.html">API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general/limitations.html">Limitations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general/revision_history.html">Revision History</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general/appx_ref.html">References</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../Genie/index.html">Genie</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Delegates</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../Delegates/TfLite/index.html">TFLite Delegate</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+
+      
+      <nav aria-label="top navigation" class="wy-nav-top">
+        
+          <i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+          <a href="../../index.html">Qualcomm® AI Runtime (QAIRT) SDKs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div aria-label="breadcrumbs navigation" role="navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a class="icon icon-home" href="../../index.html"></a> »</li>
+        
+          <li><a href="../index.html">⌂</a> »</li>
+        
+      <li>Class RuntimeConfigList</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="class-runtimeconfiglist">
+<span id="exhale-class-classpsnpe-1-1runtimeconfiglist"></span><h1>Class RuntimeConfigList<a class="headerlink" href="#class-runtimeconfiglist" title="Permalink to this heading">¶</a></h1>
+<ul class="simple">
+<li><p>Defined in <a class="reference internal" href="file_SNPE_RuntimeConfigList.hpp.html#file-snpe-runtimeconfiglist-hpp"><span class="std std-ref">File RuntimeConfigList.hpp</span></a></p></li>
+</ul>
+<div class="section" id="class-documentation">
+<h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this heading">¶</a></h2>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N5PSNPE17RuntimeConfigListE">
+<span id="_CPPv3N5PSNPE17RuntimeConfigListE"></span><span id="_CPPv2N5PSNPE17RuntimeConfigListE"></span><span id="PSNPE::RuntimeConfigList"></span><span class="target" id="classPSNPE_1_1RuntimeConfigList"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">RuntimeConfigList</span></span></span><a class="headerlink" href="#_CPPv4N5PSNPE17RuntimeConfigListE" title="Permalink to this definition">¶</a><br/></dt>
+<dd><div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5PSNPE17RuntimeConfigList17RuntimeConfigListEv">
+<span id="_CPPv3N5PSNPE17RuntimeConfigList17RuntimeConfigListEv"></span><span id="_CPPv2N5PSNPE17RuntimeConfigList17RuntimeConfigListEv"></span><span id="PSNPE::RuntimeConfigList::RuntimeConfigList"></span><span class="target" id="classPSNPE_1_1RuntimeConfigList_1a06cac3b906971f579366e579987144b9"></span><span class="sig-name descname"><span class="n"><span class="pre">RuntimeConfigList</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5PSNPE17RuntimeConfigList17RuntimeConfigListEv" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5PSNPE17RuntimeConfigList17RuntimeConfigListE6size_t">
+<span id="_CPPv3N5PSNPE17RuntimeConfigList17RuntimeConfigListE6size_t"></span><span id="_CPPv2N5PSNPE17RuntimeConfigList17RuntimeConfigListE6size_t"></span><span id="PSNPE::RuntimeConfigList::RuntimeConfigList__s"></span><span class="target" id="classPSNPE_1_1RuntimeConfigList_1a0c17265fbd71551ce95395f2983255e2"></span><span class="sig-name descname"><span class="n"><span class="pre">RuntimeConfigList</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">size</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5PSNPE17RuntimeConfigList17RuntimeConfigListE6size_t" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5PSNPE17RuntimeConfigList17RuntimeConfigListERR17RuntimeConfigList">
+<span id="_CPPv3N5PSNPE17RuntimeConfigList17RuntimeConfigListERR17RuntimeConfigList"></span><span id="_CPPv2N5PSNPE17RuntimeConfigList17RuntimeConfigListERR17RuntimeConfigList"></span><span id="PSNPE::RuntimeConfigList::RuntimeConfigList__RuntimeConfigListRR"></span><span class="target" id="classPSNPE_1_1RuntimeConfigList_1a7187265aaea41491383638678fb4a72d"></span><span class="sig-name descname"><span class="n"><span class="pre">RuntimeConfigList</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5PSNPE17RuntimeConfigList17RuntimeConfigListERR17RuntimeConfigList" title="PSNPE::RuntimeConfigList::RuntimeConfigList"><span class="n"><span class="pre">RuntimeConfigList</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">other</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4N5PSNPE17RuntimeConfigList17RuntimeConfigListERR17RuntimeConfigList" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5PSNPE17RuntimeConfigListaSERR17RuntimeConfigList">
+<span id="_CPPv3N5PSNPE17RuntimeConfigListaSERR17RuntimeConfigList"></span><span id="_CPPv2N5PSNPE17RuntimeConfigListaSERR17RuntimeConfigList"></span><span id="PSNPE::RuntimeConfigList::assign-operator__RuntimeConfigListRR"></span><span class="target" id="classPSNPE_1_1RuntimeConfigList_1a199fbdf0f065561ea571134d6c86df41"></span><a class="reference internal" href="#_CPPv4N5PSNPE17RuntimeConfigListE" title="PSNPE::RuntimeConfigList"><span class="n"><span class="pre">RuntimeConfigList</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">=</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5PSNPE17RuntimeConfigListE" title="PSNPE::RuntimeConfigList"><span class="n"><span class="pre">RuntimeConfigList</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">other</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4N5PSNPE17RuntimeConfigListaSERR17RuntimeConfigList" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5PSNPE17RuntimeConfigListaSERK17RuntimeConfigList">
+<span id="_CPPv3N5PSNPE17RuntimeConfigListaSERK17RuntimeConfigList"></span><span id="_CPPv2N5PSNPE17RuntimeConfigListaSERK17RuntimeConfigList"></span><span id="PSNPE::RuntimeConfigList::assign-operator__RuntimeConfigListCR"></span><span class="target" id="classPSNPE_1_1RuntimeConfigList_1acd5f7bc5f5ffb72d93e6785064d9b68b"></span><a class="reference internal" href="#_CPPv4N5PSNPE17RuntimeConfigListE" title="PSNPE::RuntimeConfigList"><span class="n"><span class="pre">RuntimeConfigList</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5PSNPE17RuntimeConfigListE" title="PSNPE::RuntimeConfigList"><span class="n"><span class="pre">RuntimeConfigList</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">other</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5PSNPE17RuntimeConfigListaSERK17RuntimeConfigList" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5PSNPE17RuntimeConfigList9push_backERK13RuntimeConfig">
+<span id="_CPPv3N5PSNPE17RuntimeConfigList9push_backERK13RuntimeConfig"></span><span id="_CPPv2N5PSNPE17RuntimeConfigList9push_backERK13RuntimeConfig"></span><span id="PSNPE::RuntimeConfigList::push_back__RuntimeConfigCR"></span><span class="target" id="classPSNPE_1_1RuntimeConfigList_1a3b5a5f696e655cf578e949b74ab9dfc4"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">push_back</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="structPSNPE_1_1RuntimeConfig.html#_CPPv4N5PSNPE13RuntimeConfigE" title="PSNPE::RuntimeConfig"><span class="n"><span class="pre">RuntimeConfig</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">runtimeConfig</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5PSNPE17RuntimeConfigList9push_backERK13RuntimeConfig" title="Permalink to this definition">¶</a><br/></dt>
+<dd><p>Push runtime config into runtime config list. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rcHandle</strong> – <strong>[in]</strong> Handle to access the runtime config.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Error code. Returns SNPE_SUCCESS if runtime config pushed successfully. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5PSNPE17RuntimeConfigListixE6size_t">
+<span id="_CPPv3N5PSNPE17RuntimeConfigListixE6size_t"></span><span id="_CPPv2N5PSNPE17RuntimeConfigListixE6size_t"></span><span id="PSNPE::RuntimeConfigList::subscript-operator__s"></span><span class="target" id="classPSNPE_1_1RuntimeConfigList_1adcec2a30c5bc86b062e352f9b16c8ab3"></span><a class="reference internal" href="structPSNPE_1_1RuntimeConfig.html#_CPPv4N5PSNPE13RuntimeConfigE" title="PSNPE::RuntimeConfig"><span class="n"><span class="pre">RuntimeConfig</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">[]</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">index</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5PSNPE17RuntimeConfigListixE6size_t" title="Permalink to this definition">¶</a><br/></dt>
+<dd><p>Copy-assigns the contents of rclSrcHandle into rclDstHandle. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>idx</strong> – <strong>[in]</strong> Destination <a class="reference internal" href="file_SNPE_RuntimeConfigList.hpp.html#classPSNPE_1_1RuntimeConfigList"><span class="std std-ref">RuntimeConfigList</span></a> handle.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>SNPE_SUCCESS on successful copy-assignment. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK5PSNPE17RuntimeConfigListixE6size_t">
+<span id="_CPPv3NK5PSNPE17RuntimeConfigListixE6size_t"></span><span id="_CPPv2NK5PSNPE17RuntimeConfigListixE6size_t"></span><span id="PSNPE::RuntimeConfigList::subscript-operator__sC"></span><span class="target" id="classPSNPE_1_1RuntimeConfigList_1a88e076952de5c753ace3a7de6f94cd2c"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="structPSNPE_1_1RuntimeConfig.html#_CPPv4N5PSNPE13RuntimeConfigE" title="PSNPE::RuntimeConfig"><span class="n"><span class="pre">RuntimeConfig</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">[]</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">index</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5PSNPE17RuntimeConfigListixE6size_t" title="Permalink to this definition">¶</a><br/></dt>
+<dd><p>Copy-assigns the contents of rclSrcHandle into rclDstHandle. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>idx</strong> – <strong>[in]</strong> Destination <a class="reference internal" href="file_SNPE_RuntimeConfigList.hpp.html#classPSNPE_1_1RuntimeConfigList"><span class="std std-ref">RuntimeConfigList</span></a> handle.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>SNPE_SUCCESS on successful copy-assignment. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK5PSNPE17RuntimeConfigList4sizeEv">
+<span id="_CPPv3NK5PSNPE17RuntimeConfigList4sizeEv"></span><span id="_CPPv2NK5PSNPE17RuntimeConfigList4sizeEv"></span><span id="PSNPE::RuntimeConfigList::sizeC"></span><span class="target" id="classPSNPE_1_1RuntimeConfigList_1a75fea8ebe8925ea80a765e2356c96ee0"></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">size</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4NK5PSNPE17RuntimeConfigList4sizeEv" title="Permalink to this definition">¶</a><br/></dt>
+<dd><p>Returns the number of runtime configs in the list. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Returns number of entries in the runtimeConfigList. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK5PSNPE17RuntimeConfigList8capacityEv">
+<span id="_CPPv3NK5PSNPE17RuntimeConfigList8capacityEv"></span><span id="_CPPv2NK5PSNPE17RuntimeConfigList8capacityEv"></span><span id="PSNPE::RuntimeConfigList::capacityC"></span><span class="target" id="classPSNPE_1_1RuntimeConfigList_1a165c84334d9d689ac20e26e00b6c38ce"></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">capacity</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4NK5PSNPE17RuntimeConfigList8capacityEv" title="Permalink to this definition">¶</a><br/></dt>
+<dd><p>Returns the capacity of runtime configs in the list. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Returns number of capacity in the runtimeConfigList. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5PSNPE17RuntimeConfigList5clearEv">
+<span id="_CPPv3N5PSNPE17RuntimeConfigList5clearEv"></span><span id="_CPPv2N5PSNPE17RuntimeConfigList5clearEv"></span><span id="PSNPE::RuntimeConfigList::clear"></span><span class="target" id="classPSNPE_1_1RuntimeConfigList_1a4f3ac66f1fb7074927f99e119ebdd720"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">clear</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4N5PSNPE17RuntimeConfigList5clearEv" title="Permalink to this definition">¶</a><br/></dt>
+<dd><p>Removes all runtime configs from the list. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Error code. Returns SNPE_SUCCESS if runtime config list is cleared successfully. </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        © Copyright 2020-2023, Qualcomm Technologies, Inc..
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+
+</body></html>

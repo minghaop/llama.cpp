@@ -1,0 +1,297 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>QNN LPAI Backend FAQs &mdash; Qualcomm® AI Runtime (QAIRT) SDKs</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/custom_css.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Qualcomm® AI Runtime (QAIRT) SDKs
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v2.46.0.260424121129
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">QAIRT</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../general/overview.html">Overview</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">SDKs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">QNN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../SNPE/index.html">SNPE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Genie/index.html">Genie</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Delegates</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../Delegates/TfLite/index.html">TFLite Delegate</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Qualcomm® AI Runtime (QAIRT) SDKs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>QNN LPAI Backend FAQs</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="qnn-lpai-backend-faqs">
+<h1>QNN LPAI Backend FAQs<a class="headerlink" href="#qnn-lpai-backend-faqs" title="Permalink to this heading">¶</a></h1>
+<p><strong>How do I create handles for QNN components?</strong></p>
+<p>To initialize QNN components, the following APIs must be used:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">QnnBackend_create()</span></code>: Instantiates the LPAI backend handle, which manages backend-specific operations and resources.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">QnnSystemContext_create()</span></code>: Creates the QNN system context handle, responsible for managing the graph lifecycle, context metadata, and execution environment.</p></li>
+</ul>
+<p>These handles are foundational for interacting with the QNN runtime and must be created before any graph execution or profiling.</p>
+<p><strong>What does it mean if ``QnnInterface_getProviders()`` returns zero providers?</strong></p>
+<p>A return value of zero providers typically indicates that the backend libraries are either missing, not properly installed, or not discoverable by the runtime.</p>
+<p>To resolve this issue:</p>
+<ul class="simple">
+<li><p>Ensure that the required backend shared libraries (e.g., <code class="docutils literal notranslate"><span class="pre">libQnnLpai.so</span></code>) are present on the target system.</p></li>
+<li><p>Verify that the environment variable <code class="docutils literal notranslate"><span class="pre">LD_LIBRARY_PATH</span></code> includes the directory containing the QNN backend libraries.</p></li>
+<li><p>Confirm that the backend ID <code class="docutils literal notranslate"><span class="pre">QNN_LPAI_BACKEND_ID</span></code> is correctly specified when querying providers.</p></li>
+</ul>
+<p><strong>Why is buffer alignment important?</strong></p>
+<p>Proper buffer alignment is essential to ensure correct execution and compatibility with the LPAI backend. Misaligned buffers can lead to invalid memory access and runtime errors, especially when interfacing with hardware accelerators that enforce strict alignment constraints.</p>
+<p>To determine alignment requirements:</p>
+<ul class="simple">
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">QnnBackend_getProperty()</span></code> with the property <code class="docutils literal notranslate"><span class="pre">QNN_LPAI_BACKEND_GET_PROP_ALIGNMENT_REQ</span></code>.</p></li>
+<li><p>This query returns:</p>
+<ul>
+<li><p><strong>Start Address Alignment</strong>: Specifies the required alignment for the base address of each buffer.</p></li>
+<li><p><strong>Buffer Size Alignment</strong>: Specifies the required alignment for the total size of each buffer.</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>What are the consequences of not meeting alignment requirements?</strong></p>
+<p>Failure to comply with alignment constraints may result in:</p>
+<ul class="simple">
+<li><p>Application crashes due to invalid or misaligned memory access.</p></li>
+<li><p>Backend API errors during buffer registration or graph execution.</p></li>
+<li><p>Incorrect or undefined inference results due to improper memory handling.</p></li>
+</ul>
+<p>It is strongly recommended to query and apply alignment requirements before allocating memory for input, output, or intermediate buffers.</p>
+<p><strong>Can multiple backends be used concurrently?</strong></p>
+<p>No. QNN supports only one backend per context. Each context is tightly coupled with a single backend implementation.</p>
+<p>To use multiple backends within the same application:</p>
+<ul class="simple">
+<li><p>Create separate QNN contexts for each backend.</p></li>
+<li><p>Ensure that each context is independently initialized and managed.</p></li>
+</ul>
+<p><strong>Can graphs be modified after context finalization?</strong></p>
+<p>No. Once a context is created from a binary using <code class="docutils literal notranslate"><span class="pre">QnnContext_createFromBinary()</span></code>, it becomes immutable. This means:</p>
+<ul class="simple">
+<li><p>The graph structure, layers, and parameters cannot be modified.</p></li>
+<li><p>Any changes to the model require regenerating the context binary and reinitializing the context.</p></li>
+</ul>
+<p>This immutability ensures consistency and performance optimization during inference.</p>
+<p><strong>Is ``QnnGraph_execute()`` a blocking call?</strong></p>
+<p>Yes. The <code class="docutils literal notranslate"><span class="pre">QnnGraph_execute()</span></code> API is synchronous and blocking. It will not return control to the caller until the entire graph execution is complete.</p>
+<ul class="simple">
+<li><p>This behavior ensures deterministic execution and simplifies synchronization.</p></li>
+<li><p>If asynchronous execution is required, it must be implemented at the application level using separate threads or processes.</p></li>
+</ul>
+<p><strong>Where is the output stored after execution?</strong></p>
+<p>Output data is written to the client-provided output buffers that were registered during initialization. These buffers must:</p>
+<ul class="simple">
+<li><p>Be properly allocated and aligned according to backend requirements.</p></li>
+<li><p>Remain valid and accessible throughout the execution lifecycle.</p></li>
+</ul>
+<p>The application is responsible for managing the lifecycle and memory of these buffers.</p>
+<p><strong>Is the order of deinitialization important?</strong></p>
+<p>Yes. Resources must be released in the reverse order of their allocation to avoid dependency violations or memory access errors.</p>
+<p>Recommended deinitialization order:</p>
+<ol class="arabic simple">
+<li><p>Release graph and context resources.</p></li>
+<li><p>Destroy the system context handle.</p></li>
+<li><p>Destroy the backend handle.</p></li>
+</ol>
+<p>Improper deinitialization may result in memory leaks, dangling pointers, or undefined behavior.</p>
+<p><strong>Can a context be reused after deinitialization?</strong></p>
+<p>No. Once a context is released using <code class="docutils literal notranslate"><span class="pre">QnnContext_free()</span></code>, it is no longer valid and cannot be reused.</p>
+<ul class="simple">
+<li><p>To execute the same model again, the context must be recreated using <code class="docutils literal notranslate"><span class="pre">QnnContext_createFromBinary()</span></code>.</p></li>
+<li><p>Ensure that all associated resources are reinitialized as needed.</p></li>
+</ul>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020-2025, Qualcomm Technologies, Inc..
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

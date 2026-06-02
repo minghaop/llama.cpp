@@ -1,0 +1,13 @@
+{
+  "graphs" : [
+    {
+      "graph_name": ["qnn_model"],
+      "use_qmx" : true
+    }
+  ],
+"context"  : [
+    {
+      "use_qmx" : false
+    }
+  ]
+}

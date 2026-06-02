@@ -1,0 +1,13 @@
+{
+    "Artifacts": {
+        "aarch64-openwrt-linux-gcc13.3": [
+            "qnn-net-run",
+            "libQnnCpu.so",
+            "libQnnSaver.so",
+            "qnn-profile-viewer"
+        ],
+        "x86_64-linux-clang": [
+            "qnn-profile-viewer"
+            ]
+    }
+}

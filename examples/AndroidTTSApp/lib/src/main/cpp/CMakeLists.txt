@@ -38,6 +38,7 @@ add_subdirectory(${TOKENIZERS_CPP_SRC} build-tokenizers-cpp)
 
 add_library(${CMAKE_PROJECT_NAME} SHARED
         ai_chat.cpp
+        mnn_runtime_jni.cpp
         qwen_tokenizer_jni.cpp
         litert_native_flow_jni.cpp)
 
@@ -49,6 +50,8 @@ target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE
 
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
         ${CMAKE_CURRENT_LIST_DIR}
+        ${CMAKE_CURRENT_LIST_DIR}/third_party_mnn/include
+        ${CMAKE_CURRENT_LIST_DIR}/third_party_mnn
         ${LLAMA_SRC}
         ${LLAMA_SRC}/common
         ${LLAMA_SRC}/include
@@ -56,10 +59,24 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
         ${LLAMA_SRC}/ggml/src
         ${CMAKE_CURRENT_LIST_DIR}/third_party_litert_c)
 
+set(MNN_JNILIB_DIR ${CMAKE_CURRENT_LIST_DIR}/../jniLibs/${ANDROID_ABI})
+
+add_library(MNN SHARED IMPORTED)
+set_target_properties(MNN PROPERTIES IMPORTED_LOCATION ${MNN_JNILIB_DIR}/libMNN.so)
+
+add_library(MNN_Express SHARED IMPORTED)
+set_target_properties(MNN_Express PROPERTIES IMPORTED_LOCATION ${MNN_JNILIB_DIR}/libMNN_Express.so)
+
+add_library(llm SHARED IMPORTED)
+set_target_properties(llm PROPERTIES IMPORTED_LOCATION ${MNN_JNILIB_DIR}/libllm.so)
+
 target_link_libraries(${CMAKE_PROJECT_NAME}
         llama
         common
         tokenizers_cpp
+        MNN
+        MNN_Express
+        llm
         android
         log
         EGL

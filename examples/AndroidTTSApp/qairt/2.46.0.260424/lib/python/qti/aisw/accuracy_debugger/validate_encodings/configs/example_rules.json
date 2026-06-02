@@ -1,0 +1,131 @@
+{
+  "_comment": [
+    "This file is an EXAMPLE TEMPLATE showing how to write custom validation rules.",
+    "When --rule_config is not supplied, the built-in rules run automatically.",
+    "When --rule_config IS supplied, only the rules defined in this file run —",
+    "built-in rules are replaced entirely by whatever you list here.",
+    "Copy this file, adapt the examples to your model, and pass the path via",
+    "--rule_config when running validate_encoding."
+  ],
+  "description": "Example custom rule configuration — annotated template for customers",
+  "version": "1.0",
+  "validation_rules": [
+    {
+      "_comment": [
+        "EXAMPLE 1: Match tensors by name pattern and enforce a specific bitwidth.",
+        "tensor_name_pattern is a case-insensitive Python regex applied to the full tensor name.",
+        "tensor_type restricts the rule to 'weight', 'bias', or 'activation' tensors."
+      ],
+      "name": "attention_weights_4bit_symmetric",
+      "type": "custom",
+      "enabled": true,
+      "description": "Attention weights must use 4-bit symmetric quantization",
+      "conditions": {
+        "tensor_name_pattern": "(attention|attn).*weight",
+        "tensor_type": "weight"
+      },
+      "checks": {
+        "bitwidth": 4,
+        "is_symm": true
+      }
+    },
+    {
+      "_comment": [
+        "EXAMPLE 2: Match tensors by layer type keyword and enforce bitwidth + symmetry.",
+        "layer_types is a list of keywords; the rule applies when the tensor name contains",
+        "at least one of them (case-insensitive)."
+      ],
+      "name": "embedding_weights_8bit_asymmetric",
+      "type": "custom",
+      "enabled": true,
+      "description": "Embedding weights must use 8-bit asymmetric quantization",
+      "conditions": {
+        "layer_types": ["embed"],
+        "tensor_type": "weight"
+      },
+      "checks": {
+        "bitwidth": 8,
+        "is_symm": false
+      }
+    },
+    {
+      "_comment": [
+        "EXAMPLE 3: Enforce per-channel quantization by requiring more than one channel.",
+        "min_channels: 2 means the tensor must have at least 2 quantization channels,",
+        "i.e. per-channel (not per-tensor) quantization."
+      ],
+      "name": "linear_weights_per_channel",
+      "type": "custom",
+      "enabled": true,
+      "description": "Linear layer weights must use per-channel quantization",
+      "conditions": {
+        "layer_types": ["linear", "dense", "fc"],
+        "tensor_type": "weight"
+      },
+      "checks": {
+        "min_channels": 2
+      }
+    },
+    {
+      "_comment": [
+        "EXAMPLE 4: Validate that quantization scales fall within an expected range.",
+        "scale_range min and max are inclusive bounds on each per-channel scale value.",
+        "Use this to catch tensors whose scales are unexpectedly large or small."
+      ],
+      "name": "conv_weight_scale_range",
+      "type": "custom",
+      "enabled": true,
+      "description": "Convolution weight scales must be in [0.001, 0.1]",
+      "conditions": {
+        "layer_types": ["conv"],
+        "tensor_type": "weight"
+      },
+      "checks": {
+        "scale_range": {
+          "min": 0.001,
+          "max": 0.1
+        }
+      }
+    },
+    {
+      "_comment": [
+        "EXAMPLE 5: Combine a name pattern with a layer-type list (AND logic).",
+        "Both conditions must be satisfied for the rule to apply to a tensor.",
+        "Set enabled to false to suppress a rule without deleting it."
+      ],
+      "name": "lm_head_weights_4bit",
+      "type": "custom",
+      "enabled": false,
+      "description": "LM-head weights must use 4-bit quantization — disabled in this example",
+      "conditions": {
+        "tensor_name_pattern": "lm_head.*weight",
+        "layer_types": ["linear"]
+      },
+      "checks": {
+        "bitwidth": 4
+      }
+    }
+  ],
+  "context_aware_rules": [
+    {
+      "_comment": [
+        "EXAMPLE 6: Context-aware custom rule — requires --dlc_file_path so the tool",
+        "can traverse the graph and identify the predecessor of each activation tensor.",
+        "Use offset_range to verify that quantization zero-points are within bounds."
+      ],
+      "name": "activation_offset_range",
+      "type": "custom",
+      "enabled": true,
+      "description": "Activation tensor offsets must be in [-128, 127] (int8 range)",
+      "conditions": {
+        "tensor_type": "activation"
+      },
+      "checks": {
+        "offset_range": {
+          "min": -128,
+          "max": 127
+        }
+      }
+    }
+  ]
+}

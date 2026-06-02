@@ -1,0 +1,390 @@
+#include <jni.h>
+#include <android/log.h>
+
+#include <algorithm>
+#include <fstream>
+#include <memory>
+#include <string>
+#include <utility>
+#include <vector>
+
+#include <MNN/Interpreter.hpp>
+#include <MNN/expr/ExecutorScope.hpp>
+#include <MNN/expr/Module.hpp>
+#include <MNN/expr/NeuralNetWorkOp.hpp>
+
+#define protected public
+#include "llm/llm.hpp"
+#undef protected
+
+namespace {
+
+constexpr const char *kLogTag = "ai-chat-mnn";
+
+using MNN::BackendConfig;
+using MNN::Express::Executor;
+using MNN::Express::VARP;
+using MNN::Interpreter;
+using MNN::ScheduleConfig;
+using MNN::Session;
+using MNN::Tensor;
+using MNN::Transformer::Llm;
+
+constexpr int kLlmHiddenSize = 896;
+
+struct LlmHandle {
+    Llm *llm = nullptr;
+
+    ~LlmHandle() {
+        if (llm != nullptr) {
+            Llm::destroy(llm);
+            llm = nullptr;
+        }
+    }
+};
+
+struct HifiGanHandle {
+    std::unique_ptr<Interpreter, void (*)(Interpreter *)> interpreter{
+        nullptr,
+        Interpreter::destroy,
+    };
+    Session *session = nullptr;
+};
+
+std::string jstring_to_std(JNIEnv *env, jstring value) {
+    if (value == nullptr) {
+        return {};
+    }
+    const char *raw = env->GetStringUTFChars(value, nullptr);
+    std::string out = raw != nullptr ? raw : "";
+    if (raw != nullptr) {
+        env->ReleaseStringUTFChars(value, raw);
+    }
+    return out;
+}
+
+void throw_illegal_state(JNIEnv *env, const std::string &message) {
+    jclass ex = env->FindClass("java/lang/IllegalStateException");
+    if (ex != nullptr) {
+        env->ThrowNew(ex, message.c_str());
+    }
+}
+
+bool ensure_tokenizer_compat(const std::string &config_path) {
+    const auto slash = config_path.find_last_of("/\\");
+    const std::string dir = slash == std::string::npos ? "." : config_path.substr(0, slash);
+    const std::string mtok_path = dir + "/tokenizer.mtok";
+    const std::string txt_path = dir + "/tokenizer.txt";
+
+    std::ifstream mtok(mtok_path, std::ios::binary);
+    if (mtok.good()) {
+        return true;
+    }
+    std::ifstream txt(txt_path, std::ios::binary);
+    if (!txt.good()) {
+        return false;
+    }
+    std::ofstream mtok_out(mtok_path, std::ios::binary);
+    mtok_out << txt.rdbuf();
+    const bool ok = mtok_out.good();
+    __android_log_print(
+            ANDROID_LOG_INFO,
+            kLogTag,
+            "%s: tokenizer compat copy %s -> %s, ok=%d",
+            __func__,
+            txt_path.c_str(),
+            mtok_path.c_str(),
+            ok ? 1 : 0);
+    return ok;
+}
+
+std::string build_llm_override_json(int num_threads) {
+    const int safe_threads = std::max(1, num_threads);
+    return std::string("{") +
+           "\"thread_num\":" + std::to_string(safe_threads) + "," +
+           "\"backend_type\":\"cpu\"," +
+           "\"hidden_states\":true" +
+           "}";
+}
+
+std::vector<int> jint_array_to_vector(JNIEnv *env, jintArray array) {
+    const jsize size = array != nullptr ? env->GetArrayLength(array) : 0;
+    std::vector<int> out(size);
+    if (size > 0) {
+        env->GetIntArrayRegion(array, 0, size, out.data());
+    }
+    return out;
+}
+
+std::vector<float> jfloat_array_to_vector(JNIEnv *env, jfloatArray array) {
+    const jsize size = array != nullptr ? env->GetArrayLength(array) : 0;
+    std::vector<float> out(size);
+    if (size > 0) {
+        env->GetFloatArrayRegion(array, 0, size, out.data());
+    }
+    return out;
+}
+
+jfloatArray vector_to_jfloat_array(JNIEnv *env, const std::vector<float> &values) {
+    jfloatArray out = env->NewFloatArray(static_cast<jsize>(values.size()));
+    if (out != nullptr && !values.empty()) {
+        env->SetFloatArrayRegion(out, 0, static_cast<jsize>(values.size()), values.data());
+    }
+    return out;
+}
+
+Tensor *resolve_output_tensor(Interpreter *interpreter, Session *session, int output_index) {
+    if (interpreter == nullptr || session == nullptr) {
+        return nullptr;
+    }
+    if (output_index <= 0) {
+        Tensor *first = interpreter->getSessionOutput(session, nullptr);
+        if (first != nullptr) {
+            return first;
+        }
+    }
+    const auto &outputs = interpreter->getSessionOutputAll(session);
+    if (outputs.empty()) {
+        return nullptr;
+    }
+    const size_t wanted = std::min<size_t>(std::max(output_index, 0), outputs.size() - 1);
+    auto it = outputs.begin();
+    std::advance(it, static_cast<long>(wanted));
+    return it->second;
+}
+
+}  // namespace
+
+extern "C" JNIEXPORT jlong JNICALL
+Java_com_example_llama_MnnLlmRunner_nativeLoadModel(JNIEnv *env, jclass, jstring config_path_, jint num_threads) {
+    const std::string config_path = jstring_to_std(env, config_path_);
+    if (config_path.empty()) {
+        throw_illegal_state(env, "MNN LLM config path is empty");
+        return 0;
+    }
+
+    ensure_tokenizer_compat(config_path);
+
+    std::unique_ptr<LlmHandle> handle(new LlmHandle());
+    handle->llm = Llm::createLLM(config_path);
+    if (handle->llm == nullptr) {
+        throw_illegal_state(env, "Llm::createLLM failed: " + config_path);
+        return 0;
+    }
+
+    const std::string override_json = build_llm_override_json(num_threads);
+    handle->llm->set_config(override_json);
+    __android_log_print(
+            ANDROID_LOG_INFO,
+            kLogTag,
+            "%s: config=%s override=%s",
+            __func__,
+            config_path.c_str(),
+            override_json.c_str());
+
+    if (!handle->llm->load()) {
+        throw_illegal_state(env, "MNN LLM load failed: " + config_path);
+        return 0;
+    }
+
+    return reinterpret_cast<jlong>(handle.release());
+}
+
+extern "C" JNIEXPORT void JNICALL
+Java_com_example_llama_MnnLlmRunner_nativeUnloadModel(JNIEnv *, jclass, jlong handle) {
+    delete reinterpret_cast<LlmHandle *>(handle);
+}
+
+extern "C" JNIEXPORT jint JNICALL
+Java_com_example_llama_MnnLlmRunner_nativeResetKvCache(JNIEnv *, jclass, jlong handle) {
+    auto *runner = reinterpret_cast<LlmHandle *>(handle);
+    if (runner == nullptr || runner->llm == nullptr) {
+        return -1;
+    }
+    runner->llm->reset();
+    return 0;
+}
+
+extern "C" JNIEXPORT jfloatArray JNICALL
+Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings(
+        JNIEnv *env,
+        jclass,
+        jlong handle,
+        jfloatArray input_embeddings_,
+        jint n_past) {
+    auto *runner = reinterpret_cast<LlmHandle *>(handle);
+    if (runner == nullptr || runner->llm == nullptr) {
+        throw_illegal_state(env, "MNN LLM runner is not loaded");
+        return nullptr;
+    }
+
+    std::vector<float> input_embeddings = jfloat_array_to_vector(env, input_embeddings_);
+    if (input_embeddings.empty() || input_embeddings.size() % kLlmHiddenSize != 0) {
+        throw_illegal_state(
+                env,
+                "MNN LLM embedding input must be a multiple of 896, got=" + std::to_string(input_embeddings.size()));
+        return nullptr;
+    }
+
+    const int seq_len = static_cast<int>(input_embeddings.size() / kLlmHiddenSize);
+    __android_log_print(
+            ANDROID_LOG_INFO,
+            kLogTag,
+            "%s: seq_len=%d n_past=%d",
+            __func__,
+            seq_len,
+            static_cast<int>(n_past));
+
+    VARP input_var = MNN::Express::_Const(
+            input_embeddings.data(),
+            {seq_len, kLlmHiddenSize, 1, 1},
+            MNN::Express::NCHW,
+            halide_type_of<float>());
+    auto outputs = runner->llm->forwardVec(input_var);
+    if (outputs.size() < 2 || outputs[1].get() == nullptr || outputs[1]->getInfo() == nullptr) {
+        throw_illegal_state(env, "MNN LLM forwardVec did not return hidden_states");
+        return nullptr;
+    }
+
+    VARP hidden_states = outputs[1];
+    const auto *info = hidden_states->getInfo();
+    const int element_count = static_cast<int>(info->size);
+    const float *data = hidden_states->readMap<float>();
+    if (data == nullptr || element_count <= 0) {
+        throw_illegal_state(env, "MNN LLM hidden_states output is empty");
+        return nullptr;
+    }
+
+    return vector_to_jfloat_array(env, std::vector<float>(data, data + element_count));
+}
+
+extern "C" JNIEXPORT jlong JNICALL
+Java_com_example_llama_MnnHifiGanRunner_nativeLoadModel(JNIEnv *env, jclass, jstring model_path_, jint) {
+    const std::string model_path = jstring_to_std(env, model_path_);
+    if (model_path.empty()) {
+        throw_illegal_state(env, "HifiGan model path is empty");
+        return 0;
+    }
+
+    std::unique_ptr<HifiGanHandle> handle(new HifiGanHandle());
+    handle->interpreter.reset(Interpreter::createFromFile(model_path.c_str()));
+    if (!handle->interpreter) {
+        throw_illegal_state(env, "Failed to create MNN interpreter for " + model_path);
+        return 0;
+    }
+
+    ScheduleConfig schedule{};
+    schedule.type = MNN_FORWARD_VULKAN;
+    schedule.mode = MNN_GPU_TUNING_WIDE | MNN_GPU_RECORD_BATCH;
+
+    BackendConfig backend{};
+    backend.power = BackendConfig::Power_High;
+    backend.memory = BackendConfig::Memory_Normal;
+    backend.precision = BackendConfig::Precision_High;
+    schedule.backendConfig = &backend;
+
+    handle->session = handle->interpreter->createSession(schedule);
+    if (handle->session == nullptr) {
+        throw_illegal_state(env, "Failed to create Vulkan session for hifigan: " + model_path);
+        return 0;
+    }
+
+    __android_log_print(
+            ANDROID_LOG_INFO,
+            kLogTag,
+            "%s: loaded hifigan model=%s backend=Vulkan",
+            __func__,
+            model_path.c_str());
+    return reinterpret_cast<jlong>(handle.release());
+}
+
+extern "C" JNIEXPORT void JNICALL
+Java_com_example_llama_MnnHifiGanRunner_nativeUnloadModel(JNIEnv *, jclass, jlong handle) {
+    delete reinterpret_cast<HifiGanHandle *>(handle);
+}
+
+extern "C" JNIEXPORT jfloatArray JNICALL
+Java_com_example_llama_MnnHifiGanRunner_nativeForward(
+        JNIEnv *env,
+        jclass,
+        jlong handle,
+        jfloatArray input_,
+        jintArray shape_,
+        jint output_index) {
+    auto *runner = reinterpret_cast<HifiGanHandle *>(handle);
+    if (runner == nullptr || !runner->interpreter || runner->session == nullptr) {
+        throw_illegal_state(env, "MNN HifiGan runner is not loaded");
+        return nullptr;
+    }
+
+    std::vector<float> input = jfloat_array_to_vector(env, input_);
+    std::vector<int> shape = jint_array_to_vector(env, shape_);
+    if (input.empty() || shape.empty()) {
+        throw_illegal_state(env, "HifiGan input/shape cannot be empty");
+        return nullptr;
+    }
+
+    long long expected = 1;
+    for (int dim : shape) {
+        if (dim <= 0) {
+            throw_illegal_state(env, "HifiGan shape contains non-positive dimension");
+            return nullptr;
+        }
+        expected *= dim;
+    }
+    if (expected != static_cast<long long>(input.size())) {
+        throw_illegal_state(
+                env,
+                "HifiGan input size mismatch: input=" + std::to_string(input.size()) +
+                        " shape_elems=" + std::to_string(expected));
+        return nullptr;
+    }
+
+    Tensor *input_tensor = runner->interpreter->getSessionInput(runner->session, nullptr);
+    if (input_tensor == nullptr) {
+        const auto &all_inputs = runner->interpreter->getSessionInputAll(runner->session);
+        if (!all_inputs.empty()) {
+            input_tensor = all_inputs.begin()->second;
+        }
+    }
+    if (input_tensor == nullptr) {
+        throw_illegal_state(env, "HifiGan session input tensor not found");
+        return nullptr;
+    }
+
+    runner->interpreter->resizeTensor(input_tensor, shape);
+    runner->interpreter->resizeSession(runner->session);
+
+    std::unique_ptr<Tensor> host_input(Tensor::create<float>(shape, input.data(), input_tensor->getDimensionType()));
+    if (!input_tensor->copyFromHostTensor(host_input.get())) {
+        throw_illegal_state(env, "Failed to copy HifiGan input tensor to device");
+        return nullptr;
+    }
+
+    const auto run_code = runner->interpreter->runSession(runner->session);
+    if (run_code != MNN::NO_ERROR) {
+        throw_illegal_state(env, "HifiGan Vulkan session run failed");
+        return nullptr;
+    }
+
+    Tensor *output_tensor = resolve_output_tensor(runner->interpreter.get(), runner->session, output_index);
+    if (output_tensor == nullptr) {
+        throw_illegal_state(env, "HifiGan output tensor not found");
+        return nullptr;
+    }
+
+    std::unique_ptr<Tensor> host_output(Tensor::createHostTensorFromDevice(output_tensor, true));
+    if (!output_tensor->copyToHostTensor(host_output.get())) {
+        throw_illegal_state(env, "Failed to copy HifiGan output tensor to host");
+        return nullptr;
+    }
+
+    const int element_count = host_output->elementSize();
+    const float *data = host_output->host<float>();
+    if (data == nullptr || element_count <= 0) {
+        throw_illegal_state(env, "HifiGan output tensor is empty");
+        return nullptr;
+    }
+
+    return vector_to_jfloat_array(env, std::vector<float>(data, data + element_count));
+}

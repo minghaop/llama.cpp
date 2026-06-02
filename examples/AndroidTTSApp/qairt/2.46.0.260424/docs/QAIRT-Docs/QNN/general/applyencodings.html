@@ -1,0 +1,914 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>QAIRT Quantization Specification &mdash; Qualcomm® AI Runtime (QAIRT) SDKs</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/custom_css.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Tutorials" href="tutorials.html" />
+    <link rel="prev" title="Quantization" href="quantization.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Qualcomm® AI Runtime (QAIRT) SDKs
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v2.46.0.260424121129
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">QAIRT</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../general/overview.html">Overview</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">SDKs</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">QNN</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="setup.html">Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="backend.html">Backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="op_packages.html">Op Packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tools.html">Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="converters.html">Converters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quantization.html">Quantization</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">QAIRT Quantization Specification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
+<li class="toctree-l2"><a class="reference internal" href="benchmarking.html">Benchmarking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operations.html">Operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html">API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="glossary.html">Glossary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="revision_history.html">Revision History</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../SNPE/index.html">SNPE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Genie/index.html">Genie</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Delegates</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../Delegates/TfLite/index.html">TFLite Delegate</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Qualcomm® AI Runtime (QAIRT) SDKs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">⌂</a> &raquo;</li>
+        
+      <li>QAIRT Quantization Specification</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="qairt-quantization-specification">
+<h1>QAIRT Quantization Specification<a class="headerlink" href="#qairt-quantization-specification" title="Permalink to this heading">¶</a></h1>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 34%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Document Version</strong></p></th>
+<th class="head"><p><strong>QAIRT SDK Release</strong></p></th>
+<th class="head"><p><strong>AIMET SDK Release</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>v0.1 (Alpha)</p></td>
+<td><p>v2.36</p></td>
+<td><p>v2.3</p></td>
+</tr>
+</tbody>
+</table>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#introduction" id="id5">Introduction</a></p></li>
+<li><p><a class="reference internal" href="#converter-quantization-workflow" id="id6">Converter quantization workflow</a></p>
+<ul>
+<li><p><a class="reference internal" href="#quantization-inputs" id="id7">Quantization inputs</a></p></li>
+<li><p><a class="reference internal" href="#quantization-processing" id="id8">Quantization processing</a></p></li>
+<li><p><a class="reference internal" href="#quantization-outputs" id="id9">Quantization outputs</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#target-specific-processing" id="id10">Target specific processing</a></p>
+<ul>
+<li><p><a class="reference internal" href="#handle-data-movement-ops" id="id11">Handle data movement ops</a></p></li>
+<li><p><a class="reference internal" href="#tag-super-groups" id="id12">Tag super groups</a></p></li>
+<li><p><a class="reference internal" href="#select-op-precision" id="id13">Select op precision</a></p></li>
+<li><p><a class="reference internal" href="#insert-converts" id="id14">Insert converts</a></p></li>
+<li><p><a class="reference internal" href="#quantize-static-tensors" id="id15">Quantize static tensors</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#appendix-a-classification-of-quantization-techniques" id="id16">Appendix A: Classification of quantization techniques</a></p></li>
+<li><p><a class="reference internal" href="#appendix-b-quantized-model-formats" id="id17">Appendix B: Quantized model formats</a></p>
+<ul>
+<li><p><a class="reference internal" href="#onnx" id="id18">ONNX</a></p></li>
+<li><p><a class="reference internal" href="#tflite" id="id19">TFLite</a></p></li>
+<li><p><a class="reference internal" href="#tensorflow" id="id20">TensorFlow</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#appendix-c-json-schema-version-2-0-0" id="id21">Appendix C: JSON schema version 2.0.0</a></p>
+<ul>
+<li><p><a class="reference internal" href="#per-tensor-quantization-encoding-example" id="id22">Per tensor quantization encoding example</a></p></li>
+<li><p><a class="reference internal" href="#per-channel-quantization-encoding-example" id="id23">Per channel quantization encoding example</a></p></li>
+<li><p><a class="reference internal" href="#blockwise-quantization-encoding-bq-example" id="id24">Blockwise quantization encoding (BQ) example</a></p></li>
+<li><p><a class="reference internal" href="#blockwise-quantization-encoding-bq-with-float-offset-example" id="id25">Blockwise quantization encoding (BQ) with float offset example</a></p></li>
+<li><p><a class="reference internal" href="#low-power-blockwise-quantization-lpbq-example" id="id26">Low power blockwise quantization (LPBQ) example</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#appendix-d-super-groups" id="id27">Appendix D: Super groups</a></p>
+<ul>
+<li><p><a class="reference internal" href="#htp-super-groups" id="id28">HTP super groups</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#appendix-e-data-movement-ops" id="id29">Appendix E: Data movement ops</a></p>
+<ul>
+<li><p><a class="reference internal" href="#htp-data-movement-ops" id="id30">HTP data movement ops</a></p></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id5">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this heading">¶</a></h2>
+<p>Most neural network models use 32-bit floating point representation for
+weights and activations. However, these high-precision representations
+are often optimized for inference, especially when deploying models on
+edge devices where available memory and compute resources are more
+limited. Quantization is a model compression technique used to lower
+memory footprint, power consumption, data transfers and improve
+inference speed by reducing the precision of the model’s weights and
+activations with minimal accuracy loss. For more information on
+quantization techniques refer to the Appendix of this document.</p>
+<p>The goals of this document are:</p>
+<ul class="simple">
+<li><p>To describe the QAIRT workflow for quantized networks and explain how
+quantization data is processed by the QAIRT stack.</p></li>
+<li><p>To document the quantization encoding formats supported by the QAIRT
+stack for benefit of customers using third-party quantization
+tools. Note that Qualcomm’s AI Model Efficiency Toolkit (AIMET)
+supports these output formats for seamless operation with QAIRT.</p></li>
+</ul>
+</div>
+<div class="section" id="converter-quantization-workflow">
+<h2><a class="toc-backref" href="#id6">Converter quantization workflow</a><a class="headerlink" href="#converter-quantization-workflow" title="Permalink to this heading">¶</a></h2>
+<div class="figure align-default" id="id1">
+<img alt="../_static/resources/AE_fig1.png" src="../_static/resources/AE_fig1.png" />
+<p class="caption"><span class="caption-text">Quantization workflow</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</div>
+<p>The above figure shows the high-level workflow for converting from framework
+model format to a Deep Learning Contained (DLC). The <em>qairt-converter</em>
+converts a model for source framework format into a DLC which can be used for inference.</p>
+<div class="section" id="quantization-inputs">
+<h3><a class="toc-backref" href="#id7">Quantization inputs</a><a class="headerlink" href="#quantization-inputs" title="Permalink to this heading">¶</a></h3>
+<p>The <em>qairt-converter</em> accepts the following inputs:</p>
+<ul class="simple">
+<li><p><strong>Model input (mandatory)</strong></p>
+<ul>
+<li><p><strong>Float model:</strong> A 32-bit floating point model (no quantization
+information)</p></li>
+<li><p><strong>Quantized model:</strong> A model containing quantized nodes. Ex:
+TFLite models.</p></li>
+<li><p><strong>Q-DQ model:</strong> A model where quantization information is
+signaled using Q-DQ nodes. E.g. an ONNX model with QuantizeLinear,
+DequantizeLinear</p></li>
+</ul>
+</li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For more details see <a class="reference external" href="#appendix-b-quantized-model-formats">Appendix B: Quantized Model
+Formats</a></p>
+</div>
+<ul class="simple">
+<li><p><strong>Quantization Encoding Overrides (optional)</strong></p>
+<ul>
+<li><p><strong>Encoding Overrides:</strong> a JSON file with quantization information
+for each tensor may be passed using the <em>–quantization_overrides</em>
+option. Quantization information in the encodings override file
+will take precedence over information in source model file.
+See <a class="reference external" href="https://docs.qualcomm.com/bundle/publicresource/topics/80-63442-10/quantization.html#quantization-overrides">Quantization
+Overrides</a>
+in the QAIRT SDK documentation for detailed information.</p></li>
+<li><p>Note that AIMET can be
+used to perform quantization and to produce a quantization
+overrides JSON file. Quantization information from third-party
+tools can be specified in the same format.</p></li>
+<li><p>See <a class="reference external" href="#appendix-c-json-schema-version-2-0-0">JSON Schema Version 2.0.0</a> for a
+detailed description of the encoding file format.</p></li>
+</ul>
+</li>
+<li><p><strong>Target (optional)</strong></p>
+<ul>
+<li><p>The target backend (<em>HTP, LPAI</em>, etc) can be specified using
+<em>–target_backend</em> option. Run <em>qairt-converter
+–help</em> for additional details on it. When the target device is
+provided, additional target-specific processing during the
+conversion processing is performed. Without target device
+information, only target-agnostic quantization will be performed.</p></li>
+</ul>
+</li>
+</ul>
+<p>Examples commands:</p>
+<ul>
+<li><div class="line-block">
+<div class="line">Converting a 32-bit floating-point model with quantization
+overrides file</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">qairt-converter</span> <span class="pre">-i</span> <span class="pre">model.onnx</span> <span class="pre">--quantization_overrides</span>
+<span class="pre">model.encodings</span> <span class="pre">–-target_backend=HTP</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">Converting an ONNX Q-DQ model</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">qairt-converter</span> <span class="pre">-i</span> <span class="pre">model_qdq.onnx</span> <span class="pre">–-target_backend=HTP</span></code></div>
+</div>
+</li>
+</ul>
+</div>
+<div class="section" id="quantization-processing">
+<h3><a class="toc-backref" href="#id8">Quantization processing</a><a class="headerlink" href="#quantization-processing" title="Permalink to this heading">¶</a></h3>
+<p>Quantization processing by the <em>qairt-converter</em> consists of two steps:
+quantization extraction and quantization adaptation.</p>
+<p>The <em>qairt-converter</em> first extracts quantization encoding
+information from the source model and encoding overrides file (if
+present). Note that quantization information in the source model can
+exist at different granularities such as per-tensor, per-channel,
+per-block, etc… See <a class="reference external" href="#appendix-a-classification-of-quantization-techniques">Classification of Quantization
+Techniques</a> for more information.</p>
+<p>If a tensor has encoding information in both the model and
+overrides file, the overrides file will take precedence. See <a class="reference external" href="#appendix-c-json-schema-version-2-0-0">JSON
+Schema</a> and <a class="reference external" href="#appendix-b-quantized-model-formats">Quantized Model
+Formats</a> for more details.</p>
+<p>Next, target-specific processing is performed, and the resulting
+quantization information is applied to tensors. When encodings
+associated with an operation cannot be mapped directly to the target
+device the encodings are adapted to the specified target. The
+adaption process has a defined set of rules that are documented
+in <a class="reference external" href="#target-specific-processing">Target Specific Processing</a>.</p>
+</div>
+<div class="section" id="quantization-outputs">
+<h3><a class="toc-backref" href="#id9">Quantization outputs</a><a class="headerlink" href="#quantization-outputs" title="Permalink to this heading">¶</a></h3>
+<p><strong>DLC</strong> - The output of the <em>qairt-converter</em> is a DLC ready for
+inference or compilation with the QAIRT stack.</p>
+</div>
+</div>
+<div class="section" id="target-specific-processing">
+<h2><a class="toc-backref" href="#id10">Target specific processing</a><a class="headerlink" href="#target-specific-processing" title="Permalink to this heading">¶</a></h2>
+<p>During target-specific processing, the quantization information
+extracted from processing the source model and overrides files is
+compared with the supported datatypes and operations on the specified
+target. If the extracted quantization information cannot be directly
+mapped, quantization information is adapted.</p>
+<p>The following guidelines are used when adapting an encoding to a target.</p>
+<ul class="simple">
+<li><p>32-bit floating point tensors are assigned float16 precision (default
+precision for the targets supported by QAIRT).</p></li>
+<li><p>Tensors with no encoding information are treated as 16-bit floating
+point.</p></li>
+<li><p>If the extracted quantized encoding if not supported by the target,
+the qairt-converter will fall back to a higher precision (that is
+supported on the target) in order to maintain accuracy. Precision
+precedence order is: float32, float16, int32, int16, int8, int4, and
+int2 (from highest to lowest).</p></li>
+</ul>
+<p>The figure below shows the processing steps involved in adapting
+quantization encodings for a target. Steps include handling for data
+movement ops, supergroups, promotion and assignment of encodings,
+inserting appropriate conversion ops, quantizing static tensors, etc…
+and are detailed below.</p>
+<div class="figure align-default" id="id2">
+<img alt="../_static/resources/AE_fig5.png" src="../_static/resources/AE_fig5.png" />
+<p class="caption"><span class="caption-text">Adapt Encodings – Algorithm</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</div>
+<div class="section" id="handle-data-movement-ops">
+<h3><a class="toc-backref" href="#id11">Handle data movement ops</a><a class="headerlink" href="#handle-data-movement-ops" title="Permalink to this heading">¶</a></h3>
+<p>Assign quantization encoding to the tensors associated with data
+movement ops and ensure matching quantization encodings are assigned
+along the chain of data movement operations. Operations that do not fall
+in the category of data movement ops are unaffected. List of <a class="reference external" href="#appendix-e-data-movement-ops">Data
+Movement Ops</a>.</p>
+<p><em>Rules:</em></p>
+<ul class="simple">
+<li><p>Quantization encoding of the input and output tensor of data movement
+operations must be equivalent.</p></li>
+<li><p>A continuous sequence, or chain, of data movement ops is uniformly
+assigned the same encoding value as the range is not expected to
+change within the chain.</p></li>
+<li><p>When different bit widths are detected at input and output of the op
+or chain of ops, the module assigns the minimum bit width for that op
+or group. This may result in a ConvertOp or CastOp at the start or
+end of the chain.</p></li>
+</ul>
+</div>
+<div class="section" id="tag-super-groups">
+<h3><a class="toc-backref" href="#id12">Tag super groups</a><a class="headerlink" href="#tag-super-groups" title="Permalink to this heading">¶</a></h3>
+<p>A super group is a subgraph which executes in the same precision from start
+to end. Super groups are identified and tagged at this stage. Super
+groups are used to:</p>
+<ul class="simple">
+<li><p>Avoid quantization noise by holding intermediate tensor data in
+higher precision to improve accuracy.</p></li>
+<li><p>Enable targets to fuse the subgraph, when possible, to improve
+performance.</p>
+<ul>
+<li><p>For example, the <em>Conv-&gt;ReLU</em> pattern will be detected and marked in the DLC so
+that fusion can be performed during target compilation.</p></li>
+</ul>
+</li>
+</ul>
+<p>Super groups are target specific. A complete list of the super groups
+can be found in <a class="reference external" href="#appendix-d-super-groups">Super groups</a>. Tools like AIMET
+simulate super group patterns during quantization and calibration for
+improved accuracy and performance.</p>
+<p><em>Rules:</em></p>
+<ul class="simple">
+<li><p>The super group pattern must be supported by the target (<a class="reference external" href="#appendix-d-super-groups">Super
+groups</a>).</p></li>
+<li><p>Quantization encoding must be only specified for tensors at the start
+and end of the super groups, and no encoding must be specified for
+intermediate tensors.</p></li>
+<li><p>For a sequence of ops to qualify as a super group the intermediate
+tensors must not be consumed outside of the super group ops. (For example,
+in the <em>Add-&gt;Relu</em> sequence the tensor between <em>Add</em> and <em>Relu</em>)</p></li>
+<li><p>The super group operator dimensions and other attributes must be
+supported by the specified target.</p></li>
+</ul>
+</div>
+<div class="section" id="select-op-precision">
+<h3><a class="toc-backref" href="#id13">Select op precision</a><a class="headerlink" href="#select-op-precision" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Each target supports operations in different precisions (datatype,
+bit width, symmetry, etc) as tabulated in the <a class="reference external" href="https://docs.qualcomm.com/bundle/publicresource/topics/80-63442-10/operations.html#backend-supplements">Backend Supplemental
+Op Definition for each
+target</a>.
+Tensors with missing quantization encoding information are
+assigned the default, float 16 datatype. For each op, the selection
+process determines if the encoding is supported by the target. If the
+encoding is supported, then it is used as-is. If the encoded
+precision is not supported, the precision will fall back to the
+nearest supported higher precision. Precision precedence order is:
+float32, float16, int32, int16, int8, int4, and int2 (from highest to
+lowest). If a higher precision is not available, it is reported as
+an error.</p></li>
+</ul>
+<p><em>Rules:</em></p>
+<ul class="simple">
+<li><p>Tensors with no encoding are first assigned float16 encoding
+(default). At this point all tensors must have an assigned encoding.</p></li>
+<li><p>Quantization encoding is assigned to tensors and then ops connected
+to that tensor are evaluated to ensure a matching kernel is available
+on a backend for execution.</p></li>
+<li><p>When a matching kernel is not available, iteratively, look for
+nearest higher precision kernel.</p></li>
+<li><p>Checks performed when finding a matching a kernel.</p>
+<ol class="arabic simple">
+<li><p>When the user provided Symmetry is not supported it is an error.</p></li>
+<li><p>When user provided encodings do not meet the granularity
+(per-tensor, per-channel or per-block) requirements then it is an
+error.</p></li>
+<li><p>When the user provided <em>y_scale</em> does not meet constraint
+specified by the target then, it is an error unless it can be
+rescaled to match the desired range for the selected bit width.</p></li>
+<li><p>When the user provided sign of the <em>output_dtype</em> does not match
+then, a kernel with opposite sign is looked for by changing the
+offset value.</p></li>
+<li><p>When the user provided bit width is not supported by the kernel
+even after changing the sign then, higher bit width is looked for
+by repeating the steps from 1 to 5.</p></li>
+</ol>
+</li>
+</ul>
+</div>
+<div class="section" id="insert-converts">
+<h3><a class="toc-backref" href="#id14">Insert converts</a><a class="headerlink" href="#insert-converts" title="Permalink to this heading">¶</a></h3>
+<p>For every tensor where the tensor’s producer and consumer operations
+have different datatype requirements an appropriate Convert (rescale,
+quantize, or de-quantize) or Cast Op is inserted between ops.</p>
+<p><em>Rules:</em></p>
+<ul class="simple">
+<li><p>Insert a convert or cast op from tensor datatype present in the
+model to a user specified datatype</p></li>
+<li><p>If the selected datatype is different from user specified datatype,
+then another conversion is done from user specified to selected
+datatype.</p></li>
+</ul>
+</div>
+<div class="section" id="quantize-static-tensors">
+<h3><a class="toc-backref" href="#id15">Quantize static tensors</a><a class="headerlink" href="#quantize-static-tensors" title="Permalink to this heading">¶</a></h3>
+<p>Quantize static tensor values and store to avoid inserting
+a conversion op. This step helps reduce runtime cycles.</p>
+<p><em>Rules:</em></p>
+<ul class="simple">
+<li><p>Static tensors are quantized using the precision selected in Select
+Op Precision. When quantization bit width is less than the 8-bit
+multiple elements may be packed in packed into 8-bit. For example:
+two 4-bit elements can be packed in one 8-bit datatype.</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="appendix-a-classification-of-quantization-techniques">
+<h2><a class="toc-backref" href="#id16">Appendix A: Classification of quantization techniques</a><a class="headerlink" href="#appendix-a-classification-of-quantization-techniques" title="Permalink to this heading">¶</a></h2>
+<p>Quantization can be categorized based on the aspects of the model it
+affects and the methods it uses:</p>
+<ul class="simple">
+<li><p><strong>Based on Scope</strong></p>
+<ul>
+<li><p><em>Weight Quantization:</em> Reduces the precision of weights, which
+represent learned parameters. Weight quantization is particularly
+effective because weights are fixed after training.</p></li>
+<li><p><em>Activation Quantization:</em> Reduces the precision of activation,
+which represents intermediate outputs of the model during
+inference. Activation quantization is more challenging due to
+dynamic data ranges.</p></li>
+<li><p><em>Bias Quantization:</em> Reduces precision of bias. Quantization of
+bias depends on weight and activation quantization.</p></li>
+</ul>
+</li>
+<li><p><strong>Based on Granularity</strong></p>
+<ul>
+<li><p><em>Per Tensor Quantization:</em> The entire tensor (weights or
+activations) shares a single scaling factor. <a class="reference external" href="#per-tensor-quantization-encoding-example">Example
+JSON</a></p></li>
+<li><p><em>Per Channel Quantization (PCQ):</em> Each output channel of a layer
+has its own scaling factor. <a class="reference external" href="#per-channel-quantization-encoding-example">Example JSON</a></p></li>
+<li><p><em>Block Quantization (BQ):</em> Quantizes weights or activations in
+blocks rather than per tensor/channel.
+For BQ encodings, QAIRT supports offsets of both int and float32.
+<a class="reference external" href="#blockwise-quantization-encoding-bq-example">Example JSON</a>
+<a class="reference external" href="#blockwise-quantization-encoding-bq-with-float-offset-example">Example JSON for float BQ</a></p></li>
+<li><p><em>Low Power Block Quantization (LPBQ):</em> Encodings at a lower bit
+width are determined and then adjusted such that they lie on a
+common higher bit width per channel grid.
+<a class="reference external" href="#low-power-blockwise-quantization-lpbq-example">Example JSON</a></p></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="appendix-b-quantized-model-formats">
+<h2><a class="toc-backref" href="#id17">Appendix B: Quantized model formats</a><a class="headerlink" href="#appendix-b-quantized-model-formats" title="Permalink to this heading">¶</a></h2>
+<p>Quantization information can be provided in the model source graphs
+using Q-DQ nodes or using quantized operations depending on the source
+framework being used.</p>
+<p>The following table lists the combinations of inputs supported by the
+<em>qairt-converter</em> for each framework.</p>
+<table class="docutils align-default" id="id3">
+<caption><span class="caption-text">Input model formats, framework and quantization granularity support matrix</span><a class="headerlink" href="#id3" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 45%" />
+<col style="width: 39%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Framework</p></th>
+<th class="head"><p>Formats</p></th>
+<th class="head"><p>Quantization Granularity</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>ONNX</p></td>
+<td><p>Float model, Q-DQ model</p></td>
+<td><p>Per-tensor, Per-channel,</p>
+<p>Per-block</p>
+</td>
+</tr>
+<tr class="row-odd"><td><p>TensorFlow</p></td>
+<td><p>Float model, FakeQuant model</p></td>
+<td><p>Per-tensor, Per-channel</p></td>
+</tr>
+<tr class="row-even"><td><p>TFL</p></td>
+<td><p>Float model, Quantized model</p></td>
+<td><p>Per-tensor, Per-channel</p></td>
+</tr>
+<tr class="row-odd"><td><p>PyTorch</p></td>
+<td><p>Float model</p></td>
+<td><p>Per-tensor, Per-channel</p></td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="onnx">
+<h3><a class="toc-backref" href="#id18">ONNX</a><a class="headerlink" href="#onnx" title="Permalink to this heading">¶</a></h3>
+<p>A sequence of <em>QuantizeLinear</em>
+and <em>DequantizeLinear</em> (Q-DQ) nodes are used in the ONNX graph
+to specify quantization information. During model conversion
+in <em>qairt-converter</em>, quantization information from Q-DQ sequence is
+extracted as metadata and the
+corresponding <em>QuantizeLinear</em> and <em>DequantizeLinear</em> nodes are folded
+to produce a quantized graph.</p>
+<p>For example, a ReLU node between a dequantize and quantize node, <em>int8 →
+Dequantize → fp32 → ReLU → fp32 → Quantize → int8</em> is treated equivalent
+to a quantized ReLU operator <em>int8-&gt; ReLU → int8</em>. First, quantization
+encoding from Q-DQ nodes is extracted and stored as metadata (also
+referred to as Encoding) attached to the corresponding tensor. Next, the
+encoding is applied to the tensor resulting in a quantized graph.</p>
+<p>The following figure shows how the Q-DQ nodes are
+folded to extract quantization encoding and then produce a quantized
+graph. Encoding collected from the source model may be overridden
+using the <em>–quantization-overrides</em> option.</p>
+<div class="figure align-default" id="id4">
+<img alt="../_static/resources/AE_fig3.png" src="../_static/resources/AE_fig3.png" />
+<p class="caption"><span class="caption-text">Extract encodings from Q-DQ model and quantized tensors to build a quantized graph</span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
+</div>
+<p>For more information about ONNX Q-DQ, see <a class="reference external" href="https://onnx.ai/onnx/operators/onnx__QuantizeLinear.html">QuantizeLinear - ONNX
+1.18.0
+documentation</a>.</p>
+</div>
+<div class="section" id="tflite">
+<h3><a class="toc-backref" href="#id19">TFLite</a><a class="headerlink" href="#tflite" title="Permalink to this heading">¶</a></h3>
+<p>TFLite uses quantized nodes to convert floating-point models to lower
+precision. The TFLite model, including its quantized nodes, is converted
+into a DLC. This process involves deriving quantization encodings using
+TFLite quantization parameters (scale, zero-point) before associating it
+with the tensor in the DLC. Encodings collected from the source model
+may be overridden using the <em>–quantization-overrides</em> option.</p>
+</div>
+<div class="section" id="tensorflow">
+<h3><a class="toc-backref" href="#id20">TensorFlow</a><a class="headerlink" href="#tensorflow" title="Permalink to this heading">¶</a></h3>
+<p>The <em>FakeQuant</em> node in TensorFlow is used for quantization-aware
+training. It simulates the effects of quantization during training,
+allowing the model to learn the quantization effects and potentially
+achieve higher accuracy when quantized. Quantization information present
+in the <em>FakeQuant</em> node stored as quantization encoding metadata (preceding figure
+shows int8 encodings stored as metadata associated with float-16 tensors).
+Encoding collected from the source model may be overridden
+using the <em>–quantization-overrides</em> option. For more information on
+FakeQuant see
+<a class="reference external" href="https://www.tensorflow.org/api_docs/python/tf/quantization/fake_quant_with_min_max_args">tf.quantization.fake_quant_with_min_max_args</a>.</p>
+</div>
+</div>
+<div class="section" id="appendix-c-json-schema-version-2-0-0">
+<h2><a class="toc-backref" href="#id21">Appendix C: JSON schema version 2.0.0</a><a class="headerlink" href="#appendix-c-json-schema-version-2-0-0" title="Permalink to this heading">¶</a></h2>
+<p>JSON schema uses keys which are closely aligned with attributes of the
+ONNX <em>QuantizeLinear</em> operators detailed below.</p>
+<ul class="simple">
+<li><p><strong>name</strong>: name of the tensor</p></li>
+<li><p><strong>output_dtype:</strong> tensor data type with bit-width appended. Valid
+values for this field are listed. “int4”, “uint4”, “int8”, “uint8”,
+“int16”, “uint16”, “int32”, “uint32”, “float32”, “float16”.</p></li>
+<li><p><strong>y_scale</strong>: tensor data is quantized with this scale value.</p></li>
+<li><p><strong>y_zero_point (optional, default = 0)</strong>: tensor data is quantized
+with the provided zero point. Internally this is stored as <em>offset =
+- y_zero_point</em>. Its value may be used to interpret symmetry of the
+quantized data.</p></li>
+<li><p><strong>axis (optional)</strong>: Set when per-channel quantization or block
+quantization is used. For per-channel quantization, it indicates the
+channel axis along which the scale values are specified. For block
+quantization, (when <em>block_size</em> is specified) it indicates the
+tensor axis along which blocking is done.</p></li>
+<li><p><strong>block_size (optional)</strong>: Set only when block quantization is used.
+Size of the block along the specified <em>axis</em>.</p></li>
+<li><p><strong>per_channel_float_scale (optional):</strong> TBD</p></li>
+<li><p><strong>per_block_int_scale (optional)</strong>: Applicable when Low Power Block Quantization is used,
+for which block_size must be provided. An integer scale is assigned per block.</p></li>
+</ul>
+<div class="section" id="per-tensor-quantization-encoding-example">
+<h3><a class="toc-backref" href="#id22">Per tensor quantization encoding example</a><a class="headerlink" href="#per-tensor-quantization-encoding-example" title="Permalink to this heading">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>{
+“name”: “activation”,
+“output_dtype”: “uint8”,
+“y_scale”: 1.0,
+“y_zero_point”: 128
+}
+</pre></div>
+</div>
+</div>
+<div class="section" id="per-channel-quantization-encoding-example">
+<h3><a class="toc-backref" href="#id23">Per channel quantization encoding example</a><a class="headerlink" href="#per-channel-quantization-encoding-example" title="Permalink to this heading">¶</a></h3>
+<p>Example encodings for channel <em>axis = 0</em> and <em>length = 3.</em></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>{
+“name”: “conv.weight”,
+“output_dtype”: “int8”,
+“y_scale”: [
+   0.0050100767984986305,
+   0.0017133733490481973,
+   0.0017133733490481973,
+]
+“axis”: 0
+}
+</pre></div>
+</div>
+</div>
+<div class="section" id="blockwise-quantization-encoding-bq-example">
+<h3><a class="toc-backref" href="#id24">Blockwise quantization encoding (BQ) example</a><a class="headerlink" href="#blockwise-quantization-encoding-bq-example" title="Permalink to this heading">¶</a></h3>
+<div class="line-block">
+<div class="line">shape: [3, 64]</div>
+<div class="line">channel_axis: 0</div>
+<div class="line">block_axis: 1</div>
+<div class="line">block_size: 32</div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>{
+“name”: “conv22.weight”,
+“output_dtype”: “int4”
+“y_scale”: [
+   [0.01, 0.02],
+   [0.03, 0.04],
+   [0.05, 0.06]
+],
+“y_zero_point”: [
+   [0, 0],
+   [0, 0],
+   [0, 0]
+],
+“axis”: 1,
+“block_size”: 32,
+}
+</pre></div>
+</div>
+</div>
+<div class="section" id="blockwise-quantization-encoding-bq-with-float-offset-example">
+<h3><a class="toc-backref" href="#id25">Blockwise quantization encoding (BQ) with float offset example</a><a class="headerlink" href="#blockwise-quantization-encoding-bq-with-float-offset-example" title="Permalink to this heading">¶</a></h3>
+<div class="line-block">
+<div class="line">shape: [3, 64]</div>
+<div class="line">channel_axis: 0</div>
+<div class="line">block_axis: 1</div>
+<div class="line">block_size: 32</div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>{
+“name”: “conv22.weight”,
+“output_dtype”: “int4”
+“y_scale”: [
+   [0.01, 0.02],
+   [0.03, 0.04],
+   [0.05, 0.06]
+],
+“y_zero_point”: [
+   [-0.16, 0.24],
+   [-0.35, 0.13],
+   [-0.14, 0.37]
+],
+“axis”: 1,
+“block_size”: 32,
+}
+</pre></div>
+</div>
+</div>
+<div class="section" id="low-power-blockwise-quantization-lpbq-example">
+<h3><a class="toc-backref" href="#id26">Low power blockwise quantization (LPBQ) example</a><a class="headerlink" href="#low-power-blockwise-quantization-lpbq-example" title="Permalink to this heading">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>{
+“name”: “conv2.weight”,
+“output_dtype”: “int4”
+“per_channel_float_scale”: [
+   0.01, 0.02, 0.03
+],
+“per_block_int_scale”: [
+   [1, 2, 16],
+   [2, 16, 7],
+   [16, 3, 1]
+],
+“offset”: 0,
+“block_size”: [1, 3],
+}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="appendix-d-super-groups">
+<h2><a class="toc-backref" href="#id27">Appendix D: Super groups</a><a class="headerlink" href="#appendix-d-super-groups" title="Permalink to this heading">¶</a></h2>
+<p>Super groups are listed per target in this section.</p>
+<div class="section" id="htp-super-groups">
+<h3><a class="toc-backref" href="#id28">HTP super groups</a><a class="headerlink" href="#htp-super-groups" title="Permalink to this heading">¶</a></h3>
+<p>The following table lists the super groups for HTP backend. These super
+groups are supported by Hexagon architecture version greater than v73.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Super group patterns</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>QNN_OP_ELEMENT_WISE_ADD + QNN_OP_RELU</p></td>
+</tr>
+<tr class="row-odd"><td><p>QNN_OP_CONV_2D + QNN_OP_HARD_SWISH</p></td>
+</tr>
+<tr class="row-even"><td><p>QNN_OP_CONV_2D + QNN_OP_PRELU</p></td>
+</tr>
+<tr class="row-odd"><td><p>QNN_OP_CONV_2D + QNN_OP_RELU_MIN_MAX</p></td>
+</tr>
+<tr class="row-even"><td><p>QNN_OP_CONV_2D + QNN_OP_RELU</p></td>
+</tr>
+<tr class="row-odd"><td><p>QNN_OP_TRANSPOSE_CONV_2D + QNN_OP_RELU</p></td>
+</tr>
+<tr class="row-even"><td><p>QNN_OP_FULLY_CONNECTED + QNN_OP_RELU</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="appendix-e-data-movement-ops">
+<h2><a class="toc-backref" href="#id29">Appendix E: Data movement ops</a><a class="headerlink" href="#appendix-e-data-movement-ops" title="Permalink to this heading">¶</a></h2>
+<p>Data movement ops must have the same input and output quantization
+encodings.</p>
+<div class="section" id="htp-data-movement-ops">
+<h3><a class="toc-backref" href="#id30">HTP data movement ops</a><a class="headerlink" href="#htp-data-movement-ops" title="Permalink to this heading">¶</a></h3>
+<p>The following is the complete list of data movement ops supported by HTP.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Data Movement Ops</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>QNN_OP_GATHER</p></td>
+</tr>
+<tr class="row-odd"><td><p>QNN_OP_GATHER_ELEMENTS</p></td>
+</tr>
+<tr class="row-even"><td><p>QNN_OP_GATHER_ND</p></td>
+</tr>
+<tr class="row-odd"><td><p>QNN_OP_TOP_K</p></td>
+</tr>
+<tr class="row-even"><td><p>QNN_OP_BATCH_TO_SPACE</p></td>
+</tr>
+<tr class="row-odd"><td><p>QNN_OP_CHANNEL_SHUFFLE</p></td>
+</tr>
+<tr class="row-even"><td><p>QNN_OP_SPACE_TO_BATCH</p></td>
+</tr>
+<tr class="row-odd"><td><p>QNN_OP_TILE</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="tutorials.html" class="btn btn-neutral float-right" title="Tutorials" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="quantization.html" class="btn btn-neutral float-left" title="Quantization" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020-2025, Qualcomm Technologies, Inc..
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

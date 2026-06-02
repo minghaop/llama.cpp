@@ -1,0 +1,481 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>LoRA v2 &mdash; Qualcomm® AI Runtime (QAIRT) SDKs</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/custom_css.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Qualcomm® AI Runtime (QAIRT) SDKs
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v2.46.0.260424121129
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">QAIRT</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../general/overview.html">Overview</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">SDKs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">QNN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../SNPE/index.html">SNPE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Genie/index.html">Genie</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Delegates</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../Delegates/TfLite/index.html">TFLite Delegate</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Qualcomm® AI Runtime (QAIRT) SDKs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>LoRA v2</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="lora-v2">
+<h1>LoRA v2<a class="headerlink" href="#lora-v2" title="Permalink to this heading">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#overview" id="id1">Overview</a></p>
+<ul>
+<li><p><a class="reference internal" href="#adapter-requirements" id="id2">Adapter Requirements</a></p></li>
+<li><p><a class="reference internal" href="#supported-functionality" id="id3">Supported Functionality</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#high-level-end-to-end-workflow" id="id4">High-Level end-to-end workflow</a></p></li>
+<li><p><a class="reference internal" href="#offline-flow-model-preparation" id="id5">Offline Flow : Model Preparation</a></p></li>
+<li><p><a class="reference internal" href="#offline-flow-conversion" id="id6">Offline Flow : Conversion</a></p>
+<ul>
+<li><p><a class="reference internal" href="#convert-the-base-model" id="id7">Convert the Base Model</a></p></li>
+<li><p><a class="reference internal" href="#import-the-lora-adapters-via-qairt-lora-importer" id="id8">Import the LoRA Adapters via. <code class="docutils literal notranslate"><span class="pre">qairt-lora-importer</span></code></a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#offline-flow-generating-binaries" id="id9">Offline Flow: Generating Binaries</a></p></li>
+<li><p><a class="reference internal" href="#offline-flow-generating-lora-binary-sections-with-qnn-api" id="id10">Offline Flow: Generating LoRA binary sections with QNN API</a></p>
+<ul>
+<li><p><a class="reference internal" href="#generating-lora-weight-shared-binary-sections" id="id11">Generating LoRA weight-shared binary sections</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#online-flow-qnn-call-flow" id="id12">Online Flow : QNN Call Flow</a></p></li>
+<li><p><a class="reference internal" href="#online-flow-genie-lora-api" id="id13">Online Flow : Genie LoRA API</a></p></li>
+<li><p><a class="reference internal" href="#lora-graph-switch-implementation" id="id14">LoRA + Graph switch Implementation</a></p></li>
+</ul>
+</div>
+<div class="section" id="overview">
+<h2><a class="toc-backref" href="#id1">Overview</a><a class="headerlink" href="#overview" title="Permalink to this heading">¶</a></h2>
+<a class="reference internal image-reference" href="../../_static/resources/lora/qnn_tutorial_lora_intro.png"><img alt="../../_static/resources/lora/qnn_tutorial_lora_intro.png" class="align-left" src="../../_static/resources/lora/qnn_tutorial_lora_intro.png" style="width: 300px;" /></a>
+<br clear="all"><div class="section" id="adapter-requirements">
+<h3><a class="toc-backref" href="#id2">Adapter Requirements</a><a class="headerlink" href="#adapter-requirements" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>PEFT-based Adapters (PEFT = Parameter-Efficient Fine-Tuning)</p></li>
+<li><p>All Adapters to a given base graph:</p>
+<ol class="arabic simple">
+<li><p>Have same architecture and attachment points</p></li>
+<li><p>Have the same max rank and same precision</p></li>
+</ol>
+</li>
+</ul>
+</div>
+<div class="section" id="supported-functionality">
+<h3><a class="toc-backref" href="#id3">Supported Functionality</a><a class="headerlink" href="#supported-functionality" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Currently supported for ONNX models and HTP backend only</p></li>
+<li><p>Apply a single adapter at a given time (e.g single branch)</p></li>
+<li><p>Dynamic switching of adapter (e.g. without loading/unloading of base model)</p></li>
+<li><p>Regain accuracy on Quantization by creating tailored encodings per adapter during offline conversion</p>
+<ul>
+<li><p>Adapter weights are quantized, and each weight has its own encodings</p></li>
+<li><p>Activation encodings for each adapter are different and optimized during calibration process</p></li>
+</ul>
+</li>
+<li><p>Requires full offline preparation of both Base Model &amp; Adapters, with Quantization done by AIMET</p>
+<ul>
+<li><p>Offline preparation only supported on: Linux x86 host platforms, Windows</p></li>
+<li><p>Disclaimer: Both base model context binary and adapter binary files MUST be prepared using same QAIRT SDK version.</p></li>
+</ul>
+</li>
+<li><p>Apply adapter supported on these targets: Android, Windows on Snapdragon</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="high-level-end-to-end-workflow">
+<h2><a class="toc-backref" href="#id4">High-Level end-to-end workflow</a><a class="headerlink" href="#high-level-end-to-end-workflow" title="Permalink to this heading">¶</a></h2>
+<a class="reference internal image-reference" href="../../_static/resources/lora/qnn_tutorial_lora_high_level_e2e_workflow.png"><img alt="../../_static/resources/lora/qnn_tutorial_lora_high_level_e2e_workflow.png" src="../../_static/resources/lora/qnn_tutorial_lora_high_level_e2e_workflow.png" style="width: 1600px;" /></a>
+<p>Notes :</p>
+<ol class="arabic simple">
+<li><p>For switching adapters, “Apply adapter” can be done as needed between calls to execute</p></li>
+<li><p>Setting Alpha is done by updating the relevant input tensor</p></li>
+</ol>
+</div>
+<div class="section" id="offline-flow-model-preparation">
+<h2><a class="toc-backref" href="#id5">Offline Flow : Model Preparation</a><a class="headerlink" href="#offline-flow-model-preparation" title="Permalink to this heading">¶</a></h2>
+<a class="reference internal image-reference" href="../../_static/resources/lora/qnn_tutorial_lora_offline_model_preparation.png"><img alt="../../_static/resources/lora/qnn_tutorial_lora_offline_model_preparation.png" src="../../_static/resources/lora/qnn_tutorial_lora_offline_model_preparation.png" style="width: 1600px;" /></a>
+</div>
+<div class="section" id="offline-flow-conversion">
+<h2><a class="toc-backref" href="#id6">Offline Flow : Conversion</a><a class="headerlink" href="#offline-flow-conversion" title="Permalink to this heading">¶</a></h2>
+<div class="section" id="convert-the-base-model">
+<h3><a class="toc-backref" href="#id7">Convert the Base Model</a><a class="headerlink" href="#convert-the-base-model" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Same Converter/Quantizer for LoRA and non-LoRA usages</p></li>
+<li><p>Converter has a new “–lora_weight_list” parameter to pass LoRA Weights Names, to identify as “updatable tensors” in the graph</p></li>
+</ul>
+<a class="reference internal image-reference" href="../../_static/resources/lora/qnn_tutorial_lora_offline_conversion_base_model.png"><img alt="../../_static/resources/lora/qnn_tutorial_lora_offline_conversion_base_model.png" src="../../_static/resources/lora/qnn_tutorial_lora_offline_conversion_base_model.png" style="width: 1600px;" /></a>
+</div>
+<div class="section" id="import-the-lora-adapters-via-qairt-lora-importer">
+<h3><a class="toc-backref" href="#id8">Import the LoRA Adapters via. <code class="docutils literal notranslate"><span class="pre">qairt-lora-importer</span></code></a><a class="headerlink" href="#import-the-lora-adapters-via-qairt-lora-importer" title="Permalink to this heading">¶</a></h3>
+<p><strong>Note: This feature is currently supported only for ONNX models</strong></p>
+<a class="reference internal image-reference" href="../../_static/resources/lora/qnn_tutorial_lora_offline_conversion_lora_adapters.png"><img alt="../../_static/resources/lora/qnn_tutorial_lora_offline_conversion_lora_adapters.png" src="../../_static/resources/lora/qnn_tutorial_lora_offline_conversion_lora_adapters.png" style="width: 1600px;" /></a>
+<p>What is the format of “LoRA Weights Names” provided to qairt-converter tool with –lora_weight_list option?</p>
+<ul class="simple">
+<li><p>A text file contains LoRA adapter weight tensor names with newline as delimiter</p></li>
+<li><p>Refer to the below sample code that generates a text file with LoRA adapter weight tensor names from LoRA adapter .safetensors file</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">safetensors.numpy</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_file</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">save_tensor_names</span><span class="p">(</span><span class="n">safetensor_path</span><span class="p">,</span> <span class="n">save_path</span><span class="o">=</span><span class="s2">&quot;./tensor_names.txt&quot;</span><span class="p">):</span>
+    <span class="n">tensor_name_to_data_map</span> <span class="o">=</span> <span class="n">load_file</span><span class="p">(</span><span class="n">safetensor_path</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">save_path</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">text_file</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">tensorAtt_name</span> <span class="ow">in</span> <span class="n">tensor_name_to_data_map</span><span class="p">:</span>
+            <span class="n">text_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">tensor_name</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="offline-flow-generating-binaries">
+<h2><a class="toc-backref" href="#id9">Offline Flow: Generating Binaries</a><a class="headerlink" href="#offline-flow-generating-binaries" title="Permalink to this heading">¶</a></h2>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">qnn-context-binary-generator</span></code> is extended to support Applying of LoRA weights :</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Receive a new “–adapter_weight_config” parameter to receive Adapters YAML config file (produced by
+<code class="docutils literal notranslate"><span class="pre">qairt-lora-importer</span></code> tool)</p></li>
+<li><p>Generate a “binary section” file for each LoRA adapter</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>The produced “binary section” file is used on-target with new QNN API to apply the LoRA adapter</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Notice: The QAIRT SDK version that generates the base graph context binary and the adapter binary file MUST
+be the same.</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<a class="reference internal image-reference" href="../../_static/resources/lora/qnn_tutorial_lora_offline_generate_binaries.png"><img alt="../../_static/resources/lora/qnn_tutorial_lora_offline_generate_binaries.png" src="../../_static/resources/lora/qnn_tutorial_lora_offline_generate_binaries.png" style="width: 1600px;" /></a>
+</div>
+<div class="section" id="offline-flow-generating-lora-binary-sections-with-qnn-api">
+<h2><a class="toc-backref" href="#id10">Offline Flow: Generating LoRA binary sections with QNN API</a><a class="headerlink" href="#offline-flow-generating-lora-binary-sections-with-qnn-api" title="Permalink to this heading">¶</a></h2>
+<img alt="../../_static/resources/lora/qnn_tutorial_lora_offline_generate_binary_sections_directly.png" src="../../_static/resources/lora/qnn_tutorial_lora_offline_generate_binary_sections_directly.png" />
+<ul>
+<li><p>As shown on previous page, <code class="docutils literal notranslate"><span class="pre">qnn-context-binary-generator</span></code> tool is extended to produce LoRA binary sections
+(also referred to as adapters)</p></li>
+<li><p>This page explains how do apply the adapter weights and retrieve the binary sections directly using QNN API
+(not via QNN tools)</p></li>
+<li><p>This is done in the following manner:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Create the QNN Context &amp; Graphs (either from-scratch or from a Binary)</p>
+<ul class="simple">
+<li><p>In case the Context/Graph was created from scratch, call <code class="docutils literal notranslate"><span class="pre">QnnContext_getBinary</span></code> to receive a binary
+blob of the unmodified QNN context.</p></li>
+</ul>
+</li>
+<li><p>Call New QNN API : <code class="docutils literal notranslate"><span class="pre">QnnTensor_updateGraphTensors</span></code> / <code class="docutils literal notranslate"><span class="pre">QnnTensor_updateContextTensors</span></code></p>
+<ul class="simple">
+<li><p>Tensors must be of <code class="docutils literal notranslate"><span class="pre">UPDATEABLE</span></code> type, created during graph composition (in step 1.)</p></li>
+</ul>
+</li>
+<li><p>Call <code class="docutils literal notranslate"><span class="pre">QnnGraph_finalize</span></code> (important! Updates are not applied until finalize is called)</p></li>
+<li><p>Call <code class="docutils literal notranslate"><span class="pre">QnnContext_getBinarySectionSize</span></code>  to receive the size of the binary section</p>
+<ul class="simple">
+<li><p>A buffer with a suitable size should be allocated and passed to QNN backend as part of the next API call</p></li>
+</ul>
+</li>
+<li><p>Call <code class="docutils literal notranslate"><span class="pre">QnnContext_getBinarySection</span></code>  to receive a binary blob containing the LoRA update</p></li>
+</ol>
+</div></blockquote>
+</li>
+<li><p>Steps 2-4 can be done multiple times, each time apply a different adapter (by updating the weights) and retrieve
+a suitable binary section</p></li>
+</ul>
+<div class="section" id="generating-lora-weight-shared-binary-sections">
+<h3><a class="toc-backref" href="#id11">Generating LoRA weight-shared binary sections</a><a class="headerlink" href="#generating-lora-weight-shared-binary-sections" title="Permalink to this heading">¶</a></h3>
+<img alt="../../_static/resources/lora/qnn_tutorial_lora_offline_generate_weight_shared_binary_sections_directly.png" src="../../_static/resources/lora/qnn_tutorial_lora_offline_generate_weight_shared_binary_sections_directly.png" />
+<ul>
+<li><p>There is a slight call-flow change when generating weight-shared binary sections (Super Adapters).</p></li>
+<li><p>Compared to regular adapters, where every <code class="docutils literal notranslate"><span class="pre">QNNGraph_Finalize</span></code> is followed by <code class="docutils literal notranslate"><span class="pre">QnnContext_getBinarySectionSize</span></code>
+then <code class="docutils literal notranslate"><span class="pre">QnnContext_getBinarySection</span></code>, <code class="docutils literal notranslate"><span class="pre">QnnContext_getBinarySection</span></code> is called once per a group of graphs that
+are in the same context. The combined adapter file, also referred to as “Super Adapter”, enables weight sharing
+between adapters, thereby reducing total adapter size.</p></li>
+<li><p>As mentioned in previous page, Super Adapters are generated through <code class="docutils literal notranslate"><span class="pre">qnn-context-binary-generator</span></code> by adding
+following option in Config YAML File:</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">share_adapters_between_graphs:</span> <span class="pre">Yes</span></code></p>
+</div></blockquote>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="online-flow-qnn-call-flow">
+<h2><a class="toc-backref" href="#id12">Online Flow : QNN Call Flow</a><a class="headerlink" href="#online-flow-qnn-call-flow" title="Permalink to this heading">¶</a></h2>
+<a class="reference internal image-reference" href="../../_static/resources/lora/qnn_tutorial_lora_online_qnn_callflow.png"><img alt="../../_static/resources/lora/qnn_tutorial_lora_online_qnn_callflow.png" src="../../_static/resources/lora/qnn_tutorial_lora_online_qnn_callflow.png" style="width: 1600px;" /></a>
+<ul>
+<li><p>At the end of the offline flow, users will have a serialized context binary file (for base model) , and a set of
+binary section files (for LoRA Adapters)</p></li>
+<li><p>To apply LoRA Adapter on-target, user needs to use new QNN API: <code class="docutils literal notranslate"><span class="pre">QnnContext_applyBinarySection</span></code></p></li>
+<li><p>The on-target flow is as follows</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Create Context by calling <code class="docutils literal notranslate"><span class="pre">QnnContext_createFromBinary</span></code> (as usual)</p></li>
+<li><p>Apply the adapter by calling <code class="docutils literal notranslate"><span class="pre">QnnContext_applyBinarySection</span></code> (new)</p></li>
+<li><p>Update I/O tensors using adapter binary compatible quantization encodings</p></li>
+<li><p>Get adequately quantized inputs and call <code class="docutils literal notranslate"><span class="pre">QnnGraph_execute</span></code> (as always)</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Updating quantization encodings of I/O tensors</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>For quantized models, quantization encodings of input/output tensors can change when LoRA adapter gets applied</p></li>
+<li><p>Client can retrieve quantization encodings from adapter binary by calling <code class="docutils literal notranslate"><span class="pre">QnnSystem_getBinaryInfo</span></code> on it.</p></li>
+<li><p>Client must check/update quantization encodings of I/O tensors after new adapter was applied</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Back to running with base graph only (after any adapter is applied)</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Option a - Set Alpha to 0</p></li>
+<li><p>Option b - Create one adapter which has all zero Lora weights. Switch to this adapter. A default adapter is
+generated from the <code class="docutils literal notranslate"><span class="pre">qnn-context-binary-generator</span></code> with suffix default_adapter</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div>
+<div class="section" id="online-flow-genie-lora-api">
+<h2><a class="toc-backref" href="#id13">Online Flow : Genie LoRA API</a><a class="headerlink" href="#online-flow-genie-lora-api" title="Permalink to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Genie library provides high-level Dialog API for Generative AI transformer models</p></li>
+<li><p>Dialog API is extended to include applying a LoRA adapter and setting the strength (alpha)</p></li>
+</ul>
+<img alt="../../_static/resources/lora/qnn_tutorial_lora_online_genie_callflow.png" src="../../_static/resources/lora/qnn_tutorial_lora_online_genie_callflow.png" />
+<br clear="all"><a class="reference internal image-reference" href="../../_static/resources/lora/qnn_tutorial_lora_online_genie_config.png"><img alt="../../_static/resources/lora/qnn_tutorial_lora_online_genie_config.png" src="../../_static/resources/lora/qnn_tutorial_lora_online_genie_config.png" style="width: 1200px;" /></a>
+<br clear="all"></div>
+<div class="section" id="lora-graph-switch-implementation">
+<h2><a class="toc-backref" href="#id14">LoRA + Graph switch Implementation</a><a class="headerlink" href="#lora-graph-switch-implementation" title="Permalink to this heading">¶</a></h2>
+<ul>
+<li><p>Graph switching can now be used with LoRA to reduce RAM usage by trading off slight token rate hit</p></li>
+<li><p>As per QNN SDK doc, to enable graph switch, user needs to set context config options as</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">QNN_CONTEXT_CONFIG_MEMORY_LIMIT_HINT</span></code> : non-zero value
+<code class="docutils literal notranslate"><span class="pre">QNN_CONTEXT_CONFIG_PERSISTENT_BINARY</span></code> : true</p>
+</div></blockquote>
+</li>
+<li><p>If user uses <code class="docutils literal notranslate"><span class="pre">qnn-net-run</span></code> or <code class="docutils literal notranslate"><span class="pre">qnn-throughput-net-run</span></code>, this can be done by setting config options
+accordingly in backend extension config file.:</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">memory_limit_hint</span></code> : non-zero value</p>
+<p><code class="docutils literal notranslate"><span class="pre">is_persistent_binary</span></code> : true</p>
+</div></blockquote>
+</li>
+<li><p>The adapter buffer should be kept persistent (like context binary buffer) for graph switching</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>During QnnContext_applyBinarySection, if the graph is in an unloaded state, HTP Backend deserializes the
+graph, then applies the adapter.</p></li>
+<li><p>During QnnGraph_execute, if the graph is in an unloaded state, HTP backend loads the unloaded graph and
+then reapplies last applied adapter from the persistent buffer.</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Note: When the Lora Weight Sharing feature is enabled, the graph will not be in an executable state immediately
+after deserialization. You must call QnnContext_applyBinarySection at least once for any graph before invoking
+QnnGraph_execute.</p></li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020-2025, Qualcomm Technologies, Inc..
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

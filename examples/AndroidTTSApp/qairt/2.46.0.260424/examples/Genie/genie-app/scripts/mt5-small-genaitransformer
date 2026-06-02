@@ -1,0 +1,27 @@
+version
+pipeline config create pipelineConfig
+pipeline create GeniePipeline pipelineConfig
+
+#LUT Encoder
+node config create textEncoderConfig mt5-small-text-encoder.json
+node create textEncoder textEncoderConfig
+
+#Text Generator
+node config create textGeneratorConfig mt5-small-text-generator.json
+node create textGenerator textGeneratorConfig
+node set textCallback textGenerator GENIE_NODE_TEXT_GENERATOR_TEXT_OUTPUT
+
+#Pipeline add and connect calls
+pipeline add GeniePipeline textEncoder
+pipeline add GeniePipeline textGenerator
+
+pipeline connect GeniePipeline textEncoder GENIE_NODE_TEXT_ENCODER_EMBEDDING_OUTPUT textGenerator GENIE_NODE_TEXT_GENERATOR_EMBEDDING_INPUT
+
+node set text textEncoder GENIE_NODE_TEXT_ENCODER_TEXT_INPUT "UN Offizier sagt, dass weiter verhandelt werden muss in Syrien."
+
+pipeline execute GeniePipeline
+
+pipeline reset GeniePipeline
+node free textEncoder
+node free textGenerator
+pipeline free GeniePipeline

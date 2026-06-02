@@ -1,0 +1,401 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Genie DLC &mdash; Qualcomm® AI Runtime (QAIRT) SDKs</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/custom_css.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="Library" href="../../library/library.html" />
+    <link rel="prev" title="Genie Accuracy" href="../accuracy/accuracy.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> Qualcomm® AI Runtime (QAIRT) SDKs
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v2.46.0.260424121129
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">QAIRT</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../general/overview.html">Overview</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">SDKs</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../../QNN/index.html">QNN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../SNPE/index.html">SNPE</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../../index.html">Genie</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../introduction/introduction.html">Introduction</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../tutorials.html">Tutorials</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../setup.html">Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../how_to_use_genie.html">How to Use Genie</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../source_code_examples/source_code_examples.html">Source Code Examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../dialog/dialog.html">Genie Dialog</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../embedding/embedding.html">Genie Embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../engine/engine.html">Genie Engine</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../logger/logger.html">Genie Log</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../profile/profile.html">Genie Profile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pipeline/pipeline.html">Genie Pipeline</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../accuracy/accuracy.html">Genie Accuracy</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Genie DLC</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/library.html">Library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tools/tools.html">Tools</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Delegates</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../Delegates/TfLite/index.html">TFLite Delegate</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Qualcomm® AI Runtime (QAIRT) SDKs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">⌂</a> &raquo;</li>
+        
+          <li><a href="../tutorials.html">Tutorials</a> &raquo;</li>
+        
+      <li>Genie DLC</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="genie-dlc">
+<h1>Genie DLC<a class="headerlink" href="#genie-dlc" title="Permalink to this heading">¶</a></h1>
+<p>Genie DLC APIs provide a means to load models packaged in a DLC (Deep Learning Container) file which
+is supported by QAIRT model conversion tools. A DLC bundles one or more Genie use cases
+(dialog, embedding, node) along with their configurations into a single file which simplifies deployment
+and initialization.  QAIRT GenAiBuilder tool auto-generates and bundles Genie configuration files with
+automatic population of model-driven configuration parameters into a single file. The DLC APIs allow
+creating dialog, embedding, and node configurations directly from a DLC, optionally overwriting the
+bundled configuration with a standalone Genie config.</p>
+<div class="section" id="dlc-api-overview">
+<h2>DLC API Overview<a class="headerlink" href="#dlc-api-overview" title="Permalink to this heading">¶</a></h2>
+<p>The DLC workflow consists of two steps:</p>
+<ol class="arabic simple">
+<li><p>Create a <code class="docutils literal notranslate"><span class="pre">GenieDlcConfig</span></code> from a DLC file path, then create a <code class="docutils literal notranslate"><span class="pre">GenieDlc</span></code> handle from it.</p></li>
+<li><p>Use the <code class="docutils literal notranslate"><span class="pre">GenieDlc</span></code> handle to create dialog, embedding, or node configurations via the
+<code class="docutils literal notranslate"><span class="pre">createFromDlc</span></code> APIs.</p></li>
+</ol>
+<p>The following APIs are provided:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">GenieDlcConfig_create</span></code> / <code class="docutils literal notranslate"><span class="pre">GenieDlcConfig_free</span></code> — create and free a DLC configuration.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">GenieDlc_create</span></code> / <code class="docutils literal notranslate"><span class="pre">GenieDlc_free</span></code> — create and free a DLC handle.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">GenieDlc_getUseCases</span></code> — retrieve the list of use cases supported by the DLC as a JSON string.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">GenieDialogConfig_createFromDlc</span></code> — create a dialog configuration from a DLC.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">GenieEmbeddingConfig_createFromDlc</span></code> — create an embedding configuration from a DLC.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">GenieNodeConfig_createFromDlc</span></code> — create a node configuration from a DLC.</p></li>
+</ul>
+</div>
+<div class="section" id="example-on-how-to-use-dlc-apis">
+<h2>Example on how to use DLC APIs<a class="headerlink" href="#example-on-how-to-use-dlc-apis" title="Permalink to this heading">¶</a></h2>
+<p>The following example demonstrates loading a dialog configuration from a DLC file using the C API:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>Create<span class="w"> </span>DLC<span class="w"> </span>Config
+<span class="go">GenieDlcConfig_Handle_t dlcConfigHandle = NULL;</span>
+<span class="go">GenieDlcConfig_create(&quot;/path/to/model.dlc&quot;, &amp;dlcConfigHandle);</span>
+
+<span class="gp"># </span>Create<span class="w"> </span>DLC<span class="w"> </span>Handle
+<span class="go">GenieDlc_Handle_t dlcHandle = NULL;</span>
+<span class="go">GenieDlc_create(dlcConfigHandle, &amp;dlcHandle);</span>
+
+<span class="gp"># </span>Query<span class="w"> </span>supported<span class="w"> </span>use<span class="w"> </span>cases
+<span class="gp"># </span>useCasesJson<span class="w"> </span>is<span class="w"> </span>a<span class="w"> </span>JSON<span class="w"> </span>array<span class="w"> </span>of<span class="w"> </span>use<span class="w"> </span><span class="k">case</span><span class="w"> </span>objects,<span class="w"> </span>each<span class="w"> </span>with<span class="w"> </span>a<span class="w"> </span><span class="s2">&quot;name&quot;</span><span class="w"> </span>field,<span class="w"> </span>e.g.:
+<span class="gp"># </span><span class="o">[</span>
+<span class="gp">#   </span><span class="o">{</span><span class="w"> </span><span class="s2">&quot;name&quot;</span>:<span class="w"> </span><span class="s2">&quot;dialog&quot;</span>,<span class="w"> </span><span class="s2">&quot;config&quot;</span>:<span class="w"> </span><span class="o">{</span><span class="w"> </span><span class="s2">&quot;name&quot;</span>:<span class="w"> </span><span class="s2">&quot;llama_dialog_config&quot;</span><span class="w"> </span><span class="o">}</span><span class="w"> </span><span class="o">}</span>,
+<span class="gp">#   </span><span class="o">{</span><span class="w"> </span><span class="s2">&quot;name&quot;</span>:<span class="w"> </span><span class="s2">&quot;embedding&quot;</span>,<span class="w"> </span><span class="s2">&quot;config&quot;</span>:<span class="w"> </span><span class="o">{</span><span class="w"> </span><span class="s2">&quot;name&quot;</span>:<span class="w"> </span><span class="s2">&quot;llama_embedding_config&quot;</span><span class="w"> </span><span class="o">}</span><span class="w"> </span><span class="o">}</span>
+<span class="gp"># </span><span class="o">]</span>
+<span class="go">const char* useCasesJson = nullptr;</span>
+<span class="go">const Genie_AllocCallback_t allocCallback([](size_t size, const char** data) {</span>
+<span class="go">  *data = (char*)malloc(size);</span>
+<span class="go">});</span>
+<span class="go">GenieDlc_getUseCases(dlcHandle, allocCallback, &amp;useCasesJson);</span>
+
+<span class="gp"># </span>Parse<span class="w"> </span>useCasesJson<span class="w"> </span>to<span class="w"> </span><span class="k">select</span><span class="w"> </span>the<span class="w"> </span>desired<span class="w"> </span>use<span class="w"> </span><span class="k">case</span><span class="w"> </span>name,<span class="w"> </span>e.g.<span class="w"> </span><span class="s2">&quot;dialog&quot;</span>
+<span class="gp"># </span>The<span class="w"> </span><span class="s2">&quot;name&quot;</span><span class="w"> </span>value<span class="w"> </span>from<span class="w"> </span>a<span class="w"> </span>use<span class="w"> </span><span class="k">case</span><span class="w"> </span>entry<span class="w"> </span>is<span class="w"> </span>passed<span class="w"> </span>as<span class="w"> </span>the<span class="w"> </span>useCaseName<span class="w"> </span>argument<span class="w"> </span>below
+<span class="go">free((char*)useCasesJson);</span>
+
+<span class="gp"># </span>Create<span class="w"> </span>Dialog<span class="w"> </span>Config<span class="w"> </span>from<span class="w"> </span>DLC<span class="w"> </span>using<span class="w"> </span>the<span class="w"> </span>use<span class="w"> </span><span class="k">case</span><span class="w"> </span>name<span class="w"> </span>obtained<span class="w"> </span>from<span class="w"> </span>useCasesJson
+<span class="go">GenieDialogConfig_Handle_t dialogConfigHandle = NULL;</span>
+<span class="go">GenieDialogConfig_createFromDlc(dlcHandle, &quot;dialog&quot;, nullptr, &amp;dialogConfigHandle);</span>
+
+<span class="gp"># </span>Create<span class="w"> </span>Dialog
+<span class="go">GenieDialog_Handle_t dialogHandle = NULL;</span>
+<span class="go">GenieDialog_create(dialogConfigHandle, &amp;dialogHandle);</span>
+
+<span class="gp"># </span>Run<span class="w"> </span>Dialog<span class="w"> </span>Query<span class="w"> </span>API
+<span class="go">GenieDialog_query(dialogHandle, promptStr, GENIE_DIALOG_SENTENCE_COMPLETE, queryCallback);</span>
+
+<span class="gp"># </span>Free<span class="w"> </span>handles
+<span class="go">GenieDialog_free(dialogHandle);</span>
+<span class="go">GenieDialogConfig_free(dialogConfigHandle);</span>
+<span class="go">GenieDlc_free(dlcHandle);</span>
+<span class="go">GenieDlcConfig_free(dlcConfigHandle);</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="overwriting-dlc-configuration">
+<h2>Overwriting DLC Configuration<a class="headerlink" href="#overwriting-dlc-configuration" title="Permalink to this heading">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">createFromDlc</span></code> APIs accept an optional <code class="docutils literal notranslate"><span class="pre">configStr</span></code> parameter. When provided, the
+standalone Genie JSON configuration string overwrites the configuration bundled in the DLC for
+the specified use case. Pass <code class="docutils literal notranslate"><span class="pre">nullptr</span></code> (C) or an empty string (C++) to use the DLC’s bundled
+configuration unchanged.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The standalone config must use the same JSON hierarchy as the Genie config bundled in the DLC.
+The overwrite is applied as a recursive field-level merge: each key in the standalone config is
+matched by name at each nesting level and overwrites the corresponding field in the DLC config.
+A field placed at the wrong nesting level will not overwrite the intended field — it will
+instead be inserted as a new, unrecognised key that Genie silently ignores.</p>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>Create<span class="w"> </span>Dialog<span class="w"> </span>Config<span class="w"> </span>from<span class="w"> </span>DLC,<span class="w"> </span>overwriting<span class="w"> </span>with<span class="w"> </span>a<span class="w"> </span>standalone<span class="w"> </span>config
+<span class="go">std::string overrideConfig = R&quot;({&quot;backend&quot;: {</span>
+<span class="go">                                              &quot;dialog&quot; : {</span>
+<span class="go">                                                &quot;sampler&quot; : {</span>
+<span class="go">                                                  &quot;version&quot; : 1,</span>
+<span class="go">                                                  &quot;seed&quot; : 42,</span>
+<span class="go">                                                  &quot;temp&quot; : 0.8,</span>
+<span class="go">                                                  &quot;top-k&quot; : 40,</span>
+<span class="go">                                                  &quot;top-p&quot; : 0.95</span>
+<span class="go">                                                }</span>
+<span class="go">                                              }</span>
+<span class="go">                                            })&quot;;</span>
+<span class="go">GenieDialogConfig_Handle_t dialogConfigHandle = NULL;</span>
+<span class="go">GenieDialogConfig_createFromDlc(dlcHandle, &quot;dialog&quot;, overrideConfig.c_str(), &amp;dialogConfigHandle);</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="using-dlc-apis-in-genie-app">
+<h2>Using DLC APIs in genie-app<a class="headerlink" href="#using-dlc-apis-in-genie-app" title="Permalink to this heading">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">genie-app</span></code> tool supports DLC operations through the <code class="docutils literal notranslate"><span class="pre">dlc</span></code> command group. The following
+script demonstrates the full DLC workflow for a dialog use case:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>Create<span class="w"> </span>DLC<span class="w"> </span>config<span class="w"> </span>and<span class="w"> </span>DLC<span class="w"> </span>handle
+<span class="go">dlc config create dlcConfig1 /path/to/model.dlc</span>
+<span class="go">dlc create dlc1 dlcConfig1</span>
+
+<span class="gp"># </span><span class="o">(</span>Optional<span class="o">)</span><span class="w"> </span>Save<span class="w"> </span>supported<span class="w"> </span>use<span class="w"> </span>cases<span class="w"> </span>to<span class="w"> </span>a<span class="w"> </span>JSON<span class="w"> </span>file
+<span class="go">dlc getUseCases dlc1 use_cases.json</span>
+
+<span class="gp"># </span>Create<span class="w"> </span>dialog<span class="w"> </span>config<span class="w"> </span>from<span class="w"> </span>DLC
+<span class="go">dialog config createFromDlc dialogConfig1 dlc1 dialog</span>
+
+<span class="gp"># </span>Create<span class="w"> </span>dialog<span class="w"> </span>and<span class="w"> </span>run<span class="w"> </span>a<span class="w"> </span>query
+<span class="go">dialog create dialog1 dialogConfig1</span>
+<span class="go">dialog query dialog1 &quot;Describe the Snapdragon platform in one sentence.&quot;</span>
+
+<span class="gp"># </span>Clean<span class="w"> </span>up
+<span class="go">dialog free dialog1</span>
+<span class="go">dialog config free dialogConfig1</span>
+<span class="go">dlc free dlc1</span>
+<span class="go">dlc config free dlcConfig1</span>
+</pre></div>
+</div>
+<p>To overwrite the DLC’s bundled configuration with a standalone Genie config file, pass the
+path to the config file as an optional final argument:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">dialog config createFromDlc dialogConfig1 dlc1 dialog /path/to/override.json</span>
+</pre></div>
+</div>
+<p>The same pattern applies to embedding and node configurations:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">embedding config createFromDlc embConfig1 dlc1 embedding</span>
+<span class="go">node config createFromDlc nodeConfig1 dlc1 node</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="genie-app-dlc-command-reference">
+<h2>genie-app DLC Command Reference<a class="headerlink" href="#genie-app-dlc-command-reference" title="Permalink to this heading">¶</a></h2>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">dlc config create  CONFIG_NAME FILE.dlc</span>
+<span class="go">dlc config free    CONFIG_NAME</span>
+<span class="go">dlc create         DLC_NAME CONFIG_NAME</span>
+<span class="go">dlc getUseCases    DLC_NAME OUTPUT_FILE.json</span>
+<span class="go">dlc free           DLC_NAME</span>
+
+<span class="go">dialog config createFromDlc    CONFIG_NAME DLC_NAME USE_CASE_NAME [STANDALONE_GENIE_CONFIG]</span>
+<span class="go">embedding config createFromDlc CONFIG_NAME DLC_NAME USE_CASE_NAME [STANDALONE_GENIE_CONFIG]</span>
+<span class="go">node config createFromDlc      CONFIG_NAME DLC_NAME USE_CASE_NAME [STANDALONE_GENIE_CONFIG]</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="../../library/library.html" class="btn btn-neutral float-right" title="Library" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../accuracy/accuracy.html" class="btn btn-neutral float-left" title="Genie Accuracy" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020-2025, Qualcomm Technologies, Inc..
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

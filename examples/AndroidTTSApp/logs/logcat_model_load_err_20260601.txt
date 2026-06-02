@@ -1,0 +1,518 @@
+--------- beginning of system
+06-01 11:42:45.158  2026  3613 W ActivityTaskManager: callingPackage for (uid=2000, pid=13448) has no WPC
+06-01 11:42:45.159  2026  3613 W OptProp : Cannot read opt property android.window.PROPERTY_COMPAT_ALLOW_ORIENTATION_OVERRIDE
+--------- beginning of main
+06-01 11:42:45.161  2026  3613 V GrammaticalInflectionUtils: AttributionSource: android.content.AttributionSource@914cd22 does not have READ_SYSTEM_GRAMMATICAL_GENDER permission.
+06-01 11:42:45.161  2026  3613 W OptProp : Cannot read opt property android.window.PROPERTY_COMPAT_ALLOW_RESIZEABLE_ACTIVITY_OVERRIDES
+06-01 11:42:45.162  2026  3613 W OptProp : Cannot read opt property android.window.PROPERTY_COMPAT_ALLOW_MIN_ASPECT_RATIO_OVERRIDE
+06-01 11:42:45.166  1500  1565 E ANDR-PERF-RESOURCEQS: ANDR-PERF-RESOURCEQS: AddAndApply() 131: Resource value ffffffff is not supported
+06-01 11:42:45.167  1500  1565 E ANDR-PERF-UTIL: ANDR-PERF-UTIL: change_node_val() 319: Failed to update node /proc/sys/walt/sched_per_task_boost with value 65535 0
+06-01 11:42:45.167  1500  1565 E ANDR-PERF-OPTSHANDLER: ANDR-PERF-OPTSHANDLER: sched_reset_task_boost() 3633: can't reset task 4294967295
+06-01 11:42:45.167  1500  1565 E ANDR-PERF-RESOURCEQS: ANDR-PERF-RESOURCEQS: RemoveAndApply() 292: Failed to reset optimization here [3, 32]
+06-01 11:42:45.168  1500  1565 E ANDR-PERF-UTIL: ANDR-PERF-UTIL: change_node_val() 319: Failed to update node /proc/sys/walt/sched_per_task_boost with value 0 3
+06-01 11:42:45.168  1500  1565 E ANDR-PERF-OPTSHANDLER: ANDR-PERF-OPTSHANDLER: sched_task_boost() 3609: can't boost task 0
+06-01 11:42:45.168  1500  1565 E ANDR-PERF-RESOURCEQS: ANDR-PERF-RESOURCEQS: AddAndApply() 167: Failed to apply optimization [3, 32]
+06-01 11:42:45.176  2026  3613 I ActivityTaskManager: START u0 {flg=0x10000000 cmp=com.example.llama.aichat/com.example.llama.MainActivity} with LAUNCH_MULTIPLE from uid 2000 (BAL_ALLOW_PERMISSION) result code=0
+06-01 11:42:45.176  3524  3586 V WindowManagerShell: Transition requested (#363): android.os.BinderProxy@fbe90d4 TransitionRequestInfo { type = OPEN, triggerTask = TaskInfo{userId=0 taskId=1098 displayId=0 isRunning=true baseIntent=Intent { flg=0x10000000 cmp=com.example.llama.aichat/com.example.llama.MainActivity } baseActivity=ComponentInfo{com.example.llama.aichat/com.example.llama.MainActivity} topActivity=ComponentInfo{com.example.llama.aichat/com.example.llama.MainActivity} origActivity=null realActivity=ComponentInfo{com.example.llama.aichat/com.example.llama.MainActivity} numActivities=1 lastActiveTime=508658844 supportsMultiWindow=true resizeMode=1 isResizeable=true minWidth=-1 minHeight=-1 defaultMinSize=220 token=WCT{android.window.IWindowContainerToken$Stub$Proxy@c3c727d} topActivityType=1 pictureInPictureParams=null shouldDockBigOverlays=false launchIntoPipHostTaskId=-1 lastParentTaskIdBeforePip=-1 displayCutoutSafeInsets=Rect(0, 86 - 0, 0) topActivityInfo=ActivityInfo{a4d0572 com.example.llama.MainActivity} launchCookies=[] positionInParent=Point(0, 0) parentTaskId=-1 isFocused=false isVisible=false isVisibleRequested=false isSleeping=false locusId=null displayAreaFeatureId=1 isTopActivityTransparent=false appCompatTaskInfo=AppCompatTaskInfo { topActivityInSizeCompat=false topActivityEligibleForLetterboxEducation= falseisLetterboxEducationEnabled= false isLetterboxDoubleTapEnabled= false topActivityEligibleForUserAspectRatioButton= false topActivityBoundsLetterboxed= false isFromLetterboxDoubleTap= false topActivityLetterboxVerticalPosition= -1 topActivityLetterboxHorizontalPosition= -1 topActivityLetterboxWidth=1080 topActivityLetterboxHeight=2340 isUserFullscreenOverrideEnabled=false isSystemFullscreenOverrideEnabled=false cameraCompatTaskInfo=CameraCompatTaskInfo { cameraCompatControlState=hidden freeformCameraCompatMode=inactive}}}, pipTask = null, remoteTransition = null, displayChange = null, flags = 0, debugId = 363 }
+06-01 11:42:45.177  4001  4001 W SplitSelectStateCtor: Missing session instanceIds
+06-01 11:42:45.177  4001  4001 D StatsLog: LAUNCHER_SPLIT_SELECTION_EXIT_INTERRUPTED
+06-01 11:42:45.177  3524  3586 D WindowManagerShell: setLauncherKeepClearAreaHeight: visible=false, height=492
+06-01 11:42:45.179  2026  2068 V GrammaticalInflectionUtils: AttributionSource: android.content.AttributionSource@914cd22 does not have READ_SYSTEM_GRAMMATICAL_GENDER permission.
+06-01 11:42:45.180  4001  4001 I TopTaskTracker: onTaskMovedToFront: (moved taskInfo to front) taskId=1098, baseIntent=Intent { flg=0x10000000 cmp=com.example.llama.aichat/com.example.llama.MainActivity }
+06-01 11:42:45.181  1608  1608 I BpBinder: onLastStrongRef automatically unlinking death recipients: 
+06-01 11:42:45.182  3524  3624 D InputEventReceiver: Input log is disabled in InputEventReceiver.
+06-01 11:42:45.183  2026  4000 D CoreBackPreview: Window{fe1bfd1 u0 Splash Screen com.example.llama.aichat}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@38b42a4, mPriority=0, mIsAnimationCallback=false}
+06-01 11:42:45.184  2026  3613 W WindowManager: Changing focus from Window{bfe95a8 u0 jp.co.sharp.android.launcher3/jp.co.sharp.android.launcher3.uioverrides.QuickstepLauncher} to null displayId=0 Callers=com.android.server.wm.RootWindowContainer.updateFocusedWindowLocked:479 com.android.server.wm.WindowManagerService.updateFocusedWindowLocked:6654 com.android.server.wm.WindowManagerService.relayoutWindowInner:2780 com.android.server.wm.WindowManagerService.relayoutWindow:2450 
+06-01 11:42:45.188  3524  3658 W qdgralloc: getInterlacedFlag: getMetaData returned 3, defaulting to interlaced_flag = 0
+06-01 11:42:45.190  1255  1255 D Zygote  : Forked child process 13456
+06-01 11:42:45.190  2026  2119 I ActivityManager: Start proc 13456:com.example.llama.aichat/u0a328 for next-top-activity {com.example.llama.aichat/com.example.llama.MainActivity}
+06-01 11:42:45.190  2026 13457 W ContextImpl: Calling a method in the system process without a qualified user: android.app.ContextImpl.sendBroadcast:1249 com.qualcomm.qti.Performance$SendGameLaunchBroadcast.run:327 java.lang.Thread.run:1564 <bottom of call stack> <bottom of call stack> 
+06-01 11:42:45.191  2026  2064 V WindowManager: Sent Transition (#363) createdAt=06-01 11:42:45.162 via request=TransitionRequestInfo { type = OPEN, triggerTask = TaskInfo{userId=0 taskId=1098 displayId=0 isRunning=true baseIntent=Intent { flg=0x10000000 cmp=com.example.llama.aichat/com.example.llama.MainActivity } baseActivity=ComponentInfo{com.example.llama.aichat/com.example.llama.MainActivity} topActivity=ComponentInfo{com.example.llama.aichat/com.example.llama.MainActivity} origActivity=null realActivity=ComponentInfo{com.example.llama.aichat/com.example.llama.MainActivity} numActivities=1 lastActiveTime=508658844 supportsMultiWindow=true resizeMode=1 isResizeable=true minWidth=-1 minHeight=-1 defaultMinSize=220 token=WCT{RemoteToken{77eb5d3 Task{2e34355 #1098 type=standard A=10328:com.example.llama.aichat}}} topActivityType=1 pictureInPictureParams=null shouldDockBigOverlays=false launchIntoPipHostTaskId=-1 lastParentTaskIdBeforePip=-1 displayCutoutSafeInsets=Rect(0, 86 - 0, 0) topActivityInfo=ActivityInfo{8be510 com.example.llama.MainActivity} launchCookies=[] positionInParent=Point(0, 0) parentTaskId=-1 isFocused=false isVisible=false isVisibleRequested=false isSleeping=false locusId=null displayAreaFeatureId=1 isTopActivityTransparent=false appCompatTaskInfo=AppCompatTaskInfo { topActivityInSizeCompat=false topActivityEligibleForLetterboxEducation= falseisLetterboxEducationEnabled= false isLetterboxDoubleTapEnabled= false topActivityEligibleForUserAspectRatioButton= false topActivityBoundsLetterboxed= false isFromLetterboxDoubleTap= false topActivityLetterboxVerticalPosition= -1 topActivityLetterboxHorizontalPosition= -1 topActivityLetterboxWidth=1080 topActivityLetterboxHeight=2340 isUserFullscreenOverrideEnabled=false isSystemFullscreenOverrideEnabled=false cameraCompatTaskInfo=CameraCompatTaskInfo { cameraCompatControlState=hidden freeformCameraCompatMode=inactive}}}, pipTask = null, remoteTransition = null, displayChange = null, flags = 0, debugId = 363 }
+06-01 11:42:45.191  2026  2064 V WindowManager:     startWCT=WindowContainerTransaction { changes = {} hops = [] errorCallbackToken=null taskFragmentOrganizer=null }
+06-01 11:42:45.191  2026  2064 V WindowManager:     info={id=363 t=OPEN f=0x0 trk=0 r=[0@Point(0, 0)] c=[
+06-01 11:42:45.191  2026  2064 V WindowManager:         {WCT{RemoteToken{77eb5d3 Task{2e34355 #1098 type=standard A=10328:com.example.llama.aichat}}} m=OPEN f=NONE leash=Surface(name=Task=1098)/@0xf71880d sb=Rect(0, 0 - 1080, 2340) eb=Rect(0, 0 - 1080, 2340) d=0 taskParent=-1},
+06-01 11:42:45.191  2026  2064 V WindowManager:         {WCT{RemoteToken{7dd01da Task{88acdf9 #1 type=home}}} m=TO_BACK f=SHOW_WALLPAPER leash=Surface(name=Task=1)/@0x75530b4 sb=Rect(0, 0 - 1080, 2340) eb=Rect(0, 0 - 1080, 2340) d=0 taskParent=-1}
+06-01 11:42:45.191  2026  2064 V WindowManager:     ]}
+06-01 11:42:45.191  3524  4163 V WindowManagerShell: onTransitionReady(transaction=8701603760062)
+06-01 11:42:45.191  3524  3586 V WindowManagerShell: onTransitionReady (#363) android.os.BinderProxy@fbe90d4: {id=363 t=OPEN f=0x0 trk=0 r=[0@Point(0, 0)] c=[{WCT{android.window.IWindowContainerToken$Stub$Proxy@d9d1eb1} m=OPEN f=NONE leash=Surface(name=Task=1098)/@0xa33d0ca sb=Rect(0, 0 - 1080, 2340) eb=Rect(0, 0 - 1080, 2340) d=0 taskParent=-1},{WCT{android.window.IWindowContainerToken$Stub$Proxy@9262f96} m=TO_BACK f=SHOW_WALLPAPER leash=Surface(name=Task=1)/@0x7e9a23b sb=Rect(0, 0 - 1080, 2340) eb=Rect(0, 0 - 1080, 2340) d=0 taskParent=-1}]}
+06-01 11:42:45.191  3524  3586 V WindowManagerShell: Playing animation for (#363) android.os.BinderProxy@fbe90d4@0
+06-01 11:42:45.191  3524  3586 V WindowManagerShell:  try handler com.android.wm.shell.transition.DefaultMixedHandler@bcb2e86
+06-01 11:42:45.191  3524  3586 V WindowManagerShell:  try handler com.android.wm.shell.keyguard.KeyguardTransitionHandler@f53d347
+06-01 11:42:45.191  3524  3586 V WindowManagerShell:  try handler com.android.wm.shell.pip.PipTransition@503d02c
+06-01 11:42:45.191  3524  3586 V WindowManagerShell:  try handler com.android.wm.shell.activityembedding.ActivityEmbeddingController@a153af5
+06-01 11:42:45.191  3524  3586 V WindowManagerShell:  try handler com.android.wm.shell.recents.RecentsTransitionHandler@17ef08a
+06-01 11:42:45.191  3524  3586 V ShellRecents: RecentsTransitionHandler.startAnimation: no controller found
+06-01 11:42:45.191  3524  3586 V WindowManagerShell:  try handler com.android.wm.shell.splitscreen.StageCoordinator@512a6fb
+06-01 11:42:45.191  3524  3586 V WindowManagerShell:  try handler com.android.wm.shell.transition.RemoteTransitionHandler@8f3c318
+06-01 11:42:45.191  3524  3586 V WindowManagerShell: Transition doesn't have explicit remote, search filters for match for {id=363 t=OPEN f=0x0 trk=0 r=[0@Point(0, 0)] c=[{WCT{android.window.IWindowContainerToken$Stub$Proxy@d9d1eb1} m=OPEN f=NONE leash=Surface(name=Task=1098)/@0xa33d0ca sb=Rect(0, 0 - 1080, 2340) eb=Rect(0, 0 - 1080, 2340) d=0 taskParent=-1},{WCT{android.window.IWindowContainerToken$Stub$Proxy@9262f96} m=TO_BACK f=SHOW_WALLPAPER leash=Surface(name=Task=1)/@0x7e9a23b sb=Rect(0, 0 - 1080, 2340) eb=Rect(0, 0 - 1080, 2340) d=0 taskParent=-1}]}
+06-01 11:42:45.191  3524  3586 V WindowManagerShell:  Checking filter Pair{{types=[] flags=0x0] notFlags=0x100 checks=[{atype=home independent=true modes=[OPEN,TO_FRONT] flags=NONE mustBeTask=false order=TOP topActivity=ComponentInfo{jp.co.sharp.android.launcher3/jp.co.sharp.android.launcher3.uioverrides.QuickstepLauncher} launchCookie=null},{atype=standard independent=true modes=[CLOSE,TO_BACK] flags=NONE mustBeTask=false order=ANY topActivity=null launchCookie=null}]} RemoteTransition { remoteTransition = android.window.IRemoteTransition$Stub$Proxy@1cb9171, appThread = android.app.IApplicationThread$Stub$Proxy@8638b56, debugName = QuickstepLaunchHome }}
+06-01 11:42:45.191  3524  3586 V WindowManagerShell:  Delegate animation for (#363) to null
+06-01 11:42:45.191  3524  3586 V WindowManagerShell:  try handler com.android.wm.shell.transition.DefaultTransitionHandler@15ab7d7
+06-01 11:42:45.191  3524  3586 V WindowManagerShell: start default transition animation, info = {id=363 t=OPEN f=0x0 trk=0 r=[0@Point(0, 0)] c=[{WCT{android.window.IWindowContainerToken$Stub$Proxy@d9d1eb1} m=OPEN f=NONE leash=Surface(name=Task=1098)/@0xa33d0ca sb=Rect(0, 0 - 1080, 2340) eb=Rect(0, 0 - 1080, 2340) d=0 taskParent=-1},{WCT{android.window.IWindowContainerToken$Stub$Proxy@9262f96} m=TO_BACK f=SHOW_WALLPAPER leash=Surface(name=Task=1)/@0x7e9a23b sb=Rect(0, 0 - 1080, 2340) eb=Rect(0, 0 - 1080, 2340) d=0 taskParent=-1}]}
+06-01 11:42:45.192  3524  3586 V WindowManagerShell: loadAnimation: anim=android.view.animation.AnimationSet@611d704 animAttr=0x13 type=OPEN isEntrance=false
+06-01 11:42:45.192  3524  3586 V WindowManagerShell: loadAnimation: anim=android.view.animation.AnimationSet@9575f70 animAttr=0x12 type=OPEN isEntrance=true
+06-01 11:42:45.192  3524  3586 V WindowManagerShell:  animated by com.android.wm.shell.transition.DefaultTransitionHandler@15ab7d7
+06-01 11:42:45.194  2026  3613 W UserManagerService: Requested status bar icon for non-badged user 0
+06-01 11:42:45.195  4812  7185 W SQLiteLog: (28) double-quoted string literal: "com.example.llama.aichat"
+06-01 11:42:45.196 13372 13376 I artd    : GetBestInfo: odex next to the dex file (/data/app/~~Ul3K4orIvHNyVF2cUAzAJw==/com.example.llama.aichat-Q3oNjako8OZ_SMvZVPj8Aw==/oat/arm64/base.odex) is kOatUpToDate with filter 'verify' executable 'false'
+06-01 11:42:45.198 13456 13456 I le.llama.aichat: Using CollectorTypeCMC GC.
+06-01 11:42:45.203 13456 13456 D nativeloader: Load libframework-connectivity-tiramisu-jni.so using APEX ns com_android_tethering for caller /apex/com.android.tethering/javalib/framework-connectivity-t.jar: ok
+06-01 11:42:45.205  2026  3613 V ActivityManager: New death recipient com.android.server.am.ActivityManagerService$AppDeathRecipient@793ece6 for thread android.os.BinderProxy@c0e2227
+06-01 11:42:45.208  4614 15095 D MainProcessObserver: pid:13456 uid:10328 foregroundActivities:true
+06-01 11:42:45.209  2026  3613 W ActivityTaskManager: MANAGE_ACTIVITY_STACKS is deprecated, please use alternative permission: MANAGE_ACTIVITY_TASKS
+06-01 11:42:45.209  4614 15095 D onForegroundChanged: topActivity:ComponentInfo{com.example.llama.aichat/com.example.llama.MainActivity}, taskId:1098, windowingMode:1
+06-01 11:42:45.209  4614 15095 D onForegroundChanged: packageName:com.example.llama.aichat
+06-01 11:42:45.210  4424  4475 I ekjt    : (REDACTED) HDM. appOpsListener %s %s
+06-01 11:42:45.210  4424  4475 I ekjt    : (REDACTED) HDM. Ignoring irrelevant audio permission changes for package %s
+06-01 11:42:45.212  2026  2118 D ActivityManager: sync unfroze 7586 sharp.jp.android.makersiteappli for 3
+06-01 11:42:45.212  7586  7586 D ActivityThread: Package [com.example.llama.aichat] reported as REPLACED, but missing application info. Assuming REMOVED.
+06-01 11:42:45.213  7586  7586 D ActivityThread: Package [com.example.llama.aichat] reported as REPLACED, but missing application info. Assuming REMOVED.
+06-01 11:42:45.213 13456 13456 D nativeloader: Configuring clns-7 for other apk /data/app/~~Ul3K4orIvHNyVF2cUAzAJw==/com.example.llama.aichat-Q3oNjako8OZ_SMvZVPj8Aw==/base.apk. target_sdk_version=36, uses_libraries=libOpenCL.so:libcdsprpc.so, library_path=/data/app/~~Ul3K4orIvHNyVF2cUAzAJw==/com.example.llama.aichat-Q3oNjako8OZ_SMvZVPj8Aw==/lib/arm64:/data/app/~~Ul3K4orIvHNyVF2cUAzAJw==/com.example.llama.aichat-Q3oNjako8OZ_SMvZVPj8Aw==/base.apk!/lib/arm64-v8a, permitted_path=/data:/mnt/expand:/data/user/0/com.example.llama.aichat
+06-01 11:42:45.214  4418  9696 D EventRepositoryImpl: onChangeForeground(com.example.llama.aichat, 1098)
+06-01 11:42:45.217  4418  9696 D EventRepositoryImpl: onDeactivatedApplication()
+06-01 11:42:45.217 13456 13456 V GraphicsEnvironment: Currently set values for:
+06-01 11:42:45.217 13456 13456 V GraphicsEnvironment:   angle_gl_driver_selection_pkgs=[]
+06-01 11:42:45.217 13456 13456 V GraphicsEnvironment:   angle_gl_driver_selection_values=[]
+06-01 11:42:45.217 13456 13456 V GraphicsEnvironment: Global.Settings values are invalid: number of packages: 0, number of values: 0
+06-01 11:42:45.217 13456 13456 V GraphicsEnvironment: Updatable production driver is not supported on the device.
+06-01 11:42:45.218  4614  4614 I System.out: intent:Intent { act=ACTION_SET_GAME_VIEW flg=0x10 (has extras) }
+06-01 11:42:45.218  2026  3255 W JobInfo : Job 'jp.co.sharp.android.gamingbasemodule/.GamingMenuJobIntentService#990' has a deadline with no functional constraints. The deadline won't improve job execution latency. Consider removing the deadline.
+06-01 11:42:45.218 13456 13456 W ResOptExtFactory: ResOptExtFactoryImpl not found
+06-01 11:42:45.220 13456 13456 D WM-WrkMgrInitializer: Initializing WorkManager with default configuration.
+06-01 11:42:45.221  4614  4614 I System.out: intent:Intent { act=ACTION_SET_NOTIFICATION_SUPPRESSION_TYPE flg=0x10 (has extras) }
+06-01 11:42:45.221  2026  3255 W JobInfo : Job 'jp.co.sharp.android.gamingbasemodule/.GamingMenuJobIntentService#990' has a deadline with no functional constraints. The deadline won't improve job execution latency. Consider removing the deadline.
+06-01 11:42:45.221  4614  6557 V GamingMenuJobIntentService: GAMING_ACTION_SET_GAME_VIEW: start
+06-01 11:42:45.221 13456 13456 D WM-PackageManagerHelper: Skipping component enablement for androidx.work.impl.background.systemjob.SystemJobService
+06-01 11:42:45.221  4418  9696 D EventRepositoryImpl: onActivatedApplication(com.example.llama.aichat)
+06-01 11:42:45.221  4614  4614 I System.out: intent:Intent { act=ACTION_SET_FINGERPRINT_SENSOR flg=0x10 (has extras) }
+06-01 11:42:45.221 13456 13456 D WM-Schedulers: Created SystemJobScheduler and enabled SystemJobService
+06-01 11:42:45.221  4614  6557 V GamingMenuJobIntentService: GAMING_ACTION_SET_GAME_VIEW: end
+06-01 11:42:45.221  2026  4000 W JobInfo : Job 'jp.co.sharp.android.gamingbasemodule/.GamingMenuJobIntentService#990' has a deadline with no functional constraints. The deadline won't improve job execution latency. Consider removing the deadline.
+06-01 11:42:45.222  4614  4614 I System.out: intent:Intent { act=ACTION_SET_GESTURES flg=0x10 (has extras) }
+06-01 11:42:45.222  4614  6557 V GamingMenuJobIntentService: GAMING_ACTION_SET_NOTIFICATION_SUPPRESSION_TYPE: start
+06-01 11:42:45.222  4614  6557 V setNotificationSuppressionType: start: type:0
+06-01 11:42:45.222  2026  3255 W JobInfo : Job 'jp.co.sharp.android.gamingbasemodule/.GamingMenuJobIntentService#990' has a deadline with no functional constraints. The deadline won't improve job execution latency. Consider removing the deadline.
+06-01 11:42:45.222  4614  6557 V setNotificationSuppressionType: granted
+06-01 11:42:45.222  8434  8434 D ScShoCaptureReceirver: receive ACTION_LOCK_CLIPNOW_FOR_SETTING
+06-01 11:42:45.222  4614  6557 V setNotificationSuppressionType: end
+06-01 11:42:45.222  4614  6557 V GamingMenuJobIntentService: GAMING_ACTION_SET_NOTIFICATION_SUPPRESSION_TYPE: end
+06-01 11:42:45.223  4614  6557 V GamingMenuJobIntentService: GAMING_ACTION_SET_FINGERPRINT_SENSOR: start
+06-01 11:42:45.223  4614  6557 V setFingerprintSensor: enabled = 1
+06-01 11:42:45.223  4614  6557 V GamingMenuJobIntentService: GAMING_ACTION_SET_FINGERPRINT_SENSOR: end
+06-01 11:42:45.224  4614  6557 V GamingMenuJobIntentService: GAMING_ACTION_SET_GESTURES: start
+06-01 11:42:45.225  4614  6557 V GamingMenuJobIntentService: GAMING_ACTION_SET_GESTURES: end
+06-01 11:42:45.234 13456 13456 D AppCompatDelegate: Checking for metadata for AppLocalesMetadataHolderService : Service not found
+06-01 11:42:45.240 13456 13474 D vulkan  : searching for layers in '/data/app/~~Ul3K4orIvHNyVF2cUAzAJw==/com.example.llama.aichat-Q3oNjako8OZ_SMvZVPj8Aw==/lib/arm64'
+06-01 11:42:45.241 13456 13474 D vulkan  : searching for layers in '/data/app/~~Ul3K4orIvHNyVF2cUAzAJw==/com.example.llama.aichat-Q3oNjako8OZ_SMvZVPj8Aw==/base.apk!/lib/arm64-v8a'
+06-01 11:42:45.245  1538  1538 I qspmHal : enter getGpuProf at: -2126062595
+06-01 11:42:45.245  1538  1538 I qspmHal : Coudn't match the GFX PID 13456 to AT PID 0. Checking in local cache.
+06-01 11:42:45.245  1538  1538 E qspmHal : PID 13456 from GFX didn't match!!
+06-01 11:42:45.246 13456 13474 I AdrenoVK-0: ===== BEGIN DUMP OF OVERRIDDEN SETTINGS =====
+06-01 11:42:45.246 13456 13474 I AdrenoVK-0: ===== END DUMP OF OVERRIDDEN SETTINGS =====
+06-01 11:42:45.249 13456 13456 W MaterialButton: MaterialButton manages its own background to control elevation, shape, color and states. Consider using backgroundTint, shapeAppearance and other attributes where available. A custom background will ignore these attributes and you should consider handling interaction states such as pressed, focused and disabled
+06-01 11:42:45.249 13456 13456 W MaterialButton: MaterialButton manages its own background to control elevation, shape, color and states. Consider using backgroundTint, shapeAppearance and other attributes where available. A custom background will ignore these attributes and you should consider handling interaction states such as pressed, focused and disabled
+06-01 11:42:45.249 13456 13456 W MaterialButton: MaterialButton manages its own background to control elevation, shape, color and states. Consider using backgroundTint, shapeAppearance and other attributes where available. A custom background will ignore these attributes and you should consider handling interaction states such as pressed, focused and disabled
+06-01 11:42:45.249 13456 13456 W MaterialButton: MaterialButton manages its own background to control elevation, shape, color and states. Consider using backgroundTint, shapeAppearance and other attributes where available. A custom background will ignore these attributes and you should consider handling interaction states such as pressed, focused and disabled
+06-01 11:42:45.249 13456 13456 W MaterialButton: MaterialButton manages its own background to control elevation, shape, color and states. Consider using backgroundTint, shapeAppearance and other attributes where available. A custom background will ignore these attributes and you should consider handling interaction states such as pressed, focused and disabled
+06-01 11:42:45.250 13456 13456 W MaterialButton: MaterialButton manages its own background to control elevation, shape, color and states. Consider using backgroundTint, shapeAppearance and other attributes where available. A custom background will ignore these attributes and you should consider handling interaction states such as pressed, focused and disabled
+06-01 11:42:45.251 13456 13456 W MaterialButton: MaterialButton manages its own background to control elevation, shape, color and states. Consider using backgroundTint, shapeAppearance and other attributes where available. A custom background will ignore these attributes and you should consider handling interaction states such as pressed, focused and disabled
+06-01 11:42:45.251 13456 13456 W WindowOnBackDispatcher: OnBackInvokedCallback is not enabled for the application.
+06-01 11:42:45.251 13456 13456 W WindowOnBackDispatcher: Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+06-01 11:42:45.252 13456 13456 I ContentCaptureHelper: Setting logging level to OFF
+06-01 11:42:45.254 13456 13474 I AdrenoVK-0: QUALCOMM build          : 43c70540de, Ibee7afe120
+06-01 11:42:45.254 13456 13474 I AdrenoVK-0: Build Date              : 07/17/24
+06-01 11:42:45.254 13456 13474 I AdrenoVK-0: Shader Compiler Version : E031.45.02.16
+06-01 11:42:45.254 13456 13474 I AdrenoVK-0: Local Branch            : 
+06-01 11:42:45.254 13456 13474 I AdrenoVK-0: Remote Branch           : refs/tags/AU_LINUX_ANDROID_LA.VENDOR.14.3.0.11.00.00.973.576
+06-01 11:42:45.254 13456 13474 I AdrenoVK-0: Remote Branch           : NONE
+06-01 11:42:45.254 13456 13474 I AdrenoVK-0: Reconstruct Branch      : NOTHING
+06-01 11:42:45.254 13456 13474 I AdrenoVK-0: Build Config            : S P 16.1.2 AArch64
+06-01 11:42:45.254 13456 13474 I AdrenoVK-0: Driver Path             : /vendor/lib64/hw/vulkan.adreno.so
+06-01 11:42:45.254 13456 13474 I AdrenoVK-0: Driver Version          : 0762.24
+06-01 11:42:45.254 13456 13474 I AdrenoVK-0: PFP                     : 0x01310168
+06-01 11:42:45.254 13456 13474 I AdrenoVK-0: ME                      : 0x00000000
+06-01 11:42:45.254 13456 13474 I AdrenoVK-0: Application Name    : android framework
+06-01 11:42:45.254 13456 13474 I AdrenoVK-0: Application Version : 0x00000000
+06-01 11:42:45.254 13456 13474 I AdrenoVK-0: Engine Name         : android framework
+06-01 11:42:45.254 13456 13474 I AdrenoVK-0: Engine Version      : 0x00000000
+06-01 11:42:45.254 13456 13474 I AdrenoVK-0: Api Version         : 0x00401000
+06-01 11:42:45.260 13456 13456 D InputEventReceiver: Input log is disabled in InputEventReceiver.
+06-01 11:42:45.266 13456 13456 D AutofillManager: view not autofillable - has multiline input type
+06-01 11:42:45.266 13456 13456 D AutofillManager: view not autofillable - has multiline input type
+06-01 11:42:45.266 13456 13456 D AutofillManager: view not autofillable - has multiline input type
+06-01 11:42:45.266 13456 13456 D AutofillManager: view not autofillable - has multiline input type
+06-01 11:42:45.267  2026  4000 D CoreBackPreview: Window{e6c0f5d u0 com.example.llama.aichat/com.example.llama.MainActivity}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@24655a3, mPriority=0, mIsAnimationCallback=false}
+06-01 11:42:45.273  2026  3613 W WindowManager: Changing focus from null to Window{e6c0f5d u0 com.example.llama.aichat/com.example.llama.MainActivity} displayId=0 Callers=com.android.server.wm.RootWindowContainer.updateFocusedWindowLocked:479 com.android.server.wm.WindowManagerService.updateFocusedWindowLocked:6654 com.android.server.wm.WindowManagerService.relayoutWindowInner:2780 com.android.server.wm.WindowManagerService.relayoutWindow:2450 
+06-01 11:42:45.277   943   943 I hwservicemanager: getTransport: Cannot find entry android.hardware.graphics.allocator@4.0::IAllocator/default in either framework or device VINTF manifest.
+06-01 11:42:45.277 26853 26853 I byee    : onPause
+06-01 11:42:45.277 26853 26853 W dnth    : measuring already stopped.
+06-01 11:42:45.279 13456 13474 I AdrenoUtils: <ReadGpuID:357>: Reading chip ID through GSL
+06-01 11:42:45.279 13456 13474 W qdgralloc: getInterlacedFlag: getMetaData returned 3, defaulting to interlaced_flag = 0
+06-01 11:42:45.290 13456 13474 W qdgralloc: getInterlacedFlag: getMetaData returned 3, defaulting to interlaced_flag = 0
+06-01 11:42:45.298  2026  2064 I ActivityTaskManager: Displayed com.example.llama.aichat/com.example.llama.MainActivity for user 0: +134ms
+06-01 11:42:45.299  3524  3658 W qdgralloc: getInterlacedFlag: getMetaData returned 3, defaulting to interlaced_flag = 0
+06-01 11:42:45.305  2026  3325 I ImeTracker: com.example.llama.aichat:d1655c9a: onRequestHide at ORIGIN_SERVER reason HIDE_UNSPECIFIED_WINDOW fromUser false
+06-01 11:42:45.305  2026  3325 I ImeTracker: com.example.llama.aichat:d1655c9a: onCancelled at PHASE_SERVER_SHOULD_HIDE
+06-01 11:42:45.307  3524  3658 W qdgralloc: getInterlacedFlag: getMetaData returned 3, defaulting to interlaced_flag = 0
+06-01 11:42:45.307 13456 13474 W qdgralloc: getInterlacedFlag: getMetaData returned 3, defaulting to interlaced_flag = 0
+06-01 11:42:45.307  8272  8272 D InputEventReceiver: Input log is disabled in InputEventReceiver.
+06-01 11:42:45.311  8272  8272 I GoogleInputMethodService: GoogleInputMethodService.onFinishInput():2259 
+06-01 11:42:45.311  8272  8272 I Module  : DeviceLockedStatusModuleProvider$Module.updateDeviceLockedStatus():103 repeatCheckTimes = 0, locked = false
+06-01 11:42:45.311  8272  8272 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1446 onStartInput(EditorInfo{EditorInfo{packageName=com.example.llama.aichat, inputType=0, inputTypeString=NULL, enableLearning=false, autoCorrection=false, autoComplete=false, imeOptions=0, privateImeOptions=null, actionName=UNSPECIFIED, actionLabel=null, initialSelStart=-1, initialSelEnd=-1, initialCapsMode=0, label=null, fieldId=0, fieldName=null, extras=null, hintText=null, hintLocales=[]}}, false)
+06-01 11:42:45.311  8272  8272 W AndroidIME: LatinIMEBase.updateInputViewCoverNavigation():327 Null input view, cannot update padding!
+06-01 11:42:45.312  8272  8272 I Module  : DeviceLockedStatusModuleProvider$Module.updateDeviceLockedStatus():103 repeatCheckTimes = 1, locked = false
+06-01 11:42:45.313  2026  3255 W PackageConfigPersister: App-specific configuration not found for packageName: com.example.llama.aichat and userId: 0
+06-01 11:42:45.316  3524  3658 W qdgralloc: getInterlacedFlag: getMetaData returned 3, defaulting to interlaced_flag = 0
+06-01 11:42:45.474  3524  3586 V WindowManagerShell: Transition animation finished (aborted=false), notifying core (#363) android.os.BinderProxy@fbe90d4@0
+06-01 11:42:45.476  2026  2064 V WindowManager: Finish Transition (#363): created at 06-01 11:42:45.162 collect-started=0.031ms request-sent=13.314ms started=14.981ms ready=27.178ms sent=28.519ms finished=313.166ms
+06-01 11:42:45.477  4001  4001 D VRI[QuickstepLauncher]: visibilityChanged oldVisibility=true newVisibility=false
+06-01 11:42:45.477 26853 26853 D VRI[GoogleDiscoverWindow]: visibilityChanged oldVisibility=true newVisibility=false
+06-01 11:42:45.478  3524  3586 V WindowManagerShell: Track 0 became idle
+06-01 11:42:45.478  3524  3586 V WindowManagerShell: All active transition animations finished
+06-01 11:42:45.478  2026  3255 W UserManagerService: Requested status bar icon for non-badged user 0
+06-01 11:42:45.479  2026  3255 W UserManagerService: Requested status bar icon for non-badged user 0
+06-01 11:42:45.505  4001  4001 D BaseDepthController: setSurface:
+06-01 11:42:45.505  4001  4001 D BaseDepthController: 	mWaitingOnSurfaceValidity: false
+06-01 11:42:45.505  4001  4001 D BaseDepthController: 	mSurface: null
+06-01 11:42:45.506  4001  4001 D BaseDepthController: mSurface is null and mCurrentBlur is: 0
+06-01 11:42:45.506  4001  4001 D StateManager: goToState - fromState: Normal, toState: Normal, partial trace:
+06-01 11:42:45.506  4001  4001 D StateManager: 	at com.android.launcher3.statemanager.StateManager.moveToRestState(StateManager.java:458)
+06-01 11:42:45.506  4001  4001 D StateManager: 	at com.android.launcher3.statemanager.StateManager.moveToRestState(StateManager.java:449)
+06-01 11:42:45.506  4001  4001 D StateManager: 	at com.android.launcher3.statemanager.StatefulActivity.onStop(StatefulActivity.java:122)
+06-01 11:42:45.513  4001  4001 D StatsLog: LAUNCHER_ONSTOP
+06-01 11:42:45.513 26853 26853 I byee    : onStop
+06-01 11:42:45.524  4614 20454 D MainProcessObserver: pid:4001 uid:10231 foregroundActivities:false
+06-01 11:42:45.528  2026  4000 W ActivityTaskManager: MANAGE_ACTIVITY_STACKS is deprecated, please use alternative permission: MANAGE_ACTIVITY_TASKS
+06-01 11:42:45.529  4614 20454 D onForegroundChanged: topActivity:ComponentInfo{com.example.llama.aichat/com.example.llama.MainActivity}, taskId:1098, windowingMode:1
+06-01 11:42:45.529  4614 20454 D onForegroundChanged: packageName:com.example.llama.aichat
+06-01 11:42:45.616 12233 12239 W gle.android.gms: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~Ul3K4orIvHNyVF2cUAzAJw==/com.example.llama.aichat-Q3oNjako8OZ_SMvZVPj8Aw==/base.apk' with 1 weak references
+06-01 11:42:45.667  3524  3624 W WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=android.view.ViewRootImpl$$ExternalSyntheticLambda11@822b979
+06-01 11:42:45.668  2026  3613 D CoreBackPreview: Window{fe1bfd1 u0 Splash Screen com.example.llama.aichat EXITING}: Setting back callback null
+06-01 11:42:45.669  2026  4018 W InputManager-JNI: Input channel object 'fe1bfd1 Splash Screen com.example.llama.aichat (client)' was disposed without first being removed with the input manager!
+06-01 11:42:45.713  2026  2118 D ActivityManager: notifyResumeComponent isGame : false
+06-01 11:42:45.717  3524  3624 W FrameTracker: Missing HWUI jank callback for vsyncId: 972119, CUJ=J<SPLASHSCREEN_EXIT_ANIM>
+06-01 11:42:45.717  3524  3624 W FrameTracker: Missing HWUI jank callback for vsyncId: 972237, CUJ=J<SPLASHSCREEN_EXIT_ANIM>
+06-01 11:42:45.717  3524  3624 W FrameTracker: Missing HWUI jank callback for vsyncId: 972372, CUJ=J<SPLASHSCREEN_EXIT_ANIM>
+06-01 11:42:45.717  3524  3624 W FrameTracker: Missing SF jank callback for vsyncId: 972387, CUJ=J<SPLASHSCREEN_EXIT_ANIM>
+06-01 11:42:45.770  5709  5729 I FontLog : (REDACTED) Received query %s, URI %s
+06-01 11:42:45.770  5709  5729 I FontLog : (REDACTED) Query [%s] resolved to %s
+06-01 11:42:45.773  5709  5729 I FontLog : (REDACTED) Fetch %s end status %s
+06-01 11:42:45.776  5709 10414 I FontLog : (REDACTED) Pulling font file for id = %d, cache size = %d
+06-01 11:42:45.781  5709 10414 I FontLog : (REDACTED) Pulling font file for id = %d, cache size = %d
+06-01 11:42:45.821  2026  2069 D WindowManager: setParent old=ActivityRecord{d5d3e0c u0 com.example.llama.aichat/com.example.llama.MainActivity t1098},new=null,this window=Window{fe1bfd1 u0 Splash Screen com.example.llama.aichat},callers=com.android.server.wm.WindowContainer.removeChild:833 com.android.server.wm.ActivityRecord.removeChild:4750 com.android.server.wm.ActivityRecord.removeChild:435 com.android.server.wm.WindowContainer.removeImmediately:891 com.android.server.wm.WindowState.removeImmediately:2391 com.android.server.wm.WindowState.destroySurface:3371 
+06-01 11:42:46.217  2026  4018 W ActivityTaskManager: MANAGE_ACTIVITY_STACKS is deprecated, please use alternative permission: MANAGE_ACTIVITY_TASKS
+06-01 11:42:46.539  2026  4018 W ActivityTaskManager: MANAGE_ACTIVITY_STACKS is deprecated, please use alternative permission: MANAGE_ACTIVITY_TASKS
+06-01 11:42:46.767  2200  3058 E Diag_Lib: diag: Diag_LSM_Init: invoked for pid: 2200 with init_count: 0
+06-01 11:42:46.768  2200  3058 E Diag_Lib: diag:failed to connect to diag socket
+06-01 11:42:46.769  2200  3058 E Diag_Lib:  Diag_LSM_Init: Failed to open handle to diag driver, error = 111
+06-01 11:42:46.870 13456 13474 W qdgralloc: getInterlacedFlag: getMetaData returned 3, defaulting to interlaced_flag = 0
+06-01 11:42:46.998  2026 13439 W ContextImpl: Calling a method in the system process without a qualified user: android.app.ContextImpl.sendBroadcast:1249 android.content.ContextWrapper.sendBroadcast:506 jp.co.sharp.android.brightkeep.BrightKeepService.checkTimerEvent:525 jp.co.sharp.android.brightkeep.BrightKeepService.access$000:83 jp.co.sharp.android.brightkeep.BrightKeepService$TouchCheckTask.run:671 
+06-01 11:42:47.000  2026  2026 V BrightKeepService: getAction: jp.co.sharp.android.intent.action.CLICK_SCREEN_ON isOutOfHand: false
+06-01 11:42:47.207  1442  1628 I SDM     : DisplayBase::CommitThread: Received idle timeout, panel: cmd, timeout: 70000 us
+06-01 11:42:48.312  2026  4018 D InputManager: injectMotionEvent: 13491-{action=ACTION_DOWN, id[0]=0, x[0]=540.0, y[0]=1453.0, pointerCount=1, eventTime=110670248, deviceId=4}
+06-01 11:42:48.322  2026  4018 D InputManager: injectMotionEvent: 13491-{action=ACTION_UP, id[0]=0, x[0]=540.0, y[0]=1453.0, pointerCount=1, eventTime=110670248, deviceId=4}
+06-01 11:42:48.366 13456 13495 I LlamaInferenceBridge: runInference started
+06-01 11:42:48.444  1442  1628 I SDM     : DisplayBase::CommitThread: Received idle timeout, panel: cmd, timeout: 70000 us
+06-01 11:42:48.678  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:42:48.685  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:42:49.183  2026  3295 D ActivityManager: freezing 10922 com.android.vending:background
+06-01 11:42:49.185  2026  3295 D ActivityManager: freezing 10842 com.android.vending
+06-01 11:42:49.188  2026  3295 D ActivityManager: freezing 10929 com.android.vending:quick_launch
+06-01 11:42:49.189  2026  3295 D ActivityManager: freezing 7340 com.android.vending:instant_app_installer
+06-01 11:42:49.607  2026  3382 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET, states=14
+06-01 11:42:49.607  2026  3382 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET6, states=14
+06-01 11:42:49.607  2026  3382 D InetDiagMessage: Destroyed live tcp sockets for uids={10186} in 1ms
+06-01 11:42:50.151  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:42:50.252  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:42:50.390  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:42:50.491  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:42:50.504  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:42:50.536  5709  5709 D BoundBrokerSvc: onRebind: Intent { act=com.google.android.gms.common.telemetry.service.START dat=chimera-action:/... cmp=com.google.android.gms/.chimera.PersistentApiService }
+06-01 11:42:50.583 13456 13495 I LlamaInferenceBridge: [FlowOnly][llama.cpp] enabled, skip FrontEnd/LLM/HIFT and run flow model with prepacked bins
+06-01 11:42:50.583 13456 13495 I LlamaInferenceBridge: [FlowOnly][llama.cpp] flowModel=/data/user/0/com.example.llama.aichat/files/models/flow_fp32.gguf
+06-01 11:42:50.584 13456 13495 I LlamaInferenceBridge: [FlowOnly] get InferenceEngine instance
+06-01 11:42:50.584 13456 13495 I InferenceEngineImpl: Instantiating InferenceEngineImpl,,,
+06-01 11:42:50.584 13456 13495 I LlamaInferenceBridge: [FlowOnly] loadFlowModel begin: /data/user/0/com.example.llama.aichat/files/models/flow_fp32.gguf (bytes=450294560)
+06-01 11:42:50.584 13456 13495 I InferenceEngineImpl: Loading native library...
+06-01 11:42:50.587  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:42:50.588 13456 13495 D nativeloader: Load /data/app/~~Ul3K4orIvHNyVF2cUAzAJw==/com.example.llama.aichat-Q3oNjako8OZ_SMvZVPj8Aw==/lib/arm64/libai-chat.so using class loader ns clns-7 (caller=/data/app/~~Ul3K4orIvHNyVF2cUAzAJw==/com.example.llama.aichat-Q3oNjako8OZ_SMvZVPj8Aw==/base.apk): ok
+06-01 11:42:50.588 13456 13495 I ai-chat : Java_com_arm_aichat_internal_InferenceEngineImpl_init: default GGML_HEXAGON_ARCH=79
+06-01 11:42:50.588 13456 13495 I ai-chat : Loading backends from /data/app/~~Ul3K4orIvHNyVF2cUAzAJw==/com.example.llama.aichat-Q3oNjako8OZ_SMvZVPj8Aw==/lib/arm64
+06-01 11:42:50.590 13456 13495 I ai-chat : ggml_opencl: selected platform: 'QUALCOMM Snapdragon(TM)'
+06-01 11:42:50.594 13456 13495 I ai-chat : ggml_opencl: device: 'QUALCOMM Adreno(TM) 735 (OpenCL 3.0 Adreno(TM) 735)'
+06-01 11:42:50.594 13456 13495 I ai-chat : ggml_opencl: OpenCL driver: OpenCL 3.0 QUALCOMM build: commit unknown Compiler E031.45.02.16
+06-01 11:42:50.594 13456 13495 I ai-chat : ggml_opencl: vector subgroup broadcast support: false
+06-01 11:42:50.594 13456 13495 I ai-chat : ggml_opencl: device FP16 support: true
+06-01 11:42:50.595 13456 13495 I ai-chat : ggml_opencl: mem base addr align: 128
+06-01 11:42:50.595 13456 13495 I ai-chat : ggml_opencl: max mem alloc size: 1024 MB
+06-01 11:42:50.595 13456 13495 I ai-chat : ggml_opencl: device max workgroup size: 1024
+06-01 11:42:50.595 13456 13495 I ai-chat : ggml_opencl: SVM coarse grain buffer support: true
+06-01 11:42:50.595 13456 13495 I ai-chat : ggml_opencl: SVM fine grain buffer support: true
+06-01 11:42:50.595 13456 13495 I ai-chat : ggml_opencl: SVM fine grain system support: false
+06-01 11:42:50.595 13456 13495 I ai-chat : ggml_opencl: SVM atomics support: true
+06-01 11:42:50.595 13456 13495 I ai-chat : ggml_opencl: flattening quantized weights representation as struct of arrays (GGML_OPENCL_SOA_Q)
+06-01 11:42:50.595 13456 13495 I ai-chat : ggml_opencl: using kernels optimized for Adreno (GGML_OPENCL_USE_ADRENO_KERNELS)
+06-01 11:42:50.595 13456 13495 I ai-chat : ggml_opencl: loading OpenCL kernels
+06-01 11:42:50.619  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:42:50.680  1442  1628 I SDM     : DisplayBase::CommitThread: Received idle timeout, panel: cmd, timeout: 70000 us
+06-01 11:42:50.720  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:42:50.785  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:42:50.805  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:42:50.906  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:42:50.911  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:42:51.012  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:42:51.082  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:42:51.083  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:42:51.085  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:42:51.158  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:42:51.171  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:42:51.177 13456 13500 D ProfileInstaller: Installing profile for com.example.llama.aichat
+06-01 11:42:51.272  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:42:51.373  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:42:51.393  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:42:51.407  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:42:51.508  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:42:51.551  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:42:51.556  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:42:51.606  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:42:51.619  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:42:51.720  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:42:51.723  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:42:51.769  2200  3058 E Diag_Lib: diag: Diag_LSM_Init: invoked for pid: 2200 with init_count: 0
+06-01 11:42:51.770  2200  3058 E Diag_Lib: diag:failed to connect to diag socket
+06-01 11:42:51.770  2200  3058 E Diag_Lib:  Diag_LSM_Init: Failed to open handle to diag driver, error = 111
+06-01 11:42:51.824  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:42:51.913  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:42:51.994  2026 13439 W ContextImpl: Calling a method in the system process without a qualified user: android.app.ContextImpl.sendBroadcast:1249 android.content.ContextWrapper.sendBroadcast:506 jp.co.sharp.android.brightkeep.BrightKeepService.checkTimerEvent:508 jp.co.sharp.android.brightkeep.BrightKeepService.access$000:83 jp.co.sharp.android.brightkeep.BrightKeepService$TouchCheckTask.run:671 
+06-01 11:42:51.995  2026 13439 V BrightKeepService: changeCurrentStatus old=NoTouchTimeOutState new=NormalState
+06-01 11:42:51.995  2026 13439 D [SensorHub][Manager2]: registerSensorHubListener
+06-01 11:42:51.995  2026 13439 D SensorService: enable start. handle=11
+06-01 11:42:51.995  2026 13439 D SensorService: called from jp.co.sharp.android.sensorhub.AccelerometerSHEXConverter.
+06-01 11:42:51.995  2026 13439 D SensorService: connection info count:1
+06-01 11:42:51.995  2026 13439 D SensorService: 	 lsm6dso Accelerometer Non-wakeup [0x0000000b] 
+06-01 11:42:51.995  2026 13439 D SensorService: request senosor type:1
+06-01 11:42:51.995  2026  2026 V BrightKeepService: getAction: jp.co.sharp.android.intent.action.CLICK_SCREEN_ON isOutOfHand: false
+06-01 11:42:51.996  1356  1356 I sensors-hal: batch:167, android.sensor.accelerometer/11, period=240000000, max_latency=0
+06-01 11:42:51.996  1356  1356 I sensors-hal: set_config:75, sample_period_ns is adjusted to 240000000 based on min/max delay_ns
+06-01 11:42:51.996  1356  1356 I sensors-hal: batch:176, android.sensor.accelerometer/11, period=240000000, max_latency=0 request completed
+06-01 11:42:51.996  1356  1356 I sensors-hal: activate:134, android.sensor.accelerometer/11 en=1
+06-01 11:42:51.996  1356  1356 I sensors-hal: acquire_qsh_interface:117, acquire_qsh_interface with sensor_id 31 , conn_type 2 
+06-01 11:42:51.998  1342  1474 I minksocket: MinkIPC MESSAGE: ( 1342:1474 ) MinkIPC_QRTR_Service:351 minkipc = 0xb4000075d7c46b90 sock = 18, client with node 1 port 504c went down
+06-01 11:42:51.998  1342  1476 I minksocket: MinkIPC MESSAGE: ( 1342:1476 ) MinkIPC_QRTR_Service:351 minkipc = 0xb4000075d7c45b10 sock = 24, client with node 1 port 504c went down
+06-01 11:42:51.999  1342  1476 I minksocket: MinkIPC MESSAGE: ( 1342:1476 ) MinkIPC_QRTR_Service:351 minkipc = 0xb4000075d7c45b10 sock = 24, client with node 1 port 504d went down
+06-01 11:42:51.999  1342  1474 I minksocket: MinkIPC MESSAGE: ( 1342:1474 ) MinkIPC_QRTR_Service:351 minkipc = 0xb4000075d7c46b90 sock = 18, client with node 1 port 504d went down
+06-01 11:42:51.999  1342  1474 I minksocket: MinkIPC MESSAGE: ( 1342:1474 ) MinkIPC_QRTR_Service:351 minkipc = 0xb4000075d7c46b90 sock = 18, client with node 1 port 504e went down
+06-01 11:42:51.999  1342  1476 I minksocket: MinkIPC MESSAGE: ( 1342:1476 ) MinkIPC_QRTR_Service:351 minkipc = 0xb4000075d7c45b10 sock = 24, client with node 1 port 504e went down
+06-01 11:42:52.000  1356  1356 I sensors-hal: qsh_qmi:35, qsh_qmi
+06-01 11:42:52.000  1356  1356 I sensors-hal: register_cb:309, suid(low=11115320498015681092,high=2286538866409242278) is new. register callbacks
+06-01 11:42:52.000  1342  1474 I minksocket: MinkIPC MESSAGE: ( 1342:1474 ) MinkIPC_QRTR_Service:351 minkipc = 0xb4000075d7c46b90 sock = 18, client with node 1 port 504f went down
+06-01 11:42:52.000  1342  1476 I minksocket: MinkIPC MESSAGE: ( 1342:1476 ) MinkIPC_QRTR_Service:351 minkipc = 0xb4000075d7c45b10 sock = 24, client with node 1 port 504f went down
+06-01 11:42:52.000  1356  1356 I sensors-hal: send_sensor_config_request:492, resampler is used, set resampler config
+06-01 11:42:52.000  1356  1356 I sensors-hal: send_sync_sensor_request:435, send sync request
+06-01 11:42:52.000  1356  1356 I sensors-hal: send_sync_sensor_request:445, send_sync_sensor_request before send_request for accel with SUID low=11115320498015681092 high=2286538866409242278
+06-01 11:42:52.000  1356  1356 I sensors-hal: send_sync_sensor_request:464, wait for notification of response
+06-01 11:42:52.001  1356 13502 I sensors-hal: qsh_conn_resp_cb:745, resp_value = 0 for accel 
+06-01 11:42:52.001  1356  1356 I sensors-hal: send_sync_sensor_request:470, takes 0 ms to receive the response with 0
+06-01 11:42:52.001  1356  1356 I sensors-hal: activate:145, android.sensor.accelerometer/11 en=1 completed
+06-01 11:42:52.002  2026 13439 D SensorService: enable end. 
+06-01 11:42:52.002  2026 13439 D BrightKeepService: registerAccelerometerListener ret : 0
+06-01 11:42:52.014  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:42:52.094  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:42:52.110  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:42:52.211  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:42:52.268  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:42:52.284  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:42:52.358 13456 13495 I ai-chat : ggml_opencl: flash_attn tuning profile=adreno_a7x_high_m_fixed q1_wg=64 q1_split_k=4 subgroup=off
+06-01 11:42:52.358 13456 13495 I ai-chat : ggml_opencl: flash_attn q1 kernel=v2 (split-k stage1+stage2 reduce enabled)
+06-01 11:42:52.385  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:42:52.485  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:42:52.586  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:42:52.646  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:42:52.656  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:42:52.757  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:42:52.858  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:42:52.897  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:42:52.918  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:42:53.019  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:42:53.083  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:42:53.097  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:42:53.199  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:42:53.238  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:42:53.321  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:42:53.423  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:42:53.435  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:42:53.447  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:42:53.514  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:42:53.568  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:42:53.660  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:42:53.687  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:42:53.787  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:42:53.887  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:42:53.899  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:42:53.957  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:42:53.970  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:42:54.038  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:42:54.060  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:42:54.161  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:42:54.263  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:42:54.364  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:42:54.464  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:42:54.491  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:42:54.515  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:42:54.572  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:42:54.673  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:42:54.774  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:42:54.779  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:42:54.878  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:42:54.881  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:42:54.882  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 4
+06-01 11:42:54.896  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:42:54.907  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:42:54.944  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:42:54.973  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:42:54.983  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:42:55.029  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:42:55.035  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:42:55.116  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:42:55.132  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:42:55.217  2026  3295 D ActivityManager: freezing 7586 sharp.jp.android.makersiteappli
+06-01 11:42:55.223  2026  3382 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET, states=14
+06-01 11:42:55.226  2026  3382 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET6, states=14
+06-01 11:42:55.226  2026  3382 D InetDiagMessage: Destroyed live tcp sockets for uids={10286} in 6ms
+06-01 11:42:55.233  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:42:55.334  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:42:55.386  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:42:55.402  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:42:55.440  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:42:55.446  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:42:55.543  5709  5709 D BoundBrokerSvc: onUnbind: Intent { act=com.google.android.gms.common.telemetry.service.START dat=chimera-action:/... cmp=com.google.android.gms/.chimera.PersistentApiService }
+06-01 11:42:55.546  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 4
+06-01 11:42:55.647  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:42:55.649  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:42:55.651  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:42:55.697  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:42:55.715  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:42:55.757  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 4
+06-01 11:42:55.757  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 5
+06-01 11:42:55.767  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 6
+06-01 11:42:55.781  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:42:55.801  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:42:55.826  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:42:55.848  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:42:55.875  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:42:55.888  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:42:55.932  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:42:55.948  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:42:56.049  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:42:56.150  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:42:56.191  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:42:56.196  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:42:56.250  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:42:56.255  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:42:56.355  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:42:56.358  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:42:56.367  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:42:56.395  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:42:56.405  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:42:56.425  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:42:56.439  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:42:56.501  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:42:56.514  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:42:56.614  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:42:56.626  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:42:56.727  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:42:56.731  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:42:56.770  2200  3058 E Diag_Lib: diag: Diag_LSM_Init: invoked for pid: 2200 with init_count: 0
+06-01 11:42:56.771  2200  3058 E Diag_Lib: diag:failed to connect to diag socket
+06-01 11:42:56.771  2200  3058 E Diag_Lib:  Diag_LSM_Init: Failed to open handle to diag driver, error = 111
+06-01 11:42:56.802  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:42:56.820  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:42:56.906  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:42:56.931  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:42:56.984  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:42:56.987  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:42:57.089  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:42:57.113  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:42:57.117  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:42:57.218  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:42:57.231  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:42:57.238  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:42:57.291  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:42:57.298  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:42:57.399  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:42:57.470  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:42:57.474  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:42:57.551  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:42:57.565  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:42:57.665  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 4
+06-01 11:42:57.682  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:42:57.703  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:42:57.804  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:42:57.825  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:42:57.836  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:42:57.854  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:42:57.861  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:42:57.924  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:42:57.932  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:42:58.031  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:42:58.039  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:42:58.080  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:42:58.116  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:42:58.127  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:42:58.173  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:42:58.189  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:42:58.290  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:42:58.391  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:42:58.412  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:42:58.419  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:42:58.520  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:42:58.621  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:42:58.647  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:42:58.655  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:42:58.733  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:42:58.746  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:42:58.847  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 4
+06-01 11:42:58.861  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:42:58.871  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:42:58.972  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:42:58.997  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:42:59.011  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:42:59.027  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:42:59.036  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:42:59.097  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:42:59.104  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:42:59.205  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:42:59.213  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:42:59.223  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:42:59.253  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:42:59.261  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:42:59.282  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:42:59.297  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:42:59.370  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:42:59.393  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:42:59.494  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 4
+06-01 11:42:59.520  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:42:59.526  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:42:59.627  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:42:59.683  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:42:59.712  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:42:59.732  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:42:59.742  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:42:59.809  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:42:59.819  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:42:59.920  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:42:59.932  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:42:59.941  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:42:59.985  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:42:59.989  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:42:59.999  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:43:00.007  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:43:00.082  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2
+06-01 11:43:00.109  1442  1628 I SDM     : DisplayBase::CommitThread: Received idle timeout, panel: cmd, timeout: 70000 us
+06-01 11:43:00.111  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 3
+06-01 11:43:00.212  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 4
+06-01 11:43:00.225  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:43:00.242  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:43:00.342  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 0
+06-01 11:43:00.422  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 1
+06-01 11:43:00.442  4513  4866 I ThermalEngine: ACTION: CPU - Setting CPU[7] to 2

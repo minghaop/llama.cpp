@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en"><head>
+  <meta charset="utf-8"/>
+  
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  
+  <title>Struct QnnHtpContext_CustomProperty_t — Qualcomm® AI Engine Direct</title>
+  
+
+  
+  <link href="../../_static/css/theme.css" rel="stylesheet" type="text/css"/>
+  <link href="../../_static/pygments.css" rel="stylesheet" type="text/css"/>
+  <link href="../../_static/pygments.css" rel="stylesheet" type="text/css"/>
+  <link href="../../_static/css/theme.css" rel="stylesheet" type="text/css"/>
+  <link href="../../_static/custom_css.css" rel="stylesheet" type="text/css"/>
+  <link href="../../_static/collapsible-lists/css/tree_view.css" rel="stylesheet" type="text/css"/>
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js" type="text/javascript"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+        <script src="../../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    
+    <script src="../../_static/js/theme.js" type="text/javascript"></script>
+
+    
+    <link href="../../genindex.html" rel="index" title="Index"/>
+    <link href="../../search.html" rel="search" title="Search"/>
+    <link href="structQnnHtpContext__GroupRegistration__t.html" rel="next" title="Struct QnnHtpContext_GroupRegistration_t"/>
+    <link href="structQnnHtpContext__CustomConfig.html" rel="prev" title="Struct QnnHtpContext_CustomConfig"/> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav class="wy-nav-side" data-toggle="wy-nav-shift">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a class="icon icon-home" href="../../index.html"> Qualcomm® AI Runtime (QAIRT) SDKs
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v2.46.0.260424121129
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form action="../../search.html" class="wy-form" id="rtd-search-form" method="get">
+    <input name="q" placeholder="Search docs" type="text"/>
+    <input name="check_keywords" type="hidden" value="yes"/>
+    <input name="area" type="hidden" value="default"/>
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">QAIRT</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../general/overview.html">Overview</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">SDKs</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">QNN</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../general/introduction.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general/overview.html">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general/setup.html">Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general/backend.html">Backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general/op_packages.html">Op Packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general/tools.html">Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general/converters.html">Converters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general/quantization.html">Quantization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general/applyencodings.html">QAIRT Quantization Specification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general/tutorials.html">Tutorials</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general/benchmarking.html">Benchmarking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general/operations.html">Operations</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="../general/api.html">API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../general/api_overview.html">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../general/api_usage_guidelines.html">Usage Guidelines</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../general/api_version_history.html">QNN API Revision History</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../general/api_version_history.html#backend-specific-revision-history">Backend Specific Revision History</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../general/api_version_history.html#qnn-system-api-revision-history">QNN System API Revision History</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../general/supported_api.html">Supported APIs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../general/supported_capabilities.html">Supported Capabilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../general/api_error_codes.html">Error codes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../general/glossary.html">Glossary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general/revision_history.html">Revision History</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../SNPE/index.html">SNPE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Genie/index.html">Genie</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Delegates</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../Delegates/TfLite/index.html">TFLite Delegate</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+
+      
+      <nav aria-label="top navigation" class="wy-nav-top">
+        
+          <i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+          <a href="../../index.html">Qualcomm® AI Runtime (QAIRT) SDKs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div aria-label="breadcrumbs navigation" role="navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a class="icon icon-home" href="../../index.html"></a> »</li>
+        
+          <li><a href="../index.html">⌂</a> »</li>
+        
+      <li>Struct QnnHtpContext_CustomProperty_t</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="struct-qnnhtpcontext-customproperty-t">
+<span id="exhale-struct-structqnnhtpcontext-customproperty-t"></span><h1>Struct QnnHtpContext_CustomProperty_t<a class="headerlink" href="#struct-qnnhtpcontext-customproperty-t" title="Permalink to this heading">¶</a></h1>
+<ul class="simple">
+<li><p>Defined in <a class="reference internal" href="file_include_QNN_HTP_QnnHtpContext.h.html#file-include-qnn-htp-qnnhtpcontext-h"><span class="std std-ref">File QnnHtpContext.h</span></a></p></li>
+</ul>
+<div class="section" id="nested-relationships">
+<h2>Nested Relationships<a class="headerlink" href="#nested-relationships" title="Permalink to this heading">¶</a></h2>
+<div class="section" id="nested-types">
+<h3>Nested Types<a class="headerlink" href="#nested-types" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><a class="reference internal" href="unionQnnHtpContext__CustomProperty__t_1_1unnamed.html#exhale-union-unionqnnhtpcontext-customproperty-t-1-1unnamed"><span class="std std-ref">Union QnnHtpContext_CustomProperty_t::unnamed</span></a></p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="struct-documentation">
+<h2>Struct Documentation<a class="headerlink" href="#struct-documentation" title="Permalink to this heading">¶</a></h2>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv430QnnHtpContext_CustomProperty_t">
+<span id="_CPPv330QnnHtpContext_CustomProperty_t"></span><span id="_CPPv230QnnHtpContext_CustomProperty_t"></span><span id="QnnHtpContext_CustomProperty_t"></span><span class="target" id="structQnnHtpContext__CustomProperty__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QnnHtpContext_CustomProperty_t</span></span></span><a class="headerlink" href="#_CPPv430QnnHtpContext_CustomProperty_t" title="Permalink to this definition">¶</a><br/></dt>
+<dd><div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N30QnnHtpContext_CustomProperty_t6optionE">
+<span id="_CPPv3N30QnnHtpContext_CustomProperty_t6optionE"></span><span id="_CPPv2N30QnnHtpContext_CustomProperty_t6optionE"></span><span id="QnnHtpContext_CustomProperty_t::option__QnnHtpContext_GetPropertyOption_t"></span><span class="target" id="structQnnHtpContext__CustomProperty__t_1a770f519e1f9a972ad83a1bd9e449cea1"></span><a class="reference internal" href="file_include_QNN_HTP_QnnHtpContext.h.html#_CPPv433QnnHtpContext_GetPropertyOption_t" title="QnnHtpContext_GetPropertyOption_t"><span class="n"><span class="pre">QnnHtpContext_GetPropertyOption_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">option</span></span></span><a class="headerlink" href="#_CPPv4N30QnnHtpContext_CustomProperty_t6optionE" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+</div>
+<dl class="cpp union">
+<dt class="sig sig-object cpp" id="_CPPv4N30QnnHtpContext_CustomProperty_t7unnamedE">
+<span id="_CPPv3N30QnnHtpContext_CustomProperty_t7unnamedE"></span><span id="_CPPv2N30QnnHtpContext_CustomProperty_t7unnamedE"></span><span class="target" id="unionQnnHtpContext__CustomProperty__t_1_1unnamed"></span><span class="k"><span class="pre">union</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">unnamed</span></span></span><br/></dt>
+<dd><div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N30QnnHtpContext_CustomProperty_t7unnamed20bufferStartAlignmentE">
+<span id="_CPPv3N30QnnHtpContext_CustomProperty_t7unnamed20bufferStartAlignmentE"></span><span id="_CPPv2N30QnnHtpContext_CustomProperty_t7unnamed20bufferStartAlignmentE"></span><span id="QnnHtpContext_CustomProperty_t::unnamed::bufferStartAlignment__uint64_t"></span><span class="target" id="unionQnnHtpContext__CustomProperty__t_1_1unnamed_1a9c5eba9d1f7d931ac4e3b94e51fb909f"></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">bufferStartAlignment</span></span></span><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N30QnnHtpContext_CustomProperty_t7unnamed19spillfillBufferSizeE">
+<span id="_CPPv3N30QnnHtpContext_CustomProperty_t7unnamed19spillfillBufferSizeE"></span><span id="_CPPv2N30QnnHtpContext_CustomProperty_t7unnamed19spillfillBufferSizeE"></span><span id="QnnHtpContext_CustomProperty_t::unnamed::spillfillBufferSize__uint64_t"></span><span class="target" id="unionQnnHtpContext__CustomProperty__t_1_1unnamed_1aa68ecf26788612bd730032f79726a43a"></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">spillfillBufferSize</span></span></span><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N30QnnHtpContext_CustomProperty_t7unnamed17weightsBufferSizeE">
+<span id="_CPPv3N30QnnHtpContext_CustomProperty_t7unnamed17weightsBufferSizeE"></span><span id="_CPPv2N30QnnHtpContext_CustomProperty_t7unnamed17weightsBufferSizeE"></span><span id="QnnHtpContext_CustomProperty_t::unnamed::weightsBufferSize__uint64_t"></span><span class="target" id="unionQnnHtpContext__CustomProperty__t_1_1unnamed_1aef709fb47e5c0e04c3b717ea39bc20b1"></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">weightsBufferSize</span></span></span><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N30QnnHtpContext_CustomProperty_t7unnamed20vtcmBackupBufferSizeE">
+<span id="_CPPv3N30QnnHtpContext_CustomProperty_t7unnamed20vtcmBackupBufferSizeE"></span><span id="_CPPv2N30QnnHtpContext_CustomProperty_t7unnamed20vtcmBackupBufferSizeE"></span><span id="QnnHtpContext_CustomProperty_t::unnamed::vtcmBackupBufferSize__uint64_t"></span><span class="target" id="unionQnnHtpContext__CustomProperty__t_1_1unnamed_1a9e01e2129c849b808dc17cc8e084dc69"></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">vtcmBackupBufferSize</span></span></span><br/></dt>
+<dd></dd></dl>
+
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
+        <a accesskey="n" class="btn btn-neutral float-right" href="structQnnHtpContext__GroupRegistration__t.html" rel="next" title="Struct QnnHtpContext_GroupRegistration_t">Next <span aria-hidden="true" class="fa fa-arrow-circle-right"></span></a>
+        <a accesskey="p" class="btn btn-neutral float-left" href="structQnnHtpContext__CustomConfig.html" rel="prev" title="Struct QnnHtpContext_CustomConfig"><span aria-hidden="true" class="fa fa-arrow-circle-left"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        © Copyright 2020-2026, Qualcomm Technologies, Inc..
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+
+</body></html>

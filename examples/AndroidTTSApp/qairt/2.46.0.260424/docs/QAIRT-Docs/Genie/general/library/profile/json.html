@@ -1,0 +1,309 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Genie Profile JSON configuration string &mdash; Qualcomm® AI Runtime (QAIRT) SDKs</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/custom_css.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="GenieSampler" href="../sampler/sampler.html" />
+    <link rel="prev" title="GenieProfile" href="profile.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> Qualcomm® AI Runtime (QAIRT) SDKs
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v2.46.0.260424121129
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">QAIRT</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../general/overview.html">Overview</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">SDKs</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../../QNN/index.html">QNN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../SNPE/index.html">SNPE</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../../index.html">Genie</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../introduction/introduction.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/tutorials.html">Tutorials</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../library.html">Library</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../../../api-rst/api_root.html">Genie C API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pipeline/pipeline.html">GeniePipeline</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../node/node.html">GenieNode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../dialog/dialog.html">GenieDialog</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../embedding/embedding.html">GenieEmbedding</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="profile.html">GenieProfile</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Genie Profile JSON Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../sampler/sampler.html">GenieSampler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../engine/engine.html">GenieEngine</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tokenizer/tokenizer.html">GenieTokenizer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../accuracy/accuracy.html">GenieAccuracy</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../tools/tools.html">Tools</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Delegates</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../Delegates/TfLite/index.html">TFLite Delegate</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Qualcomm® AI Runtime (QAIRT) SDKs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">⌂</a> &raquo;</li>
+        
+          <li><a href="../library.html">Library</a> &raquo;</li>
+        
+          <li><a href="profile.html">GenieProfile</a> &raquo;</li>
+        
+      <li>Genie Profile JSON configuration string</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="genie-profile-json-configuration-string">
+<span id="genie-profile-json-config-string"></span><h1>Genie Profile JSON configuration string<a class="headerlink" href="#genie-profile-json-configuration-string" title="Permalink to this heading">¶</a></h1>
+<p>The following sections contain information that pertain to the format of the JSON configuration string that is supplied
+to <a class="reference internal" href="../../../api-rst/function_GenieProfile_8h_1a70e275bd2c70b9f0f0567f079c4f2056.html#exhale-function-genieprofile-8h-1a70e275bd2c70b9f0f0567f079c4f2056"><span class="std std-ref">GenieProfileConfig_createFromJson</span></a>. This JSON configuration can also be provided in certain genie-app commands.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Please refer to the example configs contained in the SDK at ${SDK_ROOT}/examples/Genie/configs/profile/.</p>
+</div>
+<div class="section" id="general-configuration-schema">
+<h2>General configuration schema<a class="headerlink" href="#general-configuration-schema" title="Permalink to this heading">¶</a></h2>
+<p>The following provides the schema of the JSON configuration format that is provided to
+<a class="reference internal" href="../../../api-rst/function_GenieProfile_8h_1a70e275bd2c70b9f0f0567f079c4f2056.html#exhale-function-genieprofile-8h-1a70e275bd2c70b9f0f0567f079c4f2056"><span class="std std-ref">GenieProfileConfig_createFromJson</span></a>. Note that
+dependencies are not specified in the schema, but are discussed in the following per-backend sections.</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;profile&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;type&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;object&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;properties&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;version&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;type&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;integer&quot;</span><span class="p">},</span>
+<span class="w">        </span><span class="nt">&quot;trace&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">&quot;type&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;object&quot;</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">&quot;properties&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;version&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;type&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;integer&quot;</span><span class="p">},</span>
+<span class="w">            </span><span class="nt">&quot;enable&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;type&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;boolean&quot;</span><span class="p">}</span>
+<span class="w">          </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 45%" />
+<col style="width: 55%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Option</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>profile::version</p></td>
+<td><p>Version of profile object that is supported by APIs.(1)</p></td>
+</tr>
+<tr class="row-odd"><td><p>profile::trace::version</p></td>
+<td><p>Version of profile trace object that is supported by
+APIs.(1)</p></td>
+</tr>
+<tr class="row-even"><td><p>profile::trace::enable</p></td>
+<td><p>Flag to enable or disable trace profiling.</p></td>
+</tr>
+</tbody>
+</table>
+<p>An example of a trace-enabled profile configuration can be found at
+${SDK_ROOT}/examples/Genie/configs/profile/trace.json.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="../sampler/sampler.html" class="btn btn-neutral float-right" title="GenieSampler" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="profile.html" class="btn btn-neutral float-left" title="GenieProfile" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020-2025, Qualcomm Technologies, Inc..
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

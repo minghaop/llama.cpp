@@ -1,0 +1,450 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Convert to QNN for Linux Host on HTP Backend &mdash; Qualcomm® AI Runtime (QAIRT) SDKs</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/custom_css.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="Convert to QNN for Linux Host on LPAI Backend" href="lpai.html" />
+    <link rel="prev" title="Convert to QNN for Linux Host on DSP Backend" href="dsp.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> Qualcomm® AI Runtime (QAIRT) SDKs
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v2.46.0.260424121129
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">QAIRT</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../general/overview.html">Overview</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">SDKs</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../../index.html">QNN</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../introduction.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../overview.html">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../setup.html">Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../backend.html">Backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../op_packages.html">Op Packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tools.html">Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../converters.html">Converters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../quantization.html">Quantization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../applyencodings.html">QAIRT Quantization Specification</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../tutorials.html">Tutorials</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../tutorial_convert_execute_cnn_model.html">Tutorial: Converting and executing a CNN or ONNX model with QNN</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="../qnn_tutorial_linux_host.html">CNN to QNN for Linux Host</a><ul class="current">
+<li class="toctree-l5 current"><a class="reference internal" href="../qnn_tutorial_linux_host_linux_target.html">Convert to QNN for Linux Host on Linux / Android / QNX Target</a><ul class="current">
+<li class="toctree-l6"><a class="reference internal" href="cpu.html">Convert to QNN for Linux Host on CPU Backend</a></li>
+<li class="toctree-l6"><a class="reference internal" href="gpu.html">Convert to QNN for Linux Host on GPU Backend</a></li>
+<li class="toctree-l6"><a class="reference internal" href="dsp.html">Convert to QNN for Linux Host on DSP Backend</a></li>
+<li class="toctree-l6 current"><a class="current reference internal" href="#">Convert to QNN for Linux Host on HTP Backend</a></li>
+<li class="toctree-l6"><a class="reference internal" href="lpai.html">Convert to QNN for Linux Host on LPAI Backend</a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="../qnn_tutorial_linux_host_windows_target.html">CNN to QNN for Linux Host on Windows Target</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="../onnx_to_qnn_tutorial_linux_host.html">ONNX to QNN for Linux Host</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../qnn_tutorial_windows_host.html">CNN to QNN for Windows Host</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../tutorial_sample_app_linux.html">How to Use the Sample App</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../sample_app.html">Sample App Tutorial</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../saver/saver_tutorial.html">Saver Tutorial: Save execution sequence with Saver and replay on a backend</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../htp/htp_shared_buffer_tutorial.html">QNN HTP Shared Buffer Tutorial</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorial1.html">Tutorial: Executing a shallow model using custom op package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../dsp/hexnn_migration.html">Migrating from Hexagon-nn</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../benchmarking.html">Benchmarking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../operations.html">Operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api.html">API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../revision_history.html">Revision History</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../SNPE/index.html">SNPE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../Genie/index.html">Genie</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Delegates</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../Delegates/TfLite/index.html">TFLite Delegate</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Qualcomm® AI Runtime (QAIRT) SDKs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">⌂</a> &raquo;</li>
+        
+          <li><a href="../../tutorials.html">Tutorials</a> &raquo;</li>
+        
+          <li><a href="../tutorial_convert_execute_cnn_model.html">Tutorial: Converting and executing a CNN or ONNX model with QNN</a> &raquo;</li>
+        
+          <li><a href="../qnn_tutorial_linux_host.html">CNN to QNN for Linux Host</a> &raquo;</li>
+        
+          <li><a href="../qnn_tutorial_linux_host_linux_target.html">Convert to QNN for Linux Host on Linux / Android / QNX Target</a> &raquo;</li>
+        
+      <li>Convert to QNN for Linux Host on HTP Backend</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="convert-to-qnn-for-linux-host-on-htp-backend">
+<h1>Convert to QNN for Linux Host on HTP Backend<a class="headerlink" href="#convert-to-qnn-for-linux-host-on-htp-backend" title="Permalink to this heading">¶</a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is <strong>Part 3</strong> of the Convert to QNN tutorial for Linux host machines. If you have not completed Part 2, please do so <a class="reference internal" href="../tutorial_convert_execute_cnn_model.html"><span class="doc">here</span></a>.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>HTP processors require quantized models instead of full precision models. If you do not have a quantized model, please follow <span class="xref std std-doc">Step 2</span> of the CNN to QNN tutorial to build one.</p>
+</div>
+<div class="section" id="additional-htp-required-setup">
+<h2>Additional HTP Required Setup<a class="headerlink" href="#additional-htp-required-setup" title="Permalink to this heading">¶</a></h2>
+<p><em>Running the model on a target device’s HTP requires the generation of a **serialized context*</em>.*</p>
+<p><strong>On the Linux Host:</strong></p>
+<ol class="arabic">
+<li><p>Navigate to the directory where you built the model in the previous steps:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>/tmp/qnn_tmp
+</pre></div>
+</div>
+</li>
+<li><p>Users can set the custom options and different performance modes to HTP Backend through the backend config. Please refer to <a class="reference external" href="https://docs.qualcomm.com/bundle/publicresource/topics/80-63442-10/htp_backend.html">QNN HTP Backend Extensions</a> for various options available in the config.</p></li>
+<li><p>Refer to the example below for creating a backend config file for the QCS6490/QCM6490 target with mandatory options passed in:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;graphs&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;graph_names&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                </span><span class="s2">&quot;Inception_v3&quot;</span>
+<span class="w">            </span><span class="p">],</span>
+<span class="w">            </span><span class="nt">&quot;vtcm_mb&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;devices&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;htp_arch&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;v68&quot;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</li>
+<li><p>The above config file with minimum parameters such as backend extensions config specified through JSON is given below:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;backend_extensions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;shared_library_path&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;path_to_shared_library&quot;</span><span class="p">,</span><span class="w">  </span><span class="c1">// give path to shared extensions library (.so)</span>
+<span class="w">        </span><span class="nt">&quot;config_file_path&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;path_to_config_file&quot;</span><span class="w">         </span><span class="c1">// give path to backend config</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</li>
+<li><p>To generate the context, update <code class="docutils literal notranslate"><span class="pre">&lt;path</span> <span class="pre">to</span> <span class="pre">JSON</span> <span class="pre">of</span> <span class="pre">backend</span> <span class="pre">extensions&gt;</span></code> below with the config you wrote above, then run the command:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;</span><span class="nv">$QNN_SDK_ROOT</span><span class="s2">/bin/</span><span class="si">${</span><span class="nv">QNN_TARGET_ARCH</span><span class="si">}</span><span class="s2">/qnn-context-binary-generator&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--backend<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span><span class="s2">/lib/</span><span class="si">${</span><span class="nv">QNN_TARGET_ARCH</span><span class="si">}</span><span class="s2">/libQnnHtp.so&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--model<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">QNN_MODEL_PATH</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--binary_file<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">CONVERTED_MODEL_PATH</span><span class="p">##*/</span><span class="si">}</span><span class="s2">.serialized&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--config_file<span class="w"> </span>&lt;path<span class="w"> </span>to<span class="w"> </span>JSON<span class="w"> </span>of<span class="w"> </span>backend<span class="w"> </span>extensions&gt;
+</pre></div>
+</div>
+</li>
+<li><p>This creates the serialized context at:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">${PWD}/output/${CONVERTED_MODEL_PATH##*/}.serialized.bin</span></code></p></li>
+</ul>
+</li>
+</ol>
+</div>
+<div class="section" id="transferring-over-all-relevant-files">
+<h2>Transferring over all relevant files<a class="headerlink" href="#transferring-over-all-relevant-files" title="Permalink to this heading">¶</a></h2>
+<ol class="arabic">
+<li><p>On the target device, open a terminal and make a destination folder by running:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>mount<span class="w"> </span>-o<span class="w"> </span>remount,rw<span class="w"> </span>/
+mkdir<span class="w"> </span>-p<span class="w"> </span>/data/local/tmp
+<span class="nb">cd</span><span class="w"> </span>/data/local/tmp
+ln<span class="w"> </span>-s<span class="w"> </span>/etc/<span class="w"> </span>/data/local/tmp
+chmod<span class="w"> </span>-R<span class="w"> </span><span class="m">777</span><span class="w"> </span>/data/local/tmp
+mkdir<span class="w"> </span>-p<span class="w"> </span>/data/local/tmp/qnn_tutorial
+</pre></div>
+</div>
+</li>
+<li><p>Determine your target device’s SnapDragon architecture by looking up your chipset in the <a class="reference external" href="https://docs.qualcomm.com/bundle/publicresource/topics/80-63442-10/QNN_general_overview.html#supported-snapdragon-devices">Supported Snapdragon Devices</a> table.</p></li>
+<li><p>Update the “X” values below and run the commands to set <code class="docutils literal notranslate"><span class="pre">HTP_ARCH</span></code> to match the version number found in the above table. Only the 2 digits at the end should update, and they should have the same version. Ex. For “V68”, the proper value would be <code class="docutils literal notranslate"><span class="pre">hexagon-v68</span></code>.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nv">$HTP_VERSION</span><span class="o">=</span><span class="s2">&quot;XX&quot;</span>
+<span class="nv">$HTP_ARCH</span><span class="o">=</span><span class="s2">&quot;hexagon-v</span><span class="si">${</span><span class="nv">HTP_VERSION</span><span class="si">}</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+</li>
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">scp</span></code> to transfer <code class="docutils literal notranslate"><span class="pre">libQnnHtp.so</span></code> as well as other necessary executables from your host machine to <code class="docutils literal notranslate"><span class="pre">/data/local/tmp/qnn_tutorial</span></code> on the target device.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>scp<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$QNN_SDK_ROOT</span><span class="s2">/lib/</span><span class="si">${</span><span class="nv">QNN_TARGET_ARCH</span><span class="si">}</span><span class="s2">/libQnnHtp.so&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">TARGET_USER</span><span class="si">}</span><span class="s2">@</span><span class="si">${</span><span class="nv">TARGET_IP</span><span class="si">}</span><span class="s2">:/data/local/tmp/qnn_tutorial&quot;</span>
+scp<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span><span class="s2">/lib/</span><span class="si">${</span><span class="nv">DSP_ARCH</span><span class="si">}</span><span class="s2">/unsigned/*&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">TARGET_USER</span><span class="si">}</span><span class="s2">@</span><span class="si">${</span><span class="nv">TARGET_IP</span><span class="si">}</span><span class="s2">:/data/local/tmp/qnn_tutorial&quot;</span>
+scp<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span><span class="s2">/lib/</span><span class="si">${</span><span class="nv">QNN_TARGET_ARCH</span><span class="si">}</span><span class="s2">/libQnnHtpV</span><span class="si">${</span><span class="nv">HTP_VERSION</span><span class="si">}</span><span class="s2">Stub.so&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">TARGET_USER</span><span class="si">}</span><span class="s2">@</span><span class="si">${</span><span class="nv">TARGET_IP</span><span class="si">}</span><span class="s2">:/data/local/tmp/qnn_tutorial&quot;</span>
+scp<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span><span class="s2">/examples/Models/InceptionV3/output/Inception_v3.serialized.bin&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">TARGET_USER</span><span class="si">}</span><span class="s2">@</span><span class="si">${</span><span class="nv">TARGET_IP</span><span class="si">}</span><span class="s2">:/data/local/tmp/qnn_tutorial&quot;</span>
+</pre></div>
+</div>
+</li>
+<li><p>Check the <a class="reference external" href="https://docs.qualcomm.com/bundle/publicresource/topics/80-63442-10/backend.html">Backend table</a> to see if there are any other processor-specific executables needed for your target processor (<code class="docutils literal notranslate"><span class="pre">DSP</span></code>) and your target device’s architecture (<code class="docutils literal notranslate"><span class="pre">$QNN_TARGET_ARCH</span></code>). Use similar syntax above for <code class="docutils literal notranslate"><span class="pre">scp</span></code> to transfer any additional <code class="docutils literal notranslate"><span class="pre">.so</span></code> files listed <strong>below</strong> your selected target architecture in <a class="reference external" href="https://docs.qualcomm.com/bundle/publicresource/topics/80-63442-10/backend.html">this table</a>. <strong>(There may be none!)</strong></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Ensure you transfer the <code class="docutils literal notranslate"><span class="pre">hexagon-v##</span></code> values (in addition to the other architecture files!)</p>
+</div>
+</li>
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">scp</span></code> to transfer the example built model. Update the <code class="docutils literal notranslate"><span class="pre">x64</span></code> folder below to the proper folder for your built model. The folder name depends on your host machine’s architecture.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>scp<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">QNN_MODEL_PATH</span><span class="si">}</span><span class="s2">&quot;</span><span class="w">  </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">TARGET_USER</span><span class="si">}</span><span class="s2">@</span><span class="si">${</span><span class="nv">TARGET_IP</span><span class="si">}</span><span class="s2">:/data/local/tmp/qnn_tutorial&quot;</span>
+</pre></div>
+</div>
+</li>
+<li><p>Transfer the input data, input list, and script from the QNN SDK examples folder into <code class="docutils literal notranslate"><span class="pre">/data/local/tmp/qnn_tutorial</span></code> on the target device using <code class="docutils literal notranslate"><span class="pre">scp</span></code> in a similar way:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>scp<span class="w"> </span>-r<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span><span class="s2">/examples/Models/InceptionV3/data/cropped&quot;</span><span class="w">  </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">TARGET_USER</span><span class="si">}</span><span class="s2">@</span><span class="si">${</span><span class="nv">TARGET_IP</span><span class="si">}</span><span class="s2">:/data/local/tmp/qnn_tutorial&quot;</span>
+scp<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span><span class="s2">/examples/Models/InceptionV3/data/target_raw_list.txt&quot;</span><span class="w">  </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">TARGET_USER</span><span class="si">}</span><span class="s2">@</span><span class="si">${</span><span class="nv">TARGET_IP</span><span class="si">}</span><span class="s2">:/data/local/tmp/qnn_tutorial&quot;</span>
+scp<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span><span class="s2">/examples/Models/InceptionV3/data/imagenet_slim_labels&quot;</span><span class="w">  </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">TARGET_USER</span><span class="si">}</span><span class="s2">@</span><span class="si">${</span><span class="nv">TARGET_IP</span><span class="si">}</span><span class="s2">:/data/local/tmp/qnn_tutorial&quot;</span>
+scp<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span><span class="s2">/examples/Models/InceptionV3/scripts/show_inceptionv3_classifications.py&quot;</span><span class="w">  </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">TARGET_USER</span><span class="si">}</span><span class="s2">@</span><span class="si">${</span><span class="nv">TARGET_IP</span><span class="si">}</span><span class="s2">:/data/local/tmp/qnn_tutorial&quot;</span>
+</pre></div>
+</div>
+</li>
+<li><p>Transfer <code class="docutils literal notranslate"><span class="pre">qnn-net-run</span></code> from <code class="docutils literal notranslate"><span class="pre">$QNN_SDK_ROOT/bin/$QNN_TARGET_ARCH/qnn-net-run</span></code> to <code class="docutils literal notranslate"><span class="pre">/data/local/tmp/qnn_tutorial</span></code> on the target device:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>scp<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span><span class="s2">/bin/</span><span class="si">${</span><span class="nv">QNN_TARGET_ARCH</span><span class="si">}</span><span class="s2">/qnn-net-run&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">TARGET_USER</span><span class="si">}</span><span class="s2">@</span><span class="si">${</span><span class="nv">TARGET_IP</span><span class="si">}</span><span class="s2">:/data/local/tmp/qnn_tutorial&quot;</span>
+</pre></div>
+</div>
+</li>
+<li><p>On the target device, set the environment variables:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="s2">&quot;/data/local/tmp/qnn_tutorial&quot;</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">ADSP_LIBRARY_PATH</span><span class="o">=</span><span class="s2">&quot;/data/local/tmp/qnn_tutorial&quot;</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</div>
+<div class="section" id="doing-inferences-on-the-target-device-processor">
+<h2>Doing inferences on the target device processor<a class="headerlink" href="#doing-inferences-on-the-target-device-processor" title="Permalink to this heading">¶</a></h2>
+<ol class="arabic">
+<li><p>Open a terminal instance on the target device.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>ssh<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">TARGET_USER</span><span class="si">}</span><span class="s2">@</span><span class="si">${</span><span class="nv">TARGET_IP</span><span class="si">}</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You will have to login with your target device’s login for that username.</p>
+</div>
+<ol class="arabic" start="2">
+<li><p>On your target device, navigate to the directory containing the test files:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>/data/local/tmp/qnn_tutorial
+</pre></div>
+</div>
+</li>
+<li><p>Run the following command on the target device to execute an inference:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>./qnn-net-run<span class="w"> </span><span class="se">\</span>
+<span class="w">   </span>--backend<span class="w"> </span><span class="s2">&quot;libQnnHtp.so&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">   </span>--input_list<span class="w"> </span><span class="s2">&quot;target_raw_list.txt&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">   </span>--retrieve_context<span class="w"> </span><span class="s2">&quot;&lt;model name&gt;.serialized.bin&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">   </span>--output_dir<span class="w"> </span><span class="s2">&quot;./output&quot;</span>
+</pre></div>
+</div>
+</li>
+<li><p>Run the following script on the target device to view the classification results:</p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You can alternatively copy the output folder back to your host machine with <code class="docutils literal notranslate"><span class="pre">scp</span></code> and run the following script there to avoid having to install python on your target device.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span><span class="s2">&quot;.\show_inceptionv3_classifications.py&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-i<span class="w"> </span><span class="s2">&quot;.\cropped\raw_list.txt&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-o<span class="w"> </span><span class="s2">&quot;output&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-l<span class="w"> </span><span class="s2">&quot;.\imagenet_slim_labels.txt&quot;</span>
+</pre></div>
+</div>
+</div>
+<ol class="arabic simple" start="5">
+<li><p>Verify that the classification results in <code class="docutils literal notranslate"><span class="pre">output</span></code> match the following:
+1. <code class="docutils literal notranslate"><span class="pre">${QNN_SDK_ROOT}/examples/Models/InceptionV3/data/cropped/trash_bin.raw</span> <span class="pre">0.777344</span> <span class="pre">413</span> <span class="pre">ashcan</span></code>
+2. <code class="docutils literal notranslate"><span class="pre">${QNN_SDK_ROOT}/examples/Models/InceptionV3/data/cropped/chairs.raw</span> <span class="pre">0.253906</span> <span class="pre">832</span> <span class="pre">studio</span> <span class="pre">couch</span></code>
+3. <code class="docutils literal notranslate"><span class="pre">${QNN_SDK_ROOT}/examples/Models/InceptionV3/data/cropped/plastic_cup.raw</span> <span class="pre">0.980469</span> <span class="pre">648</span> <span class="pre">measuring</span> <span class="pre">cup</span></code>
+4. <code class="docutils literal notranslate"><span class="pre">${QNN_SDK_ROOT}/examples/Models/InceptionV3/data/cropped/notice_sign.raw</span> <span class="pre">0.167969</span> <span class="pre">459</span> <span class="pre">brass</span></code></p></li>
+</ol>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="lpai.html" class="btn btn-neutral float-right" title="Convert to QNN for Linux Host on LPAI Backend" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="dsp.html" class="btn btn-neutral float-left" title="Convert to QNN for Linux Host on DSP Backend" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020-2025, Qualcomm Technologies, Inc..
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -9,16 +9,27 @@
 #define TM 4
 #define TN 8
 
-#define EPILOGUE_UNARY_NONE      0
-#define EPILOGUE_UNARY_GELU_ERF  1
-#define EPILOGUE_UNARY_SILU      2
-#define EPILOGUE_UNARY_MISH      3
+#define EPILOGUE_UNARY_NONE        0
+#define EPILOGUE_UNARY_GELU        1
+#define EPILOGUE_UNARY_GELU_ERF    2
+#define EPILOGUE_UNARY_GELU_QUICK  3
+#define EPILOGUE_UNARY_SILU        4
+#define EPILOGUE_UNARY_MISH        5
 
+#define GELU_COEF_A     0.044715f
+#define GELU_QUICK_COEF -1.702f
+#define SQRT_2_OVER_PI  0.79788456080286535587989211986876f
 #define SQRT_2_INV 0.70710678118654752440084436210484f
 
 inline float ggml_opencl_apply_epilogue_unary(float x, int unary_op) {
+    if (unary_op == EPILOGUE_UNARY_GELU) {
+        return 0.5f * x * (1.0f + tanh(SQRT_2_OVER_PI * x * (1.0f + GELU_COEF_A * x * x)));
+    }
     if (unary_op == EPILOGUE_UNARY_GELU_ERF) {
         return 0.5f * x * (1.0f + erf(x * SQRT_2_INV));
+    }
+    if (unary_op == EPILOGUE_UNARY_GELU_QUICK) {
+        return x * (1.0f / (1.0f + exp(GELU_QUICK_COEF * x)));
     }
     if (unary_op == EPILOGUE_UNARY_SILU) {
         return x / (1.0f + exp(-x));

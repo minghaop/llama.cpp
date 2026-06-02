@@ -1,0 +1,90 @@
+{
+  "dialog" : {
+    "version" : 1,
+    "type" : "kv-share",
+    "stop-sequence" : [""],
+    "max-num-tokens" : 100,
+    "kv-share": {
+      "enable-in-memory-kv-share" : false
+    },
+    "context" : {
+      "version" : 1,
+      "size": 4096,
+      "n-vocab": 128256,
+      "bos-token": 128000,
+      "eos-token": 128001
+    },
+    "sampler" : {
+      "version" : 1,
+      "seed" : 42,
+      "temp" : 0.8,
+      "top-k" : 20,
+      "top-p" : 0.95,
+      "greedy" : false
+    },
+    "tokenizer" : {
+      "version" : 1,
+      "path" : "path_to_tokenizer.json"
+    },
+    "engine" : [
+      {
+        "version" : 1,
+        "role" : "primary",
+        "n-threads" : 3,
+        "backend" : {
+          "version" : 1,
+          "type" : "QnnHtp",
+          "QnnHtp" : {
+            "version" : 1,
+            "use-mmap" : false,
+            "spill-fill-bufsize" : 0,
+            "mmap-budget" : 0,
+            "poll" : false,
+            "pos-id-dim" : 64,
+            "cpu-mask" : "0xe0",
+            "kv-dim" : 128,
+            "rope-theta": 10000,
+            "enable-graph-switching": false
+          },
+          "extensions" : "htp_backend_ext_config.json"
+        },
+        "model" : {
+          "version" : 1,
+          "type" : "binary",
+          "binary" : {
+            "version" : 1,
+            "ctx-bins" : [
+              "file_1_of_5",
+              "file_2_of_5",
+              "file_3_of_5",
+              "file_4_of_5",
+              "file_5_of_5"
+            ]
+          }
+        }
+      },
+      {
+        "version" : 1,
+        "role" : "secondary",
+        "n-threads" : 6,
+        "backend" : {
+          "version" : 1,
+          "type" : "QnnGenAiTransformer",
+          "QnnGenAiTransformer" : {
+            "version" : 1,
+            "n-kv-heads" : 8,
+            "kv-quantization" : false
+          }
+        },
+        "model" : {
+          "version" : 1,
+          "type" : "library",
+          "library" : {
+            "version" : 1,
+            "model-bin" : "path_to_model_binary_file"
+          }
+        }
+      }
+    ]
+  }
+}

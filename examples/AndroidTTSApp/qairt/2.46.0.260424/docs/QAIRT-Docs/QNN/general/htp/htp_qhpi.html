@@ -1,0 +1,884 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Qualcomm Hexagon Plugin Interface (QHPI) &mdash; Qualcomm® AI Runtime (QAIRT) SDKs</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/custom_css.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="QNN HTP Op Package - Common Default Package Ops Usage Examples" href="../../HTP/common_default_package_ops_usage_examples.html" />
+    <link rel="prev" title="HTP" href="htp_backend.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Qualcomm® AI Runtime (QAIRT) SDKs
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v2.46.0.260424121129
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">QAIRT</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../general/overview.html">Overview</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">SDKs</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">QNN</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../introduction.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../overview.html">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../setup.html">Setup</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../backend.html">Backend</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../dsp/dsp_backend.html">DSP</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="htp_backend.html">HTP</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Qualcomm Hexagon Plugin Interface</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/common_default_package_ops_usage_examples.html">QNN HTP Op Package - Common Default Package Ops Usage Examples</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/common_optimization_utility_funcs_usage_examples.html">QNN HTP Optimization Utility Functions Usage Examples</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/htp_core_headers.html">HTP Core Headers for Op Packages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/implementing_ops.html">Implementing Ops</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/opPackage_API_version_guide.html">QNN HTP Op Package API Revision History</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/optimization_grammar.html">Optimization Grammar</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/relu_example.html">QNN HTP Op Package - Relu Op Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/relu_fp16_example.html">QNN HTP-FP16 Op Package - Relu Op Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/scheduling_and_allocation.html">Scheduling and Allocation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/scratch_buffer.html">Allocate Memory for Scratch Buffers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/tensors_and_memory_layout.html">Tensors and Memory Layout</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/writing_op_package.html">Writing QNN HTP Op Package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/migration/central_migration_guidance.html">General OpPackage Central Migration Guidance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/migration/writing_opPackage_migration_guide.html">Op Package Migration Guide</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/htp-network-design-recommendations/htp_guidelines_low_depth_activations.html">Avoid Low Depth Activations</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/htp-network-design-recommendations/htp_guidelines_low_depth_activation_more_examples.html">Avoid Low Depth Activations (more examples)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/htp-network-design-recommendations/htp_guidelines_space_to_depth.html">Use Space-to-depth Transformation where possible</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/htp-network-design-recommendations/htp_guidelines_tcm_requirements.html">Reducing TCM Requirements for Performance and Functionality</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/htp-network-design-recommendations/htp_guidelines_activation_functions.html">Choice of Activation Functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/htp-network-design-recommendations/htp_guidelines_channels.html">Number of Channels</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/htp-network-design-recommendations/htp_guidelines_a16_vs_fp16.html">Quantized 16 bit activations (A16) vs FP16 and Activation Fusion: Performance and power differences</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/htp-network-design-recommendations/htp_guidelines_int4_weights.html">INT4 encodings for weights</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/htp-network-design-recommendations/htp_guidelines_other_perf.html">Other Performance and Energy Guidelines</a></li>
+<li class="toctree-l4"><a class="reference internal" href="htp_yielding.html">HTP Yielding</a></li>
+<li class="toctree-l4"><a class="reference internal" href="htp_vtcm_sharing.html">HTP VTCM Sharing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="htp_vtcm_sharing.html#vtcm-windowing">VTCM Windowing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="htp_ssr.html">QNN HTP SSR</a></li>
+<li class="toctree-l4"><a class="reference internal" href="htp_qmem_graph.html">QNN HTP Qmem Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="htp_multi_soc_dlc.html">Multi-SoC DLC with Reference Weight Sharing</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../hta/hta_backend.html">HTA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../lpai/lpai_backend.html">LPAI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../cpu/cpu_backend.html">CPU</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../gpu/gpu_backend.html">GPU</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../saver/saver_backend.html">Saver</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../op_packages.html">Op Packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tools.html">Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../converters.html">Converters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quantization.html">Quantization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../applyencodings.html">QAIRT Quantization Specification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials.html">Tutorials</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../benchmarking.html">Benchmarking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../operations.html">Operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html">API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../revision_history.html">Revision History</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../SNPE/index.html">SNPE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Genie/index.html">Genie</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Delegates</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../Delegates/TfLite/index.html">TFLite Delegate</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Qualcomm® AI Runtime (QAIRT) SDKs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">⌂</a> &raquo;</li>
+        
+          <li><a href="../backend.html">Backend</a> &raquo;</li>
+        
+          <li><a href="htp_backend.html">HTP</a> &raquo;</li>
+        
+      <li>Qualcomm Hexagon Plugin Interface (QHPI)</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="qualcomm-hexagon-plugin-interface-qhpi">
+<h1>Qualcomm Hexagon Plugin Interface (QHPI)<a class="headerlink" href="#qualcomm-hexagon-plugin-interface-qhpi" title="Permalink to this heading">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#overview" id="id2">Overview</a></p>
+<ul>
+<li><p><a class="reference internal" href="#key-features" id="id3">Key Features</a></p></li>
+<li><p><a class="reference internal" href="#key-terms" id="id4">Key Terms</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#api-abi-compatibility" id="id5">API/ABI Compatibility</a></p></li>
+<li><p><a class="reference internal" href="#quick-start-checklist-for-migrating-to-qhpi" id="id6">Quick-Start Checklist for Migrating to QHPI</a></p></li>
+<li><p><a class="reference internal" href="#qhpi-based-operator-package-details" id="id7">QHPI-Based Operator Package Details</a></p>
+<ul>
+<li><p><a class="reference internal" href="#qnn-operator-package-skeletal-generation" id="id8">QNN Operator Package Skeletal Generation</a></p></li>
+<li><p><a class="reference internal" href="#operator-implementations" id="id9">Operator Implementations</a></p>
+<ul>
+<li><p><a class="reference internal" href="#operator-definition" id="id10">Operator definition</a></p></li>
+<li><p><a class="reference internal" href="#kernel-implementation" id="id11">Kernel Implementation</a></p></li>
+<li><p><a class="reference internal" href="#precomputation" id="id12">Precomputation</a></p></li>
+<li><p><a class="reference internal" href="#multithreading" id="id13">Multithreading</a></p></li>
+<li><p><a class="reference internal" href="#source-destructive" id="id14">Source Destructive</a></p></li>
+<li><p><a class="reference internal" href="#cost-function" id="id15">Cost Function</a></p></li>
+<li><p><a class="reference internal" href="#optimization-rules" id="id16">Optimization Rules</a></p></li>
+<li><p><a class="reference internal" href="#tiling" id="id17">Tiling</a></p></li>
+<li><p><a class="reference internal" href="#predicates" id="id18">Predicates</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#operator-registration" id="id19">Operator registration</a></p></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="overview">
+<h2><a class="toc-backref" href="#id2">Overview</a><a class="headerlink" href="#overview" title="Permalink to this heading">¶</a></h2>
+<p>QHPI provides a set of <strong>well-defined, strongly typed C APIs</strong> that enable operator writers to create and register operators with the <strong>QNN HTP Backend (BE)</strong>. It replaces the legacy <code class="docutils literal notranslate"><span class="pre">DEF_PACKAGE_OPT</span></code>-based operator system in QNN HTP.</p>
+<div class="section" id="key-features">
+<h3><a class="toc-backref" href="#id3">Key Features</a><a class="headerlink" href="#key-features" title="Permalink to this heading">¶</a></h3>
+<ul>
+<li><p><strong>API/ABI Compatibility</strong></p>
+<p>Provides strong API and ABI compatibility for operator packages through versioned op package registration APIs and data structures. The versioned APIs enable customers to develop op packages using a given QHPI API version and continue to use those in future SDKs without any further changes if the customer does not need features from the newer QHPI API versions. A QHPI op package built with an older SDK is expected to continue working on newer SDKs <strong>without</strong> requiring recompilation.</p>
+</li>
+<li><p><strong>Multi-threading Support</strong></p>
+<p>Provides access to improved performance on NPUs.</p>
+</li>
+<li><p><strong>Smooth Transition</strong></p>
+<p>Coexists with legacy C++ <code class="docutils literal notranslate"><span class="pre">DEF_PACKAGE_OPT</span></code> based packages to simplify migration. QHPI integrates seamlessly with existing QNN tools and the QNN HTP Backend operator package workflow, requiring minimal changes.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="key-terms">
+<h3><a class="toc-backref" href="#id4">Key Terms</a><a class="headerlink" href="#key-terms" title="Permalink to this heading">¶</a></h3>
+<p>The rest of this document uses the following key terms:</p>
+<ul>
+<li><p><strong>Operator packages</strong></p>
+<p>An operator package (also referred to as an <em>op package</em>) is a collection of one or more HTP operator implementations.</p>
+<ul class="simple">
+<li><p>Built as a dynamic linked library.</p></li>
+<li><p>Provided at graph preparation and execution time to supply custom operator implementations.</p></li>
+<li><p>Must implement the QNN Operator Package Interface API as defined in <span class="xref std std-ref">QnnOpPackage.h</span>.</p></li>
+<li><p>Includes a well-defined entry point for the HTP backend to invoke during dynamic loading.</p></li>
+<li><p>For more details, see <a class="reference internal" href="../op_packages.html"><span class="doc">Op Packages</span></a>.</p></li>
+</ul>
+</li>
+<li><p><strong>Kernel</strong></p>
+<p>A specific C/C++ function invoked during execution. Kernels are typically associated with specific layouts and element types.</p>
+</li>
+<li><p><strong>Operator</strong></p>
+<p>A named node in a machine learning graph. Operators are generic with respect to layout, element type, and storage placement. At the end of graph preparation, every operator is associated with a specific kernel.</p>
+</li>
+<li><p><strong>Precomputation</strong></p>
+<p>The equivalent of the <code class="docutils literal notranslate"><span class="pre">COMPILER_FOR</span></code> macro, where a function can be invoked when a prepared graph is loaded for execution.</p>
+</li>
+<li><p><strong>Multithreading</strong></p>
+<p>Operators can be invoked multiple times with distinct slice identifiers, enabling parallel execution across different hardware threads of the same type.</p>
+</li>
+</ul>
+<p>Please refer to <code class="docutils literal notranslate"><span class="pre">&quot;&lt;QNN_SDK_ROOT&gt;/include/HTP/core/qhpi.h&quot;</span></code> for QHPI API definitions.</p>
+</div>
+</div>
+<div class="section" id="api-abi-compatibility">
+<h2><a class="toc-backref" href="#id5">API/ABI Compatibility</a><a class="headerlink" href="#api-abi-compatibility" title="Permalink to this heading">¶</a></h2>
+<p>API and ABI compatibility is one of the key capabilities that QHPI offers to operator packages. To accomplish this, all APIs and data structures defined via <code class="docutils literal notranslate"><span class="pre">&quot;&lt;QNN_SDK_ROOT&gt;/include/HTP/core/qhpi.h&quot;</span></code> are <strong>subject to versioning</strong> to ensure compatibility. Any significant changes to a data structure or function will be handled by the creation of a <strong>new</strong> version of that data structure or function, using <code class="docutils literal notranslate"><span class="pre">_vxxx</span></code> suffix, <code class="docutils literal notranslate"><span class="pre">XXX</span></code> is the version number.</p>
+<p>The example below illustrates an updated QHPI operator data structure, <cite>QHPI_OpInfo_v1</cite>, which now references the latest QHPI kernel version, <cite>QHPI_Kernel_v1</cite>.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>typedef struct {
+   const char *name;
+   uint32_t num_kernels;
+   QHPI_Kernel_v1 *kernels;
+   QHPI_RewriteOpFunc early_rewrite;
+   QHPI_TileShapeRequired shape_required;
+   QHPI_TileShapeLegalized shape_legalized;
+   QHPI_BuildTileOfOp build_tile;
+   QHPI_RewriteOpFunc late_rewrite;
+} QHPI_OpInfo_v1;
+</pre></div>
+</div>
+<p>Here is an example of a versioned function in the API, <cite>qhpi_register_ops_v1</cite>, introduced to register the latest operator data structure, <cite>QHPI_OpInfo_v1</cite>.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>// register a collection of v1 operators
+uint32_t qhpi_register_ops_v1(uint32_t num_ops, QHPI_OpInfo_v1 *operators, const char *package);
+</pre></div>
+</div>
+<p>The versioned APIs and data structures will enable SDK users to develop op packages using a given SDK and continue using them on future SDKs without any further changes or recompilation.</p>
+</div>
+<div class="section" id="quick-start-checklist-for-migrating-to-qhpi">
+<h2><a class="toc-backref" href="#id6">Quick-Start Checklist for Migrating to QHPI</a><a class="headerlink" href="#quick-start-checklist-for-migrating-to-qhpi" title="Permalink to this heading">¶</a></h2>
+<p>Follow these steps to migrate an existing legacy operator package to QHPI:</p>
+<ol class="arabic simple">
+<li><p><strong>Update XML Configuration</strong></p></li>
+</ol>
+<ul class="simple">
+<li><p>Set <code class="docutils literal notranslate"><span class="pre">UseQHPI=&quot;true&quot;</span></code> in the <code class="docutils literal notranslate"><span class="pre">OpDefCollection</span></code> element.</p></li>
+<li><p>Verify operator definitions in XML follow the OpDef schema.</p></li>
+<li><p>Reference: <a class="reference internal" href="../op_def_schema.html"><span class="doc">QNN XML Op Def</span></a>.</p></li>
+</ul>
+<ol class="arabic simple" start="2">
+<li><p><strong>Generate QHPI Skeleton</strong></p></li>
+</ol>
+<ul>
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">qnn-op-package-generator</span></code> to create a skeletal QHPI implementation.</p></li>
+<li><p>Command:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>&lt;QNN_SDK_ROOT&gt;/bin/x86_64-linux-clang/qnn-op-package-generator<span class="w"> </span>--config<span class="w"> </span>&lt;xml_file&gt;<span class="w"> </span>--output_path<span class="w"> </span>&lt;output_dir&gt;
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p>Reference: <a class="reference internal" href="../generating_op_packages.html"><span class="doc">Generating Op Packages</span></a>.</p></li>
+</ul>
+<ol class="arabic simple" start="3">
+<li><p><strong>Implement Op Package Entry Point</strong></p></li>
+</ol>
+<ul class="simple">
+<li><p>Ensure the generated skeleton includes the <strong>mandatory</strong> function <code class="docutils literal notranslate"><span class="pre">qhpi_init()</span></code>, which is required for successful loading and registration of the QHPI operator package.</p></li>
+<li><p>Register QHPI ops with QNN HTP BE using the appropriate versioned registration API. For example, the initial QHPI release contains <code class="docutils literal notranslate"><span class="pre">QHPI_register_ops_v1()</span></code> API that could be invoked from <code class="docutils literal notranslate"><span class="pre">qhpi_init()</span></code> to register operators with QNN HTP BE.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">qhpi_init()</span></code> is the QHPI equivalent of the legacy macro <code class="docutils literal notranslate"><span class="pre">INIT_PKG_CORE_INIT_FUNC</span></code>.
+QHPI supports versioned registration APIs; please pick the appropriate API based on SDK and op/kernel/tensor properties.</p>
+</div>
+<ol class="arabic simple" start="4">
+<li><p><strong>Implement Operator Logic</strong></p></li>
+</ol>
+<ul>
+<li><p>Replace legacy macros (e.g., <code class="docutils literal notranslate"><span class="pre">REGISTER_OP</span></code>) with:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">QHPI_Kernel_vxxx</span></code> structures for kernel definitions.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">QHPI_Tensor_Signature_vxxx</span></code> for input/output tensor properties.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">QHPI_OpInfo_vxxx</span></code> for operator-to-kernel mapping.</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Ensure:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">function_name</span></code> is unique.</p></li>
+<li><p>Examine and initialize attributes such as <code class="docutils literal notranslate"><span class="pre">resources</span></code> and <code class="docutils literal notranslate"><span class="pre">source_destructive</span></code> appropriately.</p></li>
+<li><p>Order kernels appropriately. The most preferred kernel is listed first. Kernels are selected by QHPI in the order they appear in <code class="docutils literal notranslate"><span class="pre">QHPI_OpInfo_vxxx</span></code> by default. This can however be overridden by the op writer using <cite>Predicates</cite>. Refer to <a class="reference internal" href="#predicates-details"><span class="std std-ref">Predicates</span></a> for more on this.</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<ol class="arabic simple" start="5">
+<li><p><strong>Handle Kernel Invocation</strong></p></li>
+</ol>
+<ul>
+<li><p>Implement kernel execution functions for:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Default execution.</p></li>
+<li><p>Precomputation (optional).</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>See the discussion on <a class="reference internal" href="#operator-implementations"><span class="std std-ref">Operator Implementations</span></a> for details.</p></li>
+</ul>
+<ol class="arabic simple" start="6">
+<li><p><strong>Enable Advanced Features</strong></p></li>
+</ol>
+<ul class="simple">
+<li><p><strong>Multithreading</strong>: Set <code class="docutils literal notranslate"><span class="pre">multithreaded</span></code> flag and use slice APIs if kernel implementation can be parallelized across multiple hardware threads.</p></li>
+<li><p><strong>Source Destructive</strong>: Set <code class="docutils literal notranslate"><span class="pre">source_destructive</span></code> flag if the first input/output can share memory.</p></li>
+<li><p><strong>Cost Function</strong>: Optional, used for predicting performance (not for kernel selection).</p></li>
+</ul>
+<ol class="arabic simple" start="7">
+<li><p><strong>Implement Rewrite Rules</strong></p></li>
+</ol>
+<ul>
+<li><p>Rewrite callbacks can be used to rewrite operators into a new subgraph containing other QHPI and QNN operators.</p></li>
+<li><p>Replace op rewrite <code class="docutils literal notranslate"><span class="pre">DEF_PACKAGE_OPTIMIZATION</span></code> rules with optimizations implemented using the appropriate QHPI C API rewrite callbacks.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">early_rewrite</span></code>: Optional function, when specified is invoked early during graph compilation prior to op tiling.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">late_rewrite</span></code>: Optional function, when specified is invoked during graph compilation after op tiling.</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<ol class="arabic simple" start="8">
+<li><p><strong>Implement Tiling Rules</strong></p></li>
+</ol>
+<ul>
+<li><p>Tiling callbacks allow the op writer to customize HTP’s choices on splitting a QHPI operator in a given graph.</p></li>
+<li><p>Replace any <code class="docutils literal notranslate"><span class="pre">DEF_PACKAGE_OPTIMIZATION</span></code> rules using <code class="docutils literal notranslate"><span class="pre">AUTOSPLIT</span></code> and <code class="docutils literal notranslate"><span class="pre">TILING</span></code> with implementations using appropriate QHPI tiling callbacks.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">shape_required</span></code>: Optional function, when implemented can be used to enforce requirements on tiling dimensions.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">shape_legalized</span></code>: Optional function, when implemented can be used to adjust the HTP’s tile choice based on tiling heuristics.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">build_tile</span></code>: Optional function, when implemented can be used to create a tiled operator to compute a specified output slice.</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<ol class="arabic simple" start="9">
+<li><p><strong>Validate and Test</strong></p></li>
+</ol>
+<ul class="simple">
+<li><p>Build the operator package using Makefiles generated in step 2.</p></li>
+<li><p>Verify the operator package works with the HTP backend by following the workflow mentioned in the <a class="reference internal" href="../tutorial1.html"><span class="doc">Custom op package tutorial</span></a>. Note that the steps for building and executing a model using QNN HTP BE have <strong>not</strong> changed due to QHPI.</p></li>
+</ul>
+<ol class="arabic simple" start="10">
+<li><p>Please refer to the following sample legacy to QHPI ports in the SDK.</p></li>
+</ol>
+<ul class="simple">
+<li><p>${QNN_SDK_ROOT}/examples/QNN/OpPackage/HTP/QHPI/</p></li>
+<li><p>${QNN_SDK_ROOT}/examples/QNN/OpPackageGenerator/generated/HTP/</p></li>
+</ul>
+<p>The following section provides additional details on these steps.</p>
+</div>
+<div class="section" id="qhpi-based-operator-package-details">
+<h2><a class="toc-backref" href="#id7">QHPI-Based Operator Package Details</a><a class="headerlink" href="#qhpi-based-operator-package-details" title="Permalink to this heading">¶</a></h2>
+<p>A QNN operator package implementation consists of three components:</p>
+<ul class="simple">
+<li><p><strong>QNN operator package Skeletal Generation</strong></p></li>
+<li><p><strong>Operator Implementation</strong></p></li>
+<li><p><strong>Operator Registration</strong></p></li>
+</ul>
+<p>QHPI does <strong>not</strong> change the QNN op package interface definition. The QNN operator package interface remains the same whether you use legacy APIs or QHPI for operator implementations. However, the operator implementation and registration APIs must be updated to use QHPI.</p>
+<p>The following section provides examples showing how to create a new QHPI-based operator package or migrate an existing legacy package to QHPI. Several QHPI-based op implementation examples can be found in the SDK at:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>${QNN_SDK_ROOT}/examples/QNN/OpPackage/HTP/QHPI/
+</pre></div>
+</div>
+<div class="section" id="qnn-operator-package-skeletal-generation">
+<h3><a class="toc-backref" href="#id8">QNN Operator Package Skeletal Generation</a><a class="headerlink" href="#qnn-operator-package-skeletal-generation" title="Permalink to this heading">¶</a></h3>
+<p>QNN provides a streamlined way to create the required operator package interface implementation and supporting build files for generating QHPI-based operator packages using the <code class="docutils literal notranslate"><span class="pre">qnn-op-package-generator</span></code> tool.</p>
+<p>To use the tool, package information and operators must be defined using the XML OpDef schema, as described in <a class="reference internal" href="../op_def_schema.html"><span class="doc">QNN XML Op Def</span></a>.</p>
+<p>To enable QHPI, update the XML configuration file by setting the <code class="docutils literal notranslate"><span class="pre">UseQHPI=&quot;true&quot;</span></code> attribute in the <code class="docutils literal notranslate"><span class="pre">OpDefCollection</span></code> element, as shown below:</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+<span class="nt">&lt;OpDefCollection</span>
+<span class="w">   </span><span class="na">PackageName=</span><span class="s">&quot;ExampleOpPackage&quot;</span>
+<span class="w">   </span><span class="na">Domain=</span><span class="s">&quot;aisw&quot;</span>
+<span class="w">   </span><span class="na">Version=</span><span class="s">&quot;1.0&quot;</span>
+<span class="w">   </span><span class="na">UseQHPI=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
+<span class="w">   </span>...
+<span class="nt">&lt;/OpDefCollection&gt;</span>
+</pre></div>
+</div>
+<p>Sample XML configurations can be found in <a class="reference internal" href="../example_op_defs.html"><span class="doc">Example XML Op Def Configs</span></a> and in the SDK at:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>${QNN_SDK_ROOT}/examples/QNN/OpPackageGenerator
+</pre></div>
+</div>
+<p>Based on the input/output data types and parameters specified in the XML configuration file, the <code class="docutils literal notranslate"><span class="pre">qnn-op-package-generator</span></code> tool creates a QHPI-based skeletal implementation using definitions provided in the SDK. The kernel tiling, execution, and other functions are stubbed out in the generated skeleton and must be implemented by the developer.</p>
+<p>The generated skeletal implementation also includes the mandatory entry-point function <code class="docutils literal notranslate"><span class="pre">qhpi_init()</span></code>, which is required for successful loading and registration of a QHPI operator package.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">qhpi_init()</span></code> function is the QHPI equivalent of the legacy macro <code class="docutils literal notranslate"><span class="pre">INIT_PKG_CORE_INIT_FUNC</span></code>.</p>
+</div>
+<p>Given an XML configuration file, a skeletal implementation for the op package can be generated using the following command:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>&lt;QNN_SDK_ROOT&gt;/bin/x86_64-linux-clang/qnn-op-package-generator --config &lt;xml_file&gt; --output_path &lt;output_dir&gt;
+</pre></div>
+</div>
+<p>Further details on op package skeleton generation can be found at   <a class="reference internal" href="../generating_op_packages.html"><span class="doc">Generating Op Packages</span></a>.</p>
+</div>
+<div class="section" id="operator-implementations">
+<span id="id1"></span><h3><a class="toc-backref" href="#id9">Operator Implementations</a><a class="headerlink" href="#operator-implementations" title="Permalink to this heading">¶</a></h3>
+<p>The operator implementation is the primary area where QHPI APIs differ from the legacy C++ macro-based approach. The following sections provide details on QHPI operator implementation.</p>
+<div class="section" id="operator-definition">
+<h4><a class="toc-backref" href="#id10">Operator definition</a><a class="headerlink" href="#operator-definition" title="Permalink to this heading">¶</a></h4>
+<p>In the legacy interface, the <code class="docutils literal notranslate"><span class="pre">DEF_PACKAGE_OP</span></code> macro and its variants declare kernels and associate them with operators. For example:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">Ttype</span><span class="o">&gt;</span>
+<span class="n">GraphStatus</span><span class="w"> </span><span class="n">asin_opt</span><span class="p">(</span><span class="n">Ttype</span><span class="w"> </span><span class="o">&amp;</span><span class="n">out</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">Ttype</span><span class="w"> </span><span class="o">&amp;</span><span class="n">in</span><span class="p">);</span>
+
+<span class="n">DEF_PACKAGE_OP</span><span class="p">(</span><span class="n">asin_opt</span><span class="o">&lt;</span><span class="n">QuantUint16Tensor</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Asin_16&quot;</span><span class="p">);</span>
+<span class="n">DEF_PACKAGE_OP</span><span class="p">(</span><span class="n">asin_opt</span><span class="o">&lt;</span><span class="n">QuantUint16Tensor_TCM</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Asin_16&quot;</span><span class="p">);</span>
+<span class="n">DEF_PACKAGE_OP</span><span class="p">(</span><span class="n">asin_opt</span><span class="o">&lt;</span><span class="n">QUint16CroutonTensor</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Asin_16&quot;</span><span class="p">);</span>
+<span class="n">DEF_PACKAGE_OP</span><span class="p">(</span><span class="n">asin_opt</span><span class="o">&lt;</span><span class="n">QUint16CroutonTensor_TCM</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Asin_16&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>In this example, four kernels are associated with the operator <code class="docutils literal notranslate"><span class="pre">&quot;Asin_16&quot;</span></code>. These kernels differ in layout and memory placement of the input tensor. The macro uses C++ templates to interpret type signatures and match kernels to tensor types.</p>
+<p>In QHPI, kernels are declared using a static data structure <strong>QHPI_Kernel_vxxx</strong>. The <code class="docutils literal notranslate"><span class="pre">QHPI_Kernel_vxxx</span></code> defines kernel attributes such as function name, resources, input/output signatures, and flags.</p>
+<p>Example:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">static</span><span class="w"> </span><span class="n">QHPI_Kernel_v1</span><span class="w"> </span><span class="n">asin16_kernels</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{{</span>
+<span class="w">   </span><span class="p">.</span><span class="n">function_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">THIS_PKG_NAME_STR</span><span class="w"> </span><span class="s">&quot;::&quot;</span><span class="w"> </span><span class="s">&quot;asin_16_flat&quot;</span><span class="p">,</span>
+<span class="w">   </span><span class="p">.</span><span class="n">function</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">asin_16</span><span class="o">&lt;</span><span class="n">QuantUint16Tensor</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="w">   </span><span class="p">.</span><span class="n">resources</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">QHPI_RESOURCE_HVX</span><span class="p">,</span>
+<span class="w">   </span><span class="p">.</span><span class="n">source_destructive</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">,</span>
+<span class="w">   </span><span class="p">.</span><span class="n">min_inputs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">   </span><span class="p">.</span><span class="n">input_signature</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">sig_flat_16</span><span class="p">,</span>
+<span class="w">   </span><span class="p">.</span><span class="n">min_outputs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">   </span><span class="p">.</span><span class="n">output_signature</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">sig_flat_16</span><span class="p">,</span>
+<span class="p">},</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">};</span>
+</pre></div>
+</div>
+<p><strong>QHPI_Tensor_Signature_vxxx</strong></p>
+<p>Captures tensor properties such as element type, layout, storage, and memory placement. The corresponding legacy macro equivalent is <code class="docutils literal notranslate"><span class="pre">DEF_TENSOR_PROPERTIES</span></code>.</p>
+<p>Example:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">static</span><span class="w"> </span><span class="n">QHPI_Tensor_Signature_v1</span><span class="w"> </span><span class="n">sig_flat_16</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">   </span><span class="p">.</span><span class="n">element_type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">QHPI_QUInt16</span><span class="p">,</span>
+<span class="w">   </span><span class="p">.</span><span class="n">layout</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">QHPI_Layout_Flat4</span><span class="p">,</span>
+<span class="w">   </span><span class="p">.</span><span class="n">storage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">QHPI_Storage_Direct</span><span class="p">,</span>
+<span class="w">   </span><span class="p">.</span><span class="n">mem_placement</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">QHPI_MemLoc_DDR_OR_TCM</span><span class="p">,</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p><strong>QHPI_OpInfo_vxxx</strong></p>
+<p>Defines an operator and associates it with one or more kernels.</p>
+<p>Example:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">static</span><span class="w"> </span><span class="n">QHPI_OpInfo_v1</span><span class="w"> </span><span class="n">ops</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{{</span>
+<span class="w">   </span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">THIS_PKG_NAME_STR</span><span class="w"> </span><span class="s">&quot;::&quot;</span><span class="w"> </span><span class="s">&quot;Asin_16&quot;</span><span class="p">,</span>
+<span class="w">   </span><span class="p">.</span><span class="n">num_kernels</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span>
+<span class="w">   </span><span class="p">.</span><span class="n">kernels</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">asin16_kernels</span><span class="p">,</span>
+<span class="p">},</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">};</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Operator names follow the convention <code class="docutils literal notranslate"><span class="pre">PackageName::OperatorName</span></code>.</p>
+<p>Kernels are matched in the order they appear in the operator definition by default.</p>
+</div>
+</div>
+<div class="section" id="kernel-implementation">
+<h4><a class="toc-backref" href="#id11">Kernel Implementation</a><a class="headerlink" href="#kernel-implementation" title="Permalink to this heading">¶</a></h4>
+<p>Every QHPI kernel defined using <code class="docutils literal notranslate"><span class="pre">QHPI_Kernel_vxxx</span></code> must include an execution function that handles kernel implementation for inferencing.</p>
+<p>Example kernel execution signature:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">Ttype</span><span class="o">&gt;</span>
+<span class="kr">inline</span><span class="w"> </span><span class="n">GraphStatus</span><span class="w"> </span><span class="n">asin_opt</span><span class="p">(</span><span class="n">Ttype</span><span class="w"> </span><span class="o">&amp;</span><span class="n">out</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">Ttype</span><span class="w"> </span><span class="o">&amp;</span><span class="n">in</span><span class="p">);</span>
+
+<span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">TensorType</span><span class="o">&gt;</span>
+<span class="k">static</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">asin_16</span><span class="p">(</span><span class="n">QHPI_RuntimeHandle</span><span class="w"> </span><span class="o">*</span><span class="p">,</span>
+<span class="w">                        </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">num_outputs</span><span class="p">,</span><span class="w"> </span><span class="n">QHPI_Tensor</span><span class="w"> </span><span class="o">**</span><span class="n">outputs</span><span class="p">,</span>
+<span class="w">                        </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">num_inputs</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">QHPI_Tensor</span><span class="w"> </span><span class="o">*</span><span class="k">const</span><span class="w"> </span><span class="o">*</span><span class="n">inputs</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">   </span><span class="k">return</span><span class="w"> </span><span class="n">asin_opt</span><span class="o">&lt;</span><span class="n">TensorType</span><span class="o">&gt;</span><span class="p">(</span><span class="o">*</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">TensorType</span><span class="w"> </span><span class="o">*&gt;</span><span class="p">(</span><span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
+<span class="w">                              </span><span class="o">*</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="k">const</span><span class="w"> </span><span class="n">TensorType</span><span class="w"> </span><span class="o">*&gt;</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="mi">0</span><span class="p">]));</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="precomputation">
+<h4><a class="toc-backref" href="#id12">Precomputation</a><a class="headerlink" href="#precomputation" title="Permalink to this heading">¶</a></h4>
+<p>QHPI supports precomputation for optimal inferencing via additional function pointers in <code class="docutils literal notranslate"><span class="pre">QHPI_Kernel_v1</span></code>:</p>
+<ul>
+<li><p><strong>do_precomputation_function</strong></p>
+<blockquote>
+<div><p>Called during graph load to initialize a data block. This API replaces the legacy <code class="docutils literal notranslate"><span class="pre">COMPILER_FOR</span></code> macro. This function has access to tensor info such as shape, block table, and quantization parameters. Any computation based on this information may be done and stored in the data block for use later during graph inference.</p>
+</div></blockquote>
+</li>
+<li><p><strong>function_with_precomputed_data</strong></p>
+<blockquote>
+<div><p>Called during inference with the runtime handle and the precomputed data block from <code class="docutils literal notranslate"><span class="pre">do_precomputation_function</span></code>. This is an alternative to a kernel’s default execution function specified in <code class="docutils literal notranslate"><span class="pre">function</span></code>.</p>
+<p>Example:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">static</span><span class="w"> </span><span class="n">QHPI_Kernel_v1</span><span class="w"> </span><span class="n">kernels</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{{</span>
+<span class="w">   </span><span class="p">.</span><span class="n">function_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">THIS_PKG_NAME_STR</span><span class="w"> </span><span class="s">&quot;::&quot;</span><span class="w"> </span><span class="s">&quot;Asin_16&quot;</span><span class="p">,</span>
+<span class="w">   </span><span class="p">...</span>
+<span class="w">   </span><span class="p">.</span><span class="n">precomputed_data_size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">Precompute</span><span class="p">),</span>
+<span class="w">   </span><span class="p">.</span><span class="n">do_precomputation_function</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">asin_do_precomputation</span><span class="p">,</span>
+<span class="w">   </span><span class="p">.</span><span class="n">function_with_precomputed_data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">asin_use_precomputation</span><span class="p">,</span>
+<span class="p">}};</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+</ul>
+</div>
+<div class="section" id="multithreading">
+<h4><a class="toc-backref" href="#id13">Multithreading</a><a class="headerlink" href="#multithreading" title="Permalink to this heading">¶</a></h4>
+<ul class="simple">
+<li><p>Enable by setting the <code class="docutils literal notranslate"><span class="pre">multithreaded</span></code> flag in <code class="docutils literal notranslate"><span class="pre">QHPI_Kernel_v1</span></code>.</p></li>
+<li><p>Enables multi-threaded execution of a kernel across multiple hardware threads.</p></li>
+<li><p>Access slice information for current thread and the total number of slices via runtime functions:</p></li>
+</ul>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">num_slices</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">qhpi_num_slices</span><span class="p">(</span><span class="n">fh</span><span class="p">);</span>
+<span class="kt">uint32_t</span><span class="w"> </span><span class="n">slice_number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">qhpi_slice_number</span><span class="p">(</span><span class="n">fh</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="source-destructive">
+<h4><a class="toc-backref" href="#id14">Source Destructive</a><a class="headerlink" href="#source-destructive" title="Permalink to this heading">¶</a></h4>
+<p>Specify <code class="docutils literal notranslate"><span class="pre">source_destructive</span> <span class="pre">=</span> <span class="pre">true</span></code> in <code class="docutils literal notranslate"><span class="pre">QHPI_Kernel_v1</span></code> if the <strong>first</strong> input and output tensors can share memory. Such a kernel must ensure that it reads the input before writing the corresponding output location.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This optimization is opportunistic and the kernel must be written to run correctly when the tensors do not share the same memory location.</p>
+</div>
+</div>
+<div class="section" id="cost-function">
+<h4><a class="toc-backref" href="#id15">Cost Function</a><a class="headerlink" href="#cost-function" title="Permalink to this heading">¶</a></h4>
+<p>In the legacy APIs, the cost functions influenced both kernel selection and execution time prediction. In QHPI, however, they are <strong>only used for predicting execution times</strong>, and not for kernel selection. Please see <a class="reference internal" href="#predicates-details"><span class="std std-ref">Predicates</span></a> for more on kernel selection.</p>
+<p>Example:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">float</span><span class="w"> </span><span class="nf">cost_func</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">num_inputs</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">QHPI_Tensor</span><span class="w"> </span><span class="o">*</span><span class="k">const</span><span class="w"> </span><span class="o">*</span><span class="n">inputs</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">   </span><span class="n">QHPI_Shape</span><span class="w"> </span><span class="n">shape</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">qhpi_tensor_shape</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+<span class="w">   </span><span class="kt">unsigned</span><span class="w"> </span><span class="n">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">shape</span><span class="p">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">shape</span><span class="p">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">shape</span><span class="p">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">shape</span><span class="p">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span>
+<span class="w">   </span><span class="k">return</span><span class="w"> </span><span class="n">size</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">0.2f</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">10.0f</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="optimization-rules">
+<h4><a class="toc-backref" href="#id16">Optimization Rules</a><a class="headerlink" href="#optimization-rules" title="Permalink to this heading">¶</a></h4>
+<p>QHPI replaces the <code class="docutils literal notranslate"><span class="pre">DEF_OPT</span></code> Domain Specific Language (DSL) with a simplified C API for graph rewrites. Op writers can implement the following <strong>optional</strong> callbacks for tiling:</p>
+<ul>
+<li><p><strong>early_rewrite</strong></p>
+<blockquote>
+<div><p>Invoked before any tiling is performed by the compiler. This function can rewrite the operator into a new subgraph of operators. Operators in this subgraph may be QHPI operators or standard QNN operators.</p>
+<p>Example:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">static</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">QHPI_Op</span><span class="w"> </span><span class="o">*</span><span class="nf">relu_to_relu_minmax_quant_rewrite</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">QHPI_Op</span><span class="w"> </span><span class="o">*</span><span class="n">op</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">   </span><span class="n">QHPI_OpRef</span><span class="w"> </span><span class="n">input</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">qhpi_op_input</span><span class="p">(</span><span class="n">op</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">   </span><span class="n">QHPI_OutputDef</span><span class="w"> </span><span class="n">input_output</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">qhpi_op_output</span><span class="p">(</span><span class="n">input</span><span class="p">.</span><span class="n">op</span><span class="p">,</span><span class="w"> </span><span class="n">input</span><span class="p">.</span><span class="n">output_number</span><span class="p">);</span>
+
+<span class="w">   </span><span class="c1">// Check if input is quantized type</span>
+<span class="w">   </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">input_output</span><span class="p">.</span><span class="n">type</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">QHPI_QUInt8</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">input_output</span><span class="p">.</span><span class="n">type</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">QHPI_QUInt16</span><span class="w"> </span><span class="o">&amp;&amp;</span>
+<span class="w">      </span><span class="n">input_output</span><span class="p">.</span><span class="n">type</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">QHPI_QInt8</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">input_output</span><span class="p">.</span><span class="n">type</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">QHPI_QInt16</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="k">return</span><span class="w"> </span><span class="n">op</span><span class="p">;</span>
+<span class="w">   </span><span class="p">}</span>
+
+<span class="w">   </span><span class="c1">// Create ReluMinMax with min=0.0f, max=INF</span>
+<span class="w">   </span><span class="n">QHPI_OpRef</span><span class="w"> </span><span class="n">min_const</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">gen_const_scalar_f32</span><span class="p">(</span><span class="n">op</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">);</span>
+<span class="w">   </span><span class="n">QHPI_OpRef</span><span class="w"> </span><span class="n">max_const</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">gen_const_scalar_f32</span><span class="p">(</span><span class="n">op</span><span class="p">,</span><span class="w"> </span><span class="n">INFINITY</span><span class="p">);</span>
+
+<span class="w">   </span><span class="n">QHPI_OpRef</span><span class="w"> </span><span class="n">inputs</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">input</span><span class="p">,</span><span class="w"> </span><span class="n">min_const</span><span class="p">,</span><span class="w"> </span><span class="n">max_const</span><span class="p">};</span>
+<span class="w">   </span><span class="n">QHPI_OutputDef</span><span class="w"> </span><span class="n">output</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">qhpi_op_output</span><span class="p">(</span><span class="n">op</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+
+<span class="w">   </span><span class="k">return</span><span class="w"> </span><span class="n">qhpi_op_create</span><span class="p">(</span><span class="n">op</span><span class="p">,</span><span class="w"> </span><span class="n">THIS_PKG_NAME_STR</span><span class="w"> </span><span class="s">&quot;::ReluMinMax&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="n">inputs</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">output</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p><strong>late_rewrite</strong></p>
+<blockquote>
+<div><p>This allows the op package to rewrite operators after tiling into a new subgraph. In this case, the new subgraph should only contain plugin operators and a small set of additional operators such as <cite>Slice_shape</cite>, <cite>Concat</cite>, and <cite>Reshape</cite>. The late rewrite can also be used to introduce scratch space after tiling as unused outputs.</p>
+<p>Example:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">static</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">QHPI_Op</span><span class="w"> </span><span class="o">*</span><span class="nf">relu_late_rewrite</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">QHPI_Op</span><span class="w"> </span><span class="o">*</span><span class="n">op</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">   </span><span class="c1">// Use late rewrite to add scratch</span>
+<span class="w">   </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">qhpi_op_num_outputs</span><span class="p">(</span><span class="n">op</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span>
+<span class="w">      </span><span class="k">return</span><span class="w"> </span><span class="n">op</span><span class="p">;</span>
+<span class="w">   </span><span class="n">QHPI_OutputDef</span><span class="w"> </span><span class="n">outputs</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+<span class="w">   </span><span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">qhpi_op_output</span><span class="p">(</span><span class="n">op</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">   </span><span class="n">outputs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{.</span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">QHPI_Int32</span><span class="p">,</span>
+<span class="w">                  </span><span class="p">.</span><span class="n">shape</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{.</span><span class="n">rank</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">dims</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">32</span><span class="p">}}};</span>
+<span class="w">   </span><span class="n">QHPI_OpRef</span><span class="w"> </span><span class="n">input</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">qhpi_op_input</span><span class="p">(</span><span class="n">op</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">   </span><span class="k">return</span><span class="w"> </span><span class="n">qhpi_op_create</span><span class="p">(</span><span class="n">op</span><span class="p">,</span><span class="w"> </span><span class="n">qhpi_op_name</span><span class="p">(</span><span class="n">op</span><span class="p">),</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">input</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">outputs</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The explicit phase ordering supported in <code class="docutils literal notranslate"><span class="pre">DEF_OPT</span></code> is replaced by a simpler pre/post callback functions for tiling.</p>
+</div></blockquote>
+</li>
+</ul>
+</div>
+<div class="section" id="tiling">
+<h4><a class="toc-backref" href="#id17">Tiling</a><a class="headerlink" href="#tiling" title="Permalink to this heading">¶</a></h4>
+<p>QHPI supports direct callbacks into a centralized tiling algorithm. This algorithm makes decisions on how to create smaller versions of operators. By hooking into our central tiler, you can enhance parallelism across functional units and minimize peak memory footprint so as to remain in TCM and improve end-to-end latency. Concurrently, the central tiler also weighs the costs that come from over-decomposition of operators by avoiding excessive inter-op communication and aligning chunking dimensions when possible to minimize concatenation and slicing. This results in the central tiler choosing chunk sizes for every operator it processes.</p>
+<p>It is strongly recommended that users opt-in to these callbacks by (at a minimum) creating a <code class="docutils literal notranslate"><span class="pre">build_tile</span></code> function.</p>
+<p>During tiling there are several functions which may be defined and used to drive our choices on how we split an QHPI operator in our graph. These include:</p>
+<ul>
+<li><p><strong>shape_required</strong></p>
+<blockquote>
+<div><p>Callback which is passed an instance of a plugin operator and returns a _shape_ object that forces certain sizes on each tiling dimension. This function is optional and if omitted no restrictions are placed at the start of tiling.</p>
+<p>Example:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">static</span><span class="w"> </span><span class="n">QHPI_Shape</span><span class="w"> </span><span class="nf">relu_shape_required</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">QHPI_Op</span><span class="w"> </span><span class="o">*</span><span class="n">op</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">   </span><span class="c1">// Define tiling requirements - split on height dimension</span>
+<span class="w">   </span><span class="k">static</span><span class="w"> </span><span class="n">QHPI_Shape</span><span class="w"> </span><span class="n">required</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="p">.</span><span class="n">rank</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span>
+<span class="w">      </span><span class="p">.</span><span class="n">dims</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">RELU_TILE_HEIGHT</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">RELU_CHANNEL_SPLIT_SIZE</span><span class="p">}</span>
+<span class="w">   </span><span class="p">};</span>
+<span class="w">   </span><span class="k">return</span><span class="w"> </span><span class="n">required</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p><strong>shape_legalized</strong></p>
+<blockquote>
+<div><p>Callback which is passed an instance of a plugin operator and a candidate tile shape. The function then returns a “legal” tile shape after considering the initally-proposed one from central tiling’s heuristics. This is intended to support scenarios where there are operator-specific requirements on the shape (e.g. some dimension must be a multiple of some value for good performance). This function is optional and if omitted no restrictions are assumed beyond what is provided by a potential shape required function.</p>
+<p>Example:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">static</span><span class="w"> </span><span class="n">QHPI_Shape</span><span class="w"> </span><span class="nf">relu_shape_legalized</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">QHPI_Op</span><span class="w"> </span><span class="o">*</span><span class="n">op</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">   </span><span class="k">static</span><span class="w"> </span><span class="n">QHPI_Shape</span><span class="w"> </span><span class="n">legal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="p">.</span><span class="n">rank</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span>
+<span class="w">      </span><span class="p">.</span><span class="n">dims</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">256</span><span class="p">}</span>
+<span class="w">   </span><span class="p">};</span>
+<span class="w">   </span><span class="p">...</span>
+<span class="w">   </span><span class="k">return</span><span class="w"> </span><span class="n">legal</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p><strong>build_tile</strong></p>
+<blockquote>
+<div><p>Callback which is passed an instance of a plugin operator, a starting location, and an extent of the first output, is expected to create a new instance of the operator to compute that particular output tile. The key aspect of this is to determine the new inputs to this operator which will (typically) be slices of the inputs of the original. This function is required if you’d like to have your op split into smaller chunks. When omitted, the op is passed back without splitting.</p>
+<p>Example:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">static</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">QHPI_Op</span><span class="w"> </span><span class="o">*</span><span class="nf">relu_build_tile</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">QHPI_Op</span><span class="w"> </span><span class="o">*</span><span class="n">op</span><span class="p">,</span>
+<span class="w">                                    </span><span class="k">const</span><span class="w"> </span><span class="n">QHPI_Shape</span><span class="w"> </span><span class="o">*</span><span class="n">out_start</span><span class="p">,</span>
+<span class="w">                                    </span><span class="k">const</span><span class="w"> </span><span class="n">QHPI_Shape</span><span class="w"> </span><span class="o">*</span><span class="n">out_extent</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">   </span><span class="c1">// Get input reference</span>
+<span class="w">   </span><span class="n">QHPI_OpRef</span><span class="w"> </span><span class="n">input_ref</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">qhpi_op_input</span><span class="p">(</span><span class="n">op</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+
+<span class="w">   </span><span class="c1">// For ReLU, input and output have same dimensions, so input slice = output slice</span>
+<span class="w">   </span><span class="n">QHPI_Shape</span><span class="w"> </span><span class="n">in_start</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">*</span><span class="n">out_start</span><span class="p">;</span>
+<span class="w">   </span><span class="n">QHPI_Shape</span><span class="w"> </span><span class="n">in_extent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">*</span><span class="n">out_extent</span><span class="p">;</span>
+
+<span class="w">   </span><span class="c1">// Create input slice</span>
+<span class="w">   </span><span class="n">QHPI_OpRef</span><span class="w"> </span><span class="n">input_slice</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">qhpi_op_slice</span><span class="p">(</span><span class="n">input_ref</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">in_start</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">in_extent</span><span class="p">);</span>
+
+<span class="w">   </span><span class="c1">// Build tiled operator with sliced input</span>
+<span class="w">   </span><span class="n">QHPI_OpRef</span><span class="w"> </span><span class="n">inputs</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">input_slice</span><span class="p">};</span>
+
+<span class="w">   </span><span class="n">QHPI_OutputDef</span><span class="w"> </span><span class="n">outputs</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="p">{.</span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">qhpi_op_output</span><span class="p">(</span><span class="n">op</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">).</span><span class="n">type</span><span class="p">,</span>
+<span class="w">         </span><span class="p">.</span><span class="n">quant_parameters</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">qhpi_op_output</span><span class="p">(</span><span class="n">op</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">).</span><span class="n">quant_parameters</span><span class="p">,</span>
+<span class="w">         </span><span class="p">.</span><span class="n">shape</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">*</span><span class="n">out_extent</span><span class="p">}</span>
+<span class="w">   </span><span class="p">};</span>
+
+<span class="w">   </span><span class="k">return</span><span class="w"> </span><span class="n">qhpi_op_create</span><span class="p">(</span><span class="n">op</span><span class="p">,</span><span class="w"> </span><span class="n">qhpi_op_name</span><span class="p">(</span><span class="n">op</span><span class="p">),</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">inputs</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">outputs</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+</ul>
+<p>These tiling callbacks can be invoked several times during prepare to perform chunk size evaluation and generate the new sub-operations.</p>
+</div>
+<div class="section" id="predicates">
+<span id="predicates-details"></span><h4><a class="toc-backref" href="#id18">Predicates</a><a class="headerlink" href="#predicates" title="Permalink to this heading">¶</a></h4>
+<p>By default, QHPI matches kernels based on tensor signatures in the order of kernel specification at op registration time. The op writer can, however, further influence kernel matching by implementing an optional <code class="docutils literal notranslate"><span class="pre">predicate</span></code> callback function. The <code class="docutils literal notranslate"><span class="pre">predicate</span></code> callback function can be written to return true or false to either select or skip over the kernel for the next one.</p>
+<p>Example:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">uint32_t</span><span class="w"> </span><span class="nf">asin_plugin_default_predicate</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">QHPI_Op</span><span class="w"> </span><span class="o">*</span><span class="n">op</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">num_inputs</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">QHPI_Tensor</span><span class="w"> </span><span class="o">*</span><span class="k">const</span><span class="w"> </span><span class="o">*</span><span class="n">inputs</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">   </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">num_inputs</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="k">return</span><span class="w"> </span><span class="mi">0u</span><span class="p">;</span><span class="w"> </span><span class="c1">// false</span>
+<span class="w">   </span><span class="p">}</span>
+<span class="w">   </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">num_inputs</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">nullptr</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="mi">0u</span><span class="p">;</span><span class="w"> </span><span class="c1">// false</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">      </span><span class="n">QHPI_Shape</span><span class="w"> </span><span class="n">shape</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">qhpi_tensor_shape</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+<span class="w">      </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">d</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">d</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">shape</span><span class="p">.</span><span class="n">rank</span><span class="p">;</span><span class="w"> </span><span class="n">d</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">shape</span><span class="p">.</span><span class="n">dims</span><span class="p">[</span><span class="n">d</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">               </span><span class="k">return</span><span class="w"> </span><span class="mi">0u</span><span class="p">;</span><span class="w"> </span><span class="c1">// false</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">      </span><span class="n">QHPI_Quant_Parameters</span><span class="w"> </span><span class="n">qp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">qhpi_tensor_quant_parameters</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">qp</span><span class="p">.</span><span class="n">stepsize</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="mi">0u</span><span class="p">;</span><span class="w"> </span><span class="c1">// false</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">   </span><span class="p">}</span>
+<span class="w">   </span><span class="k">return</span><span class="w"> </span><span class="mi">1u</span><span class="p">;</span><span class="w"> </span><span class="c1">// non-zero =&gt; &quot;true&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="operator-registration">
+<h3><a class="toc-backref" href="#id19">Operator registration</a><a class="headerlink" href="#operator-registration" title="Permalink to this heading">¶</a></h3>
+<p>QHPI operators defined using <code class="docutils literal notranslate"><span class="pre">QHPI_OpInfo_vxxx</span></code> can be registered with the QNN HTP BE using the corresponding registration function <code class="docutils literal notranslate"><span class="pre">qhpi_register_ops_vXXX</span></code> API as part of the op package dynamic library entry point <code class="docutils literal notranslate"><span class="pre">qhpi_init()</span></code>.</p>
+<p>Example:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">// OpInfo definitions</span>
+<span class="k">static</span><span class="w"> </span><span class="n">QHPI_OpInfo_v1</span><span class="w"> </span><span class="n">ops</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">   </span><span class="p">{</span>
+<span class="w">      </span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">THIS_PKG_NAME_STR</span><span class="w"> </span><span class="s">&quot;::Relu&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="p">.</span><span class="n">num_kernels</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span>
+<span class="w">      </span><span class="p">.</span><span class="n">kernels</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">relu_kernels</span><span class="p">,</span>
+<span class="w">      </span><span class="p">.</span><span class="n">early_rewrite</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">relu_to_relu_minmax_quant</span><span class="p">,</span>
+<span class="w">      </span><span class="p">.</span><span class="n">shape_required</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">relu_shape_required</span><span class="p">,</span>
+<span class="w">      </span><span class="p">.</span><span class="n">build_tile</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">relu_build_tile</span><span class="p">,</span>
+<span class="w">   </span><span class="p">},</span>
+<span class="w">   </span><span class="c1">// ...</span>
+<span class="p">};</span>
+
+<span class="c1">// Registration function for regular ReLU operations</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">register_relu_ops</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="w">   </span><span class="n">qhpi_register_ops_v1</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="n">ops</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">ops</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span><span class="w"> </span><span class="n">ops</span><span class="p">,</span><span class="w"> </span><span class="n">THIS_PKG_NAME_STR</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">extern</span><span class="w"> </span><span class="s">&quot;C&quot;</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">qhpi_init</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="w">   </span><span class="c1">// Register the ops with HTP BE</span>
+<span class="w">   </span><span class="n">register_relu_ops</span><span class="p">();</span>
+<span class="w">   </span><span class="k">return</span><span class="w"> </span><span class="n">THIS_PKG_NAME_STR</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The next step after creating and building a QHPI op package is to build and execute a model that uses operators implemented in the op package. The steps for building and executing a model using QNN HTP BE have <strong>not</strong> changed due to QHPI, and are outlined in <a class="reference internal" href="../tutorial1.html"><span class="doc">Custom op package tutorial</span></a>.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="../../HTP/common_default_package_ops_usage_examples.html" class="btn btn-neutral float-right" title="QNN HTP Op Package - Common Default Package Ops Usage Examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="htp_backend.html" class="btn btn-neutral float-left" title="HTP" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020-2025, Qualcomm Technologies, Inc..
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

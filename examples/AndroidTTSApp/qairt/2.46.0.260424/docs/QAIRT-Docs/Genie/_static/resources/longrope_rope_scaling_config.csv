@@ -1,0 +1,6 @@
+Key, Type, Mandatory, DefaultValue
+long_factor, Array, True,
+short_factor, Array, True,
+original_max_position_embeddings, Integer, True,
+attention_factor, Floating point, False,
+type, String, True, longrope

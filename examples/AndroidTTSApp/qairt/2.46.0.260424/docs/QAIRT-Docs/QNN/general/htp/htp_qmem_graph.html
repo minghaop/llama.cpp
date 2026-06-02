@@ -1,0 +1,387 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>QNN HTP Qmem Graph &mdash; Qualcomm® AI Runtime (QAIRT) SDKs</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/custom_css.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Multi-SoC DLC with Reference Weight Sharing" href="htp_multi_soc_dlc.html" />
+    <link rel="prev" title="SubSystem Restart (SSR)" href="htp_ssr.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Qualcomm® AI Runtime (QAIRT) SDKs
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v2.46.0.260424121129
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">QAIRT</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../general/overview.html">Overview</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">SDKs</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">QNN</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../introduction.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../overview.html">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../setup.html">Setup</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../backend.html">Backend</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../dsp/dsp_backend.html">DSP</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="htp_backend.html">HTP</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="htp_qhpi.html">Qualcomm Hexagon Plugin Interface</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/common_default_package_ops_usage_examples.html">QNN HTP Op Package - Common Default Package Ops Usage Examples</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/common_optimization_utility_funcs_usage_examples.html">QNN HTP Optimization Utility Functions Usage Examples</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/htp_core_headers.html">HTP Core Headers for Op Packages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/implementing_ops.html">Implementing Ops</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/opPackage_API_version_guide.html">QNN HTP Op Package API Revision History</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/optimization_grammar.html">Optimization Grammar</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/relu_example.html">QNN HTP Op Package - Relu Op Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/relu_fp16_example.html">QNN HTP-FP16 Op Package - Relu Op Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/scheduling_and_allocation.html">Scheduling and Allocation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/scratch_buffer.html">Allocate Memory for Scratch Buffers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/tensors_and_memory_layout.html">Tensors and Memory Layout</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/writing_op_package.html">Writing QNN HTP Op Package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/migration/central_migration_guidance.html">General OpPackage Central Migration Guidance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/migration/writing_opPackage_migration_guide.html">Op Package Migration Guide</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/htp-network-design-recommendations/htp_guidelines_low_depth_activations.html">Avoid Low Depth Activations</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/htp-network-design-recommendations/htp_guidelines_low_depth_activation_more_examples.html">Avoid Low Depth Activations (more examples)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/htp-network-design-recommendations/htp_guidelines_space_to_depth.html">Use Space-to-depth Transformation where possible</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/htp-network-design-recommendations/htp_guidelines_tcm_requirements.html">Reducing TCM Requirements for Performance and Functionality</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/htp-network-design-recommendations/htp_guidelines_activation_functions.html">Choice of Activation Functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/htp-network-design-recommendations/htp_guidelines_channels.html">Number of Channels</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/htp-network-design-recommendations/htp_guidelines_a16_vs_fp16.html">Quantized 16 bit activations (A16) vs FP16 and Activation Fusion: Performance and power differences</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/htp-network-design-recommendations/htp_guidelines_int4_weights.html">INT4 encodings for weights</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../HTP/htp-network-design-recommendations/htp_guidelines_other_perf.html">Other Performance and Energy Guidelines</a></li>
+<li class="toctree-l4"><a class="reference internal" href="htp_yielding.html">HTP Yielding</a></li>
+<li class="toctree-l4"><a class="reference internal" href="htp_vtcm_sharing.html">HTP VTCM Sharing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="htp_vtcm_sharing.html#vtcm-windowing">VTCM Windowing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="htp_ssr.html">QNN HTP SSR</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">QNN HTP Qmem Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="htp_multi_soc_dlc.html">Multi-SoC DLC with Reference Weight Sharing</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../hta/hta_backend.html">HTA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../lpai/lpai_backend.html">LPAI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../cpu/cpu_backend.html">CPU</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../gpu/gpu_backend.html">GPU</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../saver/saver_backend.html">Saver</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../op_packages.html">Op Packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tools.html">Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../converters.html">Converters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quantization.html">Quantization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../applyencodings.html">QAIRT Quantization Specification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials.html">Tutorials</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../benchmarking.html">Benchmarking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../operations.html">Operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html">API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../revision_history.html">Revision History</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../SNPE/index.html">SNPE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Genie/index.html">Genie</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Delegates</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../Delegates/TfLite/index.html">TFLite Delegate</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Qualcomm® AI Runtime (QAIRT) SDKs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">⌂</a> &raquo;</li>
+        
+          <li><a href="../backend.html">Backend</a> &raquo;</li>
+        
+          <li><a href="htp_backend.html">HTP</a> &raquo;</li>
+        
+      <li>QNN HTP Qmem Graph</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="qnn-htp-qmem-graph">
+<h1>QNN HTP Qmem Graph<a class="headerlink" href="#qnn-htp-qmem-graph" title="Permalink to this heading">¶</a></h1>
+<p>Currently QnnGraph supports inferences for RAW buffers and MemHandles.
+Raw buffers are not accessible from DSP side and at Graph creation, QNN HTP reserves extra RPCMem buffers to copy RAW buffers before inference (copy out output buffers after inference)
+If the client uses MemHandles (handles to buffers allocated using rpcmem_alloc and accessible from DSP side) no copy is needed and those internal buffers are not used.
+Qmem Graph allows the client to pass a hint at graph preparation that this use case will be using RPCMem buffers and there is no need to allocate internal extra RPCmem memory.
+If the client uses Qmem Graph hint at graph creation time and still passes RAW buffers at inference time, QNN HTP will allocate extra buffers at run time (expected performance impact for that inference).</p>
+<div class="section" id="online-prepare">
+<h2>Online Prepare<a class="headerlink" href="#online-prepare" title="Permalink to this heading">¶</a></h2>
+<p><strong>Preparation</strong></p>
+<p>When doing online prepare, the hint (IO tensor memory type) that informs QnnHtp backend to reduce memory allocation is embedded in model.so file.
+This information can be passed in by <code class="code docutils literal notranslate"><span class="pre">QnnTensor_createGraphTensor</span></code> and <code class="code docutils literal notranslate"><span class="pre">QnnGraph_addNode</span></code>.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c1">// example graph. for detail, please refer to Sample App</span>
+<span class="linenos"> 2</span><span class="n">Qnn_GraphHandle_t</span><span class="w"> </span><span class="n">graph</span><span class="p">;</span>
+<span class="linenos"> 3</span><span class="c1">// IO tensors</span>
+<span class="linenos"> 4</span><span class="n">Qnn_Tensor_t</span><span class="w"> </span><span class="n">inputTensor</span><span class="p">;</span>
+<span class="linenos"> 5</span><span class="n">Qnn_Tensor_t</span><span class="w"> </span><span class="n">outputTensor</span><span class="p">;</span>
+<span class="linenos"> 6</span><span class="c1">// Set up common setting for tensors ......</span>
+<span class="linenos"> 7</span><span class="cm">/* There are 2 specific settings for shared buffer:</span>
+<span class="linenos"> 8</span><span class="cm">*  1. memType should be QNN_TENSORMEMTYPE_MEMHANDLE;</span>
+<span class="linenos"> 9</span><span class="cm">*  2. union member memHandle should be used instead of clientBuf, and it</span>
+<span class="linenos">10</span><span class="cm">*  should be set to nullptr.</span>
+<span class="linenos">11</span><span class="cm">*/</span>
+<span class="linenos">12</span><span class="n">inputTensor</span><span class="p">.</span><span class="n">v1</span><span class="p">.</span><span class="n">memType</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="n">QNN_TENSORMEMTYPE_MEMHANDLE</span><span class="p">;</span>
+<span class="linenos">13</span><span class="n">inputTensor</span><span class="p">.</span><span class="n">v1</span><span class="p">.</span><span class="n">clientBuf</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+<span class="linenos">14</span><span class="n">outputTensor</span><span class="p">.</span><span class="n">v1</span><span class="p">.</span><span class="n">memType</span><span class="w">       </span><span class="o">=</span><span class="w"> </span><span class="n">QNN_TENSORMEMTYPE_MEMHANDLE</span><span class="p">;</span>
+<span class="linenos">15</span><span class="n">outputTensor</span><span class="p">.</span><span class="n">v1</span><span class="p">.</span><span class="n">clientBuf</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+<span class="linenos">16</span><span class="n">QnnTensor_createGraphTensor</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">inputTensor</span><span class="p">);</span>
+<span class="linenos">17</span><span class="n">QnnTensor_createGraphTensor</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">outputTensor</span><span class="p">);</span>
+<span class="linenos">18</span>
+<span class="linenos">19</span><span class="c1">// create OpConfig_t with IO tensor just created</span>
+<span class="linenos">20</span><span class="n">Qnn_OpConfig_t</span><span class="w"> </span><span class="n">opConfig</span><span class="p">;</span>
+<span class="linenos">21</span><span class="n">QnnGraph_addNode</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span><span class="w"> </span><span class="n">opConfit</span><span class="p">);</span>
+</pre></div>
+</div>
+<p><strong>Execution</strong></p>
+<p>Please refer to: <a class="reference internal" href="htp_shared_buffer_tutorial.html#shared-buffer-tutorial"><span class="std std-ref">QNN HTP Shared Buffer Tutorial</span></a></p>
+</div>
+<div class="section" id="offline-prepare">
+<h2>Offline Prepare<a class="headerlink" href="#offline-prepare" title="Permalink to this heading">¶</a></h2>
+<p>When generating serialized.bin, it is recommended to generate serialized.bin with option <code class="code docutils literal notranslate"><span class="pre">--input_output_tensor_mem_type</span> <span class="pre">memhandle</span></code> to reduce the memory
+footprint. With this option used, qnn-context-binary-generator will change IO tensor memory type to memhandle. When QnnHtp backend loads serialized.bin, it will
+be able to skip memory allocation for IO tensor and understand that the user intends to use shared_buffer during execution.
+Skipping this option will not impact inference performance.</p>
+<p><strong>Preparation</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>//<span class="w"> </span>Prerequisites:<span class="w"> </span>model.so,<span class="w"> </span>qnn-context-binary-generator,<span class="w"> </span>QnnHtp<span class="w"> </span>backend<span class="w"> </span>.so<span class="w"> </span>library
+<span class="linenos">2</span>
+<span class="linenos">3</span>./qnn-context-binary-generator<span class="w"> </span>--model<span class="w"> </span>libqnn_model.so<span class="w"> </span>--backend<span class="w"> </span>libQnnHtp.so<span class="w"> </span>--binary_file<span class="w"> </span>qnngraph.serialized<span class="w"> </span>--output_dir<span class="w"> </span>output<span class="w"> </span>--input_output_tensor_mem_type<span class="w"> </span>memhandle
+<span class="linenos">4</span>
+<span class="linenos">5</span>//<span class="w"> </span>qnngraph.serialized.bin<span class="w"> </span>is<span class="w"> </span>generated<span class="w"> </span>and<span class="w"> </span>saved<span class="w"> </span>at<span class="w"> </span>output/qnngraph.serialized.bin
+</pre></div>
+</div>
+<p><strong>Execution</strong></p>
+<p>Please refer to: <a class="reference internal" href="htp_shared_buffer_tutorial.html#shared-buffer-tutorial"><span class="std std-ref">QNN HTP Shared Buffer Tutorial</span></a></p>
+<p><strong>Mis-matching mem_type during preparation and execution</strong></p>
+<table class="colwidths-auto docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Preparation</p></th>
+<th class="head"><p>Execution</p></th>
+<th class="head"><p>Behavior</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">raw</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">raw</span></code></p></td>
+<td><ul class="simple">
+<li><p>QNN HTP will allocate memory for IO buffer.</p></li>
+<li><p>HTP will copy input and output at each inference.</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">raw</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">memhandle</span></code></p></td>
+<td><ul class="simple">
+<li><p>QNN HTP will allocate memory for IO buffer.</p></li>
+<li><p>Data copy avoided.</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">memhandle</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">raw</span></code></p></td>
+<td><ul class="simple">
+<li><p>QNN HTP will not allocate memory for IO buffer during preparation.</p></li>
+<li><p>QNN HTP will allocate memory for IO buffer during first inference (<code class="docutils literal notranslate"><span class="pre">raw</span></code> passed in during execution), first inference time impact by memory allocation.</p></li>
+<li><p>HTP will copy input and output at each inference.</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">memhandle</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">memhandle</span></code></p></td>
+<td><ul class="simple">
+<li><p>QNN HTP will not allocate memory for IO buffer during preparation.</p></li>
+<li><p>Data copy avoided.</p></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="htp_multi_soc_dlc.html" class="btn btn-neutral float-right" title="Multi-SoC DLC with Reference Weight Sharing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="htp_ssr.html" class="btn btn-neutral float-left" title="SubSystem Restart (SSR)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020-2025, Qualcomm Technologies, Inc..
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,63 @@
+title Multicore Device Creation - QnnDevice_create()
+
+QNN_Application->QNN_Device: QnnDevice_getPlatformInfo(const QnnDevice_PlatformInfo_t **platformInfo)
+QNN_Device->QNN_Device:
+load platform information
+
+
+state over QNN_Device
+    load platform information 
+end note
+
+QNN_Device->QNN_Application: QnnDevice_PlatformInfo_t
+state over QNN_Application: 
+   // Create a multicore (2 cores) device handle for core A and core B
+   QnnDevice_CoreInfo_t coreInfo[2];
+   coreInfo[0] = platformInfo->v1.hwDevices[deviceId].v1.cores[A];
+   coreInfo[1] = platformInfo->v1.hwDevices[deviceId].v1.cores[B];   
+   
+   QnnDevice_HardwareDeviceInfo_t hwDeviceInfo;
+   hwDeviceInfo.v1.deviceId      = platformInfo->v1.hwDevices[deviceId].v1.deviceId;
+   hwDeviceInfo.v1.deviceType  = platformInfo->v1.hwDevices[deviceId].v1.deviceType;
+   hwDeviceInfo.v1.numCores    = 2;
+   hwDeviceInfo.v1.cores           = &coreInfo;
+    
+
+   QnnDevice_PlatformInfo_t testPlatformInfo;
+   testPlatformInfo.v1.numHwDevices = 1;
+   testPlatformInfo.v1.hwDevices        = &hwDeviceInfo;
+
+   QnnDevice_Config_t deviceConfig;
+   deviceConfig.option           = QNN_DEVICE_CONFIG_OPTION_PLATFORM_INFO;
+   deviceConfig.hardwareInfo = &testPlatformInfo;
+   QnnDevice_Config_t* deviceConfigs2cores[] = {&deviceConfig, nullptr};
+   
+   Qnn_DeviceHandle_t multicoreDeviceHandle;
+   Qnn_LogHandle_t logHandle;
+end note
+
+
+QNN_Application->QNN_Device: QnnDevice_create(logHandle, deviceConfigs2cores, multicoreDeviceHandle);
+QNN_Device->QNN_Device:
+create device handle for multicore
+
+state over QNN_Device
+    create device handle for multicore
+end note
+
+QNN_Device->QNN_Application: Qnn_DeviceHandle_t 
+
+state over QNN_Application:
+    multicore device handle is then passed to QnnContext_createFromBinary() 
+end note
+
+QNN_Application->QNN_Context: QnnContext_createFromBinary(Qnn_BackendHandle_t, Qnn_DeviceHandle_t, QnnContext_Config_t**, void* binaryBuffer, Qnn_ContextHandle_t*)
+QNN_Context->QNN_Context:
+load platform information
+
+
+state over QNN_Context
+    Deserialization will fail if # cores asssociated with device handle does NOT match with # cores in the binary
+end note
+QNN_Context->QNN_Application: Qnn_ContextHandle_t 
+

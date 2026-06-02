@@ -1,0 +1,266 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Qualcomm AI Runtime (QAIRT) Overview &mdash; Qualcomm® AI Runtime (QAIRT) SDKs</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/custom_css.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Qualcomm AI Runtime (QAIRT) Overview" href="general/overview.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="#" class="icon icon-home"> Qualcomm® AI Runtime (QAIRT) SDKs
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v2.46.0.260424121129
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">QAIRT</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="general/overview.html">Overview</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">SDKs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="QNN/index.html">QNN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SNPE/index.html">SNPE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Genie/index.html">Genie</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Delegates</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Delegates/TfLite/index.html">TFLite Delegate</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">Qualcomm® AI Runtime (QAIRT) SDKs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="#" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Qualcomm AI Runtime (QAIRT) Overview</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="qualcomm-ai-runtime-qairt-overview">
+<h1>Qualcomm AI Runtime (QAIRT) Overview<a class="headerlink" href="#qualcomm-ai-runtime-qairt-overview" title="Permalink to this heading">¶</a></h1>
+<p>Welcome to Qualcomm’s AI RunTime (aka “QAIRT”) documentation. QAIRT is a suite of tools that help you develop, run, and optimize AI models for Qualcomm-supported hardware.</p>
+<p>There are several stages to go from having a trained AI model on your “host machine” to a runnable model on your “target device”. QAIRT helps prepare the proper files you will need on your target device. It also provides runtime interpretters for each backend and processor to turn model instructions into runnable code.</p>
+<img alt="_images/host_machine.png" src="_images/host_machine.png" />
+<div class="section" id="how-to-use-qairt">
+<h2>How to Use QAIRT<a class="headerlink" href="#how-to-use-qairt" title="Permalink to this heading">¶</a></h2>
+<p>There are two primary SDKs which automate large portions of the AI build pipeline:</p>
+<ol class="arabic simple">
+<li><p><a class="reference external" href="SNPE/index.html">Qualcomm Snapdragon Neural Processing SDK (aka “SNPE”)</a> is a simpler API and allows your model to execute using multiple processors. The tradeoff for that simplicity is that SNPE may have larger files and less granular control over how individual model operations are implemented.</p></li>
+<li><p><a class="reference external" href="QNN/index.html">Qualcomm AI Engine Direct (aka “QNN”)</a> for granular control over how each operation in your model works. This SDK builds models to work with specific processors.</p></li>
+<li><p><a class="reference external" href="Genie/index.html">Generative AI Inference Extensions (GENIE) SDK</a>. GENIE extends QNN specifically for generative AI use cases (Ex. LLMs).</p></li>
+</ol>
+<p>With both of these SDKs, you will need to:</p>
+<ol class="arabic simple">
+<li><p>Get an AI model (ex. downloading a TensorFlow model).</p></li>
+<li><p>Use CLI tools provided in the SDKs to convert the model into a format the target device runtimes can interpret.</p></li>
+<li><p>Write an app in C, C++, or Java using the chosen SDK’s API to execute your model.</p></li>
+<li><p>Transfer the built model, app executable, and QAIRT runtimes to the target device.</p></li>
+<li><p>Run your app to execute inferences on the target device (ex. passing images in to be classified by <a class="reference external" href="https://huggingface.co/docs/timm/en/models/tf-inception-v3">Inception V3</a>).</p></li>
+<li><p>Benchmark and optimize your performance.</p></li>
+</ol>
+<p><strong>In order to use QAIRT, pick an SDK below and follow their tutorials to see the workflow in action:</strong></p>
+<ol class="arabic simple">
+<li><p><a class="reference external" href="SNPE/index.html">SNPE</a> - For a simpler API which can run your model on multiple processors.</p></li>
+<li><p><a class="reference external" href="QNN/index.html">QNN</a> - For granular control over how your model is executed.</p></li>
+<li><p><a class="reference external" href="Genie/index.html">GENIE</a> (extends QNN) - For LLM or Generative AI use cases.</p></li>
+</ol>
+</div>
+<div class="section" id="additional-runtimes-aka-delegates">
+<h2>Additional Runtimes (aka “Delegates”)<a class="headerlink" href="#additional-runtimes-aka-delegates" title="Permalink to this heading">¶</a></h2>
+<p>QAIRT SDKs provide runtimes that allow model operations to execute on target device processors (ex. CPU, GPU, HTP, etc.). For most situations, the runtimes provided by those SDKs will be the right ones for your use case.</p>
+<p>There are several additional runtimes which are either optimized for specific model frameworks (ex. TFLite Delegate) or made for specific hardware components.</p>
+<p>If these apply to your use case, you may need to follow the additional steps documented within to have your model execute in the proper environment:</p>
+<ol class="arabic simple">
+<li><p><a class="reference external" href="Delegates/TfLite/index.html">TFLite Delegate</a> - Specifically optimized for TFLite model files.</p></li>
+</ol>
+<div class="toctree-wrapper compound">
+</div>
+<div class="toctree-wrapper compound">
+</div>
+<div class="toctree-wrapper compound">
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="general/overview.html" class="btn btn-neutral float-right" title="Qualcomm AI Runtime (QAIRT) Overview" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020-2025, Qualcomm Technologies, Inc..
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

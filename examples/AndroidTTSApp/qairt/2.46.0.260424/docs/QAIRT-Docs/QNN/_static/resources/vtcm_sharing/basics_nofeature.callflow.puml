@@ -1,0 +1,22 @@
+@startuml
+
+autonumber "<b>[#]"
+
+participant "C1"   as cv #royalblue
+participant "QNN"  as qnn #green
+participant "HAP"  as hap 
+
+qnn -[#green]> hap: acquire(6,8)
+cv -[#blue]> hap: acquire(2,1)
+
+activate cv
+qnn -[#black]> qnn: do work
+qnn -[#green]> hap: release()
+deactivate cv
+
+hap --[#black]> cv: ok
+
+cv -> cv: do work
+
+@enduml
+

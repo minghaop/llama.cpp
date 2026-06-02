@@ -1,0 +1,481 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>QNN API Call Flow &mdash; Qualcomm® AI Runtime (QAIRT) SDKs</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/custom_css.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Qualcomm® AI Runtime (QAIRT) SDKs
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v2.46.0.260424121129
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">QAIRT</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../general/overview.html">Overview</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">SDKs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">QNN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../SNPE/index.html">SNPE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Genie/index.html">Genie</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Delegates</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../Delegates/TfLite/index.html">TFLite Delegate</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Qualcomm® AI Runtime (QAIRT) SDKs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>QNN API Call Flow</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="qnn-api-call-flow">
+<span id="id1"></span><h1>QNN API Call Flow<a class="headerlink" href="#qnn-api-call-flow" title="Permalink to this heading">¶</a></h1>
+<p>The integration of a QNN model using the LPAI backend follows a structured three-phase process. Each phase is critical to ensuring the model is correctly initialized, executed, and deinitialized within the QNN runtime environment.</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="lpai_backend_integration.html#lpai-initialization"><span class="std std-ref">Initialization</span></a></p></li>
+<li><p><a class="reference internal" href="lpai_backend_integration.html#lpai-execution"><span class="std std-ref">Execution</span></a></p></li>
+<li><p><a class="reference internal" href="lpai_backend_integration.html#lpai-deinitialization"><span class="std std-ref">Deinitialization</span></a></p></li>
+</ul>
+</div>
+<div class="section" id="initialization">
+<span id="lpai-initialization"></span><h1>Initialization<a class="headerlink" href="#initialization" title="Permalink to this heading">¶</a></h1>
+<p>The initialization phase prepares the QNN runtime and the LPAI backend for model execution.
+This phase ensures that all required interfaces, memory resources, and configurations are correctly established before inference begins. It consists of the following key steps:</p>
+<ol class="arabic">
+<li><p><strong>Interface Extraction</strong></p>
+<p>Retrieve the necessary interfaces to interact with the QNN runtime and the LPAI backend:</p>
+<ul class="simple">
+<li><p><strong>LPAI Backend Interface</strong></p>
+<ul>
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">QnnInterface_getProviders()</span></code> to enumerate available backend providers.</p></li>
+<li><p>Identify the LPAI backend using the backend ID <code class="docutils literal notranslate"><span class="pre">QNN_LPAI_BACKEND_ID</span></code>.</p></li>
+<li><p>This interface is essential for accessing backend-specific APIs and properties.</p></li>
+</ul>
+</li>
+<li><p><strong>QNN System Interface</strong></p>
+<ul>
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">QnnSystemInterface_getProviders()</span></code> to obtain system-level interfaces.</p></li>
+<li><p>Provides APIs for managing contexts, graphs, and binary metadata.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>Handle Creation</strong></p>
+<p>Create runtime handles to manage backend and system-level resources:</p>
+<ul class="simple">
+<li><p><strong>Backend Handle</strong>: Created using <code class="docutils literal notranslate"><span class="pre">QnnBackend_create()</span></code>, this handle manages backend-specific operations.</p></li>
+<li><p><strong>System Context Handle</strong>: Created using <code class="docutils literal notranslate"><span class="pre">QnnSystemContext_create()</span></code>, this handle manages system-level context and graph lifecycle.</p></li>
+</ul>
+</li>
+<li><p><strong>Buffer Alignment Query</strong></p>
+<p>Query memory alignment requirements to ensure compatibility with the backend:</p>
+<ul class="simple">
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">QnnBackend_getProperty()</span></code> with <code class="docutils literal notranslate"><span class="pre">QNN_LPAI_BACKEND_GET_PROP_ALIGNMENT_REQ</span></code>.</p></li>
+<li><p>Retrieve:</p>
+<ul>
+<li><p><strong>Start Address Alignment</strong>: Required alignment for buffer base addresses.</p></li>
+<li><p><strong>Buffer Size Alignment</strong>: Required alignment for buffer sizes.</p></li>
+</ul>
+</li>
+</ul>
+<p>Proper alignment is critical for correctness on hardware accelerators.</p>
+</li>
+<li><p><strong>Memory Allocation for Context Binary</strong></p>
+<p>Allocate memory for the context binary, ensuring:</p>
+<ul class="simple">
+<li><p>Alignment constraints are met.</p></li>
+<li><p>Memory is allocated from the appropriate pool (e.g., Island or Non-Island memory).</p></li>
+</ul>
+</li>
+<li><p><strong>Context Creation from Binary</strong></p>
+<p>Instantiate the QNN context using <code class="docutils literal notranslate"><span class="pre">QnnContext_createFromBinary()</span></code>:</p>
+<ul class="simple">
+<li><p>The context is immutable and encapsulates the model structure, metadata, and backend configuration.</p></li>
+<li><p>This step effectively loads the model into the runtime.</p></li>
+</ul>
+<p>Platform-specific configuration requirements:</p>
+<ul class="simple">
+<li><p><strong>Island Use Case</strong>: Pass the custom configuration <code class="docutils literal notranslate"><span class="pre">QNN_LPAI_CONTEXT_SET_CFG_ENABLE_ISLAND</span></code> to enable island execution.</p></li>
+<li><p><strong>Native ADSP Path</strong>: Use the common configuration <code class="docutils literal notranslate"><span class="pre">QNN_CONTEXT_CONFIG_PERSISTENT_BINARY</span></code> to enable persistent binary support.</p></li>
+<li><p><strong>FastRPC Path</strong>: No additional configuration is required.</p></li>
+</ul>
+</li>
+<li><p><strong>Graph Metadata Retrieval</strong></p>
+<p>Use <code class="docutils literal notranslate"><span class="pre">QnnSystemContext_getBinaryInfo()</span></code> to extract metadata embedded in the binary:</p>
+<ul class="simple">
+<li><p>Graph names</p></li>
+<li><p>Versioning information</p></li>
+<li><p>Backend-specific metadata</p></li>
+</ul>
+</li>
+<li><p><strong>Graph Retrieval</strong></p>
+<p>Retrieve the graph handle using <code class="docutils literal notranslate"><span class="pre">QnnGraph_retrieve()</span></code>:</p>
+<ul class="simple">
+<li><p>Pass the graph name obtained in the previous step.</p></li>
+<li><p>The graph handle is used for further configuration and execution.</p></li>
+</ul>
+</li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The following steps are specific to the Hexagon (aDSP) LPAI backend and are required for proper memory and performance configuration.</p>
+<ol class="arabic" start="8">
+<li><p><strong>Scratch and Persistent Memory Allocation</strong></p>
+<p>Query memory requirements using <code class="docutils literal notranslate"><span class="pre">QnnGraph_getProperty()</span></code>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">QNN_LPAI_GRAPH_GET_PROP_SCRATCH_MEM_SIZE</span></code>: Temporary memory used during inference.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">QNN_LPAI_GRAPH_GET_PROP_PERSISTENT_MEM_SIZE</span></code>: Memory required across multiple inferences.</p></li>
+</ul>
+<p>Allocate memory accordingly, ensuring alignment and memory pool selection.</p>
+</li>
+<li><p><strong>Memory Configuration</strong></p>
+<p>Configure the graph with allocated memory using <code class="docutils literal notranslate"><span class="pre">QnnGraph_setConfig()</span></code>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">QNN_LPAI_GRAPH_SET_CFG_SCRATCH_MEM</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">QNN_LPAI_GRAPH_SET_CFG_PERSISTENT_MEM</span></code></p></li>
+</ul>
+<p>This step binds the allocated memory to the graph for runtime use.</p>
+<p>See <span class="xref std std-ref">QNN LPAI Memory Allocations</span> for more details.</p>
+</li>
+</ol>
+</div>
+<ol class="arabic" start="10">
+<li><p><strong>Performance and Core Affinity Configuration</strong></p>
+<p>Optimize execution by configuring:</p>
+<ul class="simple">
+<li><p><strong>Performance Profile</strong>: <code class="docutils literal notranslate"><span class="pre">QNN_LPAI_GRAPH_SET_CFG_PERF_CFG</span></code> (e.g., balanced, high-performance, low-power)</p></li>
+<li><p><strong>Core Affinity</strong>: <code class="docutils literal notranslate"><span class="pre">QNN_LPAI_GRAPH_SET_CFG_CORE_AFFINITY</span></code> (e.g., assign execution to specific DSP cores)</p></li>
+</ul>
+<p>These settings help balance performance and power consumption.</p>
+</li>
+<li><p><strong>Client Priority Configuration</strong></p>
+<p>Set the execution priority of the graph using:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">QnnGraph_setConfig(QNN_GRAPH_CONFIG_OPTION_PRIORITY)</span></code></p></li>
+</ul>
+<p>This is useful in multi-client or multi-graph environments where scheduling priority matters.</p>
+</li>
+<li><p><strong>Graph Finalization</strong></p>
+<p>Finalize the graph using <code class="docutils literal notranslate"><span class="pre">QnnGraph_finalize()</span></code>:</p>
+<ul class="simple">
+<li><p>Locks the graph configuration.</p></li>
+<li><p>Prepares internal structures for execution.</p></li>
+<li><p>Must be called before any inference is performed.</p></li>
+</ul>
+</li>
+<li><p><strong>Tensor Allocation</strong></p>
+<p>Retrieve and prepare input/output tensors:</p>
+<ul class="simple">
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">QnnGraph_getInputTensors()</span></code> and <code class="docutils literal notranslate"><span class="pre">QnnGraph_getOutputTensors()</span></code>.</p></li>
+<li><p>Set tensor type to <code class="docutils literal notranslate"><span class="pre">QNN_TENSORTYPE_RAW</span></code>.</p></li>
+<li><p>Allocate and bind client buffers to each tensor.</p></li>
+</ul>
+<p>Proper tensor setup ensures correct data flow during inference.</p>
+</li>
+</ol>
+<p class="centered">
+<strong><strong>LPAI Initialization Call Flow</strong></strong></p><div class="figure align-center">
+<img alt="LPAI Initialization Call Flow" src="../../_static/resources/qnn_lpai_initialization_call_flow.png" />
+</div>
+</div>
+<div class="section" id="execution">
+<span id="lpai-execution"></span><h1>Execution<a class="headerlink" href="#execution" title="Permalink to this heading">¶</a></h1>
+<p>The execution phase is responsible for running inference using the finalized QNN graph. This phase is typically repeated for each inference request and involves the following steps:</p>
+<ol class="arabic">
+<li><p><strong>Input Buffer Preparation</strong></p>
+<ul class="simple">
+<li><p>Populate the input tensors with data from the client application.</p></li>
+<li><p>Ensure that the data format, dimensions, and layout match the model’s input specification.</p></li>
+<li><p>Input tensors must be bound to client-allocated buffers, typically of type <code class="docutils literal notranslate"><span class="pre">QNN_TENSORTYPE_RAW</span></code>.</p></li>
+</ul>
+</li>
+<li><p><strong>Graph Execution</strong></p>
+<ul class="simple">
+<li><p>Invoke the model using <code class="docutils literal notranslate"><span class="pre">QnnGraph_execute()</span></code>.</p></li>
+<li><p>This function triggers the execution of the graph on the target hardware (e.g., eNPU).</p></li>
+<li><p>The execution is synchronous; the function returns only after inference is complete.</p></li>
+</ul>
+<p><strong>Execution Flow:</strong></p>
+<ul class="simple">
+<li><p>Input data is transferred to the backend.</p></li>
+<li><p>The backend schedules and executes the graph operations.</p></li>
+<li><p>Intermediate results are computed and stored in backend-managed memory.</p></li>
+<li><p>Final outputs are written to the output buffers.</p></li>
+</ul>
+</li>
+<li><p><strong>Output Retrieval</strong></p>
+<ul class="simple">
+<li><p>After execution, output tensors contain the inference results.</p></li>
+<li><p>These results are available in the client-provided output buffers.</p></li>
+<li><p>The application can now post-process or consume the output data as needed.</p></li>
+</ul>
+</li>
+<li><p><strong>Optional: Profiling and Logging</strong></p>
+<ul class="simple">
+<li><p>If profiling is enabled (via <cite>–profiling_level</cite>), performance data is collected during execution.</p></li>
+<li><p>Profiling logs are written to the output directory and can be visualized using <cite>qnn-profile-viewer</cite>.</p></li>
+</ul>
+</li>
+<li><p><strong>Error Handling</strong></p>
+<ul class="simple">
+<li><p>Check the return status of <code class="docutils literal notranslate"><span class="pre">QnnGraph_execute()</span></code>.</p></li>
+<li><p>Handle any runtime errors, such as invalid inputs, memory access violations, or hardware faults.</p></li>
+</ul>
+</li>
+</ol>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<ul class="simple">
+<li><p>Input and output buffers must remain valid and accessible throughout the execution.</p></li>
+<li><p>Ensure that memory alignment and size requirements are met to avoid execution failures.</p></li>
+</ul>
+</div>
+<p class="centered">
+<strong><strong>LPAI Execution Call Flow</strong></strong></p><div class="figure align-center">
+<img alt="LPAI Execution Call Flow" src="../../_static/resources/qnn_lpai_execution_call_flow.png" />
+</div>
+</div>
+<div class="section" id="deinitialization">
+<span id="lpai-deinitialization"></span><h1>Deinitialization<a class="headerlink" href="#deinitialization" title="Permalink to this heading">¶</a></h1>
+<p>The deinitialization phase is responsible for releasing all resources allocated during the initialization and execution phases.
+Proper deinitialization ensures that memory is freed, handles are closed, and the system is left in a clean state. This is especially important in embedded or resource-constrained environments.</p>
+<p>The following steps outline the deinitialization process:</p>
+<ol class="arabic simple">
+<li><p><strong>Release QNN Context Handle</strong></p>
+<ul class="simple">
+<li><p>Call <code class="docutils literal notranslate"><span class="pre">QnnContext_free()</span></code> to release the context created via <code class="docutils literal notranslate"><span class="pre">QnnContext_createFromBinary()</span></code>.</p></li>
+<li><p>This step invalidates the context and all associated graph handles.</p></li>
+</ul>
+</li>
+<li><p><strong>Release LPAI Backend Handle</strong></p>
+<ul class="simple">
+<li><p>Call <code class="docutils literal notranslate"><span class="pre">QnnBackend_free()</span></code> to release the backend handle created during initialization.</p></li>
+<li><p>This step ensures that backend-specific resources (e.g., device memory, threads) are properly cleaned up.</p></li>
+</ul>
+</li>
+<li><p><strong>Release QNN System Context Handle</strong></p>
+<ul class="simple">
+<li><p>Call <code class="docutils literal notranslate"><span class="pre">QnnSystemContext_free()</span></code> to release the system context.</p></li>
+<li><p>This step finalizes the system-level interface and releases any associated metadata or configuration.</p></li>
+</ul>
+</li>
+<li><p><strong>Free Scratch and Persistent Memory</strong></p>
+<ul class="simple">
+<li><p>If memory was allocated manually for scratch and persistent buffers (e.g., on Hexagon aDSP), it must be explicitly freed.</p></li>
+<li><p>These buffers are typically allocated based on properties queried via <code class="docutils literal notranslate"><span class="pre">QnnGraph_getProperty()</span></code>.</p></li>
+</ul>
+</li>
+<li><p><strong>Free Input and Output Tensors</strong></p>
+<ul class="simple">
+<li><p>Release memory associated with input and output tensors.</p></li>
+<li><p>This includes:
+- Client-allocated buffers bound to tensors
+- Any metadata or auxiliary structures used for tensor management</p></li>
+</ul>
+</li>
+<li><p><strong>Optional: Logging and Diagnostics Cleanup</strong></p>
+<ul class="simple">
+<li><p>If profiling or logging was enabled, ensure that any open file handles or logging streams are closed.</p></li>
+<li><p>Optionally, flush logs or export profiling data before shutdown.</p></li>
+</ul>
+</li>
+</ol>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<ul class="simple">
+<li><p>All deinitialization steps must be performed in the reverse order of initialization to avoid resource leaks or undefined behavior.</p></li>
+<li><p>Failure to properly deinitialize may result in memory leaks, dangling pointers, or device instability.</p></li>
+</ul>
+</div>
+<p class="centered">
+<strong><strong>LPAI Deinitialization Call Flow</strong></strong></p><div class="figure align-center">
+<img alt="LPAI Deinitialization Call Flow" src="../../_static/resources/qnn_lpai_deinitialization_call_flow.png" />
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020-2025, Qualcomm Technologies, Inc..
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

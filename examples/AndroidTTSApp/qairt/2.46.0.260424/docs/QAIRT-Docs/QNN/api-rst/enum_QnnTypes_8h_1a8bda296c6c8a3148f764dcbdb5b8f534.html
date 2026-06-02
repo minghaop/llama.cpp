@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en"><head>
+  <meta charset="utf-8"/>
+  
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  
+  <title>Enum Qnn_DataType_t — Qualcomm® AI Engine Direct</title>
+  
+
+  
+  <link href="../../_static/css/theme.css" rel="stylesheet" type="text/css"/>
+  <link href="../../_static/pygments.css" rel="stylesheet" type="text/css"/>
+  <link href="../../_static/pygments.css" rel="stylesheet" type="text/css"/>
+  <link href="../../_static/css/theme.css" rel="stylesheet" type="text/css"/>
+  <link href="../../_static/custom_css.css" rel="stylesheet" type="text/css"/>
+  <link href="../../_static/collapsible-lists/css/tree_view.css" rel="stylesheet" type="text/css"/>
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js" type="text/javascript"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+        <script src="../../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    
+    <script src="../../_static/js/theme.js" type="text/javascript"></script>
+
+    
+    <link href="../../genindex.html" rel="index" title="Index"/>
+    <link href="../../search.html" rel="search" title="Search"/>
+    <link href="enum_QnnTypes_8h_1abbf6fedef88292dcdd6cc156754d5e68.html" rel="next" title="Enum Qnn_Definition_t"/>
+    <link href="enum_QnnContext_8h_1a85b0811046a51a2bb5c18122b6f88921.html" rel="prev" title="Enum Qnn_ContextBinaryRawBufferCallbackVersion_t"/> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav class="wy-nav-side" data-toggle="wy-nav-shift">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a class="icon icon-home" href="../../index.html"> Qualcomm® AI Runtime (QAIRT) SDKs
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v2.46.0.260424121129
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form action="../../search.html" class="wy-form" id="rtd-search-form" method="get">
+    <input name="q" placeholder="Search docs" type="text"/>
+    <input name="check_keywords" type="hidden" value="yes"/>
+    <input name="area" type="hidden" value="default"/>
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">QAIRT</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../general/overview.html">Overview</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">SDKs</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">QNN</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../general/introduction.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general/overview.html">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general/setup.html">Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general/backend.html">Backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general/op_packages.html">Op Packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general/tools.html">Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general/converters.html">Converters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general/quantization.html">Quantization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general/applyencodings.html">QAIRT Quantization Specification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general/tutorials.html">Tutorials</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general/benchmarking.html">Benchmarking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general/operations.html">Operations</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="../general/api.html">API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../general/api_overview.html">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../general/api_usage_guidelines.html">Usage Guidelines</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../general/api_version_history.html">QNN API Revision History</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../general/api_version_history.html#backend-specific-revision-history">Backend Specific Revision History</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../general/api_version_history.html#qnn-system-api-revision-history">QNN System API Revision History</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../general/supported_api.html">Supported APIs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../general/supported_capabilities.html">Supported Capabilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../general/api_error_codes.html">Error codes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../general/glossary.html">Glossary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general/revision_history.html">Revision History</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../SNPE/index.html">SNPE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Genie/index.html">Genie</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Delegates</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../Delegates/TfLite/index.html">TFLite Delegate</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+
+      
+      <nav aria-label="top navigation" class="wy-nav-top">
+        
+          <i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+          <a href="../../index.html">Qualcomm® AI Runtime (QAIRT) SDKs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div aria-label="breadcrumbs navigation" role="navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a class="icon icon-home" href="../../index.html"></a> »</li>
+        
+          <li><a href="../index.html">⌂</a> »</li>
+        
+      <li>Enum Qnn_DataType_t</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="enum-qnn-datatype-t">
+<span id="exhale-enum-qnntypes-8h-1a8bda296c6c8a3148f764dcbdb5b8f534"></span><h1>Enum Qnn_DataType_t<a class="headerlink" href="#enum-qnn-datatype-t" title="Permalink to this heading">¶</a></h1>
+<ul class="simple">
+<li><p>Defined in <a class="reference internal" href="file_include_QNN_QnnTypes.h.html#file-include-qnn-qnntypes-h"><span class="std std-ref">File QnnTypes.h</span></a></p></li>
+</ul>
+<div class="section" id="enum-documentation">
+<h2>Enum Documentation<a class="headerlink" href="#enum-documentation" title="Permalink to this heading">¶</a></h2>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv414Qnn_DataType_t">
+<span id="_CPPv314Qnn_DataType_t"></span><span id="_CPPv214Qnn_DataType_t"></span><span class="target" id="QnnTypes_8h_1a8bda296c6c8a3148f764dcbdb5b8f534"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Qnn_DataType_t</span></span></span><a class="headerlink" href="#_CPPv414Qnn_DataType_t" title="Permalink to this definition">¶</a><br/></dt>
+<dd><p>An enum which defines various data types. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>2-bit data types (QNN_DATATYPE_INT_2, QNN_DATATYPE_UINT_2, QNN_DATATYPE_SFIXED_POINT_2, and QNN_DATATYPE_UFIXED_POINT_2) are stored in tightly packed format into a single byte in little endian format. This allows four 2-bit quantized elements to be stored in a single byte. The lower nibble stores the first two values while the higher nibble stores the second two values. For example, to represent four 2-bit quantized values of [0, 1, 2, 3], they will be stored in a single byte as (1110 0100).</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>4-bit data types (QNN_DATATYPE_INT_4, QNN_DATATYPE_UINT_4, QNN_DATATYPE_SFIXED_POINT_4 and QNN_DATATYPE_UFIXED_POINT_4) are stored in tightly packed format into a single byte in little endian format. This allows two 4-bit quantized elements to be stored in a single byte. The lower nibble stores the first value while the higher nibble stores the second value. For example, to represent two 4-bit quantized values of 10 and 4, they will be stored in a single byte as (0100 1010). </p>
+</div>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_DataType_t18QNN_DATATYPE_INT_2E">
+<span id="_CPPv3N14Qnn_DataType_t18QNN_DATATYPE_INT_2E"></span><span id="_CPPv2N14Qnn_DataType_t18QNN_DATATYPE_INT_2E"></span><span class="target" id="QnnTypes_8h_1a8bda296c6c8a3148f764dcbdb5b8f534a07273e34b1fc5c390a8cda6bb1306708"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_DATATYPE_INT_2</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x0002</span></span><a class="headerlink" href="#_CPPv4N14Qnn_DataType_t18QNN_DATATYPE_INT_2E" title="Permalink to this definition">¶</a><br/></dt>
+<dd><p>2-bit integer type </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_DataType_t18QNN_DATATYPE_INT_4E">
+<span id="_CPPv3N14Qnn_DataType_t18QNN_DATATYPE_INT_4E"></span><span id="_CPPv2N14Qnn_DataType_t18QNN_DATATYPE_INT_4E"></span><span class="target" id="QnnTypes_8h_1a8bda296c6c8a3148f764dcbdb5b8f534a75b2e47bfdd6475acabe73a765f846cd"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_DATATYPE_INT_4</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x0004</span></span><a class="headerlink" href="#_CPPv4N14Qnn_DataType_t18QNN_DATATYPE_INT_4E" title="Permalink to this definition">¶</a><br/></dt>
+<dd><p>4-bit integer type </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_DataType_t18QNN_DATATYPE_INT_8E">
+<span id="_CPPv3N14Qnn_DataType_t18QNN_DATATYPE_INT_8E"></span><span id="_CPPv2N14Qnn_DataType_t18QNN_DATATYPE_INT_8E"></span><span class="target" id="QnnTypes_8h_1a8bda296c6c8a3148f764dcbdb5b8f534a4b2c52fa776b473f0c5ee16a705ec095"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_DATATYPE_INT_8</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x0008</span></span><a class="headerlink" href="#_CPPv4N14Qnn_DataType_t18QNN_DATATYPE_INT_8E" title="Permalink to this definition">¶</a><br/></dt>
+<dd><p>8-bit integer type </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_DataType_t19QNN_DATATYPE_INT_16E">
+<span id="_CPPv3N14Qnn_DataType_t19QNN_DATATYPE_INT_16E"></span><span id="_CPPv2N14Qnn_DataType_t19QNN_DATATYPE_INT_16E"></span><span class="target" id="QnnTypes_8h_1a8bda296c6c8a3148f764dcbdb5b8f534a5300857ca6a6f53c36ef9c927e0b8977"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_DATATYPE_INT_16</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x0016</span></span><a class="headerlink" href="#_CPPv4N14Qnn_DataType_t19QNN_DATATYPE_INT_16E" title="Permalink to this definition">¶</a><br/></dt>
+<dd><p>16-bit integer type </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_DataType_t19QNN_DATATYPE_INT_32E">
+<span id="_CPPv3N14Qnn_DataType_t19QNN_DATATYPE_INT_32E"></span><span id="_CPPv2N14Qnn_DataType_t19QNN_DATATYPE_INT_32E"></span><span class="target" id="QnnTypes_8h_1a8bda296c6c8a3148f764dcbdb5b8f534a11a7d26d25dba683f759560700bc5e5e"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_DATATYPE_INT_32</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x0032</span></span><a class="headerlink" href="#_CPPv4N14Qnn_DataType_t19QNN_DATATYPE_INT_32E" title="Permalink to this definition">¶</a><br/></dt>
+<dd><p>32-bit integer type </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_DataType_t19QNN_DATATYPE_INT_64E">
+<span id="_CPPv3N14Qnn_DataType_t19QNN_DATATYPE_INT_64E"></span><span id="_CPPv2N14Qnn_DataType_t19QNN_DATATYPE_INT_64E"></span><span class="target" id="QnnTypes_8h_1a8bda296c6c8a3148f764dcbdb5b8f534a736a5f05a86dd09429be38683a7e316b"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_DATATYPE_INT_64</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x0064</span></span><a class="headerlink" href="#_CPPv4N14Qnn_DataType_t19QNN_DATATYPE_INT_64E" title="Permalink to this definition">¶</a><br/></dt>
+<dd><p>64-bit integer type </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_DataType_t19QNN_DATATYPE_UINT_2E">
+<span id="_CPPv3N14Qnn_DataType_t19QNN_DATATYPE_UINT_2E"></span><span id="_CPPv2N14Qnn_DataType_t19QNN_DATATYPE_UINT_2E"></span><span class="target" id="QnnTypes_8h_1a8bda296c6c8a3148f764dcbdb5b8f534ab7266c954103259b1ffdf4fb03134e4c"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_DATATYPE_UINT_2</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x0102</span></span><a class="headerlink" href="#_CPPv4N14Qnn_DataType_t19QNN_DATATYPE_UINT_2E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_DataType_t19QNN_DATATYPE_UINT_4E">
+<span id="_CPPv3N14Qnn_DataType_t19QNN_DATATYPE_UINT_4E"></span><span id="_CPPv2N14Qnn_DataType_t19QNN_DATATYPE_UINT_4E"></span><span class="target" id="QnnTypes_8h_1a8bda296c6c8a3148f764dcbdb5b8f534a7d0fadf9bfbbf837d1ef2bb874fe0bdb"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_DATATYPE_UINT_4</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x0104</span></span><a class="headerlink" href="#_CPPv4N14Qnn_DataType_t19QNN_DATATYPE_UINT_4E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_DataType_t19QNN_DATATYPE_UINT_8E">
+<span id="_CPPv3N14Qnn_DataType_t19QNN_DATATYPE_UINT_8E"></span><span id="_CPPv2N14Qnn_DataType_t19QNN_DATATYPE_UINT_8E"></span><span class="target" id="QnnTypes_8h_1a8bda296c6c8a3148f764dcbdb5b8f534a572464fc2b3a4600f1b98aa0be1c343a"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_DATATYPE_UINT_8</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x0108</span></span><a class="headerlink" href="#_CPPv4N14Qnn_DataType_t19QNN_DATATYPE_UINT_8E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_DataType_t20QNN_DATATYPE_UINT_16E">
+<span id="_CPPv3N14Qnn_DataType_t20QNN_DATATYPE_UINT_16E"></span><span id="_CPPv2N14Qnn_DataType_t20QNN_DATATYPE_UINT_16E"></span><span class="target" id="QnnTypes_8h_1a8bda296c6c8a3148f764dcbdb5b8f534a97d1554251482ff437ad6227e972f0ac"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_DATATYPE_UINT_16</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x0116</span></span><a class="headerlink" href="#_CPPv4N14Qnn_DataType_t20QNN_DATATYPE_UINT_16E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_DataType_t20QNN_DATATYPE_UINT_32E">
+<span id="_CPPv3N14Qnn_DataType_t20QNN_DATATYPE_UINT_32E"></span><span id="_CPPv2N14Qnn_DataType_t20QNN_DATATYPE_UINT_32E"></span><span class="target" id="QnnTypes_8h_1a8bda296c6c8a3148f764dcbdb5b8f534aab08f4e4ca22b04cd7527b721115ee72"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_DATATYPE_UINT_32</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x0132</span></span><a class="headerlink" href="#_CPPv4N14Qnn_DataType_t20QNN_DATATYPE_UINT_32E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_DataType_t20QNN_DATATYPE_UINT_64E">
+<span id="_CPPv3N14Qnn_DataType_t20QNN_DATATYPE_UINT_64E"></span><span id="_CPPv2N14Qnn_DataType_t20QNN_DATATYPE_UINT_64E"></span><span class="target" id="QnnTypes_8h_1a8bda296c6c8a3148f764dcbdb5b8f534ac2cd852bd0691722388a1049d9296313"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_DATATYPE_UINT_64</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x0164</span></span><a class="headerlink" href="#_CPPv4N14Qnn_DataType_t20QNN_DATATYPE_UINT_64E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_DataType_t20QNN_DATATYPE_FLOAT_4E">
+<span id="_CPPv3N14Qnn_DataType_t20QNN_DATATYPE_FLOAT_4E"></span><span id="_CPPv2N14Qnn_DataType_t20QNN_DATATYPE_FLOAT_4E"></span><span class="target" id="QnnTypes_8h_1a8bda296c6c8a3148f764dcbdb5b8f534aa6a5cdbcabeab05e5a1a1b641dfbc311"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_DATATYPE_FLOAT_4</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x0204</span></span><a class="headerlink" href="#_CPPv4N14Qnn_DataType_t20QNN_DATATYPE_FLOAT_4E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_DataType_t20QNN_DATATYPE_FLOAT_8E">
+<span id="_CPPv3N14Qnn_DataType_t20QNN_DATATYPE_FLOAT_8E"></span><span id="_CPPv2N14Qnn_DataType_t20QNN_DATATYPE_FLOAT_8E"></span><span class="target" id="QnnTypes_8h_1a8bda296c6c8a3148f764dcbdb5b8f534ae17e312ac7f723a84cecb6bce3eec5dd"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_DATATYPE_FLOAT_8</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x0208</span></span><a class="headerlink" href="#_CPPv4N14Qnn_DataType_t20QNN_DATATYPE_FLOAT_8E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_DataType_t21QNN_DATATYPE_FLOAT_16E">
+<span id="_CPPv3N14Qnn_DataType_t21QNN_DATATYPE_FLOAT_16E"></span><span id="_CPPv2N14Qnn_DataType_t21QNN_DATATYPE_FLOAT_16E"></span><span class="target" id="QnnTypes_8h_1a8bda296c6c8a3148f764dcbdb5b8f534a289489d301b7621dcda7c7323bbc7e40"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_DATATYPE_FLOAT_16</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x0216</span></span><a class="headerlink" href="#_CPPv4N14Qnn_DataType_t21QNN_DATATYPE_FLOAT_16E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_DataType_t22QNN_DATATYPE_BFLOAT_16E">
+<span id="_CPPv3N14Qnn_DataType_t22QNN_DATATYPE_BFLOAT_16E"></span><span id="_CPPv2N14Qnn_DataType_t22QNN_DATATYPE_BFLOAT_16E"></span><span class="target" id="QnnTypes_8h_1a8bda296c6c8a3148f764dcbdb5b8f534afc6bbf93a8819f73c71a106fe408acb6"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_DATATYPE_BFLOAT_16</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x0226</span></span><a class="headerlink" href="#_CPPv4N14Qnn_DataType_t22QNN_DATATYPE_BFLOAT_16E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_DataType_t21QNN_DATATYPE_FLOAT_32E">
+<span id="_CPPv3N14Qnn_DataType_t21QNN_DATATYPE_FLOAT_32E"></span><span id="_CPPv2N14Qnn_DataType_t21QNN_DATATYPE_FLOAT_32E"></span><span class="target" id="QnnTypes_8h_1a8bda296c6c8a3148f764dcbdb5b8f534ae99980c5db58b27c0c69affb3e02ecc9"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_DATATYPE_FLOAT_32</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x0232</span></span><a class="headerlink" href="#_CPPv4N14Qnn_DataType_t21QNN_DATATYPE_FLOAT_32E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_DataType_t21QNN_DATATYPE_FLOAT_64E">
+<span id="_CPPv3N14Qnn_DataType_t21QNN_DATATYPE_FLOAT_64E"></span><span id="_CPPv2N14Qnn_DataType_t21QNN_DATATYPE_FLOAT_64E"></span><span class="target" id="QnnTypes_8h_1a8bda296c6c8a3148f764dcbdb5b8f534aa41f121ebf71ac6729b9e08e7ff35fb9"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_DATATYPE_FLOAT_64</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x0264</span></span><a class="headerlink" href="#_CPPv4N14Qnn_DataType_t21QNN_DATATYPE_FLOAT_64E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_DataType_t27QNN_DATATYPE_SFIXED_POINT_2E">
+<span id="_CPPv3N14Qnn_DataType_t27QNN_DATATYPE_SFIXED_POINT_2E"></span><span id="_CPPv2N14Qnn_DataType_t27QNN_DATATYPE_SFIXED_POINT_2E"></span><span class="target" id="QnnTypes_8h_1a8bda296c6c8a3148f764dcbdb5b8f534ac49e0e38fa07587afb3428bd1f1aa35f"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_DATATYPE_SFIXED_POINT_2</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x0302</span></span><a class="headerlink" href="#_CPPv4N14Qnn_DataType_t27QNN_DATATYPE_SFIXED_POINT_2E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_DataType_t27QNN_DATATYPE_SFIXED_POINT_4E">
+<span id="_CPPv3N14Qnn_DataType_t27QNN_DATATYPE_SFIXED_POINT_4E"></span><span id="_CPPv2N14Qnn_DataType_t27QNN_DATATYPE_SFIXED_POINT_4E"></span><span class="target" id="QnnTypes_8h_1a8bda296c6c8a3148f764dcbdb5b8f534a9986e3b9067ac180b45329c8166f49e1"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_DATATYPE_SFIXED_POINT_4</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x0304</span></span><a class="headerlink" href="#_CPPv4N14Qnn_DataType_t27QNN_DATATYPE_SFIXED_POINT_4E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_DataType_t27QNN_DATATYPE_SFIXED_POINT_8E">
+<span id="_CPPv3N14Qnn_DataType_t27QNN_DATATYPE_SFIXED_POINT_8E"></span><span id="_CPPv2N14Qnn_DataType_t27QNN_DATATYPE_SFIXED_POINT_8E"></span><span class="target" id="QnnTypes_8h_1a8bda296c6c8a3148f764dcbdb5b8f534a68f7837e6adb0c5b1b2ad6d3acd776b9"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_DATATYPE_SFIXED_POINT_8</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x0308</span></span><a class="headerlink" href="#_CPPv4N14Qnn_DataType_t27QNN_DATATYPE_SFIXED_POINT_8E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_DataType_t28QNN_DATATYPE_SFIXED_POINT_16E">
+<span id="_CPPv3N14Qnn_DataType_t28QNN_DATATYPE_SFIXED_POINT_16E"></span><span id="_CPPv2N14Qnn_DataType_t28QNN_DATATYPE_SFIXED_POINT_16E"></span><span class="target" id="QnnTypes_8h_1a8bda296c6c8a3148f764dcbdb5b8f534a412cf015e5da0d5e4d79b27abe99ce21"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_DATATYPE_SFIXED_POINT_16</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x0316</span></span><a class="headerlink" href="#_CPPv4N14Qnn_DataType_t28QNN_DATATYPE_SFIXED_POINT_16E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_DataType_t28QNN_DATATYPE_SFIXED_POINT_32E">
+<span id="_CPPv3N14Qnn_DataType_t28QNN_DATATYPE_SFIXED_POINT_32E"></span><span id="_CPPv2N14Qnn_DataType_t28QNN_DATATYPE_SFIXED_POINT_32E"></span><span class="target" id="QnnTypes_8h_1a8bda296c6c8a3148f764dcbdb5b8f534a24a588d0212abfad7fc14f80beeb0a31"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_DATATYPE_SFIXED_POINT_32</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x0332</span></span><a class="headerlink" href="#_CPPv4N14Qnn_DataType_t28QNN_DATATYPE_SFIXED_POINT_32E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_DataType_t27QNN_DATATYPE_UFIXED_POINT_2E">
+<span id="_CPPv3N14Qnn_DataType_t27QNN_DATATYPE_UFIXED_POINT_2E"></span><span id="_CPPv2N14Qnn_DataType_t27QNN_DATATYPE_UFIXED_POINT_2E"></span><span class="target" id="QnnTypes_8h_1a8bda296c6c8a3148f764dcbdb5b8f534a06c2325a94c2f3981578d45c2d946dd7"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_DATATYPE_UFIXED_POINT_2</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x0402</span></span><a class="headerlink" href="#_CPPv4N14Qnn_DataType_t27QNN_DATATYPE_UFIXED_POINT_2E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_DataType_t27QNN_DATATYPE_UFIXED_POINT_4E">
+<span id="_CPPv3N14Qnn_DataType_t27QNN_DATATYPE_UFIXED_POINT_4E"></span><span id="_CPPv2N14Qnn_DataType_t27QNN_DATATYPE_UFIXED_POINT_4E"></span><span class="target" id="QnnTypes_8h_1a8bda296c6c8a3148f764dcbdb5b8f534ab1cabd6e0dabb24850a7e7003372c033"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_DATATYPE_UFIXED_POINT_4</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x0404</span></span><a class="headerlink" href="#_CPPv4N14Qnn_DataType_t27QNN_DATATYPE_UFIXED_POINT_4E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_DataType_t27QNN_DATATYPE_UFIXED_POINT_8E">
+<span id="_CPPv3N14Qnn_DataType_t27QNN_DATATYPE_UFIXED_POINT_8E"></span><span id="_CPPv2N14Qnn_DataType_t27QNN_DATATYPE_UFIXED_POINT_8E"></span><span class="target" id="QnnTypes_8h_1a8bda296c6c8a3148f764dcbdb5b8f534aa2af5d60439ddcafab294789215cf1db"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_DATATYPE_UFIXED_POINT_8</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x0408</span></span><a class="headerlink" href="#_CPPv4N14Qnn_DataType_t27QNN_DATATYPE_UFIXED_POINT_8E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_DataType_t28QNN_DATATYPE_UFIXED_POINT_16E">
+<span id="_CPPv3N14Qnn_DataType_t28QNN_DATATYPE_UFIXED_POINT_16E"></span><span id="_CPPv2N14Qnn_DataType_t28QNN_DATATYPE_UFIXED_POINT_16E"></span><span class="target" id="QnnTypes_8h_1a8bda296c6c8a3148f764dcbdb5b8f534a1ac9d1322f226da8d8213bc6b6fa33fe"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_DATATYPE_UFIXED_POINT_16</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x0416</span></span><a class="headerlink" href="#_CPPv4N14Qnn_DataType_t28QNN_DATATYPE_UFIXED_POINT_16E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_DataType_t28QNN_DATATYPE_UFIXED_POINT_32E">
+<span id="_CPPv3N14Qnn_DataType_t28QNN_DATATYPE_UFIXED_POINT_32E"></span><span id="_CPPv2N14Qnn_DataType_t28QNN_DATATYPE_UFIXED_POINT_32E"></span><span class="target" id="QnnTypes_8h_1a8bda296c6c8a3148f764dcbdb5b8f534a0a85a35df919d9326fcbe249607771db"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_DATATYPE_UFIXED_POINT_32</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x0432</span></span><a class="headerlink" href="#_CPPv4N14Qnn_DataType_t28QNN_DATATYPE_UFIXED_POINT_32E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_DataType_t19QNN_DATATYPE_BOOL_8E">
+<span id="_CPPv3N14Qnn_DataType_t19QNN_DATATYPE_BOOL_8E"></span><span id="_CPPv2N14Qnn_DataType_t19QNN_DATATYPE_BOOL_8E"></span><span class="target" id="QnnTypes_8h_1a8bda296c6c8a3148f764dcbdb5b8f534aef918d3c5069b71d562d4ef95d31823d"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_DATATYPE_BOOL_8</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x0508</span></span><a class="headerlink" href="#_CPPv4N14Qnn_DataType_t19QNN_DATATYPE_BOOL_8E" title="Permalink to this definition">¶</a><br/></dt>
+<dd><p>8-bit boolean type, 0 = false, any non-zero value = true </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_DataType_t19QNN_DATATYPE_STRINGE">
+<span id="_CPPv3N14Qnn_DataType_t19QNN_DATATYPE_STRINGE"></span><span id="_CPPv2N14Qnn_DataType_t19QNN_DATATYPE_STRINGE"></span><span class="target" id="QnnTypes_8h_1a8bda296c6c8a3148f764dcbdb5b8f534a2f1892ff60745504265de4602f11a0fe"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_DATATYPE_STRING</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x0608</span></span><a class="headerlink" href="#_CPPv4N14Qnn_DataType_t19QNN_DATATYPE_STRINGE" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_DataType_t22QNN_DATATYPE_UNDEFINEDE">
+<span id="_CPPv3N14Qnn_DataType_t22QNN_DATATYPE_UNDEFINEDE"></span><span id="_CPPv2N14Qnn_DataType_t22QNN_DATATYPE_UNDEFINEDE"></span><span class="target" id="QnnTypes_8h_1a8bda296c6c8a3148f764dcbdb5b8f534a02f7f519ec1f541dc1741ae473bb3e19"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_DATATYPE_UNDEFINED</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x7FFFFFFF</span></span><a class="headerlink" href="#_CPPv4N14Qnn_DataType_t22QNN_DATATYPE_UNDEFINEDE" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
+        <a accesskey="n" class="btn btn-neutral float-right" href="enum_QnnTypes_8h_1abbf6fedef88292dcdd6cc156754d5e68.html" rel="next" title="Enum Qnn_Definition_t">Next <span aria-hidden="true" class="fa fa-arrow-circle-right"></span></a>
+        <a accesskey="p" class="btn btn-neutral float-left" href="enum_QnnContext_8h_1a85b0811046a51a2bb5c18122b6f88921.html" rel="prev" title="Enum Qnn_ContextBinaryRawBufferCallbackVersion_t"><span aria-hidden="true" class="fa fa-arrow-circle-left"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        © Copyright 2020-2026, Qualcomm Technologies, Inc..
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+
+</body></html>

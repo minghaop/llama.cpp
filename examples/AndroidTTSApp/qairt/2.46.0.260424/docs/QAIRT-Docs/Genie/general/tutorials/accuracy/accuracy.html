@@ -1,0 +1,396 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Genie Accuracy &mdash; Qualcomm® AI Runtime (QAIRT) SDKs</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/custom_css.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="Genie DLC" href="../dlc/dlc.html" />
+    <link rel="prev" title="Genie Pipeline" href="../pipeline/LMM/wt19-en-de/wt19-en-de.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> Qualcomm® AI Runtime (QAIRT) SDKs
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v2.46.0.260424121129
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">QAIRT</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../general/overview.html">Overview</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">SDKs</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../../QNN/index.html">QNN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../SNPE/index.html">SNPE</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../../index.html">Genie</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../introduction/introduction.html">Introduction</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../tutorials.html">Tutorials</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../setup.html">Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../how_to_use_genie.html">How to Use Genie</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../source_code_examples/source_code_examples.html">Source Code Examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../dialog/dialog.html">Genie Dialog</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../embedding/embedding.html">Genie Embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../engine/engine.html">Genie Engine</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../logger/logger.html">Genie Log</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../profile/profile.html">Genie Profile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pipeline/pipeline.html">Genie Pipeline</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Genie Accuracy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../dlc/dlc.html">Genie DLC</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/library.html">Library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tools/tools.html">Tools</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Delegates</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../Delegates/TfLite/index.html">TFLite Delegate</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Qualcomm® AI Runtime (QAIRT) SDKs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">⌂</a> &raquo;</li>
+        
+          <li><a href="../tutorials.html">Tutorials</a> &raquo;</li>
+        
+      <li>Genie Accuracy</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="genie-accuracy">
+<h1>Genie Accuracy<a class="headerlink" href="#genie-accuracy" title="Permalink to this heading">¶</a></h1>
+<p>Genie Accuracy APIs provide a method to evaluate and measure the accuracy of LLM inference results. The accuracy feature supports computing perplexity metrics on a given dataset to assess model performance.</p>
+<p>Accuracy evaluation can be performed using the genie-app tool. After computing the accuracy metrics,
+the results will be returned as a JSON object containing the perplexity value.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The accuracy computation resets the dialog and associated engine. It is recommended to run accuracy evaluation on a newly created dialog rather than in between dialog queries.</p>
+</div>
+<div class="section" id="example-on-how-to-use-accuracy-apis-with-dialog">
+<h2>Example on how to use Accuracy APIs with Dialog<a class="headerlink" href="#example-on-how-to-use-accuracy-apis-with-dialog" title="Permalink to this heading">¶</a></h2>
+<p>The following example demonstrates how to integrate GenieAccuracy APIs with an existing dialog to compute perplexity metrics.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">// Create Dialog Config</span>
+<span class="n">GenieDialogConfig_Handle_t</span><span class="w"> </span><span class="n">dialogConfigHandle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span>
+<span class="n">GenieDialogConfig_createFromJson</span><span class="p">(</span><span class="n">dialogConfigStr</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">dialogConfigHandle</span><span class="p">);</span>
+
+<span class="c1">// Create Dialog</span>
+<span class="n">GenieDialog_Handle_t</span><span class="w"> </span><span class="n">dialogHandle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span>
+<span class="n">GenieDialog_create</span><span class="p">(</span><span class="n">dialogConfigHandle</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">dialogHandle</span><span class="p">);</span>
+
+<span class="c1">// Create Accuracy Config</span>
+<span class="n">GenieAccuracyConfig_Handle_t</span><span class="w"> </span><span class="n">accuracyConfigHandle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span>
+<span class="n">GenieAccuracyConfig_createFromJson</span><span class="p">(</span><span class="n">accuracyConfigStr</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">accuracyConfigHandle</span><span class="p">);</span>
+
+<span class="c1">// Create Accuracy Handle from Dialog</span>
+<span class="n">GenieAccuracy_Handle_t</span><span class="w"> </span><span class="n">accuracyHandle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span>
+<span class="n">GenieAccuracy_createFromDialog</span><span class="p">(</span><span class="n">accuracyConfigHandle</span><span class="p">,</span><span class="w"> </span><span class="n">dialogHandle</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">accuracyHandle</span><span class="p">);</span>
+
+<span class="c1">// Define allocation callback for accuracy results</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">allocCallback</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[](</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">size</span><span class="p">,</span><span class="w"> </span><span class="kt">void</span><span class="o">**</span><span class="w"> </span><span class="n">buffer</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">Genie_Status_t</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="o">*</span><span class="n">buffer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">malloc</span><span class="p">(</span><span class="n">size</span><span class="p">));</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">buffer</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">GENIE_STATUS_SUCCESS</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">GENIE_STATUS_ERROR_MEM_ALLOC</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="c1">// Compute accuracy metrics</span>
+<span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">jsonData</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+<span class="n">Genie_Status_t</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GenieAccuracy_compute</span><span class="p">(</span><span class="n">accuracyHandle</span><span class="p">,</span><span class="w"> </span><span class="n">allocCallback</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">jsonData</span><span class="p">);</span>
+
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">status</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">GENIE_STATUS_SUCCESS</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">jsonData</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Process the accuracy results (JSON format)</span>
+<span class="w">    </span><span class="c1">// Example output: {&quot;perplexity&quot;: 5.234}</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Accuracy Results: &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">jsonData</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// Free the allocated memory for JSON data</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">jsonData</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">free</span><span class="p">(</span><span class="k">const_cast</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">jsonData</span><span class="p">));</span>
+<span class="p">}</span>
+
+<span class="c1">// Free Accuracy Handle</span>
+<span class="n">GenieAccuracy_free</span><span class="p">(</span><span class="n">accuracyHandle</span><span class="p">);</span>
+
+<span class="c1">// Free Accuracy Config</span>
+<span class="n">GenieAccuracyConfig_free</span><span class="p">(</span><span class="n">accuracyConfigHandle</span><span class="p">);</span>
+
+<span class="c1">// Free Dialog</span>
+<span class="n">GenieDialog_free</span><span class="p">(</span><span class="n">dialogHandle</span><span class="p">);</span>
+
+<span class="c1">// Free Dialog Config</span>
+<span class="n">GenieDialogConfig_free</span><span class="p">(</span><span class="n">dialogConfigHandle</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="example-on-how-to-use-accuracy-apis-with-node">
+<h2>Example on how to use Accuracy APIs with Node<a class="headerlink" href="#example-on-how-to-use-accuracy-apis-with-node" title="Permalink to this heading">¶</a></h2>
+<p>The following example demonstrates how to integrate GenieAccuracy APIs with a node (TextGenerator) to compute perplexity metrics.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">// Create Node Config</span>
+<span class="n">GenieNodeConfig_Handle_t</span><span class="w"> </span><span class="n">nodeConfigHandle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span>
+<span class="n">GenieNodeConfig_createFromJson</span><span class="p">(</span><span class="n">nodeConfigStr</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">nodeConfigHandle</span><span class="p">);</span>
+
+<span class="c1">// Create Node (TextGenerator)</span>
+<span class="n">GenieNode_Handle_t</span><span class="w"> </span><span class="n">nodeHandle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span>
+<span class="n">GenieNode_create</span><span class="p">(</span><span class="n">nodeConfigHandle</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">nodeHandle</span><span class="p">);</span>
+
+<span class="c1">// Create Accuracy Config (can be NULL for default perplexity calculation)</span>
+<span class="n">GenieAccuracyConfig_Handle_t</span><span class="w"> </span><span class="n">accuracyConfigHandle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span>
+<span class="n">GenieAccuracyConfig_createFromJson</span><span class="p">(</span><span class="n">accuracyConfigStr</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">accuracyConfigHandle</span><span class="p">);</span>
+
+<span class="c1">// Create Accuracy Handle from Node</span>
+<span class="n">GenieAccuracy_Handle_t</span><span class="w"> </span><span class="n">accuracyHandle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span>
+<span class="n">GenieAccuracy_createFromNode</span><span class="p">(</span><span class="n">accuracyConfigHandle</span><span class="p">,</span><span class="w"> </span><span class="n">nodeHandle</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">accuracyHandle</span><span class="p">);</span>
+
+<span class="c1">// Define allocation callback for accuracy results</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">allocCallback</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[](</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">size</span><span class="p">,</span><span class="w"> </span><span class="kt">void</span><span class="o">**</span><span class="w"> </span><span class="n">buffer</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">Genie_Status_t</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="o">*</span><span class="n">buffer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">malloc</span><span class="p">(</span><span class="n">size</span><span class="p">));</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">buffer</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">GENIE_STATUS_SUCCESS</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">GENIE_STATUS_ERROR_MEM_ALLOC</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="c1">// Compute accuracy metrics</span>
+<span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">jsonData</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+<span class="n">Genie_Status_t</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GenieAccuracy_compute</span><span class="p">(</span><span class="n">accuracyHandle</span><span class="p">,</span><span class="w"> </span><span class="n">allocCallback</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">jsonData</span><span class="p">);</span>
+
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">status</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">GENIE_STATUS_SUCCESS</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">jsonData</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Process the accuracy results (JSON format)</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Accuracy Results: &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">jsonData</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">// Free the allocated memory for JSON data</span>
+<span class="w">    </span><span class="n">free</span><span class="p">(</span><span class="k">const_cast</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">jsonData</span><span class="p">));</span>
+<span class="p">}</span>
+
+<span class="c1">// Free Accuracy Handle</span>
+<span class="n">GenieAccuracy_free</span><span class="p">(</span><span class="n">accuracyHandle</span><span class="p">);</span>
+
+<span class="c1">// Free Accuracy Config (if created)</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">accuracyConfigHandle</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">GenieAccuracyConfig_free</span><span class="p">(</span><span class="n">accuracyConfigHandle</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// Free Node</span>
+<span class="n">GenieNode_free</span><span class="p">(</span><span class="n">nodeHandle</span><span class="p">);</span>
+
+<span class="c1">// Free Node Config</span>
+<span class="n">GenieNodeConfig_free</span><span class="p">(</span><span class="n">nodeConfigHandle</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="example-genie-app-script">
+<h2>Example genie-app script<a class="headerlink" href="#example-genie-app-script" title="Permalink to this heading">¶</a></h2>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">The</span><span class="w"> </span><span class="n">following</span><span class="w"> </span><span class="n">is</span><span class="w"> </span><span class="n">an</span><span class="w"> </span><span class="n">example</span><span class="w"> </span><span class="n">script</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">utilizing</span><span class="w"> </span><span class="n">accuracy</span><span class="w"> </span><span class="n">features</span><span class="w"> </span><span class="n">with</span><span class="w"> </span><span class="n">genie</span><span class="o">-</span><span class="n">app</span>
+
+<span class="cp"># Version</span>
+<span class="n">version</span>
+
+<span class="cp"># Dialog creation</span>
+<span class="n">dialog</span><span class="w"> </span><span class="n">config</span><span class="w"> </span><span class="n">create</span><span class="w"> </span><span class="n">config1</span><span class="w"> </span><span class="n">dialogConfig</span><span class="p">.</span><span class="n">json</span>
+<span class="n">dialog</span><span class="w"> </span><span class="n">create</span><span class="w"> </span><span class="n">dialog1</span><span class="w"> </span><span class="n">config1</span>
+
+<span class="cp"># Accuracy Handle creation</span>
+<span class="n">accuracy</span><span class="w"> </span><span class="n">config</span><span class="w"> </span><span class="n">create</span><span class="w"> </span><span class="n">accConfig</span><span class="w"> </span><span class="n">accConfig</span><span class="p">.</span><span class="n">json</span>
+<span class="n">accuracy</span><span class="w"> </span><span class="n">create</span><span class="w"> </span><span class="n">accHandle1</span><span class="w"> </span><span class="n">accConfig</span><span class="w"> </span><span class="n">dialog</span><span class="w"> </span><span class="n">dialog1</span>
+<span class="n">accuracy</span><span class="w"> </span><span class="n">compute</span><span class="w"> </span><span class="n">accHandle1</span><span class="w"> </span><span class="n">OUTPUT_FILE</span><span class="p">.</span><span class="n">json</span>
+
+<span class="cp"># Clean up</span>
+<span class="n">accuracy</span><span class="w"> </span><span class="n">config</span><span class="w"> </span><span class="n">free</span><span class="w"> </span><span class="n">accConfig</span>
+<span class="n">accuracy</span><span class="w"> </span><span class="n">free</span><span class="w"> </span><span class="n">accHandle1</span>
+<span class="n">dialog</span><span class="w"> </span><span class="n">config</span><span class="w"> </span><span class="n">free</span><span class="w"> </span><span class="n">config1</span>
+<span class="n">dialog</span><span class="w"> </span><span class="n">free</span><span class="w"> </span><span class="n">dialog1</span>
+<span class="n">ls</span>
+
+<span class="cp"># Exit</span>
+<span class="n">exit</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="accuracy-configuration">
+<h2>Accuracy Configuration<a class="headerlink" href="#accuracy-configuration" title="Permalink to this heading">¶</a></h2>
+<p>The accuracy configuration JSON should specify the dataset path and the type of accuracy metric to compute.
+For more details on the accuracy configuration format, please refer to the <a class="reference internal" href="../../library/accuracy/json.html#genie-accuracy-json-config-string"><span class="std std-ref">Genie Accuracy JSON Configuration</span></a> documentation.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="../dlc/dlc.html" class="btn btn-neutral float-right" title="Genie DLC" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../pipeline/LMM/wt19-en-de/wt19-en-de.html" class="btn btn-neutral float-left" title="Genie Pipeline" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020-2025, Qualcomm Technologies, Inc..
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

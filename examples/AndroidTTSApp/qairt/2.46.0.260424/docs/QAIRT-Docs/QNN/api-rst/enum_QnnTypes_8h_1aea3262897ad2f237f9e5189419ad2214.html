@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en"><head>
+  <meta charset="utf-8"/>
+  
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  
+  <title>Enum Qnn_SocModel_t — Qualcomm® AI Engine Direct</title>
+  
+
+  
+  <link href="../../_static/css/theme.css" rel="stylesheet" type="text/css"/>
+  <link href="../../_static/pygments.css" rel="stylesheet" type="text/css"/>
+  <link href="../../_static/pygments.css" rel="stylesheet" type="text/css"/>
+  <link href="../../_static/css/theme.css" rel="stylesheet" type="text/css"/>
+  <link href="../../_static/custom_css.css" rel="stylesheet" type="text/css"/>
+  <link href="../../_static/collapsible-lists/css/tree_view.css" rel="stylesheet" type="text/css"/>
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js" type="text/javascript"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+        <script src="../../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    
+    <script src="../../_static/js/theme.js" type="text/javascript"></script>
+
+    
+    <link href="../../genindex.html" rel="index" title="Index"/>
+    <link href="../../search.html" rel="search" title="Search"/>
+    <link href="enum_QnnTypes_8h_1ad739f9fcfc2f6663248e40fc5b8dbebb.html" rel="next" title="Enum Qnn_SparseLayoutType_t"/>
+    <link href="enum_QnnTypes_8h_1a88b60f2f0c646947b68f62524c2c79bf.html" rel="prev" title="Enum Qnn_QuantizationEncodingMapping_t"/> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav class="wy-nav-side" data-toggle="wy-nav-shift">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a class="icon icon-home" href="../../index.html"> Qualcomm® AI Runtime (QAIRT) SDKs
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v2.46.0.260424121129
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form action="../../search.html" class="wy-form" id="rtd-search-form" method="get">
+    <input name="q" placeholder="Search docs" type="text"/>
+    <input name="check_keywords" type="hidden" value="yes"/>
+    <input name="area" type="hidden" value="default"/>
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">QAIRT</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../general/overview.html">Overview</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">SDKs</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">QNN</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../general/introduction.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general/overview.html">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general/setup.html">Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general/backend.html">Backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general/op_packages.html">Op Packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general/tools.html">Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general/converters.html">Converters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general/quantization.html">Quantization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general/applyencodings.html">QAIRT Quantization Specification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general/tutorials.html">Tutorials</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general/benchmarking.html">Benchmarking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general/operations.html">Operations</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="../general/api.html">API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../general/api_overview.html">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../general/api_usage_guidelines.html">Usage Guidelines</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../general/api_version_history.html">QNN API Revision History</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../general/api_version_history.html#backend-specific-revision-history">Backend Specific Revision History</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../general/api_version_history.html#qnn-system-api-revision-history">QNN System API Revision History</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../general/supported_api.html">Supported APIs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../general/supported_capabilities.html">Supported Capabilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../general/api_error_codes.html">Error codes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../general/glossary.html">Glossary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general/revision_history.html">Revision History</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../SNPE/index.html">SNPE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Genie/index.html">Genie</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Delegates</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../Delegates/TfLite/index.html">TFLite Delegate</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+
+      
+      <nav aria-label="top navigation" class="wy-nav-top">
+        
+          <i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+          <a href="../../index.html">Qualcomm® AI Runtime (QAIRT) SDKs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div aria-label="breadcrumbs navigation" role="navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a class="icon icon-home" href="../../index.html"></a> »</li>
+        
+          <li><a href="../index.html">⌂</a> »</li>
+        
+      <li>Enum Qnn_SocModel_t</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="enum-qnn-socmodel-t">
+<span id="exhale-enum-qnntypes-8h-1aea3262897ad2f237f9e5189419ad2214"></span><h1>Enum Qnn_SocModel_t<a class="headerlink" href="#enum-qnn-socmodel-t" title="Permalink to this heading">¶</a></h1>
+<ul class="simple">
+<li><p>Defined in <a class="reference internal" href="file_include_QNN_QnnTypes.h.html#file-include-qnn-qnntypes-h"><span class="std std-ref">File QnnTypes.h</span></a></p></li>
+</ul>
+<div class="section" id="enum-documentation">
+<h2>Enum Documentation<a class="headerlink" href="#enum-documentation" title="Permalink to this heading">¶</a></h2>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv414Qnn_SocModel_t">
+<span id="_CPPv314Qnn_SocModel_t"></span><span id="_CPPv214Qnn_SocModel_t"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Qnn_SocModel_t</span></span></span><a class="headerlink" href="#_CPPv414Qnn_SocModel_t" title="Permalink to this definition">¶</a><br/></dt>
+<dd><p>An enum which identifies SOC models. </p>
+<p></p><dl>
+<dt class="sig sig-object cpp">
+<a class="reference internal" href="page_deprecated.html#deprecated_1_deprecated000007"><span class="std std-ref"><span class="pre">Deprecated:</span></span></a></dt>
+<dd><p>This enumeration will no longer be updated. </p>
+</dd></dl>
+
+<p></p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t21QNN_SOC_MODEL_UNKNOWNE">
+<span id="_CPPv3N14Qnn_SocModel_t21QNN_SOC_MODEL_UNKNOWNE"></span><span id="_CPPv2N14Qnn_SocModel_t21QNN_SOC_MODEL_UNKNOWNE"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214a36be3280ee75a1e2e043a9034f1e0eed"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_UNKNOWN</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t21QNN_SOC_MODEL_UNKNOWNE" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SDM845E">
+<span id="_CPPv3N14Qnn_SocModel_t20QNN_SOC_MODEL_SDM845E"></span><span id="_CPPv2N14Qnn_SocModel_t20QNN_SOC_MODEL_SDM845E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214a337f451a751279490559dea477673f00"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_SDM845</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">1</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SDM845E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SDM835E">
+<span id="_CPPv3N14Qnn_SocModel_t20QNN_SOC_MODEL_SDM835E"></span><span id="_CPPv2N14Qnn_SocModel_t20QNN_SOC_MODEL_SDM835E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214a953f37019767c6c0f3e3c4d1e54ba71f"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_SDM835</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">2</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SDM835E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SDM821E">
+<span id="_CPPv3N14Qnn_SocModel_t20QNN_SOC_MODEL_SDM821E"></span><span id="_CPPv2N14Qnn_SocModel_t20QNN_SOC_MODEL_SDM821E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214a68cb851f7b739f40608c11c6907b5200"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_SDM821</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">3</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SDM821E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SDM820E">
+<span id="_CPPv3N14Qnn_SocModel_t20QNN_SOC_MODEL_SDM820E"></span><span id="_CPPv2N14Qnn_SocModel_t20QNN_SOC_MODEL_SDM820E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214a4ff3463a9b9b46bad05efe00a07b553b"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_SDM820</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">4</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SDM820E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SDM801E">
+<span id="_CPPv3N14Qnn_SocModel_t20QNN_SOC_MODEL_SDM801E"></span><span id="_CPPv2N14Qnn_SocModel_t20QNN_SOC_MODEL_SDM801E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214a43a2fdcd83f3b10107b5a4257f11fa1c"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_SDM801</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">5</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SDM801E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SDM670E">
+<span id="_CPPv3N14Qnn_SocModel_t20QNN_SOC_MODEL_SDM670E"></span><span id="_CPPv2N14Qnn_SocModel_t20QNN_SOC_MODEL_SDM670E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214a5dd1c48bf016fd4d45acdf29dac4ac42"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_SDM670</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">6</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SDM670E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SDM660E">
+<span id="_CPPv3N14Qnn_SocModel_t20QNN_SOC_MODEL_SDM660E"></span><span id="_CPPv2N14Qnn_SocModel_t20QNN_SOC_MODEL_SDM660E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214a3651f44a2698b1a9996ce31a4d55e668"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_SDM660</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">7</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SDM660E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SDM652E">
+<span id="_CPPv3N14Qnn_SocModel_t20QNN_SOC_MODEL_SDM652E"></span><span id="_CPPv2N14Qnn_SocModel_t20QNN_SOC_MODEL_SDM652E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214a273a683ca9fb28e6e88800add8cf0ad5"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_SDM652</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">8</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SDM652E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SDM636E">
+<span id="_CPPv3N14Qnn_SocModel_t20QNN_SOC_MODEL_SDM636E"></span><span id="_CPPv2N14Qnn_SocModel_t20QNN_SOC_MODEL_SDM636E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214a92ecd8f60831e9f4eaff0d3bc5f94d06"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_SDM636</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">9</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SDM636E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SDM630E">
+<span id="_CPPv3N14Qnn_SocModel_t20QNN_SOC_MODEL_SDM630E"></span><span id="_CPPv2N14Qnn_SocModel_t20QNN_SOC_MODEL_SDM630E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214ac74604bec087d51c1d5b4f9f8b19bc71"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_SDM630</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">10</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SDM630E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SDM625E">
+<span id="_CPPv3N14Qnn_SocModel_t20QNN_SOC_MODEL_SDM625E"></span><span id="_CPPv2N14Qnn_SocModel_t20QNN_SOC_MODEL_SDM625E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214a714c29ecd2961a0ad1de5ab8716541df"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_SDM625</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">11</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SDM625E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SDM855E">
+<span id="_CPPv3N14Qnn_SocModel_t20QNN_SOC_MODEL_SDM855E"></span><span id="_CPPv2N14Qnn_SocModel_t20QNN_SOC_MODEL_SDM855E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214ada8422f392d7bc9734748ecad5d78b66"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_SDM855</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">12</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SDM855E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SDM710E">
+<span id="_CPPv3N14Qnn_SocModel_t20QNN_SOC_MODEL_SDM710E"></span><span id="_CPPv2N14Qnn_SocModel_t20QNN_SOC_MODEL_SDM710E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214a8c999e237cb05d684f3e783e7eed17e9"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_SDM710</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">13</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SDM710E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SDM632E">
+<span id="_CPPv3N14Qnn_SocModel_t20QNN_SOC_MODEL_SDM632E"></span><span id="_CPPv2N14Qnn_SocModel_t20QNN_SOC_MODEL_SDM632E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214a4314b584eeb22d9948558522b6f0f704"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_SDM632</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">15</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SDM632E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM6150E">
+<span id="_CPPv3N14Qnn_SocModel_t20QNN_SOC_MODEL_SM6150E"></span><span id="_CPPv2N14Qnn_SocModel_t20QNN_SOC_MODEL_SM6150E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214a9a58c0080078d6cf6909bc8a5e139185"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_SM6150</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">16</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM6150E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM7150E">
+<span id="_CPPv3N14Qnn_SocModel_t20QNN_SOC_MODEL_SM7150E"></span><span id="_CPPv2N14Qnn_SocModel_t20QNN_SOC_MODEL_SM7150E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214ab91b11ba219e3567faf26acb938e6d35"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_SM7150</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">17</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM7150E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_QCS405E">
+<span id="_CPPv3N14Qnn_SocModel_t20QNN_SOC_MODEL_QCS405E"></span><span id="_CPPv2N14Qnn_SocModel_t20QNN_SOC_MODEL_QCS405E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214ac676491929b8263968fad52aa57c90af"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_QCS405</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">18</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_QCS405E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM6125E">
+<span id="_CPPv3N14Qnn_SocModel_t20QNN_SOC_MODEL_SM6125E"></span><span id="_CPPv2N14Qnn_SocModel_t20QNN_SOC_MODEL_SM6125E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214af17e9a73254af93da267822799a52626"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_SM6125</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">19</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM6125E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_QCS403E">
+<span id="_CPPv3N14Qnn_SocModel_t20QNN_SOC_MODEL_QCS403E"></span><span id="_CPPv2N14Qnn_SocModel_t20QNN_SOC_MODEL_QCS403E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214a2890b764ca1ec1b0344f3b34e2e91f6d"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_QCS403</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">20</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_QCS403E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SDM865E">
+<span id="_CPPv3N14Qnn_SocModel_t20QNN_SOC_MODEL_SDM865E"></span><span id="_CPPv2N14Qnn_SocModel_t20QNN_SOC_MODEL_SDM865E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214a0ef16b1f02797fa05ef30e807f589f6c"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_SDM865</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">21</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SDM865E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t21QNN_SOC_MODEL_IPQ6018E">
+<span id="_CPPv3N14Qnn_SocModel_t21QNN_SOC_MODEL_IPQ6018E"></span><span id="_CPPv2N14Qnn_SocModel_t21QNN_SOC_MODEL_IPQ6018E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214a7364e0be0df7acd20604cd421e8ae5ea"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_IPQ6018</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">23</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t21QNN_SOC_MODEL_IPQ6018E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t21QNN_SOC_MODEL_IPQ6028E">
+<span id="_CPPv3N14Qnn_SocModel_t21QNN_SOC_MODEL_IPQ6028E"></span><span id="_CPPv2N14Qnn_SocModel_t21QNN_SOC_MODEL_IPQ6028E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214afdfc761bed3d05b1102fbb20ffe09339"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_IPQ6028</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">24</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t21QNN_SOC_MODEL_IPQ6028E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM7250E">
+<span id="_CPPv3N14Qnn_SocModel_t20QNN_SOC_MODEL_SM7250E"></span><span id="_CPPv2N14Qnn_SocModel_t20QNN_SOC_MODEL_SM7250E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214ac43e5bb0abfcbb57cb7abb0f8eaa6684"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_SM7250</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">25</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM7250E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SA8195E">
+<span id="_CPPv3N14Qnn_SocModel_t20QNN_SOC_MODEL_SA8195E"></span><span id="_CPPv2N14Qnn_SocModel_t20QNN_SOC_MODEL_SA8195E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214a7a1e9cfb1b9472751acb24fd0771ccde"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_SA8195</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">26</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SA8195E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM6250E">
+<span id="_CPPv3N14Qnn_SocModel_t20QNN_SOC_MODEL_SM6250E"></span><span id="_CPPv2N14Qnn_SocModel_t20QNN_SOC_MODEL_SM6250E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214a52b3d4fc6cb578ff5a649e5f9687c528"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_SM6250</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">27</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM6250E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM4250E">
+<span id="_CPPv3N14Qnn_SocModel_t20QNN_SOC_MODEL_SM4250E"></span><span id="_CPPv2N14Qnn_SocModel_t20QNN_SOC_MODEL_SM4250E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214a8de35399d7ad8cc1b47de54e436d4552"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_SM4250</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">28</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM4250E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM6350E">
+<span id="_CPPv3N14Qnn_SocModel_t20QNN_SOC_MODEL_SM6350E"></span><span id="_CPPv2N14Qnn_SocModel_t20QNN_SOC_MODEL_SM6350E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214a5b7ef10499fd222b8b7c4a8e85926475"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_SM6350</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">29</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM6350E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM8350E">
+<span id="_CPPv3N14Qnn_SocModel_t20QNN_SOC_MODEL_SM8350E"></span><span id="_CPPv2N14Qnn_SocModel_t20QNN_SOC_MODEL_SM8350E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214abd494b3227bbe6f87a0ddfe594a3c2d4"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_SM8350</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">30</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM8350E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM4350E">
+<span id="_CPPv3N14Qnn_SocModel_t20QNN_SOC_MODEL_SM4350E"></span><span id="_CPPv2N14Qnn_SocModel_t20QNN_SOC_MODEL_SM4350E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214a76846e5f270714856163888704d5d1ff"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_SM4350</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">31</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM4350E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM7350E">
+<span id="_CPPv3N14Qnn_SocModel_t20QNN_SOC_MODEL_SM7350E"></span><span id="_CPPv2N14Qnn_SocModel_t20QNN_SOC_MODEL_SM7350E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214ae5bde799d8cab00b551dfee4e1ae1088"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_SM7350</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">32</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM7350E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_QCS410E">
+<span id="_CPPv3N14Qnn_SocModel_t20QNN_SOC_MODEL_QCS410E"></span><span id="_CPPv2N14Qnn_SocModel_t20QNN_SOC_MODEL_QCS410E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214aeae61fd645d26614ce0d6333a851375e"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_QCS410</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">33</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_QCS410E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM8325E">
+<span id="_CPPv3N14Qnn_SocModel_t20QNN_SOC_MODEL_SM8325E"></span><span id="_CPPv2N14Qnn_SocModel_t20QNN_SOC_MODEL_SM8325E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214a1e100897e64f5a9d71eb54498b3b28f1"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_SM8325</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">34</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM8325E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM7325E">
+<span id="_CPPv3N14Qnn_SocModel_t20QNN_SOC_MODEL_SM7325E"></span><span id="_CPPv2N14Qnn_SocModel_t20QNN_SOC_MODEL_SM7325E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214a29809b6af1c35f8cd06ce8e7a7b2daf6"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_SM7325</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">35</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM7325E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM8450E">
+<span id="_CPPv3N14Qnn_SocModel_t20QNN_SOC_MODEL_SM8450E"></span><span id="_CPPv2N14Qnn_SocModel_t20QNN_SOC_MODEL_SM8450E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214a7b87162aede637a135a5a285d6dc3863"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_SM8450</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">36</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM8450E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t21QNN_SOC_MODEL_SC8280XE">
+<span id="_CPPv3N14Qnn_SocModel_t21QNN_SOC_MODEL_SC8280XE"></span><span id="_CPPv2N14Qnn_SocModel_t21QNN_SOC_MODEL_SC8280XE"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214aeea5014d3a09b775514a26e699e9caa3"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_SC8280X</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">37</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t21QNN_SOC_MODEL_SC8280XE" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM7315E">
+<span id="_CPPv3N14Qnn_SocModel_t20QNN_SOC_MODEL_SM7315E"></span><span id="_CPPv2N14Qnn_SocModel_t20QNN_SOC_MODEL_SM7315E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214adcaf49a0b60b0392d9c6c1ce1ea2df3d"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_SM7315</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">38</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM7315E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SA8295E">
+<span id="_CPPv3N14Qnn_SocModel_t20QNN_SOC_MODEL_SA8295E"></span><span id="_CPPv2N14Qnn_SocModel_t20QNN_SOC_MODEL_SA8295E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214aab949e98ca0d65a94053eaa770875346"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_SA8295</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">39</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SA8295E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM6225E">
+<span id="_CPPv3N14Qnn_SocModel_t20QNN_SOC_MODEL_SM6225E"></span><span id="_CPPv2N14Qnn_SocModel_t20QNN_SOC_MODEL_SM6225E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214ace107fbc75a6574e1fa55e07033e39ee"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_SM6225</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">40</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM6225E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM7450E">
+<span id="_CPPv3N14Qnn_SocModel_t20QNN_SOC_MODEL_SM7450E"></span><span id="_CPPv2N14Qnn_SocModel_t20QNN_SOC_MODEL_SM7450E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214a44e7d43cca1e67815e89da57244b31fa"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_SM7450</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">41</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM7450E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM8475E">
+<span id="_CPPv3N14Qnn_SocModel_t20QNN_SOC_MODEL_SM8475E"></span><span id="_CPPv2N14Qnn_SocModel_t20QNN_SOC_MODEL_SM8475E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214a5d933dc05ddb62277c41bf1bd63b6655"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_SM8475</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">42</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM8475E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM8550E">
+<span id="_CPPv3N14Qnn_SocModel_t20QNN_SOC_MODEL_SM8550E"></span><span id="_CPPv2N14Qnn_SocModel_t20QNN_SOC_MODEL_SM8550E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214afd1be2fbf97810c12de5e0878bcc2cb7"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_SM8550</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">43</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM8550E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t22QNN_SOC_MODEL_SXR1230PE">
+<span id="_CPPv3N14Qnn_SocModel_t22QNN_SOC_MODEL_SXR1230PE"></span><span id="_CPPv2N14Qnn_SocModel_t22QNN_SOC_MODEL_SXR1230PE"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214a6ffc2401e9c5d6cbf220f1c557525061"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_SXR1230P</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">45</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t22QNN_SOC_MODEL_SXR1230PE" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t22QNN_SOC_MODEL_SSG2115PE">
+<span id="_CPPv3N14Qnn_SocModel_t22QNN_SOC_MODEL_SSG2115PE"></span><span id="_CPPv2N14Qnn_SocModel_t22QNN_SOC_MODEL_SSG2115PE"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214ad55807e913a3064a19c6e86dc491deec"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_SSG2115P</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">46</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t22QNN_SOC_MODEL_SSG2115PE" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t22QNN_SOC_MODEL_STP6225PE">
+<span id="_CPPv3N14Qnn_SocModel_t22QNN_SOC_MODEL_STP6225PE"></span><span id="_CPPv2N14Qnn_SocModel_t22QNN_SOC_MODEL_STP6225PE"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214af2f6048355d3a26a902c63e59dcb3bda"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_STP6225P</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">47</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t22QNN_SOC_MODEL_STP6225PE" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t21QNN_SOC_MODEL_QCS6125E">
+<span id="_CPPv3N14Qnn_SocModel_t21QNN_SOC_MODEL_QCS6125E"></span><span id="_CPPv2N14Qnn_SocModel_t21QNN_SOC_MODEL_QCS6125E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214a19254e0f6335c96c67e234fc321093c4"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_QCS6125</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">48</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t21QNN_SOC_MODEL_QCS6125E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t21QNN_SOC_MODEL_QRB4210E">
+<span id="_CPPv3N14Qnn_SocModel_t21QNN_SOC_MODEL_QRB4210E"></span><span id="_CPPv2N14Qnn_SocModel_t21QNN_SOC_MODEL_QRB4210E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214a44a285aa6880e9b7211c5917e22ad0ce"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_QRB4210</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">49</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t21QNN_SOC_MODEL_QRB4210E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM6450E">
+<span id="_CPPv3N14Qnn_SocModel_t20QNN_SOC_MODEL_SM6450E"></span><span id="_CPPv2N14Qnn_SocModel_t20QNN_SOC_MODEL_SM6450E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214a146b814472f66986e6db854fffcffa32"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_SM6450</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">50</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM6450E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t21QNN_SOC_MODEL_QCS7230E">
+<span id="_CPPv3N14Qnn_SocModel_t21QNN_SOC_MODEL_QCS7230E"></span><span id="_CPPv2N14Qnn_SocModel_t21QNN_SOC_MODEL_QCS7230E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214aa2a857211e3f6e9202ba2ffb273ec112"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_QCS7230</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">51</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t21QNN_SOC_MODEL_QCS7230E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SA8255E">
+<span id="_CPPv3N14Qnn_SocModel_t20QNN_SOC_MODEL_SA8255E"></span><span id="_CPPv2N14Qnn_SocModel_t20QNN_SOC_MODEL_SA8255E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214af869435ded17de315596483a71e971cd"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_SA8255</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">52</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SA8255E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t22QNN_SOC_MODEL_SXR2230PE">
+<span id="_CPPv3N14Qnn_SocModel_t22QNN_SOC_MODEL_SXR2230PE"></span><span id="_CPPv2N14Qnn_SocModel_t22QNN_SOC_MODEL_SXR2230PE"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214ae9b267e68e119801fb035cc670bb496f"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_SXR2230P</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">53</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t22QNN_SOC_MODEL_SXR2230PE" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM7475E">
+<span id="_CPPv3N14Qnn_SocModel_t20QNN_SOC_MODEL_SM7475E"></span><span id="_CPPv2N14Qnn_SocModel_t20QNN_SOC_MODEL_SM7475E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214aaad2908a70d10ea94cc7a6c31e8c445e"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_SM7475</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">54</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM7475E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM4375E">
+<span id="_CPPv3N14Qnn_SocModel_t20QNN_SOC_MODEL_SM4375E"></span><span id="_CPPv2N14Qnn_SocModel_t20QNN_SOC_MODEL_SM4375E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214a1fa136641df427914a668deb6dd4aa53"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_SM4375</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">55</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM4375E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t21QNN_SOC_MODEL_QCM4325E">
+<span id="_CPPv3N14Qnn_SocModel_t21QNN_SOC_MODEL_QCM4325E"></span><span id="_CPPv2N14Qnn_SocModel_t21QNN_SOC_MODEL_QCM4325E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214aaf8dbd79957b017708b6a86cd80bd91a"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_QCM4325</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">56</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t21QNN_SOC_MODEL_QCM4325E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM8650E">
+<span id="_CPPv3N14Qnn_SocModel_t20QNN_SOC_MODEL_SM8650E"></span><span id="_CPPv2N14Qnn_SocModel_t20QNN_SOC_MODEL_SM8650E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214af62fc142b355e7013d24784063eae4ee"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_SM8650</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">57</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM8650E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t22QNN_SOC_MODEL_SSG2125PE">
+<span id="_CPPv3N14Qnn_SocModel_t22QNN_SOC_MODEL_SSG2125PE"></span><span id="_CPPv2N14Qnn_SocModel_t22QNN_SOC_MODEL_SSG2125PE"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214ad5ec1a34dcb30f54a29e686c853a4b14"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_SSG2125P</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">58</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t22QNN_SOC_MODEL_SSG2125PE" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM4450E">
+<span id="_CPPv3N14Qnn_SocModel_t20QNN_SOC_MODEL_SM4450E"></span><span id="_CPPv2N14Qnn_SocModel_t20QNN_SOC_MODEL_SM4450E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214a58c3ee997503918887d16f23052aed96"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_SM4450</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">59</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM4450E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t22QNN_SOC_MODEL_SC8380XPE">
+<span id="_CPPv3N14Qnn_SocModel_t22QNN_SOC_MODEL_SC8380XPE"></span><span id="_CPPv2N14Qnn_SocModel_t22QNN_SOC_MODEL_SC8380XPE"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214a3c077f140e0b0d7477875764da89f3c9"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_SC8380XP</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">60</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t22QNN_SOC_MODEL_SC8380XPE" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM7435E">
+<span id="_CPPv3N14Qnn_SocModel_t20QNN_SOC_MODEL_SM7435E"></span><span id="_CPPv2N14Qnn_SocModel_t20QNN_SOC_MODEL_SM7435E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214a6bd565362c431a97de86495fba17e240"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_SM7435</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">61</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM7435E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SA8540E">
+<span id="_CPPv3N14Qnn_SocModel_t20QNN_SOC_MODEL_SA8540E"></span><span id="_CPPv2N14Qnn_SocModel_t20QNN_SOC_MODEL_SA8540E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214ad1538667b9a282be6aefbd195712d788"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_SA8540</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">62</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SA8540E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_AIC100E">
+<span id="_CPPv3N14Qnn_SocModel_t20QNN_SOC_MODEL_AIC100E"></span><span id="_CPPv2N14Qnn_SocModel_t20QNN_SOC_MODEL_AIC100E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214a614013b7f0a392ea0b46905461a64469"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_AIC100</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">63</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_AIC100E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM7550E">
+<span id="_CPPv3N14Qnn_SocModel_t20QNN_SOC_MODEL_SM7550E"></span><span id="_CPPv2N14Qnn_SocModel_t20QNN_SOC_MODEL_SM7550E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214ae10d62b048af133c9c4aa8ddda749bfb"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_SM7550</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">64</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM7550E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t21QNN_SOC_MODEL_SM6450QE">
+<span id="_CPPv3N14Qnn_SocModel_t21QNN_SOC_MODEL_SM6450QE"></span><span id="_CPPv2N14Qnn_SocModel_t21QNN_SOC_MODEL_SM6450QE"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214a8b8f777f7ce2e90212388ae778fa5139"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_SM6450Q</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">65</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t21QNN_SOC_MODEL_SM6450QE" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t21QNN_SOC_MODEL_QCS8550E">
+<span id="_CPPv3N14Qnn_SocModel_t21QNN_SOC_MODEL_QCS8550E"></span><span id="_CPPv2N14Qnn_SocModel_t21QNN_SOC_MODEL_QCS8550E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214a3c43b306a6d7082a8ca6fdf92bbe3731"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_QCS8550</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">66</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t21QNN_SOC_MODEL_QCS8550E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t21QNN_SOC_MODEL_SA8620PE">
+<span id="_CPPv3N14Qnn_SocModel_t21QNN_SOC_MODEL_SA8620PE"></span><span id="_CPPv2N14Qnn_SocModel_t21QNN_SOC_MODEL_SA8620PE"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214a20f1f3c9888f764ced3235ad546cd570"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_SA8620P</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">67</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t21QNN_SOC_MODEL_SA8620PE" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM8635E">
+<span id="_CPPv3N14Qnn_SocModel_t20QNN_SOC_MODEL_SM8635E"></span><span id="_CPPv2N14Qnn_SocModel_t20QNN_SOC_MODEL_SM8635E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214a2ac56917ce86ec2992e7464879dc6880"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_SM8635</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">68</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM8635E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM8750E">
+<span id="_CPPv3N14Qnn_SocModel_t20QNN_SOC_MODEL_SM8750E"></span><span id="_CPPv2N14Qnn_SocModel_t20QNN_SOC_MODEL_SM8750E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214a45c3746b7e5c1fbeee3bc3aee3995a4f"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_SM8750</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">69</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM8750E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM7675E">
+<span id="_CPPv3N14Qnn_SocModel_t20QNN_SOC_MODEL_SM7675E"></span><span id="_CPPv2N14Qnn_SocModel_t20QNN_SOC_MODEL_SM7675E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214ac56a1e6040cd6636fa743e7ae32aac6d"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_SM7675</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">70</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM7675E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM4635E">
+<span id="_CPPv3N14Qnn_SocModel_t20QNN_SOC_MODEL_SM4635E"></span><span id="_CPPv2N14Qnn_SocModel_t20QNN_SOC_MODEL_SM4635E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214ac8dcf4ab33b332c1f7b6eadb9621ce97"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_SM4635</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">71</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM4635E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SA8797E">
+<span id="_CPPv3N14Qnn_SocModel_t20QNN_SOC_MODEL_SA8797E"></span><span id="_CPPv2N14Qnn_SocModel_t20QNN_SOC_MODEL_SA8797E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214ab282ce1cfcb1844d4420efadbacc65b1"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_SA8797</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">72</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SA8797E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM7635E">
+<span id="_CPPv3N14Qnn_SocModel_t20QNN_SOC_MODEL_SM7635E"></span><span id="_CPPv2N14Qnn_SocModel_t20QNN_SOC_MODEL_SM7635E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214a02f504b8cff177563cb8780e75775287"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_SM7635</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">73</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM7635E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM6650E">
+<span id="_CPPv3N14Qnn_SocModel_t20QNN_SOC_MODEL_SM6650E"></span><span id="_CPPv2N14Qnn_SocModel_t20QNN_SOC_MODEL_SM6650E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214a7af625d650861244f95b550aa3669c4b"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_SM6650</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">74</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM6650E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t22QNN_SOC_MODEL_SXR2330PE">
+<span id="_CPPv3N14Qnn_SocModel_t22QNN_SOC_MODEL_SXR2330PE"></span><span id="_CPPv2N14Qnn_SocModel_t22QNN_SOC_MODEL_SXR2330PE"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214ae0cedc09008a0254af3aeb56fcf5bbd5"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_SXR2330P</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">75</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t22QNN_SOC_MODEL_SXR2330PE" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM6475E">
+<span id="_CPPv3N14Qnn_SocModel_t20QNN_SOC_MODEL_SM6475E"></span><span id="_CPPv2N14Qnn_SocModel_t20QNN_SOC_MODEL_SM6475E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214ae419f011b2a9bb5315dab7583cd3eafd"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_SM6475</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">76</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM6475E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t21QNN_SOC_MODEL_QCS9100E">
+<span id="_CPPv3N14Qnn_SocModel_t21QNN_SOC_MODEL_QCS9100E"></span><span id="_CPPv2N14Qnn_SocModel_t21QNN_SOC_MODEL_QCS9100E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214ab02ad178bb8b032a5604e74995bf7194"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_QCS9100</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">77</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t21QNN_SOC_MODEL_QCS9100E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t21QNN_SOC_MODEL_QCM6690E">
+<span id="_CPPv3N14Qnn_SocModel_t21QNN_SOC_MODEL_QCM6690E"></span><span id="_CPPv2N14Qnn_SocModel_t21QNN_SOC_MODEL_QCM6690E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214aa882c409b56aa5eae867ed0aeb102625"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_QCM6690</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">78</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t21QNN_SOC_MODEL_QCM6690E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t21QNN_SOC_MODEL_IPQ9574E">
+<span id="_CPPv3N14Qnn_SocModel_t21QNN_SOC_MODEL_IPQ9574E"></span><span id="_CPPv2N14Qnn_SocModel_t21QNN_SOC_MODEL_IPQ9574E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214a27c41ad0684338b521afd4ddec606d12"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_IPQ9574</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">79</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t21QNN_SOC_MODEL_IPQ9574E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t21QNN_SOC_MODEL_IPQ5404E">
+<span id="_CPPv3N14Qnn_SocModel_t21QNN_SOC_MODEL_IPQ5404E"></span><span id="_CPPv2N14Qnn_SocModel_t21QNN_SOC_MODEL_IPQ5404E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214a29780f026dd50ae4167786e5390fdbdc"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_IPQ5404</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">80</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t21QNN_SOC_MODEL_IPQ5404E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t21QNN_SOC_MODEL_IPQ5424E">
+<span id="_CPPv3N14Qnn_SocModel_t21QNN_SOC_MODEL_IPQ5424E"></span><span id="_CPPv2N14Qnn_SocModel_t21QNN_SOC_MODEL_IPQ5424E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214a63aa522aec02f3c2f86edea9ae2ba12a"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_IPQ5424</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">81</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t21QNN_SOC_MODEL_IPQ5424E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t21QNN_SOC_MODEL_QCS8300E">
+<span id="_CPPv3N14Qnn_SocModel_t21QNN_SOC_MODEL_QCS8300E"></span><span id="_CPPv2N14Qnn_SocModel_t21QNN_SOC_MODEL_QCS8300E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214a0d6c8f3d535fbad34a715b94f0f2316c"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_QCS8300</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">82</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t21QNN_SOC_MODEL_QCS8300E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t21QNN_SOC_MODEL_QCS2290E">
+<span id="_CPPv3N14Qnn_SocModel_t21QNN_SOC_MODEL_QCS2290E"></span><span id="_CPPv2N14Qnn_SocModel_t21QNN_SOC_MODEL_QCS2290E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214a332c11442dcca29c6ccdb5f65677d817"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_QCS2290</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">83</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t21QNN_SOC_MODEL_QCS2290E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SA525ME">
+<span id="_CPPv3N14Qnn_SocModel_t20QNN_SOC_MODEL_SA525ME"></span><span id="_CPPv2N14Qnn_SocModel_t20QNN_SOC_MODEL_SA525ME"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214a92b66f557a82cbb2ea081c65a433af18"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_SA525M</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">84</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SA525ME" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM8735E">
+<span id="_CPPv3N14Qnn_SocModel_t20QNN_SOC_MODEL_SM8735E"></span><span id="_CPPv2N14Qnn_SocModel_t20QNN_SOC_MODEL_SM8735E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214afd1ce923527065d03c919381f6891362"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_SM8735</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">85</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM8735E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM7750E">
+<span id="_CPPv3N14Qnn_SocModel_t20QNN_SOC_MODEL_SM7750E"></span><span id="_CPPv2N14Qnn_SocModel_t20QNN_SOC_MODEL_SM7750E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214a90a1493a3ef2bab0bcc79c01908edb74"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_SM7750</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">86</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM7750E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM8850E">
+<span id="_CPPv3N14Qnn_SocModel_t20QNN_SOC_MODEL_SM8850E"></span><span id="_CPPv2N14Qnn_SocModel_t20QNN_SOC_MODEL_SM8850E"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214acb54bbe9137eb85a6273fc228c4a42b9"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_SM8850</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">87</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t20QNN_SOC_MODEL_SM8850E" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N14Qnn_SocModel_t25QNN_SOC_MODEL_DYNAMIC_SDME">
+<span id="_CPPv3N14Qnn_SocModel_t25QNN_SOC_MODEL_DYNAMIC_SDME"></span><span id="_CPPv2N14Qnn_SocModel_t25QNN_SOC_MODEL_DYNAMIC_SDME"></span><span class="target" id="QnnTypes_8h_1aea3262897ad2f237f9e5189419ad2214a06bffc754cfe0a670640bf60acb5c6d9"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">QNN_SOC_MODEL_DYNAMIC_SDM</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">INT_MAX</span></span><a class="headerlink" href="#_CPPv4N14Qnn_SocModel_t25QNN_SOC_MODEL_DYNAMIC_SDME" title="Permalink to this definition">¶</a><br/></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
+        <a accesskey="n" class="btn btn-neutral float-right" href="enum_QnnTypes_8h_1ad739f9fcfc2f6663248e40fc5b8dbebb.html" rel="next" title="Enum Qnn_SparseLayoutType_t">Next <span aria-hidden="true" class="fa fa-arrow-circle-right"></span></a>
+        <a accesskey="p" class="btn btn-neutral float-left" href="enum_QnnTypes_8h_1a88b60f2f0c646947b68f62524c2c79bf.html" rel="prev" title="Enum Qnn_QuantizationEncodingMapping_t"><span aria-hidden="true" class="fa fa-arrow-circle-left"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        © Copyright 2020-2026, Qualcomm Technologies, Inc..
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+
+</body></html>

@@ -1,0 +1,69 @@
+{
+    "dialog" : {
+      "version" : 1,
+      "type" : "basic",
+      "context" : {
+        "version" : 1,
+        "size": 4096,
+        "n-vocab": 100096,
+        "bos-token": 1,
+        "eos-token": 2,
+        "pad-token": 3
+      },
+      "sampler" : {
+        "version" : 1,
+        "seed" : 20,
+        "temp" : 0,
+        "top-k" : 1,
+        "top-p" : 0.75,
+        "greedy" : true
+      },
+      "tokenizer" : {
+        "version" : 1,
+        "path" : "tokenizer.json"
+      },
+      "engine" : {
+        "version" : 1,
+        "n-threads" : 3,
+        "backend" : {
+          "version" : 1,
+          "type" : "QnnHtp",
+          "QnnHtp" : {
+            "version" : 1,
+            "spill-fill-bufsize" : 0,
+            "use-mmap" : true,
+            "mmap-budget" : 0,
+            "poll" : true,
+            "cpu-mask" : "0xe0",
+            "kv-dim" : 128,
+            "allow-async-init" : false
+          },
+          "extensions" : "htp_backend_ext_config.json"
+        },
+        "model" : {
+          "version" : 1,
+          "type" : "binary",
+          "binary" : {
+            "version" : 1,
+            "ctx-bins" : [
+              "weight_sharing_model_1_of_1.serialized.bin"
+            ]
+          },
+          "positional-encoding": {
+            "type" : "rope",
+            "rope-dim" : 64,
+            "rope-scaling": {
+              "rope-type":"yarnrope",
+              "factor":8.0,
+              "dim": 128,
+              "extrapolation-factor": 1.0,
+              "attn-factor": 1.0,
+              "beta-fast": 32.0,
+              "beta-slow": 1.0,
+              "original-max-position-embeddings": 4096
+            }
+          }
+        }
+      }
+    }
+  }

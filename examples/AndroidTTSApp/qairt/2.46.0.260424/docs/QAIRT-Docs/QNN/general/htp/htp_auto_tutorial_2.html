@@ -1,0 +1,556 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Execution on QNX &mdash; Qualcomm® AI Runtime (QAIRT) SDKs</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/custom_css.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Qualcomm® AI Runtime (QAIRT) SDKs
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v2.46.0.260424121129
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">QAIRT</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../general/overview.html">Overview</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">SDKs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">QNN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../SNPE/index.html">SNPE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Genie/index.html">Genie</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Delegates</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../Delegates/TfLite/index.html">TFLite Delegate</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Qualcomm® AI Runtime (QAIRT) SDKs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Execution on QNX</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="execution-on-qnx">
+<h1>Execution on QNX<a class="headerlink" href="#execution-on-qnx" title="Permalink to this heading">¶</a></h1>
+<p>Running the HTP Backend on a QNX target is largely
+similar to running the CPU and GPU backend on QNX target.</p>
+<p>In automotive application, QNN’s serialized binary context should be used for
+HTP backend execution. To generate the context run:</p>
+<div class="highlight-shell notranslate" id="context-generator"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/bin/x86_64-linux-clang/qnn-context-binary-generator<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--backend<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/lib/x86_64-linux-clang/libQnnHtp.so<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--model<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/examples/Models/InceptionV3/model_libs/x86_64-linux-clang/libInception_v3_quantized.so<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--binary_file<span class="w"> </span>Inception_v3_quantized.serialized
+</pre></div>
+</div>
+<p>This creates the context at:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">${QNN_SDK_ROOT}/examples/Models/InceptionV3/output/Inception_v3_quantized.serialized.bin</span></code></p></li>
+</ul>
+<p>You will need a FTP client like FileZilla to transfer files from host machine to the target, please make sure the file transfer type is set to binary.</p>
+<p>Now telnet to the QNX terminal (ensure the devices has Telnet service running) and create directories:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>telnet<span class="w"> </span><span class="m">192</span>.168.1.1<span class="w"> </span><span class="c1"># telnet &lt;device-ip&gt;</span>
+
+Trying<span class="w"> </span><span class="m">192</span>.168.1.1...
+Connected<span class="w"> </span>to<span class="w"> </span><span class="m">192</span>.168.1.1.
+
+QNX<span class="w"> </span>Neutrino<span class="w"> </span><span class="o">(</span>localhost<span class="o">)</span><span class="w"> </span><span class="o">(</span>ttyp6<span class="o">)</span>
+login:<span class="w"> </span>root
+Logging<span class="w"> </span><span class="k">in</span><span class="w"> </span>with<span class="w"> </span><span class="nv">home</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;/&quot;</span>.
+
+$<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/data/local/tmp/lib
+$<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/data/local/tmp/bin
+</pre></div>
+</div>
+<p>FTP the necessary libraries to device:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/lib/aarch64-qnx/libQnnHtp.so<span class="w"> </span>to<span class="w"> </span>/data/local/tmp/lib
+<span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/bin/aarch64-qnx/qnn-net-run<span class="w"> </span>to<span class="w"> </span>/data/local/tmp/bin
+<span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/bin/aarch64-qnx/qnn-profile-viewer<span class="w"> </span>to<span class="w"> </span>/data/local/tmp/bin
+
+<span class="c1"># For SA8295 and SA8540:</span>
+<span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/lib/aarch64-qnx/libQnnHtpV68Stub.so<span class="w"> </span>to<span class="w"> </span>/data/local/tmp/lib
+
+<span class="c1"># For SA8650 and SA8775:</span>
+<span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/lib/aarch64-qnx/libQnnHtpV73Stub.so<span class="w"> </span>to<span class="w"> </span>/data/local/tmp/lib
+</pre></div>
+</div>
+<p>In the QNX terminal, enable permissions for QNN binaries:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>chmod<span class="w"> </span><span class="m">777</span><span class="w"> </span>/data/local/tmp/bin/qnn-net-run
+$<span class="w"> </span>chmod<span class="w"> </span><span class="m">777</span><span class="w"> </span>/data/local/tmp/bin/qnn-profile-viewer
+</pre></div>
+</div>
+<p>Then FTP the following library to target’s CDSP directories:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># For SA8295 and SA8540:</span>
+<span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/lib/hexagon-v68/unsigned/libQnnHtpV68Skel.so<span class="w"> </span>to<span class="w"> </span>/mnt/etc/images/cdsp0/
+<span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/lib/hexagon-v68/unsigned/libQnnHtpV68Skel.so<span class="w"> </span>to<span class="w"> </span>/mnt/etc/images/cdsp1/<span class="w">  </span><span class="c1">#For CDSP1</span>
+
+<span class="c1"># For SA8650 with /dspfw and /dsplib partitions and for SA8775:</span>
+<span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/lib/hexagon-v73/unsigned/libQnnHtpV73Skel.so<span class="w"> </span>to<span class="w"> </span>/mnt/etc/images/dsp/
+
+<span class="c1"># For SA8650 without /dspfw and /dsplib partitions:</span>
+<span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/lib/hexagon-v73/unsigned/libQnnHtpV73Skel.so<span class="w"> </span>to<span class="w"> </span>/mnt/etc/images/cdsp0/
+<span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/lib/hexagon-v73/unsigned/libQnnHtpV73Skel.so<span class="w"> </span>to<span class="w"> </span>/mnt/etc/images/cdsp1/<span class="w">  </span><span class="c1">#For CDSP1</span>
+</pre></div>
+</div>
+<p>Next, for <strong>SA8540</strong>, FTP non-FuSa CDSP images to /mnt/etc/images/:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># For CDSP0:</span>
+<span class="si">${</span><span class="nv">QNX_Build_Path</span><span class="si">}</span>/qnx_ap/prebuilt_NHLOS/cdsp0_adas/non_fusa/asic_8540/cdsp0.mbn<span class="w"> </span>to<span class="w"> </span>/mnt/etc/images/
+<span class="si">${</span><span class="nv">QNX_Build_Path</span><span class="si">}</span>/qnx_ap/prebuilt_NHLOS/cdsp0_adas/non_fusa/asic_8540/cdsp0.mdt<span class="w"> </span>to<span class="w"> </span>/mnt/etc/images/
+<span class="si">${</span><span class="nv">QNX_Build_Path</span><span class="si">}</span>/qnx_ap/prebuilt_NHLOS/cdsp0_adas/non_fusa/asic_8540/shared_obj/fastrpc_shell_3<span class="w"> </span>to<span class="w"> </span>/mnt/etc/images/
+<span class="si">${</span><span class="nv">QNX_Build_Path</span><span class="si">}</span>/qnx_ap/prebuilt_NHLOS/cdsp0_adas/non_fusa/asic_8540/shared_obj/fastrpc_shell_unsigned_3<span class="w"> </span>to<span class="w"> </span>/mnt/etc/images/
+
+<span class="c1"># For CDSP1:</span>
+<span class="si">${</span><span class="nv">QNX_Build_Path</span><span class="si">}</span>/qnx_ap/prebuilt_NHLOS/cdsp1_adas/non_fusa/asic_8540/cdsp1.mbn<span class="w"> </span>to<span class="w"> </span>/mnt/etc/images/
+<span class="si">${</span><span class="nv">QNX_Build_Path</span><span class="si">}</span>/qnx_ap/prebuilt_NHLOS/cdsp1_adas/non_fusa/asic_8540/cdsp1.mdt<span class="w"> </span>to<span class="w"> </span>/mnt/etc/images/
+<span class="si">${</span><span class="nv">QNX_Build_Path</span><span class="si">}</span>/qnx_ap/prebuilt_NHLOS/cdsp1_adas/non_fusa/asic_8540/shared_obj/fastrpc_shell_4<span class="w"> </span>to<span class="w"> </span>/mnt/etc/images/
+<span class="si">${</span><span class="nv">QNX_Build_Path</span><span class="si">}</span>/qnx_ap/prebuilt_NHLOS/cdsp1_adas/non_fusa/asic_8540/shared_obj/fastrpc_shell_unsigned_4<span class="w"> </span>to<span class="w"> </span>/mnt/etc/images/
+</pre></div>
+</div>
+<p>Now FTP the input data, input lists and serialized bin to device:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/examples/Models/InceptionV3/data/cropped<span class="w"> </span>to<span class="w"> </span>/data/local/tmp/bin
+<span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/examples/Models/InceptionV3/data/target_raw_list.txt<span class="w"> </span>to<span class="w"> </span>/data/local/tmp/bin
+<span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/examples/Models/InceptionV3/output/Inception_v3_quantized.serialized.bin<span class="w"> </span>to<span class="w"> </span>/data/local/tmp/bin
+</pre></div>
+</div>
+<p>Finally, reset the target with the following command in the QNX terminal:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>reset
+</pre></div>
+</div>
+<p>Now, qnn-net-run and qnn-profile-viewer can be executed using HTP and QNX. Telnet into the QNX terminal and setup the execution environment:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>/data/local/tmp/bin
+$<span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span>/data/local/tmp/bin:<span class="nv">$PATH</span>
+$<span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">VENDOR_LIB</span><span class="o">=</span>/data/local/tmp/lib
+$<span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="nv">$VENDOR_LIB</span>:<span class="nv">$LD_LIBRARY_PATH</span>
+$<span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">ADSP_LIBRARY_PATH</span><span class="o">=</span><span class="s2">&quot;/mnt/etc/images/cdsp0;</span><span class="nv">$VENDOR_LIB</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+<p>Then we can execute qnn-net-run with the following:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>./qnn-net-run<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--backend<span class="w"> </span>libQnnHtp.so<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--input_list<span class="w"> </span>target_raw_list.txt<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--retrieve_context<span class="w"> </span>Inception_v3_quantized.serialized.bin
+</pre></div>
+</div>
+<p>We can also execute qnn-net-run with profiling:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>./qnn-net-run<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--backend<span class="w"> </span>libQnnHtp.so<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--input_list<span class="w"> </span>target_raw_list.txt<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--retrieve_context<span class="w"> </span>Inception_v3_quantized.serialized.bin<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--profiling_level<span class="w"> </span>basic
+
+<span class="c1"># OR</span>
+
+$<span class="w"> </span>./qnn-net-run<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--backend<span class="w"> </span>libQnnHtp.so<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--input_list<span class="w"> </span>target_raw_list.txt<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--retrieve_context<span class="w"> </span>Inception_v3_quantized.serialized.bin<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--profiling_level<span class="w"> </span>detailed
+</pre></div>
+</div>
+<p>Profiling data can be viewed using qnn-profile-viewer by running the following command:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>./qnn-profile-viewer<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--input_log<span class="w"> </span>output/qnn-profiling-data.log
+</pre></div>
+</div>
+<p>Outputs from the run will be located at the default ./output directory. Exit the device and view the results:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">exit</span>
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/examples/Models/InceptionV3
+$<span class="w"> </span>mkdir<span class="w"> </span>output_qnx
+</pre></div>
+</div>
+<p>Finally, FTP /data/local/tmp/bin/output to ${QNN_SDK_ROOT}/examples/Models/InceptionV3/output_qnx and run the following:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>python3<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/examples/Models/InceptionV3/scripts/show_inceptionv3_classifications.py<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-i<span class="w"> </span>data/cropped/raw_list.txt<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-o<span class="w"> </span>output_qnx/<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-l<span class="w"> </span>data/imagenet_slim_labels.txt
+</pre></div>
+</div>
+</div>
+<div class="section" id="execution-on-la-android">
+<h1>Execution on LA (Android)<a class="headerlink" href="#execution-on-la-android" title="Permalink to this heading">¶</a></h1>
+<p>In automotive application, QNN’s serialized binary context should be used for
+HTP backend execution. To generate the context run:</p>
+<div class="highlight-shell notranslate" id="id1"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/bin/x86_64-linux-clang/qnn-context-binary-generator<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--backend<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/lib/x86_64-linux-clang/libQnnHtp.so<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--model<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/examples/Models/InceptionV3/model_libs/x86_64-linux-clang/libInception_v3_quantized.so<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--binary_file<span class="w"> </span>Inception_v3_quantized.serialized
+</pre></div>
+</div>
+<p>This creates the context at:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">${QNN_SDK_ROOT}/examples/Models/InceptionV3/output/Inception_v3_quantized.serialized.bin</span></code></p></li>
+</ul>
+<p>Now execute <em>adb root &amp;&amp; adb remount</em> for your target, <em>adb shell</em> to the QNN terminal and create directories:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/data/local/tmp/lib
+$<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/data/local/tmp/bin
+</pre></div>
+</div>
+<p>Push the necessary libraries to device:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>adb<span class="w"> </span>push<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/lib/aarch64-android/libQnnHtpV68Stub.so<span class="w"> </span>/data/local/tmp/lib
+$<span class="w"> </span>adb<span class="w"> </span>push<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/lib/aarch64-android/libQnnHtp.so<span class="w"> </span>/data/local/tmp/lib
+$<span class="w"> </span>adb<span class="w"> </span>push<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/bin/aarch64-android/qnn-net-run<span class="w"> </span>/data/local/tmp/bin
+$<span class="w"> </span>adb<span class="w"> </span>push<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/bin/aarch64-android/qnn-profile-viewer<span class="w"> </span>/data/local/tmp/bin
+</pre></div>
+</div>
+<p>In the LA GVM terminal, enable permissions for QNN binaries:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>chmod<span class="w"> </span><span class="m">777</span><span class="w"> </span>/data/local/tmp/bin/qnn-net-run
+$<span class="w"> </span>chmod<span class="w"> </span><span class="m">777</span><span class="w"> </span>/data/local/tmp/bin/qnn-profile-viewer
+</pre></div>
+</div>
+<p>Push the HTP backend binary to the target:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>adb<span class="w"> </span>push<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/lib/hexagon-v68/unsigned/libQnnHtpV68Skel.so<span class="w"> </span>/data/local/tmp/lib
+</pre></div>
+</div>
+<p>Next, connect to QNX via FTP and pull the following files from the /mnt/etc/images/cdsp0 directory:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>libc++.so.1
+libc++abi.so.1
+</pre></div>
+</div>
+<p>Then, transfer these files to the /data/local/tmp/lib directory on the target device:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>adb<span class="w"> </span>push<span class="w"> </span>libc++.so.1<span class="w"> </span>/data/local/tmp/lib
+$<span class="w"> </span>adb<span class="w"> </span>push<span class="w"> </span>libc++abi.so.1<span class="w"> </span>/data/local/tmp/lib
+</pre></div>
+</div>
+<p>Now push the input data, input lists and serialized bin to device:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>adb<span class="w"> </span>push<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/examples/Models/InceptionV3/data/cropped<span class="w"> </span>/data/local/tmp/bin
+$<span class="w"> </span>adb<span class="w"> </span>push<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/examples/Models/InceptionV3/data/target_raw_list.txt<span class="w"> </span>/data/local/tmp/bin
+$<span class="w"> </span>adb<span class="w"> </span>push<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/examples/Models/InceptionV3/output/Inception_v3_quantized.serialized.bin<span class="w"> </span>/data/local/tmp/bin
+</pre></div>
+</div>
+<p>Finally, reset the target with the following command in the LA GVM terminal:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>reset
+</pre></div>
+</div>
+<p>Now qnn-net-run and qnn-profile-viewer can be executed using HTP and LA GVM. Then, <em>adb shell</em> into the LA GVM terminal and setup the execution environment:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>/data/local/tmp/bin
+$<span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span>/data/local/tmp/bin:<span class="nv">$PATH</span>
+$<span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">VENDOR_LIB</span><span class="o">=</span>/data/local/tmp/lib
+$<span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="nv">$VENDOR_LIB</span>:<span class="nv">$LD_LIBRARY_PATH</span>
+$<span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">ADSP_LIBRARY_PATH</span><span class="o">=</span><span class="s2">&quot;/vendor/lib/rfsa/adsp;</span><span class="nv">$VENDOR_LIB</span><span class="s2">;&quot;</span>
+</pre></div>
+</div>
+<p>Then we can execute qnn-net-run with the following:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>./qnn-net-run<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--backend<span class="w"> </span>libQnnHtp.so<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--input_list<span class="w"> </span>target_raw_list.txt<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--retrieve_context<span class="w"> </span>Inception_v3_quantized.serialized.bin
+</pre></div>
+</div>
+<p>We can also execute qnn-net-run with profiling:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>./qnn-net-run<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--backend<span class="w"> </span>libQnnHtp.so<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--input_list<span class="w"> </span>target_raw_list.txt<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--retrieve_context<span class="w"> </span>Inception_v3_quantized.serialized.bin<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--profiling_level<span class="w"> </span>basic
+
+<span class="c1"># OR</span>
+
+$<span class="w"> </span>./qnn-net-run<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--backend<span class="w"> </span>libQnnHtp.so<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--input_list<span class="w"> </span>target_raw_list.txt<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--retrieve_context<span class="w"> </span>Inception_v3_quantized.serialized.bin<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--profiling_level<span class="w"> </span>detailed
+</pre></div>
+</div>
+<p>Profiling data can be viewed using qnn-profile-viewer by running the following command:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>./qnn-profile-viewer<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--input_log<span class="w"> </span>output/qnn-profiling-data.log
+</pre></div>
+</div>
+<p>Outputs from the run will be located at the default ./output directory. Exit the device and view the results:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">exit</span>
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/examples/Models/InceptionV3
+$<span class="w"> </span>adb<span class="w"> </span>pull<span class="w"> </span>/data/local/tmp/bin/output<span class="w"> </span>output_android
+$<span class="w"> </span>python3<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/examples/Models/InceptionV3/scripts/show_inceptionv3_classifications.py<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-i<span class="w"> </span>data/cropped/raw_list.txt<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-o<span class="w"> </span>output_android/<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-l<span class="w"> </span>data/imagenet_slim_labels.txt
+</pre></div>
+</div>
+</div>
+<div class="section" id="execution-on-lv-gvm-rich-os">
+<h1>Execution on LV GVM (Rich OS)<a class="headerlink" href="#execution-on-lv-gvm-rich-os" title="Permalink to this heading">¶</a></h1>
+<p>In automotive application, QNN’s serialized binary context should be used for
+HTP backend execution. To generate the context run:</p>
+<div class="highlight-shell notranslate" id="id2"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/bin/x86_64-linux-clang/qnn-context-binary-generator<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--backend<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/lib/x86_64-linux-clang/libQnnHtp.so<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--model<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/examples/Models/InceptionV3/model_libs/x86_64-linux-clang/libInception_v3_quantized.so<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--binary_file<span class="w"> </span>Inception_v3_quantized.serialized
+</pre></div>
+</div>
+<p>This creates the context at:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">${QNN_SDK_ROOT}/examples/Models/InceptionV3/output/Inception_v3_quantized.serialized.bin</span></code></p></li>
+</ul>
+<p>Now execute <em>adb root &amp;&amp; adb remount</em> for your target, <em>adb shell</em> to the QNN terminal and create directories:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/data/local/tmp/lib
+$<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/data/local/tmp/bin
+</pre></div>
+</div>
+<p>Push the necessary libraries to device:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>adb<span class="w"> </span>push<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/lib/aarch64-linux-oe-gcc9.3/libQnnHtpV68Stub.so<span class="w"> </span>/data/local/tmp/lib
+$<span class="w"> </span>adb<span class="w"> </span>push<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/lib/aarch64-linux-oe-gcc9.3/libQnnHtp.so<span class="w"> </span>/data/local/tmp/lib
+$<span class="w"> </span>adb<span class="w"> </span>push<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/bin/aarch64-linux-oe-gcc9.3/qnn-net-run<span class="w"> </span>/data/local/tmp/bin
+$<span class="w"> </span>adb<span class="w"> </span>push<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/bin/aarch64-linux-oe-gcc9.3/qnn-profile-viewer<span class="w"> </span>/data/local/tmp/bin
+</pre></div>
+</div>
+<p>In the LV GVM terminal, enable permissions for QNN binaries:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>chmod<span class="w"> </span><span class="m">777</span><span class="w"> </span>/data/local/tmp/bin/qnn-net-run
+$<span class="w"> </span>chmod<span class="w"> </span><span class="m">777</span><span class="w"> </span>/data/local/tmp/bin/qnn-profile-viewer
+</pre></div>
+</div>
+<p>Push the HTP backend library to the target:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>adb<span class="w"> </span>push<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/lib/hexagon-v68/unsigned/libQnnHtpV68Skel.so<span class="w"> </span>/data/local/tmp/lib
+</pre></div>
+</div>
+<p>Next, connect to QNX via FTP and pull the following files from the /mnt/etc/images/cdsp0 directory:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>libc++.so.1
+libc++abi.so.1
+</pre></div>
+</div>
+<p>Then, transfer these files to the /data/local/tmp/lib directory on the target device:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>adb<span class="w"> </span>push<span class="w"> </span>libc++.so.1<span class="w"> </span>/data/local/tmp/lib
+$<span class="w"> </span>adb<span class="w"> </span>push<span class="w"> </span>libc++abi.so.1<span class="w"> </span>/data/local/tmp/lib
+</pre></div>
+</div>
+<p>Now push the input data, input lists and serialized bin to device:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>adb<span class="w"> </span>push<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/examples/Models/InceptionV3/data/cropped<span class="w"> </span>/data/local/tmp/bin
+$<span class="w"> </span>adb<span class="w"> </span>push<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/examples/Models/InceptionV3/data/target_raw_list.txt<span class="w"> </span>/data/local/tmp/bin
+$<span class="w"> </span>adb<span class="w"> </span>push<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/examples/Models/InceptionV3/output/Inception_v3_quantized.serialized.bin<span class="w"> </span>/data/local/tmp/bin
+</pre></div>
+</div>
+<p>Finally, reset the target with the following command in the LV GVM terminal:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>reset
+</pre></div>
+</div>
+<p>Now qnn-net-run and qnn-profile-viewer can be executed using HTP and LV GVM. Then, <em>adb shell</em> into the LV GVM terminal and setup the execution environment:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>/data/local/tmp/bin
+$<span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span>/data/local/tmp/bin:<span class="nv">$PATH</span>
+$<span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">VENDOR_LIB</span><span class="o">=</span>/data/local/tmp/lib
+$<span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="nv">$VENDOR_LIB</span>:<span class="nv">$LD_LIBRARY_PATH</span>
+$<span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">ADSP_LIBRARY_PATH</span><span class="o">=</span><span class="s2">&quot;/usr/lib/rfsa/adsp;</span><span class="nv">$VENDOR_LIB</span><span class="s2">;&quot;</span>
+</pre></div>
+</div>
+<p>Then we can execute qnn-net-run with the following:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>./qnn-net-run<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--backend<span class="w"> </span>libQnnHtp.so<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--input_list<span class="w"> </span>target_raw_list.txt<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--retrieve_context<span class="w"> </span>Inception_v3_quantized.serialized.bin
+</pre></div>
+</div>
+<p>We can also execute qnn-net-run with profiling:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>./qnn-net-run<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--backend<span class="w"> </span>libQnnHtp.so<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--input_list<span class="w"> </span>target_raw_list.txt<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--retrieve_context<span class="w"> </span>Inception_v3_quantized.serialized.bin<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--profiling_level<span class="w"> </span>basic
+
+<span class="c1"># OR</span>
+
+$<span class="w"> </span>./qnn-net-run<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--backend<span class="w"> </span>libQnnHtp.so<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--input_list<span class="w"> </span>target_raw_list.txt<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--retrieve_context<span class="w"> </span>Inception_v3_quantized.serialized.bin<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--profiling_level<span class="w"> </span>detailed
+</pre></div>
+</div>
+<p>Profiling data can be viewed using qnn-profile-viewer by running the following command:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>./qnn-profile-viewer<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--input_log<span class="w"> </span>output/qnn-profiling-data.log
+</pre></div>
+</div>
+<p>Outputs from the run will be located at the default ./output directory. Exit the device and view the results:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">exit</span>
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/examples/Models/InceptionV3
+$<span class="w"> </span>adb<span class="w"> </span>pull<span class="w"> </span>/data/local/tmp/bin/output<span class="w"> </span>output_lv
+$<span class="w"> </span>python3<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/examples/Models/InceptionV3/scripts/show_inceptionv3_classifications.py<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-i<span class="w"> </span>data/cropped/raw_list.txt<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-o<span class="w"> </span>output_lv/<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-l<span class="w"> </span>data/imagenet_slim_labels.txt
+</pre></div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020-2025, Qualcomm Technologies, Inc..
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

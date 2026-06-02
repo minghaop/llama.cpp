@@ -1,0 +1,39 @@
+#=============================================================================
+#
+#  Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
+#  All Rights Reserved.
+#  Confidential and Proprietary - Qualcomm Technologies, Inc.
+#
+#=============================================================================
+
+# QNX compiler settings
+QNX_HOST ?= gcc-qnx800-12.2-2024-x86_64/root/host
+QNX_TARGET ?= gcc-qnx800-12.2-2024-x86_64/root/target
+
+CC := qcc
+CXX := qcc
+AR := ntoaarch64-ar
+
+.PHONY: all qnx clean clean_qnx
+.DEFAULT: qnx
+
+all: qnx
+qnx:
+	@QNX_HOST=$(QNX_HOST) QNX_TARGET=$(QNX_TARGET) CC=$(CC) CXX=$(CXX) $(MAKE) -f make/Makefile.aarch64-qnx || (echo "-------------------- Failed to build genie-t2t-run for qnx --------------------"; exit 1; )
+	@echo "-------------------- genie-t2t-run build for qnx succeeded -------------------- "
+
+clean: clean_qnx
+
+clean_qnx:
+	@$(MAKE) -f make/Makefile.aarch64-qnx clean
+
+rename_target_dirs = \
+				@if [ -d ./bin/aarch64-qnx ]; then rm -rf ./bin/aarch64-qnx; fi; \
+				mkdir -p bin/aarch64-qnx \
+				&& mv ./libs/arm64-v8a/genie-t2t-run bin/aarch64-qnx \
+				&& rm -rf ./libs \
+
+check_qnx:
+ifeq ($(QNX_TARGET),)
+	$(error ERROR: QNX_TARGET not set, skipping compilation for QNX platform(s).)
+endif

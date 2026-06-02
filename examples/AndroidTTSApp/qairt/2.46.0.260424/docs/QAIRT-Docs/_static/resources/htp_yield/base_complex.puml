@@ -1,0 +1,34 @@
+@startuml
+concise    "Graph 1" as A
+concise    "App" as B
+concise    "Graph 2 " as C
+
+@0
+A is {hidden}
+B is running #adf7ff
+C is {hidden}
+
+@10
+C is waiting
+
+@20
+A is waiting
+
+@30
+A is running #ef7b6c
+B is paused
+
+@60
+A is {hidden}
+B is running #adf7ff
+
+@90
+B is {hidden}
+C is running #f9d677
+
+@120
+C is {hidden}
+
+' EVENTS
+A@20 -> B@30 : pre-empt
+@enduml

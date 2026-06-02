@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en"><head>
+  <meta charset="utf-8"/>
+  
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  
+  <title>Program Listing for File GenieNode.h — Qualcomm® Gen AI Inference Extensions</title>
+  
+
+  
+  <link href="../../_static/css/theme.css" rel="stylesheet" type="text/css"/>
+  <link href="../../_static/pygments.css" rel="stylesheet" type="text/css"/>
+  <link href="../../_static/pygments.css" rel="stylesheet" type="text/css"/>
+  <link href="../../_static/css/theme.css" rel="stylesheet" type="text/css"/>
+  <link href="../../_static/custom_css.css" rel="stylesheet" type="text/css"/>
+  <link href="../../_static/collapsible-lists/css/tree_view.css" rel="stylesheet" type="text/css"/>
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js" type="text/javascript"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+        <script src="../../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    
+    <script src="../../_static/js/theme.js" type="text/javascript"></script>
+
+    
+    <link href="../../genindex.html" rel="index" title="Index"/>
+    <link href="../../search.html" rel="search" title="Search"/> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav class="wy-nav-side" data-toggle="wy-nav-shift">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a class="icon icon-home" href="../../index.html"> Qualcomm® AI Runtime (QAIRT) SDKs
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v2.46.0.260424121129
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form action="../../search.html" class="wy-form" id="rtd-search-form" method="get">
+    <input name="q" placeholder="Search docs" type="text"/>
+    <input name="check_keywords" type="hidden" value="yes"/>
+    <input name="area" type="hidden" value="default"/>
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">QAIRT</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../general/overview.html">Overview</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">SDKs</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../QNN/index.html">QNN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../SNPE/index.html">SNPE</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Genie</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../general/introduction/introduction.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../general/tutorials/tutorials.html">Tutorials</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="../general/library/library.html">Library</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api_root.html">Genie C API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../general/library/pipeline/pipeline.html">GeniePipeline</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../general/library/node/node.html">GenieNode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../general/library/dialog/dialog.html">GenieDialog</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../general/library/embedding/embedding.html">GenieEmbedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../general/library/profile/profile.html">GenieProfile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../general/library/sampler/sampler.html">GenieSampler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../general/library/engine/engine.html">GenieEngine</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../general/library/tokenizer/tokenizer.html">GenieTokenizer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../general/library/accuracy/accuracy.html">GenieAccuracy</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../general/tools/tools.html">Tools</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Delegates</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../Delegates/TfLite/index.html">TFLite Delegate</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+
+      
+      <nav aria-label="top navigation" class="wy-nav-top">
+        
+          <i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+          <a href="../../index.html">Qualcomm® AI Runtime (QAIRT) SDKs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div aria-label="breadcrumbs navigation" role="navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a class="icon icon-home" href="../../index.html"></a> »</li>
+        
+          <li><a href="../../index.html">⌂</a> »</li>
+        
+      <li>Program Listing for File GenieNode.h</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="program-listing-for-file-genienode-h">
+<span id="program-listing-file-include-genie-genienode-h"></span><h1>Program Listing for File GenieNode.h<a class="headerlink" href="#program-listing-for-file-genienode-h" title="Permalink to this heading">¶</a></h1>
+<p>↰ <a class="reference internal" href="file_include_Genie_GenieNode.h.html#file-include-genie-genienode-h"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">include/Genie/GenieNode.h</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">//=============================================================================</span>
+<span class="c1">//</span>
+<span class="c1">//  Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.</span>
+<span class="c1">//  All Rights Reserved.</span>
+<span class="c1">//  Confidential and Proprietary - Qualcomm Technologies, Inc.</span>
+<span class="c1">//</span>
+<span class="c1">//=============================================================================</span>
+<span class="cm">/**</span>
+<span class="cm"> * @brief An API component for Genie composable pipeline IO.</span>
+<span class="cm"> */</span>
+
+<span class="cp">#ifndef GENIE_NODE_H</span>
+<span class="cp">#define GENIE_NODE_H</span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"GenieCommon.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"GenieDlc.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"GenieEngine.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"GenieLog.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"GenieProfile.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"GenieSampler.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"GenieTokenizer.h"</span>
+
+<span class="cp">#ifdef __cplusplus</span>
+<span class="k">extern</span><span class="w"> </span><span class="s">"C"</span><span class="w"> </span><span class="p">{</span>
+<span class="cp">#endif</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * @brief A handle for node instances.</span>
+<span class="cm"> */</span>
+<span class="k">typedef</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">_GenieNode_Handle_t</span><span class="o">*</span><span class="w"> </span><span class="n">GenieNode_Handle_t</span><span class="p">;</span>
+<span class="cm">/**</span>
+<span class="cm"> * @brief A handle for node config instances.</span>
+<span class="cm"> */</span>
+<span class="k">typedef</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">_GenieNodeConfig_Handle_t</span><span class="o">*</span><span class="w"> </span><span class="n">GenieNodeConfig_Handle_t</span><span class="p">;</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * @brief An enum which defines the node sentence code.</span>
+<span class="cm"> */</span>
+<span class="k">typedef</span><span class="w"> </span><span class="k">enum</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">/// The string is the entire query/response.</span>
+<span class="w">  </span><span class="n">GENIE_NODE_SENTENCE_COMPLETE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">  </span><span class="c1">/// The string is the beginning of the query/response.</span>
+<span class="w">  </span><span class="n">GENIE_NODE_SENTENCE_BEGIN</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">  </span><span class="c1">/// The string is a part of the query/response and not the beginning or end.</span>
+<span class="w">  </span><span class="n">GENIE_NODE_SENTENCE_CONTINUE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span>
+<span class="w">  </span><span class="c1">/// The string is the end of the query/response.</span>
+<span class="w">  </span><span class="n">GENIE_NODE_SENTENCE_END</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span>
+<span class="w">  </span><span class="c1">/// The query has been aborted.</span>
+<span class="w">  </span><span class="n">GENIE_NODE_SENTENCE_ABORT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span>
+<span class="w">  </span><span class="c1">/// Rewind the KV cache as per prefix query match before processing the query.</span>
+<span class="w">  </span><span class="n">GENIE_NODE_SENTENCE_REWIND</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span>
+<span class="p">}</span><span class="w"> </span><span class="n">GenieNode_TextOutput_SentenceCode_t</span><span class="p">;</span>
+
+<span class="k">typedef</span><span class="w"> </span><span class="k">enum</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">GENIE_NODE_TEXT_GENERATOR_TEXT_INPUT</span><span class="w">            </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">  </span><span class="n">GENIE_NODE_TEXT_GENERATOR_EMBEDDING_INPUT</span><span class="w">       </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">  </span><span class="n">GENIE_NODE_TEXT_GENERATOR_TEXT_OUTPUT</span><span class="w">           </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span>
+<span class="w">  </span><span class="n">GENIE_NODE_TEXT_ENCODER_TEXT_INPUT</span><span class="w">              </span><span class="o">=</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span>
+<span class="w">  </span><span class="n">GENIE_NODE_TEXT_ENCODER_EMBEDDING_OUTPUT</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="mi">101</span><span class="p">,</span>
+<span class="w">  </span><span class="n">GENIE_NODE_IMAGE_ENCODER_IMAGE_INPUT</span><span class="w">            </span><span class="o">=</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span>
+<span class="w">  </span><span class="n">GENIE_NODE_IMAGE_ENCODER_EMBEDDING_OUTPUT</span><span class="w">       </span><span class="o">=</span><span class="w"> </span><span class="mi">201</span><span class="p">,</span>
+<span class="w">  </span><span class="n">GENIE_NODE_IMAGE_ENCODER_IMAGE_POS_SIN</span><span class="w">          </span><span class="o">=</span><span class="w"> </span><span class="mi">202</span><span class="p">,</span>
+<span class="w">  </span><span class="n">GENIE_NODE_IMAGE_ENCODER_IMAGE_POS_COS</span><span class="w">          </span><span class="o">=</span><span class="w"> </span><span class="mi">203</span><span class="p">,</span>
+<span class="w">  </span><span class="n">GENIE_NODE_IMAGE_ENCODER_IMAGE_FULL_ATTN_MASK</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="mi">204</span><span class="p">,</span>
+<span class="w">  </span><span class="n">GENIE_NODE_IMAGE_ENCODER_IMAGE_WINDOW_ATTN_MASK</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">205</span><span class="p">,</span>
+
+<span class="w">  </span><span class="c1">// model specific</span>
+<span class="w">  </span><span class="n">GENIE_NODE_IMAGE_ENCODER_PRETILE_EMBEDDING_INPUT</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="mi">206</span><span class="p">,</span><span class="w">  </span><span class="c1">// Llama3.2-11B</span>
+<span class="w">  </span><span class="n">GENIE_NODE_IMAGE_ENCODER_POSTTILE_EMBEDDING_INPUT</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="mi">207</span><span class="p">,</span><span class="w">  </span><span class="c1">// Llama3.2-11B</span>
+<span class="w">  </span><span class="n">GENIE_NODE_IMAGE_ENCODER_GATED_POS_EMBEDDING_INPUT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">208</span><span class="p">,</span><span class="w">  </span><span class="c1">// Llama3.2-11B</span>
+
+<span class="w">  </span><span class="c1">// encoder decoder</span>
+<span class="w">  </span><span class="n">GENIE_NODE_DIFFUSER_TEXT_EMBEDDING_INPUT</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="mi">300</span><span class="p">,</span>
+<span class="w">  </span><span class="n">GENIE_NODE_DIFFUSER_IMAGE_EMBEDDING_OUTPUT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">301</span><span class="p">,</span>
+<span class="w">  </span><span class="n">GENIE_NODE_DIFFUSER_NOISE_INPUT</span><span class="w">            </span><span class="o">=</span><span class="w"> </span><span class="mi">302</span><span class="p">,</span>
+<span class="w">  </span><span class="n">GENIE_NODE_DIFFUSER_TIMESTEP_INPUT</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="mi">303</span><span class="p">,</span>
+
+<span class="w">  </span><span class="n">GENIE_NODE_LM_EXECUTOR_TOKEN_INPUT</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="mi">400</span><span class="p">,</span>
+<span class="w">  </span><span class="n">GENIE_NODE_LM_EXECUTOR_EMBEDDING_INPUT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">401</span><span class="p">,</span>
+<span class="w">  </span><span class="n">GENIE_NODE_LM_EXECUTOR_LOGIT_OUTPUT</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="mi">450</span><span class="p">,</span>
+
+<span class="w">  </span><span class="c1">// Unspecified I/O name. Connects any identically-named tensors between nodes.</span>
+<span class="w">  </span><span class="n">GENIE_NODE_WILDCARD</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1000</span>
+<span class="p">}</span><span class="w"> </span><span class="n">GenieNode_IOName_t</span><span class="p">;</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * @brief A client-defined callback function to handle text-generator responses.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[in] response The null-terminated query response.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[in] sentenceCode The sentence code related to the responseStr.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[in] userData The userData field provided to GeniePipeline_execute.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @return None</span>
+<span class="cm"> *</span>
+<span class="cm"> */</span>
+<span class="k">typedef</span><span class="w"> </span><span class="n">Genie_Status_t</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">GenieNode_TextOutput_Callback_t</span><span class="p">)(</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">response</span><span class="p">,</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">GenieNode_TextOutput_SentenceCode_t</span><span class="w"> </span><span class="n">sentenceCode</span><span class="p">,</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">userData</span><span class="p">);</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * @brief A client-defined callback function to get embedding buffer for node encoders.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[in] dimensions Dimensions of the embedding buffer.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[in] rank Rank of the embedding buffer dimensions.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[in] embeddingBufferSize Embedding buffer size in bytes.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[in] embeddingBuffer Embedding buffer capturing encoder output.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[in] userData The userData field provided to GeniePipeline_execute.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @return None</span>
+<span class="cm"> *</span>
+<span class="cm"> */</span>
+<span class="k">typedef</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">GenieNode_EmbeddingOutputCallback_t</span><span class="p">)(</span><span class="k">const</span><span class="w"> </span><span class="kt">uint32_t</span><span class="o">*</span><span class="w"> </span><span class="n">dimensions</span><span class="p">,</span>
+<span class="w">                                                    </span><span class="k">const</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">rank</span><span class="p">,</span>
+<span class="w">                                                    </span><span class="k">const</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">embeddingBufferSize</span><span class="p">,</span>
+<span class="w">                                                    </span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">embeddingBuffer</span><span class="p">,</span>
+<span class="w">                                                    </span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">userData</span><span class="p">);</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * @brief A client-defined callback function to get model produced outputs.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[in] data Dimensions of the embedding buffer.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[in] dataSize Size of the buffer in bytes.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[in] outputConfig Format of output data in JSON.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[in] userData The userData field provided to GenieNode_getData.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @return None</span>
+<span class="cm"> *</span>
+<span class="cm"> */</span>
+<span class="k">typedef</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">GenieNode_IOCallback_t</span><span class="p">)(</span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">data</span><span class="p">,</span>
+<span class="w">                                       </span><span class="k">const</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">dataSize</span><span class="p">,</span>
+<span class="w">                                       </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">outputConfig</span><span class="p">,</span>
+<span class="w">                                       </span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">userData</span><span class="p">);</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * @brief A function to create a node configuration from a JSON string.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[in] str A configuration string. Must not be NULL.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[out] configHandle A handle to the created config. Must not be NULL.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @return Status code:</span>
+<span class="cm"> *         - GENIE_STATUS_SUCCESS: API call was successful.</span>
+<span class="cm"> *         - GENIE_STATUS_ERROR_INVALID_ARGUMENT: At least one argument is invalid.</span>
+<span class="cm"> *         - GENIE_STATUS_ERROR_MEM_ALLOC: Memory allocation failure.</span>
+<span class="cm"> *         - GENIE_STATUS_ERROR_INVALID_CONFIG: At least one configuration option is invalid.</span>
+<span class="cm"> */</span>
+<span class="n">GENIE_API</span>
+<span class="n">Genie_Status_t</span><span class="w"> </span><span class="n">GenieNodeConfig_createFromJson</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">str</span><span class="p">,</span>
+<span class="w">                                              </span><span class="n">GenieNodeConfig_Handle_t</span><span class="o">*</span><span class="w"> </span><span class="n">configHandle</span><span class="p">);</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * @brief A function to create a node configuration from a DLC.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[in] dlcHandle The DLC handle.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[in] useCaseName The name of the genie use case supported by the DLC. Must not be NULL.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[in] configStr The configuration string to overwrite the config corresponding to</span>
+<span class="cm"> * useCaseName.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[out] configHandle A handle to the created config. Must not be NULL.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @return Status code:</span>
+<span class="cm"> *         - GENIE_STATUS_SUCCESS: API call was successful.</span>
+<span class="cm"> *         - GENIE_STATUS_ERROR_INVALID_ARGUMENT: At least one argument is invalid.</span>
+<span class="cm"> *         - GENIE_STATUS_ERROR_MEM_ALLOC: Memory allocation failure.</span>
+<span class="cm"> *         - GENIE_STATUS_ERROR_INVALID_CONFIG: At least one configuration option is invalid.</span>
+<span class="cm"> */</span>
+<span class="n">GENIE_API</span>
+<span class="n">Genie_Status_t</span><span class="w"> </span><span class="n">GenieNodeConfig_createFromDlc</span><span class="p">(</span><span class="n">GenieDlc_Handle_t</span><span class="w"> </span><span class="n">dlcHandle</span><span class="p">,</span>
+<span class="w">                                             </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">useCaseName</span><span class="p">,</span>
+<span class="w">                                             </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">configStr</span><span class="p">,</span>
+<span class="w">                                             </span><span class="n">GenieNodeConfig_Handle_t</span><span class="o">*</span><span class="w"> </span><span class="n">configHandle</span><span class="p">);</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * @brief A function to bind a profile handle to node config. The profile handle</span>
+<span class="cm"> *        will also be bound to any node handle created from this node config handle.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[in] configHandle A handle to a valid config.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[in] profileHandle The profile handle on which metrics are populated and can</span>
+<span class="cm"> *                          be queried. Cannot be NULL.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @return Status code:</span>
+<span class="cm"> *         - GENIE_STATUS_SUCCESS: API call was successful.</span>
+<span class="cm"> *         - GENIE_STATUS_ERROR_INVALID_HANDLE: Config handle or profile handle is invalid.</span>
+<span class="cm"> */</span>
+<span class="n">GENIE_API</span>
+<span class="n">Genie_Status_t</span><span class="w"> </span><span class="n">GenieNodeConfig_bindProfiler</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">GenieNodeConfig_Handle_t</span><span class="w"> </span><span class="n">configHandle</span><span class="p">,</span>
+<span class="w">                                            </span><span class="k">const</span><span class="w"> </span><span class="n">GenieProfile_Handle_t</span><span class="w"> </span><span class="n">profileHandle</span><span class="p">);</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * @brief A function to bind a log handle to node config. The log handle</span>
+<span class="cm"> *        will also be bound to any node handle created from this node config handle.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[in] configHandle A handle to a valid config.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[in] logHandle The log handle using which logs are recorded and</span>
+<span class="cm"> *                      outputted. Cannot be NULL.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @return Status code:</span>
+<span class="cm"> *         - GENIE_STATUS_SUCCESS: API call was successful.</span>
+<span class="cm"> *         - GENIE_STATUS_ERROR_INVALID_HANDLE: Config handle or log handle is invalid.</span>
+<span class="cm"> */</span>
+<span class="n">GENIE_API</span>
+<span class="n">Genie_Status_t</span><span class="w"> </span><span class="n">GenieNodeConfig_bindLogger</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">GenieNodeConfig_Handle_t</span><span class="w"> </span><span class="n">configHandle</span><span class="p">,</span>
+<span class="w">                                          </span><span class="k">const</span><span class="w"> </span><span class="n">GenieLog_Handle_t</span><span class="w"> </span><span class="n">logHandle</span><span class="p">);</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * @brief A function to free a node config.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[in] configHandle A config handle.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @return Status code:</span>
+<span class="cm"> *         - GENIE_STATUS_SUCCESS: API call was successful.</span>
+<span class="cm"> *         - GENIE_STATUS_ERROR_INVALID_HANDLE: Node handle is invalid.</span>
+<span class="cm"> *         - GENIE_STATUS_ERROR_MEM_ALLOC: Memory (de)allocation failure.</span>
+<span class="cm"> */</span>
+<span class="n">GENIE_API</span>
+<span class="n">Genie_Status_t</span><span class="w"> </span><span class="n">GenieNodeConfig_free</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">GenieNodeConfig_Handle_t</span><span class="w"> </span><span class="n">configHandle</span><span class="p">);</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * @brief A function to create a node. The node can be configured using a</span>
+<span class="cm"> *        builder pattern.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[in] nodeConfigHandle A handle to a valid config. Must not be NULL.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[out] nodeHandle A handle to the created node. Must not be NULL.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @return Status code:</span>
+<span class="cm"> *         - GENIE_STATUS_SUCCESS: API call was successful.</span>
+<span class="cm"> *         - GENIE_STATUS_ERROR_INVALID_HANDLE: Config handle is invalid.</span>
+<span class="cm"> *         - GENIE_STATUS_ERROR_INVALID_ARGUMENT: At least one argument is invalid.</span>
+<span class="cm"> *         - GENIE_STATUS_ERROR_MEM_ALLOC: Memory allocation failure.</span>
+<span class="cm"> */</span>
+<span class="n">GENIE_API</span>
+<span class="n">Genie_Status_t</span><span class="w"> </span><span class="n">GenieNode_create</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">GenieNodeConfig_Handle_t</span><span class="w"> </span><span class="n">nodeConfigHandle</span><span class="p">,</span>
+<span class="w">                                </span><span class="n">GenieNode_Handle_t</span><span class="o">*</span><span class="w"> </span><span class="n">nodeHandle</span><span class="p">);</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * @brief A function to setCallback for text generator node output.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[in] nodeHandle A node handle.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[in] nodeIOName Node IO name.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[in] callback A user callback function for text output.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @return Status code:</span>
+<span class="cm"> *         - GENIE_STATUS_SUCCESS: API call was successful.</span>
+<span class="cm"> *         - GENIE_STATUS_ERROR_INVALID_HANDLE: Node handle is invalid.</span>
+<span class="cm"> *         - GENIE_STATUS_ERROR_MEM_ALLOC: Memory (de)allocation failure.</span>
+<span class="cm"> */</span>
+<span class="n">GENIE_API</span>
+<span class="n">Genie_Status_t</span><span class="w"> </span><span class="n">GenieNode_setTextCallback</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">GenieNode_Handle_t</span><span class="w"> </span><span class="n">nodeHandle</span><span class="p">,</span>
+<span class="w">                                         </span><span class="k">const</span><span class="w"> </span><span class="n">GenieNode_IOName_t</span><span class="w"> </span><span class="n">nodeIOName</span><span class="p">,</span>
+<span class="w">                                         </span><span class="k">const</span><span class="w"> </span><span class="n">GenieNode_TextOutput_Callback_t</span><span class="w"> </span><span class="n">callback</span><span class="p">);</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * @brief A function to setCallback for encoder node output.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[in] nodeHandle A node handle.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[in] nodeIOName Node IO name.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[in] callback A user callback function for embedding output.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @return Status code:</span>
+<span class="cm"> *         - GENIE_STATUS_SUCCESS: API call was successful.</span>
+<span class="cm"> *         - GENIE_STATUS_ERROR_INVALID_HANDLE: Node handle is invalid.</span>
+<span class="cm"> *         - GENIE_STATUS_ERROR_MEM_ALLOC: Memory (de)allocation failure.</span>
+<span class="cm"> */</span>
+<span class="n">GENIE_API</span>
+<span class="n">Genie_Status_t</span><span class="w"> </span><span class="n">GenieNode_setEmbeddingCallback</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">GenieNode_Handle_t</span><span class="w"> </span><span class="n">nodeHandle</span><span class="p">,</span>
+<span class="w">                                              </span><span class="k">const</span><span class="w"> </span><span class="n">GenieNode_IOName_t</span><span class="w"> </span><span class="n">nodeIOName</span><span class="p">,</span>
+<span class="w">                                              </span><span class="k">const</span><span class="w"> </span><span class="n">GenieNode_EmbeddingOutputCallback_t</span><span class="w"> </span><span class="n">callback</span><span class="p">);</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * @brief A function to set data on a node.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[in] nodeHandle A node handle.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[in] nodeIOName Node IO name.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[in] data A pointer to the data buffer.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[in] dataSize Databuffer size in bytes.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[in] dataConfig Optional data configuration.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @return Status code:</span>
+<span class="cm"> *         - GENIE_STATUS_SUCCESS: API call was successful.</span>
+<span class="cm"> *         - GENIE_STATUS_ERROR_INVALID_HANDLE: Node handle is invalid.</span>
+<span class="cm"> *         - GENIE_STATUS_ERROR_MEM_ALLOC: Memory (de)allocation failure.</span>
+<span class="cm"> */</span>
+<span class="n">GENIE_API</span>
+<span class="n">Genie_Status_t</span><span class="w"> </span><span class="n">GenieNode_setData</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">GenieNode_Handle_t</span><span class="w"> </span><span class="n">nodeHandle</span><span class="p">,</span>
+<span class="w">                                 </span><span class="k">const</span><span class="w"> </span><span class="n">GenieNode_IOName_t</span><span class="w"> </span><span class="n">nodeIOName</span><span class="p">,</span>
+<span class="w">                                 </span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">data</span><span class="p">,</span>
+<span class="w">                                 </span><span class="k">const</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">dataSize</span><span class="p">,</span>
+<span class="w">                                 </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">dataConfig</span><span class="p">);</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * @brief A function to train a node.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[in] nodeHandle A node handle prepared for training.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @return Status code:</span>
+<span class="cm"> *         - GENIE_STATUS_SUCCESS: API call was successful.</span>
+<span class="cm"> *         - GENIE_STATUS_ERROR_INVALID_HANDLE: Node handle is invalid.</span>
+<span class="cm"> *         - GENIE_STATUS_ERROR_MEM_ALLOC: Memory (de)allocation failure.</span>
+<span class="cm"> */</span>
+<span class="n">GENIE_API</span>
+<span class="n">Genie_Status_t</span><span class="w"> </span><span class="n">GenieNode_train</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">GenieNode_Handle_t</span><span class="w"> </span><span class="n">nodeHandle</span><span class="p">);</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * @brief A function to save LoRA Adapter.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[in] nodeHandle A node handle.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[in] engine Engine from which the LoRA Adapter is being saved.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[in] loraAdapterName Name of the LoRA adapter.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @return Status code:</span>
+<span class="cm"> *         - GENIE_STATUS_SUCCESS: API call was successful.</span>
+<span class="cm"> *         - GENIE_STATUS_ERROR_INVALID_HANDLE: Node handle is invalid.</span>
+<span class="cm"> *         - GENIE_STATUS_ERROR_INVALID_ARGUMENT: At least one argument is invalid.</span>
+<span class="cm"> *         - GENIE_STATUS_ERROR_GENERAL: The LoRA adapter could not be applied.</span>
+<span class="cm"> */</span>
+<span class="n">GENIE_API</span>
+<span class="n">Genie_Status_t</span><span class="w"> </span><span class="n">GenieNode_saveLora</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">GenieNode_Handle_t</span><span class="w"> </span><span class="n">nodeHandle</span><span class="p">,</span>
+<span class="w">                                  </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">engine</span><span class="p">,</span>
+<span class="w">                                  </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">loraAdapterName</span><span class="p">);</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * @brief A function to set data on a node.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[in] nodeHandle A node handle.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[in] nodeIOName Node IO name.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[in] ioConfig IO Config specifying any specific parameters in json format.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[in] ioCallback user defined callback for getting output.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[in] userData The userData field provided to getData.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @return Status code:</span>
+<span class="cm"> *         - GENIE_STATUS_SUCCESS: API call was successful.</span>
+<span class="cm"> *         - GENIE_STATUS_ERROR_INVALID_HANDLE: Node handle is invalid.</span>
+<span class="cm"> *         - GENIE_STATUS_ERROR_MEM_ALLOC: Memory (de)allocation failure.</span>
+<span class="cm"> */</span>
+<span class="n">GENIE_API</span>
+<span class="n">Genie_Status_t</span><span class="w"> </span><span class="n">GenieNode_getData</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">GenieNode_Handle_t</span><span class="w"> </span><span class="n">nodeHandle</span><span class="p">,</span>
+<span class="w">                                 </span><span class="k">const</span><span class="w"> </span><span class="n">GenieNode_IOName_t</span><span class="w"> </span><span class="n">nodeIOName</span><span class="p">,</span>
+<span class="w">                                 </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">ioConfig</span><span class="p">,</span>
+<span class="w">                                 </span><span class="n">GenieNode_IOCallback_t</span><span class="w"> </span><span class="n">ioCallback</span><span class="p">,</span>
+<span class="w">                                 </span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">userData</span><span class="p">);</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * @brief A function to call execute on a node.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[in] nodeHandle A node handle.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[in] executionConfig execution Config in json format.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[in] userData The userData field provided to execute.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @return Status code:</span>
+<span class="cm"> *         - GENIE_STATUS_SUCCESS: API call was successful.</span>
+<span class="cm"> *         - GENIE_STATUS_ERROR_INVALID_HANDLE: Node handle is invalid.</span>
+<span class="cm"> *         - GENIE_STATUS_ERROR_MEM_ALLOC: Memory (de)allocation failure.</span>
+<span class="cm"> */</span>
+<span class="n">GENIE_API</span>
+<span class="n">Genie_Status_t</span><span class="w"> </span><span class="n">GenieNode_execute</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">GenieNode_Handle_t</span><span class="w"> </span><span class="n">nodeHandle</span><span class="p">,</span>
+<span class="w">                                 </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">executionConfig</span><span class="p">,</span>
+<span class="w">                                 </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">userData</span><span class="p">);</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * @brief A function to apply a LoRA Adapter.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @note When switching LoRA adapters, it is recommended to call GenieNode_reset.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[in] nodeHandle A node handle.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[in] engine Engine to which the LoRA Adapter is being applied.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[in] loraAdapterName Name of the LoRA adapter.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @return Status code:</span>
+<span class="cm"> *         - GENIE_STATUS_SUCCESS: API call was successful.</span>
+<span class="cm"> *         - GENIE_STATUS_ERROR_INVALID_HANDLE: Node handle is invalid.</span>
+<span class="cm"> *         - GENIE_STATUS_ERROR_INVALID_ARGUMENT: At least one argument is invalid.</span>
+<span class="cm"> *         - GENIE_STATUS_ERROR_GENERAL: The LoRA adapter could not be applied.</span>
+<span class="cm"> */</span>
+<span class="n">GENIE_API</span>
+<span class="n">Genie_Status_t</span><span class="w"> </span><span class="n">GenieNode_applyLora</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">GenieNode_Handle_t</span><span class="w"> </span><span class="n">nodeHandle</span><span class="p">,</span>
+<span class="w">                                   </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">engine</span><span class="p">,</span>
+<span class="w">                                   </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">loraAdapterName</span><span class="p">);</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * @brief A function to apply the LoRA Strength.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @note When changing LoRA alpha strengths, it is recommended to call GenieNode_reset.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[in] nodeHandle A node handle.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[in] engine Engine to which the LoRA Adapter is being applied.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[in] tensorName LoRA Alpha Tensor name.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[in] alpha Value of the LoRA alpha strength.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @return Status code:</span>
+<span class="cm"> *         - GENIE_STATUS_SUCCESS: API call was successful.</span>
+<span class="cm"> *         - GENIE_STATUS_ERROR_INVALID_HANDLE: Node handle is invalid.</span>
+<span class="cm"> *         - GENIE_STATUS_ERROR_INVALID_ARGUMENT: At least one argument is invalid.</span>
+<span class="cm"> *         - GENIE_STATUS_ERROR_GENERAL: In case due alpha tensor values could not be applied.</span>
+<span class="cm"> */</span>
+<span class="n">GENIE_API</span>
+<span class="n">Genie_Status_t</span><span class="w"> </span><span class="n">GenieNode_setLoraStrength</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">GenieNode_Handle_t</span><span class="w"> </span><span class="n">nodeHandle</span><span class="p">,</span>
+<span class="w">                                         </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">engine</span><span class="p">,</span>
+<span class="w">                                         </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">tensorName</span><span class="p">,</span>
+<span class="w">                                         </span><span class="k">const</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">alpha</span><span class="p">);</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * @brief A function to bind engine handle to Node.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @note It will unload the active engine (defined by engineType) of the Node, if it is not</span>
+<span class="cm"> *       retrieved by GenieNode_getEngine API.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @note Only draft engine binding is supported.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[in] nodeHandle A node Handle</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[in] engineType type of the engine i.e., target or draft.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[in] engineHandle The engine handle. Cannot be NULL.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @return Status code:</span>
+<span class="cm"> *         - GENIE_STATUS_SUCCESS: API call was successful.</span>
+<span class="cm"> *         - GENIE_STATUS_ERROR_INVALID_HANDLE: node handle or engine handle is invalid.</span>
+<span class="cm"> *         - GENIE_STATUS_ERROR_INVALID_ARGUMENT: invalid engineType.</span>
+<span class="cm"> */</span>
+<span class="n">GENIE_API</span>
+<span class="n">Genie_Status_t</span><span class="w"> </span><span class="n">GenieNode_bindEngine</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">GenieNode_Handle_t</span><span class="w"> </span><span class="n">nodeHandle</span><span class="p">,</span>
+<span class="w">                                    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">engineType</span><span class="p">,</span>
+<span class="w">                                    </span><span class="k">const</span><span class="w"> </span><span class="n">GenieEngine_Handle_t</span><span class="w"> </span><span class="n">engineHandle</span><span class="p">);</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * @brief A function to get the engine handle associated with a node.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @note Each call to GenieNode_getEngine API increases the engine's reference count.</span>
+<span class="cm"> *       The engine is freed only when reference count reaches zero either with GenieNode_free or</span>
+<span class="cm"> *       GenieEngine_free.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[in] nodeHandle A node handle.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[in] engineType type of the engine i.e., target or draft.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[in] nodeEngineHandle A engine handle tied to nodeHandle. Must not be NULL.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @return Status code:</span>
+<span class="cm"> *         - GENIE_STATUS_SUCCESS: API call was successful.</span>
+<span class="cm"> *         - GENIE_STATUS_ERROR_INVALID_HANDLE: Node handle is invalid.</span>
+<span class="cm"> *         - GENIE_STATUS_ERROR_INVALID_ARGUMENT: At least one argument is invalid.</span>
+<span class="cm"> *         - GENIE_STATUS_ERROR_GET_HANDLE_FAILED: Get engine handle failure.</span>
+<span class="cm"> */</span>
+<span class="n">GENIE_API</span>
+<span class="n">Genie_Status_t</span><span class="w"> </span><span class="n">GenieNode_getEngine</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">GenieNode_Handle_t</span><span class="w"> </span><span class="n">nodeHandle</span><span class="p">,</span>
+<span class="w">                                   </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">engineType</span><span class="p">,</span>
+<span class="w">                                   </span><span class="n">GenieEngine_Handle_t</span><span class="o">*</span><span class="w"> </span><span class="n">nodeEngineHandle</span><span class="p">);</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * @brief A function to get the sampler handle associated with a node.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[in] nodeHandle A node handle.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[in] nodeSamplerHandle A sampler handle tied to nodeHandle. Must not be NULL.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @return Status code:</span>
+<span class="cm"> *         - GENIE_STATUS_SUCCESS: API call was successful.</span>
+<span class="cm"> *         - GENIE_STATUS_ERROR_INVALID_HANDLE: Node handle is invalid.</span>
+<span class="cm"> *         - GENIE_STATUS_ERROR_INVALID_ARGUMENT: At least one argument is invalid.</span>
+<span class="cm"> *         - GENIE_STATUS_ERROR_GET_HANDLE_FAILED: Get sampler failure.</span>
+<span class="cm"> */</span>
+<span class="n">GENIE_API</span>
+<span class="n">Genie_Status_t</span><span class="w"> </span><span class="n">GenieNode_getSampler</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">GenieNode_Handle_t</span><span class="w"> </span><span class="n">nodeHandle</span><span class="p">,</span>
+<span class="w">                                    </span><span class="n">GenieSampler_Handle_t</span><span class="o">*</span><span class="w"> </span><span class="n">nodeSamplerHandle</span><span class="p">);</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * @brief A function to get the tokenizer handle associated with a node.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[in] nodeHandle A node handle.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[in] tokenizerHandle A tokenizer handle tied to nodeHandle. Must not be NULL.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @return Status code:</span>
+<span class="cm"> *         - GENIE_STATUS_SUCCESS: API call was successful.</span>
+<span class="cm"> *         - GENIE_STATUS_ERROR_INVALID_HANDLE: Node handle is invalid.</span>
+<span class="cm"> *         - GENIE_STATUS_ERROR_INVALID_ARGUMENT: At least one argument is invalid.</span>
+<span class="cm"> *         - GENIE_STATUS_ERROR_GET_HANDLE_FAILED: Get tokenizer failure.</span>
+<span class="cm"> */</span>
+<span class="n">GENIE_API</span>
+<span class="n">Genie_Status_t</span><span class="w"> </span><span class="n">GenieNode_getTokenizer</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">GenieNode_Handle_t</span><span class="w"> </span><span class="n">nodeHandle</span><span class="p">,</span>
+<span class="w">                                      </span><span class="n">GenieTokenizer_Handle_t</span><span class="o">*</span><span class="w"> </span><span class="n">tokenizerHandle</span><span class="p">);</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * @brief A function to reset a node.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[in] nodeHandle A node handle.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @return Status code:</span>
+<span class="cm"> *         - GENIE_STATUS_SUCCESS: API call was successful.</span>
+<span class="cm"> *         - GENIE_STATUS_ERROR_INVALID_HANDLE: Node handle is invalid.</span>
+<span class="cm"> */</span>
+<span class="n">GENIE_API</span>
+<span class="n">Genie_Status_t</span><span class="w"> </span><span class="n">GenieNode_reset</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">GenieNode_Handle_t</span><span class="w"> </span><span class="n">nodeHandle</span><span class="p">);</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * @brief A function to free a node.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param[in] nodeHandle A node handle.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @return Status code:</span>
+<span class="cm"> *         - GENIE_STATUS_SUCCESS: API call was successful.</span>
+<span class="cm"> *         - GENIE_STATUS_ERROR_INVALID_HANDLE: Node handle is invalid.</span>
+<span class="cm"> *         - GENIE_STATUS_ERROR_MEM_ALLOC: Memory (de)allocation failure.</span>
+<span class="cm"> */</span>
+<span class="n">GENIE_API</span>
+<span class="n">Genie_Status_t</span><span class="w"> </span><span class="n">GenieNode_free</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">GenieNode_Handle_t</span><span class="w"> </span><span class="n">nodeHandle</span><span class="p">);</span>
+
+<span class="cp">#ifdef __cplusplus</span>
+<span class="p">}</span><span class="w">  </span><span class="c1">// extern "C"</span>
+<span class="cp">#endif</span>
+
+<span class="cp">#endif  </span><span class="c1">// GENIE_PIPELINE_H</span>
+</pre></div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        © Copyright 2024, Qualcomm Technologies, Inc..
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+
+</body></html>

@@ -1,0 +1,488 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Low Level Perf APIs &mdash; Qualcomm® AI Runtime (QAIRT) SDKs</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/custom_css.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Network Models" href="usergroup1.html" />
+    <link rel="prev" title="Windows Error Reporting" href="wer.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Qualcomm® AI Runtime (QAIRT) SDKs
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v2.46.0.260424121129
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">QAIRT</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../general/overview.html">Overview</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">SDKs</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../QNN/index.html">QNN</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">SNPE</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="setup.html">Setup</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="usergroup6.html">Tutorials and Examples</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="building_and_executing_tutorial.html">SNPE Building and Executing Your Model Tutorial</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tutorial_setup.html">Tutorials Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="snpe2_migration_guidelines.html">SNPE1 to SNPE2 Migration Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usergroup7.html">Running Nets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usergroup8.html">Code Examples</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="usergroup9.html">Application Tips</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="prog_integration.html">Application Integration Tips</a></li>
+<li class="toctree-l4"><a class="reference internal" href="prog_performance.html">Performance Tips</a></li>
+<li class="toctree-l4"><a class="reference internal" href="prog_burst_mode.html">Burst Mode on DSP and AIP</a></li>
+<li class="toctree-l4"><a class="reference internal" href="user_logging.html">Logging</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cpu_fxp_mode.html">CPU Fixed Point Mode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="arm64x_support.html">Windows ARM64X Support</a></li>
+<li class="toctree-l4"><a class="reference internal" href="htp_hexagon_npu_runtime_driver.html">Hexagon NPU Runtime Driver (Windows Only)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="wer.html">Windows Error Reporting</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Low Level Perf APIs</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="usergroup1.html">Network Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usergroup5.html">Input Data and Preprocessing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usergroup10.html">Benchmarking and Accuracy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tools.html">Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usergroup11.html">Debug Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html">API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="limitations.html">Limitations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="revision_history.html">Revision History</a></li>
+<li class="toctree-l2"><a class="reference internal" href="appx_ref.html">References</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../Genie/index.html">Genie</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Delegates</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../Delegates/TfLite/index.html">TFLite Delegate</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Qualcomm® AI Runtime (QAIRT) SDKs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">⌂</a> &raquo;</li>
+        
+          <li><a href="usergroup6.html">Tutorials and Examples</a> &raquo;</li>
+        
+          <li><a href="usergroup9.html">Application Tips</a> &raquo;</li>
+        
+      <li>Low Level Perf APIs</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="low-level-perf-apis">
+<h1>Low Level Perf APIs<a class="headerlink" href="#low-level-perf-apis" title="Permalink to this heading">¶</a></h1>
+<div class="ui-resizable side-nav-resizable docutils container" id="side-nav">
+<div class="docutils container" id="nav-tree">
+<div class="docutils container" id="nav-tree-contents">
+</div>
+</div>
+</div>
+<div class="docutils container" id="doc-content">
+<div class="header docutils container">
+</div>
+<div class="contents docutils container">
+<div class="textblock docutils container">
+<p class="rubric" id="introduction">Introduction</p>
+<p>In SNPE-2.22, we introduced a set of low level performance management APIs primarily pertaining to the DSP runtime - SNPEPerfProfile.h ( C++ Wrapper SNPEPerfProfile.hpp).
+In addition to this, two new perf profile setting APIs were added to SNPE and one new API to Builder. Details are <a class="reference external" href="low_level_perf_apis.html#new-perf-apis">here</a>.</p>
+<p>These new APIs provide a way for a client application to set different perf settings for initialization, between inferences, and for de-initialization.
+Up until SNPE-2.21, a user-supplied preset profile (defaulting to Balanced) would be applied during the entire lifecycle of SNPE.</p>
+<p>The new APIs are designed to build a perf profile from the ground up OR start with a preset profile (like Burst) and tweak certain parameters on a case-by-case basis.
+Such customized profiles (or hybrid profiles) can be applied both during initialization via the new builder API or after initialization for inference and de-initialization using the new SNPE API. Detailed usage examples are in <a class="reference external" href="low_level_perf_apis.html#new-perf-apis">New perf APIs in SNPE-2.22</a>.</p>
+<p>SNPE employs certain heuristics based on the preset profile – which was true even in SNPE-2.21. As part of the new custom perf profile, we have exposed them as knobs that can be tweaked via APIs in SNPEPerfProfile.h. Details are in <a class="reference external" href="low_level_perf_apis.html#min-rpc-calls">Ability to hold the vote for a longer duration – Minimizing RPC Calls</a>.</p>
+<p>The new APIs enable better synchronization flexibility for cooperative multiple SNPE instances within the same process or in different processes pertaining to aggregation of voting packets at the HTP/NSP level. Example with an use case is in <a class="reference external" href="low_level_perf_apis.html#syn-prob-221">Synchronization problems in SNPE 2.21</a> and <a class="reference external" href="low_level_perf_apis.html#syn-sol-222">Better Synchronization flexibility SNPE in 2.22</a>.</p>
+<p>The net run applications snpe-net-run and snpe-throughput-net-run have a command-line argument –perf_config_yaml that takes in a user-provided YAML config file that can configure all the perf settings. A sample YAML config corresponding to sustained high performance profile is provided in <a class="reference external" href="low_level_perf_apis.html#samp-yaml-file">Sample YAML file</a>.</p>
+<p>PSNPE API configurability options are available in SNPE-2.23.</p>
+<div class="figure align-center" id="low-level-perf-figure">
+<a class="reference internal image-reference" href="../images/perf_overview.svg"><img alt="../images/perf_overview.svg" src="../images/perf_overview.svg" width="80.0%" /></a>
+</div>
+<p>The following sections demonstrate the Perf support in Qualcomm® Neural Processing SDK:</p>
+<ol class="arabic simple">
+<li><p><a class="reference external" href="low_level_perf_apis.html#new-perf-apis">New perf APIs in SNPE-2.22</a></p></li>
+<li><p><a class="reference external" href="low_level_perf_apis.html#min-rpc-calls">Ability to hold the vote for a longer duration – Minimizing RPC Calls</a></p></li>
+<li><p><a class="reference external" href="low_level_perf_apis.html#syn-prob-221">Synchronization problems in SNPE 2.21</a></p></li>
+<li><p><a class="reference external" href="low_level_perf_apis.html#syn-sol-222">Better Synchronization flexibility in SNPE 2.22</a></p></li>
+<li><p><a class="reference external" href="low_level_perf_apis.html#samp-yaml-file">Sample YAML file</a></p></li>
+</ol>
+<p class="rubric" id="new-perf-apis">New perf APIs in SNPE-2.22</p>
+<p>The current performance setting builder API allows the selection of preset profiles during SNPE initialization.
+This preset profile is used for voting both before and after initialization, inference, and de-initialization.
+Based on these preset profiles, SNPE internally employs certain heuristics with respect to RPC polling, async voting thread, and hysteresis timer for voting.
+The limitation of this design is its lack of flexibility. The same profile is used for the entire lifecycle of SNPE. Additionally, the client application is stuck with the corner voltages selected by these preset profiles, even if alternate voltages are offered by the hardware that may better suit the performance-power trade-off for a particular use case.</p>
+<p>Introducing low level perf API header SNPEPerfProfile.h ( C++ Wrapper SNPEPerfProfile.hpp) that allows client application to create a SNPE perf profile handle/object.</p>
+<div class="highlight-fragment notranslate"><div class="highlight"><pre><span></span>Snpe_SNPEPerfProfile_Handle_t perfHandle = Snpe_SNPEPerfProfile_Create();
+SNPEPerfProfile perfProfile; // C++ Wrapper API
+</pre></div>
+</div>
+<p>A perf profile handle can also be created with a preset perf profile as a starting point:-</p>
+<div class="highlight-fragment notranslate"><div class="highlight"><pre><span></span>Snpe_SNPEPerfProfile_Handle_t perfHandle = Snpe_SNPEPerfProfile_CreatePreset(SNPE_PERFORMANCE_PROFILE_BURST);
+SNPEPerfProfile perfProfile(BURST); // C++ Wrapper API
+</pre></div>
+</div>
+<p>This perf profile handle can now be customized as follows:-</p>
+<div class="highlight-fragment notranslate"><div class="highlight"><pre><span></span>Snpe_SNPEPerfProfile_SetDcvsVoltageCornerDcvsVCornerMinDone(perfHandle, SNPE_DCVS_VOLTAGE_VCORNER_NOM_PLUS);
+perfProfile.SetDcvsVoltageCornerDcvsVCornerMinDone(DCVS_VOLTAGE_VCORNER_NOM_PLUS); // C++ Wrapper API
+</pre></div>
+</div>
+<p>This custom perf profile handle/object can now be associated with SNPE Builder handle (for init) or SNPE handle (for inference and de-init):-</p>
+<div class="highlight-fragment notranslate"><div class="highlight"><pre><span></span>Snpe_SNPEBuilder_SetCustomPerfProfile(snpeBuilderHandle, perfHandle);
+builder.setCustomPerfProfile(perfProfile); // C++ Wrapper API
+Snpe_SNPE_SetCustomPerfProfile(snpeHandle, perfHandle);
+snpe-&gt;setCustomPerformanceProfile(perfProfile); // C++ Wrapper API
+Snpe_SNPE_ExecuteUserBuffers(snpeHandle, inputHandle, outputHandle);
+snpe-&gt;execute(inputUbMap, outputUbMap); // C++ Wrapper API
+</pre></div>
+</div>
+<p>An example usage with C API showing different perf settings for init, between inferences and for de-init:-</p>
+<div class="highlight-fragment notranslate"><div class="highlight"><pre><span></span>Snpe_SNPEPerfProfile_Handle_t perfHandle = Snpe_SNPEPerfProfile_CreatePreset(SNPE_PERFORMANCE_PROFILE_HIGH_PERFORMANCE);
+Snpe_SNPEPerfProfile_SetCoreVoltageCornerMaxMvStart(perfHandle, SNPE_DCVS_VOLTAGE_VCORNER_TURBO_PLUS);
+Snpe_SNPEPerfProfile_SetCoreVoltageCornerMaxMvDone(perfHandle, SNPE_DCVS_VOLTAGE_VCORNER_SVS);
+Snpe_SNPEBuilder_SetCustomPerfProfile(snpeBuilderHandle, perfHandle); // perf settings set to high_performance + new corners
+Snpe_SNPEPerfProfile_Delete(perfHandle);
+Snpe_SNPE_Handle_t snpeHandle = Snpe_SNPEBuilder_Build(snpeBuilderHandle); //Init performed with this custom setting
+Snpe_SNPE_ExecuteUserBuffers(snpeHandle, inputHandle, outputHandle); // 1st inference with this custom setting
+
+Snpe_SNPE_SetPerformanceProfile(snpeHandle, SNPE_PERFORMANCE_PROFILE_BURST); //perf setting now overwritten to Burst
+Snpe_SNPE_ExecuteUserBuffers(snpeHandle, inputHandle, outputHandle); // 2nd inference with preset Burst profile
+
+Snpe_SNPEPerfProfile_Handle_t perfHandle2 = Snpe_SNPEPerfProfile_Create();
+Snpe_SNPEPerfProfile_SetBusVoltageCornerMinStart(perfHandle2, SNPE_DCVS_VOLTAGE_VCORNER_NOM);
+……… more settings ………
+Snpe_SNPE_SetCustomPerfProfile(snpeHandle, perfHandle2); // perf settings for the SNPE handle set to cutom values
+Snpe_SNPEPerfProfile_Delete(perfHandle2);
+Snpe_SNPE_ExecuteUserBuffers(snpeHandle, inputHandle, outputHandle); // 3rd inference with custom perf settings
+
+Snpe_SNPE_SetPerformanceProfile(snpeHandle, SNPE_PERFORMANCE_PROFILE_LOW_BALANCED); //perf setting now overwritten to preset
+Snpe_SNPE_Delete(snpeHandle); //De-Init performed with this new preset of low_balanced profile
+</pre></div>
+</div>
+<p class="rubric" id="min-rpc-calls">Ability to hold the vote for a longer duration – Minimizing RPC calls</p>
+<p>With the preset profiles burst and sustained high performance, inference voting has a hysteresis feature.
+Once clocks are bumped up before execute, they are not brought down after inference is done for a certain period (300 ms) to reduce the amount of voting packets sent to the NSP.
+This feature is present in SNPE-2.21 and particularly helps when there are back to back inferences. With SNPE-2.22, we are exposing this as part of custom perf profile. So the hysteresis timer can be increased or reduced or totally turned off for burst and sustained high performance. Also this can now be enabled for any other perf profile. Example:-</p>
+<div class="highlight-fragment notranslate"><div class="highlight"><pre><span></span>Snpe_SNPEPerfProfile_Handle_t perfHandle = Snpe_SNPEPerfProfile_CreatePreset(SNPE_PERFORMANCE_PROFILE_LOW_POWER_SAVER);
+Snpe_SNPEPerfProfile_SetDspHysteresisTime(perfHandle, 500); //Set inference voting hysteresis to 500 ms
+Snpe_SNPE_SetCustomPerfProfile(snpeHandle, perfHandle);
+Snpe_SNPE_ExecuteUserBuffers(snpeHandle, inputHandle, outputHandle);
+
+…… more inferences ……
+Snpe_SNPEPerfProfile_SetDspHysteresisTime(perfHandle, 0); //Disable voting hysteresis after a few inferences
+Snpe_SNPE_SetCustomPerfProfile(snpeHandle, perfHandle);
+Snpe_SNPE_ExecuteUserBuffers(snpeHandle, inputHandle, outputHandle);
+</pre></div>
+</div>
+<p class="rubric" id="syn-prob-221">Synchronization problem for multiple SNPE instances in SNPE-2.21</p>
+<div class="figure align-center" id="sync-prob-figure">
+<a class="reference internal image-reference" href="../images/221_sync_prob.svg"><img alt="../images/221_sync_prob.svg" src="../images/221_sync_prob.svg" width="40.0%" /></a>
+</div>
+<p>Consider the use case of two SNPE instances, as shown in the diagram above.
+These instances could be part of the same process or different processes.
+They are executing concurrently, with one having a high-performance workload (represented in red) and the other having a low-performance workload (represented in blue).</p>
+<p>When these two SNPE instances are in separate processes, they get unique power config ids. When they are in the same process and unique power config ids were requested via Platform Option “dspPowerSettingContext” (which is the default), they get different power config ids.</p>
+<p>Due to this, during vote aggregation at the HTP/NSP level, the after/done vote of SNPE-1 would vote out the before/start vote of SNPE-2. This is because the default after/done vote of SNPE-1 is still high compared to the before/start vote of SNPE-2. The before and after voting voltage corners are controlled by a preset performance profile that was passed during builder/init stage. This means the execution of SNPE-2 would be performed at a higher performance level, which is not intended and thus ends up consuming more power.</p>
+<p>With the introduction of the new perf APIs in SNPE-2.22, this can be solved which is outlined in the next section.</p>
+<p class="rubric" id="syn-sol-222">Better synchronization flexibility for cooperative multiple SNPE instances in SNPE-2.22</p>
+<div class="figure align-center" id="sync-sol-figure">
+<a class="reference internal image-reference" href="../images/222_sync_sol.svg"><img alt="../images/222_sync_sol.svg" src="../images/222_sync_sol.svg" width="40.0%" /></a>
+</div>
+<p>With the introduction of the new performance APIs (illustrated in the diagram above), SNPE-1 can now selectively control the after/done vote (indicated by the dotted red arrow). SNPE-1 can match the after/done vote voltage corner to match SNPE-2’s before/start vote or lower than that or not vote at all. This allows it to cooperate with SNPE-2, thus enabling SNPE-2 to execute in desired low power mode. Code snippet to lower the after/done vote for SNPE-1 the high performance workload is provided below:-</p>
+<div class="highlight-fragment notranslate"><div class="highlight"><pre><span></span>// C API
+Snpe_SNPEPerfProfile_Handle_t perfHandle1 = Snpe_SNPEPerfProfile_CreatePreset(SNPE_PERFORMANCE_PROFILE_BURST);
+Snpe_SNPEPerfProfile_SetBusVoltageCornerMinDone(perfHandle1, SNPE_DCVS_VOLTAGE_CORNER_DISABLE);
+Snpe_SNPEPerfProfile_SetBusVoltageCornerTargetDone(perfHandle1, SNPE_DCVS_VOLTAGE_CORNER_DISABLE);
+Snpe_SNPEPerfProfile_SetBusVoltageCornerMaxDone(perfHandle1, SNPE_DCVS_VOLTAGE_CORNER_DISABLE);
+Snpe_SNPEPerfProfile_SetCoreVoltageCornerMinMvDone(perfHandle1, SNPE_DCVS_VOLTAGE_CORNER_DISABLE);
+Snpe_SNPEPerfProfile_SetCoreVoltageCornerTargetMvDone(perfHandle1, SNPE_DCVS_VOLTAGE_CORNER_DISABLE);
+Snpe_SNPEPerfProfile_SetCoreVoltageCornerMaxMvStart(perfHandle1, SNPE_DCVS_VOLTAGE_CORNER_DISABLE);
+Snpe_SNPE_SetCustomPerfProfile(snpe1Handle, perfHandle1);
+Snpe_SNPE_ExecuteUserBuffers(snpeHandle1, inputHandle, outputHandle);
+// C++ Wrapper API
+SNPEPerfProfile perfProfile1(BURST);
+perfProfile1.setBusVoltageCornerMinDone(DCVS_VOLTAGE_CORNER_DISABLE);
+perfProfile1.setBusVoltageCornerTargetDone(DCVS_VOLTAGE_CORNER_DISABLE);
+perfProfile1.setBusVoltageCornerMaxDone(DCVS_VOLTAGE_CORNER_DISABLE);
+perfProfile1.setCoreVoltageCornerMinMvDone(DCVS_VOLTAGE_CORNER_DISABLE);
+perfProfile1.setCoreVoltageCornerTargetMvDone(DCVS_VOLTAGE_CORNER_DISABLE);
+perfProfile1.setCoreVoltageCornerMaxMvDone(DCVS_VOLTAGE_CORNER_DISABLE);
+snpe1-&gt;setCustomPerformanceProfile(perfProfile1);
+snpe1-&gt;execute(inputUbMap, outputUbMap);
+</pre></div>
+</div>
+<p class="rubric" id="samp-yaml-file">Sample snpe-net-run YAML file</p>
+<p>Below is a snippet of snpe-net-run / snpe-throughput-net-run yaml corresponding to SUSTAINED_HIGH_PERFORMANCE profile:-</p>
+<div class="highlight-fragment notranslate"><div class="highlight"><pre><span></span>general:
+  ASYNC_VOTING_ENABLE: false
+  DSP_HYSTERESIS_TIME_US: 300000
+  DSP_SLEEP_DISABLE_MS: 0
+  DSP_RPC_POLLING_TIME_US: 9999
+init:
+  DSP_ENABLE_DCVS_START: false
+  DSP_ENABLE_DCVS_DONE: true
+  DSP_SLEEP_LATENCY_START_US: 100
+  HIGH_PERFORMANCE_MODE: true
+  POWERMODE_START: SNPE_DSP_PERF_INFRASTRUCTURE_POWERMODE_ADJUST_UP_DOWN
+  POWERMODE_DONE: SNPE_DSP_PERF_INFRASTRUCTURE_POWERMODE_ADJUST_UP_DOWN
+  BUS_VOLTAGE_CORNER_MIN_START: SNPE_DCVS_VOLTAGE_VCORNER_TURBO
+  BUS_VOLTAGE_CORNER_TARGET_START: SNPE_DCVS_VOLTAGE_VCORNER_TURBO
+  BUS_VOLTAGE_CORNER_MAX_START: SNPE_DCVS_VOLTAGE_VCORNER_TURBO
+  CORE_VOLTAGE_CORNER_MIN_START: SNPE_DCVS_VOLTAGE_VCORNER_TURBO
+  CORE_VOLTAGE_CORNER_TARGET_START: SNPE_DCVS_VOLTAGE_VCORNER_TURBO
+  CORE_VOLTAGE_CORNER_MAX_START: SNPE_DCVS_VOLTAGE_VCORNER_TURBO
+  BUS_VOLTAGE_CORNER_MIN_DONE: SNPE_DCVS_VOLTAGE_VCORNER_SVS2
+  BUS_VOLTAGE_CORNER_TARGET_DONE: SNPE_DCVS_VOLTAGE_VCORNER_SVS
+  BUS_VOLTAGE_CORNER_MAX_DONE: SNPE_DCVS_VOLTAGE_VCORNER_SVS
+  CORE_VOLTAGE_CORNER_MIN_DONE: SNPE_DCVS_VOLTAGE_VCORNER_SVS2
+  CORE_VOLTAGE_CORNER_TARGET_DONE: SNPE_DCVS_VOLTAGE_VCORNER_SVS
+  CORE_VOLTAGE_CORNER_MAX_DONE: SNPE_DCVS_VOLTAGE_VCORNER_SVS
+  DSP_SLEEP_LATENCY_DONE_US: 2000
+execute:
+  DSP_ENABLE_DCVS_START: false
+  DSP_ENABLE_DCVS_DONE: true
+  DSP_SLEEP_LATENCY_START_US: 100
+  HIGH_PERFORMANCE_MODE: true
+  POWERMODE_START: SNPE_DSP_PERF_INFRASTRUCTURE_POWERMODE_ADJUST_UP_DOWN
+  POWERMODE_DONE: SNPE_DSP_PERF_INFRASTRUCTURE_POWERMODE_ADJUST_UP_DOWN
+  BUS_VOLTAGE_CORNER_MIN_START: SNPE_DCVS_VOLTAGE_VCORNER_TURBO
+  BUS_VOLTAGE_CORNER_TARGET_START: SNPE_DCVS_VOLTAGE_VCORNER_TURBO
+  BUS_VOLTAGE_CORNER_MAX_START: SNPE_DCVS_VOLTAGE_VCORNER_TURBO
+  CORE_VOLTAGE_CORNER_MIN_START: SNPE_DCVS_VOLTAGE_VCORNER_TURBO
+  CORE_VOLTAGE_CORNER_TARGET_START: SNPE_DCVS_VOLTAGE_VCORNER_TURBO
+  CORE_VOLTAGE_CORNER_MAX_START: SNPE_DCVS_VOLTAGE_VCORNER_TURBO
+  BUS_VOLTAGE_CORNER_MIN_DONE: SNPE_DCVS_VOLTAGE_VCORNER_SVS2
+  BUS_VOLTAGE_CORNER_TARGET_DONE: SNPE_DCVS_VOLTAGE_VCORNER_SVS
+  BUS_VOLTAGE_CORNER_MAX_DONE: SNPE_DCVS_VOLTAGE_VCORNER_SVS
+  CORE_VOLTAGE_CORNER_MIN_DONE: SNPE_DCVS_VOLTAGE_VCORNER_SVS2
+  CORE_VOLTAGE_CORNER_TARGET_DONE: SNPE_DCVS_VOLTAGE_VCORNER_SVS
+  CORE_VOLTAGE_CORNER_MAX_DONE: SNPE_DCVS_VOLTAGE_VCORNER_SVS
+  DSP_SLEEP_LATENCY_DONE_US: 2000
+deinit:
+  DSP_ENABLE_DCVS_START: false
+  DSP_ENABLE_DCVS_DONE: true
+  HIGH_PERFORMANCE_MODE: true
+  DSP_SLEEP_LATENCY_START_US: 100
+  POWERMODE_START: SNPE_DSP_PERF_INFRASTRUCTURE_POWERMODE_ADJUST_UP_DOWN
+  POWERMODE_DONE: SNPE_DSP_PERF_INFRASTRUCTURE_POWERMODE_ADJUST_UP_DOWN
+  BUS_VOLTAGE_CORNER_MIN_START: SNPE_DCVS_VOLTAGE_VCORNER_TURBO
+  BUS_VOLTAGE_CORNER_TARGET_START: SNPE_DCVS_VOLTAGE_VCORNER_TURBO
+  BUS_VOLTAGE_CORNER_MAX_START: SNPE_DCVS_VOLTAGE_VCORNER_TURBO
+  CORE_VOLTAGE_CORNER_MIN_START: SNPE_DCVS_VOLTAGE_VCORNER_TURBO
+  CORE_VOLTAGE_CORNER_TARGET_START: SNPE_DCVS_VOLTAGE_VCORNER_TURBO
+  CORE_VOLTAGE_CORNER_MAX_START: SNPE_DCVS_VOLTAGE_VCORNER_TURBO
+  BUS_VOLTAGE_CORNER_MIN_DONE: SNPE_DCVS_VOLTAGE_VCORNER_MIN_VOLTAGE_CORNER
+  BUS_VOLTAGE_CORNER_TARGET_DONE: SNPE_DCVS_VOLTAGE_VCORNER_MIN_VOLTAGE_CORNER
+  BUS_VOLTAGE_CORNER_MAX_DONE: SNPE_DCVS_VOLTAGE_VCORNER_MIN_VOLTAGE_CORNER
+  CORE_VOLTAGE_CORNER_MIN_DONE: SNPE_DCVS_VOLTAGE_VCORNER_MIN_VOLTAGE_CORNER
+  CORE_VOLTAGE_CORNER_TARGET_DONE: SNPE_DCVS_VOLTAGE_VCORNER_MIN_VOLTAGE_CORNER
+  CORE_VOLTAGE_CORNER_MAX_DONE: SNPE_DCVS_VOLTAGE_VCORNER_MIN_VOLTAGE_CORNER
+  DSP_SLEEP_LATENCY_DONE_US: 2000
+</pre></div>
+</div>
+<p>Note:- These settings can be retrieved via the getter APIs after starting with a preset profile. Example:-</p>
+<div class="highlight-fragment notranslate"><div class="highlight"><pre><span></span>CAPI
+Snpe_SNPEPerfProfile_Handle_t perfHandle = Snpe_SNPEPerfProfile_CreatePreset(SNPE_PERFORMANCE_PROFILE_BURST);
+auto asyncVoteStatus = Snpe_SNPEPerfProfile_GetEnableAsyncVoting(perfHandle);
+auto sleepLatencyStart = Snpe_SNPEPerfProfile_GetSleepLatencyStart(perfHandle);
+auto busVoltageCornerMinDone = Snpe_SNPEPerfProfile_GetBusVoltageCornerMinDone(perfHandle);
+
+C++ Wrapper API
+SNPEPerfProfile perfProfile(BURST);
+auto asyncVoteStatus = perfProfile.getEnableAsyncVoting();
+auto sleepLatencyStart = perfProfile.getSleepLatencyStart();
+auto busVoltageCornerMinDone = perfProfile.getBusVoltageCornerMinDone();
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="usergroup1.html" class="btn btn-neutral float-right" title="Network Models" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="wer.html" class="btn btn-neutral float-left" title="Windows Error Reporting" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020-2025, Qualcomm Technologies, Inc..
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

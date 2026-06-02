@@ -1,0 +1,483 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Convert to QNN for Linux Host on Linux / Android / QNX Target &mdash; Qualcomm® AI Runtime (QAIRT) SDKs</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/custom_css.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Convert to QNN for Linux Host on CPU Backend" href="qnn_tutorial_linux_host_linux_target/cpu.html" />
+    <link rel="prev" title="CNN to QNN for Linux Host" href="qnn_tutorial_linux_host.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Qualcomm® AI Runtime (QAIRT) SDKs
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v2.46.0.260424121129
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">QAIRT</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../general/overview.html">Overview</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">SDKs</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">QNN</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../introduction.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../overview.html">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../setup.html">Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../backend.html">Backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../op_packages.html">Op Packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tools.html">Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../converters.html">Converters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quantization.html">Quantization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../applyencodings.html">QAIRT Quantization Specification</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../tutorials.html">Tutorials</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="tutorial_convert_execute_cnn_model.html">Tutorial: Converting and executing a CNN or ONNX model with QNN</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="qnn_tutorial_linux_host.html">CNN to QNN for Linux Host</a><ul class="current">
+<li class="toctree-l5 current"><a class="current reference internal" href="#">Convert to QNN for Linux Host on Linux / Android / QNX Target</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="qnn_tutorial_linux_host_linux_target/cpu.html">Convert to QNN for Linux Host on CPU Backend</a></li>
+<li class="toctree-l6"><a class="reference internal" href="qnn_tutorial_linux_host_linux_target/gpu.html">Convert to QNN for Linux Host on GPU Backend</a></li>
+<li class="toctree-l6"><a class="reference internal" href="qnn_tutorial_linux_host_linux_target/dsp.html">Convert to QNN for Linux Host on DSP Backend</a></li>
+<li class="toctree-l6"><a class="reference internal" href="qnn_tutorial_linux_host_linux_target/htp.html">Convert to QNN for Linux Host on HTP Backend</a></li>
+<li class="toctree-l6"><a class="reference internal" href="qnn_tutorial_linux_host_linux_target/lpai.html">Convert to QNN for Linux Host on LPAI Backend</a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="qnn_tutorial_linux_host_windows_target.html">CNN to QNN for Linux Host on Windows Target</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="onnx_to_qnn_tutorial_linux_host.html">ONNX to QNN for Linux Host</a></li>
+<li class="toctree-l4"><a class="reference internal" href="qnn_tutorial_windows_host.html">CNN to QNN for Windows Host</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tutorial_sample_app_linux.html">How to Use the Sample App</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../sample_app.html">Sample App Tutorial</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../saver/saver_tutorial.html">Saver Tutorial: Save execution sequence with Saver and replay on a backend</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../htp/htp_shared_buffer_tutorial.html">QNN HTP Shared Buffer Tutorial</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tutorial1.html">Tutorial: Executing a shallow model using custom op package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../dsp/hexnn_migration.html">Migrating from Hexagon-nn</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../benchmarking.html">Benchmarking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../operations.html">Operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html">API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../revision_history.html">Revision History</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../SNPE/index.html">SNPE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Genie/index.html">Genie</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Delegates</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../Delegates/TfLite/index.html">TFLite Delegate</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Qualcomm® AI Runtime (QAIRT) SDKs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">⌂</a> &raquo;</li>
+        
+          <li><a href="../tutorials.html">Tutorials</a> &raquo;</li>
+        
+          <li><a href="tutorial_convert_execute_cnn_model.html">Tutorial: Converting and executing a CNN or ONNX model with QNN</a> &raquo;</li>
+        
+          <li><a href="qnn_tutorial_linux_host.html">CNN to QNN for Linux Host</a> &raquo;</li>
+        
+      <li>Convert to QNN for Linux Host on Linux / Android / QNX Target</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="convert-to-qnn-for-linux-host-on-linux-android-qnx-target">
+<h1>Convert to QNN for Linux Host on Linux / Android / QNX Target<a class="headerlink" href="#convert-to-qnn-for-linux-host-on-linux-android-qnx-target" title="Permalink to this heading">¶</a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is <strong>Part 2</strong> of the Convert to QNN tutorial for Linux host machines. If you have not completed Part 1, please do so <a class="reference internal" href="tutorial_convert_execute_cnn_model.html"><span class="doc">here</span></a>.</p>
+</div>
+<div class="section" id="step-3-model-build-on-linux-host-for-linux-target">
+<h2>Step 3. Model Build on Linux Host for Linux Target<a class="headerlink" href="#step-3-model-build-on-linux-host-for-linux-target" title="Permalink to this heading">¶</a></h2>
+<p>Once the model has been converted into QNN format, the next step is to build it so it can run on the target device’s operating system with <code class="docutils literal notranslate"><span class="pre">qnn-model-lib-generator</span></code>.</p>
+<p>Based on the operating system and architecture of your target device, choose one of the following build instructions.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>For cases where the “host machine” and “target device” are the same, you will need to adapt the steps to handle files locally instead of transferring them to a remote device.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Please continue to use the same terminal you were using on your host machine from part 1.</p>
+</div>
+<ol class="arabic">
+<li><p>Create a directory on your host machine where your newly built files will live by running:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>mkdir<span class="w"> </span>-p<span class="w"> </span>/tmp/qnn_tmp
+</pre></div>
+</div>
+</li>
+<li><p>Navigate to the new directory:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>/tmp/qnn_tmp
+</pre></div>
+</div>
+</li>
+<li><p>Copy over the QNN <code class="docutils literal notranslate"><span class="pre">.cpp</span></code> and <code class="docutils literal notranslate"><span class="pre">.bin</span></code> model files to <code class="docutils literal notranslate"><span class="pre">/tmp/qnn_tmp/</span></code>:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>cp<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">CONVERTED_MODEL_PATH</span><span class="si">}</span><span class="s2">.cpp&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">CONVERTED_MODEL_PATH</span><span class="si">}</span><span class="s2">.bin&quot;</span><span class="w">  </span>/tmp/qnn_tmp/
+</pre></div>
+</div>
+</li>
+<li><p>Choose the most relevant supported target architecture from the following list:</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>If you don’t know which one to choose, you can run the following commands on your target device to get more information: <code class="docutils literal notranslate"><span class="pre">uname</span> <span class="pre">-a</span></code>, <code class="docutils literal notranslate"><span class="pre">cat</span> <span class="pre">/etc/os-release</span></code>, and <code class="docutils literal notranslate"><span class="pre">gcc</span> <span class="pre">--version</span></code>.</p>
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Target Architecture</p></th>
+<th class="head"><p>Build Instruction</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>64-bit Linux targets</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">x86_64-linux-clang</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>64-bit Android devices</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">aarch64-android</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Hexagon Tensor Processor (HTP)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">x86_64-linux-clang</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Qualcomm’s QNX OS</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">aarch64-qnx</span></code>
+- Note: This architecture is not supported by default in the QNN SDK.</p></td>
+</tr>
+<tr class="row-even"><td><p>OpenEmbedded Linux (GCC 11.2)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">aarch64-oe-linux-gcc11.2</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>OpenEmbedded Linux (GCC 9.3)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">aarch64-oe-linux-gcc9.3</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>OpenEmbedded Linux (GCC 8.2)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">aarch64-oe-linux-gcc8.2</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Ubuntu Linux (GCC 9.4)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">aarch64-ubuntu-gcc9.4</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Ubuntu Linux (GCC 7.5)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">aarch64-ubuntu-gcc7.5</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p>On your host machine, set the target architecture of your target device by setting <code class="docutils literal notranslate"><span class="pre">QNN_TARGET_ARCH</span></code> to your device’s target architecture:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">QNN_TARGET_ARCH</span><span class="o">=</span><span class="s2">&quot;your-target-architecture-from-above&quot;</span>
+</pre></div>
+</div>
+<p>For example:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">QNN_TARGET_ARCH</span><span class="o">=</span><span class="s2">&quot;x86_64-linux-clang&quot;</span>
+</pre></div>
+</div>
+</li>
+<li><p>Run the following command on your host machine to generate the model library:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span><span class="s2">/bin/x86_64-linux-clang/qnn-model-lib-generator&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-c<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">CONVERTED_MODEL_PATH</span><span class="p">##*/</span><span class="si">}</span><span class="s2">.cpp&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-b<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">CONVERTED_MODEL_PATH</span><span class="p">##*/</span><span class="si">}</span><span class="s2">.bin&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-o<span class="w"> </span>model_libs<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-t<span class="w"> </span><span class="si">${</span><span class="nv">QNN_TARGET_ARCH</span><span class="si">}</span>
+</pre></div>
+</div>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">c</span></code> - This indicates the path to the <code class="docutils literal notranslate"><span class="pre">.cpp</span></code> QNN model file.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">b</span></code> - This indicates the path to the <code class="docutils literal notranslate"><span class="pre">.bin</span></code> QNN model file. (<code class="docutils literal notranslate"><span class="pre">b</span></code> is optional, but at runtime, the <code class="docutils literal notranslate"><span class="pre">.cpp</span></code> file could fail if it needs the <code class="docutils literal notranslate"><span class="pre">.bin</span></code> file, so it is recommended).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">o</span></code> - The path to the output folder.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">t</span></code> - Indicate which architecture to build for.</p></li>
+</ol>
+</li>
+<li><p>Run <code class="docutils literal notranslate"><span class="pre">ls</span> <span class="pre">/tmp/qnn_tmp/model_libs/${QNN_TARGET_ARCH}</span></code> and verify that an output file ending in <code class="docutils literal notranslate"><span class="pre">.so</span></code> is inside.
+- You will use the <code class="docutils literal notranslate"><span class="pre">.so</span></code> file on the target device to execute inferences.
+- The output <code class="docutils literal notranslate"><span class="pre">.so</span></code> file will be located in the <code class="docutils literal notranslate"><span class="pre">model_libs</span></code> directory, named according to the target architecture.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>For example: <code class="docutils literal notranslate"><span class="pre">model_libs/x64/Inception_v3.so</span></code> or <code class="docutils literal notranslate"><span class="pre">model_libs/aarch64/Inception_v3.so</span></code>.</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Once you’ve located your relevant .so file, save the full path of the file to an environment variable:</p></li>
+</ol>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">QNN_MODEL_PATH</span><span class="o">=</span><span class="s2">&quot;/tmp/qnn_tmp/model_libs/&lt;path to .so&gt;&quot;</span>
+</pre></div>
+</div>
+<div class="section" id="step-4-use-the-built-model-on-specific-processors">
+<h3>Step 4. Use the built model on specific processors<a class="headerlink" href="#step-4-use-the-built-model-on-specific-processors" title="Permalink to this heading">¶</a></h3>
+<p>Now that you have an executable version of your model, the next step is to transfer the built model and all necessary files to the target processor, then to run inferences on it.</p>
+<ol class="arabic simple">
+<li><p>Install all necessary dependencies from Setup.</p></li>
+<li><p>Follow the below SSH setup instructions.</p></li>
+<li><p>Follow the instructions for each specific processor you want to run your model on.</p></li>
+</ol>
+<p><strong>Sub-Step 1: Ensure that you follow the processor-specific Setup instructions for your host machine :doc:`here&lt;../setup&gt;`.</strong></p>
+<p><strong>Sub-Step 2: Set up SSH on the target device.</strong></p>
+<blockquote>
+<div><p>Here we use <code class="docutils literal notranslate"><span class="pre">OpenSSH</span></code> to copy files with <code class="docutils literal notranslate"><span class="pre">scp</span></code> later on and run scripts on the target device via <code class="docutils literal notranslate"><span class="pre">ssh</span></code>. If that does not work for your target device, feel free to use any other method of transferring the files over. (Ex. <code class="docutils literal notranslate"><span class="pre">adb</span></code> for Android debugging or USB with manual terminal commands on the target device)</p>
+<ol class="arabic simple">
+<li><dl class="simple">
+<dt>Ensure that both the host device and the target device are on the same network for this setup.</dt><dd><ul class="simple">
+<li><p>Otherwise, <code class="docutils literal notranslate"><span class="pre">OpenSSH</span></code> requires port-forwarding to connect.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>On your target device, install <code class="docutils literal notranslate"><span class="pre">OpenSSH</span> <span class="pre">Server</span></code> if it is not already installed.</dt><dd><ul class="simple">
+<li><p>Example for an Ubuntu device:</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ol>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># Update package lists</span>
+sudo<span class="w"> </span>apt<span class="w"> </span>update
+
+<span class="c1"># Install OpenSSH server</span>
+sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>openssh-server
+
+<span class="c1"># Check SSH service status</span>
+sudo<span class="w"> </span>systemctl<span class="w"> </span>status<span class="w"> </span>ssh
+
+<span class="c1"># Start SSH service if it&#39;s not running</span>
+sudo<span class="w"> </span>systemctl<span class="w"> </span>start<span class="w"> </span>ssh
+
+<span class="c1"># Enable SSH service to start on boot</span>
+sudo<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>ssh
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You can turn off the OpenSSH Server service later by running <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">systemctl</span> <span class="pre">stop</span> <span class="pre">ssh</span></code> if you want to.</p>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>On your target device, run <code class="docutils literal notranslate"><span class="pre">ifconfig</span></code> to get the IP address of your target device.</p></li>
+<li><p>On your host machine, set a console variable for your target device’s <code class="docutils literal notranslate"><span class="pre">inet</span> <span class="pre">addr</span></code> from above to see its <code class="docutils literal notranslate"><span class="pre">ipv4</span></code> address (replacing <code class="docutils literal notranslate"><span class="pre">127.0.0.1</span></code> below).</p></li>
+</ol>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">TARGET_IP</span><span class="o">=</span><span class="s2">&quot;127.0.0.1&quot;</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="5">
+<li><p>Also set the username of the desired account on your target device (you can find it by running <code class="docutils literal notranslate"><span class="pre">whoami</span></code> on your target device if you are logged into the desired account).</p></li>
+</ol>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">TARGET_USER</span><span class="o">=</span><span class="s2">&quot;your-linux-account-username&quot;</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="6">
+<li><p>On your host machine, install <code class="docutils literal notranslate"><span class="pre">OpenSSH</span> <span class="pre">Client</span></code> by running the following commands:</p></li>
+</ol>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt<span class="w"> </span>update
+sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>openssh-client
+sudo<span class="w"> </span>systemctl<span class="w"> </span>status<span class="w"> </span>ssh
+sudo<span class="w"> </span>systemctl<span class="w"> </span>start<span class="w"> </span>ssh<span class="w">   </span><span class="c1"># Only if the service is not running</span>
+sudo<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>ssh
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>From this point on you should be able to connect to <code class="docutils literal notranslate"><span class="pre">ssh</span></code> from the terminal. You may need to open another terminal to do so though.</p>
+</div>
+</div></blockquote>
+<p><strong>Sub-Step 3: Follow the steps below for whichever processor you would like to run your model on.</strong></p>
+<blockquote>
+<div><div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="qnn_tutorial_linux_host_linux_target/cpu.html">Convert to QNN for Linux Host on CPU Backend</a></li>
+<li class="toctree-l1"><a class="reference internal" href="qnn_tutorial_linux_host_linux_target/gpu.html">Convert to QNN for Linux Host on GPU Backend</a></li>
+<li class="toctree-l1"><a class="reference internal" href="qnn_tutorial_linux_host_linux_target/dsp.html">Convert to QNN for Linux Host on DSP Backend</a></li>
+<li class="toctree-l1"><a class="reference internal" href="qnn_tutorial_linux_host_linux_target/htp.html">Convert to QNN for Linux Host on HTP Backend</a></li>
+<li class="toctree-l1"><a class="reference internal" href="qnn_tutorial_linux_host_linux_target/lpai.html">Convert to QNN for Linux Host on LPAI Backend</a></li>
+</ul>
+</div>
+</div></blockquote>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="qnn_tutorial_linux_host_linux_target/cpu.html" class="btn btn-neutral float-right" title="Convert to QNN for Linux Host on CPU Backend" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="qnn_tutorial_linux_host.html" class="btn btn-neutral float-left" title="CNN to QNN for Linux Host" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020-2025, Qualcomm Technologies, Inc..
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

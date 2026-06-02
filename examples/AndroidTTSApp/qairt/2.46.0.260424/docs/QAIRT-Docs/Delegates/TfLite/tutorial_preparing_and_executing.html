@@ -1,0 +1,384 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Tutorial - Preparing and Executing a Model with TFLite Delegate &mdash; Qualcomm® AI Runtime (QAIRT) SDKs</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/custom_css.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Tutorial - Using TFLite Delegate With a C/C++ Application" href="tutorial_c_application.html" />
+    <link rel="prev" title="Tutorials" href="tutorials.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Qualcomm® AI Runtime (QAIRT) SDKs
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v2.46.0.260424121129
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">QAIRT</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../general/overview.html">Overview</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">SDKs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../QNN/index.html">QNN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../SNPE/index.html">SNPE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Genie/index.html">Genie</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Delegates</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">TFLite Delegate</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="tutorials.html">Tutorials</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Tutorial - Preparing and Executing a Model with TFLite Delegate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tutorial_c_application.html">Tutorial - Using TFLite Delegate With a C/C++ Application</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tutorial_java_application.html">Tutorial - Using TFLite Delegate With a Java Application</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tutorial_qtld_net_run.html">Tutorial - Running Inference Using the Qualcomm® AI Engine Direct Delegate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tutorial_skip_node.html">Tutorial - Skip Delegation Ops Using the Qualcomm® AI Engine Direct Delegate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tutorial_benchmark_model.html">Tutorial - Benchmarking the Qualcomm® AI Engine Direct Delegate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tutorial_htp_shared_memory.html">Tutorial - Running Inference Using Shared Memory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tutorial_mix_precision.html">Tutorial - Use Mix-Precision Model with Qualcomm® AI Engine Direct Delegate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tutorial_qtld_profiler.html">Tutorial - Profile Custom Models using Qualcomm® AI Engine Direct Delegate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tutorial_ir_backend.html">Tutorial - Use IR Backend by Using the Qualcomm® AI Engine Direct Delegate</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="support.html">Acceleration Support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tools.html">Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="custom_op.html">Custom Operator Support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html">API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qnn_libs.html">Qualcomm® AI Engine Direct Backend Library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="glossary.html">Glossary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_version_history.html">API Version History</a></li>
+<li class="toctree-l2"><a class="reference internal" href="release_notes.html">Release Notes</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Qualcomm® AI Runtime (QAIRT) SDKs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">⌂</a> &raquo;</li>
+        
+          <li><a href="tutorials.html">Tutorials</a> &raquo;</li>
+        
+      <li>Tutorial - Preparing and Executing a Model with TFLite Delegate</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="tutorial-preparing-and-executing-a-model-with-tflite-delegate">
+<h1>Tutorial - Preparing and Executing a Model with TFLite Delegate<a class="headerlink" href="#tutorial-preparing-and-executing-a-model-with-tflite-delegate" title="Permalink to this heading">¶</a></h1>
+<p>The workflow for preparing and executing a model on a target device with the TFLite Delegate mirrors the QNN workflow except for three changes:</p>
+<ol class="arabic simple">
+<li><p>In addition to the generic backend from QNN (ex. <code class="docutils literal notranslate"><span class="pre">libQnnHtp.so</span></code>) we need to send the TFLite Delegate (<code class="docutils literal notranslate"><span class="pre">libQnnTFLiteDelegate.so</span></code>).</p></li>
+<li><p>In order to run the model, we need to send and run <code class="docutils literal notranslate"><span class="pre">qtld-net-run</span></code> instead of <code class="docutils literal notranslate"><span class="pre">qnn-net-run</span></code>.</p></li>
+<li><p>For Android target devices, we also need to send the <code class="docutils literal notranslate"><span class="pre">qtld-release.aar</span></code> file.</p></li>
+</ol>
+<p>These <strong>only affect the very end of the steps</strong> in the QNN workflow. Specifically right when we are transferring files over to the target device, there are additional things we need to do.</p>
+<div class="section" id="step-1-complete-most-of-the-cnn-to-qnn-tutorial">
+<h2>Step 1: Complete most of the CNN to QNN tutorial<a class="headerlink" href="#step-1-complete-most-of-the-cnn-to-qnn-tutorial" title="Permalink to this heading">¶</a></h2>
+<ol class="arabic simple">
+<li><p>Follow most of the <a class="reference external" href="https://docs.qualcomm.com/bundle/publicresource/topics/80-63442-10/tutorial_convert_execute_cnn_model.html">CNN to QNN tutorial</a>, but stop when you reach a step that uses <code class="docutils literal notranslate"><span class="pre">qnn-net-run</span></code>. This will be one of the last commands you have to run in the tutorial, and is located in the sections with the target backend names (Ex. HTP, GPU, or DSP).</p>
+<ol class="loweralpha simple">
+<li><p>The CNN to QNN tutorial will take you through:</p>
+<ol class="arabic simple">
+<li><p>Installing the QAIRT SDK (which includes both QNN and TFLite Delegate files)</p></li>
+<li><p>Converting your model into a QNN format for your target device</p></li>
+<li><p>Moving over the proper files to the target device</p></li>
+<li><p>Running your model using <code class="docutils literal notranslate"><span class="pre">qnn-net-run</span></code> (which we will replace with <code class="docutils literal notranslate"><span class="pre">qtld-net-run</span></code> using the below steps once you get there).</p></li>
+</ol>
+</li>
+</ol>
+</li>
+<li><p>Once you reach the <code class="docutils literal notranslate"><span class="pre">qnn-net-run</span></code> step, return to this page and follow Step 2 onwards.</p></li>
+</ol>
+</div>
+<div class="section" id="step-2-running-an-inference-with-qtld-net-run">
+<h2>Step 2: Running an inference with qtld-net-run<a class="headerlink" href="#step-2-running-an-inference-with-qtld-net-run" title="Permalink to this heading">¶</a></h2>
+<ol class="arabic">
+<li><p>Based on the target device’s OS, architecture, and optionally gcc version, choose the corresponding path to <code class="docutils literal notranslate"><span class="pre">qtld-net-run</span></code> &amp; <code class="docutils literal notranslate"><span class="pre">libQnnTFLiteDelegate.so</span></code>. For the HTP backend example, use <code class="docutils literal notranslate"><span class="pre">$QNN_TARGET_ARCH</span></code> as aarch64-android and <code class="docutils literal notranslate"><span class="pre">$HEXAGON_TARGET_ARCH</span></code> as hexagon-v75.</p>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 40%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Target OS</strong></p></th>
+<th class="head"><p><strong>Architecture</strong></p></th>
+<th class="head"><p><strong>GCC Version</strong></p></th>
+<th class="head"><p><strong>qtld-net-run &amp; libQnnTFLiteDelegate.so Path</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Ubuntu</p></td>
+<td><p>aarch64</p></td>
+<td><p>gcc9.4</p></td>
+<td><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">${QNN_SDK_ROOT}/bin/aarch64-ubuntu-gcc9.4/qtld-net-run</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">${QNN_SDK_ROOT}/lib/aarch64-ubuntu-gcc9.4/libQnnTFLiteDelegate.so</span></code></p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><td><p>Android</p></td>
+<td><p>aarch64</p></td>
+<td><p><cite>-</cite></p></td>
+<td><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">${QNN_SDK_ROOT}/bin/aarch64-android/qtld-net-run</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">${QNN_SDK_ROOT}/lib/aarch64-android/libQnnTFLiteDelegate.so</span></code></p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><td><p>OpenEmbedded Linux</p></td>
+<td><p>aarch64</p></td>
+<td><p>gcc9.3</p></td>
+<td><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">${QNN_SDK_ROOT}/bin/aarch64-oe-linux-gcc9.3/qtld-net-run</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">${QNN_SDK_ROOT}/lib/aarch64-oe-linux-gcc9.3/libQnnTFLiteDelegate.so</span></code></p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><td><p>OpenEmbedded Linux</p></td>
+<td><p>aarch64</p></td>
+<td><p>gcc11.2</p></td>
+<td><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">${QNN_SDK_ROOT}/bin/aarch64-oe-linux-gcc11.2/qtld-net-run</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">${QNN_SDK_ROOT}/lib/aarch64-oe-linux-gcc11.2/libQnnTFLiteDelegate.so</span></code></p></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p>From your host machine, transfer <code class="docutils literal notranslate"><span class="pre">qtld-net-run</span></code> &amp; <code class="docutils literal notranslate"><span class="pre">libQnnTFLiteDelegate.so</span></code> to your target device by running:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>adb<span class="w"> </span>shell<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/data/local/tmp/inception_v3
+$<span class="w"> </span><span class="c1"># Push the QNN Delegate library</span>
+$<span class="w"> </span>adb<span class="w"> </span>push<span class="w"> </span><span class="nv">$QNN_SDK_ROOT</span>/lib/<span class="nv">$QNN_TARGET_ARCH</span>/libQnnTFLiteDelegate.so<span class="w"> </span>/data/local/tmp/inception_v3
+$<span class="w"> </span>adb<span class="w"> </span>push<span class="w"> </span><span class="nv">$QNN_SDK_ROOT</span>/bin/<span class="nv">$QNN_TARGET_ARCH</span>/qtld-net-run<span class="w"> </span>/data/local/tmp/inception_v3
+</pre></div>
+</div>
+</li>
+<li><p>From your host machine, transfer Qualcomm® AI Engine Direct backend libraries to your target device by running:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="c1"># Push QNN backend ARM libraries</span>
+$<span class="w"> </span>adb<span class="w"> </span>push<span class="w"> </span><span class="nv">$QNN_SDK_ROOT</span>/lib/<span class="nv">$QNN_TARGET_ARCH</span>/libQnnHtp.so<span class="w"> </span>/data/local/tmp/inception_v3
+$<span class="w"> </span>adb<span class="w"> </span>push<span class="w"> </span><span class="nv">$QNN_SDK_ROOT</span>/lib/<span class="nv">$QNN_TARGET_ARCH</span>/libQnnHtpPrepare.so<span class="w"> </span>/data/local/tmp/inception_v3
+$<span class="w"> </span>adb<span class="w"> </span>push<span class="w"> </span><span class="nv">$QNN_SDK_ROOT</span>/lib/<span class="nv">$QNN_TARGET_ARCH</span>/libQnnSystem.so<span class="w"> </span>/data/local/tmp/inception_v3
+$<span class="w"> </span>adb<span class="w"> </span>push<span class="w"> </span><span class="nv">$QNN_SDK_ROOT</span>/lib/<span class="nv">$QNN_TARGET_ARCH</span>/libQnnHtpV75Stub.so<span class="w"> </span>/data/local/tmp/inception_v3
+$<span class="w"> </span><span class="c1"># Push Hexagon (eg. QNN HTP) backends, push the Skel:</span>
+$<span class="w"> </span>adb<span class="w"> </span>push<span class="w"> </span><span class="nv">$QNN_SDK_ROOT</span>/lib/<span class="nv">$HEXAGON_TARGET_ARCH</span>/unsigned/libQnnHtpV75Skel.so<span class="w"> </span>/data/local/tmp/inception_v3
+</pre></div>
+</div>
+</li>
+<li><p>From your host machine, transfer model, data and input list to your target device by running:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="c1"># Set the environment variable TENSORFLOW_HOME to point to the location where TensorFlow package is installed</span>
+$<span class="w"> </span><span class="c1"># TensorFlow 2.10.1 and 2.17.0 has been tested and is compatible with this tutorial</span>
+$
+$<span class="w"> </span><span class="c1"># Generate and convert inceptionV3 model to .tflite model</span>
+$<span class="w"> </span>python3<span class="w"> </span><span class="nv">$QNN_SDK_ROOT</span>/examples/Models/InceptionV3/scripts/setup_inceptionv3.py<span class="w"> </span>-a<span class="w"> </span>~/tmpdir<span class="w"> </span>-d
+$<span class="w"> </span>python3<span class="w"> </span><span class="nv">$QNN_SDK_ROOT</span>/examples/QNN/TFLiteDelegate/Models/InceptionV3Quant/scripts/convert_inceptionv3_tflite.py
+$<span class="w"> </span><span class="c1"># Push model, data and input list</span>
+$<span class="w"> </span>adb<span class="w"> </span>push<span class="w"> </span><span class="nv">$QNN_SDK_ROOT</span>/examples/QNN/TFLiteDelegate/Models/InceptionV3Quant/inception_v3_quant.tflite<span class="w"> </span>/data/local/tmp/inception_v3
+$<span class="w"> </span>adb<span class="w"> </span>push<span class="w"> </span><span class="nv">$QNN_SDK_ROOT</span>/examples/Models/InceptionV3/data/cropped<span class="w"> </span>/data/local/tmp/inception_v3
+$<span class="w"> </span>adb<span class="w"> </span>push<span class="w"> </span><span class="nv">$QNN_SDK_ROOT</span>/examples/Models/InceptionV3/data/target_raw_list.txt<span class="w"> </span>/data/local/tmp/inception_v3
+</pre></div>
+</div>
+</li>
+<li><p>From your host machine, execute the model on your target device by running:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>adb<span class="w"> </span>shell<span class="w"> </span><span class="s1">&#39;export LD_LIBRARY_PATH=/data/local/tmp/inception_v3/:$LD_LIBRARY_PATH &amp;&amp; export ADSP_LIBRARY_PATH=&quot;/data/local/tmp/inception_v3/&quot; &amp;&amp;</span>
+<span class="s1">            cd /data/local/tmp/inception_v3/ &amp;&amp; /data/local/tmp/inception_v3/qtld-net-run \</span>
+<span class="s1">            --model /data/local/tmp/inception_v3/inception_v3_quant.tflite \</span>
+<span class="s1">            --input /data/local/tmp/inception_v3/target_raw_list.txt  \</span>
+<span class="s1">            --output /data/local/tmp/inception_v3/tflite-output \</span>
+<span class="s1">            --backend htp&#39;</span>
+</pre></div>
+</div>
+</li>
+<li><p>You should see a folder named <code class="docutils literal notranslate"><span class="pre">tflite-output</span></code> which contains the results of your run.</p></li>
+</ol>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="tutorial_c_application.html" class="btn btn-neutral float-right" title="Tutorial - Using TFLite Delegate With a C/C++ Application" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="tutorials.html" class="btn btn-neutral float-left" title="Tutorials" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020-2025, Qualcomm Technologies, Inc..
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

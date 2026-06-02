@@ -1,0 +1,4 @@
+<map id="QHPI_Kernel_v1" name="QHPI_Kernel_v1">
+<area shape="rect" id="node1" title="Description of a single kernel implementation for an operator." alt="" coords="40,109,165,136"/>
+<area shape="rect" id="node2" href="$structQHPI__Tensor__Signature__v1.html" title="Tensor signature describing the expected properties of one input or output parameter of a kernel." alt="" coords="5,5,200,32"/>
+</map>

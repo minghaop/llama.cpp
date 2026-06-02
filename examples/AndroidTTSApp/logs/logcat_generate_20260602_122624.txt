@@ -1,0 +1,250 @@
+--------- beginning of system
+06-02 12:26:15.119  2026  3998 D InputManager: injectMotionEvent: 23863-{action=ACTION_DOWN, id[0]=0, x[0]=287.0, y[0]=1453.0, pointerCount=1, eventTime=139694955, deviceId=4}
+06-02 12:26:15.124  2026  2026 W ContextImpl: Calling a method in the system process without a qualified user: android.app.ContextImpl.sendBroadcast:1249 android.content.ContextWrapper.sendBroadcast:506 jp.co.sharp.android.brightkeep.BrightKeepService.checkTimerEventSub:625 jp.co.sharp.android.brightkeep.BrightKeepService.onSensorHubChanged:1183 jp.co.sharp.android.sensorhub.AccelerometerSHEXConverter.onSensorChanged:102 
+--------- beginning of main
+06-02 12:26:15.126  2026  2026 V BrightKeepService: getAction: jp.co.sharp.android.intent.action.CLICK_SCREEN_ON isOutOfHand: false
+06-02 12:26:15.130  2026  3998 D InputManager: injectMotionEvent: 23863-{action=ACTION_UP, id[0]=0, x[0]=287.0, y[0]=1453.0, pointerCount=1, eventTime=139694955, deviceId=4}
+06-02 12:26:15.167 23804 23812 W le.llama.aichat: userfaultfd: MOVE ioctl seems unsupported: Try again
+06-02 12:26:15.182 23804 23867 I LlamaInferenceBridge: runInference started, flowStreaming=false, flowFinalize=true
+06-02 12:26:15.249  1442  1628 I SDM     : DisplayBase::CommitThread: Received idle timeout, panel: cmd, timeout: 70000 us
+06-02 12:26:17.174 23528 23544 I TrafficStats: tagSocketFd(-1, 1031, -1) failed with errno-9
+06-02 12:26:17.272 21853 21853 D BoundBrokerSvc: onUnbind: Intent { act=com.google.android.gms.inappreach.service.START dat=chimera-action:/... cmp=com.google.android.gms/.chimera.GmsApiService }
+06-02 12:26:17.371 23804 23867 E LlamaInferenceBridge: runInference failed at frontEnd
+06-02 12:26:17.371 23804 23867 E LlamaInferenceBridge: java.lang.IllegalStateException: 缺少文件 hifigan.mnn，请放到以下路径之一：
+06-02 12:26:17.371 23804 23867 E LlamaInferenceBridge: - /data/user/0/com.example.llama.aichat/files/models/hifigan.mnn
+06-02 12:26:17.371 23804 23867 E LlamaInferenceBridge: 	at j2.h0.t(r8-map-id-55bdb88b48c7bcd33d1064a4fef22f0cec809b43edae4d16bdd496127f2cd7ee:90)
+06-02 12:26:17.371 23804 23867 E LlamaInferenceBridge: 	at j2.h0.i(r8-map-id-55bdb88b48c7bcd33d1064a4fef22f0cec809b43edae4d16bdd496127f2cd7ee:344)
+06-02 12:26:17.371 23804 23867 E LlamaInferenceBridge: 	at j2.h0.x(r8-map-id-55bdb88b48c7bcd33d1064a4fef22f0cec809b43edae4d16bdd496127f2cd7ee:6)
+06-02 12:26:17.371 23804 23867 E LlamaInferenceBridge: 	at j2.q0.invokeSuspend(r8-map-id-55bdb88b48c7bcd33d1064a4fef22f0cec809b43edae4d16bdd496127f2cd7ee:91)
+06-02 12:26:17.371 23804 23867 E LlamaInferenceBridge: 	at a4.a.resumeWith(r8-map-id-55bdb88b48c7bcd33d1064a4fef22f0cec809b43edae4d16bdd496127f2cd7ee:8)
+06-02 12:26:17.371 23804 23867 E LlamaInferenceBridge: 	at r4.y.run(r8-map-id-55bdb88b48c7bcd33d1064a4fef22f0cec809b43edae4d16bdd496127f2cd7ee:114)
+06-02 12:26:17.371 23804 23867 E LlamaInferenceBridge: 	at d2.b.run(r8-map-id-55bdb88b48c7bcd33d1064a4fef22f0cec809b43edae4d16bdd496127f2cd7ee:19)
+06-02 12:26:17.371 23804 23867 E LlamaInferenceBridge: 	at z4.j.run(r8-map-id-55bdb88b48c7bcd33d1064a4fef22f0cec809b43edae4d16bdd496127f2cd7ee:3)
+06-02 12:26:17.371 23804 23867 E LlamaInferenceBridge: 	at z4.a.run(r8-map-id-55bdb88b48c7bcd33d1064a4fef22f0cec809b43edae4d16bdd496127f2cd7ee:87)
+06-02 12:26:17.372 23804 23867 I LlamaInferenceBridge: runInference finished: stage=frontEnd result=false total=2.190 s
+06-02 12:26:17.563  1442  1628 I SDM     : DisplayBase::CommitThread: Received idle timeout, panel: cmd, timeout: 70000 us
+06-02 12:26:19.000  2200  3058 E Diag_Lib: diag: Diag_LSM_Init: invoked for pid: 2200 with init_count: 0
+06-02 12:26:19.001  2200  3058 E Diag_Lib: diag:failed to connect to diag socket
+06-02 12:26:19.001  2200  3058 E Diag_Lib:  Diag_LSM_Init: Failed to open handle to diag driver, error = 111
+06-02 12:26:20.026 23874 23874 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+06-02 12:26:20.028 23874 23874 I AndroidRuntime: Using default boot image
+06-02 12:26:20.028 23874 23874 I AndroidRuntime: Leaving lock profiling enabled
+06-02 12:26:20.030 23874 23874 I app_process: Using CollectorTypeCMC GC.
+06-02 12:26:20.068 23874 23874 D nativeloader: InitDefaultPublicLibraries for_preload=1: libandroid.so:libaaudio.so:libamidi.so:libbinder_ndk.so:libc.so:libcamera2ndk.so:libdl.so:libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libicu.so:libicui18n.so:libicuuc.so:libjnigraphics.so:liblog.so:libmediandk.so:libm.so:libnativehelper.so:libnativewindow.so:libOpenMAXAL.so:libOpenSLES.so:libRS.so:libstdc++.so:libsync.so:libvulkan.so:libwebviewchromium_plat_support.so:libz.so
+06-02 12:26:20.073 23874 23874 D nativeloader: Load libicu_jni.so using APEX ns com_android_art for caller /apex/com.android.art/javalib/core-oj.jar: ok
+06-02 12:26:20.073 23874 23874 D app_process: u_setTimeZoneFilesDirectory("/apex/com.android.tzdata/etc/tz/versioned/8/icu") succeeded. 
+06-02 12:26:20.073 23874 23874 D app_process: I18n APEX ICU file found: /apex/com.android.i18n/etc/icu/icudt75l.dat
+06-02 12:26:20.074 23874 23874 D nativeloader: Load libjavacore.so using APEX ns com_android_art for caller /apex/com.android.art/javalib/core-oj.jar: ok
+06-02 12:26:20.074 23874 23874 D nativeloader: Load libopenjdk.so using APEX ns com_android_art for caller /apex/com.android.art/javalib/core-oj.jar: ok
+06-02 12:26:20.075 23874 23874 I app_process: Priority-to-niceness mapping: 19, 16, 13, 10, 0, -2, -4, -5, -6, -8
+06-02 12:26:20.083 23874 23874 W System  : ClassLoader referenced unknown path: /system_ext/framework/mediatek-framework.jar
+06-02 12:26:20.083 23874 23874 W libc    : Access denied finding property "ro.vendor.mtk.hbt_binfmt_misc_support"
+06-02 12:26:20.083 23874 23874 W libc    : Access denied finding property "ro.vendor.mtk.app32_boost_support"
+06-02 12:26:20.083 23874 23874 W libc    : Access denied finding property "ro.vendor.mtk.hbt_dyn_type"
+06-02 12:26:20.083 23874 23874 W libc    : Access denied finding property "persist.vendor.mtk.hbt_dyn_type"
+06-02 12:26:20.089 23874 23874 D nativeloader: Load libframework-connectivity-tiramisu-jni.so using APEX ns com_android_tethering for caller /apex/com.android.tethering/javalib/framework-connectivity-t.jar: ok
+06-02 12:26:20.089 23874 23874 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+06-02 12:26:20.092 23874 23874 D UiAutomationConnection: Created on user UserHandle{0}
+06-02 12:26:20.092 23874 23874 I UiAutomation: Initialized for user 0 on display 0
+06-02 12:26:20.092 23874 23874 W UiAutomation: Created with deprecatead constructor, assumes DEFAULT_DISPLAY
+06-02 12:26:20.093  2026  3867 D AccessibilityManagerService: changeCurrentUserForTestAutomationIfNeededLocked(0): ignoring because device doesn't support visible background users
+06-02 12:26:20.093  2026  3867 I UiAutomationManager: Registering UiTestAutomationService (id=com.android.server.accessibility/UiAutomation, flags=0x0) when called by user 0
+06-02 12:26:20.094  2026  3399 W AS.AudioService: handleMessage({ when=0 what=35 target=com.android.server.audio.AudioService$AudioHandler }) from pid=2026, uid=1000
+06-02 12:26:20.095  2026  3867 W MagnificationConnectionManager: requestConnection duplicated request: connect=false, mConnectionState=DISCONNECTED
+06-02 12:26:20.108  2026  3399 W AS.AudioService: handleMessage({ when=0 what=35 target=com.android.server.audio.AudioService$AudioHandler }) from pid=2026, uid=1000
+06-02 12:26:20.109  2026  3867 W MagnificationConnectionManager: requestConnection duplicated request: connect=false, mConnectionState=DISCONNECTED
+06-02 12:26:20.119  2026  2026 D BatterySaverPolicy: accessibility changed to true, updating policy.
+06-02 12:26:20.129  3862  3934 D AccessibilitySourceService: enabled a11y services count 0
+06-02 12:26:20.129  3862  3934 D AccessibilitySourceService: a11y source sending 0 issue to sc
+06-02 12:26:20.130  2026  3613 D SafetySourceDataValidat: No cert check requested for package com.google.android.permissioncontroller
+06-02 12:26:20.190  1442  1628 I SDM     : DisplayBase::CommitThread: Received idle timeout, panel: cmd, timeout: 70000 us
+06-02 12:26:20.604  1442  1628 I SDM     : DisplayBase::CommitThread: Received idle timeout, panel: cmd, timeout: 70000 us
+06-02 12:26:21.135 23874 23874 W libc    : Access denied finding property "qemu.sf.lcd_density"
+06-02 12:26:21.136 23874 23874 W libc    : Access denied finding property "qemu.sf.lcd_density"
+06-02 12:26:21.131 23874 23874 W uiautomator: type=1400 audit(0.0:28436): avc:  denied  { read } for  name="u:object_r:qemu_sf_lcd_density_prop:s0" dev="tmpfs" ino=347 scontext=u:r:shell:s0 tcontext=u:object_r:qemu_sf_lcd_density_prop:s0 tclass=file permissive=0
+06-02 12:26:21.131 23874 23874 W uiautomator: type=1400 audit(0.0:28437): avc:  denied  { read } for  name="u:object_r:qemu_sf_lcd_density_prop:s0" dev="tmpfs" ino=347 scontext=u:r:shell:s0 tcontext=u:object_r:qemu_sf_lcd_density_prop:s0 tclass=file permissive=0
+06-02 12:26:21.152  4515  5116 W MediaProvider: isAppCloneUserPair for user 0: false
+06-02 12:26:21.173 23874 23874 W AccessibilityNodeInfoDumper: Fetch time: 33ms
+06-02 12:26:21.175  2026  3396 D WindowManager: setParent old=Leaf:29:31@147574553,new=null,this window=WindowToken{4e99d5d type=2032 android.os.Binder@e4c1b34},callers=com.android.server.wm.WindowContainer.removeChild:833 com.android.server.wm.WindowContainer.removeImmediately:891 com.android.server.wm.WindowToken.setExiting:255 com.android.server.wm.DisplayContent.removeWindowToken:1543 com.android.server.wm.WindowManagerService.removeWindowToken:3291 com.android.server.wm.WindowManagerService$LocalService.removeWindowToken:8360 
+06-02 12:26:21.175  2026  3399 W AS.AudioService: handleMessage({ when=0 what=35 target=com.android.server.audio.AudioService$AudioHandler }) from pid=2026, uid=1000
+06-02 12:26:21.176  2026  3396 W MagnificationConnectionManager: requestConnection duplicated request: connect=false, mConnectionState=DISCONNECTED
+06-02 12:26:21.176  2026  3396 D AccessibilityManagerService: restoreCurrentUserForTestAutomationIfNeededLocked(): ignoring because device doesn't support visible background users
+06-02 12:26:21.179 23874 23874 D AndroidRuntime: Shutting down VM
+06-02 12:26:21.187  2026  2026 D BatterySaverPolicy: accessibility changed to false, updating policy.
+06-02 12:26:21.266  1442  1628 I SDM     : DisplayBase::CommitThread: Received idle timeout, panel: cmd, timeout: 69999 us
+06-02 12:26:22.126 23528 23583 E WakeLock: GCM_CONN_ALARM ** IS FORCE-RELEASED ON TIMEOUT ** [CONTEXT service_id=259 ]
+06-02 12:26:22.201  3620  4241 D IpClient/wlan0: interfaceLinkStateChanged: ifindex 23 up
+06-02 12:26:22.285  2026  3382 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET, states=14
+06-02 12:26:22.288  2026  3382 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET6, states=14
+06-02 12:26:22.288  2026  3382 D InetDiagMessage: Destroyed live tcp sockets for uids={10303} in 8ms
+06-02 12:26:22.291  2026  3382 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET, states=14
+06-02 12:26:22.293  2026  3382 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET6, states=14
+06-02 12:26:22.293  2026  3382 D InetDiagMessage: Destroyed live tcp sockets for uids={20303} in 5ms
+06-02 12:26:23.616  1442  1628 I SDM     : DisplayBase::CommitThread: Received idle timeout, panel: cmd, timeout: 70000 us
+06-02 12:26:24.002  2200  3058 E Diag_Lib: diag: Diag_LSM_Init: invoked for pid: 2200 with init_count: 0
+06-02 12:26:24.003  2200  3058 E Diag_Lib: diag:failed to connect to diag socket
+06-02 12:26:24.004  2200  3058 E Diag_Lib:  Diag_LSM_Init: Failed to open handle to diag driver, error = 111
+06-02 12:26:26.644  1442  1628 I SDM     : DisplayBase::CommitThread: Received idle timeout, panel: cmd, timeout: 70000 us
+06-02 12:26:27.274  2026  3295 D ActivityManager: freezing 21853 com.google.android.gms
+06-02 12:26:28.812  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] wait_event:Wait done with Cmd 33
+06-02 12:26:28.812  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] do_listen_events: Rcvd valid Netlink Cmd 0 Err 0
+06-02 12:26:29.005  2200  3058 E Diag_Lib: diag: Diag_LSM_Init: invoked for pid: 2200 with init_count: 0
+06-02 12:26:29.006  2200  3058 E Diag_Lib: diag:failed to connect to diag socket
+06-02 12:26:29.006  2200  3058 E Diag_Lib:  Diag_LSM_Init: Failed to open handle to diag driver, error = 111
+06-02 12:26:29.665  1442  1628 I SDM     : DisplayBase::CommitThread: Received idle timeout, panel: cmd, timeout: 70000 us
+06-02 12:26:30.567  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] wait_event:Wait done with Cmd 34
+06-02 12:26:30.568  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] do_listen_events: Rcvd valid Netlink Cmd 34 Err 0
+06-02 12:26:30.569  2026  4438 D WifiNl80211Manager: Scan result ready event
+06-02 12:26:30.569  2026  4438 D WifiNative: Scan result ready event
+06-02 12:26:30.570  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] 
+06-02 12:26:30.570  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] BSS cc:d8:43:**:**:89 FREQ: 5745, cFreq1[40:80:160] = [5755:5775:0] cFreq2 = 0 SSID SPU_______5G, RSSI(dBM): -48, 11mcRanging: No, Country Code =    
+06-02 12:26:30.570  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] 
+06-02 12:26:30.571  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] BSS 9c:73:70:**:**:13 FREQ: 5785, cFreq1[40:80:160] = [5795:0:0] cFreq2 = 0 SSID IDEA-Office, RSSI(dBM): -54, 11mcRanging: No, Country Code = CNI
+06-02 12:26:30.571  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] 
+06-02 12:26:30.571  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] BSS 9c:73:70:**:**:00 FREQ: 2452, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID Scc-test, RSSI(dBM): -56, 11mcRanging: No, Country Code = CNI
+06-02 12:26:30.571  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] 
+06-02 12:26:30.571  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] BSS 9c:73:70:**:**:02 FREQ: 2452, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID IDEA-Guest, RSSI(dBM): -56, 11mcRanging: No, Country Code = CNI
+06-02 12:26:30.571  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] 
+06-02 12:26:30.572  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] BSS 9c:73:70:**:**:03 FREQ: 2452, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID IDEA-Office, RSSI(dBM): -56, 11mcRanging: No, Country Code = CNI
+06-02 12:26:30.572  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] 
+06-02 12:26:30.572  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] BSS c4:b2:5b:**:**:57 FREQ: 2462, cFreq1[40:80:160] = [2462:0:0] cFreq2 = 0 SSID fexlink, RSSI(dBM): -61, 11mcRanging: No, Country Code = CN
+06-02 12:26:30.572  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] 
+06-02 12:26:30.572  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] BSS 9c:73:70:**:**:e3 FREQ: 2432, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID IDEA-Office, RSSI(dBM): -69, 11mcRanging: No, Country Code = CNI
+06-02 12:26:30.573  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] 
+06-02 12:26:30.573  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] BSS 90:f9:b7:**:**:d4 FREQ: 2412, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID hw_manage_fcd0, RSSI(dBM): -66, 11mcRanging: No, Country Code = DB
+06-02 12:26:30.573  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] 
+06-02 12:26:30.573  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] BSS cc:d8:43:**:**:88 FREQ: 2412, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID SPU_______2.4G, RSSI(dBM): -48, 11mcRanging: No, Country Code =    
+06-02 12:26:30.573  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] 
+06-02 12:26:30.573  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] BSS c6:b2:5b:**:**:57 FREQ: 2462, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID fexlink_iot, RSSI(dBM): -58, 11mcRanging: No, Country Code = CN
+06-02 12:26:30.573  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] 
+06-02 12:26:30.574  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] BSS e0:27:6c:**:**:a0 FREQ: 5765, cFreq1[40:80:160] = [5755:5775:0] cFreq2 = 0 SSID NoNetworkTest, RSSI(dBM): -70, 11mcRanging: No, Country Code = CN 
+06-02 12:26:30.574  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] 
+06-02 12:26:30.574  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] BSS 9c:73:70:**:**:33 FREQ: 2432, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID IDEA-Office, RSSI(dBM): -73, 11mcRanging: No, Country Code = CNI
+06-02 12:26:30.574  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan]  -- associated
+06-02 12:26:30.574  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] 
+06-02 12:26:30.574  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] BSS 9c:73:70:**:**:f3 FREQ: 5300, cFreq1[40:80:160] = [5310:0:0] cFreq2 = 0 SSID IDEA-Office, RSSI(dBM): -63, 11mcRanging: No, Country Code = CNI
+06-02 12:26:30.574  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] 
+06-02 12:26:30.574  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] BSS 9c:73:70:**:**:10 FREQ: 5785, cFreq1[40:80:160] = [5795:0:0] cFreq2 = 0 SSID Scc-test, RSSI(dBM): -54, 11mcRanging: No, Country Code = CNI
+06-02 12:26:30.575  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] 
+06-02 12:26:30.575  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] BSS 9c:73:70:**:**:12 FREQ: 5785, cFreq1[40:80:160] = [5795:0:0] cFreq2 = 0 SSID IDEA-Guest, RSSI(dBM): -54, 11mcRanging: No, Country Code = CNI
+06-02 12:26:30.575  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] 
+06-02 12:26:30.575  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] BSS 9c:73:70:**:**:f3 FREQ: 5785, cFreq1[40:80:160] = [5795:0:0] cFreq2 = 0 SSID IDEA-Office, RSSI(dBM): -82, 11mcRanging: No, Country Code = CNI
+06-02 12:26:30.575  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] 
+06-02 12:26:30.575  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] BSS 9c:73:70:**:**:32 FREQ: 2432, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID IDEA-Guest, RSSI(dBM): -70, 11mcRanging: No, Country Code = CNI
+06-02 12:26:30.575  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] 
+06-02 12:26:30.575  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] BSS 9c:73:70:**:**:30 FREQ: 2432, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID Scc-test, RSSI(dBM): -71, 11mcRanging: No, Country Code = CNI
+06-02 12:26:30.576  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] 
+06-02 12:26:30.576  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] BSS 08:aa:89:**:**:a1 FREQ: 5805, cFreq1[40:80:160] = [5795:5775:0] cFreq2 = 0 SSID fexlink1, RSSI(dBM): -83, 11mcRanging: No, Country Code = US 
+06-02 12:26:30.576  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] 
+06-02 12:26:30.576  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] BSS 74:39:89:**:**:f9 FREQ: 2412, cFreq1[40:80:160] = [2422:0:0] cFreq2 = 0 SSID TP-LINK_C0F9_2.4G, RSSI(dBM): -36, 11mcRanging: No, Country Code = CN 
+06-02 12:26:30.576  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] 
+06-02 12:26:30.576  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] BSS 9c:73:70:**:**:d2 FREQ: 5785, cFreq1[40:80:160] = [5795:0:0] cFreq2 = 0 SSID IDEA-Guest, RSSI(dBM): -82, 11mcRanging: No, Country Code = CNI
+06-02 12:26:30.576  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] 
+06-02 12:26:30.577  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] BSS 9c:73:70:**:**:f0 FREQ: 5785, cFreq1[40:80:160] = [5795:0:0] cFreq2 = 0 SSID Scc-test, RSSI(dBM): -82, 11mcRanging: No, Country Code = CNI
+06-02 12:26:30.577  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] 
+06-02 12:26:30.577  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] BSS 90:f9:b7:**:**:94 FREQ: 2412, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID hw_manage_ff90, RSSI(dBM): -62, 11mcRanging: No, Country Code = DB
+06-02 12:26:30.577  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] 
+06-02 12:26:30.577  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] BSS 78:47:5f:**:**:20 FREQ: 2437, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID ChinaNet-cS7i, RSSI(dBM): -61, 11mcRanging: No, Country Code =    
+06-02 12:26:30.577  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] 
+06-02 12:26:30.577  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] BSS 68:ea:05:**:**:14 FREQ: 2437, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID ChinaNet-cS7i, RSSI(dBM): -65, 11mcRanging: No, Country Code =    
+06-02 12:26:30.577  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] 
+06-02 12:26:30.577  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] BSS 90:f9:b7:**:**:74 FREQ: 2437, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID hw_manage_5270, RSSI(dBM): -70, 11mcRanging: No, Country Code = DB
+06-02 12:26:30.577  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] 
+06-02 12:26:30.578  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] BSS c6:b2:5b:**:**:57 FREQ: 2462, cFreq1[40:80:160] = [2462:0:0] cFreq2 = 0 SSID , RSSI(dBM): -58, 11mcRanging: No, Country Code = CN
+06-02 12:26:30.578  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] 
+06-02 12:26:30.578  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] BSS 78:52:37:**:**:a5 FREQ: 5180, cFreq1[40:80:160] = [5190:5210:5210] cFreq2 = 5250 SSID EasyLogic-2101-5G, RSSI(dBM): -81, 11mcRanging: No, Country Code = CN 
+06-02 12:26:30.578  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] 
+06-02 12:26:30.578  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] BSS 74:39:89:**:**:fb FREQ: 5180, cFreq1[40:80:160] = [5190:5210:5210] cFreq2 = 5250 SSID TP-LINK_C0F9, RSSI(dBM): -45, 11mcRanging: No, Country Code = CN 
+06-02 12:26:30.578  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] 
+06-02 12:26:30.578  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] BSS 78:47:5f:**:**:29 FREQ: 5180, cFreq1[40:80:160] = [5190:5210:5210] cFreq2 = 5250 SSID ChinaNet-cS7i-5G, RSSI(dBM): -75, 11mcRanging: No, Country Code =    
+06-02 12:26:30.578  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] 
+06-02 12:26:30.578  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] BSS 7e:39:89:**:**:fb FREQ: 5180, cFreq1[40:80:160] = [5190:5210:5210] cFreq2 = 5250 SSID , RSSI(dBM): -45, 11mcRanging: No, Country Code = CN 
+06-02 12:26:30.578  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] 
+06-02 12:26:30.578  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] BSS 9c:73:70:**:**:e0 FREQ: 2432, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID Scc-test, RSSI(dBM): -70, 11mcRanging: No, Country Code = CNI
+06-02 12:26:30.579  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] 
+06-02 12:26:30.579  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] BSS 9c:73:70:**:**:e2 FREQ: 2432, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID IDEA-Guest, RSSI(dBM): -69, 11mcRanging: No, Country Code = CNI
+06-02 12:26:30.579  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] 
+06-02 12:26:30.579  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] BSS 9c:73:70:**:**:d0 FREQ: 5220, cFreq1[40:80:160] = [5230:0:0] cFreq2 = 0 SSID Scc-test, RSSI(dBM): -63, 11mcRanging: No, Country Code = CNI
+06-02 12:26:30.579  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] 
+06-02 12:26:30.579  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] BSS 9c:73:70:**:**:d2 FREQ: 5220, cFreq1[40:80:160] = [5230:0:0] cFreq2 = 0 SSID IDEA-Guest, RSSI(dBM): -63, 11mcRanging: No, Country Code = CNI
+06-02 12:26:30.579  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] 
+06-02 12:26:30.579  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] BSS 9c:73:70:**:**:d3 FREQ: 5220, cFreq1[40:80:160] = [5230:0:0] cFreq2 = 0 SSID IDEA-Office, RSSI(dBM): -63, 11mcRanging: No, Country Code = CNI
+06-02 12:26:30.579  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] 
+06-02 12:26:30.580  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] BSS d6:d8:43:**:**:89 FREQ: 5745, cFreq1[40:80:160] = [5755:5775:0] cFreq2 = 0 SSID , RSSI(dBM): -48, 11mcRanging: No, Country Code =    
+06-02 12:26:30.580  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] 
+06-02 12:26:30.580  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] BSS e0:27:6c:**:**:21 FREQ: 5765, cFreq1[40:80:160] = [5755:5775:0] cFreq2 = 0 SSID , RSSI(dBM): -74, 11mcRanging: No, Country Code = CN 
+06-02 12:26:30.580  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] 
+06-02 12:26:30.580  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] BSS e2:27:6c:**:**:21 FREQ: 5765, cFreq1[40:80:160] = [5755:5775:0] cFreq2 = 0 SSID , RSSI(dBM): -74, 11mcRanging: No, Country Code = CN 
+06-02 12:26:30.580  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] 
+06-02 12:26:30.580  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] BSS 8c:ee:fd:**:**:85 FREQ: 5240, cFreq1[40:80:160] = [5230:5210:5210] cFreq2 = 5250 SSID ChinaNet-z9AC-5G, RSSI(dBM): -80, 11mcRanging: No, Country Code = CN 
+06-02 12:26:30.581  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] 
+06-02 12:26:30.581  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] BSS 0a:aa:89:**:**:a1 FREQ: 5805, cFreq1[40:80:160] = [5795:5775:0] cFreq2 = 0 SSID , RSSI(dBM): -85, 11mcRanging: No, Country Code = US 
+06-02 12:26:30.581  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] 
+06-02 12:26:30.581  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] BSS c6:b2:5b:**:**:57 FREQ: 5260, cFreq1[40:80:160] = [5270:5290:5290] cFreq2 = 5250 SSID fexlink_5G, RSSI(dBM): -77, 11mcRanging: No, Country Code = CN
+06-02 12:26:30.581  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] 
+06-02 12:26:30.581  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] BSS 9c:73:70:**:**:72 FREQ: 5260, cFreq1[40:80:160] = [5270:0:0] cFreq2 = 0 SSID IDEA-Guest, RSSI(dBM): -84, 11mcRanging: No, Country Code = CNI
+06-02 12:26:30.581  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] 
+06-02 12:26:30.581  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] BSS 9c:73:70:**:**:40 FREQ: 5260, cFreq1[40:80:160] = [5270:0:0] cFreq2 = 0 SSID Scc-test, RSSI(dBM): -66, 11mcRanging: No, Country Code = CNI
+06-02 12:26:30.582  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] 
+06-02 12:26:30.582  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] BSS 9c:73:70:**:**:42 FREQ: 5260, cFreq1[40:80:160] = [5270:0:0] cFreq2 = 0 SSID IDEA-Guest, RSSI(dBM): -66, 11mcRanging: No, Country Code = CNI
+06-02 12:26:30.582  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] 
+06-02 12:26:30.582  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] BSS 9c:73:70:**:**:43 FREQ: 5260, cFreq1[40:80:160] = [5270:0:0] cFreq2 = 0 SSID IDEA-Office, RSSI(dBM): -66, 11mcRanging: No, Country Code = CNI
+06-02 12:26:30.582  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] 
+06-02 12:26:30.582  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] BSS c6:b2:5b:**:**:57 FREQ: 5260, cFreq1[40:80:160] = [5270:5290:5290] cFreq2 = 5250 SSID , RSSI(dBM): -77, 11mcRanging: No, Country Code = CN
+06-02 12:26:30.582  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] 
+06-02 12:26:30.582  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] BSS 9c:73:70:**:**:f0 FREQ: 5300, cFreq1[40:80:160] = [5310:0:0] cFreq2 = 0 SSID Scc-test, RSSI(dBM): -66, 11mcRanging: No, Country Code = CNI
+06-02 12:26:30.583  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] 
+06-02 12:26:30.583  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] BSS 9c:73:70:**:**:f2 FREQ: 5300, cFreq1[40:80:160] = [5310:0:0] cFreq2 = 0 SSID IDEA-Guest, RSSI(dBM): -66, 11mcRanging: No, Country Code = CNI
+06-02 12:26:30.583  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] 
+06-02 12:26:30.583  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] BSS 9c:73:70:**:**:f3 FREQ: 5300, cFreq1[40:80:160] = [5310:0:0] cFreq2 = 0 SSID IDEA-Office, RSSI(dBM): -66, 11mcRanging: No, Country Code = CNI
+06-02 12:26:30.583  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] 
+06-02 12:26:30.583  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] BSS 68:ea:05:**:**:1d FREQ: 5180, cFreq1[40:80:160] = [5190:5210:5210] cFreq2 = 5250 SSID ChinaNet-cS7i-5G, RSSI(dBM): -77, 11mcRanging: No, Country Code =    
+06-02 12:26:30.583  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] 
+06-02 12:26:30.583  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] BSS 8c:35:92:**:**:0c FREQ: 5220, cFreq1[40:80:160] = [5230:0:0] cFreq2 = 0 SSID DIRECT-XU20FYNVVHRFRCZUCmsEJ, RSSI(dBM): -82, 11mcRanging: No, Country Code =    
+06-02 12:26:30.583  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] 
+06-02 12:26:30.584  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] BSS 9c:73:70:**:**:f2 FREQ: 5300, cFreq1[40:80:160] = [5310:0:0] cFreq2 = 0 SSID IDEA-Guest, RSSI(dBM): -65, 11mcRanging: No, Country Code = CNI
+06-02 12:26:30.584  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] 
+06-02 12:26:30.584  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] BSS f0:ac:f3:**:**:a0 FREQ: 2412, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID QZ, RSSI(dBM): -80, 11mcRanging: No, Country Code =    
+06-02 12:26:30.584  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] 
+06-02 12:26:30.584  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] BSS 7e:39:89:**:**:f9 FREQ: 2412, cFreq1[40:80:160] = [2422:0:0] cFreq2 = 0 SSID , RSSI(dBM): -36, 11mcRanging: No, Country Code = CN 
+06-02 12:26:30.584  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] 
+06-02 12:26:30.584  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] BSS 0a:aa:89:**:**:a0 FREQ: 2422, cFreq1[40:80:160] = [2432:0:0] cFreq2 = 0 SSID , RSSI(dBM): -71, 11mcRanging: No, Country Code = US 
+06-02 12:26:30.584  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] 
+06-02 12:26:30.584  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] BSS 9c:73:70:**:**:d3 FREQ: 5785, cFreq1[40:80:160] = [5795:0:0] cFreq2 = 0 SSID IDEA-Office, RSSI(dBM): -81, 11mcRanging: No, Country Code = CNI
+06-02 12:26:30.585  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] 
+06-02 12:26:30.585  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] BSS d2:d8:43:**:**:88 FREQ: 2412, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID , RSSI(dBM): -48, 11mcRanging: No, Country Code =    
+06-02 12:26:30.585  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] 
+06-02 12:26:30.585  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] BSS 9c:73:70:**:**:d0 FREQ: 5785, cFreq1[40:80:160] = [5795:0:0] cFreq2 = 0 SSID Scc-test, RSSI(dBM): -81, 11mcRanging: No, Country Code = CNI
+06-02 12:26:30.585  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] 
+06-02 12:26:30.585  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] BSS ec:c3:b0:**:**:d2 FREQ: 2437, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID MEDICARE, RSSI(dBM): -76, 11mcRanging: No, Country Code = CN 
+06-02 12:26:30.585  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] 
+06-02 12:26:30.585  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] BSS 60:3a:7c:**:**:e2 FREQ: 2462, cFreq1[40:80:160] = [2452:0:0] cFreq2 = 0 SSID _______________, RSSI(dBM): -66, 11mcRanging: No, Country Code = CN 
+06-02 12:26:30.586  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] 
+06-02 12:26:30.586  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] BSS 9c:73:70:**:**:70 FREQ: 5260, cFreq1[40:80:160] = [5270:0:0] cFreq2 = 0 SSID Scc-test, RSSI(dBM): -83, 11mcRanging: No, Country Code = CNI
+06-02 12:26:30.586  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] 
+06-02 12:26:30.586  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] BSS 62:e4:9b:**:**:c2 FREQ: 2462, cFreq1[40:80:160] = [0:0:0] cFreq2 = 0 SSID HUAWEI_B311_A8CA, RSSI(dBM): -71, 11mcRanging: No, Country Code =    
+06-02 12:26:30.586  2441  4234 D LOWI-9.0.1.77: [LOWIDiagLog] Log: lowiMeasResult->request: invalid null argument
+06-02 12:26:30.586  2441  4234 I LOWI-9.0.1.77: [LOWI-Scan] lowi_close_record:Scan done in 597663807ms, 63 APs in scan results
+06-02 12:26:30.586  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] WipsScanUsingNL: passive scan cached 0, took 40040 ms, err 0
+06-02 12:26:30.586  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] lowi_proc_req_passive_scan_with_live_meas - No WLAN Frames to be parsed
+06-02 12:26:30.586  2441  4234 D LOWI-9.0.1.77: [LOWIScanResultReceiver] Send scan meas to listener
+06-02 12:26:30.586  2441  4234 D LOWI-9.0.1.77: [LOWIScanResultReceiver] Enter passive listening mode
+06-02 12:26:30.586  2441  4234 D LOWI-9.0.1.77: [LOWIWifiDriverInterface] getMeasurements - Passive listening mode
+06-02 12:26:30.586  2441  4234 D LOWI-9.0.1.77: [LOWI-Scan] WipsScanUsingNL:wait -1 sec for netlink message
+06-02 12:26:30.586  2441  2462 D LOWI-9.0.1.77: [LOWIEventReceiver] handleEvent:FROM:NA, TO:NA, REQ:NA, IREQ:NA, REQ_ID:0, RESP:NA, INFO:NA
+06-02 12:26:30.586  2441  2462 D LOWI-9.0.1.77: [LOWIBackgroundScanMgr] isRspForBgScanMgr: evt(LOWI_NO_EVT) - not handled
+06-02 12:26:30.586  2441  2462 D LOWI-9.0.1.77: [LOWIScheduler] manageMsg: NULL results or NULL request in results
+06-02 12:26:30.586  2441  2462 D LOWI-9.0.1.77: [LOWIController] Measurements received
+06-02 12:26:30.586  2441  2462 D LOWI-9.0.1.77: [LOWICacheManager] putInCache:Num of Meas to add: 63
+06-02 12:26:30.587  2441  2462 D LOWI-9.0.1.77: [LOWIController] processMeasurementResults: No current Request. Cache measurements
+06-02 12:26:30.587  2441  2462 D LOWI-9.0.1.77: [LOWIController] sendAsyncScanResponse: Request FreeWifiScanObserver_84 is from a different client.
+06-02 12:26:30.588  2441  2462 D LOWI-9.0.1.77: [LOWIController] generateResponse: Type (ASYNC_DISCOVERY_SCAN_RESULTS) ScanStatus (1) request FreeWifiScanObserver_84
+06-02 12:26:30.588  2441  2462 D LOWI-9.0.1.77: [LOWIEventDispatcher] sendResponse - originator = FreeWifiScanObserver
+06-02 12:26:30.588  2441  2462 D LOWI-9.0.1.77: [LOWIUtils] injectScanMeasurements - num of APs = 63
+06-02 12:26:30.589  2441  2462 I LOWI-9.0.1.77: [LOWIUtils] responseToOutPostcard - TO: FreeWifiScanObserver, FROM:   LOWI-SERVER, RESP:  LOWI_ASYNC_DISCOVERY_SCAN_RESULTS
+06-02 12:26:30.590  2441  2462 D LOWI-9.0.1.77: [LOWIControllerExtn] sendLOWILpDiscoveryScanResponse: Not a discovery scan response
+06-02 12:26:30.599 23528 23646 I WifiScanner: onFullResults
+06-02 12:26:32.686  1442  1628 I SDM     : DisplayBase::CommitThread: Received idle timeout, panel: cmd, timeout: 70000 us
+06-02 12:26:34.007  2200  3058 E Diag_Lib: diag: Diag_LSM_Init: invoked for pid: 2200 with init_count: 0
+06-02 12:26:34.007  2200  3058 E Diag_Lib: diag:failed to connect to diag socket
+06-02 12:26:34.008  2200  3058 E Diag_Lib:  Diag_LSM_Init: Failed to open handle to diag driver, error = 111

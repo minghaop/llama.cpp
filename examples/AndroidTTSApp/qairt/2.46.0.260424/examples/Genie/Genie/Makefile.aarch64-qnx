@@ -1,0 +1,75 @@
+#=============================================================================
+#
+#  Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
+#  All Rights Reserved.
+#  Confidential and Proprietary - Qualcomm Technologies, Inc.
+#
+#=============================================================================
+
+SHELL    := /bin/bash
+MAKEFLAGS += --warn-undefined-variables
+
+# -----------------------------------------------------------------------------
+# Path configuration
+# -----------------------------------------------------------------------------
+ROOT_DIR          := $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
+GENIE_SUB_MAKE    := $(ROOT_DIR)/make/Makefile.aarch64-qnx
+
+# -----------------------------------------------------------------------------
+# Rust tokenizer build settings
+# -----------------------------------------------------------------------------
+RUST_TARGET       ?= aarch64-unknown-nto-qnx800
+RUST_SOURCE_DIR   ?= $(ROOT_DIR)/src/qualla/tokenizers/rust
+CARGO_TARGET_DIR  ?= $(RUST_SOURCE_DIR)/target
+
+# -----------------------------------------------------------------------------
+# Genie shared library build settings
+# -----------------------------------------------------------------------------
+QNN_TARGET        ?= aarch64-qnx800
+LIB_OUTPUT_DIR    := $(ROOT_DIR)/lib/$(QNN_TARGET)
+OBJ_OUTPUT_DIR    := $(ROOT_DIR)/obj/$(QNN_TARGET)
+
+# -----------------------------------------------------------------------------
+# QNX toolchain configuration
+# -----------------------------------------------------------------------------
+QNX_HOST          ?= gcc-qnx800-12.2-2024-x86_64/root/host
+QNX_TARGET        ?= gcc-qnx800-12.2-2024-x86_64/root/target
+
+CC                ?= qcc
+CXX               ?= qcc
+AR                ?= ntoaarch64-ar
+CARGO             ?= cargo
+RUSTUP            ?= rustup
+
+export QNX_HOST QNX_TARGET CC CXX AR
+export CARGO_TARGET_DIR
+
+.PHONY: all qnx clean clean_qnx build_qnx_tokenizer check_qnx
+.DEFAULT_GOAL := qnx
+
+all: qnx
+
+qnx: check_qnx build_qnx_tokenizer
+	@echo "-------------------- Building genie for qnx --------------------"
+	+QNN_TARGET=$(QNN_TARGET) RUST_TARGET=$(RUST_TARGET) \
+		CC=$(CC) CXX=$(CXX) AR=$(AR) \
+		$(MAKE) -f $(GENIE_SUB_MAKE) libGenie
+	mv libGenie $(LIB_OUTPUT_DIR)/libGenie.so
+	@echo "-------------------- genie qnx build succeeded --------------------"
+
+clean: clean_qnx
+
+clean_qnx:
+	rm -rf $(LIB_OUTPUT_DIR) $(OBJ_OUTPUT_DIR)
+
+check_qnx:
+ifndef QNX_TARGET
+	$(error ERROR: QNX_TARGET not set, skipping compilation for QNX platform(s).)
+endif
+ifndef QNX_HOST
+	$(error ERROR: QNX_HOST not set, skipping compilation for QNX platform(s).)
+endif
+
+build_qnx_tokenizer: $(RUST_SOURCE_DIR)/Cargo.toml
+	@command -v $(RUSTUP) >/dev/null 2>&1 && $(RUSTUP) target add $(RUST_TARGET) >/dev/null 2>&1 || true
+	$(CARGO) build --release --manifest-path=$< --target $(RUST_TARGET)

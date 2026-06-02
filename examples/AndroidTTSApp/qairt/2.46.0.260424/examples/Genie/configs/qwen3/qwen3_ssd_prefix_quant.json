@@ -1,0 +1,67 @@
+{
+  "dialog" : {
+    "version" : 1,
+    "type" : "ssd-q1",
+    "ssd-q1" : {
+      "version" : 1,
+      "ssd-version" : 1,
+      "forecast-token-count" : 4,
+      "forecast-prefix" : 16,
+      "forecast-prefix-name" : "./ssd_forecast_prefix",
+      "prefix-quant" : 1,
+      "branches" : [3, 2],
+      "n-streams" : 1,
+      "p-threshold" : 0.0
+    },
+    "context" : {
+      "version" : 1,
+      "size": 2048,
+      "n-vocab":   151936,
+      "bos-token": -1,
+      "eos-token": 151645
+    },
+    "sampler" : {
+      "version" : 1,
+      "seed" : 42,
+      "temp" : 0.6,
+      "top-k" : 20,
+      "top-p" : 0.95,
+      "greedy" : true
+    },
+    "tokenizer" : {
+      "version" : 1,
+      "path" : "./tokenizer.json"
+    },
+    "engine" : {
+      "version" : 1,
+      "n-threads" : 3,
+      "backend" : {
+        "version" : 1,
+        "type" : "QnnHtp",
+        "QnnHtp" : {
+          "version" : 1,
+          "use-mmap" : false,
+          "spill-fill-bufsize" : 0,
+          "mmap-budget" : 0,
+          "poll" : true,
+          "pos-id-dim" : 64,
+          "cpu-mask" : "0xe0",
+          "kv-dim" : 128,
+          "allow-async-init": false,
+          "rope-theta": 1000000.0
+        },
+        "extensions" : "./htp_backend_ext_config.json"
+      },
+      "model" : {
+        "version" : 1,
+        "type" : "binary",
+        "binary" : {
+          "version" : 1,
+          "ctx-bins" : [
+            "./weight_sharing_model_1_of_1.serialized.bin"
+          ]
+        }
+      }
+    }
+  }
+}

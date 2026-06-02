@@ -1,0 +1,705 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Troubleshooting for QNN LPAI Backends (x86 Simulator, ARM &amp; aDSP) &mdash; Qualcomm® AI Runtime (QAIRT) SDKs</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/custom_css.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Qualcomm® AI Runtime (QAIRT) SDKs
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v2.46.0.260424121129
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">QAIRT</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../general/overview.html">Overview</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">SDKs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">QNN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../SNPE/index.html">SNPE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Genie/index.html">Genie</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Delegates</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../Delegates/TfLite/index.html">TFLite Delegate</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Qualcomm® AI Runtime (QAIRT) SDKs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Troubleshooting for QNN LPAI Backends (x86 Simulator, ARM &amp; aDSP)</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="troubleshooting-for-qnn-lpai-backends-x86-simulator-arm-adsp">
+<span id="qnn-lpai-troubleshooting"></span><h1>Troubleshooting for QNN LPAI Backends (x86 Simulator, ARM &amp; aDSP)<a class="headerlink" href="#troubleshooting-for-qnn-lpai-backends-x86-simulator-arm-adsp" title="Permalink to this heading">¶</a></h1>
+<p>This paragraph provides a comprehensive guide for executing and troubleshooting QNN LPAI backends across x86 (simulator), ARM (Android), and native aDSP targets.</p>
+<div class="section" id="environment-variable-export-commands">
+<h2>Environment Variable Export Commands<a class="headerlink" href="#environment-variable-export-commands" title="Permalink to this heading">¶</a></h2>
+<div class="section" id="arm-target-android">
+<h3>ARM Target (Android)<a class="headerlink" href="#arm-target-android" title="Permalink to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">QNN_TARGET_ARCH</span><span class="o">=</span>aarch64-android
+<span class="nb">export</span><span class="w"> </span><span class="nv">HW_VER</span><span class="o">=</span>v6
+</pre></div>
+</div>
+</div>
+<div class="section" id="adsp-target-hexagon-dsp">
+<h3>aDSP Target (Hexagon DSP)<a class="headerlink" href="#adsp-target-hexagon-dsp" title="Permalink to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">QNN_TARGET_ARCH</span><span class="o">=</span>aarch64-android
+<span class="nb">export</span><span class="w"> </span><span class="nv">DSP_ARCH</span><span class="o">=</span>hexagon-v81
+<span class="nb">export</span><span class="w"> </span><span class="nv">DSP_VER</span><span class="o">=</span>V81
+<span class="nb">export</span><span class="w"> </span><span class="nv">HW_VER</span><span class="o">=</span>v6
+</pre></div>
+</div>
+</div>
+<div class="section" id="x86-simulator-linux">
+<h3>x86 Simulator (Linux)<a class="headerlink" href="#x86-simulator-linux" title="Permalink to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="nv">$LD_LIBRARY_PATH</span>:<span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/lib/x86_64-linux-clang
+</pre></div>
+</div>
+</div>
+<div class="section" id="x86-simulator-windows">
+<h3>x86 Simulator (Windows)<a class="headerlink" href="#x86-simulator-windows" title="Permalink to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span>%PATH%<span class="p">;</span>%QNN_SDK_ROOT%<span class="se">\l</span>ib<span class="se">\x</span>86_64-windows-msvc
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="execution-examples">
+<h2>Execution Examples<a class="headerlink" href="#execution-examples" title="Permalink to this heading">¶</a></h2>
+<div class="section" id="id1">
+<h3>x86 Simulator (Linux)<a class="headerlink" href="#id1" title="Permalink to this heading">¶</a></h3>
+<p>From Quantized Model:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/examples/QNN/converter/models
+<span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/bin/x86_64-linux-clang/qnn-net-run<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--backend<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/lib/x86_64-linux-clang/libQnnLpai.so<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--model<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/examples/QNN/example_libs/x86_64-linux-clang/libQnnModel.so<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--input_list<span class="w"> </span>input_list_float.txt<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--config_file<span class="w"> </span>/path/to/config.json
+</pre></div>
+</div>
+<p>From Serialized Buffer:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/bin/x86_64-linux-clang/qnn-net-run<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--backend<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/lib/x86_64-linux-clang/libQnnLpai.so<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--retrieve_context<span class="w"> </span>qnn_model_8bit_quantized.serialized.bin<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--input_list<span class="w"> </span>input_list_float.txt<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--config_file<span class="w"> </span>/path/to/config.json
+</pre></div>
+</div>
+</div>
+<div class="section" id="id2">
+<h3>x86 Simulator (Windows)<a class="headerlink" href="#id2" title="Permalink to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>%QNN_SDK_ROOT%<span class="se">\e</span>xamples<span class="se">\Q</span>NN<span class="se">\c</span>onverter<span class="se">\m</span>odels
+%QNN_SDK_ROOT%<span class="se">\b</span>in<span class="se">\x</span>86_64-windows-msvc<span class="se">\q</span>nn-net-run.exe
+<span class="w">  </span>--backend<span class="w"> </span>%QNN_SDK_ROOT%<span class="se">\l</span>ib<span class="se">\x</span>86_64-windows-msvc<span class="se">\Q</span>nnLpai.dll
+<span class="w">  </span>--model<span class="w"> </span>%QNN_SDK_ROOT%<span class="se">\e</span>xamples<span class="se">\Q</span>NN<span class="se">\e</span>xample_libs<span class="se">\x</span>86_64-windows-msvc<span class="se">\Q</span>nnModel.dll
+<span class="w">  </span>--input_list<span class="w"> </span>input_list_float.txt
+<span class="w">  </span>--config_file<span class="w"> </span>C:<span class="se">\p</span>ath<span class="se">\t</span>o<span class="se">\c</span>onfig.json
+</pre></div>
+</div>
+</div>
+<div class="section" id="id3">
+<h3>ARM Target (Android)<a class="headerlink" href="#id3" title="Permalink to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>adb<span class="w"> </span>shell<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/data/local/tmp/LPAI/adsp
+adb<span class="w"> </span>push<span class="w"> </span>./output/qnn_model_8bit_quantized.serialized.bin<span class="w"> </span>/data/local/tmp/LPAI
+adb<span class="w"> </span>push<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/lib/<span class="si">${</span><span class="nv">QNN_TARGET_ARCH</span><span class="si">}</span>/libQnnLpai.so<span class="w"> </span>/data/local/tmp/LPAI
+adb<span class="w"> </span>push<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/lib/<span class="si">${</span><span class="nv">QNN_TARGET_ARCH</span><span class="si">}</span>/libQnnLpaiStub.so<span class="w"> </span>/data/local/tmp/LPAI
+adb<span class="w"> </span>push<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/lib/<span class="si">${</span><span class="nv">QNN_TARGET_ARCH</span><span class="si">}</span>/libQnnLpaiNetRunExtensions.so<span class="w"> </span>/data/local/tmp/LPAI
+adb<span class="w"> </span>push<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/lib/lpai-<span class="si">${</span><span class="nv">HW_VER</span><span class="si">}</span>/unsigned/libQnnLpaiSkel.so<span class="w"> </span>/data/local/tmp/LPAI/adsp
+adb<span class="w"> </span>push<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/examples/QNN/converter/models/input_data_float<span class="w"> </span>/data/local/tmp/LPAI
+adb<span class="w"> </span>push<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/examples/QNN/converter/models/input_list_float.txt<span class="w"> </span>/data/local/tmp/LPAI
+adb<span class="w"> </span>push<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/bin/aarch64-android/qnn-net-run<span class="w"> </span>/data/local/tmp/LPAI
+
+adb<span class="w"> </span>shell
+<span class="nb">cd</span><span class="w"> </span>/data/local/tmp/LPAI
+<span class="nb">export</span><span class="w"> </span><span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span>/data/local/tmp/LPAI:/data/local/tmp/LPAI/adsp
+<span class="nb">export</span><span class="w"> </span><span class="nv">ADSP_LIBRARY_PATH</span><span class="o">=</span><span class="s2">&quot;/data/local/tmp/LPAI/adsp&quot;</span>
+
+./qnn-net-run<span class="w"> </span>--backend<span class="w"> </span>./libQnnLpai.so<span class="w"> </span>--device_options<span class="w"> </span>device_id:0<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--retrieve_context<span class="w"> </span>./qnn_model_8bit_quantized.serialized.bin<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--input_list<span class="w"> </span>./input_list_float.txt
+</pre></div>
+</div>
+</div>
+<div class="section" id="id4">
+<h3>aDSP Target (Hexagon DSP)<a class="headerlink" href="#id4" title="Permalink to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>adb<span class="w"> </span>push<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/lib/lpai-<span class="si">${</span><span class="nv">HW_VER</span><span class="si">}</span>/unsigned/libQnnLpai.so<span class="w"> </span>/data/local/tmp/LPAI/adsp
+adb<span class="w"> </span>push<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/lib/lpai-<span class="si">${</span><span class="nv">HW_VER</span><span class="si">}</span>/unsigned/libQnnLpaiNetRunExtensions.so<span class="w"> </span>/data/local/tmp/LPAI/adsp
+adb<span class="w"> </span>push<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/lib/<span class="si">${</span><span class="nv">DSP_ARCH</span><span class="si">}</span>/unsigned/libQnnHexagonSkel_App.so<span class="w"> </span>/data/local/tmp/LPAI/adsp
+adb<span class="w"> </span>push<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/lib/<span class="si">${</span><span class="nv">DSP_ARCH</span><span class="si">}</span>/unsigned/libQnnNetRunDirect<span class="si">${</span><span class="nv">DSP_VER</span><span class="si">}</span>Skel.so<span class="w"> </span>/data/local/tmp/LPAI/adsp
+adb<span class="w"> </span>push<span class="w"> </span><span class="si">${</span><span class="nv">QNN_SDK_ROOT</span><span class="si">}</span>/lib/<span class="si">${</span><span class="nv">QNN_TARGET_ARCH</span><span class="si">}</span>/libQnnNetRunDirect<span class="si">${</span><span class="nv">DSP_VER</span><span class="si">}</span>Stub.so<span class="w"> </span>/data/local/tmp/LPAI
+
+<span class="nb">export</span><span class="w"> </span><span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span>/data/local/tmp/LPAI:/data/local/tmp/LPAI/adsp
+<span class="nb">export</span><span class="w"> </span><span class="nv">ADSP_LIBRARY_PATH</span><span class="o">=</span><span class="s2">&quot;/data/local/tmp/LPAI/adsp&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="example-config-json">
+<h3>Example config.json<a class="headerlink" href="#example-config-json" title="Permalink to this heading">¶</a></h3>
+<p>The table below shows the differences in <cite>config.json</cite> for each supported backend type:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 55%" />
+<col style="width: 14%" />
+<col style="width: 19%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Target</strong></p></th>
+<th class="head"><p><strong>shared_library_path</strong></p></th>
+<th class="head"><p><strong>config_file_path</strong></p></th>
+<th class="head"><p><strong>context_configs</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Simulator (x86)</p></td>
+<td><p>${QNN_SDK_ROOT}/lib/x86_64-linux-clang/libQnnLpaiNetRunExtensions.so</p></td>
+<td><p>./lpaiParams.conf</p></td>
+<td><p>“is_persistent_binary”: false</p></td>
+</tr>
+<tr class="row-odd"><td><p>aDSP (Hexagon)</p></td>
+<td><p>/data/local/tmp/LPAI/adsp/libQnnLpaiNetRunExtensions.so</p></td>
+<td><p>./lpaiParams.conf</p></td>
+<td><p>“is_persistent_binary”: true</p></td>
+</tr>
+<tr class="row-even"><td><p>ARM Android</p></td>
+<td><p>/data/local/tmp/LPAI/libQnnLpaiNetRunExtensions.so</p></td>
+<td><p>./lpaiParams.conf</p></td>
+<td><p>“is_persistent_binary”: false</p></td>
+</tr>
+</tbody>
+</table>
+<p>Each configuration should be wrapped in the following structure:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;backend_extensions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;shared_library_path&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&lt;appropriate path&gt;&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;config_file_path&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;./lpaiParams.conf&quot;</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">&quot;context_configs&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;is_persistent_binary&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="troubleshooting-table">
+<h1>Troubleshooting Table<a class="headerlink" href="#troubleshooting-table" title="Permalink to this heading">¶</a></h1>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 25%" />
+<col style="width: 51%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Issue Category</strong></p></th>
+<th class="head"><p><strong>Symptoms</strong></p></th>
+<th class="head"><p><strong>Resolution &amp; Debugging Commands</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Library Not Found or Load Errors</p></td>
+<td><ul class="simple">
+<li><p>cannot locate shared object file</p></li>
+<li><p>undefined symbol</p></li>
+<li><p>library not found</p></li>
+</ul>
+</td>
+<td><ul class="simple">
+<li><p>Ensure all required <cite>.so</cite> or <cite>.dll</cite> files are present in the correct paths.</p></li>
+<li><p>Verify that <cite>LD_LIBRARY_PATH</cite> (Linux) or <cite>PATH</cite> (Windows) includes the correct directories.</p></li>
+<li><p>Use <cite>ldd</cite> (Linux) or Dependency Walker (Windows) to inspect missing dependencies.</p>
+<ul>
+<li><p>x86 Linux For model generation and Simulatiion:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">${QNN_SDK_ROOT}/lib/x86_64-linux-clang/libQnnLpai.so</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">${QNN_SDK_ROOT}/lib/x86_64-linux-clang/libQnnLpaiNetRunExtensions.so</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">${QNN_SDK_ROOT}/lib/x86_64-linux-clang/libQnnLpaiPrepare_${HW_VER}.so</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">${QNN_SDK_ROOT}/lib/x86_64-linux-clang/libQnnLpaiSim_${HW_VER}.so</span></code></p></li>
+</ul>
+</li>
+<li><p>x86 Windows For model generation and Simulatiion:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">${QNN_SDK_ROOT}/lib/x86_64-windows-msvc/QnnLpai.dll</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">${QNN_SDK_ROOT}/lib/x86_64-windows-msvc/QnnLpaiNetRunExtensions.dll</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">${QNN_SDK_ROOT}/lib/x86_64-windows-msvc/QnnLpaiPrepare_${HW_VER}.dll</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">${QNN_SDK_ROOT}/lib/x86_64-windows-msvc/QnnLpaiSim_${HW_VER}.dll</span></code></p></li>
+</ul>
+</li>
+<li><p>ARM FastRpc Path:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">/data/local/tmp/LPAI/libQnnLpai.so</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">/data/local/tmp/LPAI/libQnnLpaiStub.so</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">/data/local/tmp/LPAI/libQnnLpaiNetRunExtensions</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">/data/local/tmp/LPAI/adsp/libQnnLpaiSkel.so</span></code></p></li>
+</ul>
+</li>
+<li><p>aDSP for LPAI and Hexagon libraries:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">/data/local/tmp/LPAI/adsp/libQnnLpai.so</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">/data/local/tmp/LPAI/adsp/libQnnLpaiNetRunExtensions.so</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">/data/local/tmp/LPAI/adsp/libQnnHexagonSkel_App.so</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">/data/local/tmp/LPAI/adsp/libQnnNetRunDirect${DSP_VER}Skel.so</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">/data/local/tmp/LPAI/adsp/libQnnNetRunDirect${DSP_VER}Stub.so</span></code></p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Set environment variables:</p>
+<ul>
+<li><p>Linux: <code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${QNN_SDK_ROOT}/lib/x86_64-linux-clang</span></code></p></li>
+<li><p>Windows: <code class="docutils literal notranslate"><span class="pre">set</span> <span class="pre">PATH=%PATH%;%QNN_SDK_ROOT%/lib/x86_64-windows-msvc</span></code></p></li>
+<li><p>Android: <code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">LD_LIBRARY_PATH=/data/local/tmp/LPAI:/data/local/tmp/LPAI/adsp</span></code></p></li>
+<li><p>Android: <code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">ADSP_LIBRARY_PATH=&quot;/data/local/tmp/LPAI/adsp&quot;</span></code></p></li>
+</ul>
+</li>
+<li><p>Debug commands:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">ldd</span> <span class="pre">qnn-net-run</span></code> (Linux)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Dependency</span> <span class="pre">Walker</span></code> (Windows)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">adb</span> <span class="pre">shell</span> <span class="pre">ls</span> <span class="pre">/data/local/tmp/LPAI</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">adb</span> <span class="pre">shell</span> <span class="pre">ls</span> <span class="pre">/data/local/tmp/LPAI/adsp</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">readelf</span> <span class="pre">-d</span> <span class="pre">libQnnLpai.so</span></code></p></li>
+</ul>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><td><p>Context Binary Generator Setup Failure</p></td>
+<td><ul class="simple">
+<li><p>qnn-context-binary-generator fails to start</p></li>
+<li><p>missing backend or model path</p></li>
+<li><p>missing LPAI Prepare library</p></li>
+</ul>
+</td>
+<td><ul class="simple">
+<li><p>Verify qnn-context-binary-generator binary exists:</p>
+<ul>
+<li><p>Linux: <code class="docutils literal notranslate"><span class="pre">${QNN_SDK_ROOT}/bin/x86_64-linux-clang/qnn-context-binary-generator</span></code></p></li>
+<li><p>Windows: <code class="docutils literal notranslate"><span class="pre">${QNN_SDK_ROOT}/bin/x86_64-windows-msvc/qnn-context-binary-generator.exe</span></code></p></li>
+</ul>
+</li>
+<li><p>Verify Prepare library exists:</p>
+<ul>
+<li><p>Linux: <code class="docutils literal notranslate"><span class="pre">${QNN_SDK_ROOT}/lib/x86_64-linux-clang/libQnnLpaiPrepare_${HW_VER}.so</span></code></p></li>
+<li><p>Windows: <code class="docutils literal notranslate"><span class="pre">${QNN_SDK_ROOT}/lib/x86_64-windows-msvc/QnnLpaiPrepare_${HW_VER}.so</span></code></p></li>
+</ul>
+</li>
+<li><p>Check backend and model paths are correct</p></li>
+<li><p>Debug commands:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">which</span> <span class="pre">qnn-context-binary-generator</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ls</span> <span class="pre">-l</span> <span class="pre">${QNN_SDK_ROOT}/bin/x86_64-linux-clang/</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ls</span> <span class="pre">-l</span> <span class="pre">${QNN_SDK_ROOT}/lib/x86_64-linux-clang/</span></code></p></li>
+</ul>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><td><p>Simulator Setup Failure</p></td>
+<td><ul class="simple">
+<li><p>qnn-net-run fails to start</p></li>
+<li><p>missing backend or model path</p></li>
+<li><p>missing LPAI Simulation library</p></li>
+</ul>
+</td>
+<td><ul class="simple">
+<li><p>Verify qnn-net-run binary exists:</p>
+<ul>
+<li><p>Linux: <code class="docutils literal notranslate"><span class="pre">${QNN_SDK_ROOT}/bin/x86_64-linux-clang/qnn-net-run</span></code></p></li>
+<li><p>Windows: <code class="docutils literal notranslate"><span class="pre">${QNN_SDK_ROOT}/bin/x86_64-windows-msvc/qnn-net-run.exe</span></code></p></li>
+</ul>
+</li>
+<li><p>Verify simulation library exists:</p>
+<ul>
+<li><p>Linux: <code class="docutils literal notranslate"><span class="pre">${QNN_SDK_ROOT}/lib/x86_64-linux-clang/libQnnLpaiSim_${HW_VER}.so</span></code></p></li>
+<li><p>Windows: <code class="docutils literal notranslate"><span class="pre">${QNN_SDK_ROOT}/lib/x86_64-windows-msvc/QnnLpaiSim_${HW_VER}.so</span></code></p></li>
+</ul>
+</li>
+<li><p>Check backend and model paths are correct</p></li>
+<li><p>Debug commands:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">which</span> <span class="pre">qnn-net-run</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ls</span> <span class="pre">-l</span> <span class="pre">${QNN_SDK_ROOT}/bin/x86_64-linux-clang/</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ls</span> <span class="pre">-l</span> <span class="pre">${QNN_SDK_ROOT}/lib/x86_64-linux-clang/</span></code></p></li>
+</ul>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><td><p>Incorrect Environment Variables</p></td>
+<td><ul class="simple">
+<li><p>backend fails to load</p></li>
+<li><p>ADSP libraries not found</p></li>
+</ul>
+</td>
+<td><ul class="simple">
+<li><p>Ensure correct exports are set, see example for v5 (see Supported Platform for more info):</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">QNN_TARGET_ARCH=aarch64-android</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">DSP_ARCH=hexagon-v79</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">DSP_VER=V79</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">HW_VER=v5</span></code></p></li>
+</ul>
+</li>
+<li><p>Debug commands:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">echo</span> <span class="pre">$QNN_TARGET_ARCH</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">env</span> <span class="pre">|</span> <span class="pre">grep</span> <span class="pre">DSP</span></code></p></li>
+</ul>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><td><p>ELF Format or Architecture Mismatch</p></td>
+<td><ul class="simple">
+<li><p>Exec format error</p></li>
+<li><p>wrong ELF class</p></li>
+<li><p>no such file (even though the file exists)</p></li>
+</ul>
+</td>
+<td><ul class="simple">
+<li><p>Use <cite>file &lt;binary&gt;</cite> to inspect architecture compatibility.</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">file</span> <span class="pre">libQnnLpai.so</span></code> → should show correct ELF type for target platform</p></li>
+</ul>
+</li>
+<li><p>Ensure binaries match target architecture:</p>
+<ul>
+<li><p><strong>Simulator (x86 Linux)</strong>: <code class="docutils literal notranslate"><span class="pre">ELF</span> <span class="pre">64-bit</span> <span class="pre">LSB</span> <span class="pre">shared</span> <span class="pre">object,</span> <span class="pre">x86-64</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">${QNN_SDK_ROOT}/lib/x86_64-linux-clang/libQnnLpai.so</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">${QNN_SDK_ROOT}/lib/x86_64-linux-clang/libQnnLpaiNetRunExtensions.so</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">${QNN_SDK_ROOT}/bin/x86_64-linux-clang/qnn-net-run</span></code></p></li>
+</ul>
+</li>
+<li><p><strong>Simulator (x86 Windows)</strong>: PE32/PE32+ DLLs and EXEs</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">${QNN_SDK_ROOT}/lib/x86_64-windows-msvc/QnnLpai.dll</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">${QNN_SDK_ROOT}/lib/x86_64-windows-msvc/libQnnLpaiNetRunExtensions.dll</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">${QNN_SDK_ROOT}/bin/x86_64-windows-msvc/qnn-net-run.exe</span></code></p></li>
+</ul>
+</li>
+<li><p><strong>ARM (Android)</strong>: <code class="docutils literal notranslate"><span class="pre">ELF</span> <span class="pre">64-bit</span> <span class="pre">LSB</span> <span class="pre">shared</span> <span class="pre">object,</span> <span class="pre">ARM</span> <span class="pre">aarch64</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">/data/local/tmp/LPAI/libQnnLpai.so</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">/data/local/tmp/LPAI/libQnnLpaiNetRunExtensions.so</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">/data/local/tmp/LPAI/qnn-net-run</span></code></p></li>
+</ul>
+</li>
+<li><p><strong>aDSP (Hexagon)</strong>: <code class="docutils literal notranslate"><span class="pre">ELF</span> <span class="pre">32-bit</span> <span class="pre">LSB</span> <span class="pre">shared</span> <span class="pre">object,</span> <span class="pre">Hexagon</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">/data/local/tmp/LPAI/adsp/libQnnLpai.so</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">/data/local/tmp/LPAI/adsp/libQnnLpaiNetRunExtensions.so</span></code></p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Debug commands:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">readelf</span> <span class="pre">-h</span> <span class="pre">libQnnLpai.so</span></code></p></li>
+</ul>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><td><p>Unsigned or Improperly Signed Libraries</p></td>
+<td><ul class="simple">
+<li><p>backend fails silently</p></li>
+<li><p>model fails to execute</p></li>
+</ul>
+</td>
+<td><ul class="simple">
+<li><p>Use Qualcomm signing tools (<cite>sectools</cite>, <cite>sign_hexagon.py</cite>) to sign required libraries.</p></li>
+<li><p>Ensure signed libraries are pushed to <cite>/data/local/tmp/LPAI/adsp</cite>.</p></li>
+<li><p>Sign required libraries using Qualcomm tools:</p>
+<ul>
+<li><p>Tools: <code class="docutils literal notranslate"><span class="pre">sectools</span></code>, <code class="docutils literal notranslate"><span class="pre">sign_hexagon.py</span></code></p></li>
+</ul>
+</li>
+<li><p>For ARM (Android):</p>
+<ul>
+<li><p>Sign and push to <code class="docutils literal notranslate"><span class="pre">/data/local/tmp/LPAI/adsp/</span></code>:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">${QNN_SDK_ROOT}/lib/lpai-${HW_VER}/unsigned/libQnnLpaiSkel.so</span></code></p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>For aDSP (native DSP):</p>
+<ul>
+<li><p>Sign and push to <code class="docutils literal notranslate"><span class="pre">/data/local/tmp/LPAI/adsp/</span></code>:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">${QNN_SDK_ROOT}/lib/lpai-${HW_VER}/unsigned/libQnnLpai.so</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">${QNN_SDK_ROOT}/lib/lpai-${HW_VER}/unsigned/libQnnLpaiNetRunExtensions.so</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">${QNN_SDK_ROOT}/lib/${DSP_ARCH}/unsigned/libQnnHexagonSkel_App.so</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">${QNN_SDK_ROOT}/lib/${DSP_ARCH}/unsigned/libQnnNetRunDirect${DSP_VER}Skel.so</span></code></p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Debug commands:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">adb</span> <span class="pre">shell</span> <span class="pre">ls</span> <span class="pre">-l</span> <span class="pre">/data/local/tmp/LPAI/adsp/</span></code></p></li>
+</ul>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><td><p>Invalid or Missing Configuration</p></td>
+<td><ul class="simple">
+<li><p>config.json not found</p></li>
+<li><p>backend extension fails</p></li>
+</ul>
+</td>
+<td><ul>
+<li><p>Ensure <cite>config.json</cite> and <cite>lpaiParams.conf</cite> are present and valid.</p></li>
+<li><dl class="simple">
+<dt>Validate JSON syntax and required fields</dt><dd><p>(<cite>shared_library_path</cite>, <cite>config_file_path</cite>, <cite>is_persistent_binary</cite>).</p>
+</dd>
+</dl>
+<ul class="simple">
+<li><p>Example config.json:</p></li>
+</ul>
+</li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;backend_extensions&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;shared_library_path&quot;</span><span class="p">:</span> <span class="s2">&quot;/data/local/tmp/LPAI/adsp/libQnnLpaiNetRunExtensions.so&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;config_file_path&quot;</span><span class="p">:</span> <span class="s2">&quot;./lpaiParams.conf&quot;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>Model Execution Fails or Incorrect Output</p></td>
+<td><ul class="simple">
+<li><p>model crashes</p></li>
+<li><p>Output is incorrect or empty</p></li>
+</ul>
+</td>
+<td><ul class="simple">
+<li><p>Verify QNN model was quantized and serialized correctly</p></li>
+<li><p>Ensure input data matches expected format and dimensions.</p></li>
+<li><p>Check for version mismatches between model and runtime.</p></li>
+<li><p>Confirm you dont see message like: <code class="docutils literal notranslate"><span class="pre">version</span> <span class="pre">4.xx</span> <span class="pre">is</span> <span class="pre">not</span> <span class="pre">supported</span> <span class="pre">on</span> <span class="pre">runtime</span> <span class="pre">5.xx</span></code></p></li>
+<li><p>Debug commands:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">qnn-net-run</span> <span class="pre">--log_level</span> <span class="pre">debug</span> <span class="pre">&lt;add</span> <span class="pre">your</span> <span class="pre">other</span> <span class="pre">previous</span> <span class="pre">options</span> <span class="pre">here&gt;</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">adb</span> <span class="pre">logcat</span> <span class="pre">|</span> <span class="pre">grep</span> <span class="pre">supported</span></code></p></li>
+</ul>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><td><p>Root Permissions</p></td>
+<td><ul class="simple">
+<li><p>permission denied errors</p></li>
+<li><p>cannot access /data/local/tmp</p></li>
+</ul>
+</td>
+<td><ul class="simple">
+<li><p>Ensure commands are run with root privileges:</p>
+<ul>
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">adb</span> <span class="pre">root</span></code> and <code class="docutils literal notranslate"><span class="pre">adb</span> <span class="pre">remount</span></code> before pushing files</p></li>
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">su</span></code> or <code class="docutils literal notranslate"><span class="pre">sudo</span></code> where applicable</p></li>
+</ul>
+</li>
+<li><p>Debug commands:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">adb</span> <span class="pre">shell</span> <span class="pre">whoami</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ls</span> <span class="pre">-l</span> <span class="pre">/data/local/tmp</span></code></p></li>
+</ul>
+</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020-2025, Qualcomm Technologies, Inc..
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
