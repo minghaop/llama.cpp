@@ -180,3 +180,9 @@ examples/AndroidTTSApp/qairt/
 *.a
 *.dll
 *.jar
+
+# large archives / inspection outputs
+examples/AndroidTTSApp/*.zip
+examples/AndroidTTSApp/output/
+*.zip
+*.json
