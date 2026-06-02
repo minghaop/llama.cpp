@@ -153,3 +153,30 @@ poetry.toml
 /run-chat.sh
 
 
+
+examples/AndroidTTSApp/app/build/
+examples/AndroidTTSApp/lib/.cxx/
+build-*/
+.gradle/
+.cxx/
+
+examples/AndroidTTSApp/app/src/main/assets_disabled/
+examples/AndroidTTSApp/app/src/main/assets/models/
+*.gguf
+*.onnx
+*.bin
+*.mnn.weight
+*.safetensors
+*.pt
+*.pth
+
+examples/AndroidTTSApp/tools/litert_src/
+examples/AndroidTTSApp/tools/google_tensor_ml_sdk/
+examples/AndroidTTSApp/qairt/
+
+*.apk
+*.aab
+*.so
+*.a
+*.dll
+*.jar
