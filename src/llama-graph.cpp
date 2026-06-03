@@ -952,33 +952,31 @@ ggml_tensor * llm_graph_context::build_espnet_pos_encode(
          ggml_tensor * cur,
          int32_t il) const{
         const size_t d_model = 512;
-        float xscale = std::sqrt(static_cast<float>(d_model));
+        float xscale = 22.627416997969522f;
         cur = ggml_scale(ctx0, cur, xscale);
         ggml_set_name(cur, ("espnet_pos_encode" + std::to_string(il)).c_str());
-        cb(cur, "espnet_pos_encode", il);
+        // cb(cur, "espnet_pos_encode", il);
         return cur;
 }
 
 ggml_tensor * llm_graph_context::build_flash_attn_encoder(
     ggml_tensor * x,           // [D, T, B]
-    ggml_tensor * wq,
-    ggml_tensor * wk,
-    ggml_tensor * wv,
-    ggml_tensor * wo,
-    ggml_tensor * bo,
-    ggml_tensor * attn_mask,   // 可为 nullptr
-    int32_t n_heads
-) const {
-
+    const llama_model & model,
+    ggml_tensor * mask,   // 可为 nullptr
+    ggml_tensor * pos_emb,
+    int32_t n_heads, 
+    int32_t idx) const {
+    
     const int64_t T = x->ne[1];
     const int64_t B = x->ne[2];
     const int64_t D = x->ne[0];
     const int64_t d_k = D / n_heads;
 
     // ---- QKV
-    ggml_tensor * q = ggml_mul_mat(ctx0, wq, x);
-    ggml_tensor * k = ggml_mul_mat(ctx0, wk, x);
-    ggml_tensor * v = ggml_mul_mat(ctx0, wv, x);
+    ggml_tensor * q = ggml_mul_mat(ctx0, model.layers[idx + 13].encoders_wq, x);
+    ggml_tensor * k = ggml_mul_mat(ctx0, model.layers[idx + 13].encoders_wk, x);
+    ggml_tensor * v = ggml_mul_mat(ctx0, model.layers[idx + 13].encoders_wv, x);
+    ggml_tensor * p = ggml_mul_mat(ctx0, model.layers[idx + 13].encoders_wpos, pos_emb);
 
     // ---- reshape to (d_k, T, n_heads, B)
     auto reshape_heads = [&](ggml_tensor * t) {
@@ -989,16 +987,35 @@ ggml_tensor * llm_graph_context::build_flash_attn_encoder(
     q = reshape_heads(q);
     k = reshape_heads(k);
     v = reshape_heads(v);
+    p = reshape_heads(p);
+    
+    q = ggml_permute(ctx0, q, 0, 2, 1, 3);
+    k = ggml_permute(ctx0, k, 0, 2, 1, 3);
+    p = ggml_permute(ctx0, p, 0, 2, 1, 3);
+    ggml_tensor * q_with_bias_u = ggml_add(ctx0, q, model.layers[idx + 13].encoders_pos_bias_u);
+    q_with_bias_u = ggml_permute(ctx0, q_with_bias_u, 0, 2, 1, 3);
+    ggml_tensor * q_with_bias_v = ggml_add(ctx0, q, model.layers[idx + 13].encoders_pos_bias_v);
+    q_with_bias_v = ggml_permute(ctx0, q_with_bias_v, 0, 2, 1, 3);
+    ggml_tensor * matrix_ac = ggml_mul_mat(ctx0, k, q_with_bias_u);
+    ggml_tensor * matrix_bd = ggml_mul_mat(ctx0, p, q_with_bias_v);
+
+    if(!ggml_are_same_shape(matrix_ac, matrix_bd)) {
+        matrix_bd = build_rel_shift(ctx0, matrix_bd);
+    }
+
+    ggml_tensor * scores = ggml_add(ctx0, matrix_ac, matrix_bd);
+    scores = ggml_scale(ctx0, scores, 0.125f);
 
     // ---- Flash Attention
-    ggml_tensor * attn_out = ggml_flash_attn_ext(
-        ctx0,
-        q, k, v,
-        attn_mask,
-        1.0f / sqrtf((float)d_k),
-        0.0f,
-        0.0f
-    );
+    // ggml_tensor * attn_out = ggml_flash_attn_ext(
+    //     ctx0,
+    //     q, k, v,
+    //     mask,
+    //     1.0f / sqrtf((float)d_k),
+    //     0.0f,
+    //     0.0f
+    // );
+    ggml_tensor * attn_out = build_attn_scores(k, scores, mask, model.layers[idx + 13].encoders_wo, model.layers[i + 13].encoders_bo, "encoders", idx);
 
     // ---- merge heads
     attn_out = ggml_reshape_3d(
@@ -1010,46 +1027,69 @@ ggml_tensor * llm_graph_context::build_flash_attn_encoder(
     );
 
     // ---- output proj
-    ggml_tensor * out = ggml_mul_mat(ctx0, wo, attn_out);
-    out = ggml_add(ctx0, out, bo);
+    ggml_tensor * out = ggml_mul_mat(ctx0, model.layers[idx + 13].encoders_wo, attn_out);
+    out = ggml_add(ctx0, out, model.layers[idx + 13].encoders_bo);
 
     return out;
 }
 
 ggml_tensor * llm_graph_context::build_pre_lookahead_layer(
          ggml_tensor * cur,
-         ggml_tensor * conv1_mw,
-         ggml_tensor * conv1_mb,
-         ggml_tensor * conv2_mw,
-         ggml_tensor * conv2_mb) const{
-        
+         ggml_tensor * context,
+         const llama_model & model) const{
     const int lookahead = 3;
     ggml_tensor * x = ggml_cont(ctx0, ggml_permute(ctx0, cur, 1, 0, 2, 3));  // [B, C, T]
-    x = ggml_reshape_4d(ctx0, x, x->ne[0], x->ne[1], 1, 1);
-    x = ggml_pad(ctx0, x, lookahead, 0, 0, 0);
-    ggml_set_name(x, "x_pad");
-    ggml_tensor * outputs = ggml_conv_1d(ctx0, conv1_mw, x, 1, 0, 1);
-    conv1_mb = ggml_reshape_4d(ctx0, conv1_mb, 1, 512, 1, 1);
-    outputs = ggml_add(ctx0, outputs, conv1_mb);
-    ggml_set_name(outputs, "x_conv_1d");
-    outputs = ggml_leaky_relu(ctx0, outputs, 0.01f, false);
-    ggml_set_name(outputs, "leaky_relu");
-    ggml_tensor * zeros = ggml_new_tensor_4d(ctx0, GGML_TYPE_F32, 2, outputs->ne[1], outputs->ne[2], outputs->ne[3]);
+    if (context == nullptr) {
+        // x = ggml_reshape_4d(ctx0, x, x->ne[0], x->ne[1], 1, 1);
+        x = ggml_pad(ctx0, x, lookahead, 0, 0, 0);
+    } else {
+        GGML_ASSERT(context->ne[1] == lookahead);
+        context = ggml_cont(ctx0, ggml_permute(ctx0, context, 1, 0, 2, 3));
+        x = ggml_concat(ctx0, x, context, 0);
+        x = ggml_pad(ctx0, x, lookahead - context->ne[0], 0, 0, 0);
+    }
+    x = ggml_conv_1d(ctx0, model.pre_look_conv1_w, x, 1, 0, 1);
+    ggml_tensor * conv1_mb = ggml_reshape_4d(ctx0, model.pre_look_conv1_b, 1, 512, 1, 1);
+    x = ggml_add(ctx0, x, conv1_mb);
+   
+    x = ggml_leaky_relu(ctx0, x, 0.01f, false);
+    
+    ggml_tensor * zeros = ggml_new_tensor_4d(ctx0, GGML_TYPE_F32, 2, x->ne[1], x->ne[2], x->ne[3]);
     zeros = ggml_scale(ctx0, zeros, 0.0f);
-    outputs = ggml_concat(ctx0, zeros, outputs, 0);
-    outputs = ggml_cont(ctx0, outputs);
-    ggml_set_name(outputs, "x_pad_2");
-    outputs = ggml_conv_1d(ctx0, conv2_mw, outputs, 1, 0, 1);
-    conv2_mb = ggml_reshape_4d(ctx0, conv2_mb, 1, 512, 1, 1);
-    outputs  = ggml_add(ctx0, outputs, conv2_mb);
-    ggml_set_name(outputs, "x_conv_1d_2");
-    outputs = ggml_permute(ctx0, outputs, 1, 0, 2, 3);
-    outputs = ggml_cont(ctx0, outputs);
-    outputs = ggml_add(ctx0, outputs, cur);
+    x = ggml_concat(ctx0, zeros, x, 0);
+    x = ggml_cont(ctx0, x);
+    
+    x = ggml_conv_1d(ctx0, model.pre_look_conv2_w, x, 1, 0, 1);
+    ggml_tensor * conv2_mb = ggml_reshape_4d(ctx0, model.pre_look_conv2_b, 1, 512, 1, 1);
+    x  = ggml_add(ctx0, x, model.pre_look_conv2_b);
+    
+    x = ggml_permute(ctx0, x, 1, 0, 2, 3);
+    x = ggml_cont(ctx0, x);
+    x = ggml_add(ctx0, x, cur);
 
-    ggml_set_name(outputs, "pre_look_res");
+    ggml_set_name(x, "pre_look_res");
+    // ggml_tensor * outputs = ggml_conv_1d(ctx0, model.pre_look_conv1_w, x, 1, 0, 1);
+    // ggml_tensor * conv1_mb = ggml_reshape_4d(ctx0, model.pre_look_conv1_b, 1, 512, 1, 1);
+    // outputs = ggml_add(ctx0, outputs, conv1_mb);
+   
+    // outputs = ggml_leaky_relu(ctx0, outputs, 0.01f, false);
+    
+    // ggml_tensor * zeros = ggml_new_tensor_4d(ctx0, GGML_TYPE_F32, 2, outputs->ne[1], outputs->ne[2], outputs->ne[3]);
+    // zeros = ggml_scale(ctx0, zeros, 0.0f);
+    // outputs = ggml_concat(ctx0, zeros, outputs, 0);
+    // outputs = ggml_cont(ctx0, outputs);
+    
+    // outputs = ggml_conv_1d(ctx0, model.pre_look_conv2_w, outputs, 1, 0, 1);
+    // ggml_tensor * conv2_mb = ggml_reshape_4d(ctx0, model.pre_look_conv2_b, 1, 512, 1, 1);
+    // outputs  = ggml_add(ctx0, outputs, model.pre_look_conv2_b);
+    
+    // outputs = ggml_permute(ctx0, outputs, 1, 0, 2, 3);
+    // outputs = ggml_cont(ctx0, outputs);
+    // outputs = ggml_add(ctx0, outputs, cur);
 
-    return outputs;
+    // ggml_set_name(outputs, "pre_look_res");
+
+    return x;
         
 }
 
@@ -1110,6 +1150,7 @@ ggml_tensor * llm_graph_context::build_rel_shift(
 ggml_tensor * llm_graph_context::build_attn_scores(
          ggml_tensor * cur,
          ggml_tensor * scores,
+         ggml_tensor * mask,
          ggml_tensor * mw,
          ggml_tensor * mb,
          std::string attn_type,
@@ -1121,8 +1162,18 @@ ggml_tensor * llm_graph_context::build_attn_scores(
     const int d_k  = cur->ne[0];
     const int d    = n_head * d_k;
     const int time1 = scores->ne[2];
-
-    ggml_tensor * attn = ggml_soft_max(ctx0, scores);
+    ggml_tensor * attn = nullptr;
+    if (mask) {
+        mask = ggml_view_3d(ctx0, mask, scores->ne[0], mask->ne[1], scores->ne[3], mask->nb[1], mask->nb[2], 0);
+        mask = ggml_reshape_4d(ctx0, mask, scores->ne[0], mask->ne[1], 1, scores->ne[3]);
+        mask = ggml_repeat(ctx0, mask, scores);
+        mask = ggml_scale_bias(ctx0, mask, -1.0f, 1.0f);
+        ggml_tensor * masked_scores = ggml_add(ctx0, scores, ggml_scale(ctx0, mask, -1.0e9f));
+        attn = ggml_soft_max(ctx0, masked_scores);
+        attn = ggml_mul(ctx0, attn, mask);
+    } else {
+        attn = ggml_soft_max(ctx0, scores);
+    }
     ggml_tensor * cur_T = ggml_cont(ctx0, ggml_permute(ctx0, cur, 1, 0, 2, 3));
     ggml_tensor * x = ggml_mul_mat(ctx0, cur_T, attn);
     x = ggml_reshape_3d(ctx0, ggml_cont(ctx0, ggml_permute(ctx0, x, 0, 2, 1, 3)), time1 * d_k, n_head, B);
@@ -1225,6 +1276,74 @@ ggml_tensor * llm_graph_context::build_timestep_embedding(
     return cur;
 }
 
+ggml_tensor * llm_graph_context::build_linear_no_sample(
+        ggml_tensor * cur,
+        int32_t offset,
+        const llama_model & model) const {
+    cur = ggml_mul_mat(ctx0, model.embed_out_0_w, cur);
+    cur = ggml_add(ctx0, cur, model.embed_out_0_b);
+    cur = build_layer_norm(cur, model.embed_out_1_w, model.embed_out_1_b, 1e-05, "sub_sampling", 0);
+    float xscale = 22.627416997969522f;
+    cur = ggml_scale(ctx0, cur, xscale);
+    return cur;
+}
+
+ggml_tensor * llm_graph_context::subsequent_chunk_mask(
+        int32_t size,
+        int32_t chunk_size,
+        int32_t num_left_chunks) const {
+    
+    GGML_ASSERT(size > 0);
+    GGML_ASSERT(chunk_size > 0);
+    ggml_tensor * pos_idx = ggml_arange(ctx0, 0.0f, static_cast<float>(size), 1.0f);
+    ggml_tensor * div = ggml_scale(ctx0, pos_idx, 1.0f / static_cast<float>(chunk_size));
+    ggml_tensor * div_trunc = ggml_floor(ctx0, div);
+    ggml_tensor * block_value = ggml_scale_bias(ctx0, div_trunc, static_cast<float>(chunk_size), static_cast<float>(chunk_size));
+    
+    ggml_tensor * pos_2d = ggml_reshape_2d(ctx0, pos_idx, size, 1);
+    ggml_tensor * pos_mat = ggml_repeat_4d(ctx0, pos_2d, size, size, 1, 1);
+    ggml_tensor * block_2d = ggml_reshape_2d(ctx0, block_value, 1, size);
+    ggml_tensor * block_mat = ggml_repeat_4d(ctx0, block_2d, size, size, 1, 1);
+    ggml_tensor * diff = ggml_sub(ctx0, block_mat, pos_mat);
+    ggml_tensor * diff_shift = ggml_scale_bias(ctx0, diff, 1.0f, -0.5f);
+    ggml_tensor * ret = ggml_step(ctx0, diff_shift);
+
+    return ret;
+}
+
+ggml_tensor * llm_graph_context::build_optional_chunk_mask(
+        ggml_tensor * cur,
+        ggml_tensor * masks,
+        bool use_dynamic_chunk,
+        bool use_dynamic_left_chunk,
+        int32_t decoding_chunk_size,
+        int32_t static_chunk_size,
+        int32_t num_decoding_left_chunks,
+        bool enable_full_context) const{
+    
+    int num_left_chunks = 0;
+    ggml_tensor * chunk_masks = nullptr;
+    if (static_chunk_size > 0) {
+        num_left_chunks = num_decoding_left_chunks;
+        chunk_masks = subsequent_chunk_mask(cur->ne[1], static_chunk_size, num_left_chunks);
+        chunk_masks = ggml_reshape_3d(ctx0, chunk_masks, chunk_masks->ne[0], chunk_masks->ne[1], 1);
+        ggml_tensor * masks_expand = ggml_repeat(ctx0, masks, chunk_masks);
+        chunk_masks = ggml_mul(ctx0, masks_expand, chunk_masks);
+    }else {
+        chunk_masks = masks;
+    }
+    GGML_ASSERT(chunk_masks->ne[0] > 0);
+    GGML_ASSERT(chunk_masks->ne[1] > 0);
+    GGML_ASSERT(chunk_masks->ne[2] > 0);
+    ggml_tensor * row_sum = ggml_sum_rows(ctx0, chunk_masks);
+    ggml_tensor * has_any = ggml_step(ctx0, ggml_scale_bias(ctx0, row_sum, 1.0f, -0.5f));
+    ggml_tensor * bad_row = ggml_scale_bias(ctx0, has_any, -1.0f, 1.0f);
+    ggml_tensor * bad_expand = ggml_repeat(ctx0, bad_row, chunk_masks);
+    ggml_tensor * out = ggml_sub(ctx0, ggml_add(ctx0, chunk_masks, bad_expand), ggml_mul(ctx0, chunk_masks, bad_expand));
+
+    return out;
+}
+
 ggml_tensor * llm_graph_context::build_encoder(
         ggml_tensor * token,
         int32_t token_len,
@@ -1233,21 +1352,19 @@ ggml_tensor * llm_graph_context::build_encoder(
         bool streaming,
         const llama_model & model) const {
     
-    ggml_tensor * masks = nullptr;
+    ggml_tensor * x = build_linear_no_sample(token, 0, model);
+    ggml_tensor * extend_pe_cpy = ggml_dup(ctx0, extend_pe);
+    ggml_tensor * pos_emb = build_pos_encoding(extend_pe_cpy, x->ne[1], 0, 0);
+    ggml_tensor * masks, * mask_pad, * chunk_masks = nullptr;
     if (streaming) {
         masks = build_pad_mask(token_len, token->ne[1]);
+        mask_pad = masks;
+        chunk_masks = build_optional_chunk_mask(x, masks, false, false, 0, 25, -1);
         if(context->ne[1] != 0) {
-            ggml_tensor * context_masks = ggml_new_tensor_3d(ctx0, GGML_TYPE_F32, 1, 1, context->ne[1]);
-            context = build_linear_no_subsampling(context, model.embed_out_0_w, model.embed_out_0_b, model.embed_out_1_w, model.embed_out_1_b, 1);
+            context = build_linear_no_sample(context, x->ne[1], model);
         }
-    }        
-    ggml_tensor * x = build_linear_no_subsampling(token, model.embed_out_0_w, model.embed_out_0_b, model.embed_out_1_w, model.embed_out_1_b, 1); //✅
-    x = build_espnet_pos_encode(x, 1);      //✅
-    ggml_tensor * extend_pe_cpy = ggml_dup(ctx0, extend_pe);
-    ggml_set_name(extend_pe_cpy, "extend_pe_cpy");
-    ggml_tensor * pos_emb = build_pos_encoding(extend_pe_cpy, x->ne[1], 0, 1); //✅
-    x = build_pre_lookahead_layer(x, model.pre_look_conv1_w, model.pre_look_conv1_b, model.pre_look_conv2_w, model.pre_look_conv2_b);  //✅
-    ggml_build_forward_expand(gf, x);
+    }
+    x = build_pre_lookahead_layer(x, context, model);  //✅
 
     for (int i = 0; i < 6; ++i) {
 
@@ -1264,13 +1381,10 @@ ggml_tensor * llm_graph_context::build_encoder(
 
         ggml_tensor * attn_out = build_flash_attn_encoder(
             x,
-            model.layers[i + 13].encoders_wq,
-            model.layers[i + 13].encoders_wk,
-            model.layers[i + 13].encoders_wv,
-            model.layers[i + 13].encoders_wo,
-            model.layers[i + 13].encoders_bo,
-            /* attn_mask = */ nullptr,
-            /* n_heads   = */ 8
+            model,
+            /* attn_mask = */ chunk_masks,
+            /* n_heads   = */ 8,
+            i
         );
 
         x = ggml_add(ctx0, residual, attn_out);
@@ -1307,7 +1421,11 @@ ggml_tensor * llm_graph_context::build_encoder(
     x = build_espnet_pos_encode(x, 2);
     ggml_tensor * extend_pe_cpy2 = extend_pe;
     pos_emb = build_pos_encoding(extend_pe_cpy2, x->ne[1], 0, 2);
-
+    if (streaming) {
+        masks = build_pad_mask(x->ne[1] + 6, x->ne[1]);
+        mask_pad = masks;
+        chunk_masks = build_optional_chunk_mask(x, masks, false, false, 0, 50, -1);
+    } 
     //build up_encoders
     for(int i = 0; i < 4; i++) {
         ggml_tensor * attn_residual = x;
@@ -1334,9 +1452,9 @@ ggml_tensor * llm_graph_context::build_encoder(
         ggml_tensor * matrix_ac = ggml_mul_mat(ctx0, key, q_with_bias_u);
         ggml_tensor * matrix_bd = ggml_mul_mat(ctx0, p, q_with_bias_v);
         matrix_bd = build_rel_shift(gf, matrix_bd);
-        ggml_tensor * scores = ggml_scale(ctx0, ggml_add(ctx0, matrix_ac, matrix_bd), 1.0f / sqrtf(float(64.0f)));
+        ggml_tensor * scores = ggml_scale(ctx0, ggml_add(ctx0, matrix_ac, matrix_bd), 0.125f);
         cb(scores, "up_scores", i);
-        ggml_tensor * x_att = build_attn_scores(value, scores, model.layers[i + 132].up_encoders_wo, model.layers[i + 132].up_encoders_bo, "up_encoders", i);
+        ggml_tensor * x_att = build_attn_scores(value, scores, chunk_masks, model.layers[i + 132].up_encoders_wo, model.layers[i + 132].up_encoders_bo, "up_encoders", i);
         cb(x_att, "up_x_att", i);
         x = ggml_add(ctx0, attn_residual, x_att);
         ggml_tensor * ffn_residual = x;

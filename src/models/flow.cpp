@@ -12,9 +12,6 @@ llm_build_flow::llm_build_flow(const llama_model & model, const llm_graph_params
     ggml_tensor * prompt_feat = build_inp_prompt_feat(); //✅
     ggml_build_forward_expand(gf, prompt_feat);
 
-    // ggml_tensor * test = ggml_add(ctx0, prompt_feat, prompt_feat);
-    // ggml_build_forward_expand(gf, test);
-    // cb(test, "test_after_attn", 0);
     
     ggml_tensor * extend_pe = build_inp_extend_pe();    //✅
     ggml_build_forward_expand(gf, extend_pe);
@@ -26,13 +23,8 @@ llm_build_flow::llm_build_flow(const llama_model & model, const llm_graph_params
     ggml_set_name(spk_add, "spk_affine_layer");
     ggml_build_forward_expand(gf, spk_add);
 
-    // ggml_tensor * mask = build_pad_mask(params.ubatch.prompt_token_len + params.ubatch.token_len, 0, 0);
-    // ggml_build_forward_expand(gf, mask);
-    // mask = ggml_cont(ctx0, ggml_permute(ctx0, mask, 1, 0, 2, 3));   //✅
 
     token = build_flow_embedding(token, model.inp_embed_w, -1);   //✅
-    // ggml_tensor * token_mask = ggml_mul(ctx0, token, mask);
-    // ggml_set_name(token_mask, "flow_embd_token");                 //✅
     bool stream = (build_stream() != 0);
     bool finalize = !stream;
     ggml_tensor * x = nullptr;

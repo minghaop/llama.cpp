@@ -736,6 +736,26 @@ struct llm_graph_context {
              ggml_tensor * norm_mb, 
              int32_t il) const;
     
+    ggml_tensor * build_linear_no_sample(
+        ggml_tensor * cur,
+        int32_t offset,
+        const llama_model & model) const;
+    
+    ggml_tensor * subsequent_chunk_mask(
+        int32_t size,
+        int32_t chunk_size,
+        int32_t num_left_chunks = -1) const;
+    
+    ggml_tensor * build_optional_chunk_mask(
+        ggml_tensor * cur,
+        ggml_tensor * masks,
+        bool use_dynamic_chunk,
+        bool use_dynamic_left_chunk,
+        int32_t decoding_chunk_size,
+        int32_t static_chunk_size,
+        int32_t num_decoding_left_chunks,
+        bool enable_full_context = true) const;
+    
     ggml_tensor * build_pe(ggml_cgraph * gf, int64_t max_len = 5000) const;
 
     ggml_tensor * build_pos_encoding(
@@ -750,21 +770,16 @@ struct llm_graph_context {
     
     ggml_tensor * build_flash_attn_encoder(
         ggml_tensor * x,           // [D, T, B]
-        ggml_tensor * wq,
-        ggml_tensor * wk,
-        ggml_tensor * wv,
-        ggml_tensor * wo,
-        ggml_tensor * bo,
-        ggml_tensor * attn_mask,   // 可为 nullptr
-        int32_t n_heads
-    ) const;
+        const llama_model & model,
+        ggml_tensor * mask,   // 可为 nullptr
+        ggml_tensor * pos_emb,
+        int32_t n_heads, 
+        int32_t idx) const;
     
     ggml_tensor * build_pre_lookahead_layer(
          ggml_tensor * cur,
-         ggml_tensor * conv1_mw,
-         ggml_tensor * conv1_mb,
-         ggml_tensor * conv2_mw,
-         ggml_tensor * conv2_mb) const;
+         ggml_tensor * context,
+         const llama_model & model) const;
     
 
     ggml_tensor * build_rel_pos_attn(
@@ -780,6 +795,7 @@ struct llm_graph_context {
     ggml_tensor * build_attn_scores(
          ggml_tensor * cur,
          ggml_tensor * scores,
+         ggml_tensor * mask,
          ggml_tensor * mw,
          ggml_tensor * mb,
          std::string attn_type,
