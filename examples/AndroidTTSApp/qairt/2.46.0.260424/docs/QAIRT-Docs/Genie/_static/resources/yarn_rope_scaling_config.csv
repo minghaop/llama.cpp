@@ -1,7 +1,0 @@
-Key, Type, Mandatory, DefaultValue
-factor, Floating point, True,
-original_max_position_embeddings, Integer, True,
-attention_factor, Floating point, False,
-beta_fast, Floating point, False, 32.0
-beta_slow, Floating point, False, 1.0
-type, String, True, yarn

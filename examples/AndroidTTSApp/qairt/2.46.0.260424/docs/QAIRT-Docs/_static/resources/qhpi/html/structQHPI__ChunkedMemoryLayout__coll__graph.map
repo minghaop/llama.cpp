@@ -1,4 +1,0 @@
-<map id="QHPI_ChunkedMemoryLayout" name="QHPI_ChunkedMemoryLayout">
-<area shape="rect" id="node1" title="Descriptor for a chunked (blocked) memory layout." alt="" coords="5,95,220,121"/>
-<area shape="rect" id="node2" href="$structQHPI__DimInfo.html" title="One dimension entry in a chunked memory layout descriptor." alt="" coords="56,5,169,32"/>
-</map>

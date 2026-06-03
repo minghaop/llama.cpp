@@ -1,6 +1,0 @@
-Key, Type, Mandatory, DefaultValue
-factor, Floating point, True,
-high_freq_factor, Floating point, True,
-low_freq_factor, Floating point, True,
-original_max_position_embeddings, Integer, True,
-type, String, True, llama3

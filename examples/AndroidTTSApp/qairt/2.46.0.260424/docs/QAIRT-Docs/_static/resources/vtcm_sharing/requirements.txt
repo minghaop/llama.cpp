@@ -1,3 +1,0 @@
-drawSvg
-numpy
-pillow
