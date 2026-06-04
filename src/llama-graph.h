@@ -860,6 +860,7 @@ struct llm_graph_context {
     ggml_tensor * causal_conv1d_forward(
         ggml_tensor * x,
         ggml_tensor * pad,
+        ggml_tensor * mask,
         const ConvBias & conv_b,
         std::string mode,
         int32_t layer_id,
@@ -921,7 +922,8 @@ struct llm_graph_context {
          const std::vector<ggml_tensor *> & up_w0,
          const std::vector<ggml_tensor *> & up_w2,
          const llama_model & model,
-         int32_t step) const;
+         int32_t step, 
+         bool streaming) const;
     
     ggml_tensor * build_repeat(ggml_tensor * cur, int32_t current_length, int32_t target_length, int32_t dim) const;
     
@@ -932,7 +934,8 @@ struct llm_graph_context {
          ggml_tensor * mask,
          ggml_tensor * spks,
          ggml_tensor * cond,
-         const llama_model & model) const;
+         const llama_model & model, 
+         bool streaming) const;
     
     ggml_tensor * bulid_f0_predictor(
         ggml_tensor * cur,

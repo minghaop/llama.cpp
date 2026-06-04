@@ -1534,13 +1534,13 @@ ggml_tensor * llm_graph_context::build_basic_attn(
 ggml_tensor * llm_graph_context::causal_conv1d_forward(
         ggml_tensor * x,
         ggml_tensor * pad,
+        ggml_tensor * mask,
         const ConvBias & conv_b,
         std::string mode,
         int32_t layer_id,
         int32_t blk_id,
         const llama_model & model,
         int32_t step) const{
-    
     ggml_tensor * x_pad = ggml_concat(ctx0, pad, x, 0);
     ggml_set_name(x_pad, ("causal_blk1d_conv_pad_" + mode + "_" + std::to_string(step) + "_" + std::to_string(layer_id) + "_" + std::to_string(blk_id)).c_str());
     ggml_tensor * model_weight;
@@ -1600,17 +1600,18 @@ ggml_tensor * llm_graph_context::causal_conv1d_forward(
 }
 
 ggml_tensor * llm_graph_context::causal_block1d_forward(
-        ggml_tensor * x,
-        std::vector<ggml_tensor *> pad_list,
-        ggml_tensor * mask,
-        ggml_tensor * resnet_mish_ones,
-        const ConvBias & conv_b,
-        std::string mode,
-        int32_t layer_id,
-        int32_t blk_id,
-        const llama_model & model,
-        int32_t step) const{
+    ggml_tensor * x,
+    std::vector<ggml_tensor *> pad_list,
+    ggml_tensor * mask,
+    ggml_tensor * resnet_mish_ones,
+    const ConvBias & conv_b,
+    std::string mode,
+    int32_t layer_id,
+    int32_t blk_id,
+    const llama_model & model,
+    int32_t step) const{
     
+    x = ggml_mul(ctx0, x, mask);
     if (x->ne[1] == 256) {
         x = causal_conv1d_forward(x, pad_list[0], conv_b, mode, layer_id, blk_id, model, step);
     } else if (x->ne[1] == 320) {
@@ -1730,7 +1731,8 @@ ggml_tensor * llm_graph_context::build_causal_cond_decoder(
          const std::vector<ggml_tensor *> & up_w0,
          const std::vector<ggml_tensor *> & up_w2,
          const llama_model & model,
-         int32_t step) const{
+         int32_t step,
+         bool streaming) const{
     
     t = build_sinusoidal_pos_emb(t, emb_row, 320, 1000);
     t = build_timestep_embedding(t, model.time_mlp_1_w, model.time_mlp_1_b, model.time_mlp_2_w, model.time_mlp_2_b);
@@ -1740,11 +1742,9 @@ ggml_tensor * llm_graph_context::build_causal_cond_decoder(
     x = ggml_concat(ctx0, x, mu, 1);
     if (spks) {
         x = ggml_concat(ctx0, x, spks_t, 1);
-        ggml_set_name(x, ("spks_" + std::to_string(step)).c_str());
     }
     if (cond) {
         x = ggml_concat(ctx0, x, cond, 1);
-        ggml_set_name(x, ("cond_" + std::to_string(step)).c_str());
     }
 
     std::vector<ggml_tensor *> hiddens;
@@ -1754,6 +1754,10 @@ ggml_tensor * llm_graph_context::build_causal_cond_decoder(
     x = causal_resnet_block1d_forward(x, pad_list, mask_down, t_mish, step, 0, "down_block", t_emb_ones, resnet_mish_ones, res_w, conv_b, model);
     ggml_set_name(x, ("causal_resnet_blk1d_" + std::to_string(step)).c_str());
     ggml_tensor * tr_x, *h, *attn_out, *ff_out;
+    if (streaming) {
+        attn_mask = build_optional_chunk_mask(x, mask_down, false, false, 0, 50, -1);
+        attn_mask = ggml_scale_bias(ctx0, mask, 1.0e10f, -1.0e10f);
+    }
     for (size_t i = 0; i < 4; ++i) {
         tr_x = x;
         h = build_layer_norm(x, model.layers[226 + i].down_block1_norm1_w, model.layers[226 + i].down_block1_norm1_b, 1e-5f, "down_block", 20 + i);
@@ -1775,13 +1779,17 @@ ggml_tensor * llm_graph_context::build_causal_cond_decoder(
     // hiddens.push_back(x);
     // ggml_tensor * x_mask = ggml_mul(ctx0, x, mask_down);
     if (x->ne[1] == 256) {
-        x = causal_conv1d_forward(x, pad_list[0], conv_b, "down_block", 0, 3, model, step);
+        x = causal_conv1d_forward(x, pad_list[0], conv_b, mask_down, "down_block", 0, 3, model, step);
     } else if (x->ne[1] == 320) {
-        x = causal_conv1d_forward(x, pad_list[1], conv_b, "down_block", 0, 3, model, step);
+        x = causal_conv1d_forward(x, pad_list[1], conv_b, mask_down, "down_block", 0, 3, model, step);
     } else {
-        x = causal_conv1d_forward(x, pad_list[2], conv_b, "down_block", 0, 3, model, step);
+        x = causal_conv1d_forward(x, pad_list[2], conv_b, mask_down, "down_block", 0, 3, model, step);
     }
     
+    if (streaming) {
+        attn_mask = build_optional_chunk_mask(x, mask, false, false, 0, 50, -1);
+        attn_mask = ggml_scale_bias(ctx0, mask, 1.0e10f, -1.0e10f);
+    }
     for(size_t i = 0; i < 12; i++) {
         x = causal_resnet_block1d_forward(x, pad_list, mask, t_mish, step, 280 + i, "mid_block", t_emb_ones, resnet_mish_ones, res_w, conv_b, model);
         ggml_set_name(x, ("causal_resnet_mid_block_" + std::to_string(step) + "_layer_" + std::to_string(i)).c_str());
@@ -1808,6 +1816,10 @@ ggml_tensor * llm_graph_context::build_causal_cond_decoder(
     ggml_set_name(x, ("causal_trans_mid_block_" + std::to_string(step)).c_str());
     x = ggml_concat(ctx0, x, hidden, 1);
     x = causal_resnet_block1d_forward(x, pad_list, mask, t_mish, step, 0, "up_block", t_emb_ones, resnet_mish_ones, res_w, conv_b, model);
+    if (streaming) {
+        attn_mask = build_optional_chunk_mask(x, mask, false, false, 0, 50, -1);
+        attn_mask = ggml_scale_bias(ctx0, mask, 1.0e10f, -1.0e10f);
+    }
     for (size_t i = 0; i < 4; ++i) {
         tr_x = x;
         h = build_layer_norm(x, model.layers[1059 + i].up_block1_norm1_w, model.layers[1059 + i].up_block1_norm1_b, 1e-5f, "up_block", 124 + i);
@@ -1826,14 +1838,14 @@ ggml_tensor * llm_graph_context::build_causal_cond_decoder(
     x = ggml_cont(ctx0, ggml_permute(ctx0, x, 1, 0, 2, 3));
     // x_mask = ggml_mul(ctx0, x, mask_up);
     if (x->ne[1] == 256) {
-        x = causal_conv1d_forward(x, pad_list[0], conv_b, "up_block", 0, 3, model, step);
+        x = causal_conv1d_forward(x, pad_list[0], conv_b, mask, "up_block", 0, 3, model, step);
     } else if (x->ne[1] == 320) {
-        x = causal_conv1d_forward(x, pad_list[1], conv_b, "up_block", 0, 3, model, step);
+        x = causal_conv1d_forward(x, pad_list[1], conv_b, mask, "up_block", 0, 3, model, step);
     } else {
-        x = causal_conv1d_forward(x, pad_list[2], conv_b, "up_block", 0, 3, model, step);
+        x = causal_conv1d_forward(x, pad_list[2], conv_b, mask, "up_block", 0, 3, model, step);
     }
     x = causal_block1d_forward(x, pad_list, mask, resnet_mish_ones, conv_b, "final_block", 0, 3, model, step);
-    // x = ggml_mul(ctx0, x, mask_up);
+    
     ggml_tensor * weight_t  = model.f_proj_w;
     ggml_tensor * weight_2d = ggml_reshape_2d(ctx0, weight_t, weight_t->ne[1], weight_t->ne[2]);
     ggml_tensor * res_perm = ggml_cont(ctx0, ggml_permute(ctx0, x, 1, 0, 2, 3));
@@ -1852,7 +1864,8 @@ ggml_tensor * llm_graph_context::build_solve_euler(
          ggml_tensor * mask,
          ggml_tensor * spks,
          ggml_tensor * cond,
-         const llama_model & model) const{
+         const llama_model & model,
+         bool streaming) const{
         
     const int64_t B   = z->ne[2];
     const int64_t C   = z->ne[1]; 
@@ -1999,7 +2012,7 @@ ggml_tensor * llm_graph_context::build_solve_euler(
         ggml_tensor * t_in = ggml_concat(ctx0, t_current, t_current, 0);
         ggml_tensor * z_in = ggml_concat(ctx0, z_current, z_current, 2);
         ggml_tensor * dphi_dt = build_causal_cond_decoder(z_in, pad_list, mask_in, mu_in, t_in, spks_in, cond_in, spks_t, \
-                        attn_mask, t_tmb_ones, resnet_mish_ones, res_w, conv_b, emb_row, down_w0_f16, down_w2_f16, mid_w0_f16, mid_w2_f16, up_w0_f16, up_w2_f16, model, step);
+                        attn_mask, t_tmb_ones, resnet_mish_ones, res_w, conv_b, emb_row, down_w0_f16, down_w2_f16, mid_w0_f16, mid_w2_f16, up_w0_f16, up_w2_f16, model, step, streaming);
         ggml_tensor * dphi_dt_split   = ggml_view_3d(ctx0, dphi_dt, T, z->ne[1], B, dphi_dt->nb[1], dphi_dt->nb[2], 0);
         ggml_tensor * cfg_dphi_dt  = ggml_view_3d(ctx0, dphi_dt, T, z->ne[1], B, dphi_dt->nb[1], dphi_dt->nb[2], B * dphi_dt->nb[2]);
         ggml_tensor * dphi  = ggml_sub_inplace(ctx0, ggml_scale(ctx0, dphi_dt_split, 1.7f * dt), ggml_scale(ctx0, cfg_dphi_dt, 0.7f * dt));
