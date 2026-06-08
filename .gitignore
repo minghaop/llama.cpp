@@ -50,6 +50,7 @@ lcov-report/
 tags
 .build/
 build*
+!build-xcframework.sh
 release
 debug
 !build-info.cmake

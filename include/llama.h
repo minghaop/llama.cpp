@@ -906,7 +906,13 @@ extern "C" {
             int32_t n_tokens,
             int32_t embd,
             int32_t n_seq_max,
-            int32_t is_flow);
+            int32_t is_flow,
+            int32_t stream);
+
+#ifdef __cplusplus
+#    define llama_batch_init(n_tokens, embd, n_seq_max, is_flow) \
+        llama_batch_init(n_tokens, embd, n_seq_max, is_flow, 0)
+#endif
 
     // Frees a batch of tokens allocated with llama_batch_init()
     LLAMA_API void llama_batch_free(struct llama_batch batch);

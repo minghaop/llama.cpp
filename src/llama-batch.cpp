@@ -9,6 +9,10 @@
 #include <algorithm>
 #include <sstream>
 
+#ifdef llama_batch_init
+#undef llama_batch_init
+#endif
+
 #define LOG_INT_VAL(desc, var) \
     LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&& %s is: %d\n", desc, var)
 
@@ -989,7 +993,7 @@ struct llama_batch llama_batch_init(int32_t n_tokens_alloc, int32_t embd, int32_
         /*prompt_feat_len =*/ 0,
         /*rand_noise =*/ nullptr,
         /*extend_pe =*/ nullptr,
-        /*stream    =*/ 0,
+        /*stream    =*/ stream,
     };
 
     if (embd) {

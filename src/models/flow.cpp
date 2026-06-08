@@ -2,6 +2,7 @@
 #include "models.h"
 
 llm_build_flow::llm_build_flow(const llama_model & model, const llm_graph_params & params) : llm_graph_context(params) {
+    const int32_t stream_val = build_stream();
 
     ggml_tensor * embedding = build_inp_embd(model.inp_embed_w); //✅
     
@@ -19,7 +20,7 @@ llm_build_flow::llm_build_flow(const llama_model & model, const llm_graph_params
 
     token = build_flow_embedding(token, model.inp_embed_w, -1);   //✅
     
-    bool stream = (build_stream() != 0);
+    bool stream = (stream_val != 0);
     bool finalize = !stream;
     ggml_tensor * x = nullptr;
     int32_t token_len = token->ne[1];
@@ -66,4 +67,3 @@ llm_build_flow::llm_build_flow(const llama_model & model, const llm_graph_params
     res->t_embd = feat;
     ggml_build_forward_expand(gf, feat);
 }
-

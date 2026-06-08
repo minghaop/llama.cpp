@@ -74,9 +74,11 @@ static inline void prepare_text_batch_for_decode(llama_batch &b);
 
 // Compatibility shim for llama_batch_init() signature differences across forks.
 template <typename Fn = decltype(&llama_batch_init)>
-static llama_batch llama_batch_init_compat(int32_t n_tokens, int32_t embd, int32_t n_seq_max, int32_t is_flow = 0) {
+static llama_batch llama_batch_init_compat(int32_t n_tokens, int32_t embd, int32_t n_seq_max, int32_t is_flow = 0, int32_t stream = 0) {
     auto fn = static_cast<Fn>(&llama_batch_init);
-    if constexpr (std::is_same_v<Fn, llama_batch (*)(int32_t, int32_t, int32_t, int32_t)>) {
+    if constexpr (std::is_same_v<Fn, llama_batch (*)(int32_t, int32_t, int32_t, int32_t, int32_t)>) {
+        return fn(n_tokens, embd, n_seq_max, is_flow, stream);
+    } else if constexpr (std::is_same_v<Fn, llama_batch (*)(int32_t, int32_t, int32_t, int32_t)>) {
         return fn(n_tokens, embd, n_seq_max, is_flow);
     } else {
         return fn(n_tokens, embd, n_seq_max);
