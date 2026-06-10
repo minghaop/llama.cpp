@@ -128,6 +128,37 @@ std::vector<float> jfloat_array_to_vector(JNIEnv *env, jfloatArray array) {
     return out;
 }
 
+std::string float_vector_stats(const std::vector<float> &values) {
+    if (values.empty()) {
+        return "size=0";
+    }
+    double min_v = values.front();
+    double max_v = values.front();
+    long double sum = 0.0L;
+    size_t nan_count = 0;
+    for (float v : values) {
+        if (std::isnan(v)) {
+            nan_count += 1;
+            continue;
+        }
+        min_v = std::min(min_v, static_cast<double>(v));
+        max_v = std::max(max_v, static_cast<double>(v));
+        sum += v;
+    }
+    const double mean = values.size() > nan_count ? static_cast<double>(sum / static_cast<long double>(values.size() - nan_count)) : 0.0;
+    char buffer[256];
+    std::snprintf(
+            buffer,
+            sizeof(buffer),
+            "size=%zu min=%.6f max=%.6f mean=%.6f nan=%zu",
+            values.size(),
+            min_v,
+            max_v,
+            mean,
+            nan_count);
+    return std::string(buffer);
+}
+
 jfloatArray vector_to_jfloat_array(JNIEnv *env, const std::vector<float> &values) {
     jfloatArray out = env->NewFloatArray(static_cast<jsize>(values.size()));
     if (out != nullptr && !values.empty()) {
@@ -154,6 +185,26 @@ Tensor *resolve_output_tensor(Interpreter *interpreter, Session *session, int ou
     auto it = outputs.begin();
     std::advance(it, static_cast<long>(wanted));
     return it->second;
+}
+
+std::vector<float> tensor_to_vector(Tensor *output_tensor) {
+    if (output_tensor == nullptr) {
+        return {};
+    }
+    std::unique_ptr<Tensor> host_output(Tensor::createHostTensorFromDevice(output_tensor, true));
+    if (host_output == nullptr) {
+        return {};
+    }
+    if (!output_tensor->copyToHostTensor(host_output.get())) {
+        return {};
+    }
+
+    const int element_count = host_output->elementSize();
+    const float *data = host_output->host<float>();
+    if (data == nullptr || element_count <= 0) {
+        return {};
+    }
+    return std::vector<float>(data, data + element_count);
 }
 
 }  // namespace
@@ -394,24 +445,66 @@ Java_com_example_llama_MnnHifiGanRunner_nativeForward(
         return nullptr;
     }
 
+    if (output_index == 3) {
+        Tensor *magnitude_tensor = resolve_output_tensor(runner->interpreter.get(), runner->session, 0);
+        Tensor *phase_tensor = resolve_output_tensor(runner->interpreter.get(), runner->session, 1);
+        if (magnitude_tensor == nullptr || phase_tensor == nullptr) {
+            throw_illegal_state(env, "HifiGan magnitude/phase output tensor not found");
+            return nullptr;
+        }
+
+        std::vector<float> magnitude = tensor_to_vector(magnitude_tensor);
+        std::vector<float> phase = tensor_to_vector(phase_tensor);
+        if (magnitude.empty() || phase.empty()) {
+            throw_illegal_state(env, "HifiGan magnitude/phase output tensor is empty");
+            return nullptr;
+        }
+        if (magnitude.size() != phase.size()) {
+            throw_illegal_state(
+                    env,
+                    "HifiGan magnitude/phase size mismatch: magnitude=" + std::to_string(magnitude.size()) +
+                            " phase=" + std::to_string(phase.size()));
+            return nullptr;
+        }
+
+        __android_log_print(
+                ANDROID_LOG_INFO,
+                kLogTag,
+                "%s: magnitude stats=%s",
+                __func__,
+                float_vector_stats(magnitude).c_str());
+        __android_log_print(
+                ANDROID_LOG_INFO,
+                kLogTag,
+                "%s: phase stats=%s",
+                __func__,
+                float_vector_stats(phase).c_str());
+
+        std::vector<float> merged;
+        merged.reserve(magnitude.size() + phase.size());
+        merged.insert(merged.end(), magnitude.begin(), magnitude.end());
+        merged.insert(merged.end(), phase.begin(), phase.end());
+
+        __android_log_print(
+                ANDROID_LOG_INFO,
+                kLogTag,
+                "%s: merged magnitude/phase outputs size=%zu",
+                __func__,
+                merged.size());
+        return vector_to_jfloat_array(env, merged);
+    }
+
     Tensor *output_tensor = resolve_output_tensor(runner->interpreter.get(), runner->session, output_index);
     if (output_tensor == nullptr) {
         throw_illegal_state(env, "HifiGan output tensor not found");
         return nullptr;
     }
 
-    std::unique_ptr<Tensor> host_output(Tensor::createHostTensorFromDevice(output_tensor, true));
-    if (!output_tensor->copyToHostTensor(host_output.get())) {
-        throw_illegal_state(env, "Failed to copy HifiGan output tensor to host");
-        return nullptr;
-    }
-
-    const int element_count = host_output->elementSize();
-    const float *data = host_output->host<float>();
-    if (data == nullptr || element_count <= 0) {
+    std::vector<float> output = tensor_to_vector(output_tensor);
+    if (output.empty()) {
         throw_illegal_state(env, "HifiGan output tensor is empty");
         return nullptr;
     }
 
-    return vector_to_jfloat_array(env, std::vector<float>(data, data + element_count));
+    return vector_to_jfloat_array(env, output);
 }

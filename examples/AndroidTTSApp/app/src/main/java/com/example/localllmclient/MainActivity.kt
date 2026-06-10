@@ -13,6 +13,7 @@ import android.os.Looper
 import android.speech.RecognitionListener
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
+import android.util.Log
 import android.util.TypedValue
 import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
@@ -72,6 +73,11 @@ class MainActivity : AppCompatActivity() {
 
     private var mediaPlayer: MediaPlayer? = null
     private var historyPlaybackState = HistoryPlaybackState.Stopped
+    private var playbackMode = PlaybackMode.None
+    private val streamingPlaybackQueue = ArrayDeque<StreamingPlaybackSegment>()
+    private var streamingPlaybackState = StreamingPlaybackState.Idle
+    private var streamingPlaybackSessionId: String? = null
+    private var streamingGenerationActive = false
 
     private var speechRecognizer: SpeechRecognizer? = null
     private val mainHandler = Handler(Looper.getMainLooper())
@@ -651,6 +657,7 @@ class MainActivity : AppCompatActivity() {
             },
         )
         stopPlayback(pauseState = HistoryPlaybackState.Stopped)
+        streamingGenerationActive = streaming
         isGenerating = true
         generationSeq += 1
         val seq = generationSeq
@@ -683,6 +690,9 @@ class MainActivity : AppCompatActivity() {
 
             withContext(Dispatchers.Main) {
                 if (seq != generationSeq) return@withContext
+                if (streaming) {
+                    onStreamingGenerationFinished()
+                }
                 if (resultPath == "false") {
                     appendEventLine("生成失败")
                 } else if (resultPath.startsWith("LLM_ONLY_OK:")) {
@@ -750,11 +760,15 @@ class MainActivity : AppCompatActivity() {
             mediaPlayer = MediaPlayer().apply {
                 setDataSource(item.audioPath)
                 setOnCompletionListener {
-                    stopPlayback(pauseState = HistoryPlaybackState.Stopped)
+                    releaseCurrentPlayer(stopFirst = false)
+                    historyPlaybackState = HistoryPlaybackState.Stopped
+                    refreshGeneratedHistoryUI()
+                    refreshControlsEnabled()
                 }
                 prepare()
                 start()
             }
+            playbackMode = PlaybackMode.History
             historyPlaybackState = HistoryPlaybackState.Playing
             appendEventLine("开始播放 GR${item.genIndex}")
             refreshGeneratedHistoryUI()
@@ -770,13 +784,126 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun stopPlayback(pauseState: HistoryPlaybackState) {
+        releaseCurrentPlayer(stopFirst = true)
+        historyPlaybackState = pauseState
+        resetStreamingPlaybackState()
+        refreshGeneratedHistoryUI()
+        refreshControlsEnabled()
+    }
+
+    private fun releaseCurrentPlayer(stopFirst: Boolean) {
         mediaPlayer?.runCatching {
-            stop()
+            if (stopFirst) {
+                stop()
+            }
             release()
         }
         mediaPlayer = null
-        historyPlaybackState = pauseState
-        refreshGeneratedHistoryUI()
+        playbackMode = PlaybackMode.None
+    }
+
+    private fun resetStreamingPlaybackState() {
+        streamingPlaybackQueue.clear()
+        streamingPlaybackState = StreamingPlaybackState.Idle
+        streamingPlaybackSessionId = null
+        streamingGenerationActive = false
+    }
+
+    private fun onStreamingAudioSessionStarted(sessionId: String) {
+        if (streamingPlaybackSessionId == sessionId) {
+            return
+        }
+        if (playbackMode == PlaybackMode.Streaming) {
+            releaseCurrentPlayer(stopFirst = true)
+        }
+        streamingPlaybackQueue.clear()
+        streamingPlaybackSessionId = sessionId
+        streamingPlaybackState = StreamingPlaybackState.Waiting
+        refreshControlsEnabled()
+    }
+
+    private fun onStreamingAudioSegmentReady(event: InferenceEvent.StreamingAudioSegmentReady) {
+        val activeSessionId = streamingPlaybackSessionId
+        if (activeSessionId != null && activeSessionId != event.sessionId) {
+            return
+        }
+        if (activeSessionId == null) {
+            streamingPlaybackSessionId = event.sessionId
+        }
+        streamingPlaybackQueue.addLast(
+            StreamingPlaybackSegment(
+                sessionId = event.sessionId,
+                audioPath = event.audioPath,
+                segmentIndex = event.segmentIndex,
+                seconds = event.seconds,
+                isPrefix = event.isPrefix,
+            ),
+        )
+        val label = if (event.isPrefix) "前5秒音频" else "chunk音频"
+        appendEventLine("$label 就绪 #${event.segmentIndex} ${"%.3f".format(event.seconds)}s")
+        if (playbackMode != PlaybackMode.Streaming && mediaPlayer == null) {
+            playNextStreamingSegment()
+        } else if (playbackMode == PlaybackMode.None && mediaPlayer == null) {
+            playNextStreamingSegment()
+        }
+    }
+
+    private fun playNextStreamingSegment() {
+        if (streamingPlaybackQueue.isEmpty()) {
+            streamingPlaybackState = if (streamingGenerationActive) {
+                StreamingPlaybackState.Waiting
+            } else {
+                StreamingPlaybackState.Idle
+            }
+            if (!streamingGenerationActive) {
+                streamingPlaybackSessionId = null
+            }
+            refreshControlsEnabled()
+            return
+        }
+
+        val segment = streamingPlaybackQueue.removeFirst()
+        runCatching {
+            mediaPlayer = MediaPlayer().apply {
+                setDataSource(segment.audioPath)
+                setOnCompletionListener {
+                    Log.i(TAG, "[StreamingPlayback] completed segment #${segment.segmentIndex} path=${segment.audioPath}")
+                    releaseCurrentPlayer(stopFirst = false)
+                    playNextStreamingSegment()
+                }
+                prepare()
+                start()
+            }
+            playbackMode = PlaybackMode.Streaming
+            streamingPlaybackState = StreamingPlaybackState.Playing
+            val label = if (segment.isPrefix) "开始播放前5秒音频" else "开始播放chunk音频"
+            Log.i(
+                TAG,
+                "[StreamingPlayback] started ${if (segment.isPrefix) "prefix" else "chunk"} " +
+                    "segment #${segment.segmentIndex} seconds=${"%.3f".format(Locale.US, segment.seconds)} path=${segment.audioPath}",
+            )
+            appendEventLine("$label #${segment.segmentIndex}")
+            refreshControlsEnabled()
+        }.onFailure { t ->
+            Log.e(TAG, "[StreamingPlayback] failed to play segment #${segment.segmentIndex}: ${t.message}", t)
+            appendEventLine("流式播放失败: ${t.message}")
+            releaseCurrentPlayer(stopFirst = true)
+            if (streamingPlaybackQueue.isEmpty() && !streamingGenerationActive) {
+                streamingPlaybackState = StreamingPlaybackState.Idle
+                streamingPlaybackSessionId = null
+            } else {
+                streamingPlaybackState = StreamingPlaybackState.Waiting
+            }
+            refreshControlsEnabled()
+        }
+    }
+
+    private fun onStreamingGenerationFinished() {
+        streamingGenerationActive = false
+        if (streamingPlaybackState != StreamingPlaybackState.Playing && streamingPlaybackQueue.isEmpty()) {
+            streamingPlaybackState = StreamingPlaybackState.Idle
+            streamingPlaybackSessionId = null
+        }
         refreshControlsEnabled()
     }
 
@@ -826,6 +953,14 @@ class MainActivity : AppCompatActivity() {
                             "decoder=${"%.4f".format(event.decoderSeconds)}s " +
                             "total=${"%.4f".format(event.totalSeconds)}s",
                     )
+                    renderInferenceInfoThrottled(force = true)
+                }
+                is InferenceEvent.StreamingAudioSessionStarted -> {
+                    onStreamingAudioSessionStarted(event.sessionId)
+                    renderInferenceInfoThrottled(force = true)
+                }
+                is InferenceEvent.StreamingAudioSegmentReady -> {
+                    onStreamingAudioSegmentReady(event)
                     renderInferenceInfoThrottled(force = true)
                 }
                 is InferenceEvent.Note -> {
@@ -1029,7 +1164,9 @@ class MainActivity : AppCompatActivity() {
         val currentState = captureState
         val hasMic = hasRecordPermission()
         val captureBusy = currentState != CaptureState.Idle
-        val isPlaying = historyPlaybackState == HistoryPlaybackState.Playing
+        val isPlaying =
+            historyPlaybackState == HistoryPlaybackState.Playing ||
+                streamingPlaybackState == StreamingPlaybackState.Playing
 
         val canGenerate = !isGenerating && !captureBusy && !isPlaying
         generateButton.isEnabled = canGenerate
@@ -1046,7 +1183,9 @@ class MainActivity : AppCompatActivity() {
         promptHistoryButton.isEnabled = !isGenerating && !captureBusy && !isPlaying
         ttsHistoryButton.isEnabled = !isGenerating && !captureBusy && !isPlaying
         generatedHistoryButton.isEnabled = !isGenerating && !captureBusy && !isPlaying
-        playHistoryButton.isEnabled = !isGenerating && !captureBusy
+        playHistoryButton.isEnabled =
+            !isGenerating && !captureBusy &&
+                (historyPlaybackState == HistoryPlaybackState.Playing || !isPlaying)
 
         promptTextInput.isEnabled =
             currentState == CaptureState.Idle && selectedPromptHistoryId != null && !isPlaying && !isGenerating
@@ -1465,6 +1604,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     companion object {
+        private const val TAG = "MainActivity"
         private const val LLM_ONLY_UI_MODE = false
         private const val FLOW_ONLY_UI_MODE = false
         private const val HIFIGAN_ONLY_UI_MODE = false
@@ -1493,6 +1633,7 @@ class MainActivity : AppCompatActivity() {
             listOf("local_llm_resources/prompt_2.wav", "prompts/prompt_2.wav", "prompt_2.wav"),
         )
     }
+
 }
 
 private enum class CaptureTarget {
@@ -1511,6 +1652,26 @@ private enum class HistoryPlaybackState {
     Playing,
     Paused,
 }
+
+private enum class PlaybackMode {
+    None,
+    History,
+    Streaming,
+}
+
+private enum class StreamingPlaybackState {
+    Idle,
+    Waiting,
+    Playing,
+}
+
+private data class StreamingPlaybackSegment(
+    val sessionId: String,
+    val audioPath: String,
+    val segmentIndex: Int,
+    val seconds: Double,
+    val isPrefix: Boolean,
+)
 
 private data class PromptHistoryItem(
     val id: String,

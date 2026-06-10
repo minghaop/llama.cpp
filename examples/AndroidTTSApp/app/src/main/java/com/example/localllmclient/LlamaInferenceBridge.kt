@@ -34,6 +34,8 @@ import kotlin.math.cos
 import kotlin.math.exp
 import kotlin.math.max
 import kotlin.math.min
+import kotlin.math.abs
+import kotlin.math.roundToInt
 import kotlin.math.sin
 
 enum class InferenceStage {
@@ -68,6 +70,14 @@ sealed class InferenceEvent {
     data class Failed(val stage: InferenceStage, val message: String) : InferenceEvent()
     data class AudioDuration(val seconds: Double, val samples: Int, val sampleRate: Int) : InferenceEvent()
     data class FlowBreakdown(val encoderSeconds: Double, val decoderSeconds: Double, val totalSeconds: Double) : InferenceEvent()
+    data class StreamingAudioSessionStarted(val sessionId: String) : InferenceEvent()
+    data class StreamingAudioSegmentReady(
+        val sessionId: String,
+        val audioPath: String,
+        val segmentIndex: Int,
+        val seconds: Double,
+        val isPrefix: Boolean,
+    ) : InferenceEvent()
     data class Note(val message: String) : InferenceEvent()
 }
 
@@ -301,7 +311,7 @@ class LlamaInferenceBridge(
                 TAG,
                 "[LLMPrepare] begin, llmBackend=${if (USE_MNN_LLM_BACKEND) "MNN-CPU" else "llama.cpp"} " +
                     "flowBackend=${if (USE_HTTP_FLOW_BACKEND) "HTTP" else "local"} " +
-                    "hifiganBackend=MNN-$HIFIGAN_BACKEND_LABEL",
+                    "hiftBackend=${if (USE_MNN_HIFT_BACKEND) "MNN-$HIFIGAN_BACKEND_LABEL" else "llama.cpp"}",
             )
             val loadedEngine = if (USE_MNN_LLM_BACKEND) {
                 ensureMnnLlmRunnerReady(resources)
@@ -311,6 +321,8 @@ class LlamaInferenceBridge(
                     modelFile = resources.llmModel,
                     flowModelFile = resources.flowModel,
                     loadFlowModel = !USE_HTTP_FLOW_BACKEND,
+                    hiftModelFile = resources.localHiftModel,
+                    loadHiftModel = !USE_MNN_HIFT_BACKEND,
                 )
             }
             Log.i(TAG, "[LLMPrepare] ensureEngineReady done")
@@ -325,6 +337,7 @@ class LlamaInferenceBridge(
 
             currentStage = InferenceStage.flow
             val hiftResult = if (USE_HTTP_FLOW_BACKEND && flowStreaming) {
+                require(USE_MNN_HIFT_BACKEND) { "Streaming flow currently requires MNN HIFT backend" }
                 val hifiganRunner = ensureMnnHifiGanRunnerReady(resources.hifiganModel)
                 runFlowInferenceHttpStreaming(
                     llmTokens = llmResult.speechTokens,
@@ -356,23 +369,31 @@ class LlamaInferenceBridge(
                     }
 
                 currentStage = InferenceStage.hift
-                emit(InferenceEvent.StageBegan(InferenceStage.hift, "HifiGan init: 正在加载模型"))
-                val hifiganRunner = ensureMnnHifiGanRunnerReady(resources.hifiganModel)
+                emit(InferenceEvent.StageBegan(InferenceStage.hift, "HIFT init: 正在加载模型"))
                 emit(
                     InferenceEvent.StageProgress(
                         stage = InferenceStage.hift,
-                        unitName = "HifiGan init: 模型加载完成",
+                        unitName = "HIFT init: 模型加载完成",
                         unitsDone = 1,
                         secondsElapsed = 0.0,
                         instUPS = 0.0,
                         avgUPS = 0.0,
                     ),
                 )
-                runHIFTInference(
-                    flowResult = flowResult,
-                    runner = hifiganRunner,
-                    onEvent = onEvent,
-                )
+                if (USE_MNN_HIFT_BACKEND) {
+                    val hifiganRunner = ensureMnnHifiGanRunnerReady(resources.hifiganModel)
+                    runHIFTInference(
+                        flowResult = flowResult,
+                        runner = hifiganRunner,
+                        onEvent = onEvent,
+                    )
+                } else {
+                    runLocalHIFTInference(
+                        flowResult = flowResult,
+                        engine = requireNotNull(loadedEngine) { "Local HIFT backend requires InferenceEngine" },
+                        onEvent = onEvent,
+                    )
+                }
             }
 
             currentStage = InferenceStage.voiceGeneration
@@ -475,6 +496,12 @@ class LlamaInferenceBridge(
                     avgUPS = 0.0,
                 ),
             ),
+        )
+        Log.i(
+            TAG,
+            "[FrontEnd] tokenLen=${artifacts.speechTokenLen}, featLen=${artifacts.speechFeatLen}, " +
+                "embeddingLen=${artifacts.speechEmbedding.size}, tokenPreview=${describeIntArrayPreview(artifacts.speechTokens)}, " +
+                "featStats=${describeFloatArrayStats(artifacts.speechFeat)}, embeddingStats=${describeFloatArrayStats(artifacts.speechEmbedding)}",
         )
         return FrontEndResult(
             speechTokenLen = artifacts.speechTokenLen,
@@ -666,6 +693,10 @@ class LlamaInferenceBridge(
                 ),
             ),
         )
+        Log.i(
+            TAG,
+            "[LLM] completed tokens=${outTokens.size}, preview=${describeIntArrayPreview(outTokens.toIntArray())}",
+        )
 
         return LLMResult(
             tokenCount = outTokens.size,
@@ -724,6 +755,16 @@ class LlamaInferenceBridge(
             promptFeatLen = frontEndResult.speechFeatLen,
             randNoise = noise.randNoise,
             extendPe = noise.extendPe,
+        )
+        val flowFrames = if (flowOutput.isNotEmpty() && flowOutput.size % HIFIGAN_MEL_BINS == 0) {
+            flowOutput.size / HIFIGAN_MEL_BINS
+        } else {
+            0
+        }
+        Log.i(
+            TAG,
+            "[FlowMain] local output stats: " +
+                if (flowFrames > 0) describeFlowMelStats(flowOutput, flowFrames) else describeFloatArrayStats(flowOutput),
         )
 
         val units = mergedToken.size.coerceAtLeast(1)
@@ -826,12 +867,15 @@ class LlamaInferenceBridge(
 
         val started = nowSeconds()
         emit(InferenceEvent.Note("[FlowHTTP] endpoint=$FLOW_HTTP_ENDPOINT stream=true finalize=$flowFinalize queue=1"))
+        val streamingAudioSession = createStreamingAudioSession()
+        emit(InferenceEvent.StreamingAudioSessionStarted(streamingAudioSession.sessionId))
 
         val chunkQueue = Channel<FlowHttpMelChunk>(capacity = 1)
         val hiftDeferred = async(Dispatchers.Default) {
             runHifiGanQueueInference(
                 runner = runner,
                 chunkQueue = chunkQueue,
+                streamingAudioSession = streamingAudioSession,
                 onEvent = onEvent,
             )
         }
@@ -1475,6 +1519,7 @@ class LlamaInferenceBridge(
         val hiftOutput = runner.forward(
             input = flowResult.output,
             shape = shape,
+            outputIndex = MNN_HIFT_MERGED_OUTPUT_INDEX,
         )
         require(hiftOutput.isNotEmpty()) { "HIFT output is empty" }
         val outputSamples = hiftOutput.size
@@ -1493,9 +1538,51 @@ class LlamaInferenceBridge(
         return HiftResult(outputSamples = outputSamples, output = hiftOutput)
     }
 
+    private suspend fun runLocalHIFTInference(
+        flowResult: FlowResult,
+        engine: InferenceEngine,
+        onEvent: ((InferenceEvent) -> Unit)? = null,
+    ): HiftResult {
+        fun emit(event: InferenceEvent) {
+            onEvent?.invoke(event)
+        }
+
+        emit(
+            InferenceEvent.StageProgress(
+                stage = InferenceStage.hift,
+                unitName = "HIFT 推理中...",
+                unitsDone = 1,
+                secondsElapsed = 0.0,
+                instUPS = 0.0,
+                avgUPS = 0.0,
+            ),
+        )
+
+        require(flowResult.output.isNotEmpty()) { "HIFT input is empty" }
+
+        val t0 = nowSeconds()
+        val hiftOutput = engine.encodeHift(flowResult.output)
+        require(hiftOutput.isNotEmpty()) { "Local HIFT output is empty" }
+        val outputSamples = hiftOutput.size
+        val elapsed = nowSeconds() - t0
+        emit(
+            InferenceEvent.StageEnded(
+                StageEndedInfo(
+                    stage = InferenceStage.hift,
+                    unitName = "HIFT local inference completed",
+                    units = outputSamples,
+                    seconds = elapsed,
+                    avgUPS = if (elapsed > 0.0) outputSamples / elapsed else 0.0,
+                ),
+            ),
+        )
+        return HiftResult(outputSamples = outputSamples, output = hiftOutput)
+    }
+
     private suspend fun runHifiGanQueueInference(
         runner: MnnHifiGanRunner,
         chunkQueue: Channel<FlowHttpMelChunk>,
+        streamingAudioSession: StreamingAudioSession? = null,
         onEvent: ((InferenceEvent) -> Unit)? = null,
     ): HiftResult {
         fun emit(event: InferenceEvent) {
@@ -1511,22 +1598,57 @@ class LlamaInferenceBridge(
         var totalOutputSamples = 0
         var totalInputFrames = 0
         var chunkCount = 0
+        val streamCache = HifiGanStreamCache()
+        val streamTailSamples = HIFIGAN_STREAM_SOURCE_CACHE_SAMPLES
 
         for (chunk in chunkQueue) {
             if (chunk.frames <= 0) {
                 continue
             }
             chunkCount += 1
-            val shape = inferHifiGanInputShape(chunk.mel.size)
-            val chunkOutput = runner.forward(
-                input = chunk.mel,
+            val melWithCache = prependHifiGanMelCache(streamCache.melTail, chunk.mel)
+            val shape = inferHifiGanInputShape(melWithCache.size)
+            val rawChunkOutput = runner.forward(
+                input = melWithCache,
                 shape = shape,
+                outputIndex = MNN_HIFT_MERGED_OUTPUT_INDEX,
             )
-            require(chunkOutput.isNotEmpty()) { "HifiGan output is empty for chunk=$chunkCount" }
+            require(rawChunkOutput.isNotEmpty()) { "HifiGan output is empty for chunk=$chunkCount" }
+            val chunkOutput = postProcessHiftModelOutput(rawChunkOutput)
+            require(chunkOutput.isNotEmpty()) { "HIFT waveform is empty for chunk=$chunkCount" }
 
-            chunkOutputs += chunkOutput
-            totalOutputSamples += chunkOutput.size
+            val blendedOutput = if (streamCache.outputTail != null) {
+                blendHifiGanStreamOutput(chunkOutput, streamCache.outputTail!!)
+            } else {
+                chunkOutput
+            }
+            val outputTail = takeTail(blendedOutput, streamTailSamples)
+            val emittedOutput = if (blendedOutput.size > streamTailSamples) {
+                blendedOutput.copyOfRange(0, blendedOutput.size - streamTailSamples)
+            } else {
+                FloatArray(0)
+            }
+            streamCache.melTail = takeMelTail(melWithCache, HIFIGAN_STREAM_MEL_CACHE_FRAMES)
+            streamCache.outputTail = if (outputTail.isNotEmpty()) outputTail else null
+
+            if (emittedOutput.isNotEmpty()) {
+                chunkOutputs += emittedOutput
+                totalOutputSamples += emittedOutput.size
+            }
             totalInputFrames += chunk.frames
+            streamingAudioSession
+                ?.append(emittedOutput)
+                ?.forEach { segment ->
+                    emit(
+                        InferenceEvent.StreamingAudioSegmentReady(
+                            sessionId = segment.sessionId,
+                            audioPath = segment.file.absolutePath,
+                            segmentIndex = segment.segmentIndex,
+                            seconds = segment.durationSeconds,
+                            isPrefix = segment.isPrefix,
+                        ),
+                    )
+                }
 
             val elapsed = nowSeconds() - started
             emit(
@@ -1541,9 +1663,48 @@ class LlamaInferenceBridge(
             )
             Log.i(
                 TAG,
-                "[HifiGan][stream] consumed chunk=$chunkCount inputFrames=${chunk.frames} totalInputFrames=$totalInputFrames outputSamples=${chunkOutput.size} totalOutputSamples=$totalOutputSamples elapsed=${"%.3f".format(Locale.US, elapsed)} s",
+                "[HifiGan][stream] consumed chunk=$chunkCount inputFrames=${chunk.frames} totalInputFrames=$totalInputFrames " +
+                    "melFrames=${melWithCache.size / HIFIGAN_MEL_BINS} outputSamples=${emittedOutput.size} " +
+                    "totalOutputSamples=$totalOutputSamples cacheTail=${streamCache.outputTail?.size ?: 0} " +
+                    "elapsed=${"%.3f".format(Locale.US, elapsed)} s",
             )
         }
+
+        streamCache.outputTail?.takeIf { it.isNotEmpty() }?.let { finalTail ->
+            chunkOutputs += finalTail
+            totalOutputSamples += finalTail.size
+            streamingAudioSession
+                ?.append(finalTail)
+                ?.forEach { segment ->
+                    emit(
+                        InferenceEvent.StreamingAudioSegmentReady(
+                            sessionId = segment.sessionId,
+                            audioPath = segment.file.absolutePath,
+                            segmentIndex = segment.segmentIndex,
+                            seconds = segment.durationSeconds,
+                            isPrefix = segment.isPrefix,
+                        ),
+                    )
+                }
+            Log.i(
+                TAG,
+                "[HifiGan][stream] flushed final tail samples=${finalTail.size} totalOutputSamples=$totalOutputSamples",
+            )
+        }
+
+        streamingAudioSession
+            ?.finish()
+            ?.forEach { segment ->
+                emit(
+                    InferenceEvent.StreamingAudioSegmentReady(
+                        sessionId = segment.sessionId,
+                        audioPath = segment.file.absolutePath,
+                        segmentIndex = segment.segmentIndex,
+                        seconds = segment.durationSeconds,
+                        isPrefix = segment.isPrefix,
+                    ),
+                )
+            }
 
         require(chunkOutputs.isNotEmpty()) { "HifiGan queue produced no output" }
         val hiftOutput = concatFloatArrays(*chunkOutputs.toTypedArray())
@@ -1562,6 +1723,106 @@ class LlamaInferenceBridge(
             ),
         )
         return HiftResult(outputSamples = outputSamples, output = hiftOutput)
+    }
+
+    private fun prependHifiGanMelCache(cacheTail: FloatArray?, currentMel: FloatArray): FloatArray {
+        if (cacheTail == null || cacheTail.isEmpty()) {
+            return currentMel
+        }
+        require(cacheTail.size % HIFIGAN_MEL_BINS == 0) {
+            "Invalid HifiGan mel cache size: ${cacheTail.size}"
+        }
+        require(currentMel.size % HIFIGAN_MEL_BINS == 0) {
+            "Invalid HifiGan current mel size: ${currentMel.size}"
+        }
+        val cacheFrames = cacheTail.size / HIFIGAN_MEL_BINS
+        val currentFrames = currentMel.size / HIFIGAN_MEL_BINS
+        val totalFrames = cacheFrames + currentFrames
+        val out = FloatArray(HIFIGAN_MEL_BINS * totalFrames)
+        var melBin = 0
+        while (melBin < HIFIGAN_MEL_BINS) {
+            val dstOffset = melBin * totalFrames
+            val cacheOffset = melBin * cacheFrames
+            val currentOffset = melBin * currentFrames
+            System.arraycopy(cacheTail, cacheOffset, out, dstOffset, cacheFrames)
+            System.arraycopy(currentMel, currentOffset, out, dstOffset + cacheFrames, currentFrames)
+            melBin += 1
+        }
+        return out
+    }
+
+    private fun takeMelTail(flatMel: FloatArray, tailFrames: Int): FloatArray {
+        if (flatMel.isEmpty() || tailFrames <= 0) {
+            return FloatArray(0)
+        }
+        require(flatMel.size % HIFIGAN_MEL_BINS == 0) {
+            "Invalid HifiGan mel size: ${flatMel.size}"
+        }
+        val frameCount = flatMel.size / HIFIGAN_MEL_BINS
+        val actualTailFrames = min(tailFrames, frameCount)
+        if (actualTailFrames <= 0) {
+            return FloatArray(0)
+        }
+        val out = FloatArray(HIFIGAN_MEL_BINS * actualTailFrames)
+        val frameOffset = frameCount - actualTailFrames
+        var melBin = 0
+        while (melBin < HIFIGAN_MEL_BINS) {
+            val srcOffset = melBin * frameCount + frameOffset
+            val dstOffset = melBin * actualTailFrames
+            System.arraycopy(flatMel, srcOffset, out, dstOffset, actualTailFrames)
+            melBin += 1
+        }
+        return out
+    }
+
+    private fun blendHifiGanStreamOutput(current: FloatArray, previousTail: FloatArray): FloatArray {
+        if (current.isEmpty() || previousTail.isEmpty()) {
+            return current
+        }
+        val overlap = min(current.size, previousTail.size)
+        if (overlap <= 0) {
+            return current
+        }
+        val window = hammingWindow(overlap * 2)
+        if (window.isEmpty()) {
+            return current
+        }
+        val blended = current.copyOf()
+        val prevStart = previousTail.size - overlap
+        var i = 0
+        while (i < overlap) {
+            blended[i] = blended[i] * window[i] + previousTail[prevStart + i] * window[overlap + i]
+            i += 1
+        }
+        return blended
+    }
+
+    private fun takeTail(values: FloatArray, tailSize: Int): FloatArray {
+        if (values.isEmpty() || tailSize <= 0) {
+            return FloatArray(0)
+        }
+        val actualTailSize = min(tailSize, values.size)
+        if (actualTailSize <= 0) {
+            return FloatArray(0)
+        }
+        return values.copyOfRange(values.size - actualTailSize, values.size)
+    }
+
+    private fun hammingWindow(length: Int): FloatArray {
+        if (length <= 0) {
+            return FloatArray(0)
+        }
+        if (length == 1) {
+            return floatArrayOf(1f)
+        }
+        val out = FloatArray(length)
+        val denom = (length - 1).toDouble()
+        var i = 0
+        while (i < length) {
+            out[i] = (0.54 - 0.46 * cos(2.0 * Math.PI * i / denom)).toFloat()
+            i += 1
+        }
+        return out
     }
 
     private suspend fun runHifiGanInferenceFromBins(
@@ -1587,11 +1848,14 @@ class LlamaInferenceBridge(
         val input = readRawFloatArray(File(inputDir, FILE_HIFIGAN_INPUT))
         val shape = readRawIntShapeText(File(inputDir, FILE_HIFIGAN_INPUT_SHAPE))
         val t0 = nowSeconds()
-        val hiftOutput = runner.forward(
+        val rawHiftOutput = runner.forward(
             input = input,
             shape = shape,
+            outputIndex = MNN_HIFT_MERGED_OUTPUT_INDEX,
         )
-        require(hiftOutput.isNotEmpty()) { "HifiGan output is empty" }
+        require(rawHiftOutput.isNotEmpty()) { "HifiGan output is empty" }
+        val hiftOutput = postProcessHiftModelOutput(rawHiftOutput)
+        require(hiftOutput.isNotEmpty()) { "HIFT waveform is empty" }
 
         val outputSamples = hiftOutput.size
         val elapsed = nowSeconds() - t0
@@ -1718,12 +1982,32 @@ class LlamaInferenceBridge(
                 },
             )
             put(
+                "llm_prompt_speech_token",
+                encodeTensorPayloadJson(
+                    shape = intArrayOf(1, frontEndResult.speechTokenLen),
+                    dtype = "int64",
+                    bytes = encodeIntArrayAsInt64Bytes(frontEndResult.speechTokens, frontEndResult.speechTokenLen),
+                ),
+            )
+            put(
+                "llm_prompt_speech_token_len",
+                JSONArray().apply {
+                    put(frontEndResult.speechTokenLen)
+                },
+            )
+            put(
                 "flow_prompt_speech_token",
                 encodeTensorPayloadJson(
                     shape = intArrayOf(1, frontEndResult.speechTokenLen),
                     dtype = "int64",
                     bytes = encodeIntArrayAsInt64Bytes(frontEndResult.speechTokens, frontEndResult.speechTokenLen),
                 ),
+            )
+            put(
+                "flow_prompt_speech_token_len",
+                JSONArray().apply {
+                    put(frontEndResult.speechTokenLen)
+                },
             )
             put(
                 "prompt_speech_feat",
@@ -1826,6 +2110,39 @@ class LlamaInferenceBridge(
         return "frames=$totalFrames, size=${mel.size}, min=${"%.6f".format(Locale.US, minV)}, " +
             "max=${"%.6f".format(Locale.US, maxV)}, mean=${"%.6f".format(Locale.US, meanV)}, " +
             "zeroRatio=${"%.4f".format(Locale.US, zeroRatio)}, preview=[${preview.joinToString(", ")}]"
+    }
+
+    private fun describeFloatArrayStats(values: FloatArray, previewCount: Int = 8): String {
+        if (values.isEmpty()) {
+            return "empty"
+        }
+        var minV = Float.POSITIVE_INFINITY
+        var maxV = Float.NEGATIVE_INFINITY
+        var sum = 0.0
+        val preview = ArrayList<String>(min(previewCount, values.size))
+        for (i in values.indices) {
+            val v = values[i]
+            if (v < minV) minV = v
+            if (v > maxV) maxV = v
+            sum += v.toDouble()
+            if (i < previewCount) {
+                preview += String.format(Locale.US, "%.6f", v)
+            }
+        }
+        return "size=${values.size}, min=${"%.6f".format(Locale.US, minV)}, " +
+            "max=${"%.6f".format(Locale.US, maxV)}, mean=${"%.6f".format(Locale.US, sum / values.size.toDouble())}, " +
+            "preview=[${preview.joinToString(", ")}]"
+    }
+
+    private fun describeIntArrayPreview(values: IntArray, previewCount: Int = 16): String {
+        if (values.isEmpty()) {
+            return "[]"
+        }
+        val count = min(previewCount, values.size)
+        return values.copyOfRange(0, count).joinToString(
+            prefix = "[",
+            postfix = if (values.size > count) ", ...]" else "]",
+        )
     }
 
     private fun encodeFloatArrayBytes(values: FloatArray): ByteArray =
@@ -2071,10 +2388,7 @@ class LlamaInferenceBridge(
                 )
                 val flowModel = resolveRequiredFile(
                     FILE_FLOW_GGUF_MODEL,
-                    listOf(
-                        File(modelsDir, FILE_FLOW_GGUF_MODEL),
-                        File(modelsDir, FILE_LLM_MODEL),
-                    ),
+                    FLOW_GGUF_MODEL_CANDIDATES.map { candidate -> File(modelsDir, candidate) },
                 )
                 FlowOnlyResourceFiles(
                     flowModel = flowModel,
@@ -2126,16 +2440,35 @@ class LlamaInferenceBridge(
         val sampleRate = 24_000
         require(hiftResult.output.isNotEmpty()) { "HIFT output is empty" }
 
-        val audio = reconstructWaveformFromHift(hiftResult.output)
+        val audio = postProcessHiftModelOutput(hiftResult.output)
         require(audio.isNotEmpty()) { "HIFT output produced empty waveform" }
         val clamped = FloatArray(audio.size) { i ->
             audio[i].coerceIn(-0.99f, 0.99f)
         }
-        writeMonoFloat32Wav(
+        Log.i(
+            TAG,
+            "[voiceGeneration] audioStats=${describeFloatArrayStats(clamped)} duration=${"%.3f".format(Locale.US, clamped.size.toDouble() / sampleRate.toDouble())}s",
+        )
+        writeMonoPcm16Wav(
             audioData = clamped,
             sampleRate = sampleRate,
             file = wavFile,
         )
+        runCatching {
+            val externalDir = appContext.getExternalFilesDir("generated_audio")
+            if (externalDir != null) {
+                externalDir.mkdirs()
+                val externalCopy = File(externalDir, wavFile.name)
+                writeMonoPcm16Wav(
+                    audioData = clamped,
+                    sampleRate = sampleRate,
+                    file = externalCopy,
+                )
+                Log.i(TAG, "[voiceGeneration] externalCopy=${externalCopy.absolutePath}")
+            }
+        }.onFailure { t ->
+            Log.w(TAG, "[voiceGeneration] failed to write external copy: ${t.message}", t)
+        }
         emit(
             InferenceEvent.AudioDuration(
                 seconds = clamped.size.toDouble() / sampleRate.toDouble(),
@@ -2290,26 +2623,41 @@ class LlamaInferenceBridge(
     }
 
     private fun reconstructWaveformFromHift(hiftOutput: FloatArray): FloatArray {
-        val firstPartCount = hiftOutput.size
-        require(firstPartCount >= HIFT_FRAME_FEATURES) { "HIFT output too short: $firstPartCount" }
-        val magnitudeRaw = hiftOutput.copyOfRange(0, firstPartCount / 2)
-        val phaseRaw = hiftOutput.copyOfRange(firstPartCount / 2, firstPartCount)
-        val nFrames = firstPartCount / HIFT_FRAME_FEATURES
-        require(nFrames > 0) { "Invalid HIFT nFrames: $nFrames" }
-        val expectedPerHalf = nFrames * HIFT_N_FREQ
-        require(magnitudeRaw.size >= expectedPerHalf && phaseRaw.size >= expectedPerHalf) {
-            "Invalid HIFT output shape: total=$firstPartCount nFrames=$nFrames"
+        val totalCount = hiftOutput.size
+        require(totalCount >= HIFT_FRAME_FEATURES) { "HIFT output too short: $totalCount" }
+        require(totalCount % HIFT_FRAME_FEATURES == 0) {
+            "Invalid HIFT output shape: total=$totalCount must be divisible by $HIFT_FRAME_FEATURES"
         }
+        val nFrames = totalCount / HIFT_FRAME_FEATURES
+        require(nFrames > 0) { "Invalid HIFT nFrames: $nFrames" }
+
+        // HifTGenerator outputs [B, 18, T] with contiguous channel-major layout:
+        // first 9 channels are magnitude, next 9 channels are phase.
+        val magnitudeRaw = hiftOutput.copyOfRange(0, nFrames * HIFT_N_FREQ)
+        val phaseRaw = hiftOutput.copyOfRange(nFrames * HIFT_N_FREQ, totalCount)
+        Log.i(
+            TAG,
+            "[HIFT] rawSpecStats magnitude=${describeFloatArrayStats(magnitudeRaw)} phase=${describeFloatArrayStats(phaseRaw)}",
+        )
+
+        // MNN hift.mnn already exposes magnitude/phase, so do not apply the
+        // extra exp/sin transform used by the PyTorch HiFT reference decode().
+        val magnitude = FloatArray(magnitudeRaw.size) { i ->
+            magnitudeRaw[i].coerceIn(0f, 1e2f)
+        }
+        val phase = phaseRaw
+        Log.i(
+            TAG,
+            "[HIFT] interpretedSpecStats magnitude=${describeFloatArrayStats(magnitude)} phase=${describeFloatArrayStats(phase)}",
+        )
 
         val real = FloatArray(nFrames * HIFT_N_FREQ)
         val imag = FloatArray(nFrames * HIFT_N_FREQ)
 
         var i = 0
         while (i < real.size) {
-            val magnitude = min(exp(magnitudeRaw[i].toDouble()).toFloat(), 1e2f)
-            val phaseSin = sin(phaseRaw[i].toDouble()).toFloat()
-            real[i] = magnitude * cos(phaseSin.toDouble()).toFloat()
-            imag[i] = magnitude * sin(phaseSin.toDouble()).toFloat()
+            real[i] = magnitude[i] * cos(phase[i].toDouble()).toFloat()
+            imag[i] = magnitude[i] * sin(phase[i].toDouble()).toFloat()
             i += 1
         }
 
@@ -2321,6 +2669,134 @@ class LlamaInferenceBridge(
             nFft = HIFT_N_FFT,
             hopLength = HIFT_HOP_LENGTH,
             center = true,
+        )
+    }
+
+    private fun postProcessHiftModelOutput(
+        hiftOutput: FloatArray,
+    ): FloatArray {
+        if (hiftOutput.isEmpty()) {
+            return hiftOutput
+        }
+
+        val audio = reconstructWaveformFromHift(hiftOutput)
+        if (audio.isEmpty()) {
+            return audio
+        }
+        val clipCount = audio.count { abs(it) >= HIFT_AUDIO_LIMIT }
+        Log.i(
+            TAG,
+            "[HIFT] waveformStats=${describeFloatArrayStats(audio)} clipRatio=${"%.4f".format(Locale.US, clipCount.toDouble() / audio.size.toDouble())}",
+        )
+        return clampAudio(audio, HIFT_AUDIO_LIMIT)
+    }
+
+    private fun clampAudio(audio: FloatArray, limit: Float): FloatArray =
+        FloatArray(audio.size) { i ->
+            audio[i].coerceIn(-limit, limit)
+        }
+
+    private fun createStreamingAudioSession(): StreamingAudioSession {
+        val sessionId = "stream_${System.currentTimeMillis()}"
+        val outputDir = File(appContext.filesDir, "generated_audio/stream_segments/$sessionId").apply { mkdirs() }
+        return StreamingAudioSession(
+            sessionId = sessionId,
+            outputDir = outputDir,
+            sampleRate = HIFT_SAMPLE_RATE,
+            prefixTargetSamples = STREAMING_PLAYBACK_PREFIX_SAMPLES,
+        )
+    }
+
+    private fun StreamingAudioSession.append(chunkAudio: FloatArray): List<StreamingAudioSegmentFile> {
+        if (chunkAudio.isEmpty()) {
+            return emptyList()
+        }
+
+        if (prefixWritten) {
+            return listOf(writeStreamingAudioSegment(this, chunkAudio, isPrefix = false))
+        }
+
+        val remainingNeeded = prefixTargetSamples - prefixSamples
+        if (remainingNeeded <= 0) {
+            prefixWritten = true
+            return listOf(writeStreamingAudioSegment(this, chunkAudio, isPrefix = false))
+        }
+
+        if (chunkAudio.size < remainingNeeded) {
+            prefixParts += chunkAudio
+            prefixSamples += chunkAudio.size
+            return emptyList()
+        }
+
+        val head = if (remainingNeeded >= chunkAudio.size) {
+            chunkAudio
+        } else {
+            chunkAudio.copyOfRange(0, remainingNeeded)
+        }
+        if (head.isNotEmpty()) {
+            prefixParts += head
+            prefixSamples += head.size
+        }
+
+        val emitted = ArrayList<StreamingAudioSegmentFile>(2)
+        val prefixAudio = concatFloatArrays(*prefixParts.toTypedArray())
+        prefixParts.clear()
+        prefixWritten = true
+        emitted += writeStreamingAudioSegment(this, prefixAudio, isPrefix = true)
+
+        if (remainingNeeded < chunkAudio.size) {
+            val remainder = chunkAudio.copyOfRange(remainingNeeded, chunkAudio.size)
+            if (remainder.isNotEmpty()) {
+                emitted += writeStreamingAudioSegment(this, remainder, isPrefix = false)
+            }
+        }
+        return emitted
+    }
+
+    private fun StreamingAudioSession.finish(): List<StreamingAudioSegmentFile> {
+        if (prefixWritten) {
+            return emptyList()
+        }
+        val prefixAudio = concatFloatArrays(*prefixParts.toTypedArray())
+        prefixParts.clear()
+        if (prefixAudio.isEmpty()) {
+            return emptyList()
+        }
+        prefixWritten = true
+        return listOf(writeStreamingAudioSegment(this, prefixAudio, isPrefix = true))
+    }
+
+    private fun writeStreamingAudioSegment(
+        session: StreamingAudioSession,
+        audioData: FloatArray,
+        isPrefix: Boolean,
+    ): StreamingAudioSegmentFile {
+        require(audioData.isNotEmpty()) { "Streaming audio segment is empty" }
+        val segmentIndex = session.nextSegmentIndex
+        session.nextSegmentIndex += 1
+        val fileName = if (isPrefix) {
+            String.format(Locale.US, "prefix_%03d.wav", segmentIndex)
+        } else {
+            String.format(Locale.US, "chunk_%03d.wav", segmentIndex)
+        }
+        val file = File(session.outputDir, fileName)
+        writeMonoPcm16Wav(
+            audioData = audioData,
+            sampleRate = session.sampleRate,
+            file = file,
+        )
+        Log.i(
+            TAG,
+            "[StreamingAudio] wrote ${if (isPrefix) "prefix" else "chunk"} segment #$segmentIndex " +
+                "samples=${audioData.size} seconds=${"%.3f".format(Locale.US, audioData.size.toDouble() / session.sampleRate.toDouble())} " +
+                "path=${file.absolutePath}",
+        )
+        return StreamingAudioSegmentFile(
+            sessionId = session.sessionId,
+            file = file,
+            segmentIndex = segmentIndex,
+            durationSeconds = audioData.size.toDouble() / session.sampleRate.toDouble(),
+            isPrefix = isPrefix,
         )
     }
 
@@ -2525,6 +3001,47 @@ class LlamaInferenceBridge(
         }
     }
 
+    private fun writeMonoPcm16Wav(audioData: FloatArray, sampleRate: Int, file: File) {
+        if (file.exists()) {
+            file.delete()
+        }
+        val numChannels = 1
+        val bitsPerSample = 16
+        val audioFormat = 1 // PCM
+        val bytesPerSample = bitsPerSample / 8
+        val byteRate = sampleRate * numChannels * bytesPerSample
+        val blockAlign = numChannels * bytesPerSample
+        val dataSize = audioData.size * bytesPerSample
+        val chunkSize = 36 + dataSize
+
+        FileOutputStream(file).use { out ->
+            val header = ByteBuffer.allocate(44).order(ByteOrder.LITTLE_ENDIAN)
+            header.put("RIFF".toByteArray(Charsets.US_ASCII))
+            header.putInt(chunkSize)
+            header.put("WAVE".toByteArray(Charsets.US_ASCII))
+            header.put("fmt ".toByteArray(Charsets.US_ASCII))
+            header.putInt(16)
+            header.putShort(audioFormat.toShort())
+            header.putShort(numChannels.toShort())
+            header.putInt(sampleRate)
+            header.putInt(byteRate)
+            header.putShort(blockAlign.toShort())
+            header.putShort(bitsPerSample.toShort())
+            header.put("data".toByteArray(Charsets.US_ASCII))
+            header.putInt(dataSize)
+            out.write(header.array())
+
+            val payload = ByteBuffer.allocate(dataSize).order(ByteOrder.LITTLE_ENDIAN)
+            var i = 0
+            while (i < audioData.size) {
+                val sample = (audioData[i].coerceIn(-1f, 1f) * 32767f).roundToInt().toShort()
+                payload.putShort(sample)
+                i += 1
+            }
+            out.write(payload.array())
+        }
+    }
+
     private fun buildDecoderHeadPreviewNote(output: FloatArray): String {
         if (output.isEmpty()) {
             return "[DecoderOut] [0,0,:8]=[] (empty output)"
@@ -2538,7 +3055,13 @@ class LlamaInferenceBridge(
         return "[DecoderOut] [0,0,:8]=$values"
     }
 
-    private suspend fun ensureEngineReady(modelFile: File, flowModelFile: File, loadFlowModel: Boolean = true): InferenceEngine =
+    private suspend fun ensureEngineReady(
+        modelFile: File,
+        flowModelFile: File,
+        loadFlowModel: Boolean = true,
+        hiftModelFile: File? = null,
+        loadHiftModel: Boolean = false,
+    ): InferenceEngine =
         engineMutex.withLock {
             engine?.let { return it }
 
@@ -2564,6 +3087,15 @@ class LlamaInferenceBridge(
                 Log.i(TAG, "[LLMPrepare] loadFlowModel done in ${"%.3f".format(Locale.US, nowSeconds() - t1)} s")
             } else {
                 Log.i(TAG, "[LLMPrepare] skip loadFlowModel by config")
+            }
+            if (loadHiftModel) {
+                val resolvedHiftModel = requireNotNull(hiftModelFile) { "Local HIFT backend requires hiftModelFile" }
+                val t2 = nowSeconds()
+                Log.i(TAG, "[LLMPrepare] loadHiftModel begin: ${resolvedHiftModel.absolutePath} (bytes=${resolvedHiftModel.length()})")
+                loaded.loadHiftModel(resolvedHiftModel.absolutePath)
+                Log.i(TAG, "[LLMPrepare] loadHiftModel done in ${"%.3f".format(Locale.US, nowSeconds() - t2)} s")
+            } else {
+                Log.i(TAG, "[LLMPrepare] skip loadHiftModel by config")
             }
             engine = loaded
             loaded
@@ -2774,7 +3306,9 @@ class LlamaInferenceBridge(
             assetDir = ASSET_DIR_MODELS,
             targetDir = targetModelsDir,
             requiredFileCandidates = listOf(
-                listOf(FILE_FLOW_GGUF_MODEL, FILE_LLM_MODEL),
+                listOf(FILE_LLM_MODEL),
+                listOf(FILE_FLOW_GGUF_MODEL),
+                listOf(FILE_LOCAL_HIFT_MODEL),
                 listOf("$DIR_MNN_MODELS/$FILE_MNN_LLM_CONFIG", FILE_MNN_LLM_CONFIG),
                 listOf("$DIR_MNN_MODELS/$FILE_FLOW_MODEL"),
                 listOf("$DIR_MNN_MODELS/$FILE_FLOW_ENCODER_MODEL"),
@@ -2895,18 +3429,6 @@ class LlamaInferenceBridge(
         }
     }
 
-    private fun resolveModelFile(): File {
-        val modelsDir = File(appContext.filesDir, DIRECTORY_MODELS).also {
-            if (it.exists() && !it.isDirectory) it.delete()
-            if (!it.exists()) it.mkdirs()
-        }
-        return modelsDir.listFiles()
-            ?.filter { it.isFile && it.extension.equals("gguf", ignoreCase = true) }
-            ?.sortedBy { it.name.lowercase(Locale.ROOT) }
-            ?.firstOrNull()
-            ?: error("未找到 GGUF 模型，请放入 ${modelsDir.absolutePath}")
-    }
-
     private suspend fun ensureLocalResourcesReady(): LocalResourceFiles =
         engineMutex.withLock {
             localResources?.let { return it }
@@ -2917,24 +3439,28 @@ class LlamaInferenceBridge(
             val mnnModelsDir = ensureDirectory(File(modelsDir, DIR_MNN_MODELS))
 
             val resolved = LocalResourceFiles(
-                llmModel =
-                    resolveOptionalFileInDirIgnoreCase(modelsDir, FLOW_GGUF_MODEL_CANDIDATES)
-                        ?: resolveModelFile(),
+                llmModel = resolveRequiredFileInDirIgnoreCase(FILE_LLM_MODEL, modelsDir, LLM_GGUF_MODEL_CANDIDATES),
                 mnnLlmConfig = resolveOptionalFile(
                     listOf(
                         File(modelsDir, "$DIR_MNN_MODELS/$FILE_MNN_LLM_CONFIG"),
                         File(modelsDir, FILE_MNN_LLM_CONFIG),
                     ),
                 ),
-                flowModel = resolveOptionalFile(
-                    listOf(File(mnnModelsDir, FILE_FLOW_MODEL)),
-                ) ?: File(mnnModelsDir, FILE_FLOW_MODEL),
+                flowModel =
+                    if (USE_HTTP_FLOW_BACKEND) {
+                        resolveOptionalFile(
+                            listOf(File(mnnModelsDir, FILE_FLOW_MODEL)),
+                        ) ?: File(mnnModelsDir, FILE_FLOW_MODEL)
+                    } else {
+                        resolveRequiredFileInDirIgnoreCase(FILE_FLOW_GGUF_MODEL, modelsDir, FLOW_GGUF_MODEL_CANDIDATES)
+                    },
                 flowModelWeight = resolveOptionalFile(
                     listOf(
                         File(mnnModelsDir, FILE_FLOW_MODEL_WEIGHTS),
                         File(mnnModelsDir, FILE_FLOW_MODEL_WEIGHT),
                     ),
                 ) ?: File(mnnModelsDir, FILE_FLOW_MODEL_WEIGHTS),
+                localHiftModel = resolveOptionalFileInDirIgnoreCase(modelsDir, HIFT_GGUF_MODEL_CANDIDATES),
                 hifiganModel = resolveRequiredFile(FILE_HIFIGAN_MODEL, listOf(File(modelsDir, FILE_HIFIGAN_MODEL))),
                 modelInputZh = resolveRequiredFile(FILE_MODEL_INPUT_ZH, listOf(File(resourcesDir, FILE_MODEL_INPUT_ZH))),
                 modelInputZh2 = resolveRequiredFile(FILE_MODEL_INPUT_ZH2, listOf(File(resourcesDir, FILE_MODEL_INPUT_ZH2))),
@@ -2971,6 +3497,13 @@ class LlamaInferenceBridge(
                 flowInputsBinDir = resolveOptionalDirectory(listOf(File(resourcesDir, DIR_FLOW_INPUTS_BIN)))
                     ?: File(resourcesDir, DIR_FLOW_INPUTS_BIN),
                 hifiganInputsBinDir = resolveRequiredDirectory(DIR_HIFIGAN_INPUTS_BIN, listOf(File(resourcesDir, DIR_HIFIGAN_INPUTS_BIN))),
+            )
+            Log.i(
+                TAG,
+                "[Resources] llmModel=${resolved.llmModel.absolutePath}, flowModel=${resolved.flowModel.absolutePath}, " +
+                    "localHiftModel=${resolved.localHiftModel?.absolutePath ?: "<missing>"}, " +
+                    "hifiganModel=${resolved.hifiganModel.absolutePath}, " +
+                    "useMnnLlm=$USE_MNN_LLM_BACKEND, useHttpFlow=$USE_HTTP_FLOW_BACKEND, useMnnHift=$USE_MNN_HIFT_BACKEND",
             )
             localResources = resolved
             resolved
@@ -3052,8 +3585,10 @@ class LlamaInferenceBridge(
 
     companion object {
         private const val TAG = "LlamaInferenceBridge"
-        private const val USE_MNN_LLM_BACKEND = true
+        private const val USE_MNN_LLM_BACKEND = false
+        // Default to HTTP Flow for debugging the non-streaming path.
         private const val USE_HTTP_FLOW_BACKEND = true
+        private const val USE_MNN_HIFT_BACKEND = true
         private const val LLM_ONLY_TEST_MODE = false
         private const val FLOW_ONLY_TEST_MODE = false
         private const val HIFIGAN_ONLY_TEST_MODE = false
@@ -3062,6 +3597,7 @@ class LlamaInferenceBridge(
         private const val LITERT_FORCE_NPU_JIT_MODEL = true
         private const val FLOW_MNN_OP_PROFILE_ENABLED = true
         private const val HIFIGAN_BACKEND_LABEL = "CPU"
+        private const val MNN_HIFT_MERGED_OUTPUT_INDEX = 3
         private const val FLOW_HTTP_ENDPOINT = "http://192.168.81.7:8100/v1/flow/stream_tts_mel"
         private const val FLOW_HTTP_CONNECT_TIMEOUT_MS = 15_000
         private const val FLOW_HTTP_READ_TIMEOUT_MS = 120_000
@@ -3071,16 +3607,28 @@ class LlamaInferenceBridge(
         private const val ASSET_DIR_MODELS = "models"
         private const val ASSET_DIR_LOCAL_RESOURCES = "local_llm_resources"
 
-        private const val FILE_LLM_MODEL = "flow_fp32.gguf"
+        private const val FILE_LLM_MODEL = "cosyvoice2-0.5B-Q2_K.gguf"
         private const val FILE_FLOW_GGUF_MODEL = "flow_fp32.gguf"
+        private const val FILE_LOCAL_HIFT_MODEL = "hift_fp32.gguf"
+        private val LLM_GGUF_MODEL_CANDIDATES =
+            listOf(
+                FILE_LLM_MODEL,
+                "CosyVoice2-0.5B-Q2_K.gguf",
+                "cosyvoice2-0.5b-q2_k.gguf",
+            )
         private val FLOW_GGUF_MODEL_CANDIDATES =
             listOf(
                 FILE_FLOW_GGUF_MODEL,
-                FILE_LLM_MODEL,
                 "Flow_fp32.gguf",
                 "Flow_FP32.gguf",
                 "FLOW_FP32.gguf",
                 "flow_FP32.gguf",
+            )
+        private val HIFT_GGUF_MODEL_CANDIDATES =
+            listOf(
+                FILE_LOCAL_HIFT_MODEL,
+                "HIFT_fp32.gguf",
+                "Hift_fp32.gguf",
             )
         private const val DIR_MNN_MODELS = "mnnModels"
         private const val FILE_MNN_LLM_CONFIG = "config.json"
@@ -3097,7 +3645,7 @@ class LlamaInferenceBridge(
         private const val FILE_FLOW_TFLITE_NPU_G5_MODEL = "flow_Google_Tensor_G5.tflite"
         private const val FILE_FLOW_MODEL_WEIGHTS = "flow.mnn.weights"
         private const val FILE_FLOW_MODEL_WEIGHT = "flow.mnn.weight"
-        private const val FILE_HIFIGAN_MODEL = "hifigan.mnn"
+        private const val FILE_HIFIGAN_MODEL = "hift.mnn"
 
         private const val FILE_MODEL_INPUT_ZH = "model_input_zh.bin"
         private const val FILE_MODEL_INPUT_ZH2 = "model_input_zh2.bin"
@@ -3153,6 +3701,11 @@ class LlamaInferenceBridge(
         private const val HIFT_HOP_LENGTH = 4
         private const val HIFT_N_FREQ = HIFT_N_FFT / 2 + 1
         private const val HIFT_FRAME_FEATURES = HIFT_N_FREQ * 2
+        private const val HIFT_SAMPLE_RATE = 24_000
+        private const val HIFT_AUDIO_LIMIT = 0.99f
+        private const val HIFIGAN_STREAM_MEL_CACHE_FRAMES = 20
+        private const val HIFIGAN_STREAM_SOURCE_CACHE_SAMPLES = HIFIGAN_STREAM_MEL_CACHE_FRAMES * 256
+        private const val STREAMING_PLAYBACK_PREFIX_SAMPLES = HIFT_SAMPLE_RATE * 5
         private const val HIFIGAN_MEL_BINS = 80
     }
 }
@@ -3179,6 +3732,30 @@ private data class FlowResult(
 private data class FlowHttpMelChunk(
     val frames: Int,
     val mel: FloatArray,
+)
+
+private data class HifiGanStreamCache(
+    var melTail: FloatArray? = null,
+    var outputTail: FloatArray? = null,
+)
+
+private data class StreamingAudioSession(
+    val sessionId: String,
+    val outputDir: File,
+    val sampleRate: Int,
+    val prefixTargetSamples: Int,
+    val prefixParts: MutableList<FloatArray> = ArrayList(),
+    var prefixSamples: Int = 0,
+    var prefixWritten: Boolean = false,
+    var nextSegmentIndex: Int = 1,
+)
+
+private data class StreamingAudioSegmentFile(
+    val sessionId: String,
+    val file: File,
+    val segmentIndex: Int,
+    val durationSeconds: Double,
+    val isPrefix: Boolean,
 )
 
 private data class FlowHttpResponse(
@@ -3211,6 +3788,7 @@ private data class LocalResourceFiles(
     val mnnLlmConfig: File?,
     val flowModel: File,
     val flowModelWeight: File,
+    val localHiftModel: File?,
     val hifiganModel: File,
     val modelInputZh: File,
     val modelInputZh2: File,
