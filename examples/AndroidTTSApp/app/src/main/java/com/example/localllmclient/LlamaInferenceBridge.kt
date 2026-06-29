@@ -593,11 +593,20 @@ class LlamaInferenceBridge(
         }
 
         var currentInput = concatFloatArrays(sosEosEmb, textEmb, taskIdEmb, promptSpeechTokenEmb)
+        var nPast = 0
+        val useRollingContext = isEncoderOnlyMnnLlm(resources)
+        if (useRollingContext) {
+            currentInput = trimEmbeddingContext(currentInput, LLM_MNN_CONTEXT_WINDOW)
+            nPast = currentInput.size / LLM_HIDDEN_SIZE
+            Log.i(
+                TAG,
+                "[LLM] encoder-only MNN rolling context enabled, initialTokens=${currentInput.size / LLM_HIDDEN_SIZE}, window=$LLM_MNN_CONTEXT_WINDOW",
+            )
+        }
         val minLen = (ttsIds.size * 2).coerceAtLeast(0)
         val maxLen = (ttsIds.size * 20).coerceAtLeast(1)
 
         val outTokens = ArrayList<Int>(maxLen.coerceAtMost(2048))
-        var nPast = 0
         val rng = SeededRNG(seed = 0L)
 
         val mnnRunner = if (USE_MNN_LLM_BACKEND) {
@@ -627,7 +636,6 @@ class LlamaInferenceBridge(
                 "llm_res size $totalElements not multiple of $LLM_HIDDEN_SIZE"
             }
 
-            nPast += (currentInput.size / LLM_HIDDEN_SIZE).coerceAtLeast(1)
             val start = totalElements - LLM_HIDDEN_SIZE
             val lastTokenVector = llmRes.copyOfRange(start, totalElements)
             val logp = params.computeLogProbabilities(lastTokenVector)
@@ -654,7 +662,20 @@ class LlamaInferenceBridge(
 
             val embeddingVector = params.getEmbeddingRow("speech_embedding.weight", topId)
             require(!(embeddingVector == null || embeddingVector.isEmpty())) { "getEmbeddingRow failed: $topId" }
-            currentInput = embeddingVector
+            currentInput = if (useRollingContext) {
+                appendEmbeddingContext(
+                    context = currentInput,
+                    nextTokenEmbedding = embeddingVector,
+                    maxTokens = LLM_MNN_CONTEXT_WINDOW,
+                )
+            } else {
+                embeddingVector
+            }
+            if (useRollingContext) {
+                nPast = currentInput.size / LLM_HIDDEN_SIZE
+            } else {
+                nPast += (currentInput.size / LLM_HIDDEN_SIZE).coerceAtLeast(1)
+            }
 
             val now = nowSeconds()
             if (now - lastReportT >= reportEverySeconds) {
@@ -2201,6 +2222,15 @@ class LlamaInferenceBridge(
         val rng = SeededRNG(seed = 0L)
         var currentInput = inputEmbeddings
         var nPast = 0
+        val useRollingContext = isEncoderOnlyMnnLlm(resources)
+        if (useRollingContext) {
+            currentInput = trimEmbeddingContext(currentInput, LLM_MNN_CONTEXT_WINDOW)
+            nPast = currentInput.size / LLM_HIDDEN_SIZE
+            Log.i(
+                TAG,
+                "[LLM_ONLY] encoder-only MNN rolling context enabled, initialTokens=${currentInput.size / LLM_HIDDEN_SIZE}, window=$LLM_MNN_CONTEXT_WINDOW",
+            )
+        }
         val reportEverySeconds = 1.0
         var lastReportT = llmBegin
         var lastReportCount = 0
@@ -2212,7 +2242,6 @@ class LlamaInferenceBridge(
                     "llm_res size $totalElements not multiple of $LLM_HIDDEN_SIZE"
                 }
 
-                nPast += (currentInput.size / LLM_HIDDEN_SIZE).coerceAtLeast(1)
                 val start = totalElements - LLM_HIDDEN_SIZE
                 val lastTokenVector = llmRes.copyOfRange(start, totalElements)
                 val logp = params.computeLogProbabilities(lastTokenVector)
@@ -2239,7 +2268,20 @@ class LlamaInferenceBridge(
 
                 val embeddingVector = params.getEmbeddingRow("speech_embedding.weight", topId)
                 require(!(embeddingVector == null || embeddingVector.isEmpty())) { "getEmbeddingRow failed: $topId" }
-                currentInput = embeddingVector
+                currentInput = if (useRollingContext) {
+                    appendEmbeddingContext(
+                        context = currentInput,
+                        nextTokenEmbedding = embeddingVector,
+                        maxTokens = LLM_MNN_CONTEXT_WINDOW,
+                    )
+                } else {
+                    embeddingVector
+                }
+                if (useRollingContext) {
+                    nPast = currentInput.size / LLM_HIDDEN_SIZE
+                } else {
+                    nPast += (currentInput.size / LLM_HIDDEN_SIZE).coerceAtLeast(1)
+                }
 
                 val now = nowSeconds()
                 if (now - lastReportT >= reportEverySeconds) {
@@ -2620,6 +2662,56 @@ class LlamaInferenceBridge(
             }
             return out
         }
+    }
+
+    private fun isEncoderOnlyMnnLlm(resources: LocalResourceFiles): Boolean {
+        val configDirName = resources.mnnLlmConfig?.parentFile?.name ?: return false
+        return configDirName.equals(DIR_LLM_MNN_VERIFIED, ignoreCase = true) ||
+            configDirName.contains("qwen2encoder", ignoreCase = true) ||
+            configDirName.contains("embedding", ignoreCase = true)
+    }
+
+    private fun trimEmbeddingContext(context: FloatArray, maxTokens: Int): FloatArray {
+        require(maxTokens > 0) { "maxTokens must be > 0" }
+        if (context.isEmpty()) {
+            return context
+        }
+        require(context.size % LLM_HIDDEN_SIZE == 0) {
+            "Embedding context size ${context.size} is not divisible by $LLM_HIDDEN_SIZE"
+        }
+        val tokenCount = context.size / LLM_HIDDEN_SIZE
+        if (tokenCount <= maxTokens) {
+            return context
+        }
+        val keepTokens = maxTokens
+        val startFloat = (tokenCount - keepTokens) * LLM_HIDDEN_SIZE
+        val out = FloatArray(keepTokens * LLM_HIDDEN_SIZE)
+        System.arraycopy(context, startFloat, out, 0, out.size)
+        return out
+    }
+
+    private fun appendEmbeddingContext(
+        context: FloatArray,
+        nextTokenEmbedding: FloatArray,
+        maxTokens: Int,
+    ): FloatArray {
+        require(maxTokens > 0) { "maxTokens must be > 0" }
+        require(nextTokenEmbedding.size == LLM_HIDDEN_SIZE) {
+            "Token embedding size ${nextTokenEmbedding.size} must be $LLM_HIDDEN_SIZE"
+        }
+        require(context.isEmpty() || context.size % LLM_HIDDEN_SIZE == 0) {
+            "Embedding context size ${context.size} is not divisible by $LLM_HIDDEN_SIZE"
+        }
+        val contextTokens = context.size / LLM_HIDDEN_SIZE
+        val keepTokens = minOf(contextTokens, (maxTokens - 1).coerceAtLeast(0))
+        val resultTokens = keepTokens + 1
+        val out = FloatArray(resultTokens * LLM_HIDDEN_SIZE)
+        if (keepTokens > 0) {
+            val startFloat = (contextTokens - keepTokens) * LLM_HIDDEN_SIZE
+            System.arraycopy(context, startFloat, out, 0, keepTokens * LLM_HIDDEN_SIZE)
+        }
+        System.arraycopy(nextTokenEmbedding, 0, out, keepTokens * LLM_HIDDEN_SIZE, LLM_HIDDEN_SIZE)
+        return out
     }
 
     private fun reconstructWaveformFromHift(hiftOutput: FloatArray): FloatArray {
@@ -3259,8 +3351,20 @@ class LlamaInferenceBridge(
                 ?: error(
                     "MNN LLM config not found. Expected one of:\n" +
                         "- ${File(appContext.filesDir, "$DIRECTORY_MODELS/$DIR_MNN_MODELS/$FILE_MNN_LLM_CONFIG").absolutePath}\n" +
-                        "- ${File(appContext.filesDir, "$DIRECTORY_MODELS/$FILE_MNN_LLM_CONFIG").absolutePath}",
+                    "- ${File(appContext.filesDir, "$DIRECTORY_MODELS/$FILE_MNN_LLM_CONFIG").absolutePath}",
                 )
+            val configDir = configFile.parentFile
+            Log.i(
+                TAG,
+                "[MNN-LLM] dirCheck=${configDir?.absolutePath} " +
+                    "config=${configFile.exists()} " +
+                    "llm.mnn=${configDir?.let { File(it, FILE_LLM_MNN_MODEL).exists() } == true} " +
+                    "llm.mnn.weight=${configDir?.let { File(it, FILE_LLM_MNN_WEIGHT).exists() } == true} " +
+                    "llm.mnn.json=${configDir?.let { File(it, FILE_LLM_MNN_JSON).exists() } == true} " +
+                    "embeddings_bf16.bin=${configDir?.let { File(it, "embeddings_bf16.bin").exists() } == true} " +
+                    "tokenizer.mtok=${configDir?.let { File(it, "tokenizer.mtok").exists() } == true} " +
+                    "tokenizer.txt=${configDir?.let { File(it, "tokenizer.txt").exists() } == true}",
+            )
             val t0 = nowSeconds()
             Log.i(TAG, "[MNN-LLM] load begin: ${configFile.absolutePath} (bytes=${configFile.length()}) backend=CPU")
             val loaded = MnnLlmRunner.load(configFile = configFile)
@@ -3309,6 +3413,11 @@ class LlamaInferenceBridge(
                 listOf(FILE_LLM_MODEL),
                 listOf(FILE_FLOW_GGUF_MODEL),
                 listOf(FILE_LOCAL_HIFT_MODEL),
+                listOf("$DIR_LLM_MNN_VERIFIED/config.json"),
+                listOf("$DIR_LLM_MNN_VERIFIED/$FILE_LLM_MNN_MODEL"),
+                listOf("$DIR_LLM_MNN_VERIFIED/$FILE_LLM_MNN_WEIGHT"),
+                listOf("$DIR_LLM_MNN_VERIFIED/$FILE_LLM_MNN_JSON"),
+                listOf("$DIR_LLM_MNN_VERIFIED/embeddings_bf16.bin"),
                 listOf("$DIR_MNN_MODELS/$FILE_MNN_LLM_CONFIG", FILE_MNN_LLM_CONFIG),
                 listOf("$DIR_MNN_MODELS/$FILE_FLOW_MODEL"),
                 listOf("$DIR_MNN_MODELS/$FILE_FLOW_ENCODER_MODEL"),
@@ -3438,10 +3547,19 @@ class LlamaInferenceBridge(
             val resourcesDir = ensureDirectory(File(appContext.filesDir, DIRECTORY_LOCAL_RESOURCES))
             val mnnModelsDir = ensureDirectory(File(modelsDir, DIR_MNN_MODELS))
 
+            Log.i(
+                TAG,
+                "ensureLocalResourcesReady: resourcesDir=${resourcesDir.absolutePath}, " +
+                    "llm_input.pt=${File(resourcesDir, FILE_LLM_INPUT_PT).exists()}, " +
+                    "lm_input.pt=${File(resourcesDir, FILE_LLM_INPUT_PT_LEGACY).exists()}, " +
+                    "LLM_input.pt=${File(resourcesDir, FILE_LLM_INPUT_PT_UPPER_LEGACY).exists()}",
+            )
+
             val resolved = LocalResourceFiles(
                 llmModel = resolveRequiredFileInDirIgnoreCase(FILE_LLM_MODEL, modelsDir, LLM_GGUF_MODEL_CANDIDATES),
                 mnnLlmConfig = resolveOptionalFile(
                     listOf(
+                        File(modelsDir, "$DIR_LLM_MNN_VERIFIED/config.json"),
                         File(modelsDir, "$DIR_MNN_MODELS/$FILE_MNN_LLM_CONFIG"),
                         File(modelsDir, FILE_MNN_LLM_CONFIG),
                     ),
@@ -3585,7 +3703,7 @@ class LlamaInferenceBridge(
 
     companion object {
         private const val TAG = "LlamaInferenceBridge"
-        private const val USE_MNN_LLM_BACKEND = false
+        private const val USE_MNN_LLM_BACKEND = true
         // Default to HTTP Flow for debugging the non-streaming path.
         private const val USE_HTTP_FLOW_BACKEND = true
         private const val USE_MNN_HIFT_BACKEND = true
@@ -3598,7 +3716,7 @@ class LlamaInferenceBridge(
         private const val FLOW_MNN_OP_PROFILE_ENABLED = true
         private const val HIFIGAN_BACKEND_LABEL = "CPU"
         private const val MNN_HIFT_MERGED_OUTPUT_INDEX = 3
-        private const val FLOW_HTTP_ENDPOINT = "http://192.168.81.7:8100/v1/flow/stream_tts_mel"
+        private const val FLOW_HTTP_ENDPOINT = "http://192.168.190.6:8100/v1/flow/stream_tts_mel"
         private const val FLOW_HTTP_CONNECT_TIMEOUT_MS = 15_000
         private const val FLOW_HTTP_READ_TIMEOUT_MS = 120_000
         private const val ASSET_SYNC_MARKER = ".asset_sync_ok"
@@ -3610,6 +3728,7 @@ class LlamaInferenceBridge(
         private const val FILE_LLM_MODEL = "cosyvoice2-0.5B-Q2_K.gguf"
         private const val FILE_FLOW_GGUF_MODEL = "flow_fp32.gguf"
         private const val FILE_LOCAL_HIFT_MODEL = "hift_fp32.gguf"
+        private const val DIR_LLM_MNN_VERIFIED = "llmMNN_qwen2encoder_fp16_verified"
         private val LLM_GGUF_MODEL_CANDIDATES =
             listOf(
                 FILE_LLM_MODEL,
@@ -3632,6 +3751,9 @@ class LlamaInferenceBridge(
             )
         private const val DIR_MNN_MODELS = "mnnModels"
         private const val FILE_MNN_LLM_CONFIG = "config.json"
+        private const val FILE_LLM_MNN_MODEL = "llm.mnn"
+        private const val FILE_LLM_MNN_WEIGHT = "llm.mnn.weight"
+        private const val FILE_LLM_MNN_JSON = "llm.mnn.json"
         private const val FILE_FLOW_MODEL = "flow.mnn"
         private const val FILE_FLOW_ENCODER_MODEL = "flow_encoder.mnn"
         private const val FILE_FLOW_DECODER_MODEL = "flow_decoder.mnn"
@@ -3696,6 +3818,7 @@ class LlamaInferenceBridge(
         private const val LLM_ONLY_MIN_NEW_TOKENS = 0
         private const val LLM_ONLY_MAX_NEW_TOKENS = 512
         private const val LLM_HIDDEN_SIZE = 896
+        private const val LLM_MNN_CONTEXT_WINDOW = 192
         private const val FLOW_DECODER_MEL_BINS = 80
         private const val HIFT_N_FFT = 16
         private const val HIFT_HOP_LENGTH = 4

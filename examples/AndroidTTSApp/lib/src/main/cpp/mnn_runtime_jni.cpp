@@ -2,6 +2,7 @@
 #include <android/log.h>
 
 #include <algorithm>
+#include <cctype>
 #include <fstream>
 #include <memory>
 #include <string>
@@ -22,9 +23,11 @@ namespace {
 constexpr const char *kLogTag = "ai-chat-mnn";
 constexpr bool kHifiGanUseCpuBackend = true;
 constexpr const char *kHifiGanBackendLabel = kHifiGanUseCpuBackend ? "CPU" : "Vulkan";
+constexpr const char *kMnnEncoderOnlyModelName = "llm.mnn";
 
 using MNN::BackendConfig;
 using MNN::Express::Executor;
+using MNN::Express::Module;
 using MNN::Express::VARP;
 using MNN::Interpreter;
 using MNN::ScheduleConfig;
@@ -33,17 +36,37 @@ using MNN::Tensor;
 using MNN::Transformer::Llm;
 
 constexpr int kLlmHiddenSize = 896;
+constexpr int kLlmModuleWindow = 192;
 
 struct LlmHandle {
     Llm *llm = nullptr;
+    Module *module = nullptr;
+    std::shared_ptr<Executor> moduleExecutor;
+    Module::BackendInfo moduleBackendInfo{};
+    BackendConfig moduleBackendConfig{};
+    bool encoderOnly = false;
 
     ~LlmHandle() {
         if (llm != nullptr) {
             Llm::destroy(llm);
             llm = nullptr;
         }
+        if (module != nullptr) {
+            Module::destroy(module);
+            module = nullptr;
+        }
+        moduleExecutor.reset();
     }
 };
+
+bool is_encoder_only_llm_model(const std::string &config_path) {
+    std::string lower = config_path;
+    std::transform(lower.begin(), lower.end(), lower.begin(), [](unsigned char c) {
+        return static_cast<char>(std::tolower(c));
+    });
+    return lower.find("qwen2encoder") != std::string::npos ||
+           lower.find("embedding") != std::string::npos;
+}
 
 struct HifiGanHandle {
     std::unique_ptr<Interpreter, void (*)(Interpreter *)> interpreter{
@@ -108,6 +131,33 @@ std::string build_llm_override_json(int num_threads) {
            "\"backend_type\":\"cpu\"," +
            "\"hidden_states\":true" +
            "}";
+}
+
+std::string parent_dir(const std::string &path) {
+    const auto slash = path.find_last_of("/\\");
+    return slash == std::string::npos ? std::string(".") : path.substr(0, slash);
+}
+
+std::string join_path(const std::string &dir, const std::string &name) {
+    if (dir.empty() || dir == ".") {
+        return name;
+    }
+    if (!dir.empty() && (dir.back() == '/' || dir.back() == '\\')) {
+        return dir + name;
+    }
+    return dir + "/" + name;
+}
+
+std::string dims_to_string(const std::vector<int> &dims) {
+    std::string out = "[";
+    for (size_t i = 0; i < dims.size(); ++i) {
+        if (i != 0) {
+            out += ",";
+        }
+        out += std::to_string(dims[i]);
+    }
+    out += "]";
+    return out;
 }
 
 std::vector<int> jint_array_to_vector(JNIEnv *env, jintArray array) {
@@ -220,25 +270,64 @@ Java_com_example_llama_MnnLlmRunner_nativeLoadModel(JNIEnv *env, jclass, jstring
     ensure_tokenizer_compat(config_path);
 
     std::unique_ptr<LlmHandle> handle(new LlmHandle());
-    handle->llm = Llm::createLLM(config_path);
-    if (handle->llm == nullptr) {
-        throw_illegal_state(env, "Llm::createLLM failed: " + config_path);
-        return 0;
-    }
-
+    const bool encoder_only = is_encoder_only_llm_model(config_path);
+    handle->encoderOnly = encoder_only;
     const std::string override_json = build_llm_override_json(num_threads);
-    handle->llm->set_config(override_json);
+
     __android_log_print(
             ANDROID_LOG_INFO,
             kLogTag,
-            "%s: config=%s override=%s",
+            "%s: config=%s override=%s mode=%s",
             __func__,
             config_path.c_str(),
-            override_json.c_str());
+            override_json.c_str(),
+            encoder_only ? "Module(hidden_states)" : "Llm");
 
-    if (!handle->llm->load()) {
-        throw_illegal_state(env, "MNN LLM load failed: " + config_path);
-        return 0;
+    if (encoder_only) {
+        const std::string model_dir = parent_dir(config_path);
+        const std::string model_path = join_path(model_dir, kMnnEncoderOnlyModelName);
+
+        handle->moduleBackendConfig.memory = BackendConfig::Memory_Normal;
+        handle->moduleBackendConfig.power = BackendConfig::Power_High;
+        handle->moduleBackendConfig.precision = BackendConfig::Precision_High;
+        handle->moduleBackendInfo.type = MNN_FORWARD_CPU;
+        handle->moduleBackendInfo.config = &handle->moduleBackendConfig;
+
+        Module::Config moduleConfig{};
+        moduleConfig.backend = &handle->moduleBackendInfo;
+        moduleConfig.dynamic = false;
+        moduleConfig.shapeMutable = true;
+
+        handle->moduleExecutor = Executor::newExecutor(
+                MNN_FORWARD_CPU,
+                handle->moduleBackendConfig,
+                std::max(1, static_cast<int>(num_threads)));
+        if (handle->moduleExecutor == nullptr) {
+            throw_illegal_state(env, "Failed to create MNN executor for module: " + model_path);
+            return 0;
+        }
+
+        MNN::Express::ExecutorScope scope(handle->moduleExecutor);
+        handle->module = Module::load(
+                {"xs", "xs_lens"},
+                {"hidden_states"},
+                model_path.c_str(),
+                &moduleConfig);
+        if (handle->module == nullptr) {
+            throw_illegal_state(env, "MNN module load failed: " + model_path);
+            return 0;
+        }
+    } else {
+        handle->llm = Llm::createLLM(config_path);
+        if (handle->llm == nullptr) {
+            throw_illegal_state(env, "Failed to create MNN LLM runner: " + config_path);
+            return 0;
+        }
+        handle->llm->set_config(override_json);
+        if (!handle->llm->load()) {
+            throw_illegal_state(env, "MNN LLM load failed: " + config_path);
+            return 0;
+        }
     }
 
     return reinterpret_cast<jlong>(handle.release());
@@ -252,10 +341,14 @@ Java_com_example_llama_MnnLlmRunner_nativeUnloadModel(JNIEnv *, jclass, jlong ha
 extern "C" JNIEXPORT jint JNICALL
 Java_com_example_llama_MnnLlmRunner_nativeResetKvCache(JNIEnv *, jclass, jlong handle) {
     auto *runner = reinterpret_cast<LlmHandle *>(handle);
-    if (runner == nullptr || runner->llm == nullptr) {
+    if (runner == nullptr || (runner->llm == nullptr && runner->module == nullptr)) {
         return -1;
     }
-    runner->llm->reset();
+    if (runner->llm != nullptr) {
+        runner->llm->reset();
+    } else if (runner->module != nullptr) {
+        runner->module->clearCache();
+    }
     return 0;
 }
 
@@ -267,7 +360,7 @@ Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings(
         jfloatArray input_embeddings_,
         jint n_past) {
     auto *runner = reinterpret_cast<LlmHandle *>(handle);
-    if (runner == nullptr || runner->llm == nullptr) {
+    if (runner == nullptr || (runner->llm == nullptr && runner->module == nullptr)) {
         throw_illegal_state(env, "MNN LLM runner is not loaded");
         return nullptr;
     }
@@ -294,19 +387,92 @@ Java_com_example_llama_MnnLlmRunner_nativeDecodeEmbeddings(
             {seq_len, kLlmHiddenSize, 1, 1},
             MNN::Express::NCHW,
             halide_type_of<float>());
-    auto outputs = runner->llm->forwardVec(input_var);
-    if (outputs.size() < 2 || outputs[1].get() == nullptr || outputs[1]->getInfo() == nullptr) {
-        throw_illegal_state(env, "MNN LLM forwardVec did not return hidden_states");
+    VARP hidden_states = nullptr;
+    if (runner->module != nullptr) {
+        const int window_len = std::min(seq_len, kLlmModuleWindow);
+        const int start_token = std::max(0, seq_len - window_len);
+        std::vector<float> window_embeddings(
+                static_cast<size_t>(kLlmModuleWindow) * static_cast<size_t>(kLlmHiddenSize),
+                0.0f);
+        const float *src = input_embeddings.data() + static_cast<size_t>(start_token) * static_cast<size_t>(kLlmHiddenSize);
+        std::copy(
+                src,
+                src + static_cast<size_t>(window_len) * static_cast<size_t>(kLlmHiddenSize),
+                window_embeddings.begin());
+        int seq_len_value = window_len;
+        VARP xs = MNN::Express::_Input(
+                {1, kLlmModuleWindow, kLlmHiddenSize},
+                MNN::Express::NCHW,
+                halide_type_of<float>());
+        VARP xs_lens = MNN::Express::_Input(
+                {1},
+                MNN::Express::NCHW,
+                halide_type_of<int>());
+        std::copy(window_embeddings.begin(), window_embeddings.end(), xs->writeMap<float>());
+        xs_lens->writeMap<int>()[0] = seq_len_value;
+        __android_log_print(
+                ANDROID_LOG_INFO,
+                kLogTag,
+                "%s: module window_len=%d start_token=%d padded_to=%d",
+                __func__,
+                window_len,
+                start_token,
+                kLlmModuleWindow);
+        MNN::Express::ExecutorScope scope(runner->moduleExecutor);
+        auto outputs = runner->module->onForward({xs, xs_lens});
+        if (outputs.empty() || outputs[0].get() == nullptr || outputs[0]->getInfo() == nullptr) {
+            throw_illegal_state(env, "MNN module forward did not return hidden_states");
+            return nullptr;
+        }
+        hidden_states = outputs[0];
+        const auto *module_info = hidden_states->getInfo();
+        __android_log_print(
+                ANDROID_LOG_INFO,
+                kLogTag,
+                "%s: module hidden_states dims=%s size=%zu window_len=%d",
+                __func__,
+                dims_to_string(module_info->dim).c_str(),
+                module_info->size,
+                window_len);
+    } else {
+        auto outputs = runner->llm->forwardVec(input_var);
+        if (outputs.size() < 2 || outputs[1].get() == nullptr || outputs[1]->getInfo() == nullptr) {
+            throw_illegal_state(env, "MNN LLM forwardVec did not return hidden_states");
+            return nullptr;
+        }
+        hidden_states = outputs[1];
+    }
+
+    const auto *info = hidden_states->getInfo();
+    if (info == nullptr) {
+        throw_illegal_state(env, "MNN LLM hidden_states info is null");
+        return nullptr;
+    }
+    const size_t element_count = info->size;
+    const float *data = hidden_states->readMap<float>();
+    if (data == nullptr || element_count == 0) {
+        throw_illegal_state(env, "MNN LLM hidden_states output is empty");
         return nullptr;
     }
 
-    VARP hidden_states = outputs[1];
-    const auto *info = hidden_states->getInfo();
-    const int element_count = static_cast<int>(info->size);
-    const float *data = hidden_states->readMap<float>();
-    if (data == nullptr || element_count <= 0) {
-        throw_illegal_state(env, "MNN LLM hidden_states output is empty");
-        return nullptr;
+    if (runner->module != nullptr) {
+        const size_t valid_tokens = std::min<size_t>(
+                static_cast<size_t>(std::max(seq_len, 0)),
+                element_count / static_cast<size_t>(kLlmHiddenSize));
+        const size_t valid_elements = valid_tokens * static_cast<size_t>(kLlmHiddenSize);
+        if (valid_tokens == 0 || valid_elements == 0) {
+            throw_illegal_state(env, "MNN module hidden_states output is too short");
+            return nullptr;
+        }
+        __android_log_print(
+                ANDROID_LOG_INFO,
+                kLogTag,
+                "%s: module output elements=%zu valid_tokens=%zu valid_elements=%zu",
+                __func__,
+                element_count,
+                valid_tokens,
+                valid_elements);
+        return vector_to_jfloat_array(env, std::vector<float>(data, data + valid_elements));
     }
 
     return vector_to_jfloat_array(env, std::vector<float>(data, data + element_count));
