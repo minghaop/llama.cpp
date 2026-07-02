@@ -561,6 +561,121 @@ ggml_metal_pipeline_with_params ggml_metal_library_get_pipeline_mul_mm(ggml_meta
     return res;
 }
 
+ggml_metal_pipeline_with_params ggml_metal_library_get_pipeline_mul_mm_add(ggml_metal_library_t lib, const ggml_tensor * op) {
+    char base[256];
+    char name[256];
+
+    const ggml_type tsrc0 = op->src[0]->type;
+    const ggml_type tsrc1 = op->src[1]->type;
+
+    const bool bc_inp = op->src[0]->ne[0] % 32 != 0;
+    const bool bc_out = op->ne[0] % 64 != 0 || op->ne[1] % 32 != 0;
+
+    snprintf(base, 256, "kernel_mul_mm_add_%s_%s", ggml_type_name(tsrc0), ggml_type_name(tsrc1));
+    snprintf(name, 256, "%s_bci=%d_bco=%d", base, bc_inp, bc_out);
+
+    ggml_metal_pipeline_with_params res = ggml_metal_library_get_pipeline(lib, name);
+    if (!res.pipeline) {
+        ggml_metal_cv_t cv = ggml_metal_cv_init();
+
+        ggml_metal_cv_set_bool(cv, bc_inp, FC_MUL_MM + 0);
+        ggml_metal_cv_set_bool(cv, bc_out, FC_MUL_MM + 1);
+
+        res = ggml_metal_library_compile_pipeline(lib, base, name, cv);
+
+        ggml_metal_cv_free(cv);
+    }
+
+    res.smem = bc_out ? 8192 : 4096 + 2048;
+
+    return res;
+}
+
+ggml_metal_pipeline_with_params ggml_metal_library_get_pipeline_mul_mv_add(ggml_metal_library_t lib, const ggml_tensor * op) {
+    GGML_TENSOR_LOCALS( int32_t, ne0, op->src[0], ne);
+    GGML_TENSOR_LOCALS( int32_t, ne1, op->src[1], ne);
+
+    char base[256];
+    char name[256];
+
+    int nsg = 0;
+    int nr0 = 0;
+    int nr1 = 1;
+
+    size_t smem = 0;
+
+    const ggml_type tsrc0 = op->src[0]->type;
+    const ggml_type tsrc1 = op->src[1]->type;
+
+    const char * suffix = "";
+
+    switch (tsrc0) {
+        case GGML_TYPE_F32:
+        case GGML_TYPE_F16:
+        case GGML_TYPE_BF16:
+            {
+                if (ne00 < 32) {
+                    nsg = 1;
+                    nr0 = 32;
+                    nr1 = 1;
+                    suffix = "_short";
+                } else {
+                    nsg = std::min(4, (ne00 + 127) / 128);
+                    nr0 = 2;
+                    nr1 = 1;
+                    smem = 32*sizeof(float)*nr0;
+                    suffix = ne00 % 4 == 0 ? "_4" : "";
+                }
+            } break;
+        case GGML_TYPE_Q4_0:    nsg = N_SG_Q4_0;    nr0 = N_R0_Q4_0;    break;
+        case GGML_TYPE_Q4_1:    nsg = N_SG_Q4_1;    nr0 = N_R0_Q4_1;    break;
+        case GGML_TYPE_Q5_0:    nsg = N_SG_Q5_0;    nr0 = N_R0_Q5_0;    break;
+        case GGML_TYPE_Q5_1:    nsg = N_SG_Q5_1;    nr0 = N_R0_Q5_1;    break;
+        case GGML_TYPE_Q8_0:    nsg = N_SG_Q8_0;    nr0 = N_R0_Q8_0;    smem = 32*sizeof(float)*N_R0_Q8_0; break;
+        case GGML_TYPE_MXFP4:   nsg = N_SG_MXFP4;   nr0 = N_R0_MXFP4;   smem = 32*sizeof(float); break;
+        case GGML_TYPE_Q2_K:    nsg = N_SG_Q2_K;    nr0 = N_R0_Q2_K;    break;
+        case GGML_TYPE_Q3_K:    nsg = N_SG_Q3_K;    nr0 = N_R0_Q3_K;    break;
+        case GGML_TYPE_Q4_K:    nsg = N_SG_Q4_K;    nr0 = N_R0_Q4_K;    break;
+        case GGML_TYPE_Q5_K:    nsg = N_SG_Q5_K;    nr0 = N_R0_Q5_K;    break;
+        case GGML_TYPE_Q6_K:    nsg = N_SG_Q6_K;    nr0 = N_R0_Q6_K;    break;
+        case GGML_TYPE_IQ2_XXS: nsg = N_SG_IQ2_XXS; nr0 = N_R0_IQ2_XXS; smem = 256*8+128; break;
+        case GGML_TYPE_IQ2_XS:  nsg = N_SG_IQ2_XS;  nr0 = N_R0_IQ2_XS;  smem = 512*8+128; break;
+        case GGML_TYPE_IQ3_XXS: nsg = N_SG_IQ3_XXS; nr0 = N_R0_IQ3_XXS; smem = 256*4+128; break;
+        case GGML_TYPE_IQ3_S:   nsg = N_SG_IQ3_S;   nr0 = N_R0_IQ3_S;   smem = 512*4; break;
+        case GGML_TYPE_IQ2_S:   nsg = N_SG_IQ2_S;   nr0 = N_R0_IQ2_S;   break;
+        case GGML_TYPE_IQ1_S:   nsg = N_SG_IQ1_S;   nr0 = N_R0_IQ1_S;   break;
+        case GGML_TYPE_IQ1_M:   nsg = N_SG_IQ1_M;   nr0 = N_R0_IQ1_M;   break;
+        case GGML_TYPE_IQ4_NL:  nsg = N_SG_IQ4_NL;  nr0 = N_R0_IQ4_NL;  smem = 32*sizeof(float); break;
+        case GGML_TYPE_IQ4_XS:  nsg = N_SG_IQ4_XS;  nr0 = N_R0_IQ4_XS;  smem = 32*sizeof(float); break;
+        default:
+            {
+                GGML_LOG_ERROR("Asserting on type %d\n", (int) tsrc0);
+                GGML_ABORT("not implemented");
+            }
+    };
+
+    snprintf(base, 256, "kernel_mul_mv_add_%s_%s%s", ggml_type_name(tsrc0), ggml_type_name(tsrc1), suffix);
+    snprintf(name, 256, "%s_nsg=%d", base, nsg);
+
+    ggml_metal_pipeline_with_params res = ggml_metal_library_get_pipeline(lib, name);
+    if (!res.pipeline) {
+        ggml_metal_cv_t cv = ggml_metal_cv_init();
+
+        ggml_metal_cv_set_int16(cv, nsg, FC_MUL_MV + 0);
+
+        res = ggml_metal_library_compile_pipeline(lib, base, name, cv);
+
+        ggml_metal_cv_free(cv);
+    }
+
+    res.nr0  = nr0;
+    res.nr1  = nr1;
+    res.nsg  = nsg;
+    res.smem = smem;
+
+    return res;
+}
+
 ggml_metal_pipeline_with_params ggml_metal_library_get_pipeline_mul_mv(ggml_metal_library_t lib, const ggml_tensor * op) {
     GGML_TENSOR_LOCALS( int32_t, ne0, op->src[0], ne);
     GGML_TENSOR_LOCALS( int32_t, ne1, op->src[1], ne);

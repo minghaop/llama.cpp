@@ -258,6 +258,7 @@ static std::vector<int> ggml_metal_graph_optimize_reorder(const std::vector<node
     // can be expanded when needed
     const auto & h_safe = [](ggml_op op) {
         switch (op) {
+            case GGML_OP_MUL_MAT_ADD:
             case GGML_OP_MUL_MAT:
             case GGML_OP_MUL_MAT_ID:
             case GGML_OP_ROPE:

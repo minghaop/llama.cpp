@@ -971,6 +971,7 @@ static const char * GGML_OP_NAME[GGML_OP_COUNT] = {
     "L2_NORM",
 
     "MUL_MAT",
+    "MUL_MAT_ADD",
     "MUL_MAT_ID",
     "OUT_PROD",
 
@@ -1045,7 +1046,7 @@ static const char * GGML_OP_NAME[GGML_OP_COUNT] = {
     "GLU",
 };
 
-static_assert(GGML_OP_COUNT == 95, "GGML_OP_COUNT != 95");
+static_assert(GGML_OP_COUNT == 96, "GGML_OP_COUNT != 96");
 
 static const char * GGML_OP_SYMBOL[GGML_OP_COUNT] = {
     "none",
@@ -1080,6 +1081,7 @@ static const char * GGML_OP_SYMBOL[GGML_OP_COUNT] = {
     "l2_norm(x)",
 
     "X*Y",
+    "X*Y+Z",
     "X[i]*Y",
     "X*Y",
 
@@ -1154,7 +1156,7 @@ static const char * GGML_OP_SYMBOL[GGML_OP_COUNT] = {
     "glu(x)",
 };
 
-static_assert(GGML_OP_COUNT == 95, "GGML_OP_COUNT != 95");
+static_assert(GGML_OP_COUNT == 96, "GGML_OP_COUNT != 96");
 
 static_assert(GGML_OP_POOL_COUNT == 2, "GGML_OP_POOL_COUNT != 2");
 
@@ -3201,10 +3203,41 @@ struct ggml_tensor * ggml_mul_mat(
     return result;
 }
 
+struct ggml_tensor * ggml_mul_mat_add(
+        struct ggml_context * ctx,
+        struct ggml_tensor  * a,
+        struct ggml_tensor  * b,
+        struct ggml_tensor  * c) {
+    GGML_ASSERT(ggml_can_mul_mat(a, b));
+    GGML_ASSERT(!ggml_is_transposed(a));
+
+    const int64_t ne[4] = { a->ne[1], b->ne[1], b->ne[2], b->ne[3] };
+    struct ggml_tensor * result = ggml_new_tensor(ctx, GGML_TYPE_F32, 4, ne);
+
+    GGML_ASSERT(ggml_can_repeat(c, result));
+
+    result->op     = GGML_OP_MUL_MAT_ADD;
+    result->src[0] = a;
+    result->src[1] = b;
+    result->src[2] = c;
+
+    return result;
+}
+
 void ggml_mul_mat_set_prec(
         struct ggml_tensor * a,
         enum ggml_prec       prec) {
     GGML_ASSERT(a->op == GGML_OP_MUL_MAT);
+
+    const int32_t prec_i32 = (int32_t) prec;
+
+    ggml_set_op_params_i32(a, 0, prec_i32);
+}
+
+void ggml_mul_mat_add_set_prec(
+        struct ggml_tensor * a,
+        enum ggml_prec       prec) {
+    GGML_ASSERT(a->op == GGML_OP_MUL_MAT_ADD);
 
     const int32_t prec_i32 = (int32_t) prec;
 
@@ -6445,6 +6478,43 @@ static void ggml_compute_backward(
                             src0,               // [n,m,q1,r1]
                             ggml_transpose(ctx, // [p,m,qq,rr]
                                 grad)));        // [m,p,qq,rr]
+            }
+        } break;
+        case GGML_OP_MUL_MAT_ADD: {
+            if (src0_needs_grads) {
+                GGML_ASSERT(grad->ne[2] == src1->ne[2]);
+                GGML_ASSERT(grad->ne[3] == src1->ne[3]);
+                struct ggml_tensor * tmp =
+                    ggml_out_prod(ctx,
+                        src1,
+                        grad);
+                if (!ggml_are_same_shape(tmp, src0)) {
+                    GGML_ASSERT(tmp->ne[0] == src0->ne[0]);
+                    GGML_ASSERT(tmp->ne[1] == src0->ne[1]);
+                    GGML_ASSERT(tmp->ne[3] == 1);
+
+                    const int64_t nr2 = tmp->ne[2] / src0->ne[2];
+                    const size_t nb2 = tmp->nb[2] * nr2;
+                    const size_t nb3 = tmp->nb[2];
+
+                    tmp = ggml_view_4d(ctx, tmp, src0->ne[0], src0->ne[1], src0->ne[2], nr2, tmp->nb[1], nb2, nb3, 0);
+                    tmp = ggml_repeat_back(ctx, tmp, src0);
+                }
+                ggml_add_or_set(ctx, cgraph, isrc0, tmp);
+            }
+            if (src1_needs_grads) {
+                ggml_add_or_set(ctx, cgraph, isrc1,
+                        ggml_out_prod(ctx,
+                            src0,
+                            ggml_transpose(ctx,
+                                grad)));
+            }
+            if (src2_needs_grads) {
+                struct ggml_tensor * tmp = grad;
+                if (!ggml_are_same_shape(tmp, src2)) {
+                    tmp = ggml_repeat_back(ctx, tmp, src2);
+                }
+                ggml_add_or_set(ctx, cgraph, isrc2, tmp);
             }
         } break;
         case GGML_OP_SCALE: {

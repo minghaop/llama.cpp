@@ -383,6 +383,32 @@ typedef struct {
 
 typedef struct {
     int32_t  ne00;
+    int32_t  ne02;
+    uint64_t nb01;
+    uint64_t nb02;
+    uint64_t nb03;
+    int32_t  ne12;
+    uint64_t nb10;
+    uint64_t nb11;
+    uint64_t nb12;
+    uint64_t nb13;
+    int32_t  ne0;
+    int32_t  ne1;
+    int16_t  r2;
+    int16_t  r3;
+    int32_t  ne20;
+    int32_t  ne21;
+    int32_t  ne22;
+    int32_t  ne23;
+    int32_t  src2_type;
+    uint64_t nb20;
+    uint64_t nb21;
+    uint64_t nb22;
+    uint64_t nb23;
+} ggml_metal_kargs_mul_mm_add;
+
+typedef struct {
+    int32_t  ne00;
     int32_t  ne01;
     int32_t  ne02;
     uint64_t nb00;
@@ -402,6 +428,37 @@ typedef struct {
     int16_t  r2;
     int16_t  r3;
 } ggml_metal_kargs_mul_mv;
+
+typedef struct {
+    int32_t  ne00;
+    int32_t  ne01;
+    int32_t  ne02;
+    uint64_t nb00;
+    uint64_t nb01;
+    uint64_t nb02;
+    uint64_t nb03;
+    int32_t  ne10;
+    int32_t  ne11;
+    int32_t  ne12;
+    uint64_t nb10;
+    uint64_t nb11;
+    uint64_t nb12;
+    uint64_t nb13;
+    int32_t  ne0;
+    int32_t  ne1;
+    int32_t  nr0;
+    int16_t  r2;
+    int16_t  r3;
+    int32_t  ne20;
+    int32_t  ne21;
+    int32_t  ne22;
+    int32_t  ne23;
+    int32_t  src2_type;
+    uint64_t nb20;
+    uint64_t nb21;
+    uint64_t nb22;
+    uint64_t nb23;
+} ggml_metal_kargs_mul_mv_add;
 
 typedef struct {
     int32_t  ne00;

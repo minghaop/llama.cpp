@@ -494,6 +494,7 @@ extern "C" {
         GGML_OP_L2_NORM,
 
         GGML_OP_MUL_MAT,
+        GGML_OP_MUL_MAT_ADD,
         GGML_OP_MUL_MAT_ID,
         GGML_OP_OUT_PROD,
 
@@ -1408,9 +1409,24 @@ extern "C" {
             struct ggml_tensor  * a,
             struct ggml_tensor  * b);
 
+    // A: k columns, n rows => [ne03, ne02, n, k]
+    // B: k columns, m rows  (i.e. we transpose it internally) => [ne03 * x, ne02 * y, m, k]
+    // C: broadcastable to the result of A*B
+    // result is n columns, m rows => [ne03 * x, ne02 * y, m, n]
+    GGML_API struct ggml_tensor * ggml_mul_mat_add(
+            struct ggml_context * ctx,
+            struct ggml_tensor  * a,
+            struct ggml_tensor  * b,
+            struct ggml_tensor  * c);
+
     // change the precision of a matrix multiplication
     // set to GGML_PREC_F32 for higher precision (useful for phi-2)
     GGML_API void ggml_mul_mat_set_prec(
+            struct ggml_tensor * a,
+            enum ggml_prec       prec);
+
+    // change the precision of a fused matrix multiplication + add
+    GGML_API void ggml_mul_mat_add_set_prec(
             struct ggml_tensor * a,
             enum ggml_prec       prec);
 

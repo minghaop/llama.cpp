@@ -615,6 +615,8 @@ static bool ggml_backend_metal_device_supports_buft(ggml_backend_dev_t dev, ggml
 
 static int64_t get_op_batch_size(const ggml_tensor * op) {
     switch (op->op) {
+        case GGML_OP_MUL_MAT_ADD:
+            return op->ne[1];
         case GGML_OP_MUL_MAT:
             return op->ne[1];
         case GGML_OP_MUL_MAT_ID:
@@ -628,6 +630,7 @@ static bool ggml_backend_metal_device_offload_op(ggml_backend_dev_t dev, const g
     const int min_batch_size = 32;
 
     return (op->op == GGML_OP_MUL_MAT ||
+            op->op == GGML_OP_MUL_MAT_ADD ||
             op->op == GGML_OP_MUL_MAT_ID) &&
             get_op_batch_size(op) >= min_batch_size;
 
