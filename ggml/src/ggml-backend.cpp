@@ -1151,6 +1151,13 @@ void ggml_backend_sched_split_graph(ggml_backend_sched_t sched, struct ggml_cgra
 
     // pass 5: split graph, find tensors that need to be copied
     {
+        const char * dbg_split_env = getenv("GGML_SCHED_DEBUG_SPLIT_REASONS");
+        const int dbg_split_limit = dbg_split_env ? atoi(dbg_split_env) : 0;
+        int dbg_split_backend = 0;
+        int dbg_split_weight  = 0;
+        int dbg_split_inputs  = 0;
+        int dbg_split_printed = 0;
+
         int i_split = 0;
         struct ggml_backend_sched_split * split = &sched->splits[0];
         // find the backend of the first split, skipping view ops
@@ -1178,6 +1185,10 @@ void ggml_backend_sched_split_graph(ggml_backend_sched_t sched, struct ggml_cgra
 
             // check if we should start a new split based on the sources of the current node
             bool need_new_split = false;
+            bool need_new_split_weight = false;
+            bool need_new_split_inputs = false;
+            int need_new_split_src = -1;
+            struct ggml_tensor * need_new_split_tensor = NULL;
             if (node_backend_id == cur_backend_id && split->n_inputs > 0) {
                 for (int j = 0; j < GGML_MAX_SRC; j++) {
                     struct ggml_tensor * src = node->src[j];
@@ -1190,6 +1201,9 @@ void ggml_backend_sched_split_graph(ggml_backend_sched_t sched, struct ggml_cgra
                         int src_backend_id = tensor_backend_id(src);
                         if (src_backend_id != cur_backend_id && !ggml_backend_sched_buffer_supported(sched, src, cur_backend_id)) {
                             need_new_split = true;
+                            need_new_split_weight = true;
+                            need_new_split_src = j;
+                            need_new_split_tensor = src;
                             break;
                         }
                     }
@@ -1201,6 +1215,9 @@ void ggml_backend_sched_split_graph(ggml_backend_sched_t sched, struct ggml_cgra
                         bool supported = ggml_backend_sched_buffer_supported(sched, src, cur_backend_id);
                         if (src_backend_id != cur_backend_id && tensor_id_copy(id, cur_backend_id, 0) == NULL && !supported) {
                             need_new_split = true;
+                            need_new_split_inputs = true;
+                            need_new_split_src = j;
+                            need_new_split_tensor = src;
                             break;
                         }
                     }
@@ -1208,6 +1225,51 @@ void ggml_backend_sched_split_graph(ggml_backend_sched_t sched, struct ggml_cgra
             }
 
             if (node_backend_id != cur_backend_id || need_new_split) {
+                if (dbg_split_limit > 0) {
+                    const bool backend_change = node_backend_id != cur_backend_id;
+                    if (backend_change) {
+                        dbg_split_backend++;
+                    } else if (need_new_split_weight) {
+                        dbg_split_weight++;
+                    } else if (need_new_split_inputs) {
+                        dbg_split_inputs++;
+                    }
+
+                    if (dbg_split_printed < dbg_split_limit) {
+                        const char * reason = backend_change ? "backend" : need_new_split_weight ? "weight" : "inputs";
+                        const int src_backend_id = need_new_split_tensor ? tensor_backend_id(need_new_split_tensor) : -1;
+                        const struct ggml_tensor * src0 = node->src[0];
+                        const struct ggml_tensor * src1 = node->src[1];
+                        const bool cur_supports_node = cur_backend_id >= 0 && ggml_backend_supports_op(sched->backends[cur_backend_id], node);
+                        const bool dst_supports_node = node_backend_id >= 0 && ggml_backend_supports_op(sched->backends[node_backend_id], node);
+                        fprintf(stderr,
+                                "sched split #%d reason=%s node=%d op=%s%s name=\"%s\" type=%s contig=%d backend=%s->%s cur_supports=%d dst_supports=%d split_inputs=%d src=%d src_name=\"%s\" src_op=%s src_backend=%s src_buffer=%s src0_type=%s src0_contig=%d src1_type=%s src1_contig=%d\n",
+                                i_split + 1,
+                                reason,
+                                i,
+                                ggml_op_name(node->op),
+                                node->op == GGML_OP_UNARY ? ggml_unary_op_name(ggml_get_unary_op(node)) : "",
+                                node->name,
+                                ggml_type_name(node->type),
+                                ggml_is_contiguous(node),
+                                cur_backend_id >= 0 ? ggml_backend_name(sched->backends[cur_backend_id]) : "none",
+                                node_backend_id >= 0 ? ggml_backend_name(sched->backends[node_backend_id]) : "none",
+                                cur_supports_node,
+                                dst_supports_node,
+                                split->n_inputs,
+                                need_new_split_src,
+                                need_new_split_tensor ? need_new_split_tensor->name : "",
+                                need_new_split_tensor ? ggml_op_name(need_new_split_tensor->op) : "",
+                                src_backend_id >= 0 ? ggml_backend_name(sched->backends[src_backend_id]) : "none",
+                                need_new_split_tensor && need_new_split_tensor->buffer ? ggml_backend_buffer_name(need_new_split_tensor->buffer) : "none",
+                                src0 ? ggml_type_name(src0->type) : "none",
+                                src0 ? ggml_is_contiguous(src0) : 0,
+                                src1 ? ggml_type_name(src1->type) : "none",
+                                src1 ? ggml_is_contiguous(src1) : 0);
+                        dbg_split_printed++;
+                    }
+                }
+
                 split->i_end = i;
                 i_split++;
                 if (i_split >= sched->splits_capacity) {
@@ -1280,6 +1342,15 @@ void ggml_backend_sched_split_graph(ggml_backend_sched_t sched, struct ggml_cgra
         }
         split->i_end = graph->n_nodes;
         sched->n_splits = i_split + 1;
+
+        if (dbg_split_limit > 0) {
+            fprintf(stderr,
+                    "sched split summary: total=%d backend=%d incompatible_weight=%d max_inputs=%d\n",
+                    sched->n_splits,
+                    dbg_split_backend,
+                    dbg_split_weight,
+                    dbg_split_inputs);
+        }
     }
 
     if (sched->debug) {
