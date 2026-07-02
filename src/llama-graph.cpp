@@ -16,10 +16,13 @@
 #include <cstring>
 #include "llama-model.h"
 #include <random>
+#include <string>
 #include <vector>
 #include <fstream>
 #include <iomanip>
 #include <algorithm>
+
+#include "flow-rand-noise.inc"
 
 void llm_graph_input_embd::set_input(const llama_ubatch * ubatch) {
     if (ubatch->token) {
@@ -122,14 +125,47 @@ static bool flow_load_rand_noise_bin(const char * path, std::vector<float> & res
     return true;
 }
 
+static bool flow_load_rand_noise_embedded(std::vector<float> & result) {
+    constexpr int64_t rand_noise_len = 80 * 50 * 300;
+    constexpr size_t expected_size = rand_noise_len * sizeof(float);
+
+    if (flow_rand_noise_bin_len != expected_size) {
+        LLAMA_LOG_INFO("flow embedded rand_noise ignored: has %u bytes, expected %zu\n",
+                flow_rand_noise_bin_len, expected_size);
+        return false;
+    }
+
+    result.resize(rand_noise_len);
+    // Layout matches torch.randn([1, 80, 50 * 300]).contiguous().view(-1):
+    // GGML tensor ne=[15000, 80, 1], with ne0 as the fastest-changing dimension.
+    std::memcpy(result.data(), flow_rand_noise_bin, expected_size);
+    LLAMA_LOG_INFO("flow rand_noise loaded from embedded data\n");
+    return true;
+}
+
+static std::string flow_source_dir_rand_noise_bin_path() {
+    std::string path = __FILE__;
+    const size_t pos = path.find_last_of("/\\");
+    if (pos == std::string::npos) {
+        return "rand_noise.bin";
+    }
+
+    path.resize(pos + 1);
+    path += "rand_noise.bin";
+    return path;
+}
+
 static const std::vector<float> & flow_cached_rand_noise() {
     static const std::vector<float> data = []() {
         constexpr int64_t rand_noise_len = 80 * 50 * 300;
         constexpr float two_pi = 6.28318530717958647692f;
 
         std::vector<float> result(rand_noise_len);
+        const std::string source_dir_rand_noise = flow_source_dir_rand_noise_bin_path();
         if (flow_load_rand_noise_bin(std::getenv("LLAMA_FLOW_RAND_NOISE_BIN"), result) ||
-                flow_load_rand_noise_bin("./rand_noise.bin", result)) {
+                flow_load_rand_noise_embedded(result) ||
+                flow_load_rand_noise_bin("./rand_noise.bin", result) ||
+                flow_load_rand_noise_bin(source_dir_rand_noise.c_str(), result)) {
             return result;
         }
 
