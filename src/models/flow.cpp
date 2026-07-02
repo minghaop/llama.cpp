@@ -14,8 +14,9 @@ llm_build_flow::llm_build_flow(const llama_model & model, const llm_graph_params
 
     embedding = build_F_normalize(embedding, 1e-12f); //✅
     
-    ggml_tensor * spk_mul = ggml_mul_mat(ctx0, model.spk_embed_w, embedding); 
-    ggml_tensor * spk_add = ggml_add(ctx0, spk_mul, model.spk_embed_b);       //✅
+    // ggml_tensor * spk_mul = ggml_mul_mat(ctx0, model.spk_embed_w, embedding); 
+    // ggml_tensor * spk_add = ggml_add(ctx0, spk_mul, model.spk_embed_b);       //✅
+    ggml_tensor * spk_add = ggml_mul_mat(ctx0, model.spk_embed_w, embedding, model.spk_embed_b);
     ggml_set_name(spk_add, "spk_affine_layer");
 
     token = build_flow_embedding(token, model.inp_embed_w, -1);   //✅
@@ -35,8 +36,9 @@ llm_build_flow::llm_build_flow(const llama_model & model, const llm_graph_params
     }
     
     x = build_layer_norm(x, model.after_norm_w, model.after_norm_b, 1e-5f, "before_decoder", 20);
-    x = ggml_mul_mat(ctx0, model.encoder_proj_w, x);
-    x = ggml_add(ctx0, x, model.encoder_proj_b);
+    // x = ggml_mul_mat(ctx0, model.encoder_proj_w, x);
+    // x = ggml_add(ctx0, x, model.encoder_proj_b);
+    x = ggml_mul_mat_add(ctx0, model.encoder_proj_w, x, model.encoder_proj_b);
 
     //build decoder
     int32_t mel_len1 = prompt_feat->ne[1];
