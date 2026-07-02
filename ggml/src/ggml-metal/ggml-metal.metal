@@ -3211,12 +3211,12 @@ static inline float helper_mul_mv_add_bias(
         const int out_i1,
         const int i12,
         const int i13) {
-    GGML_UNUSED(args);
-    GGML_UNUSED(src2);
-    GGML_UNUSED(out_i0);
-    GGML_UNUSED(out_i1);
-    GGML_UNUSED(i12);
-    GGML_UNUSED(i13);
+    (void) args;
+    (void) src2;
+    (void) out_i0;
+    (void) out_i1;
+    (void) i12;
+    (void) i13;
     return 0.0f;
 }
 
@@ -3233,7 +3233,7 @@ static inline float helper_mul_mat_add_bias_value(
         case GGML_METAL_TYPE_F16:
             return (float) *(device const half *) src2;
         case GGML_METAL_TYPE_BF16:
-            return (float) *(device const bfloat *) src2;
+            return as_type<float>(((uint) (*(device const uint16_t *) src2)) << 16);
         default:
             return 0.0f;
     }

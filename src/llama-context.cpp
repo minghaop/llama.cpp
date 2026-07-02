@@ -8,11 +8,70 @@
 #include "llama-mmap.h"
 #include "llama-model.h"
 
+#include <algorithm>
+#include <array>
 #include <cinttypes>
 #include <cmath>
 #include <cstring>
 #include <limits>
 #include <stdexcept>
+#include <utility>
+
+static bool llama_flow_stats_count_op(enum ggml_op op) {
+    switch (op) {
+        case GGML_OP_NONE:
+        case GGML_OP_RESHAPE:
+        case GGML_OP_TRANSPOSE:
+        case GGML_OP_VIEW:
+        case GGML_OP_PERMUTE:
+            return false;
+        default:
+            return op >= 0 && op < GGML_OP_COUNT;
+    }
+}
+
+static void llama_flow_stats_print(
+        const std::array<uint64_t, GGML_OP_COUNT> & op_counts,
+        uint64_t flow_graph_count,
+        uint64_t flow_node_count,
+        uint64_t flow_sync_count,
+        uint64_t flow_token_count,
+        int64_t flow_graph_compute_us,
+        int64_t flow_total_time_us) {
+    std::vector<std::pair<enum ggml_op, uint64_t>> entries;
+    entries.reserve(GGML_OP_COUNT);
+
+    for (int op = 0; op < GGML_OP_COUNT; ++op) {
+        if (op_counts[op] == 0) {
+            continue;
+        }
+        entries.emplace_back((enum ggml_op) op, op_counts[op]);
+    }
+
+    std::sort(entries.begin(), entries.end(), [](const auto & lhs, const auto & rhs) {
+        if (lhs.second != rhs.second) {
+            return lhs.second > rhs.second;
+        }
+        return lhs.first < rhs.first;
+    });
+
+    LLAMA_LOG_INFO("%s: flow graph submissions = %" PRIu64 "\n", __func__, flow_graph_count);
+    LLAMA_LOG_INFO("%s: flow synchronize calls = %" PRIu64 "\n", __func__, flow_sync_count);
+    LLAMA_LOG_INFO("%s: flow tokens           = %" PRIu64 "\n", __func__, flow_token_count);
+    LLAMA_LOG_INFO("%s: flow graph_compute    = %10.3f ms\n", __func__, flow_graph_compute_us / 1000.0);
+    LLAMA_LOG_INFO("%s: flow sync wait        = %10.3f ms\n", __func__, flow_total_time_us / 1000.0);
+    LLAMA_LOG_INFO("%s: flow tracked total    = %10.3f ms\n", __func__, (flow_graph_compute_us + flow_total_time_us) / 1000.0);
+    if (flow_sync_count > 0) {
+        LLAMA_LOG_INFO("%s: flow avg sync wait   = %10.3f ms\n", __func__, flow_total_time_us / 1000.0 / flow_sync_count);
+    }
+    LLAMA_LOG_INFO("%s: flow counted nodes    = %" PRIu64 "\n", __func__, flow_node_count);
+
+    for (const auto & [op, count] : entries) {
+        const double pct = flow_node_count > 0 ? (100.0 * count / flow_node_count) : 0.0;
+        LLAMA_LOG_INFO("%s: flow op %-16s count = %10" PRIu64 " (%6.2f%%)\n",
+                __func__, ggml_op_name(op), count, pct);
+    }
+}
 
 //
 // llama_context
@@ -142,6 +201,15 @@ llama_context::llama_context(
 
         if (graph_reuse_disable) {
             LLAMA_LOG_WARN("%s: graph reuse disabled\n", __func__);
+        }
+    }
+
+    {
+        const char * LLAMA_FLOW_OP_STATS = getenv("LLAMA_FLOW_OP_STATS");
+        flow_op_stats_enabled = LLAMA_FLOW_OP_STATS ? (atoi(LLAMA_FLOW_OP_STATS) != 0) : flow_op_stats_enabled;
+
+        if (flow_op_stats_enabled && model.arch == LLM_ARCH_COSYVOICEFLOW) {
+            LLAMA_LOG_INFO("%s: flow op stats enabled\n", __func__);
         }
     }
 
@@ -459,6 +527,17 @@ llama_context::llama_context(
 }
 
 llama_context::~llama_context() {
+    if (flow_op_stats_enabled && model.arch == LLM_ARCH_COSYVOICEFLOW) {
+        llama_flow_stats_print(
+                flow_op_counts,
+                flow_graph_count,
+                flow_node_count,
+                flow_sync_count,
+                flow_token_count,
+                flow_graph_compute_us,
+                flow_total_time_us);
+    }
+
     if (!model.hparams.no_alloc) {
         for (size_t i = 0; i < backend_ptrs.size(); ++i) {
             ggml_backend_t             backend = backend_ptrs[i];
@@ -485,22 +564,31 @@ void llama_context::synchronize() {
     // the stats will be added to the prompt evaluation stats
     // this should only happen when using batch size 1 to evaluate a batch
 
+    const int64_t t_sync_us = ggml_time_us();
+    const int64_t dt_us = t_compute_start_us != 0 ? (t_sync_us - t_compute_start_us) : 0;
+
     // add the evaluation to the stats
     if (n_queued_tokens == 1) {
         if (!cparams.no_perf) {
-            t_eval_us += ggml_time_us() - t_compute_start_us;
+            t_eval_us += dt_us;
         }
         n_eval++;
     } else if (n_queued_tokens > 1) {
         if (!cparams.no_perf) {
-            t_p_eval_us += ggml_time_us() - t_compute_start_us;
+            t_p_eval_us += dt_us;
         }
         n_p_eval += n_queued_tokens;
     }
 
+    if (flow_op_stats_enabled && model.arch == LLM_ARCH_COSYVOICEFLOW && n_queued_tokens > 0) {
+        flow_total_time_us += dt_us;
+        flow_sync_count++;
+        flow_token_count += n_queued_tokens;
+    }
+
     // get a more accurate load time, upon first eval
     if (n_queued_tokens > 0 && !has_evaluated_once) {
-        t_load_us = ggml_time_us() - t_start_us;
+        t_load_us = t_sync_us - t_start_us;
         has_evaluated_once = true;
     }
 
@@ -1625,7 +1713,27 @@ ggml_status llama_context::graph_compute(
         set_n_threads_fn.second(set_n_threads_fn.first, n_threads);
     }
 
+    if (flow_op_stats_enabled && model.arch == LLM_ARCH_COSYVOICEFLOW && gf != nullptr) {
+        flow_graph_count++;
+
+        const int n_nodes = ggml_graph_n_nodes(gf);
+        for (int i = 0; i < n_nodes; ++i) {
+            const auto * node = ggml_graph_node(gf, i);
+            if (node == nullptr || !llama_flow_stats_count_op(node->op)) {
+                continue;
+            }
+
+            flow_op_counts[node->op]++;
+            flow_node_count++;
+        }
+    }
+
+    const int64_t t_graph_compute_start_us = ggml_time_us();
     auto status = ggml_backend_sched_graph_compute_async(sched.get(), gf);
+    const int64_t t_graph_compute_end_us = ggml_time_us();
+    if (flow_op_stats_enabled && model.arch == LLM_ARCH_COSYVOICEFLOW) {
+        flow_graph_compute_us += t_graph_compute_end_us - t_graph_compute_start_us;
+    }
     if (status != GGML_STATUS_SUCCESS) {
         LLAMA_LOG_ERROR("%s: ggml_backend_sched_graph_compute_async failed with error %d\n", __func__, status);
     }
@@ -2193,6 +2301,14 @@ void llama_context::perf_reset() {
     t_eval_us   = n_eval = 0;
     t_p_eval_us = n_p_eval = 0;
     n_reused    = 0;
+
+    flow_op_counts.fill(0);
+    flow_graph_count = 0;
+    flow_node_count = 0;
+    flow_sync_count = 0;
+    flow_token_count = 0;
+    flow_graph_compute_us = 0;
+    flow_total_time_us = 0;
 }
 
 std::map<ggml_backend_buffer_type_t, llama_memory_breakdown_data> llama_context::memory_breakdown() const {

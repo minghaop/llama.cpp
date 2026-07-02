@@ -16,7 +16,7 @@ llm_build_flow::llm_build_flow(const llama_model & model, const llm_graph_params
     
     // ggml_tensor * spk_mul = ggml_mul_mat(ctx0, model.spk_embed_w, embedding); 
     // ggml_tensor * spk_add = ggml_add(ctx0, spk_mul, model.spk_embed_b);       //✅
-    ggml_tensor * spk_add = ggml_mul_mat(ctx0, model.spk_embed_w, embedding, model.spk_embed_b);
+    ggml_tensor * spk_add = ggml_mul_mat_add(ctx0, model.spk_embed_w, embedding, model.spk_embed_b);
     ggml_set_name(spk_add, "spk_affine_layer");
 
     token = build_flow_embedding(token, model.inp_embed_w, -1);   //✅

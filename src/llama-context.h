@@ -8,6 +8,7 @@
 #include "ggml-cpp.h"
 #include "ggml-opt.h"
 
+#include <array>
 #include <map>
 #include <vector>
 
@@ -302,6 +303,8 @@ private:
 
     // env: LLAMA_GRAPH_REUSE_DISABLE
     bool graph_reuse_disable = false;
+    // env: LLAMA_FLOW_OP_STATS
+    bool flow_op_stats_enabled = false;
 
     // perf
     mutable int64_t t_start_us  = 0;
@@ -316,4 +319,12 @@ private:
     mutable int32_t n_eval   = 0; // number of eval calls
 
     mutable int32_t n_reused = 0; // number of times the previous graph was reused
+
+    mutable std::array<uint64_t, GGML_OP_COUNT> flow_op_counts = {};
+    mutable uint64_t flow_graph_count = 0;
+    mutable uint64_t flow_node_count = 0;
+    mutable uint64_t flow_sync_count = 0;
+    mutable uint64_t flow_token_count = 0;
+    mutable int64_t flow_graph_compute_us = 0;
+    mutable int64_t flow_total_time_us = 0;
 };
