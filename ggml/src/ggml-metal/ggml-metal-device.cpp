@@ -203,6 +203,7 @@ ggml_metal_pipeline_with_params ggml_metal_library_get_pipeline_unary(ggml_metal
                 case GGML_UNARY_OP_SOFTPLUS:    op_str = "softplus";    break;
                 case GGML_UNARY_OP_MISH:        op_str = "mish";    break;
                 case GGML_UNARY_OP_EXPM1:       op_str = "expm1";       break;
+                case GGML_UNARY_OP_FLOOR:       op_str = "floor";       break;
                 default: GGML_ABORT("fatal error");
             } break;
         default: GGML_ABORT("fatal error");

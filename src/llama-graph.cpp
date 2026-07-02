@@ -11,6 +11,8 @@
 
 #include <cassert>
 #include <cmath>
+#include <cstdint>
+#include <cstdlib>
 #include <cstring>
 #include "llama-model.h"
 #include <random>
@@ -89,20 +91,120 @@ void llm_graph_input_prompt_feat::set_input(const llama_ubatch * ubatch) {
     }
 }
 
-void llm_graph_input_rand_noise::set_input(const llama_ubatch * ubatch) {
-    if(ubatch->rand_noise) {
-        const int64_t rand_noise_len = 80 * 50 * 300;
-
-        ggml_backend_tensor_set(input_rand_noise, ubatch->rand_noise, 0, rand_noise_len*ggml_element_size(input_rand_noise));
+static bool flow_load_rand_noise_bin(const char * path, std::vector<float> & result) {
+    if (path == nullptr || path[0] == '\0') {
+        return false;
     }
+
+    constexpr int64_t rand_noise_len = 80 * 50 * 300;
+    constexpr size_t expected_size = rand_noise_len * sizeof(float);
+
+    std::ifstream file(path, std::ios::binary | std::ios::ate);
+    if (!file) {
+        return false;
+    }
+
+    const std::streamsize size = file.tellg();
+    if (size != (std::streamsize) expected_size) {
+        LLAMA_LOG_INFO("flow rand_noise bin ignored: %s has %zu bytes, expected %zu\n",
+                path, (size_t) size, expected_size);
+        return false;
+    }
+
+    file.seekg(0, std::ios::beg);
+    result.resize(rand_noise_len);
+    if (!file.read(reinterpret_cast<char *>(result.data()), expected_size)) {
+        result.clear();
+        return false;
+    }
+
+    LLAMA_LOG_INFO("flow rand_noise loaded from bin: %s\n", path);
+    return true;
+}
+
+static const std::vector<float> & flow_cached_rand_noise() {
+    static const std::vector<float> data = []() {
+        constexpr int64_t rand_noise_len = 80 * 50 * 300;
+        constexpr float two_pi = 6.28318530717958647692f;
+
+        std::vector<float> result(rand_noise_len);
+        if (flow_load_rand_noise_bin(std::getenv("LLAMA_FLOW_RAND_NOISE_BIN"), result) ||
+                flow_load_rand_noise_bin("./rand_noise.bin", result)) {
+            return result;
+        }
+
+        LLAMA_LOG_INFO("flow rand_noise bin not found; using built-in deterministic noise\n");
+        uint32_t state = 0x12345678u;
+
+        auto uniform01 = [&state]() {
+            state ^= state << 13;
+            state ^= state >> 17;
+            state ^= state << 5;
+            return ((state >> 8) + 0.5f) * (1.0f / 16777216.0f);
+        };
+
+        for (int64_t i = 0; i < rand_noise_len; i += 2) {
+            const float u1 = std::max(uniform01(), 1.0e-7f);
+            const float u2 = uniform01();
+            const float r = std::sqrt(-2.0f * std::log(u1));
+            const float theta = two_pi * u2;
+
+            result[i] = r * std::cos(theta);
+            if (i + 1 < rand_noise_len) {
+                result[i + 1] = r * std::sin(theta);
+            }
+        }
+
+        return result;
+    }();
+
+    return data;
+}
+
+static const std::vector<float> & flow_cached_extend_pe() {
+    static const std::vector<float> data = []() {
+        constexpr int64_t n_ctx  = 5000;
+        constexpr int64_t n_embd = 512;
+        constexpr int64_t n_pos  = 2 * n_ctx - 1;
+
+        std::vector<float> result(n_pos * n_embd);
+        std::vector<float> div_terms(n_embd / 2);
+
+        const float scale = -std::log(10000.0f) / float(n_embd);
+        for (int64_t i = 0; i < n_embd / 2; ++i) {
+            div_terms[i] = std::exp(float(2 * i) * scale);
+        }
+
+        for (int64_t row = 0; row < n_pos; ++row) {
+            const bool negative = row >= n_ctx;
+            const int64_t pos = negative ? (row - n_ctx + 1) : (n_ctx - 1 - row);
+            const float sign = negative ? -1.0f : 1.0f;
+
+            for (int64_t i = 0; i < n_embd / 2; ++i) {
+                const float v = float(pos) * div_terms[i];
+                result[row * n_embd + 2 * i + 0] = sign * std::sin(v);
+                result[row * n_embd + 2 * i + 1] = sign * std::cos(v);
+            }
+        }
+
+        return result;
+    }();
+
+    return data;
+}
+
+void llm_graph_input_rand_noise::set_input(const llama_ubatch * ubatch) {
+    const int64_t rand_noise_len = 80 * 50 * 300;
+    const float * rand_noise = ubatch->rand_noise ? ubatch->rand_noise : flow_cached_rand_noise().data();
+
+    ggml_backend_tensor_set(input_rand_noise, rand_noise, 0, rand_noise_len*ggml_element_size(input_rand_noise));
 }
 
 void llm_graph_input_extend_pe::set_input(const llama_ubatch * ubatch) {
-    if(ubatch->extend_pe) {
-        const int64_t extend_pe_len = 9999 * 512;
+    const int64_t extend_pe_len = 9999 * 512;
+    const float * extend_pe = ubatch->extend_pe ? ubatch->extend_pe : flow_cached_extend_pe().data();
 
-        ggml_backend_tensor_set(input_extend_pe, ubatch->extend_pe, 0, extend_pe_len*ggml_element_size(input_extend_pe));
-    }
+    ggml_backend_tensor_set(input_extend_pe, extend_pe, 0, extend_pe_len*ggml_element_size(input_extend_pe));
 }
 
 void llm_graph_input_stream::set_input(const llama_ubatch * ubatch) {
@@ -1662,12 +1764,12 @@ ggml_tensor * llm_graph_context::build_causal_cond_decoder(
          std::vector<ggml_tensor *> res_w,
          const ConvBias & conv_b,
          ggml_tensor * emb_row,
-        //  const std::vector<ggml_tensor *> & down_w0,
-        //  const std::vector<ggml_tensor *> & down_w2,
-        //  const std::vector<ggml_tensor *> & mid_w0,
-        //  const std::vector<ggml_tensor *> & mid_w2,
-        //  const std::vector<ggml_tensor *> & up_w0,
-        //  const std::vector<ggml_tensor *> & up_w2,
+         const std::vector<ggml_tensor *> & down_w0,
+         const std::vector<ggml_tensor *> & down_w2,
+         const std::vector<ggml_tensor *> & mid_w0,
+         const std::vector<ggml_tensor *> & mid_w2,
+         const std::vector<ggml_tensor *> & up_w0,
+         const std::vector<ggml_tensor *> & up_w2,
          const llama_model & model,
          int32_t step,
          bool streaming) const{
@@ -1727,11 +1829,11 @@ ggml_tensor * llm_graph_context::build_causal_cond_decoder(
         h = build_layer_norm(tr_x, model.layers[226 + i].down_block1_norm3_w, model.layers[226 + i].down_block1_norm3_b, 1e-5f, "down_block", 24 + i);
         // ff_out = ggml_mul_mat(ctx0, down_w0[i], h);
         // ff_out = ggml_add(ctx0, ff_out, model.layers[226 + i].down_block1_ffn_b0);
-        ff_out = ggml_mul_mat_add(ctx0, model.layers[226 + i].down_block1_ffn_w0, h, model.layers[226 + i].down_block1_ffn_b0);
+        ff_out = ggml_mul_mat_add(ctx0, down_w0[i], h, model.layers[226 + i].down_block1_ffn_b0);
         ff_out = ggml_gelu_erf(ctx0, ff_out);
         // ff_out = ggml_mul_mat(ctx0, down_w2[i], ff_out);
         // ff_out = ggml_add(ctx0, ff_out, model.layers[226 + i].down_block1_ffn_b2);
-        ff_out = ggml_mul_mat_add(ctx0, model.layers[226 + i].down_block1_ffn_w2, ff_out, model.layers[226 + i].down_block1_ffn_b2);
+        ff_out = ggml_mul_mat_add(ctx0, down_w2[i], ff_out, model.layers[226 + i].down_block1_ffn_b2);
         x = ggml_add(ctx0, ff_out, tr_x);
         // x = tr_x;
     }
@@ -1765,11 +1867,11 @@ ggml_tensor * llm_graph_context::build_causal_cond_decoder(
             h = build_layer_norm(tr_x, model.mid_block_sub_layers[i * 4 + j].mid_block1_norm3_w, model.mid_block_sub_layers[i * 4 + j].mid_block1_norm3_b, 1e-5f, "mid_block", 76 + i +j);
             // ff_out = ggml_mul_mat(ctx0,  mid_w0[i * 4 + j], h);
             // ff_out = ggml_add(ctx0, ff_out, model.mid_block_sub_layers[i *4 + j].mid_block1_ffn_b0);
-            ff_out = ggml_mul_mat_add(ctx0, model.mid_block_sub_layers[i *4 + j].mid_block1_ffn_w0, h, model.mid_block_sub_layers[i *4 + j].mid_block1_ffn_b0);
+            ff_out = ggml_mul_mat_add(ctx0, mid_w0[i * 4 + j], h, model.mid_block_sub_layers[i *4 + j].mid_block1_ffn_b0);
             ff_out = ggml_gelu_erf(ctx0, ff_out);
             // ff_out = ggml_mul_mat(ctx0, mid_w2[i * 4 + j], ff_out);
             // ff_out = ggml_add(ctx0, ff_out, model.mid_block_sub_layers[i *4 + j].mid_block1_ffn_b2);
-            ff_out = ggml_mul_mat_add(ctx0, model.mid_block_sub_layers[i *4 + j].mid_block1_ffn_w2, ff_out, model.mid_block_sub_layers[i *4 + j].mid_block1_ffn_b2);
+            ff_out = ggml_mul_mat_add(ctx0, mid_w2[i * 4 + j], ff_out, model.mid_block_sub_layers[i *4 + j].mid_block1_ffn_b2);
             x = ggml_add(ctx0, ff_out, tr_x);
             // x = tr_x;
             ggml_set_name(x, ("causal_trans_mid_block_" + std::to_string(step) + "_layer_" + std::to_string(i) + "_sub_layer_" + std::to_string(j)).c_str());
@@ -1790,11 +1892,11 @@ ggml_tensor * llm_graph_context::build_causal_cond_decoder(
         h = build_layer_norm(tr_x, model.layers[1059 + i].up_block1_norm3_w, model.layers[1059 + i].up_block1_norm3_b, 1e-5f, "up_block", 128 + i);
         // ff_out = ggml_mul_mat(ctx0, up_w0[i], h);
         // ff_out = ggml_add(ctx0, ff_out, model.layers[1059 + i].up_block1_ffn_b0);
-        ff_out = ggml_mul_mat_add(ctx0, model.layers[1059 + i].up_block1_ffn_w0, h, model.layers[1059 + i].up_block1_ffn_b0);
+        ff_out = ggml_mul_mat_add(ctx0, up_w0[i], h, model.layers[1059 + i].up_block1_ffn_b0);
         ff_out = ggml_gelu_erf(ctx0, ff_out);
         // ff_out = ggml_mul_mat(ctx0, up_w2[i], ff_out);
         // ff_out = ggml_add(ctx0, ff_out, model.layers[1059 + i].up_block1_ffn_b2);
-        ff_out = ggml_mul_mat_add(ctx0, model.layers[1059 + i].up_block1_ffn_w2, ff_out, model.layers[1059 + i].up_block1_ffn_b2);
+        ff_out = ggml_mul_mat_add(ctx0, up_w2[i], ff_out, model.layers[1059 + i].up_block1_ffn_b2);
         x = ggml_add(ctx0, ff_out, tr_x);
         // x = tr_x;
     }
@@ -1943,31 +2045,31 @@ ggml_tensor * llm_graph_context::build_solve_euler(
     // =======================================================
 
     // 1. 转换 Down Blocks 的 FFN 权重
-    // std::vector<ggml_tensor *> down_w0_f16(4);
-    // std::vector<ggml_tensor *> down_w2_f16(4);
-    // for (int i = 0; i < 4; ++i) {
-    //     down_w0_f16[i] = ggml_cast(ctx0, model.layers[226 + i].down_block1_ffn_w0, GGML_TYPE_F16);
-    //     down_w2_f16[i] = ggml_cast(ctx0, model.layers[226 + i].down_block1_ffn_w2, GGML_TYPE_F16);
-    // }
+    std::vector<ggml_tensor *> down_w0_f16(4);
+    std::vector<ggml_tensor *> down_w2_f16(4);
+    for (int i = 0; i < 4; ++i) {
+        down_w0_f16[i] = ggml_cast(ctx0, model.layers[226 + i].down_block1_ffn_w0, GGML_TYPE_F16);
+        down_w2_f16[i] = ggml_cast(ctx0, model.layers[226 + i].down_block1_ffn_w2, GGML_TYPE_F16);
+    }
 
-    // // 2. 转换 Mid Blocks 的 FFN 权重 (12 * 4 = 48 个)
-    // std::vector<ggml_tensor *> mid_w0_f16(48);
-    // std::vector<ggml_tensor *> mid_w2_f16(48);
-    // for (int i = 0; i < 12; ++i) {
-    //     for (int j = 0; j < 4; ++j) {
-    //         int idx = i * 4 + j;
-    //         mid_w0_f16[idx] = ggml_cast(ctx0, model.mid_block_sub_layers[idx].mid_block1_ffn_w0, GGML_TYPE_F16);
-    //         mid_w2_f16[idx] = ggml_cast(ctx0, model.mid_block_sub_layers[idx].mid_block1_ffn_w2, GGML_TYPE_F16);
-    //     }
-    // }
+    // 2. 转换 Mid Blocks 的 FFN 权重 (12 * 4 = 48 个)
+    std::vector<ggml_tensor *> mid_w0_f16(48);
+    std::vector<ggml_tensor *> mid_w2_f16(48);
+    for (int i = 0; i < 12; ++i) {
+        for (int j = 0; j < 4; ++j) {
+            int idx = i * 4 + j;
+            mid_w0_f16[idx] = ggml_cast(ctx0, model.mid_block_sub_layers[idx].mid_block1_ffn_w0, GGML_TYPE_F16);
+            mid_w2_f16[idx] = ggml_cast(ctx0, model.mid_block_sub_layers[idx].mid_block1_ffn_w2, GGML_TYPE_F16);
+        }
+    }
 
-    // // 3. 转换 Up Blocks 的 FFN 权重
-    // std::vector<ggml_tensor *> up_w0_f16(4);
-    // std::vector<ggml_tensor *> up_w2_f16(4);
-    // for (int i = 0; i < 4; ++i) {
-    //     up_w0_f16[i] = ggml_cast(ctx0, model.layers[1059 + i].up_block1_ffn_w0, GGML_TYPE_F16);
-    //     up_w2_f16[i] = ggml_cast(ctx0, model.layers[1059 + i].up_block1_ffn_w2, GGML_TYPE_F16);
-    // }
+    // 3. 转换 Up Blocks 的 FFN 权重
+    std::vector<ggml_tensor *> up_w0_f16(4);
+    std::vector<ggml_tensor *> up_w2_f16(4);
+    for (int i = 0; i < 4; ++i) {
+        up_w0_f16[i] = ggml_cast(ctx0, model.layers[1059 + i].up_block1_ffn_w0, GGML_TYPE_F16);
+        up_w2_f16[i] = ggml_cast(ctx0, model.layers[1059 + i].up_block1_ffn_w2, GGML_TYPE_F16);
+    }
 
     // =======================================================
 
@@ -1976,7 +2078,7 @@ ggml_tensor * llm_graph_context::build_solve_euler(
         ggml_tensor * t_in = ggml_concat(ctx0, t_current, t_current, 0);
         ggml_tensor * z_in = ggml_concat(ctx0, z_current, z_current, 2);
         ggml_tensor * dphi_dt = build_causal_cond_decoder(z_in, pad_list, mask_in, mu_in, t_in, spks_in, cond_in, spks_t, \
-                        attn_mask, t_tmb_ones, resnet_mish_ones, res_w, conv_b, emb_row, model, step, streaming);
+                        attn_mask, t_tmb_ones, resnet_mish_ones, res_w, conv_b, emb_row, down_w0_f16, down_w2_f16, mid_w0_f16, mid_w2_f16, up_w0_f16, up_w2_f16, model, step, streaming);
         ggml_tensor * dphi_dt_split   = ggml_view_3d(ctx0, dphi_dt, T, z->ne[1], B, dphi_dt->nb[1], dphi_dt->nb[2], 0);
         ggml_tensor * cfg_dphi_dt  = ggml_view_3d(ctx0, dphi_dt, T, z->ne[1], B, dphi_dt->nb[1], dphi_dt->nb[2], B * dphi_dt->nb[2]);
         ggml_tensor * dphi  = ggml_sub_inplace(ctx0, ggml_scale(ctx0, dphi_dt_split, 1.7f * dt), ggml_scale(ctx0, cfg_dphi_dt, 0.7f * dt));

@@ -1565,6 +1565,20 @@ kernel void kernel_step_f32_4(
     dst[tpig] = step(0.0f, src0[tpig]);
 }
 
+kernel void kernel_floor_f32(
+        device const float * src0,
+        device       float * dst,
+        uint tpig[[thread_position_in_grid]]) {
+    dst[tpig] = floor(src0[tpig]);
+}
+
+kernel void kernel_floor_f32_4(
+        device const float4 * src0,
+        device       float4 * dst,
+        uint tpig[[thread_position_in_grid]]) {
+    dst[tpig] = floor(src0[tpig]);
+}
+
 kernel void kernel_hardswish_f32(
         device const float * src0,
         device       float * dst,

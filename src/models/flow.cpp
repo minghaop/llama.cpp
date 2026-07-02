@@ -1,6 +1,8 @@
 
 #include "models.h"
 
+#include "llama-impl.h"
+
 llm_build_flow::llm_build_flow(const llama_model & model, const llm_graph_params & params) : llm_graph_context(params) {
     const int32_t stream_val = build_stream();
 
@@ -25,6 +27,7 @@ llm_build_flow::llm_build_flow(const llama_model & model, const llm_graph_params
     bool finalize = !stream;
     ggml_tensor * x = nullptr;
     int32_t token_len = token->ne[1];
+    LLAMA_LOG_INFO("=========================================== stream is: %d\n", stream ? 1 : 0);
     if (finalize) {
         x = build_encoder(token, token_len, nullptr, extend_pe, stream, model);
     }else {
@@ -32,7 +35,7 @@ llm_build_flow::llm_build_flow(const llama_model & model, const llm_graph_params
             ctx0, token, token->ne[0], token->ne[1] -3, token->ne[2], token->nb[1], token->nb[2], 0);
         ggml_tensor * context = ggml_view_3d(
             ctx0, token, token->ne[0], 3, token->ne[2], token->nb[1], token->nb[2], 0);
-        x = build_encoder(token, token_len, context, extend_pe, stream, model);
+        x = build_encoder(token_stream, token_len, context, extend_pe, stream, model);
     }
     
     x = build_layer_norm(x, model.after_norm_w, model.after_norm_b, 1e-5f, "before_decoder", 20);

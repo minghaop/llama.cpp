@@ -745,6 +745,10 @@ float * llama_context::get_logits_ith(int32_t i) {
 }
 
 float * llama_context::get_embeddings() {
+    if (model.arch == LLM_ARCH_COSYVOICEFLOW) {
+        return embd;
+    }
+
     output_reorder();
 
     return embd;
@@ -1109,8 +1113,34 @@ int llama_context::encode(const llama_batch & batch_inp, int dot_debug) {
                         ggml_backend_tensor_get_async(backend_embd, t_embd, embd, 0, out_dim*sizeof(float));
                     } else {
                         int32_t out_dim = (int32_t)((batch_inp.prompt_token_len + batch_inp.token_len) * 2) * 80;
-                        // LLAMA_LOG_INFO("&&&&&&&&&&&&&&&&&&&&&&&& out_dim is: %d\n", out_dim);
-                        ggml_backend_tensor_get_async(backend_embd, t_embd, embd, 0, out_dim*sizeof(float));
+                        const size_t read_size = (size_t) out_dim*sizeof(float);
+                        const size_t tensor_size = ggml_nbytes(t_embd);
+                        const char * backend_name = backend_embd ? ggml_backend_name(backend_embd) : "null";
+                        const char * buffer_name = t_embd->buffer ? ggml_backend_buffer_name(t_embd->buffer) : "null";
+
+                        LLAMA_LOG_ERROR(
+                            "%s: flow output read: out_dim=%d read_size=%zu tensor_size=%zu ne=[%lld,%lld,%lld,%lld] nb=[%zu,%zu,%zu,%zu] type=%s op=%s backend=%s buffer=%s token_len=%u prompt_token_len=%u prompt_feat_len=%u n_tokens=%d n_embd=%d embd_size=%zu\n",
+                            __func__, out_dim, read_size, tensor_size,
+                            (long long) t_embd->ne[0], (long long) t_embd->ne[1], (long long) t_embd->ne[2], (long long) t_embd->ne[3],
+                            (size_t) t_embd->nb[0], (size_t) t_embd->nb[1], (size_t) t_embd->nb[2], (size_t) t_embd->nb[3],
+                            ggml_type_name(t_embd->type), ggml_op_name(t_embd->op),
+                            backend_name, buffer_name,
+                            batch_inp.token_len, batch_inp.prompt_token_len, batch_inp.prompt_feat_len,
+                            n_tokens, n_embd, embd_size);
+
+                        if (read_size > tensor_size) {
+                            LLAMA_LOG_ERROR(
+                                "%s: flow output read out of bounds: requested %zu bytes, tensor has %zu bytes\n",
+                                __func__, read_size, tensor_size);
+                            return -3;
+                        }
+
+                        const int64_t t_read_start_us = ggml_time_us();
+                        ggml_backend_tensor_get_async(backend_embd, t_embd, embd, 0, read_size);
+                        const int64_t t_read_end_us = ggml_time_us();
+                        LLAMA_LOG_ERROR(
+                            "%s: flow output read copy/sync time: %lld us\n",
+                            __func__, (long long) (t_read_end_us - t_read_start_us));
                     }
                 } break;
             case LLAMA_POOLING_TYPE_MEAN:
