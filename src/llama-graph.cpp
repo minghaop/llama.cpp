@@ -2012,14 +2012,17 @@ ggml_tensor * llm_graph_context::build_solve_euler(
     ggml_tensor * z_current = z;
     float t_val = t_span[0];
     float dt = t_span[1] - t_span[0];
-
-    ggml_tensor * attn_mask = ggml_new_tensor_4d(ctx0, GGML_TYPE_F32, mask->ne[0], mask->ne[0], 1, 1);
-    attn_mask = ggml_scale(ctx0, attn_mask, -0.0f);
-    ggml_tensor * mask_pad = ggml_new_tensor_4d(ctx0, GGML_TYPE_F32, GGML_PAD(mask->ne[0], 64) - mask->ne[0], mask->ne[0], 1, 1);
-    mask_pad = ggml_scale(ctx0, mask_pad, 0.0f);
-    mask_pad = ggml_scale(ctx0, ggml_exp(ctx0, mask_pad), -1e4f);
-    attn_mask = ggml_concat(ctx0, attn_mask, mask_pad, 0);
-    attn_mask = ggml_cast(ctx0, attn_mask, GGML_TYPE_F16);
+    ggml_tensor * attn_mask = nullptr;
+    if(streaming) {
+        attn_mask = ggml_new_tensor_4d(ctx0, GGML_TYPE_F32, mask->ne[0], mask->ne[0], 1, 1);
+        attn_mask = ggml_scale(ctx0, attn_mask, -0.0f);
+        ggml_tensor * mask_pad = ggml_new_tensor_4d(ctx0, GGML_TYPE_F32, GGML_PAD(mask->ne[0], 64) - mask->ne[0], mask->ne[0], 1, 1);
+        mask_pad = ggml_scale(ctx0, mask_pad, 0.0f);
+        mask_pad = ggml_scale(ctx0, ggml_exp(ctx0, mask_pad), -1e4f);
+        attn_mask = ggml_concat(ctx0, attn_mask, mask_pad, 0);
+        attn_mask = ggml_cast(ctx0, attn_mask, GGML_TYPE_F16);
+    }
+    
     ggml_tensor * t_tmb_zeros = ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, 1024, 2);
     t_tmb_zeros = ggml_scale(ctx0, t_tmb_zeros, 0.0f);
     ggml_tensor * t_tmb_ones = ggml_exp(ctx0, t_tmb_zeros);

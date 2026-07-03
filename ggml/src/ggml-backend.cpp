@@ -770,7 +770,7 @@ static void ggml_backend_sched_print_op_stats(
 
     printf("%s\n", title);
     if (with_time) {
-        printf("op_profile_note: total_ms is split elapsed time distributed by node count; fused Metal kernels are approximate.\n");
+        printf("op_profile_note: total_ms is measured by executing one graph node at a time; profiling synchronizes after each node.\n");
         printf("%-24s %12s %14s\n", "op", "count", "total_ms");
     } else {
         printf("%-24s %12s\n", "op", "count");
@@ -791,13 +791,29 @@ static void ggml_backend_sched_print_op_stats(
     }
 }
 
-static void ggml_backend_sched_collect_op_counts(const struct ggml_cgraph * graph, uint64_t op_counts[GGML_OP_COUNT]) {
-    for (int i = 0; i < graph->n_nodes; ++i) {
-        const struct ggml_tensor * node = graph->nodes[i];
-        if (node->op >= 0 && node->op < GGML_OP_COUNT) {
-            op_counts[node->op]++;
-        }
+static enum ggml_status ggml_backend_sched_compute_node_profile(
+        ggml_backend_t backend,
+        struct ggml_cgraph * graph,
+        int node_index,
+        uint64_t op_counts[GGML_OP_COUNT],
+        uint64_t op_time_us[GGML_OP_COUNT]) {
+    struct ggml_tensor * node = graph->nodes[node_index];
+    struct ggml_cgraph node_graph = ggml_graph_view(graph, node_index, node_index + 1);
+
+    const int64_t t_start_us = ggml_time_us();
+    enum ggml_status ec = ggml_backend_graph_compute_async(backend, &node_graph);
+    if (ec != GGML_STATUS_SUCCESS) {
+        return ec;
     }
+
+    ggml_backend_synchronize(backend);
+
+    if (node->op >= 0 && node->op < GGML_OP_COUNT) {
+        op_counts[node->op]++;
+        op_time_us[node->op] += ggml_time_us() - t_start_us;
+    }
+
+    return GGML_STATUS_SUCCESS;
 }
 
 #define hash_id(tensor) ggml_hash_find_or_insert(&sched->hash_set, tensor)
@@ -1579,7 +1595,7 @@ static enum ggml_status ggml_backend_sched_compute_splits(ggml_backend_sched_t s
     GGML_ASSERT(sched);
     struct ggml_backend_sched_split * splits = sched->splits;
 
-    const bool op_profile = true;
+    const bool op_profile = false;
     uint64_t op_profile_counts[GGML_OP_COUNT] = {};
     uint64_t op_profile_time_us[GGML_OP_COUNT] = {};
 
@@ -1716,76 +1732,68 @@ static enum ggml_status ggml_backend_sched_compute_splits(ggml_backend_sched_t s
         }
 
         if (!sched->callback_eval) {
-            uint64_t split_op_counts[GGML_OP_COUNT] = {};
             if (op_profile) {
-                ggml_backend_sched_collect_op_counts(&split->graph, split_op_counts);
-            }
-
-            const int64_t t_start_us = op_profile ? ggml_time_us() : 0;
-            enum ggml_status ec = ggml_backend_graph_compute_async(split_backend, &split->graph);
-            if (ec != GGML_STATUS_SUCCESS) {
-                return ec;
-            }
-            if (op_profile) {
-                ggml_backend_synchronize(split_backend);
-                const uint64_t elapsed_us = ggml_time_us() - t_start_us;
-                const uint64_t n_nodes = split->graph.n_nodes > 0 ? (uint64_t) split->graph.n_nodes : 1;
-                for (int op = 0; op < GGML_OP_COUNT; ++op) {
-                    if (split_op_counts[op] == 0) {
-                        continue;
+                for (int j = 0; j < split->graph.n_nodes; ++j) {
+                    enum ggml_status ec = ggml_backend_sched_compute_node_profile(
+                            split_backend, &split->graph, j, op_profile_counts, op_profile_time_us);
+                    if (ec != GGML_STATUS_SUCCESS) {
+                        return ec;
                     }
-                    op_profile_counts[op] += split_op_counts[op];
-                    op_profile_time_us[op] += elapsed_us * split_op_counts[op] / n_nodes;
+                }
+            } else {
+                enum ggml_status ec = ggml_backend_graph_compute_async(split_backend, &split->graph);
+                if (ec != GGML_STATUS_SUCCESS) {
+                    return ec;
                 }
             }
         } else {
             // similar to ggml_backend_compare_graph_backend
-            for (int j0 = 0; j0 < split->graph.n_nodes; j0++) {
-                struct ggml_tensor * t = split->graph.nodes[j0];
+            if (op_profile) {
+                for (int j = 0; j < split->graph.n_nodes; ++j) {
+                    struct ggml_tensor * t = split->graph.nodes[j];
+                    bool need = sched->callback_eval(t, true, sched->callback_eval_user_data);
 
-                // check if the user needs data from this node
-                bool need = sched->callback_eval(t, true, sched->callback_eval_user_data);
+                    enum ggml_status ec = ggml_backend_sched_compute_node_profile(
+                            split_backend, &split->graph, j, op_profile_counts, op_profile_time_us);
+                    if (ec != GGML_STATUS_SUCCESS) {
+                        return ec;
+                    }
 
-                int j1 = j0;
-
-                // determine the range [j0, j1] of nodes that can be computed together
-                while (!need && j1 < split->graph.n_nodes - 1) {
-                    t = split->graph.nodes[++j1];
-                    need = sched->callback_eval(t, true, sched->callback_eval_user_data);
-                }
-
-                struct ggml_cgraph gv = ggml_graph_view(&split->graph, j0, j1 + 1);
-
-                uint64_t view_op_counts[GGML_OP_COUNT] = {};
-                if (op_profile) {
-                    ggml_backend_sched_collect_op_counts(&gv, view_op_counts);
-                }
-
-                const int64_t t_start_us = op_profile ? ggml_time_us() : 0;
-                enum ggml_status ec = ggml_backend_graph_compute_async(split_backend, &gv);
-                if (ec != GGML_STATUS_SUCCESS) {
-                    return ec;
-                }
-
-                // TODO: pass backend to the callback, then the user can decide if they want to synchronize
-                ggml_backend_synchronize(split_backend);
-                if (op_profile) {
-                    const uint64_t elapsed_us = ggml_time_us() - t_start_us;
-                    const uint64_t n_nodes = gv.n_nodes > 0 ? (uint64_t) gv.n_nodes : 1;
-                    for (int op = 0; op < GGML_OP_COUNT; ++op) {
-                        if (view_op_counts[op] == 0) {
-                            continue;
-                        }
-                        op_profile_counts[op] += view_op_counts[op];
-                        op_profile_time_us[op] += elapsed_us * view_op_counts[op] / n_nodes;
+                    if (need && !sched->callback_eval(t, false, sched->callback_eval_user_data)) {
+                        break;
                     }
                 }
+            } else {
+                for (int j0 = 0; j0 < split->graph.n_nodes; j0++) {
+                    struct ggml_tensor * t = split->graph.nodes[j0];
 
-                if (need && !sched->callback_eval(t, false, sched->callback_eval_user_data)) {
-                    break;
+                    // check if the user needs data from this node
+                    bool need = sched->callback_eval(t, true, sched->callback_eval_user_data);
+
+                    int j1 = j0;
+
+                    // determine the range [j0, j1] of nodes that can be computed together
+                    while (!need && j1 < split->graph.n_nodes - 1) {
+                        t = split->graph.nodes[++j1];
+                        need = sched->callback_eval(t, true, sched->callback_eval_user_data);
+                    }
+
+                    struct ggml_cgraph gv = ggml_graph_view(&split->graph, j0, j1 + 1);
+
+                    enum ggml_status ec = ggml_backend_graph_compute_async(split_backend, &gv);
+                    if (ec != GGML_STATUS_SUCCESS) {
+                        return ec;
+                    }
+
+                    // TODO: pass backend to the callback, then the user can decide if they want to synchronize
+                    ggml_backend_synchronize(split_backend);
+
+                    if (need && !sched->callback_eval(t, false, sched->callback_eval_user_data)) {
+                        break;
+                    }
+
+                    j0 = j1;
                 }
-
-                j0 = j1;
             }
         }
 
@@ -1961,10 +1969,6 @@ bool ggml_backend_sched_alloc_graph(ggml_backend_sched_t sched, struct ggml_cgra
     printf("2. Total Leafs (Weights): %d\n", graph->n_leafs);
     printf("3. Scheduler Splits    : %d\n", sched->n_splits);
     printf("=============================================\n");
-    uint64_t op_counts[GGML_OP_COUNT] = {};
-    ggml_backend_sched_collect_op_counts(graph, op_counts);
-    ggml_backend_sched_print_op_stats("=== Scheduler Op Counts ===", op_counts, NULL, false);
-    printf("=== Scheduler Op Profile Enabled: split compute will synchronize after each split ===\n");
 
     sched->is_alloc = true;
 
