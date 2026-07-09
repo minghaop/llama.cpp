@@ -233,14 +233,28 @@ void llm_graph_input_rand_noise::set_input(const llama_ubatch * ubatch) {
     const int64_t rand_noise_len = 80 * 50 * 300;
     const float * rand_noise = ubatch->rand_noise ? ubatch->rand_noise : flow_cached_rand_noise().data();
 
+    const int64_t t_start_us = ggml_time_us();
     ggml_backend_tensor_set(input_rand_noise, rand_noise, 0, rand_noise_len*ggml_element_size(input_rand_noise));
+    const int64_t t_end_us = ggml_time_us();
+
+    LLAMA_LOG_INFO("flow input set rand_noise: source=%s size=%.3f MB time=%.3f ms\n",
+            ubatch->rand_noise ? "ubatch" : "cached",
+            (double) (rand_noise_len*ggml_element_size(input_rand_noise)) / (1024.0*1024.0),
+            (double) (t_end_us - t_start_us) / 1000.0);
 }
 
 void llm_graph_input_extend_pe::set_input(const llama_ubatch * ubatch) {
     const int64_t extend_pe_len = 9999 * 512;
     const float * extend_pe = ubatch->extend_pe ? ubatch->extend_pe : flow_cached_extend_pe().data();
 
+    const int64_t t_start_us = ggml_time_us();
     ggml_backend_tensor_set(input_extend_pe, extend_pe, 0, extend_pe_len*ggml_element_size(input_extend_pe));
+    const int64_t t_end_us = ggml_time_us();
+
+    LLAMA_LOG_INFO("flow input set extend_pe: source=%s size=%.3f MB time=%.3f ms\n",
+            ubatch->extend_pe ? "ubatch" : "cached",
+            (double) (extend_pe_len*ggml_element_size(input_extend_pe)) / (1024.0*1024.0),
+            (double) (t_end_us - t_start_us) / 1000.0);
 }
 
 void llm_graph_input_stream::set_input(const llama_ubatch * ubatch) {
@@ -2477,8 +2491,9 @@ ggml_tensor * llm_graph_context::build_m_source(
     ggml_tensor * sine_waves = ggml_mul(ctx0, sines, uv);
     sine_waves = ggml_add(ctx0, sine_waves, noise);
     ggml_set_name(sine_waves, "m_source_sine_waves");
-    ggml_tensor * sine_wavs = ggml_mul_mat(ctx0, mw, sine_waves);
-    sine_wavs = ggml_add(ctx0, sine_wavs, mb);
+    // ggml_tensor * sine_wavs = ggml_mul_mat(ctx0, mw, sine_waves);
+    // sine_wavs = ggml_add(ctx0, sine_wavs, mb);
+    ggml_tensor * sine_wavs = ggml_mul_mat_add(ctx0, mw, sine_waves, mb);
 
     ggml_tensor * sine_merge = ggml_tanh(ctx0, sine_wavs);
     ggml_set_name(sine_merge, "sine_merge");

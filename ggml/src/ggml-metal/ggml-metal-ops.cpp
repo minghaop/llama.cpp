@@ -12,6 +12,10 @@
 #include <algorithm>
 #include <limits>
 #include <cmath>
+#include <cstdio>
+#include <mutex>
+#include <set>
+#include <string>
 
 static ggml_metal_buffer_id ggml_metal_get_buffer_id(const ggml_tensor * t) {
     if (!t) {
@@ -23,6 +27,85 @@ static ggml_metal_buffer_id ggml_metal_get_buffer_id(const ggml_tensor * t) {
     ggml_metal_buffer_t ctx = (ggml_metal_buffer_t) buffer->context;
 
     return ggml_metal_buffer_get_id(ctx, t);
+}
+
+static void ggml_metal_log_flash_attn_shape_once(
+        const ggml_tensor * op,
+        bool has_mask,
+        bool has_sinks,
+        bool has_bias,
+        bool has_scap,
+        bool has_kvpad,
+        bool use_vec,
+        int32_t nqptg,
+        int32_t ncpsg) {
+    static std::mutex mutex;
+    static std::set<std::string> seen;
+
+    const ggml_tensor * q = op->src[0];
+    const ggml_tensor * k = op->src[1];
+    const ggml_tensor * v = op->src[2];
+    const ggml_tensor * m = op->src[3];
+
+    const int32_t ns10 = (int32_t) (k->nb[1]/k->nb[0]);
+    const int32_t ns20 = (int32_t) (v->nb[1]/v->nb[0]);
+
+    char key[512];
+    snprintf(key, sizeof(key),
+            "q=%lld,kv=%lld,dk=%lld,dv=%lld,qh=%lld,qb=%lld,kh=%lld,kb=%lld,type=%d,mask=%d,sinks=%d,bias=%d,scap=%d,kvpad=%d,vec=%d,nqptg=%d,ncpsg=%d,ns10=%d,ns20=%d",
+            (long long) q->ne[1],
+            (long long) k->ne[1],
+            (long long) k->ne[0],
+            (long long) v->ne[0],
+            (long long) q->ne[2],
+            (long long) q->ne[3],
+            (long long) k->ne[2],
+            (long long) k->ne[3],
+            (int) k->type,
+            has_mask ? 1 : 0,
+            has_sinks ? 1 : 0,
+            has_bias ? 1 : 0,
+            has_scap ? 1 : 0,
+            has_kvpad ? 1 : 0,
+            use_vec ? 1 : 0,
+            nqptg,
+            ncpsg,
+            ns10,
+            ns20);
+
+    std::lock_guard<std::mutex> lock(mutex);
+    if (!seen.insert(key).second) {
+        return;
+    }
+
+    printf("ggml_metal_flash_attn_shape: q_len=%lld kv_len=%lld dk=%lld dv=%lld q_heads=%lld q_batch=%lld k_heads=%lld k_batch=%lld k_type=%s mask=%d sinks=%d bias=%d scap=%d kvpad=%d use_vec=%d nqptg=%d ncpsg=%d ns10=%d ns20=%d",
+            (long long) q->ne[1],
+            (long long) k->ne[1],
+            (long long) k->ne[0],
+            (long long) v->ne[0],
+            (long long) q->ne[2],
+            (long long) q->ne[3],
+            (long long) k->ne[2],
+            (long long) k->ne[3],
+            ggml_type_name(k->type),
+            has_mask ? 1 : 0,
+            has_sinks ? 1 : 0,
+            has_bias ? 1 : 0,
+            has_scap ? 1 : 0,
+            has_kvpad ? 1 : 0,
+            use_vec ? 1 : 0,
+            nqptg,
+            ncpsg,
+            ns10,
+            ns20);
+    if (m) {
+        printf(" mask_ne=[%lld,%lld,%lld,%lld]",
+                (long long) m->ne[0],
+                (long long) m->ne[1],
+                (long long) m->ne[2],
+                (long long) m->ne[3]);
+    }
+    printf("\n");
 }
 
 struct ggml_metal_op {
@@ -2481,9 +2564,33 @@ int ggml_metal_op_flash_attn_ext(ggml_metal_op_t ctx, int idx) {
     ggml_metal_buffer_id bid_tmp = bid_blk;
     bid_tmp.offs += ggml_metal_op_flash_attn_ext_extra_blk(op);
 
-    if (!ggml_metal_op_flash_attn_ext_use_vec(op)) {
+    const bool use_vec = ggml_metal_op_flash_attn_ext_use_vec(op);
+    const bool use_flow_tuned =
+        !use_vec &&
+        !has_mask &&
+        !has_sinks &&
+        !has_bias &&
+        !has_scap &&
+        op->src[0]->type == GGML_TYPE_F32 &&
+        op->src[1]->type == GGML_TYPE_F32 &&
+        op->src[2]->type == GGML_TYPE_F32 &&
+        ne00 == 64 &&
+        ne20 == 64 &&
+        ne02 == 8 &&
+        ne03 == 2 &&
+        ne12 == 8 &&
+        ne13 == 2;
+    {
+        const int32_t log_nqptg = use_vec ? OP_FLASH_ATTN_EXT_VEC_NQPTG : (use_flow_tuned ? 16 : OP_FLASH_ATTN_EXT_NQPTG);
+        const int32_t log_ncpsg = use_vec ? OP_FLASH_ATTN_EXT_VEC_NCPSG : OP_FLASH_ATTN_EXT_NCPSG;
+        const bool log_has_kvpad = ne11 % log_ncpsg != 0;
+        ggml_metal_log_flash_attn_shape_once(
+                op, has_mask, has_sinks, has_bias, has_scap, log_has_kvpad, use_vec, log_nqptg, log_ncpsg);
+    }
+
+    if (!use_vec) {
         // half8x8 kernel
-        const int nqptg = OP_FLASH_ATTN_EXT_NQPTG; // queries per threadgroup
+        const int nqptg = use_flow_tuned ? 16 : OP_FLASH_ATTN_EXT_NQPTG; // queries per threadgroup
         const int ncpsg = OP_FLASH_ATTN_EXT_NCPSG; // cache values per simdgroup
 
         GGML_ASSERT(nqptg <= 32);
@@ -2631,7 +2738,10 @@ int ggml_metal_op_flash_attn_ext(ggml_metal_op_t ctx, int idx) {
             /*.logit_softcap =*/ logit_softcap,
         };
 
-        auto pipeline = ggml_metal_library_get_pipeline_flash_attn_ext(lib, op, has_mask, has_sinks, has_bias, has_scap, has_kvpad, nsg);
+        auto pipeline = ggml_metal_library_get_pipeline_flash_attn_ext(lib, op, has_mask, has_sinks, has_bias, has_scap, has_kvpad, nsg, use_flow_tuned);
+
+        GGML_ASSERT(nsg*32 <= ggml_metal_pipeline_max_theads_per_threadgroup(pipeline));
+        GGML_ASSERT(smem <= props_dev->max_theadgroup_memory_size);
 
         ggml_metal_encoder_set_pipeline(enc, pipeline);
         ggml_metal_encoder_set_bytes   (enc, &args, sizeof(args), 0);
